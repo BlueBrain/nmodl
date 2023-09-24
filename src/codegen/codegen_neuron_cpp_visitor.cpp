@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "codegen/codegen_coreneuron_cpp_visitor.hpp"
+#include "codegen/codegen_neuron_cpp_visitor.hpp"
 
 #include <algorithm>
 #include <chrono>
@@ -47,7 +47,7 @@ using symtab::syminfo::NmodlType;
 
 static const std::regex regex_special_chars{R"([-[\]{}()*+?.,\^$|#\s])"};
 
-void CodegenCoreneuronCppVisitor::visit_string(const String& node) {
+void CodegenNeuronCppVisitor::visit_string(const String& node) {
     if (!codegen) {
         return;
     }
@@ -59,7 +59,7 @@ void CodegenCoreneuronCppVisitor::visit_string(const String& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_integer(const Integer& node) {
+void CodegenNeuronCppVisitor::visit_integer(const Integer& node) {
     if (!codegen) {
         return;
     }
@@ -68,7 +68,7 @@ void CodegenCoreneuronCppVisitor::visit_integer(const Integer& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_float(const Float& node) {
+void CodegenNeuronCppVisitor::visit_float(const Float& node) {
     if (!codegen) {
         return;
     }
@@ -76,7 +76,7 @@ void CodegenCoreneuronCppVisitor::visit_float(const Float& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_double(const Double& node) {
+void CodegenNeuronCppVisitor::visit_double(const Double& node) {
     if (!codegen) {
         return;
     }
@@ -84,7 +84,7 @@ void CodegenCoreneuronCppVisitor::visit_double(const Double& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_boolean(const Boolean& node) {
+void CodegenNeuronCppVisitor::visit_boolean(const Boolean& node) {
     if (!codegen) {
         return;
     }
@@ -92,7 +92,7 @@ void CodegenCoreneuronCppVisitor::visit_boolean(const Boolean& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_name(const Name& node) {
+void CodegenNeuronCppVisitor::visit_name(const Name& node) {
     if (!codegen) {
         return;
     }
@@ -100,12 +100,12 @@ void CodegenCoreneuronCppVisitor::visit_name(const Name& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_unit(const ast::Unit& node) {
+void CodegenNeuronCppVisitor::visit_unit(const ast::Unit& node) {
     // do not print units
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_prime_name(const PrimeName& /* node */) {
+void CodegenNeuronCppVisitor::visit_prime_name(const PrimeName& /* node */) {
     throw std::runtime_error("PRIME encountered during code generation, ODEs not solved?");
 }
 
@@ -113,7 +113,7 @@ void CodegenCoreneuronCppVisitor::visit_prime_name(const PrimeName& /* node */) 
 /**
  * \todo : Validate how @ is being handled in neuron implementation
  */
-void CodegenCoreneuronCppVisitor::visit_var_name(const VarName& node) {
+void CodegenNeuronCppVisitor::visit_var_name(const VarName& node) {
     if (!codegen) {
         return;
     }
@@ -135,7 +135,7 @@ void CodegenCoreneuronCppVisitor::visit_var_name(const VarName& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_indexed_name(const IndexedName& node) {
+void CodegenNeuronCppVisitor::visit_indexed_name(const IndexedName& node) {
     if (!codegen) {
         return;
     }
@@ -148,7 +148,7 @@ void CodegenCoreneuronCppVisitor::visit_indexed_name(const IndexedName& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_local_list_statement(const LocalListStatement& node) {
+void CodegenNeuronCppVisitor::visit_local_list_statement(const LocalListStatement& node) {
     if (!codegen) {
         return;
     }
@@ -157,7 +157,7 @@ void CodegenCoreneuronCppVisitor::visit_local_list_statement(const LocalListStat
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_if_statement(const IfStatement& node) {
+void CodegenNeuronCppVisitor::visit_if_statement(const IfStatement& node) {
     if (!codegen) {
         return;
     }
@@ -173,7 +173,7 @@ void CodegenCoreneuronCppVisitor::visit_if_statement(const IfStatement& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_else_if_statement(const ElseIfStatement& node) {
+void CodegenNeuronCppVisitor::visit_else_if_statement(const ElseIfStatement& node) {
     if (!codegen) {
         return;
     }
@@ -184,7 +184,7 @@ void CodegenCoreneuronCppVisitor::visit_else_if_statement(const ElseIfStatement&
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_else_statement(const ElseStatement& node) {
+void CodegenNeuronCppVisitor::visit_else_statement(const ElseStatement& node) {
     if (!codegen) {
         return;
     }
@@ -193,7 +193,7 @@ void CodegenCoreneuronCppVisitor::visit_else_statement(const ElseStatement& node
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_while_statement(const WhileStatement& node) {
+void CodegenNeuronCppVisitor::visit_while_statement(const WhileStatement& node) {
     printer->add_text("while (");
     node.get_condition()->accept(*this);
     printer->add_text(") ");
@@ -201,7 +201,7 @@ void CodegenCoreneuronCppVisitor::visit_while_statement(const WhileStatement& no
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_from_statement(const ast::FromStatement& node) {
+void CodegenNeuronCppVisitor::visit_from_statement(const ast::FromStatement& node) {
     if (!codegen) {
         return;
     }
@@ -225,7 +225,7 @@ void CodegenCoreneuronCppVisitor::visit_from_statement(const ast::FromStatement&
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_paren_expression(const ParenExpression& node) {
+void CodegenNeuronCppVisitor::visit_paren_expression(const ParenExpression& node) {
     if (!codegen) {
         return;
     }
@@ -235,7 +235,7 @@ void CodegenCoreneuronCppVisitor::visit_paren_expression(const ParenExpression& 
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_binary_expression(const BinaryExpression& node) {
+void CodegenNeuronCppVisitor::visit_binary_expression(const BinaryExpression& node) {
     if (!codegen) {
         return;
     }
@@ -256,7 +256,7 @@ void CodegenCoreneuronCppVisitor::visit_binary_expression(const BinaryExpression
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_binary_operator(const BinaryOperator& node) {
+void CodegenNeuronCppVisitor::visit_binary_operator(const BinaryOperator& node) {
     if (!codegen) {
         return;
     }
@@ -264,7 +264,7 @@ void CodegenCoreneuronCppVisitor::visit_binary_operator(const BinaryOperator& no
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_unary_operator(const UnaryOperator& node) {
+void CodegenNeuronCppVisitor::visit_unary_operator(const UnaryOperator& node) {
     if (!codegen) {
         return;
     }
@@ -277,7 +277,7 @@ void CodegenCoreneuronCppVisitor::visit_unary_operator(const UnaryOperator& node
  * Sometime we want to analyse ast nodes even if code generation is
  * false. Hence we visit children even if code generation is false.
  */
-void CodegenCoreneuronCppVisitor::visit_statement_block(const StatementBlock& node) {
+void CodegenNeuronCppVisitor::visit_statement_block(const StatementBlock& node) {
     if (!codegen) {
         node.visit_children(*this);
         return;
@@ -286,7 +286,7 @@ void CodegenCoreneuronCppVisitor::visit_statement_block(const StatementBlock& no
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_function_call(const FunctionCall& node) {
+void CodegenNeuronCppVisitor::visit_function_call(const FunctionCall& node) {
     if (!codegen) {
         return;
     }
@@ -294,7 +294,7 @@ void CodegenCoreneuronCppVisitor::visit_function_call(const FunctionCall& node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_verbatim(const Verbatim& node) {
+void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
     if (!codegen) {
         return;
     }
@@ -310,24 +310,24 @@ void CodegenCoreneuronCppVisitor::visit_verbatim(const Verbatim& node) {
     }
 }
 
-void CodegenCoreneuronCppVisitor::visit_update_dt(const ast::UpdateDt& node) {
+void CodegenNeuronCppVisitor::visit_update_dt(const ast::UpdateDt& node) {
     // dt change statement should be pulled outside already
 }
 
-void CodegenCoreneuronCppVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
+void CodegenNeuronCppVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
     print_atomic_reduction_pragma();
     printer->add_indent();
     node.get_expression()->accept(*this);
     printer->add_text(";");
 }
 
-void CodegenCoreneuronCppVisitor::visit_mutex_lock(const ast::MutexLock& node) {
+void CodegenNeuronCppVisitor::visit_mutex_lock(const ast::MutexLock& node) {
     printer->fmt_line("#pragma omp critical ({})", info.mod_suffix);
     printer->add_indent();
     printer->push_block();
 }
 
-void CodegenCoreneuronCppVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
+void CodegenNeuronCppVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
     printer->pop_block();
 }
 
@@ -342,7 +342,7 @@ void CodegenCoreneuronCppVisitor::visit_mutex_unlock(const ast::MutexUnlock& nod
  * statement and hence we have to check inner expression. It's also true
  * for the initial block defined inside net receive block.
  */
-bool CodegenCoreneuronCppVisitor::statement_to_skip(const Statement& node) {
+bool CodegenNeuronCppVisitor::statement_to_skip(const Statement& node) {
     // clang-format off
     if (node.is_unit_state()
         || node.is_line_comment()
@@ -366,7 +366,7 @@ bool CodegenCoreneuronCppVisitor::statement_to_skip(const Statement& node) {
 }
 
 
-bool CodegenCoreneuronCppVisitor::net_send_buffer_required() const noexcept {
+bool CodegenNeuronCppVisitor::net_send_buffer_required() const noexcept {
     if (net_receive_required() && !info.artificial_cell) {
         if (info.net_event_used || info.net_send_used || info.is_watch_used()) {
             return true;
@@ -376,12 +376,12 @@ bool CodegenCoreneuronCppVisitor::net_send_buffer_required() const noexcept {
 }
 
 
-bool CodegenCoreneuronCppVisitor::net_receive_buffering_required() const noexcept {
+bool CodegenNeuronCppVisitor::net_receive_buffering_required() const noexcept {
     return info.point_process && !info.artificial_cell && info.net_receive_node != nullptr;
 }
 
 
-bool CodegenCoreneuronCppVisitor::nrn_state_required() const noexcept {
+bool CodegenNeuronCppVisitor::nrn_state_required() const noexcept {
     if (info.artificial_cell) {
         return false;
     }
@@ -389,22 +389,22 @@ bool CodegenCoreneuronCppVisitor::nrn_state_required() const noexcept {
 }
 
 
-bool CodegenCoreneuronCppVisitor::nrn_cur_required() const noexcept {
+bool CodegenNeuronCppVisitor::nrn_cur_required() const noexcept {
     return info.breakpoint_node != nullptr && !info.currents.empty();
 }
 
 
-bool CodegenCoreneuronCppVisitor::net_receive_exist() const noexcept {
+bool CodegenNeuronCppVisitor::net_receive_exist() const noexcept {
     return info.net_receive_node != nullptr;
 }
 
 
-bool CodegenCoreneuronCppVisitor::breakpoint_exist() const noexcept {
+bool CodegenNeuronCppVisitor::breakpoint_exist() const noexcept {
     return info.breakpoint_node != nullptr;
 }
 
 
-bool CodegenCoreneuronCppVisitor::net_receive_required() const noexcept {
+bool CodegenNeuronCppVisitor::net_receive_required() const noexcept {
     return net_receive_exist();
 }
 
@@ -413,12 +413,12 @@ bool CodegenCoreneuronCppVisitor::net_receive_required() const noexcept {
  * \details When floating point data type is not default (i.e. double) then we
  * have to copy old array to new type (for range variables).
  */
-bool CodegenCoreneuronCppVisitor::range_variable_setup_required() const noexcept {
+bool CodegenNeuronCppVisitor::range_variable_setup_required() const noexcept {
     return codegen::naming::DEFAULT_FLOAT_TYPE != float_data_type();
 }
 
 
-int CodegenCoreneuronCppVisitor::position_of_float_var(const std::string& name) const {
+int CodegenNeuronCppVisitor::position_of_float_var(const std::string& name) const {
     int index = 0;
     for (const auto& var: codegen_float_variables) {
         if (var->get_name() == name) {
@@ -430,7 +430,7 @@ int CodegenCoreneuronCppVisitor::position_of_float_var(const std::string& name) 
 }
 
 
-int CodegenCoreneuronCppVisitor::position_of_int_var(const std::string& name) const {
+int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const {
     int index = 0;
     for (const auto& var: codegen_int_variables) {
         if (var.symbol->get_name() == name) {
@@ -450,12 +450,12 @@ int CodegenCoreneuronCppVisitor::position_of_int_var(const std::string& name) co
  * they are represented in the mod file by user. If the value is in scientific
  * representation (1e+20, 1E-15) then keep it as it is.
  */
-std::string CodegenCoreneuronCppVisitor::format_double_string(const std::string& s_value) {
+std::string CodegenNeuronCppVisitor::format_double_string(const std::string& s_value) {
     return utils::format_double_string<CodegenCoreneuronCppVisitor>(s_value);
 }
 
 
-std::string CodegenCoreneuronCppVisitor::format_float_string(const std::string& s_value) {
+std::string CodegenNeuronCppVisitor::format_float_string(const std::string& s_value) {
     return utils::format_float_string<CodegenCoreneuronCppVisitor>(s_value);
 }
 
@@ -466,13 +466,14 @@ std::string CodegenCoreneuronCppVisitor::format_float_string(const std::string& 
  * block can appear as statement using expression statement which need to
  * be inspected.
  */
-bool CodegenCoreneuronCppVisitor::need_semicolon(const Statement& node) {
+bool CodegenNeuronCppVisitor::need_semicolon(const Statement& node) {
     // clang-format off
     if (node.is_if_statement()
         || node.is_else_if_statement()
         || node.is_else_statement()
         || node.is_from_statement()
         || node.is_verbatim()
+        || node.is_from_statement()
         || node.is_conductance_hint()
         || node.is_while_statement()
         || node.is_protect_statement()
@@ -496,7 +497,7 @@ bool CodegenCoreneuronCppVisitor::need_semicolon(const Statement& node) {
 
 
 // check if there is a function or procedure defined with given name
-bool CodegenCoreneuronCppVisitor::defined_method(const std::string& name) const {
+bool CodegenNeuronCppVisitor::defined_method(const std::string& name) const {
     const auto& function = program_symtab->lookup(name);
     auto properties = NmodlType::function_block | NmodlType::procedure_block;
     return function && function->has_any_property(properties);
@@ -511,7 +512,7 @@ bool CodegenCoreneuronCppVisitor::defined_method(const std::string& name) const 
  * the variable is renamed. Note that we have to look into the symbol table
  * of statement block and not breakpoint.
  */
-std::string CodegenCoreneuronCppVisitor::breakpoint_current(std::string current) const {
+std::string CodegenNeuronCppVisitor::breakpoint_current(std::string current) const {
     auto breakpoint = info.breakpoint_node;
     if (breakpoint == nullptr) {
         return current;
@@ -530,12 +531,12 @@ std::string CodegenCoreneuronCppVisitor::breakpoint_current(std::string current)
 }
 
 
-int CodegenCoreneuronCppVisitor::float_variables_size() const {
+int CodegenNeuronCppVisitor::float_variables_size() const {
     return codegen_float_variables.size();
 }
 
 
-int CodegenCoreneuronCppVisitor::int_variables_size() const {
+int CodegenNeuronCppVisitor::int_variables_size() const {
     const auto count_semantics = [](int sum, const IndexSemantics& sem) { return sum += sem.size; };
     return std::accumulate(info.semantics.begin(), info.semantics.end(), 0, count_semantics);
 }
@@ -548,7 +549,7 @@ int CodegenCoreneuronCppVisitor::int_variables_size() const {
  * different variable names, we rely on backend-specific read_ion_variable_name
  * and write_ion_variable_name method which will be overloaded.
  */
-std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements(BlockType type) const {
+std::vector<std::string> CodegenNeuronCppVisitor::ion_read_statements(BlockType type) const {
     if (optimize_ion_variable_copies()) {
         return ion_read_statements_optimized(type);
     }
@@ -578,7 +579,7 @@ std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements(BlockT
 }
 
 
-std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements_optimized(BlockType type) const {
+std::vector<std::string> CodegenNeuronCppVisitor::ion_read_statements_optimized(BlockType type) const {
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
@@ -594,7 +595,7 @@ std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements_optimi
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-std::vector<ShadowUseStatement> CodegenCoreneuronCppVisitor::ion_write_statements(BlockType type) {
+std::vector<ShadowUseStatement> CodegenNeuronCppVisitor::ion_write_statements(BlockType type) {
     std::vector<ShadowUseStatement> statements;
     for (const auto& ion: info.ions) {
         std::string concentration;
@@ -651,7 +652,7 @@ std::vector<ShadowUseStatement> CodegenCoreneuronCppVisitor::ion_write_statement
  * \details Often top level verbatim blocks use variables with old names.
  * Here we process if we are processing verbatim block at global scope.
  */
-std::string CodegenCoreneuronCppVisitor::process_verbatim_token(const std::string& token) {
+std::string CodegenNeuronCppVisitor::process_verbatim_token(const std::string& token) {
     const std::string& name = token;
 
     /*
@@ -682,7 +683,7 @@ std::string CodegenCoreneuronCppVisitor::process_verbatim_token(const std::strin
 }
 
 
-bool CodegenCoreneuronCppVisitor::ion_variable_struct_required() const {
+bool CodegenNeuronCppVisitor::ion_variable_struct_required() const {
     return optimize_ion_variable_copies() && info.ion_has_write_variable();
 }
 
@@ -692,7 +693,7 @@ bool CodegenCoreneuronCppVisitor::ion_variable_struct_required() const {
  * except in INITIAL block where they are set to 0. As initial block is/can be
  * executed on c++/cpu backend, gpu backend can mark the parameter as constant.
  */
-bool CodegenCoreneuronCppVisitor::is_constant_variable(const std::string& name) const {
+bool CodegenNeuronCppVisitor::is_constant_variable(const std::string& name) const {
     auto symbol = program_symtab->lookup_in_scope(name);
     bool is_constant = false;
     if (symbol != nullptr) {
@@ -716,7 +717,7 @@ bool CodegenCoreneuronCppVisitor::is_constant_variable(const std::string& name) 
  * \details Once variables are populated, update index semantics to register with coreneuron
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenCoreneuronCppVisitor::update_index_semantics() {
+void CodegenNeuronCppVisitor::update_index_semantics() {
     int index = 0;
     info.semantics.clear();
 
@@ -783,7 +784,7 @@ void CodegenCoreneuronCppVisitor::update_index_semantics() {
 }
 
 
-std::vector<CodegenCoreneuronCppVisitor::SymbolType> CodegenCoreneuronCppVisitor::get_float_variables() const {
+std::vector<CodegenNeuronCppVisitor::SymbolType> CodegenNeuronCppVisitor::get_float_variables() const {
     // sort with definition order
     auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
         return first->get_definition_order() < second->get_definition_order();
@@ -849,7 +850,7 @@ std::vector<CodegenCoreneuronCppVisitor::SymbolType> CodegenCoreneuronCppVisitor
  *  - style_ionname is index / offset
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-std::vector<IndexVariableInfo> CodegenCoreneuronCppVisitor::get_int_variables() {
+std::vector<IndexVariableInfo> CodegenNeuronCppVisitor::get_int_variables() {
     std::vector<IndexVariableInfo> variables;
     if (info.point_process) {
         variables.emplace_back(make_symbol(naming::NODE_AREA_VARIABLE));
@@ -972,7 +973,7 @@ std::vector<IndexVariableInfo> CodegenCoreneuronCppVisitor::get_int_variables() 
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
 
-std::string CodegenCoreneuronCppVisitor::get_parameter_str(const ParamVector& params) {
+std::string CodegenNeuronCppVisitor::get_parameter_str(const ParamVector& params) {
     std::string str;
     bool is_first = true;
     for (const auto& param: params) {
@@ -991,31 +992,31 @@ std::string CodegenCoreneuronCppVisitor::get_parameter_str(const ParamVector& pa
 }
 
 
-void CodegenCoreneuronCppVisitor::print_deriv_advance_flag_transfer_to_device() const {
+void CodegenNeuronCppVisitor::print_deriv_advance_flag_transfer_to_device() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_device_atomic_capture_annotation() const {
+void CodegenNeuronCppVisitor::print_device_atomic_capture_annotation() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buf_count_update_to_host() const {
+void CodegenNeuronCppVisitor::print_net_send_buf_count_update_to_host() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buf_update_to_host() const {
+void CodegenNeuronCppVisitor::print_net_send_buf_update_to_host() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buf_count_update_to_device() const {
+void CodegenNeuronCppVisitor::print_net_send_buf_count_update_to_device() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_dt_update_to_device() const {
+void CodegenNeuronCppVisitor::print_dt_update_to_device() const {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_device_stream_wait() const {
+void CodegenNeuronCppVisitor::print_device_stream_wait() const {
     // backend specific, do nothing
 }
 
@@ -1033,20 +1034,20 @@ void CodegenCoreneuronCppVisitor::print_device_stream_wait() const {
  *  }
  *  \endcode
  */
-void CodegenCoreneuronCppVisitor::print_kernel_data_present_annotation_block_begin() {
+void CodegenNeuronCppVisitor::print_kernel_data_present_annotation_block_begin() {
     // backend specific, do nothing
 }
 
 
-void CodegenCoreneuronCppVisitor::print_kernel_data_present_annotation_block_end() {
+void CodegenNeuronCppVisitor::print_kernel_data_present_annotation_block_end() {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_begin() {
+void CodegenNeuronCppVisitor::print_net_init_acc_serial_annotation_block_begin() {
     // backend specific, do nothing
 }
 
-void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_end() {
+void CodegenNeuronCppVisitor::print_net_init_acc_serial_annotation_block_end() {
     // backend specific, do nothing
 }
 
@@ -1062,7 +1063,7 @@ void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_end
  *      for(int id = 0; id < nodecount; id++) {
  * \endcode
  */
-void CodegenCoreneuronCppVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
+void CodegenNeuronCppVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
                                                                     const ast::Block* block) {
     // ivdep allows SIMD parallelisation of a block/loop but doesn't provide
     // a standard mechanism for atomics. Also, even with openmp 5.0, openmp
@@ -1084,12 +1085,12 @@ void CodegenCoreneuronCppVisitor::print_channel_iteration_block_parallel_hint(Bl
 }
 
 
-bool CodegenCoreneuronCppVisitor::nrn_cur_reduction_loop_required() {
+bool CodegenNeuronCppVisitor::nrn_cur_reduction_loop_required() {
     return info.point_process;
 }
 
 
-void CodegenCoreneuronCppVisitor::print_rhs_d_shadow_variables() {
+void CodegenNeuronCppVisitor::print_rhs_d_shadow_variables() {
     if (info.point_process) {
         printer->fmt_line("double* shadow_rhs = nt->{};", naming::NTHREAD_RHS_SHADOW);
         printer->fmt_line("double* shadow_d = nt->{};", naming::NTHREAD_D_SHADOW);
@@ -1097,7 +1098,7 @@ void CodegenCoreneuronCppVisitor::print_rhs_d_shadow_variables() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur_matrix_shadow_update() {
+void CodegenNeuronCppVisitor::print_nrn_cur_matrix_shadow_update() {
     if (info.point_process) {
         printer->add_line("shadow_rhs[id] = rhs;");
         printer->add_line("shadow_d[id] = g;");
@@ -1110,7 +1111,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_matrix_shadow_update() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur_matrix_shadow_reduction() {
+void CodegenNeuronCppVisitor::print_nrn_cur_matrix_shadow_reduction() {
     auto rhs_op = operator_for_rhs();
     auto d_op = operator_for_d();
     if (info.point_process) {
@@ -1126,47 +1127,47 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_matrix_shadow_reduction() {
  * only with PROTECT construct (atomic rduction requirement for other cases on CPU
  * is handled via separate shadow vectors).
  */
-void CodegenCoreneuronCppVisitor::print_atomic_reduction_pragma() {
+void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
     printer->add_line("#pragma omp atomic update");
 }
 
 
-void CodegenCoreneuronCppVisitor::print_device_method_annotation() {
+void CodegenNeuronCppVisitor::print_device_method_annotation() {
     // backend specific, nothing for cpu
 }
 
 
-void CodegenCoreneuronCppVisitor::print_global_method_annotation() {
+void CodegenNeuronCppVisitor::print_global_method_annotation() {
     // backend specific, nothing for cpu
 }
 
 
-void CodegenCoreneuronCppVisitor::print_backend_namespace_start() {
+void CodegenNeuronCppVisitor::print_backend_namespace_start() {
     // no separate namespace for C++ (cpu) backend
 }
 
 
-void CodegenCoreneuronCppVisitor::print_backend_namespace_stop() {
+void CodegenNeuronCppVisitor::print_backend_namespace_stop() {
     // no separate namespace for C++ (cpu) backend
 }
 
 
-void CodegenCoreneuronCppVisitor::print_backend_includes() {
+void CodegenNeuronCppVisitor::print_backend_includes() {
     // backend specific, nothing for cpu
 }
 
 
-std::string CodegenCoreneuronCppVisitor::backend_name() const {
+std::string CodegenNeuronCppVisitor::backend_name() const {
     return "C++ (api-compatibility)";
 }
 
 
-bool CodegenCoreneuronCppVisitor::optimize_ion_variable_copies() const {
+bool CodegenNeuronCppVisitor::optimize_ion_variable_copies() const {
     return optimize_ionvar_copies;
 }
 
 
-void CodegenCoreneuronCppVisitor::print_memory_allocation_routine() const {
+void CodegenNeuronCppVisitor::print_memory_allocation_routine() const {
     printer->add_newline(2);
     auto args = "size_t num, size_t size, size_t alignment = 16";
     printer->fmt_push_block("static inline void* mem_alloc({})", args);
@@ -1183,7 +1184,7 @@ void CodegenCoreneuronCppVisitor::print_memory_allocation_routine() const {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_abort_routine() const {
+void CodegenNeuronCppVisitor::print_abort_routine() const {
     printer->add_newline(2);
     printer->push_block("static inline void coreneuron_abort()");
     printer->add_line("abort();");
@@ -1191,7 +1192,7 @@ void CodegenCoreneuronCppVisitor::print_abort_routine() const {
 }
 
 
-std::string CodegenCoreneuronCppVisitor::compute_method_name(BlockType type) const {
+std::string CodegenNeuronCppVisitor::compute_method_name(BlockType type) const {
     if (type == BlockType::Initial) {
         return method_name(naming::NRN_INIT_METHOD);
     }
@@ -1214,11 +1215,11 @@ std::string CodegenCoreneuronCppVisitor::compute_method_name(BlockType type) con
 }
 
 
-std::string CodegenCoreneuronCppVisitor::global_var_struct_type_qualifier() {
+std::string CodegenNeuronCppVisitor::global_var_struct_type_qualifier() {
     return "";
 }
 
-void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
+void CodegenNeuronCppVisitor::print_global_var_struct_decl() {
     printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
 }
 
@@ -1227,13 +1228,13 @@ void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
 /****************************************************************************************/
 
 
-void CodegenCoreneuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
+void CodegenNeuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
     printer->add_text(fmt::format("nrn_watch_activate(inst, id, pnodecount, {}, v, watch_remove)",
                                   current_watch_statement++));
 }
 
 
-void CodegenCoreneuronCppVisitor::print_statement_block(const ast::StatementBlock& node,
+void CodegenNeuronCppVisitor::print_statement_block(const ast::StatementBlock& node,
                                               bool open_brace,
                                               bool close_brace) {
     if (open_brace) {
@@ -1265,7 +1266,7 @@ void CodegenCoreneuronCppVisitor::print_statement_block(const ast::StatementBloc
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_call(const FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
     const auto& name = node.get_node_name();
     auto function_name = name;
     if (defined_method(name)) {
@@ -1302,7 +1303,7 @@ void CodegenCoreneuronCppVisitor::print_function_call(const FunctionCall& node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
+void CodegenNeuronCppVisitor::print_top_verbatim_blocks() {
     if (info.top_verbatim_blocks.empty()) {
         return;
     }
@@ -1333,7 +1334,7 @@ void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
  * is because verbatim renaming pass has already stripped out prefixes from
  * the text.
  */
-void CodegenCoreneuronCppVisitor::rename_function_arguments() {
+void CodegenNeuronCppVisitor::rename_function_arguments() {
     const auto& default_arguments = stringutils::split_string(nrn_thread_arguments(), ',');
     for (const auto& dirty_arg: default_arguments) {
         const auto& arg = stringutils::trim(dirty_arg);
@@ -1352,7 +1353,7 @@ void CodegenCoreneuronCppVisitor::rename_function_arguments() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_prototypes() {
+void CodegenNeuronCppVisitor::print_function_prototypes() {
     if (info.functions.empty() && info.procedures.empty()) {
         return;
     }
@@ -1387,11 +1388,11 @@ static const TableStatement* get_table_statement(const ast::Block& node) {
 }
 
 
-std::tuple<bool, int> CodegenCoreneuronCppVisitor::check_if_var_is_array(const std::string& name) {
+std::tuple<bool, int> CodegenNeuronCppVisitor::check_if_var_is_array(const std::string& name) {
     auto symbol = program_symtab->lookup_in_scope(name);
     if (!symbol) {
         throw std::runtime_error(
-            fmt::format("CodegenCoreneuronCppVisitor:: {} not found in symbol table!", name));
+            fmt::format("CodegenNeuronCppVisitor:: {} not found in symbol table!", name));
     }
     if (symbol->is_array()) {
         return {true, symbol->get_length()};
@@ -1401,7 +1402,7 @@ std::tuple<bool, int> CodegenCoreneuronCppVisitor::check_if_var_is_array(const s
 }
 
 
-void CodegenCoreneuronCppVisitor::print_table_check_function(const Block& node) {
+void CodegenNeuronCppVisitor::print_table_check_function(const Block& node) {
     auto statement = get_table_statement(node);
     auto table_variables = statement->get_table_vars();
     auto depend_variables = statement->get_depend_vars();
@@ -1498,7 +1499,7 @@ void CodegenCoreneuronCppVisitor::print_table_check_function(const Block& node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_table_replacement_function(const ast::Block& node) {
+void CodegenNeuronCppVisitor::print_table_replacement_function(const ast::Block& node) {
     auto name = node.get_node_name();
     auto statement = get_table_statement(node);
     auto table_variables = statement->get_table_vars();
@@ -1607,7 +1608,7 @@ void CodegenCoreneuronCppVisitor::print_table_replacement_function(const ast::Bl
 }
 
 
-void CodegenCoreneuronCppVisitor::print_check_table_thread_function() {
+void CodegenNeuronCppVisitor::print_check_table_thread_function() {
     if (info.table_count == 0) {
         return;
     }
@@ -1631,7 +1632,7 @@ void CodegenCoreneuronCppVisitor::print_check_table_thread_function() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_or_procedure(const ast::Block& node,
+void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
                                                     const std::string& name) {
     printer->add_newline(2);
     print_function_declaration(node, name);
@@ -1652,7 +1653,7 @@ void CodegenCoreneuronCppVisitor::print_function_or_procedure(const ast::Block& 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
+void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
     codegen = true;
     auto name = node.get_node_name();
 
@@ -1669,12 +1670,12 @@ void CodegenCoreneuronCppVisitor::print_function_procedure_helper(const ast::Blo
 }
 
 
-void CodegenCoreneuronCppVisitor::print_procedure(const ast::ProcedureBlock& node) {
+void CodegenNeuronCppVisitor::print_procedure(const ast::ProcedureBlock& node) {
     print_function_procedure_helper(node);
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function(const ast::FunctionBlock& node) {
+void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
     auto name = node.get_node_name();
 
     // name of return variable
@@ -1694,7 +1695,7 @@ void CodegenCoreneuronCppVisitor::print_function(const ast::FunctionBlock& node)
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
+void CodegenNeuronCppVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
     auto name = node.get_node_name();
     const auto& p = node.get_parameters();
     auto params = internal_method_parameters();
@@ -1731,7 +1732,7 @@ void CodegenCoreneuronCppVisitor::print_function_tables(const ast::FunctionTable
  *                      solver
  * @return True if operator() is const else False
  */
-bool CodegenCoreneuronCppVisitor::is_functor_const(const ast::StatementBlock& variable_block,
+bool CodegenNeuronCppVisitor::is_functor_const(const ast::StatementBlock& variable_block,
                       const ast::StatementBlock& functor_block) {
     // Create complete_block with both variable declarations (done in variable_block) and solver
     // part (done in functor_block) to be able to run the SymtabVisitor and DefUseAnalyzeVisitor
@@ -1766,7 +1767,7 @@ bool CodegenCoreneuronCppVisitor::is_functor_const(const ast::StatementBlock& va
     return is_functor_const;
 }
 
-void CodegenCoreneuronCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock& node) {
+void CodegenNeuronCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock& node) {
     // functor that evaluates F(X) and J(X) for
     // Newton solver
     auto float_type = default_float_data_type();
@@ -1831,7 +1832,7 @@ void CodegenCoreneuronCppVisitor::print_functor_definition(const ast::EigenNewto
     printer->pop_block(";");
 }
 
-void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
+void CodegenNeuronCppVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
     // solution vector to store copy of state vars for Newton solver
     printer->add_newline();
 
@@ -1857,7 +1858,7 @@ void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(const ast::Eig
     printer->add_line("newton_functor.finalize();");
 }
 
-void CodegenCoreneuronCppVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) {
+void CodegenNeuronCppVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) {
     printer->add_newline();
 
     const std::string float_type = default_float_data_type();
@@ -1881,7 +1882,7 @@ void CodegenCoreneuronCppVisitor::visit_eigen_linear_solver_block(const ast::Eig
     print_statement_block(*node.get_finalize_block(), false, false);
 }
 
-void CodegenCoreneuronCppVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
+void CodegenNeuronCppVisitor::print_eigen_linear_solver(const std::string& float_type, int N) {
     if (N <= 4) {
         // Faster compared to LU, given the template specialization in Eigen.
         printer->add_multi_line(R"CODE(
@@ -1922,7 +1923,7 @@ void CodegenCoreneuronCppVisitor::print_eigen_linear_solver(const std::string& f
 /****************************************************************************************/
 
 
-std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
+std::string CodegenNeuronCppVisitor::internal_method_arguments() {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
@@ -1933,7 +1934,7 @@ std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
 /**
  * @todo: figure out how to correctly handle qualifiers
  */
-CodegenCoreneuronCppVisitor::ParamVector CodegenCoreneuronCppVisitor::internal_method_parameters() {
+CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
     ParamVector params;
     params.emplace_back("", "int", "", "id");
     params.emplace_back("", "int", "", "pnodecount");
@@ -1950,12 +1951,12 @@ CodegenCoreneuronCppVisitor::ParamVector CodegenCoreneuronCppVisitor::internal_m
 }
 
 
-const char* CodegenCoreneuronCppVisitor::external_method_arguments() noexcept {
+const char* CodegenNeuronCppVisitor::external_method_arguments() noexcept {
     return "id, pnodecount, data, indexes, thread, nt, ml, v";
 }
 
 
-const char* CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
+const char* CodegenNeuronCppVisitor::external_method_parameters(bool table) noexcept {
     if (table) {
         return "int id, int pnodecount, double* data, Datum* indexes, "
                "ThreadDatum* thread, NrnThread* nt, Memb_list* ml, int tml_id";
@@ -1965,7 +1966,7 @@ const char* CodegenCoreneuronCppVisitor::external_method_parameters(bool table) 
 }
 
 
-std::string CodegenCoreneuronCppVisitor::nrn_thread_arguments() const {
+std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, ionvar, data, indexes, thread, nt, ml, v";
     }
@@ -1977,7 +1978,7 @@ std::string CodegenCoreneuronCppVisitor::nrn_thread_arguments() const {
  * Function call arguments when function or procedure is defined in the
  * same mod file itself
  */
-std::string CodegenCoreneuronCppVisitor::nrn_thread_internal_arguments() {
+std::string CodegenNeuronCppVisitor::nrn_thread_internal_arguments() {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
@@ -1989,7 +1990,7 @@ std::string CodegenCoreneuronCppVisitor::nrn_thread_internal_arguments() {
  * Replace commonly used variables in the verbatim blocks into their corresponding
  * variable name in the new code generation backend.
  */
-std::string CodegenCoreneuronCppVisitor::replace_if_verbatim_variable(std::string name) {
+std::string CodegenNeuronCppVisitor::replace_if_verbatim_variable(std::string name) {
     if (naming::VERBATIM_VARIABLES_MAPPING.find(name) != naming::VERBATIM_VARIABLES_MAPPING.end()) {
         name = naming::VERBATIM_VARIABLES_MAPPING.at(name);
     }
@@ -2018,7 +2019,7 @@ std::string CodegenCoreneuronCppVisitor::replace_if_verbatim_variable(std::strin
  * @todo : this is still ad-hoc and requires re-implementation to
  * handle it more elegantly.
  */
-std::string CodegenCoreneuronCppVisitor::process_verbatim_text(std::string const& text) {
+std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
     parser::CDriver driver;
     driver.scan_string(text);
     auto tokens = driver.all_tokens();
@@ -2045,7 +2046,7 @@ std::string CodegenCoreneuronCppVisitor::process_verbatim_text(std::string const
 }
 
 
-std::string CodegenCoreneuronCppVisitor::register_mechanism_arguments() const {
+std::string CodegenNeuronCppVisitor::register_mechanism_arguments() const {
     auto nrn_cur = nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "nullptr";
     auto nrn_state = nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr";
     auto nrn_alloc = method_name(naming::NRN_ALLOC_METHOD);
@@ -2062,19 +2063,19 @@ std::string CodegenCoreneuronCppVisitor::register_mechanism_arguments() const {
 }
 
 
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::read_ion_variable_name(
+std::pair<std::string, std::string> CodegenNeuronCppVisitor::read_ion_variable_name(
     const std::string& name) {
     return {name, naming::ION_VARNAME_PREFIX + name};
 }
 
 
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::write_ion_variable_name(
+std::pair<std::string, std::string> CodegenNeuronCppVisitor::write_ion_variable_name(
     const std::string& name) {
     return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
 
-std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string& ion_name,
+std::string CodegenNeuronCppVisitor::conc_write_statement(const std::string& ion_name,
                                                     const std::string& concentration,
                                                     int index) {
     auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
@@ -2102,7 +2103,7 @@ std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string&
  * case we first update current mechanism's shadow vector and then add statement
  * to queue that will be used in reduction queue.
  */
-std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
+std::string CodegenNeuronCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
                                                                BlockType /* type */) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
@@ -2126,7 +2127,7 @@ std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(const S
  * NMODL constants from unit database
  *
  */
-void CodegenCoreneuronCppVisitor::print_nmodl_constants() {
+void CodegenNeuronCppVisitor::print_nmodl_constants() {
     if (!info.factor_definitions.empty()) {
         printer->add_newline(2);
         printer->add_line("/** constants used in nmodl from UNITS */");
@@ -2138,7 +2139,7 @@ void CodegenCoreneuronCppVisitor::print_nmodl_constants() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
+void CodegenNeuronCppVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->push_block("static inline int first_pointer_var_index()");
@@ -2147,7 +2148,7 @@ void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_num_variable_getter() {
+void CodegenNeuronCppVisitor::print_num_variable_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->push_block("static inline int float_variables_size()");
@@ -2162,7 +2163,7 @@ void CodegenCoreneuronCppVisitor::print_num_variable_getter() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_arg_size_getter() {
+void CodegenNeuronCppVisitor::print_net_receive_arg_size_getter() {
     if (!net_receive_exist()) {
         return;
     }
@@ -2174,7 +2175,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_arg_size_getter() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_mech_type_getter() {
+void CodegenNeuronCppVisitor::print_mech_type_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->push_block("static inline int get_mech_type()");
@@ -2184,7 +2185,7 @@ void CodegenCoreneuronCppVisitor::print_mech_type_getter() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_memb_list_getter() {
+void CodegenNeuronCppVisitor::print_memb_list_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
     printer->push_block("static inline Memb_list* get_memb_list(NrnThread* nt)");
@@ -2196,13 +2197,13 @@ void CodegenCoreneuronCppVisitor::print_memb_list_getter() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_namespace_start() {
+void CodegenNeuronCppVisitor::print_namespace_start() {
     printer->add_newline(2);
     printer->push_block("namespace coreneuron");
 }
 
 
-void CodegenCoreneuronCppVisitor::print_namespace_stop() {
+void CodegenNeuronCppVisitor::print_namespace_stop() {
     printer->pop_block();
 }
 
@@ -2219,7 +2220,7 @@ void CodegenCoreneuronCppVisitor::print_namespace_stop() {
  * decide the index of thread.
  */
 
-void CodegenCoreneuronCppVisitor::print_thread_getters() {
+void CodegenNeuronCppVisitor::print_thread_getters() {
     if (info.vectorize && info.derivimplicit_used()) {
         int tid = info.derivimplicit_var_thread_id;
         int list = info.derivimplicit_list_num;
@@ -2268,7 +2269,7 @@ void CodegenCoreneuronCppVisitor::print_thread_getters() {
 /****************************************************************************************/
 
 
-std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& symbol,
+std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbol,
                                                    bool use_instance) const {
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
@@ -2288,7 +2289,7 @@ std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& s
 }
 
 
-std::string CodegenCoreneuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
+std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                  const std::string& name,
                                                  bool use_instance) const {
     auto position = position_of_int_var(name);
@@ -2314,7 +2315,7 @@ std::string CodegenCoreneuronCppVisitor::int_variable_name(const IndexVariableIn
 }
 
 
-std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& symbol,
+std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symbol,
                                                     bool use_instance) const {
     if (use_instance) {
         return fmt::format("inst->{}->{}", naming::INST_GLOBAL_MEMBER, symbol->get_name());
@@ -2324,7 +2325,7 @@ std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& 
 }
 
 
-std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(const std::string& name) const {
+std::string CodegenNeuronCppVisitor::update_if_ion_variable_name(const std::string& name) const {
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {
@@ -2341,7 +2342,7 @@ std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(const std::
 }
 
 
-std::string CodegenCoreneuronCppVisitor::get_variable_name(const std::string& name, bool use_instance) const {
+std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name, bool use_instance) const {
     const std::string& varname = update_if_ion_variable_name(name);
 
     // clang-format off
@@ -2413,7 +2414,7 @@ std::string CodegenCoreneuronCppVisitor::get_variable_name(const std::string& na
 /****************************************************************************************/
 
 
-void CodegenCoreneuronCppVisitor::print_backend_info() {
+void CodegenNeuronCppVisitor::print_backend_info() {
     time_t current_time{};
     time(&current_time);
     std::string data_time_str{std::ctime(&current_time)};
@@ -2432,7 +2433,7 @@ void CodegenCoreneuronCppVisitor::print_backend_info() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_standard_includes() {
+void CodegenNeuronCppVisitor::print_standard_includes() {
     printer->add_newline();
     printer->add_multi_line(R"CODE(
         #include <math.h>
@@ -2443,7 +2444,7 @@ void CodegenCoreneuronCppVisitor::print_standard_includes() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
+void CodegenNeuronCppVisitor::print_coreneuron_includes() {
     printer->add_newline();
     printer->add_multi_line(R"CODE(
         #include <coreneuron/gpu/nrn_acc_manager.hpp>
@@ -2492,7 +2493,7 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
  * same for some variables to keep same code as neuron.
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
+void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
     const auto value_initialize = print_initializers ? "{}" : "";
     const auto qualifier = global_var_struct_type_qualifier();
 
@@ -2692,7 +2693,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
     print_global_var_struct_decl();
 }
 
-void CodegenCoreneuronCppVisitor::print_global_var_struct_assertions() const {
+void CodegenNeuronCppVisitor::print_global_var_struct_assertions() const {
     // Assert some things that we assume when copying instances of this struct
     // to the GPU and so on.
     printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);",
@@ -2705,14 +2706,14 @@ void CodegenCoreneuronCppVisitor::print_global_var_struct_assertions() const {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_prcellstate_macros() const {
+void CodegenNeuronCppVisitor::print_prcellstate_macros() const {
     printer->add_line("#ifndef NRN_PRCELLSTATE");
     printer->add_line("#define NRN_PRCELLSTATE 0");
     printer->add_line("#endif");
 }
 
 
-void CodegenCoreneuronCppVisitor::print_mechanism_info() {
+void CodegenNeuronCppVisitor::print_mechanism_info() {
     auto variable_printer = [&](const std::vector<SymbolType>& variables) {
         for (const auto& v: variables) {
             auto name = v->get_name();
@@ -2749,7 +2750,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_info() {
  * Print structs that encapsulate information about scalar and
  * vector elements of type global and thread variables.
  */
-void CodegenCoreneuronCppVisitor::print_global_variables_for_hoc() {
+void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     auto variable_printer =
         [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
             for (const auto& variable: variables) {
@@ -2855,7 +2856,7 @@ static std::string get_register_type_for_ba_block(const ast::Block* block) {
  *    compatible for cpu as well as gpu target.
  */
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenCoreneuronCppVisitor::print_mechanism_register() {
+void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
     printer->fmt_push_block("void _{}_reg()", info.mod_file);
@@ -2997,7 +2998,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_register() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_thread_memory_callbacks() {
+void CodegenNeuronCppVisitor::print_thread_memory_callbacks() {
     if (!info.thread_callback_register) {
         return;
     }
@@ -3060,7 +3061,7 @@ void CodegenCoreneuronCppVisitor::print_thread_memory_callbacks() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_mechanism_range_var_structure(bool print_initializers) {
+void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_initializers) {
     auto const value_initialize = print_initializers ? "{}" : "";
     auto int_type = default_int_data_type();
     printer->add_newline(2);
@@ -3102,7 +3103,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_range_var_structure(bool print
 }
 
 
-void CodegenCoreneuronCppVisitor::print_ion_var_structure() {
+void CodegenNeuronCppVisitor::print_ion_var_structure() {
     if (!ion_variable_struct_required()) {
         return;
     }
@@ -3132,7 +3133,7 @@ void CodegenCoreneuronCppVisitor::print_ion_var_structure() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
+void CodegenNeuronCppVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
     // constructor
     printer->add_newline();
     printer->add_indent();
@@ -3148,17 +3149,17 @@ void CodegenCoreneuronCppVisitor::print_ion_var_constructor(const std::vector<st
 }
 
 
-void CodegenCoreneuronCppVisitor::print_ion_variable() {
+void CodegenNeuronCppVisitor::print_ion_variable() {
     printer->add_line("IonCurVar ionvar;");
 }
 
 
-void CodegenCoreneuronCppVisitor::print_global_variable_device_update_annotation() {
+void CodegenNeuronCppVisitor::print_global_variable_device_update_annotation() {
     // nothing for cpu
 }
 
 
-void CodegenCoreneuronCppVisitor::print_setup_range_variable() {
+void CodegenNeuronCppVisitor::print_setup_range_variable() {
     auto type = float_data_type();
     printer->add_newline(2);
     printer->add_line("/** allocate and setup array for range variable */");
@@ -3179,7 +3180,7 @@ void CodegenCoreneuronCppVisitor::print_setup_range_variable() {
  * are pointers to internal variables (e.g. ions). Hence, we check if given
  * variable can be safely converted to new type. If so, return new type.
  */
-std::string CodegenCoreneuronCppVisitor::get_range_var_float_type(const SymbolType& symbol) {
+std::string CodegenNeuronCppVisitor::get_range_var_float_type(const SymbolType& symbol) {
     // clang-format off
     auto with   =   NmodlType::read_ion_var
                     | NmodlType::write_ion_var
@@ -3195,7 +3196,7 @@ std::string CodegenCoreneuronCppVisitor::get_range_var_float_type(const SymbolTy
 }
 
 
-void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
+void CodegenNeuronCppVisitor::print_instance_variable_setup() {
     if (range_variable_setup_required()) {
         print_setup_range_variable();
     }
@@ -3305,7 +3306,7 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_initial_block(const InitialBlock* node) {
+void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
     if (info.artificial_cell) {
         printer->add_line("double v = 0.0;");
     } else {
@@ -3349,7 +3350,7 @@ void CodegenCoreneuronCppVisitor::print_initial_block(const InitialBlock* node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_global_function_common_code(BlockType type,
+void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
                                                           const std::string& function_name) {
     std::string method;
     if (function_name.empty()) {
@@ -3399,7 +3400,7 @@ void CodegenCoreneuronCppVisitor::print_global_function_common_code(BlockType ty
     printer->add_newline(1);
 }
 
-void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
+void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     codegen = true;
     printer->add_newline(2);
     printer->add_line("/** initialize channel */");
@@ -3476,7 +3477,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
     codegen = false;
 }
 
-void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
+void CodegenNeuronCppVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
     codegen = true;
 
     std::string ba_type;
@@ -3533,7 +3534,7 @@ void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* nod
     codegen = false;
 }
 
-void CodegenCoreneuronCppVisitor::print_nrn_constructor() {
+void CodegenNeuronCppVisitor::print_nrn_constructor() {
     printer->add_newline(2);
     print_global_function_common_code(BlockType::Constructor);
     if (info.constructor_node != nullptr) {
@@ -3545,7 +3546,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_constructor() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_destructor() {
+void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->add_newline(2);
     print_global_function_common_code(BlockType::Destructor);
     if (info.destructor_node != nullptr) {
@@ -3557,7 +3558,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_destructor() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_functors_definitions() {
+void CodegenNeuronCppVisitor::print_functors_definitions() {
     codegen = true;
     for (const auto& functor_name: info.functor_names) {
         printer->add_newline(2);
@@ -3567,7 +3568,7 @@ void CodegenCoreneuronCppVisitor::print_functors_definitions() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_alloc() {
+void CodegenNeuronCppVisitor::print_nrn_alloc() {
     printer->add_newline(2);
     auto method = method_name(naming::NRN_ALLOC_METHOD);
     printer->fmt_push_block("static void {}(double* data, Datum* indexes, int type)", method);
@@ -3580,7 +3581,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_alloc() {
  * according to grammar. Check if this is correctly handled in neuron
  * and coreneuron.
  */
-void CodegenCoreneuronCppVisitor::print_watch_activate() {
+void CodegenNeuronCppVisitor::print_watch_activate() {
     if (info.watch_statements.empty()) {
         return;
     }
@@ -3629,7 +3630,7 @@ void CodegenCoreneuronCppVisitor::print_watch_activate() {
  * \todo Similar to print_watch_activate, we are using only
  * first watch. need to verify with neuron/coreneuron about rest.
  */
-void CodegenCoreneuronCppVisitor::print_watch_check() {
+void CodegenNeuronCppVisitor::print_watch_check() {
     if (info.watch_statements.empty()) {
         return;
     }
@@ -3712,7 +3713,7 @@ void CodegenCoreneuronCppVisitor::print_watch_check() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_common_code(const Block& node, bool need_mech_inst) {
+void CodegenNeuronCppVisitor::print_net_receive_common_code(const Block& node, bool need_mech_inst) {
     printer->add_multi_line(R"CODE(
         int tid = pnt->_tid;
         int id = pnt->_i_instance;
@@ -3762,7 +3763,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_common_code(const Block& nod
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_send_call(const FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_net_send_call(const FunctionCall& node) {
     auto const& arguments = node.get_arguments();
     const auto& tqitem = get_variable_name("tqitem");
     std::string weight_index = "weight_index";
@@ -3794,7 +3795,7 @@ void CodegenCoreneuronCppVisitor::print_net_send_call(const FunctionCall& node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_move_call(const FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_net_move_call(const FunctionCall& node) {
     if (!printing_net_receive && !printing_net_init) {
         throw std::runtime_error("Error : net_move only allowed in NET_RECEIVE block");
     }
@@ -3821,7 +3822,7 @@ void CodegenCoreneuronCppVisitor::print_net_move_call(const FunctionCall& node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_event_call(const FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_net_event_call(const FunctionCall& node) {
     const auto& arguments = node.get_arguments();
     if (info.artificial_cell) {
         printer->add_text("net_event(pnt, ");
@@ -3873,7 +3874,7 @@ static void rename_net_receive_arguments(const ast::NetReceiveBlock& net_receive
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_init() {
+void CodegenNeuronCppVisitor::print_net_init() {
     const auto node = info.net_receive_initial_node;
     if (node == nullptr) {
         return;
@@ -3907,7 +3908,7 @@ void CodegenCoreneuronCppVisitor::print_net_init() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_send_event_move() {
+void CodegenNeuronCppVisitor::print_send_event_move() {
     printer->add_newline();
     printer->add_line("NetSendBuffer_t* nsb = ml->_net_send_buffer;");
     print_net_send_buf_update_to_host();
@@ -3928,12 +3929,12 @@ void CodegenCoreneuronCppVisitor::print_send_event_move() {
 }
 
 
-std::string CodegenCoreneuronCppVisitor::net_receive_buffering_declaration() {
+std::string CodegenNeuronCppVisitor::net_receive_buffering_declaration() {
     return fmt::format("void {}(NrnThread* nt)", method_name("net_buf_receive"));
 }
 
 
-void CodegenCoreneuronCppVisitor::print_get_memb_list() {
+void CodegenNeuronCppVisitor::print_get_memb_list() {
     printer->add_line("Memb_list* ml = get_memb_list(nt);");
     printer->push_block("if (!ml)");
     printer->add_line("return;");
@@ -3942,19 +3943,19 @@ void CodegenCoreneuronCppVisitor::print_get_memb_list() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_loop_begin() {
+void CodegenNeuronCppVisitor::print_net_receive_loop_begin() {
     printer->add_line("int count = nrb->_displ_cnt;");
     print_channel_iteration_block_parallel_hint(BlockType::NetReceive, info.net_receive_node);
     printer->push_block("for (int i = 0; i < count; i++)");
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_loop_end() {
+void CodegenNeuronCppVisitor::print_net_receive_loop_end() {
     printer->pop_block();
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_buffering(bool need_mech_inst) {
+void CodegenNeuronCppVisitor::print_net_receive_buffering(bool need_mech_inst) {
     if (!net_receive_required() || info.artificial_cell) {
         return;
     }
@@ -3999,17 +4000,17 @@ void CodegenCoreneuronCppVisitor::print_net_receive_buffering(bool need_mech_ins
     printer->pop_block();
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buffering_cnt_update() const {
+void CodegenNeuronCppVisitor::print_net_send_buffering_cnt_update() const {
     printer->add_line("i = nsb->_cnt++;");
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buffering_grow() {
+void CodegenNeuronCppVisitor::print_net_send_buffering_grow() {
     printer->push_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
     printer->pop_block();
 }
 
-void CodegenCoreneuronCppVisitor::print_net_send_buffering() {
+void CodegenNeuronCppVisitor::print_net_send_buffering() {
     if (!net_send_buffer_required()) {
         return;
     }
@@ -4037,7 +4038,7 @@ void CodegenCoreneuronCppVisitor::print_net_send_buffering() {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+void CodegenNeuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
     // For_netcon should take the same arguments as net_receive and apply the operations
     // in the block to the weights of the netcons. Since all the weights are on the same vector,
     // weights, we have a mask of operations that we apply iteratively, advancing the offset
@@ -4074,7 +4075,7 @@ void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
     printer->add_line("}");
 }
 
-void CodegenCoreneuronCppVisitor::print_net_receive_kernel() {
+void CodegenNeuronCppVisitor::print_net_receive_kernel() {
     if (!net_receive_required()) {
         return;
     }
@@ -4134,7 +4135,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_kernel() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive() {
+void CodegenNeuronCppVisitor::print_net_receive() {
     if (!net_receive_required()) {
         return;
     }
@@ -4176,7 +4177,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive() {
  * actual variable names? [resolved now?]
  * slist needs to added as local variable
  */
-void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block) {
+void CodegenNeuronCppVisitor::print_derivimplicit_kernel(const Block& block) {
     auto ext_args = external_method_arguments();
     auto ext_params = external_method_parameters();
     auto suffix = info.mod_suffix;
@@ -4265,12 +4266,12 @@ void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block)
 }
 
 
-void CodegenCoreneuronCppVisitor::print_newtonspace_transfer_to_device() const {
+void CodegenNeuronCppVisitor::print_newtonspace_transfer_to_device() const {
     // nothing to do on cpu
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) {
+void CodegenNeuronCppVisitor::visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) {
     if (!codegen) {
         return;
     }
@@ -4280,7 +4281,7 @@ void CodegenCoreneuronCppVisitor::visit_derivimplicit_callback(const ast::Derivi
                       external_method_arguments());
 }
 
-void CodegenCoreneuronCppVisitor::visit_solution_expression(const SolutionExpression& node) {
+void CodegenNeuronCppVisitor::visit_solution_expression(const SolutionExpression& node) {
     auto block = node.get_node_to_solve().get();
     if (block->is_statement_block()) {
         auto statement_block = dynamic_cast<ast::StatementBlock*>(block);
@@ -4296,7 +4297,7 @@ void CodegenCoreneuronCppVisitor::visit_solution_expression(const SolutionExpres
 /****************************************************************************************/
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_state() {
+void CodegenNeuronCppVisitor::print_nrn_state() {
     if (!nrn_state_required()) {
         return;
     }
@@ -4353,7 +4354,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_state() {
 /****************************************************************************************/
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
+void CodegenNeuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
     const auto& args = internal_method_parameters();
     const auto& block = node.get_statement_block();
     printer->add_newline(2);
@@ -4372,7 +4373,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_current(const BreakpointBlock& node)
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& node) {
+void CodegenNeuronCppVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& node) {
     const auto& block = node.get_statement_block();
     print_statement_block(*block, false, false);
     if (!info.currents.empty()) {
@@ -4409,7 +4410,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_conductance_kernel(const Breakpo
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur_non_conductance_kernel() {
+void CodegenNeuronCppVisitor::print_nrn_cur_non_conductance_kernel() {
     printer->fmt_line("double g = nrn_current_{}({}+0.001);",
                                   info.mod_suffix,
                                   internal_method_arguments());
@@ -4443,7 +4444,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_non_conductance_kernel() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
+void CodegenNeuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_index[id];");
     printer->add_line("double v = voltage[node_id];");
     print_v_unused();
@@ -4478,7 +4479,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& no
     print_g_unused();
 }
 
-void CodegenCoreneuronCppVisitor::print_fast_imem_calculation() {
+void CodegenNeuronCppVisitor::print_fast_imem_calculation() {
     if (!info.electrode_current) {
         return;
     }
@@ -4506,7 +4507,7 @@ void CodegenCoreneuronCppVisitor::print_fast_imem_calculation() {
     printer->pop_block();
 }
 
-void CodegenCoreneuronCppVisitor::print_nrn_cur() {
+void CodegenNeuronCppVisitor::print_nrn_cur() {
     if (!nrn_cur_required()) {
         return;
     }
@@ -4545,26 +4546,26 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur() {
 /*                            Main code printing entry points                            */
 /****************************************************************************************/
 
-void CodegenCoreneuronCppVisitor::print_headers_include() {
+void CodegenNeuronCppVisitor::print_headers_include() {
     print_standard_includes();
     print_backend_includes();
     print_coreneuron_includes();
 }
 
 
-void CodegenCoreneuronCppVisitor::print_namespace_begin() {
+void CodegenNeuronCppVisitor::print_namespace_begin() {
     print_namespace_start();
     print_backend_namespace_start();
 }
 
 
-void CodegenCoreneuronCppVisitor::print_namespace_end() {
+void CodegenNeuronCppVisitor::print_namespace_end() {
     print_backend_namespace_stop();
     print_namespace_stop();
 }
 
 
-void CodegenCoreneuronCppVisitor::print_common_getters() {
+void CodegenNeuronCppVisitor::print_common_getters() {
     print_first_pointer_var_index_getter();
     print_net_receive_arg_size_getter();
     print_thread_getters();
@@ -4574,13 +4575,13 @@ void CodegenCoreneuronCppVisitor::print_common_getters() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_data_structures(bool print_initializers) {
+void CodegenNeuronCppVisitor::print_data_structures(bool print_initializers) {
     print_mechanism_global_var_structure(print_initializers);
     print_mechanism_range_var_structure(print_initializers);
     print_ion_var_structure();
 }
 
-void CodegenCoreneuronCppVisitor::print_v_unused() const {
+void CodegenNeuronCppVisitor::print_v_unused() const {
     if (!info.vectorize) {
         return;
     }
@@ -4591,7 +4592,7 @@ void CodegenCoreneuronCppVisitor::print_v_unused() const {
     )CODE");
 }
 
-void CodegenCoreneuronCppVisitor::print_g_unused() const {
+void CodegenNeuronCppVisitor::print_g_unused() const {
     printer->add_multi_line(R"CODE(
         #if NRN_PRCELLSTATE
         inst->g_unused[id] = g;
@@ -4599,7 +4600,7 @@ void CodegenCoreneuronCppVisitor::print_g_unused() const {
     )CODE");
 }
 
-void CodegenCoreneuronCppVisitor::print_compute_functions() {
+void CodegenNeuronCppVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
@@ -4630,7 +4631,7 @@ void CodegenCoreneuronCppVisitor::print_compute_functions() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_codegen_routines() {
+void CodegenNeuronCppVisitor::print_codegen_routines() {
     codegen = true;
     print_backend_info();
     print_headers_include();
@@ -4658,12 +4659,17 @@ void CodegenCoreneuronCppVisitor::print_codegen_routines() {
 }
 
 
-void CodegenCppVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
+void CodegenNeuronCppVisitor::print_wrapper_routines() {
+    // nothing to do
+}
+
+
+void CodegenNeuronCppVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
     codegen_global_variables = global_vars;
 }
 
 
-void CodegenCoreneuronCppVisitor::setup(const Program& node) {
+void CodegenNeuronCppVisitor::setup(const Program& node) {
     program_symtab = node.get_symbol_table();
 
     CodegenHelperVisitor v;
@@ -4671,7 +4677,7 @@ void CodegenCoreneuronCppVisitor::setup(const Program& node) {
     info.mod_file = mod_filename;
 
     if (!info.vectorize) {
-        logger->warn("CodegenCoreneuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
+        logger->warn("CodegenNeuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
     }
 
     codegen_float_variables = get_float_variables();
@@ -4682,9 +4688,10 @@ void CodegenCoreneuronCppVisitor::setup(const Program& node) {
 }
 
 
-void CodegenCoreneuronCppVisitor::visit_program(const Program& node) {
+void CodegenNeuronCppVisitor::visit_program(const Program& node) {
     setup(node);
     print_codegen_routines();
+    print_wrapper_routines();
 }
 
 }  // namespace codegen

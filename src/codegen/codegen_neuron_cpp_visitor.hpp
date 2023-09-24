@@ -12,7 +12,7 @@
  * \brief Code generation backend implementations for CoreNEURON
  *
  * \file
- * \brief \copybrief nmodl::codegen::CodegenCoreneuronCppVisitor
+ * \brief \copybrief nmodl::codegen::CodegenNeuronCppVisitor
  */
 
 #include <algorithm>
@@ -24,6 +24,7 @@
 #include <string_view>
 #include <utility>
 
+#include <codegen/codegen_coreneuron_cpp_visitor.hpp>
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "printer/code_printer.hpp"
@@ -37,125 +38,6 @@ namespace nmodl {
 
 namespace codegen {
 
-/**
- * \defgroup codegen Code Generation Implementation
- * \brief Implementations of code generation backends
- *
- * \defgroup codegen_details Codegen Helpers
- * \ingroup codegen
- * \brief Helper routines/types for code generation
- * \{
- */
-
-/**
- * \enum BlockType
- * \brief Helper to represent various block types
- *
- * Note: do not assign integers to these enums
- *
- */
-enum class BlockType {
-    /// initial block
-    Initial,
-
-    /// constructor block
-    Constructor,
-
-    /// destructor block
-    Destructor,
-
-    /// breakpoint block
-    Equation,
-
-    /// derivative block
-    State,
-
-    /// watch block
-    Watch,
-
-    /// net_receive block
-    NetReceive,
-
-    /// before / after block
-    BeforeAfter,
-
-    /// fake ending block type for loops on the enums. Keep it at the end
-    BlockTypeEnd
-};
-
-
-/**
- * \enum MemberType
- * \brief Helper to represent various variables types
- *
- */
-enum class MemberType {
-    /// index / int variables
-    index,
-
-    /// range / double variables
-    range,
-
-    /// global variables
-    global,
-
-    /// thread variables
-    thread
-};
-
-
-/**
- * \class IndexVariableInfo
- * \brief Helper to represent information about index/int variables
- *
- */
-struct IndexVariableInfo {
-    /// symbol for the variable
-    const std::shared_ptr<symtab::Symbol> symbol;
-
-    /// if variable resides in vdata field of NrnThread
-    /// typically true for bbcore pointer
-    bool is_vdata = false;
-
-    /// if this is pure index (e.g. style_ion) variables is directly
-    /// index and shouldn't be printed with data/vdata
-    bool is_index = false;
-
-    /// if this is an integer (e.g. tqitem, point_process) variable which
-    /// is printed as array accesses
-    bool is_integer = false;
-
-    /// if the variable is qualified as constant (this is property of IndexVariable)
-    bool is_constant = false;
-
-    explicit IndexVariableInfo(std::shared_ptr<symtab::Symbol> symbol,
-                               bool is_vdata = false,
-                               bool is_index = false,
-                               bool is_integer = false)
-        : symbol(std::move(symbol))
-        , is_vdata(is_vdata)
-        , is_index(is_index)
-        , is_integer(is_integer) {}
-};
-
-
-/**
- * \class ShadowUseStatement
- * \brief Represents ion write statement during code generation
- *
- * Ion update statement needs use of shadow vectors for certain backends
- * as atomics operations are not supported on cpu backend.
- *
- * \todo If shadow_lhs is empty then we assume shadow statement not required
- */
-struct ShadowUseStatement {
-    std::string lhs;
-    std::string op;
-    std::string rhs;
-};
-
-/** \} */  // end of codegen_details
-
 
 using printer::CodePrinter;
 
@@ -168,7 +50,7 @@ using printer::CodePrinter;
  */
 
 /**
- * \class CodegenCoreneuronCppVisitor
+ * \class CodegenNeuronCppVisitor
  * \brief %Visitor for printing C++ code compatible with legacy api of CoreNEURON
  *
  * \todo
@@ -178,7 +60,7 @@ using printer::CodePrinter;
  *    error checking. For example, see netstim.mod where we
  *    have removed return from verbatim block.
  */
-class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
+class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
   protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
@@ -955,6 +837,7 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
     bool is_functor_const(const ast::StatementBlock& variable_block,
                       const ast::StatementBlock& functor_block);
 
+
     /**
      * Check if the given name exist in the symbol
      * \return \c return a tuple <true, array_length> if variable
@@ -1425,7 +1308,7 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
      * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
      *
      * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
-     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     * CodegenNeuronCppVisitor::print_nrn_cur_kernel will use this printer
      *
      * \param node the AST node representing the NMODL breakpoint block
      */
@@ -1436,7 +1319,7 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
      * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
      *
      * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
-     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     * CodegenNeuronCppVisitor::print_nrn_cur_kernel will use this printer
      */
     void print_nrn_cur_non_conductance_kernel();
 
@@ -1568,6 +1451,39 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_codegen_routines();
 
 
+    /**
+     * Print entry point to code generation for wrappers
+     */
+    virtual void print_wrapper_routines();
+
+
+    /// This constructor is private, see the public section below to find how to create an instance
+    /// of this class.
+    CodegenNeuronCppVisitor(std::string mod_filename,
+                      const std::string& output_dir,
+                      std::string float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension,
+                      const std::string& wrapper_ext)
+        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
+        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
+    /// This constructor is private, see the public section below to find how to create an instance
+    /// of this class.
+    CodegenNeuronCppVisitor(std::string mod_filename,
+                      std::ostream& stream,
+                      std::string float_type,
+                      const bool optimize_ionvar_copies,
+                      const std::string& /* extension */,
+                      const std::string& /* wrapper_ext */)
+        : printer(std::make_unique<CodePrinter>(stream))
+        , mod_filename(std::move(mod_filename))
+        , float_type(std::move(float_type))
+        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
+
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -1584,18 +1500,20 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
      * \param output_dir   The directory where target C++ file should be generated.
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
+     * \param extension    The file extension to use. This defaults to \c .cpp .
      */
-    CodegenCoreneuronCppVisitor(std::string mod_filename,
+    CodegenNeuronCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
                       std::string float_type,
-                      const bool optimize_ionvar_copies)
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + ".cpp"))
+                      const bool optimize_ionvar_copies,
+                      const std::string& extension = ".cpp")
+        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
     /**
-     * \copybrief nmodl::codegen::CodegenCoreneuronCppVisitor
+     * \copybrief nmodl::codegen::CodegenNeuronCppVisitor
      *
      * This constructor instantiates an NMODL C++ code generator and allows writing generated code
      * into an output stream.
@@ -1610,7 +1528,7 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
      * \param float_type   The float type to use in the generated code. The string will be used
      *                     as-is in the target code. This defaults to \c double.
      */
-    CodegenCoreneuronCppVisitor(std::string mod_filename,
+    CodegenNeuronCppVisitor(std::string mod_filename,
                       std::ostream& stream,
                       std::string float_type,
                       const bool optimize_ionvar_copies)
@@ -1801,7 +1719,7 @@ class CodegenCoreneuronCppVisitor: public visitor::ConstAstVisitor {
 
 
 template <typename T>
-void CodegenCoreneuronCppVisitor::print_vector_elements(const std::vector<T>& elements,
+void CodegenNeuronCppVisitor::print_vector_elements(const std::vector<T>& elements,
                                               const std::string& separator,
                                               const std::string& prefix) {
     for (auto iter = elements.begin(); iter != elements.end(); iter++) {
@@ -1815,32 +1733,13 @@ void CodegenCoreneuronCppVisitor::print_vector_elements(const std::vector<T>& el
 
 
 /**
- * Check if function or procedure node has parameter with given name
- *
- * \tparam T Node type (either procedure or function)
- * \param node AST node (either procedure or function)
- * \param name Name of parameter
- * \return True if argument with name exist
- */
-template <typename T>
-bool has_parameter_of_name(const T& node, const std::string& name) {
-    auto parameters = node->get_parameters();
-    return std::any_of(parameters.begin(),
-                       parameters.end(),
-                       [&name](const decltype(*parameters.begin()) arg) {
-                           return arg->get_node_name() == name;
-                       });
-}
-
-
-/**
  * \details If there is an argument with name (say alpha) same as range variable (say alpha),
  * we want to avoid it being printed as instance->alpha. And hence we disable variable
  * name lookup during prototype declaration. Note that the name of procedure can be
  * different in case of table statement.
  */
 template <typename T>
-void CodegenCoreneuronCppVisitor::print_function_declaration(const T& node, const std::string& name) {
+void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const std::string& name) {
     enable_variable_name_lookup = false;
     auto type = default_float_data_type();
 

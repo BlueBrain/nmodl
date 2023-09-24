@@ -15,6 +15,7 @@
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
 #include "codegen/codegen_coreneuron_cpp_visitor.hpp"
+#include "codegen/codegen_neuron_cpp_visitor.hpp"
 #include "codegen/codegen_transform_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
@@ -68,6 +69,12 @@ int main(int argc, const char* argv[]) {
 
     /// true if debug logger statements should be shown
     std::string verbose("info");
+
+    /// true if code is to be generated for NEURON
+    bool neuron_code(false);
+
+    /// true if code is to be generated for CoreNEURON
+    bool coreneuron_code(true);
 
     /// true if serial c code to be generated
     bool c_backend(true);
@@ -175,15 +182,21 @@ int main(int argc, const char* argv[]) {
         ->capture_default_str()
         ->ignore_case();
 
+    auto simulator_opt = app.add_subcommand("simulator", "NEURON/CoreNEURON code backends")->ignore_case();
+    simulator_opt->add_flag("--neuron", neuron_code, "Generate C++ code for NEURON")
+        ->ignore_case();
+    simulator_opt->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON")
+        ->ignore_case();
+
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", c_backend, fmt::format("C/C++ backend ({})", c_backend))
+    host_opt->add_flag("--c", c_backend, fmt::format("C++ backend ({})", c_backend))
         ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
         ->add_flag("--oacc",
                    oacc_backend,
-                   fmt::format("C/C++ backend with OpenACC ({})", oacc_backend))
+                   fmt::format("C++ backend with OpenACC ({})", oacc_backend))
         ->ignore_case();
 
     // clang-format off
@@ -519,8 +532,8 @@ int main(int argc, const char* argv[]) {
         }
 
         {
-            if (oacc_backend) {
-                logger->info("Running OpenACC backend code generator");
+            if (coreneuron_code && oacc_backend) {
+                logger->info("Running OpenACC backend code generator for CoreNEURON");
                 CodegenAccVisitor visitor(modfile,
                                           output_dir,
                                           data_type,
@@ -528,13 +541,26 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
             }
 
-            else if (c_backend) {
-                logger->info("Running C++ backend code generator");
+            else if (coreneuron_code && c_backend) {
+                logger->info("Running C++ backend code generator for CoreNEURON");
                 CodegenCoreneuronCppVisitor visitor(modfile,
                                           output_dir,
                                           data_type,
                                           optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
+            }
+
+            else if (neuron_code && c_backend) {
+                logger->info("Running C++ backend code generator for NEURON");
+                CodegenNeuronCppVisitor visitor(modfile,
+                                          output_dir,
+                                          data_type,
+                                          optimize_ionvar_copies_codegen);
+                visitor.visit_program(*ast);
+            }
+
+            else {
+                throw std::runtime_error("Non valid code generation configuration. Code generation with NMODL is supported for NEURON with C++ backend or CoreNEURON with C++/OpenACC backends");
             }
         }
     }
