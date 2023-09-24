@@ -215,14 +215,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Check if given statement should be skipped during code generation
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement is to be skipped
-     */
-    static bool statement_to_skip(const ast::Statement& node);
-
-
-    /**
      * Check if a semicolon is required at the end of given statement
      * \param node The AST Statement node to check
      * \return     \c true if this Statement requires a semicolon
@@ -278,7 +270,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \return             The C++ string representing the access to the variable in the neuron
      * thread structure
      */
-    std::string get_variable_name(const std::string& name, bool use_instance = true) const;
+    std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
 
 
     /**
@@ -445,6 +437,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Process a verbatim block for possible variable renaming
+     * \param text The verbatim code to be processed
+     * \return     The code with all variables renamed as needed
+     */
+    std::string process_verbatim_text(std::string const& text) override;
+
+
+    /**
      * Prints the start of the \c neuron namespace
      */
     void print_namespace_start();
@@ -530,10 +530,16 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Print atomic update pragma for reduction statements
+     */
+    virtual void print_atomic_reduction_pragma() override;
+
+
+    /**
      * Print call to internal or external function
      * \param node The AST node representing a function call
      */
-    void print_function_call(const ast::FunctionCall& node);
+    void print_function_call(const ast::FunctionCall& node) override;
 
 
     /**
@@ -754,29 +760,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
-    void visit_binary_expression(const ast::BinaryExpression& node) override;
-    void visit_binary_operator(const ast::BinaryOperator& node) override;
-    void visit_boolean(const ast::Boolean& node) override;
-    void visit_double(const ast::Double& node) override;
-    void visit_else_if_statement(const ast::ElseIfStatement& node) override;
-    void visit_else_statement(const ast::ElseStatement& node) override;
-    void visit_float(const ast::Float& node) override;
-    void visit_from_statement(const ast::FromStatement& node) override;
-    void visit_function_call(const ast::FunctionCall& node) override;
-    void visit_if_statement(const ast::IfStatement& node) override;
-    void visit_indexed_name(const ast::IndexedName& node) override;
-    void visit_integer(const ast::Integer& node) override;
-    void visit_local_list_statement(const ast::LocalListStatement& node) override;
-    void visit_name(const ast::Name& node) override;
-    void visit_paren_expression(const ast::ParenExpression& node) override;
-    void visit_prime_name(const ast::PrimeName& node) override;
-    void visit_statement_block(const ast::StatementBlock& node) override;
-    void visit_string(const ast::String& node) override;
-    void visit_solution_expression(const ast::SolutionExpression& node) override;
-    void visit_unary_operator(const ast::UnaryOperator& node) override;
-    void visit_unit(const ast::Unit& node) override;
-    void visit_var_name(const ast::VarName& node) override;
-    void visit_while_statement(const ast::WhileStatement& node) override;
+    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
+    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 };
 
 

@@ -76,15 +76,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
-    /**
-     * Flag to indicate if visitor should print the visited nodes
-     */
-    bool codegen = false;
 
-    /**
-     * Variable name should be converted to instance name (but not for function arguments)
-     */
-    bool enable_variable_name_lookup = true;
 
     /**
      * Symbol table for the program
@@ -330,22 +322,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Check if given statement should be skipped during code generation
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement is to be skipped
-     */
-    static bool statement_to_skip(const ast::Statement& node);
-
-
-    /**
-     * Check if a semicolon is required at the end of given statement
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement requires a semicolon
-     */
-    static bool need_semicolon(const ast::Statement& node);
-
-
-    /**
      * Determine the number of threads to allocate
      */
     int num_thread_objects() const noexcept {
@@ -401,22 +377,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Convert a given \c double value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
-     */
-    virtual std::string format_double_string(const std::string& value);
-
-
-    /**
-     * Convert a given \c float value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
-     */
-    virtual std::string format_float_string(const std::string& value);
-
-
-    /**
      * Determine the name of a \c float variable given its symbol
      *
      * This function typically returns the accessor expression in backend code for the given symbol.
@@ -467,7 +427,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return             The C++ string representing the access to the variable in the neuron
      * thread structure
      */
-    std::string get_variable_name(const std::string& name, bool use_instance = true) const;
+    std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
 
 
     /**
@@ -500,23 +460,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print the items in a vector as a list
-     *
-     * This function prints a given vector of elements as a list with given separator onto the
-     * current printer. Elements are expected to be of type nmodl::ast::Ast and are printed by being
-     * visited. Care is taken to omit the separator after the the last element.
-     *
-     * \tparam T The element type in the vector, which must be of type nmodl::ast::Ast
-     * \param  elements The vector of elements to be printed
-     * \param  separator The separator string to print between all elements
-     * \param  prefix A prefix string to print before each element
-     */
-    template <typename T>
-    void print_vector_elements(const std::vector<T>& elements,
-                               const std::string& separator,
-                               const std::string& prefix = "");
-
-    /**
      * Generate the string representing the procedure parameter declaration
      *
      * The procedure parameters are stored in a vector of 4-tuples each representing a parameter.
@@ -526,21 +469,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return The string representing the declaration of function parameters
      */
     static std::string get_parameter_str(const ParamVector& params);
-
-
-    /**
-     * Print any statement block in nmodl with option to (not) print braces
-     *
-     * The individual statements (of type nmodl::ast::Statement) in the StatementBlock are printed
-     * by accepting \c this visistor.
-     *
-     * \param node        A (possibly empty) statement block AST node
-     * \param open_brace  Print an opening brace if \c false
-     * \param close_brace Print a closing brace if \c true
-     */
-    void print_statement_block(const ast::StatementBlock& node,
-                               bool open_brace = true,
-                               bool close_brace = true);
 
 
     /**
@@ -555,7 +483,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param text The verbatim code to be processed
      * \return     The code with all variables renamed as needed
      */
-    std::string process_verbatim_text(std::string const& text);
+    std::string process_verbatim_text(std::string const& text) override;
 
 
     /**
@@ -1025,7 +953,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print call to internal or external function
      * \param node The AST node representing a function call
      */
-    void print_function_call(const ast::FunctionCall& node);
+    void print_function_call(const ast::FunctionCall& node) override;
 
 
     /**
@@ -1247,7 +1175,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print atomic update pragma for reduction statements
      */
-    virtual void print_atomic_reduction_pragma();
+    virtual void print_atomic_reduction_pragma() override;
 
 
     /**
@@ -1614,55 +1542,14 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
-    void visit_binary_expression(const ast::BinaryExpression& node) override;
-    void visit_binary_operator(const ast::BinaryOperator& node) override;
-    void visit_boolean(const ast::Boolean& node) override;
-    void visit_double(const ast::Double& node) override;
-    void visit_else_if_statement(const ast::ElseIfStatement& node) override;
-    void visit_else_statement(const ast::ElseStatement& node) override;
-    void visit_float(const ast::Float& node) override;
-    void visit_from_statement(const ast::FromStatement& node) override;
-    void visit_function_call(const ast::FunctionCall& node) override;
+    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
     virtual void print_eigen_linear_solver(const std::string& float_type, int N);
-    void visit_if_statement(const ast::IfStatement& node) override;
-    void visit_indexed_name(const ast::IndexedName& node) override;
-    void visit_integer(const ast::Integer& node) override;
-    void visit_local_list_statement(const ast::LocalListStatement& node) override;
-    void visit_name(const ast::Name& node) override;
-    void visit_paren_expression(const ast::ParenExpression& node) override;
-    void visit_prime_name(const ast::PrimeName& node) override;
-    void visit_statement_block(const ast::StatementBlock& node) override;
-    void visit_string(const ast::String& node) override;
-    void visit_solution_expression(const ast::SolutionExpression& node) override;
-    void visit_unary_operator(const ast::UnaryOperator& node) override;
-    void visit_unit(const ast::Unit& node) override;
-    void visit_var_name(const ast::VarName& node) override;
-    void visit_verbatim(const ast::Verbatim& node) override;
-    void visit_watch_statement(const ast::WatchStatement& node) override;
-    void visit_while_statement(const ast::WhileStatement& node) override;
-    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
-    void visit_update_dt(const ast::UpdateDt& node) override;
-    void visit_protect_statement(const ast::ProtectStatement& node) override;
-    void visit_mutex_lock(const ast::MutexLock& node) override;
-    void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
+    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 };
-
-
-template <typename T>
-void CodegenCoreneuronCppVisitor::print_vector_elements(const std::vector<T>& elements,
-                                              const std::string& separator,
-                                              const std::string& prefix) {
-    for (auto iter = elements.begin(); iter != elements.end(); iter++) {
-        printer->add_text(prefix);
-        (*iter)->accept(*this);
-        if (!separator.empty() && !nmodl::utils::is_last(iter, elements)) {
-            printer->add_text(separator);
-        }
-    }
-}
 
 
 /**

@@ -41,293 +41,10 @@ using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
 
-/****************************************************************************************/
-/*                            Overloaded visitor routines                               */
-/****************************************************************************************/
-
-static const std::regex regex_special_chars{R"([-[\]{}()*+?.,\^$|#\s])"};
-
-void CodegenNeuronCppVisitor::visit_string(const String& node) {
-    if (!codegen) {
-        return;
-    }
-    std::string name = node.eval();
-    if (enable_variable_name_lookup) {
-        name = get_variable_name(name);
-    }
-    printer->add_text(name);
-}
-
-
-void CodegenNeuronCppVisitor::visit_integer(const Integer& node) {
-    if (!codegen) {
-        return;
-    }
-    const auto& value = node.get_value();
-    printer->add_text(std::to_string(value));
-}
-
-
-void CodegenNeuronCppVisitor::visit_float(const Float& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(format_float_string(node.get_value()));
-}
-
-
-void CodegenNeuronCppVisitor::visit_double(const Double& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(format_double_string(node.get_value()));
-}
-
-
-void CodegenNeuronCppVisitor::visit_boolean(const Boolean& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(std::to_string(static_cast<int>(node.eval())));
-}
-
-
-void CodegenNeuronCppVisitor::visit_name(const Name& node) {
-    if (!codegen) {
-        return;
-    }
-    node.visit_children(*this);
-}
-
-
-void CodegenNeuronCppVisitor::visit_unit(const ast::Unit& node) {
-    // do not print units
-}
-
-
-void CodegenNeuronCppVisitor::visit_prime_name(const PrimeName& /* node */) {
-    throw std::runtime_error("PRIME encountered during code generation, ODEs not solved?");
-}
-
-
-
-/**
- * \todo : Validate how @ is being handled in neuron implementation
- */
-void CodegenNeuronCppVisitor::visit_var_name(const VarName& node) {
-    if (!codegen) {
-        return;
-    }
-    const auto& name = node.get_name();
-    const auto& at_index = node.get_at();
-    const auto& index = node.get_index();
-    name->accept(*this);
-    if (at_index) {
-        printer->add_text("@");
-        at_index->accept(*this);
-    }
-    if (index) {
-        printer->add_text("[");
-        printer->add_text("static_cast<int>(");
-        index->accept(*this);
-        printer->add_text(")");
-        printer->add_text("]");
-    }
-}
-
-
-void CodegenNeuronCppVisitor::visit_indexed_name(const IndexedName& node) {
-    if (!codegen) {
-        return;
-    }
-    node.get_name()->accept(*this);
-    printer->add_text("[");
-    printer->add_text("static_cast<int>(");
-    node.get_length()->accept(*this);
-    printer->add_text(")");
-    printer->add_text("]");
-}
-
-
-void CodegenNeuronCppVisitor::visit_local_list_statement(const LocalListStatement& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(local_var_type(), ' ');
-    print_vector_elements(node.get_variables(), ", ");
-}
-
-
-void CodegenNeuronCppVisitor::visit_if_statement(const IfStatement& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text("if (");
-    node.get_condition()->accept(*this);
-    printer->add_text(") ");
-    node.get_statement_block()->accept(*this);
-    print_vector_elements(node.get_elseifs(), "");
-    const auto& elses = node.get_elses();
-    if (elses) {
-        elses->accept(*this);
-    }
-}
-
-
-void CodegenNeuronCppVisitor::visit_else_if_statement(const ElseIfStatement& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(" else if (");
-    node.get_condition()->accept(*this);
-    printer->add_text(") ");
-    node.get_statement_block()->accept(*this);
-}
-
-
-void CodegenNeuronCppVisitor::visit_else_statement(const ElseStatement& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(" else ");
-    node.visit_children(*this);
-}
-
-
-void CodegenNeuronCppVisitor::visit_while_statement(const WhileStatement& node) {
-    printer->add_text("while (");
-    node.get_condition()->accept(*this);
-    printer->add_text(") ");
-    node.get_statement_block()->accept(*this);
-}
-
-
-void CodegenNeuronCppVisitor::visit_from_statement(const ast::FromStatement& node) {
-    if (!codegen) {
-        return;
-    }
-    auto name = node.get_node_name();
-    const auto& from = node.get_from();
-    const auto& to = node.get_to();
-    const auto& inc = node.get_increment();
-    const auto& block = node.get_statement_block();
-    printer->fmt_text("for (int {} = ", name);
-    from->accept(*this);
-    printer->fmt_text("; {} <= ", name);
-    to->accept(*this);
-    if (inc) {
-        printer->fmt_text("; {} += ", name);
-        inc->accept(*this);
-    } else {
-        printer->fmt_text("; {}++", name);
-    }
-    printer->add_text(") ");
-    block->accept(*this);
-}
-
-
-void CodegenNeuronCppVisitor::visit_paren_expression(const ParenExpression& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text("(");
-    node.get_expression()->accept(*this);
-    printer->add_text(")");
-}
-
-
-void CodegenNeuronCppVisitor::visit_binary_expression(const BinaryExpression& node) {
-    if (!codegen) {
-        return;
-    }
-    auto op = node.get_op().eval();
-    const auto& lhs = node.get_lhs();
-    const auto& rhs = node.get_rhs();
-    if (op == "^") {
-        printer->add_text("pow(");
-        lhs->accept(*this);
-        printer->add_text(", ");
-        rhs->accept(*this);
-        printer->add_text(")");
-    } else {
-        lhs->accept(*this);
-        printer->add_text(" " + op + " ");
-        rhs->accept(*this);
-    }
-}
-
-
-void CodegenNeuronCppVisitor::visit_binary_operator(const BinaryOperator& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(node.eval());
-}
-
-
-void CodegenNeuronCppVisitor::visit_unary_operator(const UnaryOperator& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->add_text(" " + node.eval());
-}
-
-
-/**
- * \details Statement block is top level construct (for every nmodl block).
- * Sometime we want to analyse ast nodes even if code generation is
- * false. Hence we visit children even if code generation is false.
- */
-void CodegenNeuronCppVisitor::visit_statement_block(const StatementBlock& node) {
-    if (!codegen) {
-        node.visit_children(*this);
-        return;
-    }
-    print_statement_block(node);
-}
-
-
-void CodegenNeuronCppVisitor::visit_function_call(const FunctionCall& node) {
-    if (!codegen) {
-        return;
-    }
-    print_function_call(node);
-}
-
 
 /****************************************************************************************/
 /*                               Common helper routines                                 */
 /****************************************************************************************/
-
-
-/**
- * \details Certain statements like unit, comment, solve can/need to be skipped
- * during code generation. Note that solve block is wrapped in expression
- * statement and hence we have to check inner expression. It's also true
- * for the initial block defined inside net receive block.
- */
-bool CodegenNeuronCppVisitor::statement_to_skip(const Statement& node) {
-    // clang-format off
-    if (node.is_unit_state()
-        || node.is_line_comment()
-        || node.is_block_comment()
-        || node.is_solve_block()
-        || node.is_conductance_hint()
-        || node.is_table_statement()) {
-        return true;
-    }
-    // clang-format on
-    if (node.is_expression_statement()) {
-        auto expression = dynamic_cast<const ExpressionStatement*>(&node)->get_expression();
-        if (expression->is_solve_block()) {
-            return true;
-        }
-        if (expression->is_initial_block()) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
 bool CodegenNeuronCppVisitor::nrn_state_required() const noexcept {
@@ -886,6 +603,16 @@ std::string CodegenNeuronCppVisitor::compute_method_name(BlockType type) const {
 /*              printing routines for code generation                                   */
 /****************************************************************************************/
 
+// TODO: Edit for NEURON
+void CodegenNeuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
+    return;
+}
+
+
+// TODO: Check what we do in NEURON
+void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
+    return;
+}
 
 void CodegenNeuronCppVisitor::print_statement_block(const ast::StatementBlock& node,
                                               bool open_brace,
@@ -1083,6 +810,12 @@ std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
 std::string CodegenNeuronCppVisitor::nrn_thread_internal_arguments() {
    // TODO: rewrite based on NEURON
    return {};
+}
+
+
+// TODO: Write for NEURON
+std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
+    return {};
 }
 
 
