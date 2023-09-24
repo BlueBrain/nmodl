@@ -106,32 +106,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     std::vector<SymbolType> codegen_global_variables;
 
-    /**
-     * \c true if currently net_receive block being printed
-     */
-    bool printing_net_receive = false;
-
-    /**
-     * \c true if currently initial block of net_receive being printed
-     */
-    bool printing_net_init = false;
-
-
-    /**
-     * \c true if currently printing top level verbatim blocks
-     */
-    bool printing_top_verbatim_blocks = false;
-
-    /**
-     * \c true if internal method call was encountered while processing verbatim block
-     */
-    bool internal_method_call_encountered = false;
-
-    /**
-     * Index of watch statement being printed
-     */
-    int current_watch_statement = 0;
-
 
     /**
      * Return Nmodl language version
@@ -150,23 +124,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     std::string add_escape_quote(const std::string& text) const {
         return "\"" + text + "\"";
     }
-
-
-    /**
-     * Operator for rhs vector update (matrix update)
-     */
-    const char* operator_for_rhs() const noexcept {
-        return info.electrode_current ? "+=" : "-=";
-    }
-
-
-    /**
-     * Operator for diagonal vector update (matrix update)
-     */
-    const char* operator_for_d() const noexcept {
-        return info.electrode_current ? "-=" : "+=";
-    }
-
 
     /**
      * Data type for the local variables
@@ -201,58 +158,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Checks if given function name is \c net_send
-     * \param name The function name to check
-     * \return     \c true if the function is net_send
-     */
-    bool is_net_send(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_SEND_METHOD;
-    }
-
-    /**
-     * Checks if given function name is \c net_move
-     * \param name The function name to check
-     * \return     \c true if the function is net_move
-     */
-    bool is_net_move(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_MOVE_METHOD;
-    }
-
-    /**
-     * Checks if given function name is \c net_event
-     * \param name The function name to check
-     * \return     \c true if the function is net_event
-     */
-    bool is_net_event(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_EVENT_METHOD;
-    }
-
-
-    /**
-     * Name of structure that wraps range variables
-     */
-    std::string instance_struct() const {
-        return fmt::format("{}_Instance", info.mod_suffix);
-    }
-
-
-    /**
-     * Name of structure that wraps global variables
-     */
-    std::string global_struct() const {
-        return fmt::format("{}_Store", info.mod_suffix);
-    }
-
-
-    /**
-     * Name of the (host-only) global instance of `global_struct`
-     */
-    std::string global_struct_instance() const {
-        return info.mod_suffix + "_global";
-    }
-
-
-    /**
      * Constructs the name of a function or procedure
      * \param name The name of the function or procedure
      * \return     The name of the function or procedure postfixed with the model name
@@ -270,12 +175,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     SymbolType make_symbol(const std::string& name) const {
         return std::make_shared<symtab::Symbol>(name, ModToken());
     }
-
-
-    /**
-     * Check if net receive/send buffering kernels required
-     */
-    bool net_receive_buffering_required() const noexcept;
 
 
     /**
@@ -310,23 +209,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Check if net_receive node exist
-     */
-    bool net_receive_exist() const noexcept;
-
-
-    /**
      * Check if breakpoint node exist
      */
     bool breakpoint_exist() const noexcept;
-
-
-    /**
-     * Check if given method is defined in this model
-     * \param name The name of the method to check
-     * \return     \c true if the method is defined
-     */
-    bool defined_method(const std::string& name) const;
 
 
     /**
@@ -346,14 +231,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine the number of threads to allocate
-     */
-    int num_thread_objects() const noexcept {
-        return info.vectorize ? (info.thread_data_index + 1) : 0;
-    }
-
-
-    /**
      * Number of float variables in the model
      */
     int float_variables_size() const;
@@ -363,30 +240,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Number of integer variables in the model
      */
     int int_variables_size() const;
-
-
-    /**
-     * Determine the position in the data array for a given float variable
-     * \param name The name of a float variable
-     * \return     The position index in the data array
-     */
-    int position_of_float_var(const std::string& name) const;
-
-
-    /**
-     * Determine the position in the data array for a given int variable
-     * \param name The name of an int variable
-     * \return     The position index in the data array
-     */
-    int position_of_int_var(const std::string& name) const;
-
-
-    /**
-     * Determine the updated name if the ion variable has been optimized
-     * \param name The ion variable name
-     * \return     The updated name of the variable has been optimized (e.g. \c ena --> \c ion_ena)
-     */
-    std::string update_if_ion_variable_name(const std::string& name) const;
 
 
     /**
@@ -415,49 +268,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \return      Its string representation
      */
     virtual std::string format_float_string(const std::string& value);
-
-
-    /**
-     * Determine the name of a \c float variable given its symbol
-     *
-     * This function typically returns the accessor expression in backend code for the given symbol.
-     * Since the model variables are stored in data arrays and accessed by offset, this function
-     * will return the C++ string representing the array access at the correct offset
-     *
-     * \param symbol       The symbol of a variable for which we want to obtain its name
-     * \param use_instance Should the variable be accessed via instance or data array
-     * \return             The backend code string representing the access to the given variable
-     * symbol
-     */
-    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const;
-
-
-    /**
-     * Determine the name of an \c int variable given its symbol
-     *
-     * This function typically returns the accessor expression in backend code for the given symbol.
-     * Since the model variables are stored in data arrays and accessed by offset, this function
-     * will return the C++ string representing the array access at the correct offset
-     *
-     * \param symbol       The symbol of a variable for which we want to obtain its name
-     * \param name         The name of the index variable
-     * \param use_instance Should the variable be accessed via instance or data array
-     * \return             The backend code string representing the access to the given variable
-     * symbol
-     */
-    std::string int_variable_name(const IndexVariableInfo& symbol,
-                                  const std::string& name,
-                                  bool use_instance) const;
-
-
-    /**
-     * Determine the variable name for a global variable given its symbol
-     * \param symbol The symbol of a variable for which we want to obtain its name
-     * \param use_instance Should the variable be accessed via the (host-only)
-     * global variable or the instance-specific copy (also available on GPU).
-     * \return       The C++ string representing the access to the global variable
-     */
-    std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
 
 
     /**
@@ -517,17 +327,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
                                const std::string& separator,
                                const std::string& prefix = "");
 
-    /**
-     * Generate the string representing the procedure parameter declaration
-     *
-     * The procedure parameters are stored in a vector of 4-tuples each representing a parameter.
-     *
-     * \param params The parameters that should be concatenated into the function parameter
-     * declaration
-     * \return The string representing the declaration of function parameters
-     */
-    static std::string get_parameter_str(const ParamVector& params);
-
 
     /**
      * Print any statement block in nmodl with option to (not) print braces
@@ -542,29 +341,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_statement_block(const ast::StatementBlock& node,
                                bool open_brace = true,
                                bool close_brace = true);
-
-
-    /**
-     * Check if a structure for ion variables is required
-     * \return \c true if a structure fot ion variables must be generated
-     */
-    bool ion_variable_struct_required() const;
-
-
-    /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
-     */
-    std::string process_verbatim_text(std::string const& text);
-
-
-    /**
-     * Process a token in a verbatim block for possible variable renaming
-     * \param token The verbatim token to be processed
-     * \return      The code after variable renaming
-     */
-    std::string process_verbatim_token(const std::string& token);
 
 
     /**
@@ -608,18 +384,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \return     The ion write variable name
      */
     static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
-
-
-    /**
-     * Generate Function call statement for nrn_wrote_conc
-     * \param ion_name      The name of the ion variable
-     * \param concentration The name of the concentration variable
-     * \param index
-     * \return              The string representing the function call
-     */
-    std::string conc_write_statement(const std::string& ion_name,
-                                     const std::string& concentration,
-                                     int index);
 
 
     /**
@@ -674,42 +438,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Replace commonly used verbatim variables
-     * \param name A variable name to be checked and possibly updated
-     * \return     The possibly replace variable name
-     */
-    std::string replace_if_verbatim_variable(std::string name);
-
-
-    /**
      * Return the name of main compute kernels
      * \param type A block type
      */
     virtual std::string compute_method_name(BlockType type) const;
 
-
-    /**
-     * The used global type qualifier
-     *
-     * For C++ code generation this is empty
-     * \return ""
-     *
-     * \return "uniform "
-     */
-    virtual std::string global_var_struct_type_qualifier();
-
-    /**
-     * Instantiate global var instance
-     *
-     * For C++ code generation this is empty
-     * \return ""
-     */
-    virtual void print_global_var_struct_decl();
-
-    /**
-     * Print static assertions about the global variable struct.
-     */
-    virtual void print_global_var_struct_assertions() const;
 
     /**
      * Prints the start of the \c coreneuron namespace
@@ -721,22 +454,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Prints the end of the \c coreneuron namespace
      */
     void print_namespace_stop();
-
-
-    /**
-     * Prints the start of namespace for the backend-specific code
-     *
-     * For the C++ backend no additional namespace is required
-     */
-    virtual void print_backend_namespace_start();
-
-
-    /**
-     * Prints the end of namespace for the backend-specific code
-     *
-     * For the C++ backend no additional namespace is required
-     */
-    virtual void print_backend_namespace_stop();
 
 
     /**
@@ -779,47 +496,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print includes from coreneuron
+     * Print includes from NEURON
      */
-    void print_coreneuron_includes();
+    void print_neuron_includes();
 
-
-    /**
-     * Print backend specific includes (none needed for C++ backend)
-     */
-    virtual void print_backend_includes();
-
-
-    /**
-     * Check if ion variable copies should be avoided
-     */
-    bool optimize_ion_variable_copies() const;
-
-
-    /**
-     * Check if reduction block in \c nrn\_cur required
-     */
-    virtual bool nrn_cur_reduction_loop_required();
-
-
-    /**
-     * Check if variable is qualified as constant
-     * \param name The name of variable
-     * \return \c true if it is constant
-     */
-    virtual bool is_constant_variable(const std::string& name) const;
-
-
-    bool is_functor_const(const ast::StatementBlock& variable_block,
-                      const ast::StatementBlock& functor_block);
-
-
-    /**
-     * Check if the given name exist in the symbol
-     * \return \c return a tuple <true, array_length> if variable
-     *            is an array otherwise <false, 0>
-     */
-    std::tuple<bool, int> check_if_var_is_array(const std::string& name);
 
     /**
      * Print declaration of macro NRN_PRCELLSTATE for debugging
@@ -843,184 +523,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print structure of ion variables used for local copies
-     */
-    void print_ion_var_structure();
-
-
-    /**
-     * Print constructor of ion variables
-     * \param members The ion variable names
-     */
-    virtual void print_ion_var_constructor(const std::vector<std::string>& members);
-
-
-    /**
-     * Print the ion variable struct
-     */
-    virtual void print_ion_variable();
-
-
-    /**
-     * Returns floating point type for given range variable symbol
-     * \param symbol A range variable symbol
-     */
-    std::string get_range_var_float_type(const SymbolType& symbol);
-
-
-    /**
-     * Print the function that initialize range variable with different data type
-     */
-    void print_setup_range_variable();
-
-
-    /**
-     * Print declarations of the functions used by \ref
-     * print_instance_struct_copy_to_device and \ref
-     * print_instance_struct_delete_from_device.
-     */
-    virtual void print_instance_struct_transfer_routine_declarations() {}
-
-    /**
-     * Print the definitions of the functions used by \ref
-     * print_instance_struct_copy_to_device and \ref
-     * print_instance_struct_delete_from_device. Declarations of these functions
-     * are printed by \ref print_instance_struct_transfer_routine_declarations.
-     *
-     * This updates the (pointer) member variables in the device copy of the
-     * instance struct to contain device pointers, which is why you must pass a
-     * list of names of those member variables.
-     *
-     * \param ptr_members List of instance struct member names.
-     */
-    virtual void print_instance_struct_transfer_routines(
-        std::vector<std::string> const& /* ptr_members */) {}
-
-
-    /**
-     * Transfer the instance struct to the device. This calls a function
-     * declared by \ref print_instance_struct_transfer_routine_declarations.
-     */
-    virtual void print_instance_struct_copy_to_device() {}
-
-    /**
-     * Delete the instance struct from the device. This calls a function
-     * declared by \ref print_instance_struct_transfer_routine_declarations.
-     */
-    virtual void print_instance_struct_delete_from_device() {}
-
-
-    /**
-     * Print the code to copy derivative advance flag to device
-     */
-    virtual void print_deriv_advance_flag_transfer_to_device() const;
-
-
-    /**
-     * Print the code to update NetSendBuffer_t count from device to host
-     */
-    virtual void print_net_send_buf_count_update_to_host() const;
-
-    /**
-     * Print the code to update NetSendBuffer_t from device to host
-     */
-    virtual void print_net_send_buf_update_to_host() const;
-
-
-    /**
-     * Print the code to update NetSendBuffer_t count from host to device
-     */
-    virtual void print_net_send_buf_count_update_to_device() const;
-
-    /**
-     * Print the code to update dt from host to device
-     */
-    virtual void print_dt_update_to_device() const;
-
-    /**
-     * Print the code to synchronise/wait on stream specific to NrnThread
-     */
-    virtual void print_device_stream_wait() const;
-
-
-    /**
      * Print byte arrays that register scalar and vector variables for hoc interface
      *
      */
     void print_global_variables_for_hoc();
-
-
-    /**
-     * Print the getter method for thread variables and ids
-     *
-     */
-    void print_thread_getters();
-
-
-    /**
-     * Print the getter method for index position of first pointer variable
-     *
-     */
-    void print_first_pointer_var_index_getter();
-
-
-    /**
-     * Print the getter methods for float and integer variables count
-     *
-     */
-    void print_num_variable_getter();
-
-
-    /**
-     * Print the getter method for getting number of arguments for net_receive
-     *
-     */
-    void print_net_receive_arg_size_getter();
-
-
-    /**
-     * Print the getter method for returning membrane list from NrnThread
-     *
-     */
-    void print_memb_list_getter();
-
-
-    /**
-     * Print the getter method for returning mechtype
-     *
-     */
-    void print_mech_type_getter();
-
-
-    /**
-     * Print the pragma annotation to update global variables from host to the device
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_global_variable_device_update_annotation();
-
-
-    /**
-     * Print the setup method for setting matrix shadow vectors
-     *
-     */
-    virtual void print_rhs_d_shadow_variables();
-
-
-    /**
-     * Print the backend specific device method annotation
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_device_method_annotation();
-
-
-    /**
-     * Print backend specific global method annotation
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_global_method_annotation();
 
 
     /**
@@ -1031,77 +537,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print call to \c net\_send
-     * \param node The AST node representing the function call
-     */
-    void print_net_send_call(const ast::FunctionCall& node);
-
-
-    /**
-     * Print call to net\_move
-     * \param node The AST node representing the function call
-     */
-    void print_net_move_call(const ast::FunctionCall& node);
-
-
-    /**
-     * Print call to net\_event
-     * \param node The AST node representing the function call
-     */
-    void print_net_event_call(const ast::FunctionCall& node);
-
-
-    /**
-     * Print pragma annotations for channel iterations
-     *
-     * This can be overriden by backends to provide additonal annotations or pragmas to enable
-     * for example SIMD code generation (e.g. through \c ivdep)
-     * The default implementation prints
-     *
-     * \code
-     * #pragma ivdep
-     * \endcode
-     *
-     * \param type The block type
-     */
-    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
-                                                             const ast::Block* block);
-
-
-    /**
-     * Print accelerator annotations indicating data presence on device
-     */
-    virtual void print_kernel_data_present_annotation_block_begin();
-
-
-    /**
-     * Print matching block end of accelerator annotations for data presence on device
-     */
-    virtual void print_kernel_data_present_annotation_block_end();
-
-
-    /**
-     * Print accelerator kernels begin annotation for net_init kernel
-     */
-    virtual void print_net_init_acc_serial_annotation_block_begin();
-
-
-    /**
-     * Print accelerator kernels end annotation for net_init kernel
-     */
-    virtual void print_net_init_acc_serial_annotation_block_end();
-
-
-    /**
      * Print function and procedures prototype declaration
      */
     void print_function_prototypes();
-
-
-    /**
-     * Print check_table functions
-     */
-    void print_check_table_thread_function();
 
 
     /**
@@ -1118,17 +556,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_function_procedure_helper(const ast::Block& node);
 
-    /**
-     * Print thread related memory allocation and deallocation callbacks
-     */
-    void print_thread_memory_callbacks();
-
-
-    /**
-     * Print top level (global scope) verbatim blocks
-     */
-    void print_top_verbatim_blocks();
-
 
     /**
      * Print prototype declarations of functions or procedures
@@ -1138,189 +565,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     template <typename T>
     void print_function_declaration(const T& node, const std::string& name);
-
-
-    /**
-     * Print initial block statements
-     *
-     * Generate the target backend code corresponding to the NMODL initial block statements
-     *
-     * \param node The AST Node representing a NMODL initial block
-     */
-    void print_initial_block(const ast::InitialBlock* node);
-
-
-    /**
-     * Print initial block in the net receive block
-     */
-    void print_net_init();
-
-
-    /**
-     * Print the common code section for net receive related methods
-     *
-     * \param node The AST node representing the corresponding NMODL block
-     * \param need_mech_inst \c true if a local \c inst variable needs to be defined in generated
-     * code
-     */
-    void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true);
-
-
-    /**
-     * Print the code related to the update of NetSendBuffer_t cnt. For GPU this needs to be done
-     * with atomic operation, on CPU it's not needed.
-     *
-     */
-    virtual void print_net_send_buffering_cnt_update() const;
-
-
-    /**
-     * Print statement that grows NetSendBuffering_t structure if needed.
-     * This function should be overridden for backends that cannot dynamically reallocate the buffer
-     */
-    virtual void print_net_send_buffering_grow();
-
-
-    /**
-     * Print kernel for buffering net_send events
-     *
-     * This kernel is only needed for accelerator backends where \c net\_send needs to be executed
-     * in two stages as the actual communication must be done in the host code.
-     */
-    void print_net_send_buffering();
-
-
-    /**
-     * Print send event move block used in net receive as well as watch
-     */
-    void print_send_event_move();
-
-
-    /**
-     * Generate the target backend code for the \c net\_receive\_buffering function delcaration
-     * \return The target code string
-     */
-    virtual std::string net_receive_buffering_declaration();
-
-
-    /**
-     * Print the target backend code for defining and checking a local \c Memb\_list variable
-     */
-    virtual void print_get_memb_list();
-
-
-    /**
-     * Print the code for the main \c net\_receive loop
-     */
-    virtual void print_net_receive_loop_begin();
-
-
-    /**
-     * Print the code for closing the main \c net\_receive loop
-     */
-    virtual void print_net_receive_loop_end();
-
-
-    /**
-     * Print \c net\_receive function definition
-     */
-    void print_net_receive();
-
-
-    /**
-     * Print derivative kernel when \c derivimplicit method is used
-     *
-     * \param block The corresponding AST node representing an NMODL \c derivimplicit block
-     */
-    void print_derivimplicit_kernel(const ast::Block& block);
-
-
-    /**
-     * Print code block to transfer newtonspace structure to device
-     */
-    virtual void print_newtonspace_transfer_to_device() const;
-
-
-    /**
-     * Print pragma annotation for increase and capture of variable in automatic way
-     */
-    virtual void print_device_atomic_capture_annotation() const;
-
-    /**
-     * Print atomic update pragma for reduction statements
-     */
-    virtual void print_atomic_reduction_pragma();
-
-
-    /**
-     * Print all reduction statements
-     *
-     */
-    void print_shadow_reduction_statements();
-
-
-    /**
-     * Process shadow update statement
-     *
-     * If the statement requires reduction then add it to vector of reduction statement and return
-     * statement using shadow update
-     *
-     * \param statement The statement that might require shadow updates
-     * \param type      The target backend code block type
-     * \return          The generated target backend code
-     */
-    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                BlockType type);
-
-
-    /**
-     * Print main body of nrn_cur function
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_cur_kernel(const ast::BreakpointBlock& node);
-
-
-    /**
-     * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
-     *
-     * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
-     * CodegenNeuronCppVisitor::print_nrn_cur_kernel will use this printer
-     *
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node);
-
-
-    /**
-     * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
-     *
-     * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
-     * CodegenNeuronCppVisitor::print_nrn_cur_kernel will use this printer
-     */
-    void print_nrn_cur_non_conductance_kernel();
-
-
-    /**
-     * Print the \c nrn_current kernel
-     *
-     * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_current(const ast::BreakpointBlock& node);
-
-
-    /**
-     * Print the update to matrix elements with/without shadow vectors
-     *
-     */
-    virtual void print_nrn_cur_matrix_shadow_update();
-
-
-    /**
-     * Print the reduction to matrix elements from shadow vectors
-     *
-     */
-    virtual void print_nrn_cur_matrix_shadow_reduction();
 
 
     /**
@@ -1360,13 +604,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print watch activate function
-     *
-     */
-    void print_watch_activate();
-
-
-    /**
      * Print all includes
      *
      */
@@ -1385,13 +622,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      */
     void print_namespace_end();
-
-
-    /**
-     * Print common getters
-     *
-     */
-    void print_common_getters();
 
 
     /**
@@ -1425,12 +655,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      */
     virtual void print_codegen_routines();
-
-
-    /**
-     * Print entry point to code generation for wrappers
-     */
-    virtual void print_wrapper_routines();
 
 
   public:
@@ -1484,64 +708,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void visit_program(const ast::Program& program) override;
 
-    /**
-     * Print the \c nrn\_init function definition
-     * \param skip_init_check \c true to generate code executing the initialization conditionally
-     */
-    void print_nrn_init(bool skip_init_check = true);
-
 
     /**
      * Print nrn_state / state update function definition
      */
     void print_nrn_state();
-
-
-    /**
-     * Print nrn_cur / current update function definition
-     */
-    void print_nrn_cur();
-
-    /**
-     * Print fast membrane current calculation code
-     */
-    virtual void print_fast_imem_calculation();
-
-
-    /**
-     * Print kernel for buffering net_receive events
-     *
-     * This kernel is only needed for accelerator backends where \c net\_receive needs to be
-     * executed in two stages as the actual communication must be done in the host code. \param
-     * need_mech_inst \c true if the generated code needs a local inst variable to be defined
-     */
-    void print_net_receive_buffering(bool need_mech_inst = true);
-
-
-    /**
-     * Print \c net\_receive kernel function definition
-     */
-    void print_net_receive_kernel();
-
-
-    /**
-     * Print watch activate function
-     */
-    void print_watch_check();
-
-
-    /**
-     * Print \c check\_function() for functions or procedure using table
-     * \param node The AST node representing a function or procedure block
-     */
-    void print_table_check_function(const ast::Block& node);
-
-
-    /**
-     * Print replacement function for function or procedure using table
-     * \param node The AST node representing a function or procedure block
-     */
-    void print_table_replacement_function(const ast::Block& node);
 
 
     /**
@@ -1552,24 +723,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print NMODL function_table in target backend code
-     * \param node
-     */
-    void print_function_tables(const ast::FunctionTableBlock& node);
-
-
-    /**
      * Print NMODL procedure in target backend code
      * \param node
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
 
-    /**
-     * Print NMODL before / after block in target backend code
-     * \param node AST node of type before/after type being printed
-     * \param block_id Index of the before/after block
-     */
-    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
 
     /** Setup the target backend code generator
      *
@@ -1580,20 +738,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Set the global variables to be generated in target backend code
-     * \param global_vars
-     */
-    void set_codegen_global_variables(const std::vector<SymbolType>& global_vars);
-
-    /**
-     * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
-     * nmodl::visitor::SympySolverVisitor
-     * \param original_name Original name of variable to change
-     * \return std::string Unique name produced as [original_name]_[random_string]
-     */
-    std::string find_var_unique_name(const std::string& original_name) const;
-
-    /**
      * Print the structure that wraps all range and int variables required for the NMODL
      *
      * \param print_initializers Whether or not default values for variables
@@ -1601,18 +745,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_mechanism_range_var_structure(bool print_initializers);
 
-    /**
-     * Print the function that initialize instance structure
-     */
-    void print_instance_variable_setup();
-
-    /**
-     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
-     * and print the functor definitions before the definitions of the functions of the generated
-     * file
-     *
-     */
-    void print_functors_definitions();
 
     /**
      * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
@@ -1631,9 +763,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void visit_float(const ast::Float& node) override;
     void visit_from_statement(const ast::FromStatement& node) override;
     void visit_function_call(const ast::FunctionCall& node) override;
-    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
-    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
-    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
     void visit_if_statement(const ast::IfStatement& node) override;
     void visit_indexed_name(const ast::IndexedName& node) override;
     void visit_integer(const ast::Integer& node) override;
@@ -1647,15 +776,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void visit_unary_operator(const ast::UnaryOperator& node) override;
     void visit_unit(const ast::Unit& node) override;
     void visit_var_name(const ast::VarName& node) override;
-    void visit_verbatim(const ast::Verbatim& node) override;
-    void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
-    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
-    void visit_for_netcon(const ast::ForNetcon& node) override;
-    void visit_update_dt(const ast::UpdateDt& node) override;
-    void visit_protect_statement(const ast::ProtectStatement& node) override;
-    void visit_mutex_lock(const ast::MutexLock& node) override;
-    void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 };
 
 
@@ -1697,12 +818,11 @@ void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const st
         return_type = default_float_data_type();
     }
 
-    print_device_method_annotation();
     printer->add_indent();
-    printer->fmt_text("inline {} {}({})",
-                      return_type,
-                      method_name(name),
-                      get_parameter_str(internal_params));
+    // printer->fmt_text("inline {} {}({})",
+    //                   return_type,
+    //                   method_name(name),
+    //                   get_parameter_str(internal_params));
 
     enable_variable_name_lookup = true;
 }
