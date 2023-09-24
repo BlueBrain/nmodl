@@ -9,7 +9,7 @@
 
 /**
  * \dir
- * \brief Code generation backend implementations for CoreNEURON
+ * \brief Code generation backend implementations for NEURON
  *
  * \file
  * \brief \copybrief nmodl::codegen::CodegenNeuronCppVisitor
@@ -45,13 +45,13 @@ using printer::CodePrinter;
 /**
  * \defgroup codegen_backends Codegen Backends
  * \ingroup codegen
- * \brief Code generation backends for CoreNEURON
+ * \brief Code generation backends for NEURON
  * \{
  */
 
 /**
  * \class CodegenNeuronCppVisitor
- * \brief %Visitor for printing C++ code compatible with legacy api of CoreNEURON
+ * \brief %Visitor for printing C++ code compatible with legacy api of NEURON
  *
  * \todo
  *  - Handle define statement (i.e. macros)
@@ -291,7 +291,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * populate all index semantics needed for registration with coreneuron
+     * populate all index semantics needed for registration with NEURON
      */
     void update_index_semantics();
 
@@ -445,13 +445,13 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Prints the start of the \c coreneuron namespace
+     * Prints the start of the \c neuron namespace
      */
     void print_namespace_start();
 
 
     /**
-     * Prints the end of the \c coreneuron namespace
+     * Prints the end of the \c neuron namespace
      */
     void print_namespace_stop();
 
@@ -508,7 +508,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     /**
      * Print backend code for byte array that has mechanism information (to be registered
-     * with coreneuron)
+     * with NEURON)
      */
     void print_mechanism_info();
 
@@ -819,10 +819,10 @@ void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const st
     }
 
     printer->add_indent();
-    // printer->fmt_text("inline {} {}({})",
-    //                   return_type,
-    //                   method_name(name),
-    //                   get_parameter_str(internal_params));
+    printer->fmt_text("inline {} {}({})",
+                      return_type,
+                      method_name(name),
+                      "params");
 
     enable_variable_name_lookup = true;
 }

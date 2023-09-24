@@ -1109,7 +1109,7 @@ void CodegenNeuronCppVisitor::print_nmodl_constants() {
 
 void CodegenNeuronCppVisitor::print_namespace_start() {
     printer->add_newline(2);
-    printer->push_block("namespace coreneuron");
+    printer->push_block("namespace neuron");
 }
 
 
@@ -1373,13 +1373,14 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
     )CODE");
 }
 
+// TODO: Print functions, procedues and nrn_state
 void CodegenNeuronCppVisitor::print_compute_functions() {
-    for (const auto& procedure: info.procedures) {
-        print_procedure(*procedure); // maybes yes
-    }
-    for (const auto& function: info.functions) {
-        print_function(*function); // maybe yes
-    }
+    // for (const auto& procedure: info.procedures) {
+    //     print_procedure(*procedure); // maybes yes
+    // }
+    // for (const auto& function: info.functions) {
+    //     print_function(*function); // maybe yes
+    // }
     print_nrn_state(); // Only this
 }
 
@@ -1397,8 +1398,8 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_memory_allocation_routine(); // same
     print_abort_routine(); // simple
     print_nrn_alloc(); // `nrn_alloc_hh`
-    print_nrn_constructor(); // should be same
-    print_nrn_destructor(); // should be same
+    // print_nrn_constructor(); // should be same
+    // print_nrn_destructor(); // should be same
     print_function_prototypes(); // yes
     print_compute_functions(); // only functions, procedures and state
     print_mechanism_register(); // Yes
