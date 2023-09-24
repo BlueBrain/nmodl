@@ -24,6 +24,7 @@
 #include <string_view>
 #include <utility>
 
+#include <codegen/codegen_cpp_visitor.hpp>
 #include <codegen/codegen_coreneuron_cpp_visitor.hpp>
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -60,7 +61,7 @@ using printer::CodePrinter;
  *    error checking. For example, see netstim.mod where we
  *    have removed return from verbatim block.
  */
-class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
+class CodegenNeuronCppVisitor: public CodegenCppVisitor {
   protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
@@ -74,26 +75,6 @@ class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
      *
      */
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
-
-    /**
-     * Code printer object for target (C++)
-     */
-    std::unique_ptr<CodePrinter> printer;
-
-    /**
-     * Name of mod file (without .mod suffix)
-     */
-    std::string mod_filename;
-
-    /**
-     * Data type of floating point variables
-     */
-    std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
-
-    /**
-     * Flag to indicate if visitor should avoid ion variable copies
-     */
-    bool optimize_ionvar_copies = true;
 
     /**
      * Flag to indicate if visitor should print the visited nodes
@@ -1457,33 +1438,6 @@ class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_wrapper_routines();
 
 
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
-    CodegenNeuronCppVisitor(std::string mod_filename,
-                      const std::string& output_dir,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& extension,
-                      const std::string& wrapper_ext)
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
-    CodegenNeuronCppVisitor(std::string mod_filename,
-                      std::ostream& stream,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& /* extension */,
-                      const std::string& /* wrapper_ext */)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
-
-
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -1505,12 +1459,8 @@ class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
     CodegenNeuronCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
                       std::string float_type,
-                      const bool optimize_ionvar_copies,
-                      const std::string& extension = ".cpp")
-        : printer(std::make_unique<CodePrinter>(output_dir + "/" + mod_filename + extension))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+                      const bool optimize_ionvar_copies)
+        : CodegenCppVisitor(mod_filename, output_dir, float_type, optimize_ionvar_copies) {}
 
     /**
      * \copybrief nmodl::codegen::CodegenNeuronCppVisitor
@@ -1532,10 +1482,7 @@ class CodegenNeuronCppVisitor: public visitor::ConstAstVisitor {
                       std::ostream& stream,
                       std::string float_type,
                       const bool optimize_ionvar_copies)
-        : printer(std::make_unique<CodePrinter>(stream))
-        , mod_filename(std::move(mod_filename))
-        , float_type(std::move(float_type))
-        , optimize_ionvar_copies(optimize_ionvar_copies) {}
+        : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
     /**
      * Main and only member function to call after creating an instance of this class.
