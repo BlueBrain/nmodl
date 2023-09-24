@@ -10,7 +10,7 @@
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
-#include "codegen/codegen_cpp_visitor.hpp"
+#include "codegen/codegen_coreneuron_cpp_visitor.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
@@ -32,7 +32,7 @@ using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
-std::shared_ptr<CodegenCppVisitor> create_c_visitor(const std::shared_ptr<ast::Program>& ast,
+std::shared_ptr<CodegenCoreneuronCppVisitor> create_coreneuron_cpp_visitor(const std::shared_ptr<ast::Program>& ast,
                                                     const std::string& /* text */,
                                                     std::stringstream& ss) {
     /// construct symbol table
@@ -44,7 +44,7 @@ std::shared_ptr<CodegenCppVisitor> create_c_visitor(const std::shared_ptr<ast::P
     SolveBlockVisitor().visit_program(*ast);
 
     /// create C code generation visitor
-    auto cv = std::make_shared<CodegenCppVisitor>("temp.mod", ss, "double", false);
+    auto cv = std::make_shared<CodegenCoreneuronCppVisitor>("temp.mod", ss, "double", false);
     cv->setup(*ast);
     return cv;
 }
@@ -71,7 +71,7 @@ std::shared_ptr<CodegenAccVisitor> create_acc_visitor(const std::shared_ptr<ast:
 std::string get_instance_var_setup_function(std::string& nmodl_text) {
     const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
-    auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
+    auto cvisitor = create_coreneuron_cpp_visitor(ast, nmodl_text, ss);
     cvisitor->print_instance_variable_setup();
     return reindent_text(ss.str());
 }
@@ -84,7 +84,7 @@ std::string get_cpp_code(const std::string& nmodl_text, const bool generate_gpu_
         auto accvisitor = create_acc_visitor(ast, nmodl_text, ss);
         accvisitor->visit_program(*ast);
     } else {
-        auto cvisitor = create_c_visitor(ast, nmodl_text, ss);
+        auto cvisitor = create_coreneuron_cpp_visitor(ast, nmodl_text, ss);
         cvisitor->visit_program(*ast);
     }
     return reindent_text(ss.str());
@@ -311,7 +311,7 @@ std::string get_instance_structure(std::string nmodl_text) {
     PerfVisitor{}.visit_program(*ast);
     // setup codegen
     std::stringstream ss{};
-    CodegenCppVisitor cv{"temp.mod", ss, "double", false};
+    CodegenCoreneuronCppVisitor cv{"temp.mod", ss, "double", false};
     cv.setup(*ast);
     cv.print_mechanism_range_var_structure(true);
     return ss.str();

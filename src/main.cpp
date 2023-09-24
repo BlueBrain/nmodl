@@ -14,7 +14,7 @@
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
-#include "codegen/codegen_cpp_visitor.hpp"
+#include "codegen/codegen_coreneuron_cpp_visitor.hpp"
 #include "codegen/codegen_transform_visitor.hpp"
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
@@ -530,7 +530,7 @@ int main(int argc, const char* argv[]) {
 
             else if (c_backend) {
                 logger->info("Running C++ backend code generator");
-                CodegenCppVisitor visitor(modfile,
+                CodegenCoreneuronCppVisitor visitor(modfile,
                                           output_dir,
                                           data_type,
                                           optimize_ionvar_copies_codegen);
