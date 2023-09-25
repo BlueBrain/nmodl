@@ -1,0 +1,56 @@
+name: SonarCloud
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1
+        with:
+          cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
+      - name: Install packages
+        run: |
+          sudo apt-get install bison ccache flex lcov libfl-dev \
+            python3-dev python3-pip
+        shell: bash
+      - name: Set up Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Install Python3 dependencies
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          pip3 install -U pip setuptools
+          pip3 install --user -r requirements.txt
+      - name: Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v2
+      - name: Configure project
+        shell: bash
+        working-directory: ${{runner.workspace}}/nmodl
+        run:  |
+          mkdir build
+          cmake -S . -B build \
+            -DPYTHON_EXECUTABLE=$(which python3) \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Run build-wrapper
+        working-directory: ${{runner.workspace}}/nmodl
+        run: |
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/
+      - name: Run sonar-scanner
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
