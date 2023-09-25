@@ -50,9 +50,7 @@ var group__codegen__backends =
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html", [
       [ "ParamVector", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3", null ],
       [ "SymbolType", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8", null ],
-      [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae38df22c264ec3a7c7ef6c3d2744e285", null ],
-      [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac741704ddb4a7f5435336c4459f462a7", null ],
-      [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ab4d8319d32edc84322c28aa4dae4fe68", null ],
+      [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af75968756df0bb3b12307f75bf122f20", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a18359d1914ead9e3f6ddfa77ea99bab3", null ],
       [ "add_escape_quote", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a752650d1c896dbf83b2b5ab61b128357", null ],
@@ -229,7 +227,6 @@ var group__codegen__backends =
       [ "print_vector_elements", "group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c", null ],
       [ "print_watch_activate", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a89a6745455933a1dc6a9e792d2727b3a", null ],
       [ "print_watch_check", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a61777f8bad11d00afa7917561b102882", null ],
-      [ "print_wrapper_routines", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a95880e46b7a8cb2feb90d2b1e646680d", null ],
       [ "process_shadow_update_statement", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa539bb6033a8bcd87fc4eb279bad887a", null ],
       [ "process_verbatim_text", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c21fe2f09c7911acadbbfa9a71dfabe", null ],
       [ "process_verbatim_token", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad54a9c3a235b86cd6c6d0089fec6bc76", null ],
