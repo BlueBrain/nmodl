@@ -4235,7 +4235,7 @@ void CodegenCoreneuronCppVisitor::print_codegen_routines() {
 }
 
 
-void CodegenCppVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
+void CodegenCoreneuronCppVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
     codegen_global_variables = global_vars;
 }
 
