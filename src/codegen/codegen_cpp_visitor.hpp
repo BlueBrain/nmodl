@@ -361,6 +361,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual std::string process_verbatim_text(std::string const& text) = 0;
 
+    /**
+     * Print nrn_state / state update function definition
+     */
+    virtual void print_nrn_state() = 0;
 
     /**
      * Print call to internal or external function
@@ -421,6 +425,13 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void print_vector_elements(const std::vector<T>& elements,
                                const std::string& separator,
                                const std::string& prefix = "");
+
+
+    /**
+     * Print all includes
+     *
+     */
+    virtual void print_headers_include() = 0;
 
 
     /// This constructor is private, only the derived classes' public constructors are public

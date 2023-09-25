@@ -574,7 +574,28 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print all includes
      *
      */
-    virtual void print_headers_include();
+    void print_headers_include() override;
+
+
+    /**
+     * Print all NEURON macros
+     *
+     */
+    void print_macro_definitions();
+
+
+    /**
+     * Print NEURON global variable macros
+     *
+     */
+    void print_global_macros();
+
+
+    /**
+     * Print mechanism variables' related macros
+     *
+     */
+    void print_mechanism_variables_macros();
 
 
     /**
@@ -679,7 +700,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    void print_nrn_state() override;
 
 
     /**

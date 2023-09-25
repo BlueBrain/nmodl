@@ -896,41 +896,60 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
         #include <math.h>
         #include <stdio.h>
         #include <stdlib.h>
-        #include <string.h>
     )CODE");
+    if (!info.vectorize) {
+        printer->add_line("#include <vector>");
+    }
 }
 
 
 void CodegenNeuronCppVisitor::print_neuron_includes() {
     printer->add_newline();
     printer->add_multi_line(R"CODE(
-        #include <coreneuron/gpu/nrn_acc_manager.hpp>
-        #include <coreneuron/mechanism/mech/mod2c_core_thread.hpp>
-        #include <coreneuron/mechanism/register_mech.hpp>
-        #include <coreneuron/nrnconf.h>
-        #include <coreneuron/nrniv/nrniv_decl.h>
-        #include <coreneuron/sim/multicore.hpp>
-        #include <coreneuron/sim/scopmath/newton_thread.hpp>
-        #include <coreneuron/utils/ivocvect.hpp>
-        #include <coreneuron/utils/nrnoc_aux.hpp>
-        #include <coreneuron/utils/randoms/nrnran123.h>
+        #include "mech_api.h"
+        #include "md1redef.h"
+        #include "section_fwd.hpp"
+        #include "nrniv_mf.h"
+        #include "md2redef.h"
+        #include "neuron/cache/mechanism_range.hpp"
     )CODE");
-    if (info.eigen_newton_solver_exist) {
-        printer->add_line("#include <newton/newton.hpp>");
+}
+
+
+void CodegenNeuronCppVisitor::print_global_macros() {
+    printer->add_newline();
+    printer->add_line("/* NEURON global macro definitions */");
+    if (info.vectorize) {
+        printer->add_multi_line(R"CODE(
+            /* VECTORIZED */
+            #define NRN_VECTORIZED 1
+        )CODE");
+    } else {
+        printer->add_multi_line(R"CODE(
+            /* NOT VECTORIZED */
+            #define NRN_VECTORIZED 0
+        )CODE");
     }
-    if (info.eigen_linear_solver_exist) {
-        if (std::accumulate(info.state_vars.begin(),
-                            info.state_vars.end(),
-                            0,
-                            [](int l, const SymbolType& variable) {
-                                return l += variable->get_length();
-                            }) > 4) {
-            printer->add_line("#include <crout/crout.hpp>");
-        } else {
-            printer->add_line("#include <Eigen/Dense>");
-            printer->add_line("#include <Eigen/LU>");
-        }
+    printer->add_multi_line(R"CODE(
+        #undef PI
+        #define nil 0
+        #define _pval pval
+    )CODE");
+}
+
+
+void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
+    printer->add_newline();
+    printer->add_line("static constexpr auto number_of_datum_variables = ", std::to_string(int_variables_size()), ";");
+    printer->add_line("static constexpr auto number_of_floating_point_variables = ", std::to_string(float_variables_size()), ";");
+    printer->add_line("/* NEURON RANGE variables macro definitions */");
+    for(auto i = 0; i < codegen_float_variables.size(); ++i) {
+        const auto float_var = codegen_float_variables[i];
+        printer->add_line("#define ", float_var->get_name(), "(id) _ml->template fpfield<", std::to_string(i), ">(id)");
     }
+    printer->add_line("/* NEURON GLOBAL variables macro definitions */");
+    // Go through the area (if point_process), ions
+    // TODO: More prints here?
 }
 
 
@@ -1074,6 +1093,12 @@ void CodegenNeuronCppVisitor::print_headers_include() {
 }
 
 
+void CodegenNeuronCppVisitor::print_macro_definitions() {
+    print_global_macros();
+    print_mechanism_variables_macros();
+}
+
+
 void CodegenNeuronCppVisitor::print_namespace_begin() {
     print_namespace_start();
 }
@@ -1124,6 +1149,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     codegen = true;
     print_backend_info();
     print_headers_include();
+    print_macro_definitions();
     print_namespace_begin();
     print_nmodl_constants();
     print_prcellstate_macros();

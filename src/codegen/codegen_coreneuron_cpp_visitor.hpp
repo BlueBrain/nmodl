@@ -1239,7 +1239,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print all includes
      *
      */
-    virtual void print_headers_include();
+    void print_headers_include() override;
 
 
     /**
@@ -1357,7 +1357,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print nrn_state / state update function definition
      */
-    void print_nrn_state();
+    void print_nrn_state() override;
 
 
     /**
