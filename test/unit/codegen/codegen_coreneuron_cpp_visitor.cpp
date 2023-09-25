@@ -32,9 +32,10 @@ using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
 
 /// Helper for creating C codegen visitor
-std::shared_ptr<CodegenCoreneuronCppVisitor> create_coreneuron_cpp_visitor(const std::shared_ptr<ast::Program>& ast,
-                                                    const std::string& /* text */,
-                                                    std::stringstream& ss) {
+std::shared_ptr<CodegenCoreneuronCppVisitor> create_coreneuron_cpp_visitor(
+    const std::shared_ptr<ast::Program>& ast,
+    const std::string& /* text */,
+    std::stringstream& ss) {
     /// construct symbol table
     SymtabVisitor().visit_program(*ast);
 

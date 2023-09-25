@@ -207,7 +207,8 @@ std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements(BlockT
 }
 
 
-std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements_optimized(BlockType type) const {
+std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements_optimized(
+    BlockType type) const {
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
@@ -412,7 +413,8 @@ void CodegenCoreneuronCppVisitor::update_index_semantics() {
 }
 
 
-std::vector<CodegenCoreneuronCppVisitor::SymbolType> CodegenCoreneuronCppVisitor::get_float_variables() const {
+std::vector<CodegenCoreneuronCppVisitor::SymbolType>
+CodegenCoreneuronCppVisitor::get_float_variables() const {
     // sort with definition order
     auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
         return first->get_definition_order() < second->get_definition_order();
@@ -691,8 +693,9 @@ void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_end
  *      for(int id = 0; id < nodecount; id++) {
  * \endcode
  */
-void CodegenCoreneuronCppVisitor::print_channel_iteration_block_parallel_hint(BlockType /* type */,
-                                                                    const ast::Block* block) {
+void CodegenCoreneuronCppVisitor::print_channel_iteration_block_parallel_hint(
+    BlockType /* type */,
+    const ast::Block* block) {
     // ivdep allows SIMD parallelisation of a block/loop but doesn't provide
     // a standard mechanism for atomics. Also, even with openmp 5.0, openmp
     // atomics do not enable vectorisation under "omp simd" (gives compiler
@@ -1208,7 +1211,7 @@ void CodegenCoreneuronCppVisitor::print_check_table_thread_function() {
 
 
 void CodegenCoreneuronCppVisitor::print_function_or_procedure(const ast::Block& node,
-                                                    const std::string& name) {
+                                                              const std::string& name) {
     printer->add_newline(2);
     print_function_declaration(node, name);
     printer->add_text(" ");
@@ -1308,7 +1311,7 @@ void CodegenCoreneuronCppVisitor::print_function_tables(const ast::FunctionTable
  * @return True if operator() is const else False
  */
 bool CodegenCoreneuronCppVisitor::is_functor_const(const ast::StatementBlock& variable_block,
-                      const ast::StatementBlock& functor_block) {
+                                                   const ast::StatementBlock& functor_block) {
     // Create complete_block with both variable declarations (done in variable_block) and solver
     // part (done in functor_block) to be able to run the SymtabVisitor and DefUseAnalyzeVisitor
     // then and get the proper DUChains for the variables defined in the variable_block
@@ -1342,7 +1345,8 @@ bool CodegenCoreneuronCppVisitor::is_functor_const(const ast::StatementBlock& va
     return is_functor_const;
 }
 
-void CodegenCoreneuronCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlock& node) {
+void CodegenCoreneuronCppVisitor::print_functor_definition(
+    const ast::EigenNewtonSolverBlock& node) {
     // functor that evaluates F(X) and J(X) for
     // Newton solver
     auto float_type = default_float_data_type();
@@ -1407,7 +1411,8 @@ void CodegenCoreneuronCppVisitor::print_functor_definition(const ast::EigenNewto
     printer->pop_block(";");
 }
 
-void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) {
+void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(
+    const ast::EigenNewtonSolverBlock& node) {
     // solution vector to store copy of state vars for Newton solver
     printer->add_newline();
 
@@ -1433,7 +1438,8 @@ void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(const ast::Eig
     printer->add_line("newton_functor.finalize();");
 }
 
-void CodegenCoreneuronCppVisitor::visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) {
+void CodegenCoreneuronCppVisitor::visit_eigen_linear_solver_block(
+    const ast::EigenLinearSolverBlock& node) {
     printer->add_newline();
 
     const std::string float_type = default_float_data_type();
@@ -1651,8 +1657,8 @@ std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::write_ion_varia
 
 
 std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string& ion_name,
-                                                    const std::string& concentration,
-                                                    int index) {
+                                                              const std::string& concentration,
+                                                              int index) {
     auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return fmt::format(
@@ -1678,8 +1684,9 @@ std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string&
  * case we first update current mechanism's shadow vector and then add statement
  * to queue that will be used in reduction queue.
  */
-std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                               BlockType /* type */) {
+std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(
+    const ShadowUseStatement& statement,
+    BlockType /* type */) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
         auto text = statement.lhs + ";";
@@ -1845,7 +1852,7 @@ void CodegenCoreneuronCppVisitor::print_thread_getters() {
 
 
 std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& symbol,
-                                                   bool use_instance) const {
+                                                             bool use_instance) const {
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
     auto position = position_of_float_var(name);
@@ -1865,8 +1872,8 @@ std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& s
 
 
 std::string CodegenCoreneuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
-                                                 const std::string& name,
-                                                 bool use_instance) const {
+                                                           const std::string& name,
+                                                           bool use_instance) const {
     auto position = position_of_int_var(name);
     // clang-format off
     if (symbol.is_index) {
@@ -1891,7 +1898,7 @@ std::string CodegenCoreneuronCppVisitor::int_variable_name(const IndexVariableIn
 
 
 std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& symbol,
-                                                    bool use_instance) const {
+                                                              bool use_instance) const {
     if (use_instance) {
         return fmt::format("inst->{}->{}", naming::INST_GLOBAL_MEMBER, symbol->get_name());
     } else {
@@ -1900,7 +1907,8 @@ std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& 
 }
 
 
-std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(const std::string& name) const {
+std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(
+    const std::string& name) const {
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {
@@ -1917,7 +1925,8 @@ std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(const std::
 }
 
 
-std::string CodegenCoreneuronCppVisitor::get_variable_name(const std::string& name, bool use_instance) const {
+std::string CodegenCoreneuronCppVisitor::get_variable_name(const std::string& name,
+                                                           bool use_instance) const {
     const std::string& varname = update_if_ion_variable_name(name);
 
     // clang-format off
@@ -2709,7 +2718,8 @@ void CodegenCoreneuronCppVisitor::print_ion_var_structure() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_ion_var_constructor(const std::vector<std::string>& members) {
+void CodegenCoreneuronCppVisitor::print_ion_var_constructor(
+    const std::vector<std::string>& members) {
     // constructor
     printer->add_newline();
     printer->add_indent();
@@ -2926,8 +2936,9 @@ void CodegenCoreneuronCppVisitor::print_initial_block(const InitialBlock* node) 
 }
 
 
-void CodegenCoreneuronCppVisitor::print_global_function_common_code(BlockType type,
-                                                          const std::string& function_name) {
+void CodegenCoreneuronCppVisitor::print_global_function_common_code(
+    BlockType type,
+    const std::string& function_name) {
     std::string method;
     if (function_name.empty()) {
         method = compute_method_name(type);
@@ -3053,7 +3064,8 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
     codegen = false;
 }
 
-void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* node, size_t block_id) {
+void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* node,
+                                                           size_t block_id) {
     codegen = true;
 
     std::string ba_type;
@@ -3289,7 +3301,8 @@ void CodegenCoreneuronCppVisitor::print_watch_check() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_net_receive_common_code(const Block& node, bool need_mech_inst) {
+void CodegenCoreneuronCppVisitor::print_net_receive_common_code(const Block& node,
+                                                                bool need_mech_inst) {
     printer->add_multi_line(R"CODE(
         int tid = pnt->_tid;
         int id = pnt->_i_instance;

@@ -24,13 +24,13 @@
 #include <string_view>
 #include <utility>
 
-#include <codegen/codegen_cpp_visitor.hpp>
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "printer/code_printer.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
+#include <codegen/codegen_cpp_visitor.hpp>
 
 
 /// encapsulates code generation backend implementations
@@ -642,9 +642,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *                     as-is in the target code. This defaults to \c double.
      */
     CodegenNeuronCppVisitor(std::string mod_filename,
-                      const std::string& output_dir,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies)
+                            const std::string& output_dir,
+                            std::string float_type,
+                            const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, output_dir, float_type, optimize_ionvar_copies) {}
 
     /**
@@ -664,9 +664,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *                     as-is in the target code. This defaults to \c double.
      */
     CodegenNeuronCppVisitor(std::string mod_filename,
-                      std::ostream& stream,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies)
+                            std::ostream& stream,
+                            std::string float_type,
+                            const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
     /**
@@ -728,8 +728,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 template <typename T>
 void CodegenNeuronCppVisitor::print_vector_elements(const std::vector<T>& elements,
-                                              const std::string& separator,
-                                              const std::string& prefix) {
+                                                    const std::string& separator,
+                                                    const std::string& prefix) {
     for (auto iter = elements.begin(); iter != elements.end(); iter++) {
         printer->add_text(prefix);
         (*iter)->accept(*this);
@@ -765,10 +765,7 @@ void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const st
     }
 
     printer->add_indent();
-    printer->fmt_text("inline {} {}({})",
-                      return_type,
-                      method_name(name),
-                      "params");
+    printer->fmt_text("inline {} {}({})", return_type, method_name(name), "params");
 
     enable_variable_name_lookup = true;
 }

@@ -681,7 +681,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     bool is_functor_const(const ast::StatementBlock& variable_block,
-                      const ast::StatementBlock& functor_block);
+                          const ast::StatementBlock& functor_block);
 
     /**
      * Check if the given name exist in the symbol
@@ -1314,9 +1314,9 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *                     as-is in the target code. This defaults to \c double.
      */
     CodegenCoreneuronCppVisitor(std::string mod_filename,
-                      const std::string& output_dir,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies)
+                                const std::string& output_dir,
+                                std::string float_type,
+                                const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, output_dir, float_type, optimize_ionvar_copies) {}
 
     /**
@@ -1336,9 +1336,9 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *                     as-is in the target code. This defaults to \c double.
      */
     CodegenCoreneuronCppVisitor(std::string mod_filename,
-                      std::ostream& stream,
-                      std::string float_type,
-                      const bool optimize_ionvar_copies)
+                                std::ostream& stream,
+                                std::string float_type,
+                                const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
     /**
@@ -1502,7 +1502,8 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
  * different in case of table statement.
  */
 template <typename T>
-void CodegenCoreneuronCppVisitor::print_function_declaration(const T& node, const std::string& name) {
+void CodegenCoreneuronCppVisitor::print_function_declaration(const T& node,
+                                                             const std::string& name) {
     enable_variable_name_lookup = false;
     auto type = default_float_data_type();
 

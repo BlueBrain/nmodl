@@ -210,7 +210,8 @@ std::vector<std::string> CodegenNeuronCppVisitor::ion_read_statements(BlockType 
 }
 
 
-std::vector<std::string> CodegenNeuronCppVisitor::ion_read_statements_optimized(BlockType type) const {
+std::vector<std::string> CodegenNeuronCppVisitor::ion_read_statements_optimized(
+    BlockType type) const {
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
@@ -351,7 +352,8 @@ void CodegenNeuronCppVisitor::update_index_semantics() {
 }
 
 // TODO: Move to CodegenCppVisitor
-std::vector<CodegenNeuronCppVisitor::SymbolType> CodegenNeuronCppVisitor::get_float_variables() const {
+std::vector<CodegenNeuronCppVisitor::SymbolType> CodegenNeuronCppVisitor::get_float_variables()
+    const {
     // sort with definition order
     auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
         return first->get_definition_order() < second->get_definition_order();
@@ -615,8 +617,8 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 }
 
 void CodegenNeuronCppVisitor::print_statement_block(const ast::StatementBlock& node,
-                                              bool open_brace,
-                                              bool close_brace) {
+                                                    bool open_brace,
+                                                    bool close_brace) {
     if (open_brace) {
         printer->push_block();
     }
@@ -705,7 +707,7 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 
 // TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
-                                                    const std::string& name) {
+                                                          const std::string& name) {
     printer->add_newline(2);
     print_function_declaration(node, name);
     printer->add_text(" ");
@@ -808,8 +810,8 @@ std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
  * same mod file itself
  */
 std::string CodegenNeuronCppVisitor::nrn_thread_internal_arguments() {
-   // TODO: rewrite based on NEURON
-   return {};
+    // TODO: rewrite based on NEURON
+    return {};
 }
 
 
@@ -856,7 +858,8 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
 /****************************************************************************************/
 
 
-std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name, bool use_instance) const {
+std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
+                                                       bool use_instance) const {
     // TODO: Rewrite for NEURON
     return {};
 }
@@ -993,8 +996,8 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
 
 // TODO: Needs changes
 void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
-                                                          const std::string& function_name) {
- return;
+                                                                const std::string& function_name) {
+    return;
 }
 
 
@@ -1020,7 +1023,6 @@ void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->add_line("#endif");
     // printer->pop_block();
 }
-
 
 
 // TODO: Print the equivalent of `nrn_alloc_<mech_name>`
@@ -1114,7 +1116,7 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     // for (const auto& function: info.functions) {
     //     print_function(*function); // maybe yes
     // }
-    print_nrn_state(); // Only this
+    print_nrn_state();  // Only this
 }
 
 
@@ -1125,18 +1127,18 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_namespace_begin();
     print_nmodl_constants();
     print_prcellstate_macros();
-    print_mechanism_info(); // same as NEURON
-    print_data_structures(true); // print macros instead here for range variables and global ones
-    print_global_variables_for_hoc(); // same
-    print_memory_allocation_routine(); // same
-    print_abort_routine(); // simple
-    print_nrn_alloc(); // `nrn_alloc_hh`
+    print_mechanism_info();       // same as NEURON
+    print_data_structures(true);  // print macros instead here for range variables and global ones
+    print_global_variables_for_hoc();   // same
+    print_memory_allocation_routine();  // same
+    print_abort_routine();              // simple
+    print_nrn_alloc();                  // `nrn_alloc_hh`
     // print_nrn_constructor(); // should be same
     // print_nrn_destructor(); // should be same
-    print_function_prototypes(); // yes
-    print_compute_functions(); // only functions, procedures and state
-    print_mechanism_register(); // Yes
-    print_namespace_end(); // Yes
+    print_function_prototypes();  // yes
+    print_compute_functions();    // only functions, procedures and state
+    print_mechanism_register();   // Yes
+    print_namespace_end();        // Yes
     codegen = false;
 }
 

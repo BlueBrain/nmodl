@@ -182,15 +182,15 @@ int main(int argc, const char* argv[]) {
         ->capture_default_str()
         ->ignore_case();
 
-    auto simulator_opt = app.add_subcommand("simulator", "NEURON/CoreNEURON code backends")->ignore_case();
-    simulator_opt->add_flag("--neuron", neuron_code, "Generate C++ code for NEURON")
-        ->ignore_case();
-    simulator_opt->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)")
+    auto simulator_opt =
+        app.add_subcommand("simulator", "NEURON/CoreNEURON code backends")->ignore_case();
+    simulator_opt->add_flag("--neuron", neuron_code, "Generate C++ code for NEURON")->ignore_case();
+    simulator_opt
+        ->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)")
         ->ignore_case();
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", c_backend, fmt::format("C++ backend ({})", c_backend))
-        ->ignore_case();
+    host_opt->add_flag("--c", c_backend, fmt::format("C++ backend ({})", c_backend))->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
@@ -544,23 +544,26 @@ int main(int argc, const char* argv[]) {
             else if (coreneuron_code && !neuron_code && c_backend) {
                 logger->info("Running C++ backend code generator for CoreNEURON");
                 CodegenCoreneuronCppVisitor visitor(modfile,
-                                          output_dir,
-                                          data_type,
-                                          optimize_ionvar_copies_codegen);
+                                                    output_dir,
+                                                    data_type,
+                                                    optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
 
             else if (neuron_code && c_backend) {
                 logger->info("Running C++ backend code generator for NEURON");
                 CodegenNeuronCppVisitor visitor(modfile,
-                                          output_dir,
-                                          data_type,
-                                          optimize_ionvar_copies_codegen);
+                                                output_dir,
+                                                data_type,
+                                                optimize_ionvar_copies_codegen);
                 visitor.visit_program(*ast);
             }
 
             else {
-                throw std::runtime_error("Non valid code generation configuration. Code generation with NMODL is supported for NEURON with C++ backend or CoreNEURON with C++/OpenACC backends");
+                throw std::runtime_error(
+                    "Non valid code generation configuration. Code generation with NMODL is "
+                    "supported for NEURON with C++ backend or CoreNEURON with C++/OpenACC "
+                    "backends");
             }
         }
     }

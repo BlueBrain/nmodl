@@ -178,48 +178,57 @@ using printer::CodePrinter;
  *    have removed return from verbatim block.
  */
 class CodegenCppVisitor: public visitor::ConstAstVisitor {
-protected:
+  protected:
     using SymbolType = std::shared_ptr<symtab::Symbol>;
+
 
     /**
      * Code printer object for target (C++)
      */
     std::unique_ptr<CodePrinter> printer;
 
+
     /**
      * Name of mod file (without .mod suffix)
      */
     std::string mod_filename;
+
 
     /**
      * Data type of floating point variables
      */
     std::string float_type = codegen::naming::DEFAULT_FLOAT_TYPE;
 
+
     /**
      * Flag to indicate if visitor should avoid ion variable copies
      */
     bool optimize_ionvar_copies = true;
+
 
     /**
      * All ast information for code generation
      */
     codegen::CodegenInfo info;
 
+
     /**
      * Symbol table for the program
      */
     symtab::SymbolTable* program_symtab = nullptr;
+
 
     /**
      * All float variables for the model
      */
     std::vector<SymbolType> codegen_float_variables;
 
+
     /**
      * All int variables for the model
      */
     std::vector<IndexVariableInfo> codegen_int_variables;
+
 
     /**
      * All global variables for the model
@@ -227,20 +236,24 @@ protected:
      */
     std::vector<SymbolType> codegen_global_variables;
 
+
     /**
      * Flag to indicate if visitor should print the visited nodes
      */
     bool codegen = false;
+
 
     /**
      * Variable name should be converted to instance name (but not for function arguments)
      */
     bool enable_variable_name_lookup = true;
 
-        /**
+
+    /**
      * \c true if currently net_receive block being printed
      */
     bool printing_net_receive = false;
+
 
     /**
      * \c true if currently initial block of net_receive being printed
@@ -253,15 +266,18 @@ protected:
      */
     bool printing_top_verbatim_blocks = false;
 
+
     /**
      * \c true if internal method call was encountered while processing verbatim block
      */
     bool internal_method_call_encountered = false;
 
+
     /**
      * Index of watch statement being printed
      */
     int current_watch_statement = 0;
+
 
     /**
      * Return Nmodl language version
@@ -271,10 +287,12 @@ protected:
         return codegen::naming::NMODL_VERSION;
     }
 
+
     /**
      * Name of the simulator the code was generated for
      */
     virtual std::string simulator_name() = 0;
+
 
     /**
      * Data type for the local variables
@@ -283,6 +301,7 @@ protected:
         return codegen::naming::DEFAULT_LOCAL_VAR_TYPE;
     }
 
+
     /**
      * Convert a given \c double value to its string representation
      * \param value The number to convert given as string as it is parsed by the modfile
@@ -290,12 +309,14 @@ protected:
      */
     std::string format_double_string(const std::string& value);
 
+
     /**
      * Convert a given \c float value to its string representation
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
      */
     std::string format_float_string(const std::string& value);
+
 
     /**
      * Determine variable name in the structure of mechanism properties
@@ -305,7 +326,9 @@ protected:
      * \return             The C++ string representing the access to the variable in the neuron
      * thread structure
      */
-    virtual std::string get_variable_name(const std::string& name, bool use_instance = true) const = 0;
+    virtual std::string get_variable_name(const std::string& name,
+                                          bool use_instance = true) const = 0;
+
 
     /**
      * Check if function or procedure node has parameter with given name
@@ -318,10 +341,12 @@ protected:
     template <typename T>
     bool has_parameter_of_name(const T& node, const std::string& name);
 
+
     /**
      * Rename function/procedure arguments that conflict with default arguments
      */
     void rename_function_arguments();
+
 
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
@@ -379,6 +404,7 @@ protected:
                                bool open_brace = true,
                                bool close_brace = true);
 
+
     /**
      * Print the items in a vector as a list
      *
@@ -397,8 +423,7 @@ protected:
                                const std::string& prefix = "");
 
 
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
+    /// This constructor is private, only the derived classes' public constructors are public
     CodegenCppVisitor(std::string mod_filename,
                       const std::string& output_dir,
                       std::string float_type,
@@ -408,8 +433,8 @@ protected:
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
-    /// This constructor is private, see the public section below to find how to create an instance
-    /// of this class.
+
+    /// This constructor is private, only the derived classes' public constructors are public
     CodegenCppVisitor(std::string mod_filename,
                       std::ostream& stream,
                       std::string float_type,
