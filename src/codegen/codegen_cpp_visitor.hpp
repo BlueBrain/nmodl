@@ -179,6 +179,8 @@ using printer::CodePrinter;
  */
 class CodegenCppVisitor: public visitor::ConstAstVisitor {
 protected:
+    using SymbolType = std::shared_ptr<symtab::Symbol>;
+
     /**
      * Code printer object for target (C++)
      */
@@ -204,6 +206,26 @@ protected:
      */
     codegen::CodegenInfo info;
 
+    /**
+     * Symbol table for the program
+     */
+    symtab::SymbolTable* program_symtab = nullptr;
+
+    /**
+     * All float variables for the model
+     */
+    std::vector<SymbolType> codegen_float_variables;
+
+    /**
+     * All int variables for the model
+     */
+    std::vector<IndexVariableInfo> codegen_int_variables;
+
+    /**
+     * All global variables for the model
+     * \todo: this has become different than CodegenInfo
+     */
+    std::vector<SymbolType> codegen_global_variables;
 
     /**
      * Flag to indicate if visitor should print the visited nodes
@@ -215,11 +237,44 @@ protected:
      */
     bool enable_variable_name_lookup = true;
 
+        /**
+     * \c true if currently net_receive block being printed
+     */
+    bool printing_net_receive = false;
+
+    /**
+     * \c true if currently initial block of net_receive being printed
+     */
+    bool printing_net_init = false;
+
+
+    /**
+     * \c true if currently printing top level verbatim blocks
+     */
+    bool printing_top_verbatim_blocks = false;
+
+    /**
+     * \c true if internal method call was encountered while processing verbatim block
+     */
+    bool internal_method_call_encountered = false;
+
+    /**
+     * Index of watch statement being printed
+     */
+    int current_watch_statement = 0;
+
+    /**
+     * Return Nmodl language version
+     * \return A version
+     */
+    std::string nmodl_version() const noexcept {
+        return codegen::naming::NMODL_VERSION;
+    }
+
     /**
      * Name of the simulator the code was generated for
      */
     virtual std::string simulator_name() = 0;
-
 
     /**
      * Data type for the local variables
@@ -234,7 +289,6 @@ protected:
      * \return      Its string representation
      */
     std::string format_double_string(const std::string& value);
-
 
     /**
      * Convert a given \c float value to its string representation

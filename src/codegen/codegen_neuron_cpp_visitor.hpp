@@ -75,45 +75,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
-    /**
-     * Flag to indicate if visitor should print the visited nodes
-     */
-    bool codegen = false;
-
-    /**
-     * Variable name should be converted to instance name (but not for function arguments)
-     */
-    bool enable_variable_name_lookup = true;
-
-    /**
-     * Symbol table for the program
-     */
-    symtab::SymbolTable* program_symtab = nullptr;
-
-    /**
-     * All float variables for the model
-     */
-    std::vector<SymbolType> codegen_float_variables;
-
-    /**
-     * All int variables for the model
-     */
-    std::vector<IndexVariableInfo> codegen_int_variables;
-
-    /**
-     * All global variables for the model
-     * \todo: this has become different than CodegenInfo
-     */
-    std::vector<SymbolType> codegen_global_variables;
-
-
-    /**
-     * Return Nmodl language version
-     * \return A version
-     */
-    std::string nmodl_version() const noexcept {
-        return codegen::naming::NMODL_VERSION;
-    }
 
     /**
      * Add quotes to string to be output
