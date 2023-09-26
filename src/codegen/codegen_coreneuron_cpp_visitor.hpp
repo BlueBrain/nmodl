@@ -331,7 +331,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return             The backend code string representing the access to the given variable
      * symbol
      */
-    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const;
+    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const override;
 
 
     /**
@@ -349,7 +349,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string int_variable_name(const IndexVariableInfo& symbol,
                                   const std::string& name,
-                                  bool use_instance) const;
+                                  bool use_instance) const override;
 
 
     /**
@@ -359,7 +359,8 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * global variable or the instance-specific copy (also available on GPU).
      * \return       The C++ string representing the access to the global variable
      */
-    std::string global_variable_name(const SymbolType& symbol, bool use_instance = true) const;
+    std::string global_variable_name(const SymbolType& symbol,
+                                     bool use_instance = true) const override;
 
 
     /**

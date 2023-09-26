@@ -224,6 +224,50 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Determine the name of a \c float variable given its symbol
+     *
+     * This function typically returns the accessor expression in backend code for the given symbol.
+     * Since the model variables are stored in data arrays and accessed by offset, this function
+     * will return the C++ string representing the array access at the correct offset
+     *
+     * \param symbol       The symbol of a variable for which we want to obtain its name
+     * \param use_instance Should the variable be accessed via instance or data array
+     * \return             The backend code string representing the access to the given variable
+     * symbol
+     */
+    std::string float_variable_name(const SymbolType& symbol, bool use_instance) const override;
+
+
+    /**
+     * Determine the name of an \c int variable given its symbol
+     *
+     * This function typically returns the accessor expression in backend code for the given symbol.
+     * Since the model variables are stored in data arrays and accessed by offset, this function
+     * will return the C++ string representing the array access at the correct offset
+     *
+     * \param symbol       The symbol of a variable for which we want to obtain its name
+     * \param name         The name of the index variable
+     * \param use_instance Should the variable be accessed via instance or data array
+     * \return             The backend code string representing the access to the given variable
+     * symbol
+     */
+    std::string int_variable_name(const IndexVariableInfo& symbol,
+                                  const std::string& name,
+                                  bool use_instance) const override;
+
+
+    /**
+     * Determine the variable name for a global variable given its symbol
+     * \param symbol The symbol of a variable for which we want to obtain its name
+     * \param use_instance Should the variable be accessed via the (host-only)
+     * global variable or the instance-specific copy (also available on GPU).
+     * \return       The C++ string representing the access to the global variable
+     */
+    std::string global_variable_name(const SymbolType& symbol,
+                                     bool use_instance = true) const override;
+
+
+    /**
      * Determine variable name in the structure of mechanism properties
      *
      * \param name         Variable name that is being printed

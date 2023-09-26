@@ -858,10 +858,32 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
 /****************************************************************************************/
 
 
+std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbol,
+                                                         bool use_instance) const {
+    // TODO: rewrite for NEURON
+    return symbol->get_name();
+}
+
+
+std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
+                                                       const std::string& name,
+                                                       bool use_instance) const {
+    // TODO: rewrite for NEURON
+    return name;
+}
+
+
+std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symbol,
+                                                          bool use_instance) const {
+    // TODO: rewrite for NEURON
+    return symbol->get_name();
+}
+
+
 std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
                                                        bool use_instance) const {
-    // TODO: Rewrite for NEURON
-    return {};
+    // TODO: rewrite for NEURON
+    return name;
 }
 
 
@@ -906,12 +928,12 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
 void CodegenNeuronCppVisitor::print_neuron_includes() {
     printer->add_newline();
     printer->add_multi_line(R"CODE(
-        #include "mech_api.h"
         #include "md1redef.h"
-        #include "section_fwd.hpp"
-        #include "nrniv_mf.h"
         #include "md2redef.h"
+        #include "mech_api.h"
         #include "neuron/cache/mechanism_range.hpp"
+        #include "nrniv_mf.h"
+        #include "section_fwd.hpp"
     )CODE");
 }
 
@@ -940,12 +962,20 @@ void CodegenNeuronCppVisitor::print_global_macros() {
 
 void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     printer->add_newline();
-    printer->add_line("static constexpr auto number_of_datum_variables = ", std::to_string(int_variables_size()), ";");
-    printer->add_line("static constexpr auto number_of_floating_point_variables = ", std::to_string(float_variables_size()), ";");
+    printer->add_line("static constexpr auto number_of_datum_variables = ",
+                      std::to_string(int_variables_size()),
+                      ";");
+    printer->add_line("static constexpr auto number_of_floating_point_variables = ",
+                      std::to_string(float_variables_size()),
+                      ";");
     printer->add_line("/* NEURON RANGE variables macro definitions */");
-    for(auto i = 0; i < codegen_float_variables.size(); ++i) {
+    for (auto i = 0; i < codegen_float_variables.size(); ++i) {
         const auto float_var = codegen_float_variables[i];
-        printer->add_line("#define ", float_var->get_name(), "(id) _ml->template fpfield<", std::to_string(i), ">(id)");
+        printer->add_line("#define ",
+                          float_var->get_name(),
+                          "(id) _ml->template fpfield<",
+                          std::to_string(i),
+                          ">(id)");
     }
     printer->add_line("/* NEURON GLOBAL variables macro definitions */");
     // Go through the area (if point_process), ions
