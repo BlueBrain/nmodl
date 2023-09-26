@@ -1056,6 +1056,35 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
 void CodegenNeuronCppVisitor::print_mechanism_register() {
     // TODO: Write this according to NEURON
+    printer->add_newline(2);
+    printer->add_line("/** register channel with the simulator */");
+    printer->fmt_push_block("void _{}_reg()", info.mod_file);
+
+    // type related information
+    auto suffix = add_escape_quote(info.mod_suffix);
+    printer->add_newline();
+    printer->fmt_line("int mech_type = nrn_get_mechtype({});", suffix);
+
+    // More things to add here
+    printer->add_line("_nrn_mechanism_register_data_fields(_mechtype,");
+    printer->increase_indent();
+    const auto codegen_float_variables_size = codegen_float_variables.size();
+    for (int i = 0; i < codegen_float_variables_size; ++i) {
+        const auto& float_var = codegen_float_variables[i];
+        const auto print_comma = i < codegen_float_variables_size-1 || info.emit_cvode;
+        if (float_var->is_array()) {
+            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\", {}}} /* {} */{}", float_var->get_name(), float_var->get_length(), i, print_comma ? "," : "");
+        } else {
+            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\"}} /* {} */{}", float_var->get_name(), i, print_comma ? "," : "");
+        }
+    }
+    if (info.emit_cvode) {
+        printer->add_line("_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
+    }
+    printer->decrease_indent();
+    printer->add_line(");");
+    printer->add_newline();
+
 }
 
 
