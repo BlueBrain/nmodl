@@ -12,8 +12,7 @@
 #include "utils/string_utils.hpp"
 #include "utils/table_data.hpp"
 
-namespace nmodl {
-namespace utils {
+namespace nmodl::utils {
 
 /**
  *   Print table data in below shown format: title as first row (centrally aligned),
@@ -128,5 +127,4 @@ void TableData::print(int indent) const {
     print(std::cout, indent);
 }
 
-}  // namespace utils
-}  // namespace nmodl
+}  // namespace nmodl::utils

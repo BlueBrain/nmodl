@@ -14,8 +14,7 @@
 #include "utils/logger.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using symtab::Symbol;
 using symtab::syminfo::NmodlType;
@@ -159,5 +158,4 @@ void LocalizeVisitor::visit_program(const ast::Program& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

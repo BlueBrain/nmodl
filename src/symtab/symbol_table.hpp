@@ -21,8 +21,7 @@
 
 #include "symtab/symbol.hpp"
 
-namespace nmodl {
-namespace symtab {
+namespace nmodl::symtab {
 
 
 /**
@@ -294,5 +293,4 @@ class ModelSymbolTable {
 
 /** @} */  // end of sym_tab
 
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab

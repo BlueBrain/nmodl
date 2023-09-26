@@ -12,9 +12,7 @@
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
-
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 const std::map<ast::AstNodeType, CodegenCompatibilityVisitor::FunctionPointer>
     CodegenCompatibilityVisitor::unhandled_ast_types_func(
@@ -101,7 +99,7 @@ std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
         parser::CDriver driver;
 
         driver.scan_string(verbatim_statement_string);
-        auto tokens = driver.all_tokens();
+        const auto& tokens = driver.all_tokens();
 
         for (const auto& token: tokens) {
             if (token == "bbcore_read") {
@@ -132,7 +130,7 @@ std::string CodegenCompatibilityVisitor::return_error_if_no_bbcore_read_write(
 bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast& node) const {
     std::vector<ast::AstNodeType> unhandled_ast_types;
     unhandled_ast_types.reserve(unhandled_ast_types_func.size());
-    for (auto [node_type, _]: unhandled_ast_types_func) {
+    for (const auto& [node_type, _]: unhandled_ast_types_func) {
         unhandled_ast_types.push_back(node_type);
     }
     const auto& unhandled_ast_nodes = collect_nodes(node, unhandled_ast_types);
@@ -158,5 +156,4 @@ bool CodegenCompatibilityVisitor::find_unhandled_ast_nodes(Ast& node) const {
     return false;
 }
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

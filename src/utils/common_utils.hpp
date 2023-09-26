@@ -24,9 +24,8 @@
  * \brief Common utility functions for file/dir manipulation
  */
 
-namespace nmodl {
 /// file/string manipulation functions
-namespace utils {
+namespace nmodl::utils {
 
 /**
  * @defgroup utils Utility Implementation
@@ -130,5 +129,4 @@ class SingletonRandomString {
 
 /** @} */  // end of utils
 
-}  // namespace utils
-}  // namespace nmodl
+}  // namespace nmodl::utils

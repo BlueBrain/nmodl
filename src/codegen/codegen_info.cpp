@@ -12,8 +12,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 using visitor::VarUsageVisitor;
 
@@ -106,5 +105,4 @@ bool CodegenInfo::is_voltage_used_by_watch_statements() const {
     });
 }
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

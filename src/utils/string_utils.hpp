@@ -22,9 +22,8 @@
 #include <sstream>
 #include <vector>
 
-namespace nmodl {
 /// string utility functions
-namespace stringutils {
+namespace nmodl::stringutils {
 
 /**
  * \addtogroup utils
@@ -182,5 +181,4 @@ std::string to_string(double value, const std::string& format_spec = "{:.16g}");
 
 /** \} */  // end of utils
 
-}  // namespace stringutils
-}  // namespace nmodl
+}  // namespace nmodl::stringutils

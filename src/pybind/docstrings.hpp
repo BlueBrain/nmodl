@@ -7,8 +7,7 @@
 
 #pragma once
 
-namespace nmodl {
-namespace docstring {
+namespace nmodl::docstring {
 
 constexpr const char* binary_op_enum() {
     return R"(
@@ -170,5 +169,4 @@ constexpr const char* parent_property() {
 )";
 }
 
-}  // namespace docstring
-}  // namespace nmodl
+}  // namespace nmodl::docstring

@@ -27,10 +27,8 @@
 #include <utility>
 #include <vector>
 
-
-namespace nmodl {
 /// encapsulates unit database and tables implementation
-namespace units {
+namespace nmodl::units {
 
 /**
  * @defgroup units Unit Implementation
@@ -292,5 +290,4 @@ class UnitTable {
 
 /** @} */  // end of units
 
-}  // namespace units
-}  // namespace nmodl
+}  // namespace nmodl::units

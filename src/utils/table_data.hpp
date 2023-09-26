@@ -18,8 +18,7 @@
 #include "utils/string_utils.hpp"
 
 
-namespace nmodl {
-namespace utils {
+namespace nmodl::utils {
 
 /**
  * @addtogroup utils
@@ -55,5 +54,4 @@ struct TableData {
 
 /** @} */  // end of utils
 
-}  // namespace utils
-}  // namespace nmodl
+}  // namespace nmodl::utils

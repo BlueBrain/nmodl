@@ -12,8 +12,7 @@
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \details SympyReplaceSolutionsVisitor tells us that a new equation appear and, depending where
@@ -462,5 +461,4 @@ void SympyReplaceSolutionsVisitor::StatementDispenser::tag_all_statements() {
 }
 
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

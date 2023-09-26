@@ -35,8 +35,7 @@
 #include "FlexLexer.h"
 #endif
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * @defgroup lexer Lexer Implementation
@@ -154,5 +153,4 @@ class NmodlLexer: public NmodlFlexLexer {
 
 /** @} */  // end of lexer
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

@@ -13,8 +13,7 @@
 #include "printer/json_printer.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using printer::JSONPrinter;
 using symtab::Symbol;
@@ -577,5 +576,4 @@ void PerfVisitor::update_memory_ops(const std::string& name) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -17,8 +17,7 @@
 
 namespace pywrap = nmodl::pybind_wrappers;
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using ast::AstNodeType;
 using ast::BinaryOp;
@@ -244,5 +243,4 @@ void SympyConductanceVisitor::visit_program(ast::Program& node) {
     node.visit_children(*this);
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

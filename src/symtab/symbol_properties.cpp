@@ -12,9 +12,7 @@
 #include "utils/string_utils.hpp"
 
 
-namespace nmodl {
-namespace symtab {
-namespace syminfo {
+namespace nmodl::symtab::syminfo {
 
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
@@ -206,6 +204,4 @@ std::ostream& operator<<(std::ostream& os, const Status& obj) {
     return os << to_string(obj);
 }
 
-}  // namespace syminfo
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab::syminfo

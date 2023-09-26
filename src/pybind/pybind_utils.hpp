@@ -13,8 +13,7 @@
 #include <pybind11/stl.h>
 
 
-namespace pybind11 {
-namespace detail {
+namespace pybind11::detail {
 
 template <typename StringType>
 struct CopyFromPython {
@@ -88,8 +87,7 @@ class pythonibuf: public std::streambuf {
         setg(end, end, end);
     }
 };
-}  // namespace detail
-}  // namespace pybind11
+}  // namespace pybind11::detail
 
 class VisitorOStreamResources {
   protected:

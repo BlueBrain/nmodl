@@ -13,8 +13,7 @@
 #include "utils/logger.hpp"
 #include "utils/table_data.hpp"
 
-namespace nmodl {
-namespace symtab {
+namespace nmodl::symtab {
 
 using namespace ast;
 using syminfo::NmodlType;
@@ -527,5 +526,4 @@ void SymbolTable::print(std::ostream& ss, int level) const {
     }
 }
 
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab

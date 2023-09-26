@@ -13,8 +13,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "utils/logger.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void AfterCVodeToCnexpVisitor::visit_solve_block(ast::SolveBlock& node) {
     const auto& method = node.get_method();
@@ -27,5 +26,4 @@ void AfterCVodeToCnexpVisitor::visit_solve_block(ast::SolveBlock& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

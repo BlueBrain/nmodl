@@ -13,8 +13,7 @@
 #include "ast/all.hpp"
 #include "utils/logger.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using printer::JSONPrinter;
 using symtab::syminfo::NmodlType;
@@ -444,5 +443,4 @@ DUChain DefUseAnalyzeVisitor::analyze(const ast::Ast& node, const std::string& n
     return usage;
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

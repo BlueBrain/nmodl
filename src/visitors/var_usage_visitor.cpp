@@ -12,8 +12,7 @@
 #include "ast/name.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /// rename matching variable
 void VarUsageVisitor::visit_name(const ast::Name& node) {
@@ -30,5 +29,4 @@ bool VarUsageVisitor::variable_used(const ast::Node& node, std::string name) {
     return used;
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -20,9 +20,7 @@
 #include <Eigen/Dense>
 #include <Eigen/LU>
 
-namespace nmodl {
-/// newton solver implementations
-namespace newton {
+namespace nmodl::newton {
 
 /**
  * @defgroup solver Solver Implementation
@@ -237,5 +235,4 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, 4, 1>& X,
 
 /** @} */  // end of solver
 
-}  // namespace newton
-}  // namespace nmodl
+}  // namespace nmodl::newton

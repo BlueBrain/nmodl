@@ -22,8 +22,7 @@
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 using namespace ast;
 
@@ -157,5 +156,4 @@ class CodegenCompatibilityVisitor: public visitor::AstVisitor {
 
 /** \} */  // end of codegen_backends
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

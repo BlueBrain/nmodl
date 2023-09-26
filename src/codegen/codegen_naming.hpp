@@ -11,10 +11,7 @@
 #include <string>
 
 
-namespace nmodl {
-namespace codegen {
-/// different variable names used in code generation
-namespace naming {
+namespace nmodl::codegen::naming {
 
 /// nmodl language version
 /// @todo : should be moved from codegen to global scope
@@ -179,6 +176,4 @@ static constexpr char ION_VARNAME_PREFIX[] = "ion_";
                 {"_tqitem", "tqitem"}};
 // clang-format on
 
-}  // namespace naming
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen::naming

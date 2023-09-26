@@ -14,8 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace nmodl {
-namespace pybind_wrappers {
+namespace nmodl::pybind_wrappers {
 
 
 struct PythonExecutor {
@@ -182,5 +181,4 @@ class EmbeddedPythonLoader {
 
 pybind_wrap_api init_pybind_wrap_api() noexcept;
 
-}  // namespace pybind_wrappers
-}  // namespace nmodl
+}  // namespace nmodl::pybind_wrappers

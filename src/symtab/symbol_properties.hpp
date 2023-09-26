@@ -17,11 +17,7 @@
 #include "utils/string_utils.hpp"
 
 
-namespace nmodl {
-namespace symtab {
-
-/// %Symbol information
-namespace syminfo {
+namespace nmodl::symtab::syminfo {
 
 /// \todo Error with pybind if std::underlying_typ is used
 using enum_type = long long;
@@ -285,6 +281,4 @@ std::string to_string(const T& obj) {
     return text;
 }
 
-}  // namespace syminfo
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab::syminfo

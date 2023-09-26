@@ -13,8 +13,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 
 std::string RenameVisitor::new_name_generator(const std::string& old_name) {
@@ -101,5 +100,4 @@ void RenameVisitor::visit_verbatim(const ast::Verbatim& node) {
     statement->set(result.str());
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -23,8 +23,7 @@
 #include "coreneuron/utils/offload.hpp"
 #endif
 
-namespace nmodl {
-namespace crout {
+namespace nmodl::crout {
 
 /**
  * \brief Crout matrix decomposition : in-place LU Decomposition of matrix a.
@@ -203,5 +202,4 @@ nrn_pragma_omp(end declare target)
 #undef y_
 #undef b_
 
-}  // namespace crout
-}  // namespace nmodl
+}  // namespace nmodl::crout

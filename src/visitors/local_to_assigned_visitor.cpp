@@ -15,8 +15,7 @@
 #include "visitors/local_to_assigned_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void LocalToAssignedVisitor::visit_program(ast::Program& node) {
     ast::AssignedDefinitionVector assigned_variables;
@@ -81,5 +80,4 @@ void LocalToAssignedVisitor::visit_program(ast::Program& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

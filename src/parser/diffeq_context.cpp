@@ -11,9 +11,7 @@
 #include "utils/string_utils.hpp"
 
 
-namespace nmodl {
-namespace parser {
-namespace diffeq {
+namespace nmodl::parser::diffeq {
 
 Term::Term(const std::string& expr, const std::string& state)
     : expr(expr)
@@ -182,6 +180,4 @@ std::string DiffEqContext::get_solution(bool& cnexp_possible) {
     return solution;
 }
 
-}  // namespace diffeq
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser::diffeq

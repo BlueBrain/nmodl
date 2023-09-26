@@ -15,9 +15,7 @@
 
 #include <string>
 
-namespace nmodl {
-namespace codegen {
-namespace utils {
+namespace nmodl::codegen::utils {
 
 /**
  * Handles the double constants format being printed in the generated code.
@@ -46,6 +44,4 @@ std::string format_double_string(const std::string& s_value);
 template <typename T>
 std::string format_float_string(const std::string& s_value);
 
-}  // namespace utils
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen::utils

@@ -9,8 +9,7 @@
 #include "utils/logger.hpp"
 
 
-namespace nmodl {
-namespace printer {
+namespace nmodl::printer {
 
 /// Dump output to provided file
 JSONPrinter::JSONPrinter(const std::string& filename) {
@@ -90,5 +89,4 @@ void JSONPrinter::flush() {
     }
 }
 
-}  // namespace printer
-}  // namespace nmodl
+}  // namespace nmodl::printer

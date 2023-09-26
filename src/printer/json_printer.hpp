@@ -18,8 +18,7 @@
 #include <iostream>
 #include <stack>
 
-namespace nmodl {
-namespace printer {
+namespace nmodl::printer {
 
 using json = nlohmann::json;
 
@@ -100,5 +99,4 @@ class JSONPrinter {
 
 /** @} */  // end of printer
 
-}  // namespace printer
-}  // namespace nmodl
+}  // namespace nmodl::printer

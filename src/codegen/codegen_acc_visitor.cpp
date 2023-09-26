@@ -12,8 +12,7 @@
 #include "ast/protect_statement.hpp"
 
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
@@ -376,5 +375,4 @@ void CodegenAccVisitor::print_dt_update_to_device() const {
                       get_variable_name(naming::NTHREAD_DT_VARIABLE));
 }
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

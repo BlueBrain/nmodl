@@ -28,8 +28,7 @@
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 using namespace ast;
 
@@ -529,12 +528,6 @@ std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
     return current;
 }
 
-
-int CodegenCppVisitor::float_variables_size() const {
-    return codegen_float_variables.size();
-}
-
-
 int CodegenCppVisitor::int_variables_size() const {
     const auto count_semantics = [](int sum, const IndexSemantics& sem) { return sum += sem.size; };
     return std::accumulate(info.semantics.begin(), info.semantics.end(), 0, count_semantics);
@@ -554,23 +547,22 @@ std::vector<std::string> CodegenCppVisitor::ion_read_statements(BlockType type) 
     }
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
-        auto name = ion.name;
         for (const auto& var: ion.reads) {
             auto const iter = std::find(ion.implicit_reads.begin(), ion.implicit_reads.end(), var);
             if (iter != ion.implicit_reads.end()) {
                 continue;
             }
-            auto variable_names = read_ion_variable_name(var);
-            auto first = get_variable_name(variable_names.first);
-            auto second = get_variable_name(variable_names.second);
-            statements.push_back(fmt::format("{} = {};", first, second));
+            const auto& [dest, src] = read_ion_variable_name(var);
+            auto dest_var = get_variable_name(dest);
+            auto src_var = get_variable_name(src);
+            statements.push_back(fmt::format("{} = {};", dest_var, src_var));
         }
         for (const auto& var: ion.writes) {
             if (ion.is_ionic_conc(var)) {
-                auto variables = read_ion_variable_name(var);
-                auto first = get_variable_name(variables.first);
-                auto second = get_variable_name(variables.second);
-                statements.push_back(fmt::format("{} = {};", first, second));
+                const auto& [dest, src] = read_ion_variable_name(var);
+                auto dest_var = get_variable_name(dest);
+                auto src_var = get_variable_name(src);
+                statements.push_back(fmt::format("{} = {};", dest_var, src_var));
             }
         }
     }
@@ -578,33 +570,56 @@ std::vector<std::string> CodegenCppVisitor::ion_read_statements(BlockType type) 
 }
 
 
-std::vector<std::string> CodegenCppVisitor::ion_read_statements_optimized(BlockType type) const {
+std::vector<std::string> CodegenCppVisitor::ion_read_statements_optimized(
+    BlockType /* type */) const {
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
             if (ion.is_ionic_conc(var)) {
-                auto variables = read_ion_variable_name(var);
-                auto first = "ionvar." + variables.first;
-                const auto& second = get_variable_name(variables.second);
-                statements.push_back(fmt::format("{} = {};", first, second));
+                const auto& [dest, src] = read_ion_variable_name(var);
+                auto dest_var = "ionvar." + dest;
+                const auto& src_var = get_variable_name(src);
+                statements.push_back(fmt::format("{} = {};", dest_var, src_var));
             }
         }
     }
     return statements;
 }
 
+
+void CodegenCppVisitor::handle_initial_ion_write_statement(
+    const Ion& ion,
+    const std::string& concentration,
+    std::vector<ShadowUseStatement>& statements) const {
+    int index = 0;
+    if (ion.is_intra_cell_conc(concentration)) {
+        index = 1;
+    } else if (ion.is_extra_cell_conc(concentration)) {
+        index = 2;
+    } else {
+        /// \todo Unhandled case in neuron implementation
+        throw std::logic_error(fmt::format("codegen error for {} ion", ion.name));
+    }
+    auto ion_type_name = fmt::format("{}_type", ion.name);
+    auto lhs = fmt::format("int {}", ion_type_name);
+    auto op = "=";
+    auto rhs = get_variable_name(ion_type_name);
+    statements.push_back(ShadowUseStatement{lhs, op, rhs});
+    auto statement = conc_write_statement(ion.name, concentration, index);
+    statements.push_back(ShadowUseStatement{statement, "", ""});
+}
+
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-std::vector<ShadowUseStatement> CodegenCppVisitor::ion_write_statements(BlockType type) {
+std::vector<ShadowUseStatement> CodegenCppVisitor::ion_write_statements(BlockType type) const {
     std::vector<ShadowUseStatement> statements;
     for (const auto& ion: info.ions) {
         std::string concentration;
-        auto name = ion.name;
         for (const auto& var: ion.writes) {
-            auto variable_names = write_ion_variable_name(var);
+            const auto& [dest, src] = write_ion_variable_name(var);
             if (ion.is_ionic_current(var)) {
                 if (type == BlockType::Equation) {
                     auto current = breakpoint_current(var);
-                    auto lhs = variable_names.first;
+                    const auto& lhs = dest;
                     auto op = "+=";
                     auto rhs = get_variable_name(current);
                     if (info.point_process) {
@@ -617,30 +632,15 @@ std::vector<ShadowUseStatement> CodegenCppVisitor::ion_write_statements(BlockTyp
                 if (!ion.is_rev_potential(var)) {
                     concentration = var;
                 }
-                auto lhs = variable_names.first;
+                const auto& lhs = dest;
                 auto op = "=";
-                auto rhs = get_variable_name(variable_names.second);
+                const auto& rhs = get_variable_name(src);
                 statements.push_back(ShadowUseStatement{lhs, op, rhs});
             }
         }
 
         if (type == BlockType::Initial && !concentration.empty()) {
-            int index = 0;
-            if (ion.is_intra_cell_conc(concentration)) {
-                index = 1;
-            } else if (ion.is_extra_cell_conc(concentration)) {
-                index = 2;
-            } else {
-                /// \todo Unhandled case in neuron implementation
-                throw std::logic_error(fmt::format("codegen error for {} ion", ion.name));
-            }
-            auto ion_type_name = fmt::format("{}_type", ion.name);
-            auto lhs = fmt::format("int {}", ion_type_name);
-            auto op = "=";
-            auto rhs = get_variable_name(ion_type_name);
-            statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            auto statement = conc_write_statement(ion.name, concentration, index);
-            statements.push_back(ShadowUseStatement{statement, "", ""});
+            handle_initial_ion_write_statement(ion, concentration, statements);
         }
     }
     return statements;
@@ -742,7 +742,7 @@ void CodegenCppVisitor::update_index_semantics() {
             info.semantics.emplace_back(index++, fmt::format("#{}_ion", ion.name), 1);
         }
     }
-    for (auto& var: info.pointer_variables) {
+    for (const auto& var: info.pointer_variables) {
         if (info.first_pointer_var_index == -1) {
             info.first_pointer_var_index = index;
         }
@@ -1373,8 +1373,6 @@ void CodegenCppVisitor::print_function_prototypes() {
 
 
 static const TableStatement* get_table_statement(const ast::Block& node) {
-    // TableStatementVisitor v;
-
     const auto& table_statements = collect_nodes(node, {AstNodeType::TABLE_STATEMENT});
 
     if (table_statements.size() != 1) {
@@ -1387,7 +1385,7 @@ static const TableStatement* get_table_statement(const ast::Block& node) {
 }
 
 
-std::tuple<bool, int> CodegenCppVisitor::check_if_var_is_array(const std::string& name) {
+std::tuple<bool, int> CodegenCppVisitor::check_if_var_is_array(const std::string& name) const {
     auto symbol = program_symtab->lookup_in_scope(name);
     if (!symbol) {
         throw std::runtime_error(
@@ -1403,8 +1401,8 @@ std::tuple<bool, int> CodegenCppVisitor::check_if_var_is_array(const std::string
 
 void CodegenCppVisitor::print_table_check_function(const Block& node) {
     auto statement = get_table_statement(node);
-    auto table_variables = statement->get_table_vars();
-    auto depend_variables = statement->get_depend_vars();
+    const auto& table_variables = statement->get_table_vars();
+    const auto& depend_variables = statement->get_depend_vars();
     const auto& from = statement->get_from();
     const auto& to = statement->get_to();
     auto name = node.get_node_name();
@@ -1413,7 +1411,6 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
     auto use_table_var = get_variable_name(naming::USE_TABLE_VARIABLE);
     auto tmin_name = get_variable_name("tmin_" + name);
     auto mfac_name = get_variable_name("mfac_" + name);
-    auto float_type = default_float_data_type();
 
     printer->add_newline(2);
     print_device_method_annotation();
@@ -1427,7 +1424,9 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
 
         printer->add_line("static bool make_table = true;");
         for (const auto& variable: depend_variables) {
-            printer->fmt_line("static {} save_{};", float_type, variable->get_node_name());
+            printer->fmt_line("static {} save_{};",
+                              default_float_data_type(),
+                              variable->get_node_name());
         }
 
         for (const auto& variable: depend_variables) {
@@ -1922,7 +1921,7 @@ void CodegenCppVisitor::print_eigen_linear_solver(const std::string& float_type,
 /****************************************************************************************/
 
 
-std::string CodegenCppVisitor::internal_method_arguments() {
+std::string CodegenCppVisitor::internal_method_arguments() const {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
@@ -1933,7 +1932,7 @@ std::string CodegenCppVisitor::internal_method_arguments() {
 /**
  * @todo: figure out how to correctly handle qualifiers
  */
-CodegenCppVisitor::ParamVector CodegenCppVisitor::internal_method_parameters() {
+CodegenCppVisitor::ParamVector CodegenCppVisitor::internal_method_parameters() const {
     ParamVector params;
     params.emplace_back("", "int", "", "id");
     params.emplace_back("", "int", "", "pnodecount");
@@ -1977,7 +1976,7 @@ std::string CodegenCppVisitor::nrn_thread_arguments() const {
  * Function call arguments when function or procedure is defined in the
  * same mod file itself
  */
-std::string CodegenCppVisitor::nrn_thread_internal_arguments() {
+std::string CodegenCppVisitor::nrn_thread_internal_arguments() const {
     if (ion_variable_struct_required()) {
         return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
     }
@@ -2076,7 +2075,7 @@ std::pair<std::string, std::string> CodegenCppVisitor::write_ion_variable_name(
 
 std::string CodegenCppVisitor::conc_write_statement(const std::string& ion_name,
                                                     const std::string& concentration,
-                                                    int index) {
+                                                    int index) const {
     auto conc_var_name = get_variable_name(naming::ION_VARNAME_PREFIX + concentration);
     auto style_var_name = get_variable_name("style_" + ion_name);
     return fmt::format(
@@ -2103,7 +2102,7 @@ std::string CodegenCppVisitor::conc_write_statement(const std::string& ion_name,
  * to queue that will be used in reduction queue.
  */
 std::string CodegenCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                               BlockType /* type */) {
+                                                               BlockType /* type */) const {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
         auto text = statement.lhs + ";";
@@ -2525,7 +2524,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
     // is false. But as v is always local variable and passed as argument,
     // we don't need to use global variable v
 
-    auto& top_locals = info.top_local_variables;
+    const auto& top_locals = info.top_local_variables;
     if (!info.vectorize && !top_locals.empty()) {
         for (const auto& var: top_locals) {
             auto name = var->get_name();
@@ -2587,7 +2586,7 @@ void CodegenCppVisitor::print_mechanism_global_var_structure(bool print_initiali
 
     for (const auto& var: info.constant_variables) {
         auto const name = var->get_name();
-        auto* const value_ptr = var->get_value().get();
+        const auto* const value_ptr = var->get_value().get();
         double const value{value_ptr ? *value_ptr : 0};
         printer->fmt_line("{}{} {}{};",
                           qualifier,
@@ -3075,13 +3074,13 @@ void CodegenCppVisitor::print_mechanism_range_var_structure(bool print_initializ
                           print_initializers ? fmt::format("{{&coreneuron::{}}}", name)
                                              : std::string{});
     }
-    for (auto& var: codegen_float_variables) {
+    for (const auto& var: codegen_float_variables) {
         const auto& name = var->get_name();
         auto type = get_range_var_float_type(var);
         auto qualifier = is_constant_variable(name) ? "const " : "";
         printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialize);
     }
-    for (auto& var: codegen_int_variables) {
+    for (const auto& var: codegen_int_variables) {
         const auto& name = var.symbol->get_name();
         if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? "const " : "";
@@ -3179,7 +3178,7 @@ void CodegenCppVisitor::print_setup_range_variable() {
  * are pointers to internal variables (e.g. ions). Hence, we check if given
  * variable can be safely converted to new type. If so, return new type.
  */
-std::string CodegenCppVisitor::get_range_var_float_type(const SymbolType& symbol) {
+std::string CodegenCppVisitor::get_range_var_float_type(const SymbolType& symbol) const {
     // clang-format off
     auto with   =   NmodlType::read_ion_var
                     | NmodlType::write_ion_var
@@ -3283,7 +3282,7 @@ void CodegenCppVisitor::print_instance_variable_setup() {
         id += var->get_length();
     }
 
-    for (auto& var: codegen_int_variables) {
+    for (const auto& var: codegen_int_variables) {
         auto name = var.symbol->get_name();
         auto const variable = [&var]() {
             if (var.is_index || var.is_integer) {
@@ -3341,9 +3340,9 @@ void CodegenCppVisitor::print_initial_block(const InitialBlock* node) {
     }
 
     // write ion statements
-    auto write_statements = ion_write_statements(BlockType::Initial);
-    for (auto& statement: write_statements) {
-        auto text = process_shadow_update_statement(statement, BlockType::Initial);
+    const auto& write_statements = ion_write_statements(BlockType::Initial);
+    for (const auto& statement: write_statements) {
+        const auto& text = process_shadow_update_statement(statement, BlockType::Initial);
         printer->add_line(text);
     }
 }
@@ -3748,8 +3747,8 @@ void CodegenCppVisitor::print_net_receive_common_code(const Block& node, bool ne
     if (!parameters.empty()) {
         int i = 0;
         printer->add_newline();
-        for (auto& parameter: parameters) {
-            auto name = parameter->get_node_name();
+        for (const auto& parameter: parameters) {
+            const auto& name = parameter->get_node_name();
             bool var_used = VarUsageVisitor().variable_used(node, "(*" + name + ")");
             if (var_used) {
                 printer->fmt_line("double* {} = weights + weight_index + {};", name, i);
@@ -4363,7 +4362,7 @@ void CodegenCppVisitor::print_nrn_current(const BreakpointBlock& node) {
                                     get_parameter_str(args));
     printer->add_line("double current = 0.0;");
     print_statement_block(*block, false, false);
-    for (auto& current: info.currents) {
+    for (const auto& current: info.currents) {
         const auto& name = get_variable_name(current);
         printer->fmt_line("current += {};", name);
     }
@@ -4409,12 +4408,12 @@ void CodegenCppVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& 
 }
 
 
-void CodegenCppVisitor::print_nrn_cur_non_conductance_kernel() {
+void CodegenCppVisitor::print_nrn_cur_non_conductance_kernel() const {
     printer->fmt_line("double g = nrn_current_{}({}+0.001);",
                                   info.mod_suffix,
                                   internal_method_arguments());
-    for (auto& ion: info.ions) {
-        for (auto& var: ion.writes) {
+    for (const auto& ion: info.ions) {
+        for (const auto& var: ion.writes) {
             if (ion.is_ionic_current(var)) {
                 const auto& name = get_variable_name(var);
                 printer->fmt_line("double di{} = {};", ion.name, name);
@@ -4687,5 +4686,4 @@ void CodegenCppVisitor::visit_program(const Program& node) {
     print_codegen_routines();
 }
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

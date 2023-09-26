@@ -20,8 +20,7 @@
 #include "ast/ast.hpp"
 #include "symtab/symbol_table.hpp"
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 /**
  * \addtogroup codegen_details
@@ -439,5 +438,4 @@ struct CodegenInfo {
 
 /** \} */  // end of codegen_backends
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

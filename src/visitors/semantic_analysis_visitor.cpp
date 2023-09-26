@@ -18,8 +18,7 @@
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     check_fail = false;
@@ -170,5 +169,4 @@ void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node
     /// -->
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

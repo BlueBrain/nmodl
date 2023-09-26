@@ -19,8 +19,7 @@
 #include "visitors/ast_visitor.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \addtogroup solver
@@ -73,5 +72,4 @@ class NeuronSolveVisitor: public AstVisitor {
 
 /** \} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

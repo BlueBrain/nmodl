@@ -17,8 +17,7 @@
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
     ast::RangeVarVector range_variables;
@@ -65,5 +64,4 @@ void GlobalToRangeVisitor::visit_neuron_block(ast::NeuronBlock& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -21,8 +21,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /// Represent a state in Def-Use chain
 enum class DUState {
@@ -312,5 +311,4 @@ class DefUseAnalyzeVisitor: protected ConstAstVisitor {
 
 /** @} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

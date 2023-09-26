@@ -28,8 +28,7 @@
 #include "FlexLexer.h"
 #endif
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * @addtogroup lexer
@@ -80,5 +79,4 @@ class DiffeqLexer: public DiffEqFlexLexer {
 
 /** @} */  // end of lexer
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

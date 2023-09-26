@@ -33,9 +33,7 @@
 
 
 /// encapsulates code generation backend implementations
-namespace nmodl {
-
-namespace codegen {
+namespace nmodl::codegen {
 
 /**
  * \defgroup codegen Code Generation Implementation
@@ -498,7 +496,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Number of float variables in the model
      */
-    int float_variables_size() const;
+    auto float_variables_size() const {
+        return codegen_float_variables.size();
+    }
 
 
     /**
@@ -733,7 +733,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param type The type of code block being generated
      * \return     A \c vector of strings representing the write-back of ion variables
      */
-    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
+    std::vector<ShadowUseStatement> ion_write_statements(BlockType type) const;
 
 
     /**
@@ -761,21 +761,21 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     std::string conc_write_statement(const std::string& ion_name,
                                      const std::string& concentration,
-                                     int index);
+                                     int index) const;
 
 
     /**
      * Arguments for functions that are defined and used internally.
      * \return the method arguments
      */
-    std::string internal_method_arguments();
+    std::string internal_method_arguments() const;
 
 
     /**
      * Parameters for internally defined functions
      * \return the method parameters
      */
-    ParamVector internal_method_parameters();
+    ParamVector internal_method_parameters() const;
 
 
     /**
@@ -812,7 +812,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_internal_arguments();
+    std::string nrn_thread_internal_arguments() const;
 
 
     /**
@@ -956,7 +956,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return \c return a tuple <true, array_length> if variable
      *            is an array otherwise <false, 0>
      */
-    std::tuple<bool, int> check_if_var_is_array(const std::string& name);
+    std::tuple<bool, int> check_if_var_is_array(const std::string& name) const;
 
     /**
      * Print declaration of macro NRN_PRCELLSTATE for debugging
@@ -1002,7 +1002,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Returns floating point type for given range variable symbol
      * \param symbol A range variable symbol
      */
-    std::string get_range_var_float_type(const SymbolType& symbol);
+    std::string get_range_var_float_type(const SymbolType& symbol) const;
 
 
     /**
@@ -1407,7 +1407,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return          The generated target backend code
      */
     std::string process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                BlockType type);
+                                                BlockType type) const;
 
 
     /**
@@ -1434,7 +1434,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
      * CodegenCppVisitor::print_nrn_cur_kernel will use this printer
      */
-    void print_nrn_cur_non_conductance_kernel();
+    void print_nrn_cur_non_conductance_kernel() const;
 
 
     /**
@@ -1793,6 +1793,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_protect_statement(const ast::ProtectStatement& node) override;
     void visit_mutex_lock(const ast::MutexLock& node) override;
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+
+
+  private:
+    void handle_initial_ion_write_statement(const Ion& ion,
+                                            const std::string& concentration,
+                                            std::vector<ShadowUseStatement>& statements) const;
 };
 
 
@@ -1865,5 +1871,4 @@ void CodegenCppVisitor::print_function_declaration(const T& node, const std::str
 
 /** \} */  // end of codegen_backends
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

@@ -19,8 +19,7 @@
 
 namespace pywrap = nmodl::pybind_wrappers;
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using symtab::syminfo::NmodlType;
 
@@ -682,5 +681,4 @@ void SympySolverVisitor::visit_program(ast::Program& node) {
     node.visit_children(*this);
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

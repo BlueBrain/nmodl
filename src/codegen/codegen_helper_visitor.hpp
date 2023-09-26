@@ -18,8 +18,7 @@
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 /**
  * @addtogroup codegen_details
@@ -119,5 +118,4 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
 
 /** @} */  // end of codegen_details
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

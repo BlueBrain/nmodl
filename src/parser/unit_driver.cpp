@@ -11,8 +11,7 @@
 #include "lexer/unit_lexer.hpp"
 #include "parser/unit_driver.hpp"
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /// parse Units file provided as istream
 bool UnitDriver::parse_stream(std::istream& in) {
@@ -42,5 +41,4 @@ bool UnitDriver::parse_string(const std::string& input) {
     return parse_stream(iss);
 }
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser
