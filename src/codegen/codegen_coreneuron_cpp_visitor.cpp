@@ -2917,7 +2917,13 @@ void CodegenCoreneuronCppVisitor::print_initial_block(const InitialBlock* node) 
         if (!info.is_ionic_conc(name)) {
             auto lhs = get_variable_name(name);
             auto rhs = get_variable_name(name + "0");
-            printer->fmt_line("{} = {};", lhs, rhs);
+            if (var->is_array()) {
+                printer->fmt_push_block("for (std::size_t arr_index = 0; arr_index < {}; ++arr_index)", var->get_length());
+                printer->add_line(lhs, "[arr_index] = ", rhs, ";");
+                printer->pop_block();
+            } else {
+                printer->fmt_line("{} = {};", lhs, rhs);
+            }
         }
     }
 
