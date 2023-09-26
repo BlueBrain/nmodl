@@ -928,8 +928,6 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
 void CodegenNeuronCppVisitor::print_neuron_includes() {
     printer->add_newline();
     printer->add_multi_line(R"CODE(
-        #include "md1redef.h"
-        #include "md2redef.h"
         #include "mech_api.h"
         #include "neuron/cache/mechanism_range.hpp"
         #include "nrniv_mf.h"
@@ -952,11 +950,6 @@ void CodegenNeuronCppVisitor::print_global_macros() {
             #define NRN_VECTORIZED 0
         )CODE");
     }
-    printer->add_multi_line(R"CODE(
-        #undef PI
-        #define nil 0
-        #define _pval pval
-    )CODE");
 }
 
 
@@ -968,6 +961,24 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     printer->add_line("static constexpr auto number_of_floating_point_variables = ",
                       std::to_string(float_variables_size()),
                       ";");
+    printer->add_newline();
+    printer->add_multi_line(R"CODE(
+    namespace {
+    template <typename T>
+    using _nrn_mechanism_std_vector = std::vector<T>;
+    using _nrn_model_sorted_token = neuron::model_sorted_token;
+    using _nrn_mechanism_cache_range =
+        neuron::cache::MechanismRange<number_of_floating_point_variables, number_of_datum_variables>;
+    using _nrn_mechanism_cache_instance =
+        neuron::cache::MechanismInstance<number_of_floating_point_variables, number_of_datum_variables>;
+    template <typename T>
+    using _nrn_mechanism_field = neuron::mechanism::field<T>;
+    template <typename... Args>
+    void _nrn_mechanism_register_data_fields(Args&&... args) {
+        neuron::mechanism::register_data_fields(std::forward<Args>(args)...);
+    }
+    }  // namespace
+    )CODE");
     printer->add_line("/* NEURON RANGE variables macro definitions */");
     for (auto i = 0; i < codegen_float_variables.size(); ++i) {
         const auto float_var = codegen_float_variables[i];
