@@ -478,6 +478,42 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_headers_include() = 0;
 
 
+    /**
+     * Creates a temporary symbol
+     * \param name The name of the symbol
+     * \return     A symbol based on the given name
+     */
+    SymbolType make_symbol(const std::string& name) const {
+        return std::make_shared<symtab::Symbol>(name, ModToken());
+    }
+
+
+    virtual void print_sdlists_init(bool print_initializers) = 0;
+
+
+    /**
+     * Print the mechanism registration function
+     *
+     */
+    virtual void print_mechanism_register() = 0;
+
+
+    /**
+     * Determine the position in the data array for a given float variable
+     * \param name The name of a float variable
+     * \return     The position index in the data array
+     */
+    virtual int position_of_float_var(const std::string& name) const = 0;
+
+
+    /**
+     * Determine the position in the data array for a given int variable
+     * \param name The name of an int variable
+     * \return     The position index in the data array
+     */
+    virtual int position_of_int_var(const std::string& name) const = 0;
+
+
     /// This constructor is private, only the derived classes' public constructors are public
     CodegenCppVisitor(std::string mod_filename,
                       const std::string& output_dir,

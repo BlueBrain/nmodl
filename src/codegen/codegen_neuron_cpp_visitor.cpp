@@ -1006,6 +1006,11 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
 
 void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
     // TODO: Print only global variables printed in NEURON
+    printer->add_line();
+    printer->add_line("/* NEURON global variables */");
+    if (info.primes_size != 0) {
+        printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];", info.primes_size);
+    }
 }
 
 
@@ -1054,12 +1059,60 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 }
 
 
+int CodegenNeuronCppVisitor::position_of_float_var(const std::string& name) const {
+    const auto has_name = [&name](const SymbolType& symbol) { return symbol->get_name() == name; };
+    const auto var_iter = std::find_if(codegen_float_variables.begin(), codegen_float_variables.end(), has_name);
+    if (var_iter != codegen_float_variables.end()) {
+        return var_iter - codegen_float_variables.begin();
+    } else {
+        throw std::logic_error(name + " variable not found");
+    }
+}
+
+
+int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const {
+    const auto has_name = [&name](const IndexVariableInfo& index_var_symbol) { return index_var_symbol.symbol->get_name() == name; };
+    const auto var_iter = std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), has_name);
+    if (var_iter != codegen_int_variables.end()) {
+        return var_iter - codegen_int_variables.begin();
+    } else {
+        throw std::logic_error(name + " variable not found");
+    }
+}
+
+
+void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
+    for (auto i = 0; i < info.prime_variables_by_order.size(); ++i) {
+        const auto& prime_var = info.prime_variables_by_order[i];
+        // TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at the moment
+        // TODO: We have to do checks and add errors similar to nocmodl in the SemanticAnalysisVisitor
+        if (prime_var->is_array()) {
+            // TODO: Needs a for loop here. Look at https://github.com/neuronsimulator/nrn/blob/df001a436bcb4e23d698afe66c2a513819a6bfe8/src/nmodl/deriv.cpp#L524
+            // TODO: Also needs a test
+            printer->fmt_push_block("for (int _i = 0; _i < {}; ++_i)", prime_var->get_length());
+            printer->fmt_line("/* {}[{}] */", prime_var->get_name(), prime_var->get_length());
+            printer->fmt_line("_slist1[{}+_i] = {{{}, _i}}", i, position_of_float_var(prime_var->get_name()));
+            const auto prime_var_deriv_name = "D" + prime_var->get_name();
+            printer->fmt_line("/* {}[{}] */", prime_var_deriv_name, prime_var->get_length());
+            printer->fmt_line("_dlist1[{}+_i] = {{{}, _i}}", i, position_of_float_var(prime_var_deriv_name));
+            printer->pop_block();
+        } else {
+            printer->fmt_line("/* {} */", prime_var->get_name());
+            printer->fmt_line("_slist1[{}] = {{{}, 0}}", i, position_of_float_var(prime_var->get_name()));
+            const auto prime_var_deriv_name = "D" + prime_var->get_name();
+            printer->fmt_line("/* {} */", prime_var_deriv_name);
+            printer->fmt_line("_dlist1[{}] = {{{}, 0}}", i, position_of_float_var(prime_var_deriv_name));
+        }
+    }
+}
+
+
 void CodegenNeuronCppVisitor::print_mechanism_register() {
     // TODO: Write this according to NEURON
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
     printer->fmt_push_block("void _{}_reg()", info.mod_file);
-
+    print_sdlists_init(true);
     // type related information
     auto suffix = add_escape_quote(info.mod_suffix);
     printer->add_newline();

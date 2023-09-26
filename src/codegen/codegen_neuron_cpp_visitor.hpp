@@ -607,11 +607,30 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
                                                    const std::string& function_name = "");
 
 
+    void print_sdlists_init(bool print_initializers) override;
+
+
+    /**
+     * Determine the position in the data array for a given float variable
+     * \param name The name of a float variable
+     * \return     The position index in the data array
+     */
+    int position_of_float_var(const std::string& name) const override;
+
+
+    /**
+     * Determine the position in the data array for a given int variable
+     * \param name The name of an int variable
+     * \return     The position index in the data array
+     */
+    int position_of_int_var(const std::string& name) const override;
+
+
     /**
      * Print the mechanism registration function
      *
      */
-    void print_mechanism_register();
+    void print_mechanism_register() override;
 
 
     /**

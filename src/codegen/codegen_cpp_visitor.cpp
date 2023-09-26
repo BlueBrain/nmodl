@@ -17,6 +17,7 @@ using namespace ast;
 
 using visitor::RenameVisitor;
 
+using symtab::syminfo::NmodlType;
 
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */

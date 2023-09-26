@@ -851,10 +851,6 @@ std::string CodegenCoreneuronCppVisitor::compute_method_name(BlockType type) con
 }
 
 
-std::string CodegenCoreneuronCppVisitor::global_var_struct_type_qualifier() {
-    return "";
-}
-
 void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
     printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
 }
@@ -2062,6 +2058,51 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
 }
 
 
+void CodegenCoreneuronCppVisitor::print_sdlists_init(bool print_initializers) {
+    if (info.primes_size == 0) {
+        return;
+    }
+    if (info.primes_size != info.prime_variables_by_order.size()) {
+        throw std::runtime_error{
+            fmt::format("primes_size = {} differs from prime_variables_by_order.size() = {}, "
+                        "this should not happen.",
+                        info.primes_size,
+                        info.prime_variables_by_order.size())};
+    }
+    auto const initializer_list = [&](auto const& primes, const char* prefix) -> std::string {
+        if (!print_initializers) {
+            return {};
+        }
+        std::string list{"{"};
+        for (auto iter = primes.begin(); iter != primes.end(); ++iter) {
+            auto const& prime = *iter;
+            list.append(std::to_string(position_of_float_var(prefix + prime->get_name())));
+            if (std::next(iter) != primes.end()) {
+                list.append(", ");
+            }
+        }
+        list.append("}");
+        return list;
+    };
+    printer->fmt_line("int slist1[{}]{};",
+                        info.primes_size,
+                        initializer_list(info.prime_variables_by_order, ""));
+    printer->fmt_line("int dlist1[{}]{};",
+                        info.primes_size,
+                        initializer_list(info.prime_variables_by_order, "D"));
+    codegen_global_variables.push_back(make_symbol("slist1"));
+    codegen_global_variables.push_back(make_symbol("dlist1"));
+    // additional list for derivimplicit method
+    if (info.derivimplicit_used()) {
+        auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
+        printer->fmt_line("int slist2[{}]{};",
+                            info.primes_size,
+                            initializer_list(primes, ""));
+        codegen_global_variables.push_back(make_symbol("slist2"));
+    }
+}
+
+
 /**
  * \details Variables required for type of ion, type of point process etc. are
  * of static int type. For the C++ backend type, it's ok to have
@@ -2080,7 +2121,6 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
     const auto value_initialize = print_initializers ? "{}" : "";
-    const auto qualifier = global_var_struct_type_qualifier();
 
     auto float_type = default_float_data_type();
     printer->add_newline(2);
@@ -2089,12 +2129,12 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
 
     for (const auto& ion: info.ions) {
         auto name = fmt::format("{}_type", ion.name);
-        printer->fmt_line("{}int {}{};", qualifier, name, value_initialize);
+        printer->fmt_line("int {}{};", name, value_initialize);
         codegen_global_variables.push_back(make_symbol(name));
     }
 
     if (info.point_process) {
-        printer->fmt_line("{}int point_type{};", qualifier, value_initialize);
+        printer->fmt_line("int point_type{};", value_initialize);
         codegen_global_variables.push_back(make_symbol("point_type"));
     }
 
@@ -2102,7 +2142,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
         auto name = var->get_name() + "0";
         auto symbol = program_symtab->lookup(name);
         if (symbol == nullptr) {
-            printer->fmt_line("{}{} {}{};", qualifier, float_type, name, value_initialize);
+            printer->fmt_line("{} {}{};", float_type, name, value_initialize);
             codegen_global_variables.push_back(make_symbol(name));
         }
     }
@@ -2117,14 +2157,12 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
             auto name = var->get_name();
             auto length = var->get_length();
             if (var->is_array()) {
-                printer->fmt_line("{}{} {}[{}] /* TODO init top-local-array */;",
-                                  qualifier,
+                printer->fmt_line("{} {}[{}] /* TODO init top-local-array */;",
                                   float_type,
                                   name,
                                   length);
             } else {
-                printer->fmt_line("{}{} {} /* TODO init top-local */;",
-                                  qualifier,
+                printer->fmt_line("{} {} /* TODO init top-local */;",
                                   float_type,
                                   name);
             }
@@ -2133,9 +2171,8 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
     }
 
     if (!info.thread_variables.empty()) {
-        printer->fmt_line("{}int thread_data_in_use{};", qualifier, value_initialize);
-        printer->fmt_line("{}{} thread_data[{}] /* TODO init thread_data */;",
-                          qualifier,
+        printer->fmt_line("int thread_data_in_use{};", value_initialize);
+        printer->fmt_line("{} thread_data[{}] /* TODO init thread_data */;",
                           float_type,
                           info.thread_var_data_size);
         codegen_global_variables.push_back(make_symbol("thread_data_in_use"));
@@ -2145,10 +2182,10 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
     }
 
     // TODO: remove this entirely?
-    printer->fmt_line("{}int reset{};", qualifier, value_initialize);
+    printer->fmt_line("int reset{};", value_initialize);
     codegen_global_variables.push_back(make_symbol("reset"));
 
-    printer->fmt_line("{}int mech_type{};", qualifier, value_initialize);
+    printer->fmt_line("int mech_type{};", value_initialize);
     codegen_global_variables.push_back(make_symbol("mech_type"));
 
     for (const auto& var: info.global_variables) {
@@ -2156,14 +2193,13 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
         auto length = var->get_length();
         if (var->is_array()) {
             printer->fmt_line(
-                "{}{} {}[{}] /* TODO init const-array */;", qualifier, float_type, name, length);
+                "{} {}[{}] /* TODO init const-array */;", float_type, name, length);
         } else {
             double value{};
             if (auto const& value_ptr = var->get_value()) {
                 value = *value_ptr;
             }
-            printer->fmt_line("{}{} {}{};",
-                              qualifier,
+            printer->fmt_line("{} {}{};",
                               float_type,
                               name,
                               print_initializers ? fmt::format("{{{:g}}}", value) : std::string{});
@@ -2175,66 +2211,23 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
         auto const name = var->get_name();
         auto* const value_ptr = var->get_value().get();
         double const value{value_ptr ? *value_ptr : 0};
-        printer->fmt_line("{}{} {}{};",
-                          qualifier,
+        printer->fmt_line("{} {}{};",
                           float_type,
                           name,
                           print_initializers ? fmt::format("{{{:g}}}", value) : std::string{});
         codegen_global_variables.push_back(var);
     }
 
-    if (info.primes_size != 0) {
-        if (info.primes_size != info.prime_variables_by_order.size()) {
-            throw std::runtime_error{
-                fmt::format("primes_size = {} differs from prime_variables_by_order.size() = {}, "
-                            "this should not happen.",
-                            info.primes_size,
-                            info.prime_variables_by_order.size())};
-        }
-        auto const initializer_list = [&](auto const& primes, const char* prefix) -> std::string {
-            if (!print_initializers) {
-                return {};
-            }
-            std::string list{"{"};
-            for (auto iter = primes.begin(); iter != primes.end(); ++iter) {
-                auto const& prime = *iter;
-                list.append(std::to_string(position_of_float_var(prefix + prime->get_name())));
-                if (std::next(iter) != primes.end()) {
-                    list.append(", ");
-                }
-            }
-            list.append("}");
-            return list;
-        };
-        printer->fmt_line("{}int slist1[{}]{};",
-                          qualifier,
-                          info.primes_size,
-                          initializer_list(info.prime_variables_by_order, ""));
-        printer->fmt_line("{}int dlist1[{}]{};",
-                          qualifier,
-                          info.primes_size,
-                          initializer_list(info.prime_variables_by_order, "D"));
-        codegen_global_variables.push_back(make_symbol("slist1"));
-        codegen_global_variables.push_back(make_symbol("dlist1"));
-        // additional list for derivimplicit method
-        if (info.derivimplicit_used()) {
-            auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
-            printer->fmt_line("{}int slist2[{}]{};",
-                              qualifier,
-                              info.primes_size,
-                              initializer_list(primes, ""));
-            codegen_global_variables.push_back(make_symbol("slist2"));
-        }
-    }
+    print_sdlists_init(print_initializers);
 
     if (info.table_count > 0) {
-        printer->fmt_line("{}double usetable{};", qualifier, print_initializers ? "{1}" : "");
+        printer->fmt_line("double usetable{};", print_initializers ? "{1}" : "");
         codegen_global_variables.push_back(make_symbol(naming::USE_TABLE_VARIABLE));
 
         for (const auto& block: info.functions_with_table) {
             const auto& name = block->get_node_name();
-            printer->fmt_line("{}{} tmin_{}{};", qualifier, float_type, name, value_initialize);
-            printer->fmt_line("{}{} mfac_{}{};", qualifier, float_type, name, value_initialize);
+            printer->fmt_line("{} tmin_{}{};", float_type, name, value_initialize);
+            printer->fmt_line("{} mfac_{}{};", float_type, name, value_initialize);
             codegen_global_variables.push_back(make_symbol("tmin_" + name));
             codegen_global_variables.push_back(make_symbol("mfac_" + name));
         }
@@ -2244,8 +2237,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
             auto const num_values = variable->get_num_values();
             if (variable->is_array()) {
                 int array_len = variable->get_length();
-                printer->fmt_line("{}{} {}[{}][{}]{};",
-                                  qualifier,
+                printer->fmt_line("{} {}[{}][{}]{};",
                                   float_type,
                                   name,
                                   array_len,
@@ -2253,7 +2245,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
                                   value_initialize);
             } else {
                 printer->fmt_line(
-                    "{}{} {}[{}]{};", qualifier, float_type, name, num_values, value_initialize);
+                    "{} {}[{}]{};", float_type, name, num_values, value_initialize);
             }
             codegen_global_variables.push_back(make_symbol(name));
         }
@@ -2265,8 +2257,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
     }
 
     if (info.vectorize && info.thread_data_index) {
-        printer->fmt_line("{}ThreadDatum ext_call_thread[{}]{};",
-                          qualifier,
+        printer->fmt_line("ThreadDatum ext_call_thread[{}]{};",
                           info.thread_data_index,
                           value_initialize);
         codegen_global_variables.push_back(make_symbol("ext_call_thread"));

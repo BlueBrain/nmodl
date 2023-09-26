@@ -198,16 +198,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-
-    /**
      * Check if net receive/send buffering kernels required
      */
     bool net_receive_buffering_required() const noexcept;
@@ -289,7 +279,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param name The name of a float variable
      * \return     The position index in the data array
      */
-    int position_of_float_var(const std::string& name) const;
+    int position_of_float_var(const std::string& name) const override;
 
 
     /**
@@ -297,7 +287,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param name The name of an int variable
      * \return     The position index in the data array
      */
-    int position_of_int_var(const std::string& name) const;
+    int position_of_int_var(const std::string& name) const override;
 
 
     /**
@@ -560,16 +550,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * The used global type qualifier
-     *
-     * For C++ code generation this is empty
-     * \return ""
-     *
-     * \return "uniform "
-     */
-    virtual std::string global_var_struct_type_qualifier();
-
-    /**
      * Instantiate global var instance
      *
      * For C++ code generation this is empty
@@ -701,6 +681,9 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * with coreneuron)
      */
     void print_mechanism_info();
+
+
+    void print_sdlists_init(bool print_initializers) override;
 
 
     /**
@@ -1226,7 +1209,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print the mechanism registration function
      *
      */
-    void print_mechanism_register();
+    void print_mechanism_register() override;
 
 
     /**
