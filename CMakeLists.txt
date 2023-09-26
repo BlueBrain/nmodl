@@ -219,7 +219,9 @@ add_subdirectory(src)
 # =============================================================================
 # Install unit database to share
 # =============================================================================
-install(FILES share/nrnunits.lib DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nmodl)
+configure_file(share/nrnunits.lib ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib COPYONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib
+        DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nmodl)
 
 # to print compiler flags in the build status
 if(CMAKE_BUILD_TYPE)
