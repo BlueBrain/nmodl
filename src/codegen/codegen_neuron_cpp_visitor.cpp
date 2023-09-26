@@ -1009,7 +1009,8 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     printer->add_line();
     printer->add_line("/* NEURON global variables */");
     if (info.primes_size != 0) {
-        printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];", info.primes_size);
+        printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];",
+                          info.primes_size);
     }
 }
 
@@ -1061,7 +1062,8 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
 int CodegenNeuronCppVisitor::position_of_float_var(const std::string& name) const {
     const auto has_name = [&name](const SymbolType& symbol) { return symbol->get_name() == name; };
-    const auto var_iter = std::find_if(codegen_float_variables.begin(), codegen_float_variables.end(), has_name);
+    const auto var_iter =
+        std::find_if(codegen_float_variables.begin(), codegen_float_variables.end(), has_name);
     if (var_iter != codegen_float_variables.end()) {
         return var_iter - codegen_float_variables.begin();
     } else {
@@ -1071,8 +1073,11 @@ int CodegenNeuronCppVisitor::position_of_float_var(const std::string& name) cons
 
 
 int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const {
-    const auto has_name = [&name](const IndexVariableInfo& index_var_symbol) { return index_var_symbol.symbol->get_name() == name; };
-    const auto var_iter = std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), has_name);
+    const auto has_name = [&name](const IndexVariableInfo& index_var_symbol) {
+        return index_var_symbol.symbol->get_name() == name;
+    };
+    const auto var_iter =
+        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), has_name);
     if (var_iter != codegen_int_variables.end()) {
         return var_iter - codegen_int_variables.begin();
     } else {
@@ -1084,24 +1089,35 @@ int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const 
 void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
     for (auto i = 0; i < info.prime_variables_by_order.size(); ++i) {
         const auto& prime_var = info.prime_variables_by_order[i];
-        // TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at the moment
-        // TODO: We have to do checks and add errors similar to nocmodl in the SemanticAnalysisVisitor
+        // TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at
+        // the moment
+        // TODO: We have to do checks and add errors similar to nocmodl in the
+        // SemanticAnalysisVisitor
         if (prime_var->is_array()) {
-            // TODO: Needs a for loop here. Look at https://github.com/neuronsimulator/nrn/blob/df001a436bcb4e23d698afe66c2a513819a6bfe8/src/nmodl/deriv.cpp#L524
+            // TODO: Needs a for loop here. Look at
+            // https://github.com/neuronsimulator/nrn/blob/df001a436bcb4e23d698afe66c2a513819a6bfe8/src/nmodl/deriv.cpp#L524
             // TODO: Also needs a test
             printer->fmt_push_block("for (int _i = 0; _i < {}; ++_i)", prime_var->get_length());
             printer->fmt_line("/* {}[{}] */", prime_var->get_name(), prime_var->get_length());
-            printer->fmt_line("_slist1[{}+_i] = {{{}, _i}}", i, position_of_float_var(prime_var->get_name()));
+            printer->fmt_line("_slist1[{}+_i] = {{{}, _i}}",
+                              i,
+                              position_of_float_var(prime_var->get_name()));
             const auto prime_var_deriv_name = "D" + prime_var->get_name();
             printer->fmt_line("/* {}[{}] */", prime_var_deriv_name, prime_var->get_length());
-            printer->fmt_line("_dlist1[{}+_i] = {{{}, _i}}", i, position_of_float_var(prime_var_deriv_name));
+            printer->fmt_line("_dlist1[{}+_i] = {{{}, _i}}",
+                              i,
+                              position_of_float_var(prime_var_deriv_name));
             printer->pop_block();
         } else {
             printer->fmt_line("/* {} */", prime_var->get_name());
-            printer->fmt_line("_slist1[{}] = {{{}, 0}}", i, position_of_float_var(prime_var->get_name()));
+            printer->fmt_line("_slist1[{}] = {{{}, 0}}",
+                              i,
+                              position_of_float_var(prime_var->get_name()));
             const auto prime_var_deriv_name = "D" + prime_var->get_name();
             printer->fmt_line("/* {} */", prime_var_deriv_name);
-            printer->fmt_line("_dlist1[{}] = {{{}, 0}}", i, position_of_float_var(prime_var_deriv_name));
+            printer->fmt_line("_dlist1[{}] = {{{}, 0}}",
+                              i,
+                              position_of_float_var(prime_var_deriv_name));
         }
     }
 }
@@ -1124,11 +1140,18 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     const auto codegen_float_variables_size = codegen_float_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        const auto print_comma = i < codegen_float_variables_size-1 || info.emit_cvode;
+        const auto print_comma = i < codegen_float_variables_size - 1 || info.emit_cvode;
         if (float_var->is_array()) {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\", {}}} /* {} */{}", float_var->get_name(), float_var->get_length(), i, print_comma ? "," : "");
+            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\", {}}} /* {} */{}",
+                              float_var->get_name(),
+                              float_var->get_length(),
+                              i,
+                              print_comma ? "," : "");
         } else {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\"}} /* {} */{}", float_var->get_name(), i, print_comma ? "," : "");
+            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\"}} /* {} */{}",
+                              float_var->get_name(),
+                              i,
+                              print_comma ? "," : "");
         }
     }
     if (info.emit_cvode) {
@@ -1137,7 +1160,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
-
 }
 
 

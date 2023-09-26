@@ -2085,19 +2085,17 @@ void CodegenCoreneuronCppVisitor::print_sdlists_init(bool print_initializers) {
         return list;
     };
     printer->fmt_line("int slist1[{}]{};",
-                        info.primes_size,
-                        initializer_list(info.prime_variables_by_order, ""));
+                      info.primes_size,
+                      initializer_list(info.prime_variables_by_order, ""));
     printer->fmt_line("int dlist1[{}]{};",
-                        info.primes_size,
-                        initializer_list(info.prime_variables_by_order, "D"));
+                      info.primes_size,
+                      initializer_list(info.prime_variables_by_order, "D"));
     codegen_global_variables.push_back(make_symbol("slist1"));
     codegen_global_variables.push_back(make_symbol("dlist1"));
     // additional list for derivimplicit method
     if (info.derivimplicit_used()) {
         auto primes = program_symtab->get_variables_with_properties(NmodlType::prime_name);
-        printer->fmt_line("int slist2[{}]{};",
-                            info.primes_size,
-                            initializer_list(primes, ""));
+        printer->fmt_line("int slist2[{}]{};", info.primes_size, initializer_list(primes, ""));
         codegen_global_variables.push_back(make_symbol("slist2"));
     }
 }
@@ -2162,9 +2160,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
                                   name,
                                   length);
             } else {
-                printer->fmt_line("{} {} /* TODO init top-local */;",
-                                  float_type,
-                                  name);
+                printer->fmt_line("{} {} /* TODO init top-local */;", float_type, name);
             }
             codegen_global_variables.push_back(var);
         }
@@ -2192,8 +2188,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
         auto name = var->get_name();
         auto length = var->get_length();
         if (var->is_array()) {
-            printer->fmt_line(
-                "{} {}[{}] /* TODO init const-array */;", float_type, name, length);
+            printer->fmt_line("{} {}[{}] /* TODO init const-array */;", float_type, name, length);
         } else {
             double value{};
             if (auto const& value_ptr = var->get_value()) {
@@ -2237,15 +2232,10 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
             auto const num_values = variable->get_num_values();
             if (variable->is_array()) {
                 int array_len = variable->get_length();
-                printer->fmt_line("{} {}[{}][{}]{};",
-                                  float_type,
-                                  name,
-                                  array_len,
-                                  num_values,
-                                  value_initialize);
-            } else {
                 printer->fmt_line(
-                    "{} {}[{}]{};", float_type, name, num_values, value_initialize);
+                    "{} {}[{}][{}]{};", float_type, name, array_len, num_values, value_initialize);
+            } else {
+                printer->fmt_line("{} {}[{}]{};", float_type, name, num_values, value_initialize);
             }
             codegen_global_variables.push_back(make_symbol(name));
         }
