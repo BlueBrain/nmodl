@@ -982,11 +982,21 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     printer->add_line("/* NEURON RANGE variables macro definitions */");
     for (auto i = 0; i < codegen_float_variables.size(); ++i) {
         const auto float_var = codegen_float_variables[i];
-        printer->add_line("#define ",
-                          float_var->get_name(),
-                          "(id) _ml->template fpfield<",
-                          std::to_string(i),
-                          ">(id)");
+        if (float_var->is_array()) {
+            printer->add_line("#define ",
+                              float_var->get_name(),
+                              "(id) _ml->template data_array<",
+                              std::to_string(i),
+                              ", ",
+                              std::to_string(float_var->get_length()),
+                              ">(id)");
+        } else {
+            printer->add_line("#define ",
+                              float_var->get_name(),
+                              "(id) _ml->template fpfield<",
+                              std::to_string(i),
+                              ">(id)");
+        }
     }
     printer->add_line("/* NEURON GLOBAL variables macro definitions */");
     // Go through the area (if point_process), ions
