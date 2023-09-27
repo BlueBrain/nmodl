@@ -310,6 +310,11 @@ void CodegenCppVisitor::visit_mutex_unlock(const ast::MutexUnlock& node) {
 }
 
 
+/****************************************************************************************/
+/*                     Common helper routines accross codegen functions                 */
+/****************************************************************************************/
+
+
 template <typename T>
 bool CodegenCppVisitor::has_parameter_of_name(const T& node, const std::string& name) {
     auto parameters = node->get_parameters();
@@ -352,6 +357,24 @@ bool CodegenCppVisitor::statement_to_skip(const Statement& node) {
 
 
 /**
+ * \details We can directly print value but if user specify value as integer then
+ * then it gets printed as an integer. To avoid this, we use below wrapper.
+ * If user has provided integer then it gets printed as 1.0 (similar to mod2c
+ * and neuron where ".0" is appended). Otherwise we print double variables as
+ * they are represented in the mod file by user. If the value is in scientific
+ * representation (1e+20, 1E-15) then keep it as it is.
+ */
+std::string CodegenCppVisitor::format_double_string(const std::string& s_value) {
+    return utils::format_double_string<CodegenCppVisitor>(s_value);
+}
+
+
+std::string CodegenCppVisitor::format_float_string(const std::string& s_value) {
+    return utils::format_float_string<CodegenCppVisitor>(s_value);
+}
+
+
+/**
  * \details Statements like if, else etc. don't need semicolon at the end.
  * (Note that it's valid to have "extraneous" semicolon). Also, statement
  * block can appear as statement using expression statement which need to
@@ -387,22 +410,10 @@ bool CodegenCppVisitor::need_semicolon(const Statement& node) {
 }
 
 
-/**
- * \details We can directly print value but if user specify value as integer then
- * then it gets printed as an integer. To avoid this, we use below wrapper.
- * If user has provided integer then it gets printed as 1.0 (similar to mod2c
- * and neuron where ".0" is appended). Otherwise we print double variables as
- * they are represented in the mod file by user. If the value is in scientific
- * representation (1e+20, 1E-15) then keep it as it is.
- */
-std::string CodegenCppVisitor::format_double_string(const std::string& s_value) {
-    return utils::format_double_string<CodegenCppVisitor>(s_value);
-}
+/****************************************************************************************/
+/*                         Printing routines for code generation                        */
+/****************************************************************************************/
 
-
-std::string CodegenCppVisitor::format_float_string(const std::string& s_value) {
-    return utils::format_float_string<CodegenCppVisitor>(s_value);
-}
 
 void CodegenCppVisitor::print_statement_block(const ast::StatementBlock& node,
                                               bool open_brace,
