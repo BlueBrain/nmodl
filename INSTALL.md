@@ -79,6 +79,8 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
 make -j && make install
 ```
 
+:warning: By default `NMODL` is build with the `CMake` option `NMODL_ENABLE_PYTHON_BINDINGS` set to `ON` which increases a lot the compilation complexity and memory requirements. For that purpose it's recommended to either disable this option if the Python bindings are not needed or restrict the number of parallel jobs running in parallel in the `make` command using `make -j <number_of_parallel_jobs>`. i.e. in a machine with 8 threads do `make -j 4`. :warning:
+
 And set PYTHONPATH as:
 
 ```sh
