@@ -1160,6 +1160,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
+    printer->pop_block();
 }
 
 
