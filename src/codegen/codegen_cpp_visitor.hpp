@@ -182,6 +182,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
 
+    /****************************************************************************************/
+    /*                                    Member variables                                  */
+    /****************************************************************************************/
+
     /**
      * Code printer object for target (C++)
      */
@@ -279,6 +283,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     int current_watch_statement = 0;
 
 
+    /****************************************************************************************/
+    /*                              Generic information getters                             */
+    /****************************************************************************************/
+
     /**
      * Return Nmodl language version
      * \return A version
@@ -303,6 +311,55 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Check if a semicolon is required at the end of given statement
+     * \param node The AST Statement node to check
+     * \return     \c true if this Statement requires a semicolon
+     */
+    static bool need_semicolon(const ast::Statement& node);
+
+
+    /****************************************************************************************/
+    /*                     Common helper routines accross codegen functions                 */
+    /****************************************************************************************/
+
+
+    /**
+     * Check if function or procedure node has parameter with given name
+     *
+     * \tparam T Node type (either procedure or function)
+     * \param node AST node (either procedure or function)
+     * \param name Name of parameter
+     * \return True if argument with name exist
+     */
+    template <typename T>
+    bool has_parameter_of_name(const T& node, const std::string& name);
+
+
+    /**
+     * Check if given statement should be skipped during code generation
+     * \param node The AST Statement node to check
+     * \return     \c true if this Statement is to be skipped
+     */
+    static bool statement_to_skip(const ast::Statement& node);
+
+
+    /**
+     * Determine the position in the data array for a given float variable
+     * \param name The name of a float variable
+     * \return     The position index in the data array
+     */
+    virtual int position_of_float_var(const std::string& name) const = 0;
+
+
+    /**
+     * Determine the position in the data array for a given int variable
+     * \param name The name of an int variable
+     * \return     The position index in the data array
+     */
+    virtual int position_of_int_var(const std::string& name) const = 0;
+
+
+    /**
      * Convert a given \c double value to its string representation
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
@@ -316,6 +373,107 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return      Its string representation
      */
     std::string format_float_string(const std::string& value);
+
+
+    /****************************************************************************************/
+    /*                                Backend specific routines                             */
+    /****************************************************************************************/
+
+
+    /**
+     * Print atomic update pragma for reduction statements
+     */
+    virtual void print_atomic_reduction_pragma() = 0;
+
+
+    /****************************************************************************************/
+    /*                         Printing routines for code generation                        */
+    /****************************************************************************************/
+
+
+    /**
+     * Print any statement block in nmodl with option to (not) print braces
+     *
+     * The individual statements (of type nmodl::ast::Statement) in the StatementBlock are printed
+     * by accepting \c this visistor.
+     *
+     * \param node        A (possibly empty) statement block AST node
+     * \param open_brace  Print an opening brace if \c false
+     * \param close_brace Print a closing brace if \c true
+     */
+    void print_statement_block(const ast::StatementBlock& node,
+                               bool open_brace = true,
+                               bool close_brace = true);
+
+
+    /**
+     * Print call to internal or external function
+     * \param node The AST node representing a function call
+     */
+    virtual void print_function_call(const ast::FunctionCall& node) = 0;
+
+
+    /**
+     * Rename function/procedure arguments that conflict with default arguments
+     */
+    void rename_function_arguments();
+
+
+    /**
+     * Print the items in a vector as a list
+     *
+     * This function prints a given vector of elements as a list with given separator onto the
+     * current printer. Elements are expected to be of type nmodl::ast::Ast and are printed by being
+     * visited. Care is taken to omit the separator after the the last element.
+     *
+     * \tparam T The element type in the vector, which must be of type nmodl::ast::Ast
+     * \param  elements The vector of elements to be printed
+     * \param  separator The separator string to print between all elements
+     * \param  prefix A prefix string to print before each element
+     */
+    template <typename T>
+    void print_vector_elements(const std::vector<T>& elements,
+                               const std::string& separator,
+                               const std::string& prefix = "");
+
+
+    /****************************************************************************************/
+    /*                             Code-specific helper routines                            */
+    /****************************************************************************************/
+
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    virtual std::string nrn_thread_arguments() const = 0;
+
+
+    /**
+     * Process a verbatim block for possible variable renaming
+     * \param text The verbatim code to be processed
+     * \return     The code with all variables renamed as needed
+     */
+    virtual std::string process_verbatim_text(std::string const& text) = 0;
+
+
+    /**
+     * Creates a temporary symbol
+     * \param name The name of the symbol
+     * \return     A symbol based on the given name
+     */
+    SymbolType make_symbol(const std::string& name) const {
+        return std::make_shared<symtab::Symbol>(name, ModToken());
+    }
+
+
+    /****************************************************************************************/
+    /*                  Code-specific printing routines for code generations                */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                         Routines for returning variable name                         */
+    /****************************************************************************************/
 
 
     /**
@@ -374,101 +532,33 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
                                           bool use_instance = true) const = 0;
 
 
-    /**
-     * Check if function or procedure node has parameter with given name
-     *
-     * \tparam T Node type (either procedure or function)
-     * \param node AST node (either procedure or function)
-     * \param name Name of parameter
-     * \return True if argument with name exist
-     */
-    template <typename T>
-    bool has_parameter_of_name(const T& node, const std::string& name);
+    /****************************************************************************************/
+    /*                      Main printing routines for code generation                      */
+    /****************************************************************************************/
 
 
-    /**
-     * Rename function/procedure arguments that conflict with default arguments
-     */
-    void rename_function_arguments();
+    virtual void print_sdlists_init(bool print_initializers) = 0;
 
 
-    /**
-     * Arguments for "_threadargs_" macro in neuron implementation
-     */
-    virtual std::string nrn_thread_arguments() const = 0;
+    /****************************************************************************************/
+    /*                                 Print nrn_state routine                              */
+    /****************************************************************************************/
 
-
-    /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
-     */
-    virtual std::string process_verbatim_text(std::string const& text) = 0;
 
     /**
      * Print nrn_state / state update function definition
      */
     virtual void print_nrn_state() = 0;
 
-    /**
-     * Print call to internal or external function
-     * \param node The AST node representing a function call
-     */
-    virtual void print_function_call(const ast::FunctionCall& node) = 0;
 
-    /**
-     * Print atomic update pragma for reduction statements
-     */
-    virtual void print_atomic_reduction_pragma() = 0;
+    /****************************************************************************************/
+    /*                              Print nrn_cur related routines                          */
+    /****************************************************************************************/
 
 
-    /**
-     * Check if given statement should be skipped during code generation
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement is to be skipped
-     */
-    static bool statement_to_skip(const ast::Statement& node);
-
-
-    /**
-     * Check if a semicolon is required at the end of given statement
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement requires a semicolon
-     */
-    static bool need_semicolon(const ast::Statement& node);
-
-
-    /**
-     * Print any statement block in nmodl with option to (not) print braces
-     *
-     * The individual statements (of type nmodl::ast::Statement) in the StatementBlock are printed
-     * by accepting \c this visistor.
-     *
-     * \param node        A (possibly empty) statement block AST node
-     * \param open_brace  Print an opening brace if \c false
-     * \param close_brace Print a closing brace if \c true
-     */
-    void print_statement_block(const ast::StatementBlock& node,
-                               bool open_brace = true,
-                               bool close_brace = true);
-
-
-    /**
-     * Print the items in a vector as a list
-     *
-     * This function prints a given vector of elements as a list with given separator onto the
-     * current printer. Elements are expected to be of type nmodl::ast::Ast and are printed by being
-     * visited. Care is taken to omit the separator after the the last element.
-     *
-     * \tparam T The element type in the vector, which must be of type nmodl::ast::Ast
-     * \param  elements The vector of elements to be printed
-     * \param  separator The separator string to print between all elements
-     * \param  prefix A prefix string to print before each element
-     */
-    template <typename T>
-    void print_vector_elements(const std::vector<T>& elements,
-                               const std::string& separator,
-                               const std::string& prefix = "");
+    /****************************************************************************************/
+    /*                              Main code printing entry points                         */
+    /****************************************************************************************/
 
 
     /**
@@ -479,39 +569,15 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-
-    virtual void print_sdlists_init(bool print_initializers) = 0;
-
-
-    /**
      * Print the mechanism registration function
      *
      */
     virtual void print_mechanism_register() = 0;
 
 
-    /**
-     * Determine the position in the data array for a given float variable
-     * \param name The name of a float variable
-     * \return     The position index in the data array
-     */
-    virtual int position_of_float_var(const std::string& name) const = 0;
-
-
-    /**
-     * Determine the position in the data array for a given int variable
-     * \param name The name of an int variable
-     * \return     The position index in the data array
-     */
-    virtual int position_of_int_var(const std::string& name) const = 0;
+    /****************************************************************************************/
+    /*                                  Protected constructors                              */
+    /****************************************************************************************/
 
 
     /// This constructor is private, only the derived classes' public constructors are public
@@ -535,6 +601,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
 
+    /****************************************************************************************/
+    /*                            Overloaded visitor routines                               */
+    /****************************************************************************************/
 
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_binary_operator(const ast::BinaryOperator& node) override;
@@ -565,7 +634,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 };
 
-
+/* Templated functions need to be defined in header file */
 template <typename T>
 void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
                                               const std::string& separator,
