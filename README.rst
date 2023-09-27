@@ -65,7 +65,7 @@ Installation
 ------------
 
 See
-`INSTALL.md <https://github.com/BlueBrain/nmodl/blob/master/INSTALL.md>`__
+`INSTALL.rst <https://github.com/BlueBrain/nmodl/blob/master/INSTALL.rst>`__
 for detailed instructions to build the NMODL from source.
 
 Try NMODL with Docker
@@ -343,7 +343,7 @@ If you see any issue, feel free to `raise a
 ticket <https://github.com/BlueBrain/nmodl/issues/new>`__. If you would
 like to improve this framework, see `open
 issues <https://github.com/BlueBrain/nmodl/issues>`__ and `contribution
-guidelines <CONTRIBUTING.md>`__.
+guidelines <CONTRIBUTING.rst>`__.
 
 Examples / Benchmarks
 ---------------------
