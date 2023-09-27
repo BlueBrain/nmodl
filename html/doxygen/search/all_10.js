@@ -41,7 +41,7 @@ var searchData=
   ['readionvar_1776',['ReadIonVar',['../classnmodl_1_1ast_1_1_read_ion_var.html',1,'nmodl::ast::ReadIonVar'],['../classnmodl_1_1ast_1_1_read_ion_var.html#a735f451dc9cd10d422b0ce3c011ed963',1,'nmodl::ast::ReadIonVar::ReadIonVar(Name *name)'],['../classnmodl_1_1ast_1_1_read_ion_var.html#aeb8a5eff809f8ab24863e86c5f543d50',1,'nmodl::ast::ReadIonVar::ReadIonVar(std::shared_ptr&lt; Name &gt; name)'],['../classnmodl_1_1ast_1_1_read_ion_var.html#a321d2b8a0d3a6bb8f7579e2f27f1aec9',1,'nmodl::ast::ReadIonVar::ReadIonVar(const ReadIonVar &amp;obj)']]],
   ['readionvarvector_1777',['ReadIonVarVector',['../group__ast__vec__type.html#gaa0c97050f4d9ee45495c9500d7be7678',1,'nmodl::ast']]],
   ['readlist_1778',['readlist',['../classnmodl_1_1ast_1_1_useion.html#aa812111f6f7cfc47bf8cc7b2dbe51008',1,'nmodl::ast::Useion']]],
-  ['readme_2emd_1779',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
+  ['readme_2erst_1779',['README.rst',['../_r_e_a_d_m_e_8rst.html',1,'']]],
   ['reads_1780',['reads',['../structnmodl_1_1codegen_1_1_ion.html#ad3b1eb176f8e00671fb36cc625ad0f49',1,'nmodl::codegen::Ion']]],
   ['regex_5fspecial_5fchars_1781',['regex_special_chars',['../namespacenmodl_1_1codegen.html#a7fe9cbd601e67e2d2726026c0008b16f',1,'nmodl::codegen']]],
   ['register_5fmechanism_5farguments_1782',['register_mechanism_arguments',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aafd54617af490e9e333c2b343f0f5fec',1,'nmodl::codegen::CodegenCppVisitor']]],

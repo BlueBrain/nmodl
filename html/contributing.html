@@ -73,22 +73,11 @@
 <p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to the NMODL Framework</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#got-a-question"><a name="question"></a> Got a Question?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#found-a-bug"><a name="issue"></a> Found a Bug?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#missing-a-feature"><a name="feature"></a> Missing a Feature?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#submission-guidelines"><a name="submit"></a> Submission Guidelines</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#submitting-an-issue"><a name="submit-issue"></a> Submitting an Issue</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#submitting-a-pull-request-pr"><a name="submit-pr"></a> Submitting a Pull Request (PR)</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#after-your-pull-request-is-merged">After your pull request is merged</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#development-conventions"><a name="devconv"></a> Development Conventions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#validate-the-python-package">Validate the Python package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#memory-leaks-and-clang-tidy">Memory Leaks and clang-tidy</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#got-a-question">Got a Question?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#found-a-bug">Found a Bug?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#missing-a-feature">Missing a Feature?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#submission-guidelines">Submission Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-conventions">Development Conventions</a></li>
 </ul>
 </li>
 </ul>
@@ -124,82 +113,95 @@
              
   <section id="contributing-to-the-nmodl-framework">
 <h1>Contributing to the NMODL Framework<a class="headerlink" href="#contributing-to-the-nmodl-framework" title="Permalink to this heading"></a></h1>
-<p>We would love for you to contribute to the NMODL Framework and help make it better than it is today. As a
-contributor, here are the guidelines we would like you to follow:</p>
-<ul class="simple">
-<li><p>Question or Problem?</p></li>
-<li><p>Issues and Bugs</p></li>
-<li><p>Feature Requests</p></li>
-<li><p>Submission Guidelines</p></li>
-<li><p>Development Conventions</p></li>
-</ul>
+<p>We would love for you to contribute to the NMODL Framework and help make
+it better than it is today. As a contributor, here are the guidelines we
+would like you to follow: - <code class="docutils literal notranslate"><span class="pre">Question</span> <span class="pre">or</span> <span class="pre">Problem?</span> <span class="pre">&lt;#question&gt;</span></code>__ -
+<code class="docutils literal notranslate"><span class="pre">Issues</span> <span class="pre">and</span> <span class="pre">Bugs</span> <span class="pre">&lt;#issue&gt;</span></code>__ - <code class="docutils literal notranslate"><span class="pre">Feature</span> <span class="pre">Requests</span> <span class="pre">&lt;#feature&gt;</span></code>__ -
+<code class="docutils literal notranslate"><span class="pre">Submission</span> <span class="pre">Guidelines</span> <span class="pre">&lt;#submit&gt;</span></code>__ - <code class="docutils literal notranslate"><span class="pre">Development</span> <span class="pre">Conventions</span> <span class="pre">&lt;#devconv&gt;</span></code>__</p>
 <section id="got-a-question">
-<h2><a name="question"></a> Got a Question?<a class="headerlink" href="#got-a-question" title="Permalink to this heading"></a></h2>
-<p>Please do not hesitate to raise an issue on <a class="reference external" href="https://github.com/BlueBrain/nmodl">github project page</a>.</p>
+<h2>Got a Question?<a class="headerlink" href="#got-a-question" title="Permalink to this heading"></a></h2>
+<p>Please do not hesitate to raise an issue on <code class="docutils literal notranslate"><span class="pre">github</span> <span class="pre">project</span> <span class="pre">page</span> <span class="pre">&lt;https://github.com/BlueBrain/nmodl&gt;</span></code>__.</p>
 </section>
 <section id="found-a-bug">
-<h2><a name="issue"></a> Found a Bug?<a class="headerlink" href="#found-a-bug" title="Permalink to this heading"></a></h2>
-<p>If you find a bug in the source code, you can help us by submitting an issue to our <a class="reference external" href="https://github.com/BlueBrain/nmodl">GitHub Repository</a>. Even better, you can submit a Pull Request with a fix.</p>
+<h2>Found a Bug?<a class="headerlink" href="#found-a-bug" title="Permalink to this heading"></a></h2>
+<p>If you find a bug in the source code, you can help us by <code class="docutils literal notranslate"><span class="pre">submitting</span> <span class="pre">an</span> <span class="pre">issue</span> <span class="pre">&lt;#submit-issue&gt;</span></code>__ to our <code class="docutils literal notranslate"><span class="pre">GitHub</span> <span class="pre">Repository</span> <span class="pre">&lt;https://github.com/BlueBrain/nmodl&gt;</span></code><strong>. Even better, you can
+<code class="docutils literal notranslate"><span class="pre">submit</span> <span class="pre">a</span> <span class="pre">Pull</span> <span class="pre">Request</span> <span class="pre">&lt;#submit-pr&gt;</span></code></strong> with a fix.</p>
 </section>
 <section id="missing-a-feature">
-<h2><a name="feature"></a> Missing a Feature?<a class="headerlink" href="#missing-a-feature" title="Permalink to this heading"></a></h2>
-<p>You can <em>request</em> a new feature by submitting an issue to our GitHub Repository. If you would like to <em>implement</em> a new feature, please submit an issue with a proposal for your work first, to be sure that we can use it.</p>
+<h2>Missing a Feature?<a class="headerlink" href="#missing-a-feature" title="Permalink to this heading"></a></h2>
+<p>You can <em>request</em> a new feature by <code class="docutils literal notranslate"><span class="pre">submitting</span> <span class="pre">an</span> <span class="pre">issue</span> <span class="pre">&lt;#submit-issue&gt;</span></code>__ to our GitHub Repository. If you would like to
+<em>implement</em> a new feature, please submit an issue with a proposal for
+your work first, to be sure that we can use it.</p>
 <p>Please consider what kind of change it is:</p>
 <ul class="simple">
-<li><p>For a <strong>Major Feature</strong>, first open an issue and outline your proposal so that it can be
-discussed. This will also allow us to better coordinate our efforts, prevent duplication of work,
-and help you to craft the change so that it is successfully accepted into the project.</p></li>
-<li><p><strong>Small Features</strong> can be crafted and directly submitted as a Pull Request.</p></li>
+<li><p>For a <strong>Major Feature</strong>, first open an issue and outline your
+proposal so that it can be discussed. This will also allow us to
+better coordinate our efforts, prevent duplication of work, and help
+you to craft the change so that it is successfully accepted into the
+project.</p></li>
+<li><p><strong>Small Features</strong> can be crafted and directly <code class="docutils literal notranslate"><span class="pre">submitted</span> <span class="pre">as</span> <span class="pre">a</span> <span class="pre">Pull</span> <span class="pre">Request</span> <span class="pre">&lt;#submit-pr&gt;</span></code>__.</p></li>
 </ul>
 </section>
 <section id="submission-guidelines">
-<h2><a name="submit"></a> Submission Guidelines<a class="headerlink" href="#submission-guidelines" title="Permalink to this heading"></a></h2>
-<section id="submitting-an-issue">
-<h3><a name="submit-issue"></a> Submitting an Issue<a class="headerlink" href="#submitting-an-issue" title="Permalink to this heading"></a></h3>
-<p>Before you submit an issue, please search the issue tracker, maybe an issue for your problem already exists and the
-discussion might inform you of workarounds readily available.</p>
-<p>We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will need as much information as possible, and preferably a sample MOD file or Python example.</p>
-</section>
-<section id="submitting-a-pull-request-pr">
-<h3><a name="submit-pr"></a> Submitting a Pull Request (PR)<a class="headerlink" href="#submitting-a-pull-request-pr" title="Permalink to this heading"></a></h3>
-<p>When you wish to contribute to the code base, please consider the following guidelines:</p>
-<ul>
-<li><p>Make a <a class="reference external" href="https://guides.github.com/activities/forking/">fork</a> of this repository.</p></li>
-<li><p>Make your changes in your fork, in a new git branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>my-fix-branch<span class="w"> </span>master
+<h2>Submission Guidelines<a class="headerlink" href="#submission-guidelines" title="Permalink to this heading"></a></h2>
+<p>Submitting an Issue</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+<span class="n">Before</span> <span class="n">you</span> <span class="n">submit</span> <span class="n">an</span> <span class="n">issue</span><span class="p">,</span> <span class="n">please</span> <span class="n">search</span> <span class="n">the</span> <span class="n">issue</span> <span class="n">tracker</span><span class="p">,</span> <span class="n">maybe</span> <span class="n">an</span>
+<span class="n">issue</span> <span class="k">for</span> <span class="n">your</span> <span class="n">problem</span> <span class="n">already</span> <span class="n">exists</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">discussion</span> <span class="n">might</span> <span class="n">inform</span>
+<span class="n">you</span> <span class="n">of</span> <span class="n">workarounds</span> <span class="n">readily</span> <span class="n">available</span><span class="o">.</span>
+
+<span class="n">We</span> <span class="n">want</span> <span class="n">to</span> <span class="n">fix</span> <span class="nb">all</span> <span class="n">the</span> <span class="n">issues</span> <span class="k">as</span> <span class="n">soon</span> <span class="k">as</span> <span class="n">possible</span><span class="p">,</span> <span class="n">but</span> <span class="n">before</span> <span class="n">fixing</span> <span class="n">a</span>
+<span class="n">bug</span> <span class="n">we</span> <span class="n">need</span> <span class="n">to</span> <span class="n">reproduce</span> <span class="ow">and</span> <span class="n">confirm</span> <span class="n">it</span><span class="o">.</span> <span class="n">In</span> <span class="n">order</span> <span class="n">to</span> <span class="n">reproduce</span> <span class="n">bugs</span> <span class="n">we</span>
+<span class="n">will</span> <span class="n">need</span> <span class="k">as</span> <span class="n">much</span> <span class="n">information</span> <span class="k">as</span> <span class="n">possible</span><span class="p">,</span> <span class="ow">and</span> <span class="n">preferably</span> <span class="n">a</span> <span class="n">sample</span> <span class="n">MOD</span>
+<span class="n">file</span> <span class="ow">or</span> <span class="n">Python</span> <span class="n">example</span><span class="o">.</span>
+
+ <span class="n">Submitting</span> <span class="n">a</span> <span class="n">Pull</span> <span class="n">Request</span> <span class="p">(</span><span class="n">PR</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>When you wish to contribute to the code base, please consider the
+following guidelines:</p>
+<ul>
+<li><p>Make a <code class="docutils literal notranslate"><span class="pre">fork</span> <span class="pre">&lt;https://guides.github.com/activities/forking/&gt;</span></code>__ of
+this repository.</p></li>
+<li><p>Make your changes in your fork, in a new git branch:</p>
+<p>.. code:: shell</p>
+<p>git checkout -b my-fix-branch master</p>
 </li>
 <li><p>Create your patch, <strong>including appropriate test cases</strong>.</p></li>
-<li><p>Enable <code class="docutils literal notranslate"><span class="pre">NMODL_TEST_FORMATTING</span></code> CMake variable
-to ensure that your change follows the coding conventions of this project when running the tests.
-The formatting utility can also be used directly:</p>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">NMODL_TEST_FORMATTING</span></code> CMake variable to ensure that your
+change follows the coding conventions of this project when running
+the tests. The formatting utility can also be used directly:</p>
 <ul class="simple">
-<li><p>to format CMake and C++ files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span></code></p></li>
-<li><p>to format only the C++ files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--lang</span> <span class="pre">c++</span></code></p></li>
-<li><p>to format a subset of files or directories: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">src/codegen/</span> <span class="pre">src/main.cpp</span></code></p></li>
-<li><p>to check the formatting of CMake files: <code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--dry-run</span> <span class="pre">--lang</span> <span class="pre">cmake</span></code></p></li>
+<li><p>to format CMake and C++ files:
+<code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span></code></p></li>
+<li><p>to format only the C++ files:
+<code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--lang</span> <span class="pre">c++</span></code></p></li>
+<li><p>to format a subset of files or directories:
+<code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">src/codegen/</span> <span class="pre">src/main.cpp</span></code></p></li>
+<li><p>to check the formatting of CMake files:
+<code class="docutils literal notranslate"><span class="pre">cmake/hpc-coding-conventions/bin/format</span> <span class="pre">--dry-run</span> <span class="pre">--lang</span> <span class="pre">cmake</span></code></p></li>
 </ul>
 </li>
 <li><p>Run the full test suite, and ensure that all tests pass.</p></li>
 <li><p>Commit your changes using a descriptive commit message.</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>commit<span class="w"> </span>-a
-</pre></div>
-</div>
+<p>.. code:: shell</p>
+<p>git commit -a</p>
 </li>
 <li><p>Push your branch to GitHub:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>my-fix-branch
-</pre></div>
-</div>
+<p>.. code:: shell</p>
+<p>git push origin my-fix-branch</p>
 </li>
-<li><p>In GitHub, send a Pull Request to the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the upstream repository of the relevant component.</p></li>
+<li><p>In GitHub, send a Pull Request to the <code class="docutils literal notranslate"><span class="pre">master</span></code> branch of the
+upstream repository of the relevant component.</p></li>
 <li><p>If we suggest changes then:</p>
 <ul>
 <li><p>Make the required updates.</p></li>
 <li><p>Re-run the test suites to ensure tests are still passing.</p></li>
-<li><p>Rebase your branch and force push to your GitHub repository (this will update your Pull Request):</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="w"> </span>git<span class="w"> </span>rebase<span class="w"> </span>master<span class="w"> </span>-i
-<span class="w"> </span>git<span class="w"> </span>push<span class="w"> </span>-f
+<li><p>Rebase your branch and force push to your GitHub repository (this
+will update your Pull Request):</p>
+<p>.. code:: shell</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git rebase master -i
+git push -f
 </pre></div>
 </div>
 </li>
@@ -207,86 +209,77 @@ The formatting utility can also be used directly:</p>
 </li>
 </ul>
 <p>That’s it! Thank you for your contribution!</p>
-<section id="after-your-pull-request-is-merged">
-<h4>After your pull request is merged<a class="headerlink" href="#after-your-pull-request-is-merged" title="Permalink to this heading"></a></h4>
-<p>After your pull request is merged, you can safely delete your branch and pull the changes from the main (upstream)
-repository:</p>
+<p>After your pull request is merged
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</p>
+<p>After your pull request is merged, you can safely delete your branch and
+pull the changes from the main (upstream) repository:</p>
 <ul>
-<li><p>Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--delete<span class="w"> </span>my-fix-branch
-</pre></div>
-</div>
+<li><p>Delete the remote branch on GitHub either through the GitHub web UI
+or your local shell as follows:</p>
+<p>.. code:: shell</p>
+<p>git push origin –delete my-fix-branch</p>
 </li>
 <li><p>Check out the master branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>master<span class="w"> </span>-f
-</pre></div>
-</div>
+<p>.. code:: shell</p>
+<p>git checkout master -f</p>
 </li>
 <li><p>Delete the local branch:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>branch<span class="w"> </span>-D<span class="w"> </span>my-fix-branch
-</pre></div>
-</div>
+<p>.. code:: shell</p>
+<p>git branch -D my-fix-branch</p>
 </li>
 <li><p>Update your master with the latest upstream version:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>pull<span class="w"> </span>--ff<span class="w"> </span>upstream<span class="w"> </span>master
-</pre></div>
-</div>
+<p>.. code:: shell</p>
+<p>git pull –ff upstream master</p>
 </li>
 </ul>
 </section>
-</section>
-</section>
 <section id="development-conventions">
-<h2><a name="devconv"></a> Development Conventions<a class="headerlink" href="#development-conventions" title="Permalink to this heading"></a></h2>
-<p>If you are developing NMODL, make sure to enable both <code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code>
-CMake variables to ensure that your contributions follow the coding conventions of this project:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span>cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON &lt;path&gt;
-</pre></div>
-</div>
+<h2>Development Conventions<a class="headerlink" href="#development-conventions" title="Permalink to this heading"></a></h2>
+<p>If you are developing NMODL, make sure to enable both
+<code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code> CMake variables to ensure
+that your contributions follow the coding conventions of this project:</p>
+<p>.. code:: cmake</p>
+<p>cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON <path></p>
 <p>The first variable provides the following additional targets to format
 C, C++, and CMake files:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">clang</span><span class="o">-</span><span class="nb">format</span> <span class="n">cmake</span><span class="o">-</span><span class="nb">format</span>
-</pre></div>
-</div>
-<p>The second option activates Git hooks that will discard commits that
-do not comply with coding conventions of this project. These 2 CMake variables require additional utilities:</p>
+<p>::</p>
+<p>make clang-format cmake-format</p>
+<p>The second option activates Git hooks that will discard commits that do
+not comply with coding conventions of this project. These 2 CMake
+variables require additional utilities:</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://releases.llvm.org/7.0.0/tools/clang/docs/ClangFormat.html">ClangFormat 7</a></p></li>
-<li><p><a class="reference external" href="https://github.com/cheshirekow/cmake_format">cmake-format</a></p></li>
-<li><p><a class="reference external" href="https://pre-commit.com/">pre-commit</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClangFormat</span> <span class="pre">7</span> <span class="pre">&lt;https://releases.llvm.org/7.0.0/tools/clang/docs/ClangFormat.html&gt;</span></code>__</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake-format</span> <span class="pre">&lt;https://github.com/cheshirekow/cmake_format&gt;</span></code>__</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">&lt;https://pre-commit.com/&gt;</span></code>__</p></li>
 </ul>
-<p>clang-format can be installed on Linux thanks
-to <a class="reference external" href="http://apt.llvm.org/">LLVM apt page</a>. On MacOS, you can simply install llvm with brew:
-<code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span></code>.
-<em>cmake-format</em> and <em>pre-commit</em> utilities can be installed with <em>pip</em>.</p>
-<section id="validate-the-python-package">
-<h3>Validate the Python package<a class="headerlink" href="#validate-the-python-package" title="Permalink to this heading"></a></h3>
-<p>You may run the Python test-suites if your contribution has an impact
-on the Python API:</p>
-<ol class="arabic simple">
-<li><p>setup a sandbox environment with either <em>virtualenv</em>,
-<em>pyenv</em>, or <em>pipenv</em>. For instance with <em>virtualenv</em>:
-<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
-<li><p>build the Python package with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p></li>
-<li><p>install <em>pytest</em> Python package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest</span></code></p></li>
-<li><p>execute the unit-tests: <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
-</ol>
-</section>
-<section id="memory-leaks-and-clang-tidy">
-<h3>Memory Leaks and clang-tidy<a class="headerlink" href="#memory-leaks-and-clang-tidy" title="Permalink to this heading"></a></h3>
+<p>clang-format can be installed on Linux thanks to <code class="docutils literal notranslate"><span class="pre">LLVM</span> <span class="pre">apt</span> <span class="pre">page</span> <span class="pre">&lt;http://apt.llvm.org/&gt;</span></code>__. On MacOS, you can simply install llvm
+with brew: <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span></code>. <em>cmake-format</em> and <em>pre-commit</em>
+utilities can be installed with <em>pip</em>.</p>
+<p>Validate the Python package</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+You may run the Python test-suites if your contribution has an impact on
+the Python API:
+
+1. setup a sandbox environment with either *virtualenv*, *pyenv*, or
+   *pipenv*. For instance with *virtualenv*:
+   ``python -m venv .venv &amp;&amp; source .venv/bin/activate``
+2. build the Python package with the command: ``python setup.py build``
+3. install *pytest* Python package: ``pip install pytest``
+4. execute the unit-tests: ``pytest``
+
+Memory Leaks and clang-tidy
+</pre></div>
+</div>
 <p>If you want to test for memory leaks, do :</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">valgrind</span> <span class="o">--</span><span class="n">leak</span><span class="o">-</span><span class="n">check</span><span class="o">=</span><span class="n">full</span> <span class="o">--</span><span class="n">track</span><span class="o">-</span><span class="n">origins</span><span class="o">=</span><span class="n">yes</span>  <span class="o">./</span><span class="nb">bin</span><span class="o">/</span><span class="n">nmodl_lexer</span>
-</pre></div>
-</div>
+<p>::</p>
+<p>valgrind –leak-check=full –track-origins=yes  ./bin/nmodl_lexer</p>
 <p>Or using CTest as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ctest</span> <span class="o">-</span><span class="n">T</span> <span class="n">memcheck</span>
-</pre></div>
-</div>
-<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cmake</span> <span class="o">..</span> <span class="o">-</span><span class="n">DENABLE_CLANG_TIDY</span><span class="o">=</span><span class="n">ON</span>
-</pre></div>
-</div>
-</section>
+<p>::</p>
+<p>ctest -T memcheck</p>
+<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to
+have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
+<p>::</p>
+<p>cmake .. -DENABLE_CLANG_TIDY=ON</p>
 </section>
 </section>
 

@@ -53,22 +53,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installing the NMODL Framework</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#getting-started">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cloning-source">Cloning Source</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#on-os-x">On OS X</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#on-ubuntu">On Ubuntu</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#build-project">Build Project</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#using-cmake">Using CMake</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#flex-bison-paths">Flex / Bison Paths</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#using-python-setuptools">Using Python setuptools</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#when-building-without-linking-against-libpython">When building without linking against libpython</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#testing-the-installed-module">Testing the Installed Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#generating-documentation">Generating Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#build-project">Build Project</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="language.html">The NEURON MODeling language</a></li>
@@ -128,160 +114,209 @@
 <h1>Installing the NMODL Framework<a class="headerlink" href="#installing-the-nmodl-framework" title="Permalink to this heading"></a></h1>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h2>
-<p>These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.</p>
+<p>These instructions will get you a copy of the project up and running on
+your local machine for development and testing purposes.</p>
 </section>
 <section id="cloning-source">
 <h2>Cloning Source<a class="headerlink" href="#cloning-source" title="Permalink to this heading"></a></h2>
-<p>The NMODL Framework is maintained on github. The best way to get the sources is to simply clone the repository.</p>
-<p><strong>Note</strong>: This project uses git submodules which must be cloned along with the repository itself:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>--recursive<span class="w"> </span>https://github.com/BlueBrain/nmodl.git
-<span class="nb">cd</span><span class="w"> </span>nmodl
-</pre></div>
-</div>
+<p>The NMODL Framework is maintained on github. The best way to get the
+sources is to simply clone the repository.</p>
+<p><strong>Note</strong>: This project uses git submodules which must be cloned along
+with the repository itself:</p>
+<p>.. code:: sh</p>
+<p>git clone –recursive https://github.com/BlueBrain/nmodl.git
+cd nmodl</p>
 </section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>To build the project from source, a modern C++ compiler with C++14 support is necessary. Make sure you have following packages available:</p>
+<p>To build the project from source, a modern C++ compiler with C++14
+support is necessary. Make sure you have following packages available:</p>
 <ul class="simple">
 <li><p>flex (&gt;=2.6)</p></li>
 <li><p>bison (&gt;=3.0)</p></li>
 <li><p>CMake (&gt;=3.15)</p></li>
 <li><p>Python (&gt;=3.8)</p></li>
-<li><p>Python packages : jinja2 (&gt;=2.10), pyyaml (&gt;=3.13), pytest (&gt;=4.0.0), sympy (&gt;=1.3), textwrap</p></li>
+<li><p>Python packages : jinja2 (&gt;=2.10), pyyaml (&gt;=3.13), pytest (&gt;=4.0.0),
+sympy (&gt;=1.3), textwrap</p></li>
 </ul>
-<section id="on-os-x">
-<h3>On OS X<a class="headerlink" href="#on-os-x" title="Permalink to this heading"></a></h3>
-<p>Typically the versions of bison and flex provided by the system are outdated and not compatible with our requirements.
-To get recent version of all dependencies we recommend using <a class="reference external" href="https://brew.sh/">homebrew</a>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>cmake<span class="w"> </span>python3
+<p>On OS X</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+Typically the versions of bison and flex provided by the system are
+outdated and not compatible with our requirements. To get recent version
+of all dependencies we recommend using `homebrew &lt;https://brew.sh/&gt;`__:
+
+.. code:: sh
+
+   brew install flex bison cmake python3
+
+The necessary Python packages can then easily be added using the pip3
+command.
+
+.. code:: sh
+
+   pip3 install --user -r requirements.txt
+
+Make sure to have latest flex/bison in $PATH :
+
+.. code:: sh
+
+   export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/usr/local/bin/:$PATH
+
+On Apple M1, corresponding brew paths are under ``/opt/homebrew/opt/``:
+
+.. code:: sh
+
+   export PATH=/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:$PATH
+
+On Ubuntu
 </pre></div>
 </div>
-<p>The necessary Python packages can then easily be added using the pip3 command.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</pre></div>
-</div>
-<p>Make sure to have latest flex/bison in $PATH :</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/usr/local/bin/:<span class="nv">$PATH</span>
-</pre></div>
-</div>
-<p>On Apple M1, corresponding brew paths are under <code class="docutils literal notranslate"><span class="pre">/opt/homebrew/opt/</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:<span class="nv">$PATH</span>
-</pre></div>
-</div>
-</section>
-<section id="on-ubuntu">
-<h3>On Ubuntu<a class="headerlink" href="#on-ubuntu" title="Permalink to this heading"></a></h3>
-<p>On Ubuntu (&gt;=18.04) flex/bison versions are recent enough and are installed along with the system toolchain:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>apt-get<span class="w"> </span>install<span class="w"> </span>flex<span class="w"> </span>bison<span class="w"> </span>gcc<span class="w"> </span>python3<span class="w"> </span>python3-pip
-</pre></div>
-</div>
+<p>On Ubuntu (&gt;=18.04) flex/bison versions are recent enough and are
+installed along with the system toolchain:</p>
+<p>.. code:: sh</p>
+<p>apt-get install flex bison gcc python3 python3-pip</p>
 <p>The Python dependencies are installed using:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-</pre></div>
-</div>
-</section>
+<p>.. code:: sh</p>
+<p>pip3 install –user -r requirements.txt</p>
 </section>
 <section id="build-project">
 <h2>Build Project<a class="headerlink" href="#build-project" title="Permalink to this heading"></a></h2>
-<section id="using-cmake">
-<h3>Using CMake<a class="headerlink" href="#using-cmake" title="Permalink to this heading"></a></h3>
-<p>Once all dependencies are in place, build project as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>-p<span class="w"> </span>nmodl/build
-<span class="nb">cd</span><span class="w"> </span>nmodl/build
-cmake<span class="w"> </span>..<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
-make<span class="w"> </span>-j<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>install
+<p>Using CMake</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+Once all dependencies are in place, build project as:
+
+.. code:: sh
+
+   mkdir -p nmodl/build
+   cd nmodl/build
+   cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+   cmake --build . --parallel 4 --target install
+
+.. hint::
+
+   By default ``NMODL`` is build with the ``CMake`` option
+   ``NMODL_ENABLE_PYTHON_BINDINGS`` set to ``ON`` which increases a lot
+   the compilation complexity and memory requirements. For that purpose
+   it’s recommended to either disable this option if the Python bindings
+   are not needed or restrict the number of parallel jobs running in
+   parallel in the ``cmake`` command using
+   ``cmake --parallel &lt;number_of_parallel_jobs&gt;``. i.e. in a machine
+   with 8 threads do ``cmake --parallel 4``.
+
+And set PYTHONPATH as:
+
+.. code:: sh
+
+   export PYTHONPATH=$HOME/nmodl/lib:$PYTHONPATH
+
+Flex / Bison Paths
+^^^^^^^^^^^^^^^^^^
+
+If flex / bison are not in your default $PATH, you can provide the path
+to cmake as:
+
+.. code:: sh
+
+   cmake .. -DFLEX_EXECUTABLE=/usr/local/opt/flex/bin/flex \
+            -DBISON_EXECUTABLE=/usr/local/opt/bison/bin/bison \
+            -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
+
+Using Python setuptools
 </pre></div>
 </div>
-<p>And set PYTHONPATH as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$HOME</span>/nmodl/lib:<span class="nv">$PYTHONPATH</span>
-</pre></div>
-</div>
-<section id="flex-bison-paths">
-<h4>Flex / Bison Paths<a class="headerlink" href="#flex-bison-paths" title="Permalink to this heading"></a></h4>
-<p>If flex / bison are not in your default $PATH, you can provide the path to cmake as:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>..<span class="w"> </span>-DFLEX_EXECUTABLE<span class="o">=</span>/usr/local/opt/flex/bin/flex<span class="w"> </span><span class="se">\</span>
-<span class="w">         </span>-DBISON_EXECUTABLE<span class="o">=</span>/usr/local/opt/bison/bin/bison<span class="w"> </span><span class="se">\</span>
-<span class="w">         </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$HOME</span>/nmodl
-</pre></div>
-</div>
-</section>
-</section>
-<section id="using-python-setuptools">
-<h3>Using Python setuptools<a class="headerlink" href="#using-python-setuptools" title="Permalink to this heading"></a></h3>
-<p>If you are mainly interested in the NMODL Framework parsing and analysis tools and wish to use them from Python, we
-recommend building and installing using Python.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip3<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>.
-</pre></div>
-</div>
-<p>This should build the NMODL framework and install it into your pip user <code class="docutils literal notranslate"><span class="pre">site-packages</span></code> folder such that it becomes
-available as a Python module.</p>
-</section>
-<section id="when-building-without-linking-against-libpython">
-<h3>When building without linking against libpython<a class="headerlink" href="#when-building-without-linking-against-libpython" title="Permalink to this heading"></a></h3>
-<p>NMODL uses an embedded python to symbolically evaluate differential equations. For this to work we would usually link
-against libpython, which is automatically taken care of by pybind11. In some cases, for instance when building a
-python wheel, we cannot link against libpython, because we cannot know where it will be at runtime. Instead, we load
-the python library (along with a wrapper library that manages calls to embedded python) at runtime.
-To disable linking against python and enabling dynamic loading of libpython at runtime we need to configure the build
-with the cmake option <code class="docutils literal notranslate"><span class="pre">-DLINK_AGAINST_PYTHON=False</span></code>.</p>
-<p>In order for NMODL binaries to know where to find libpython and our own libpywrapper two environment variables need to
-be present:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">NMODL_PYLIB</span></code>: This variable should point to the libpython shared-object (or dylib) file. On macos this could be
-for example:</p></li>
-</ul>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">NMODL_PYLIB</span><span class="o">=</span>/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
-</pre></div>
-</div>
-<p><strong>Note</strong>: In order for all unit tests to function correctly when building without linking against libpython we must
-set <code class="docutils literal notranslate"><span class="pre">NMODL_PYLIB</span></code> before running cmake!</p>
-</section>
-</section>
-<section id="testing-the-installed-module">
-<h2>Testing the Installed Module<a class="headerlink" href="#testing-the-installed-module" title="Permalink to this heading"></a></h2>
-<p>If you have installed the NMODL Framework using CMake, you can now run tests from the build directory as:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>make<span class="w"> </span><span class="nb">test</span>
-Running<span class="w"> </span>tests...
-Test<span class="w"> </span>project<span class="w"> </span>/Users/kumbhar/workarena/repos/bbp/incubator/nocmodl/cmake-build-debug
-<span class="w">      </span>Start<span class="w">  </span><span class="m">1</span>:<span class="w"> </span>testmodtoken/NMODL<span class="w"> </span>Lexer<span class="w"> </span>returning<span class="w"> </span>valid<span class="w"> </span>ModToken<span class="w"> </span>object
-<span class="w"> </span><span class="m">1</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#1: testmodtoken/NMODL Lexer returning valid ModToken object ...................................   Passed    0.01 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">2</span>:<span class="w"> </span>testlexer/NMODL<span class="w"> </span>Lexer<span class="w"> </span>returning<span class="w"> </span>valid<span class="w"> </span>token<span class="w"> </span>types
-<span class="w"> </span><span class="m">2</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#2: testlexer/NMODL Lexer returning valid token types ..........................................   Passed    0.00 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">3</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>can<span class="w"> </span>define<span class="w"> </span>macros<span class="w"> </span>using<span class="w"> </span>DEFINE<span class="w"> </span>keyword
-<span class="w"> </span><span class="m">3</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#3: testparser/Scenario: NMODL can define macros using DEFINE keyword ..........................   Passed    0.01 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">4</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>Macros<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>used<span class="w"> </span>anywhere<span class="w"> </span><span class="k">in</span><span class="w"> </span>the<span class="w"> </span>mod<span class="w"> </span>file
-<span class="w"> </span><span class="m">4</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#4: testparser/Scenario: Macros can be used anywhere in the mod file ...........................   Passed    0.01 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">5</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>accepts<span class="w"> </span>empty<span class="w"> </span>unit<span class="w"> </span>specification
-<span class="w"> </span><span class="m">5</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#5: testparser/Scenario: NMODL parser accepts empty unit specification .........................   Passed    0.01 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">6</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>running<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>valid<span class="w"> </span>NMODL<span class="w"> </span>constructs
-<span class="w"> </span><span class="m">6</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#6: testparser/Scenario: NMODL parser running number of valid NMODL constructs .................   Passed    0.04 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">7</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>NMODL<span class="w"> </span>parser<span class="w"> </span>running<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>invalid<span class="w"> </span>NMODL<span class="w"> </span>constructs
-<span class="w"> </span><span class="m">7</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#7: testparser/Scenario: NMODL parser running number of invalid NMODL constructs ...............   Passed    0.01 sec</span>
-<span class="w">      </span>Start<span class="w">  </span><span class="m">8</span>:<span class="w"> </span>testparser/Scenario:<span class="w"> </span>Legacy<span class="w"> </span>differential<span class="w"> </span>equation<span class="w"> </span>solver<span class="w"> </span>from<span class="w"> </span>NEURON<span class="w"> </span>solve<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>ODE
-<span class="w"> </span><span class="m">8</span>/60<span class="w"> </span>Test<span class="w">  </span><span class="c1">#8: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE ...   Passed    0.00 sec</span>
-<span class="w"> </span>...
-</pre></div>
-</div>
-<p>To test the NMODL Framework python bindings, you can try a minimal example in your Python 3 interpeter as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">nmodl.dsl</span> <span class="k">as</span> <span class="nn">nmodl</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">driver</span> <span class="o">=</span> <span class="n">nmodl</span><span class="o">.</span><span class="n">NmodlDriver</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">modast</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">parse_string</span><span class="p">(</span><span class="s2">&quot;NEURON { SUFFIX hh }&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">modast</span><span class="p">)</span>
-<span class="go">{&quot;Program&quot;:[{&quot;NeuronBlock&quot;:[{&quot;StatementBlock&quot;:[{&quot;Suffix&quot;:[{&quot;Name&quot;:[{&quot;String&quot;:[{&quot;name&quot;:&quot;SUFFIX&quot;}]}]},{&quot;Name&quot;:[{&quot;String&quot;:[{&quot;name&quot;:&quot;hh&quot;}]}]}]}]}]}]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span> <span class="p">(</span><span class="n">nmodl</span><span class="o">.</span><span class="n">to_nmodl</span><span class="p">(</span><span class="n">modast</span><span class="p">))</span>
-<span class="go">NEURON {</span>
-<span class="go">    SUFFIX hh</span>
-<span class="go">}</span>
-</pre></div>
-</div>
-<p>NMODL is now setup correctly!</p>
-</section>
-<section id="generating-documentation">
-<h2>Generating Documentation<a class="headerlink" href="#generating-documentation" title="Permalink to this heading"></a></h2>
-<p>In order to build the documentation you must have additionally <code class="docutils literal notranslate"><span class="pre">pandoc</span></code> installed. Use your
-system’s package manager to do this (e.g. <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">pandoc</span></code>).</p>
-<p>You can build the entire documentation simply by using sphinx from <code class="docutils literal notranslate"><span class="pre">setup.py</span></code>:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>setup.py<span class="w"> </span>build_ext<span class="w"> </span>--inplace<span class="w"> </span>docs<span class="w"> </span>-G<span class="w"> </span><span class="s2">&quot;Unix Makefiles&quot;</span>
+<p>If you are mainly interested in the NMODL Framework parsing and analysis
+tools and wish to use them from Python, we recommend building and
+installing using Python.</p>
+<p>.. code:: sh</p>
+<p>pip3 install –user .</p>
+<p>This should build the NMODL framework and install it into your pip user
+<code class="docutils literal notranslate"><span class="pre">site-packages</span></code> folder such that it becomes available as a Python
+module.</p>
+<p>When building without linking against libpython</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+NMODL uses an embedded python to symbolically evaluate differential
+equations. For this to work we would usually link against libpython,
+which is automatically taken care of by pybind11. In some cases, for
+instance when building a python wheel, we cannot link against libpython,
+because we cannot know where it will be at runtime. Instead, we load the
+python library (along with a wrapper library that manages calls to
+embedded python) at runtime. To disable linking against python and
+enabling dynamic loading of libpython at runtime we need to configure
+the build with the cmake option ``-DLINK_AGAINST_PYTHON=False``.
+
+In order for NMODL binaries to know where to find libpython and our own
+libpywrapper two environment variables need to be present:
+
+-  ``NMODL_PYLIB``: This variable should point to the libpython
+   shared-object (or dylib) file. On macos this could be for example:
+
+.. code:: sh
+
+   export NMODL_PYLIB=/usr/local/Cellar/python/3.7.7/Frameworks/Python.framework/Versions/3.7/Python
+
+**Note**: In order for all unit tests to function correctly when
+building without linking against libpython we must set ``NMODL_PYLIB``
+before running cmake!
+
+Testing the Installed Module
+----------------------------
+
+If you have installed the NMODL Framework using CMake, you can now run
+tests from the build directory as:
+
+.. code:: bash
+
+   $ make test
+   Running tests...
+   Test project /Users/kumbhar/workarena/repos/bbp/incubator/nocmodl/cmake-build-debug
+         Start  1: testmodtoken/NMODL Lexer returning valid ModToken object
+    1/60 Test  #1: testmodtoken/NMODL Lexer returning valid ModToken object ...................................   Passed    0.01 sec
+         Start  2: testlexer/NMODL Lexer returning valid token types
+    2/60 Test  #2: testlexer/NMODL Lexer returning valid token types ..........................................   Passed    0.00 sec
+         Start  3: testparser/Scenario: NMODL can define macros using DEFINE keyword
+    3/60 Test  #3: testparser/Scenario: NMODL can define macros using DEFINE keyword ..........................   Passed    0.01 sec
+         Start  4: testparser/Scenario: Macros can be used anywhere in the mod file
+    4/60 Test  #4: testparser/Scenario: Macros can be used anywhere in the mod file ...........................   Passed    0.01 sec
+         Start  5: testparser/Scenario: NMODL parser accepts empty unit specification
+    5/60 Test  #5: testparser/Scenario: NMODL parser accepts empty unit specification .........................   Passed    0.01 sec
+         Start  6: testparser/Scenario: NMODL parser running number of valid NMODL constructs
+    6/60 Test  #6: testparser/Scenario: NMODL parser running number of valid NMODL constructs .................   Passed    0.04 sec
+         Start  7: testparser/Scenario: NMODL parser running number of invalid NMODL constructs
+    7/60 Test  #7: testparser/Scenario: NMODL parser running number of invalid NMODL constructs ...............   Passed    0.01 sec
+         Start  8: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE
+    8/60 Test  #8: testparser/Scenario: Legacy differential equation solver from NEURON solve number of ODE ...   Passed    0.00 sec
+    ...
+
+To test the NMODL Framework python bindings, you can try a minimal
+example in your Python 3 interpeter as follows:
+
+.. code:: python
+
+   &gt;&gt;&gt; import nmodl.dsl as nmodl
+   &gt;&gt;&gt; driver = nmodl.NmodlDriver()
+   &gt;&gt;&gt; modast = driver.parse_string(&quot;NEURON { SUFFIX hh }&quot;)
+   &gt;&gt;&gt; print (&#39;%s&#39; % modast)
+   {&quot;Program&quot;:[{&quot;NeuronBlock&quot;:[{&quot;StatementBlock&quot;:[{&quot;Suffix&quot;:[{&quot;Name&quot;:[{&quot;String&quot;:[{&quot;name&quot;:&quot;SUFFIX&quot;}]}]},{&quot;Name&quot;:[{&quot;String&quot;:[{&quot;name&quot;:&quot;hh&quot;}]}]}]}]}]}]}
+   &gt;&gt;&gt; print (nmodl.to_nmodl(modast))
+   NEURON {
+       SUFFIX hh
+   }
+
+NMODL is now setup correctly!
+
+Generating Documentation
+------------------------
+
+In order to build the documentation you must have additionally
+``pandoc`` installed. Use your system’s package manager to do this
+(e.g. ``sudo apt-get install pandoc``).
+
+You can build the entire documentation simply by using sphinx from
+``setup.py``:
+
+.. code:: sh
+
+   python3 setup.py build_ext --inplace docs -G &quot;Unix Makefiles&quot;
 </pre></div>
 </div>
 </section>
