@@ -12,7 +12,6 @@ import math
 import os
 from pathlib import Path, PurePath
 import shutil
-import stat
 import subprocess
 import tempfile
 
@@ -25,6 +24,13 @@ import utils
 
 LOGGING_FORMAT = "%(levelname)s:%(name)s: %(message)s"
 LOGGER = logging.getLogger("NMODLCodeGen")
+CLANG_FORMAT_EXECUTABLE = (
+    Path(__file__).resolve().parent.parent.parent
+    / "cmake"
+    / "hpc-coding-conventions"
+    / "bin"
+    / "format"
+)
 
 
 class CodeGenerator(
@@ -32,7 +38,6 @@ class CodeGenerator(
         "Base",
         [
             "base_dir",
-            "clang_format",
             "jinja_env",
             "jinja_templates_dir",
             "modification_date",
@@ -48,7 +53,6 @@ class CodeGenerator(
 
     Attributes:
         base_dir: output root directory where Jinja templates are rendered
-        clang_format: clang-format command line if C++ files have to be formatted, `None` otherwise
         py_files: list of Path objects to the Python files used by this program
         yaml_files: list of Path object to YAML files describing the NMODL language
         modification_date: most recent modification date of the Python and YAML files in this directory
@@ -58,7 +62,7 @@ class CodeGenerator(
         temp_dir: path to the directory where to create temporary files
     """
 
-    def __new__(cls, base_dir, clang_format=None):
+    def __new__(cls, base_dir):
         this_dir = Path(__file__).parent.resolve()
         jinja_templates_dir = this_dir / "templates"
         py_files = [Path(p).relative_to(this_dir) for p in this_dir.glob("*.py")]
@@ -66,7 +70,6 @@ class CodeGenerator(
         self = super(CodeGenerator, cls).__new__(
             cls,
             base_dir=base_dir,
-            clang_format=clang_format,
             this_dir=this_dir,
             jinja_templates_dir=jinja_templates_dir,
             jinja_env=jinja2.Environment(
@@ -97,6 +100,14 @@ class CodeGenerator(
         self.nodes.extend(x for x in codegen_nodes if x not in self.nodes)
 
         return self
+
+    @property
+    def within_ci(self):
+        """Return True if code is running in a continuous-integration environment, else otherwise"""
+        for varname in ["CI", "CI_PIPELINE_ID", "AZURE_ENV_NAME"]:
+            if varname in os.environ:
+                return True
+        return False
 
     def jinja_template(self, path):
         """Construct a Jinja template object
@@ -287,9 +298,9 @@ class JinjaTask(
             language: c++ or cmake
 
         """
-        if self.language == "c++" and self.app.clang_format:
-            LOGGER.debug("Formatting C++ file %s", str(file))
-            subprocess.check_call(self.app.clang_format + ["-i", str(file)])
+        if self.language == "c++" and not self.app.within_ci:
+            LOGGER.debug("Formatting C++ file %s", file)
+            subprocess.check_call([CLANG_FORMAT_EXECUTABLE, "-q", str(file)])
 
     @property
     def language(self):
@@ -340,21 +351,11 @@ def parse_args(args=None):
         args: arguments given in CLI
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--clang-format", help="Path to clang-format executable")
-    parser.add_argument(
-        "--clang-format-opts", help="clang-format options", action="append"
-    )
     parser.add_argument("--base-dir", help="output root directory")
     parser.add_argument(
         "-v", "--verbosity", action="count", default=0, help="increase output verbosity"
     )
     args = parser.parse_args(args=args)
-
-    # construct clang-format command line to use, if provided
-    if args.clang_format:
-        args.clang_format = [args.clang_format]
-        if args.clang_format_opts:
-            args.clang_format += args.clang_format_opts
 
     # destination directory to render templates
     args.base_dir = (
@@ -383,7 +384,7 @@ def main(args=None):
     args = parse_args(args)
     configure_logger(args.verbosity)
 
-    codegen = CodeGenerator(clang_format=args.clang_format, base_dir=args.base_dir)
+    codegen = CodeGenerator(base_dir=args.base_dir)
     num_tasks = 0
     tasks_performed = []
     for task in codegen.workload():
