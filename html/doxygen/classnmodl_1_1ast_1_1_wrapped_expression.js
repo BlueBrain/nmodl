@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_wrapped_expression =
 [
     [ "WrappedExpression", "classnmodl_1_1ast_1_1_wrapped_expression.html#ae0a42cf0b7fc6f4471d633efdd5600cb", null ],
-    [ "WrappedExpression", "classnmodl_1_1ast_1_1_wrapped_expression.html#a2df08c2c544881d06258b53eddbc33cd", null ],
+    [ "WrappedExpression", "classnmodl_1_1ast_1_1_wrapped_expression.html#a185482954c503b996bdf55c2ab1f2e36", null ],
     [ "WrappedExpression", "classnmodl_1_1ast_1_1_wrapped_expression.html#a8e97a342800b096a1121f356a33d4602", null ],
     [ "~WrappedExpression", "classnmodl_1_1ast_1_1_wrapped_expression.html#aa868b464a68e616d3cb94b41675c6a2b", null ],
     [ "accept", "classnmodl_1_1ast_1_1_wrapped_expression.html#a37c8ab8a2e3e48019f974fb93f8929ce", null ],
     [ "accept", "classnmodl_1_1ast_1_1_wrapped_expression.html#accc34d2c541aa1970063345e01c80843", null ],
     [ "clone", "classnmodl_1_1ast_1_1_wrapped_expression.html#ad09e04b51212350470394c499b31af92", null ],
-    [ "get_expression", "classnmodl_1_1ast_1_1_wrapped_expression.html#a7ffb210072d4259e90a3a7dd5727f3f7", null ],
+    [ "get_expression", "classnmodl_1_1ast_1_1_wrapped_expression.html#a5619aee24781f07366c3929236214433", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_wrapped_expression.html#af5129f2c9865ea53b78c0bd7749b8f35", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_wrapped_expression.html#a3bd7b61fb7fb0a74b832f6f4da9718e6", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0", null ],

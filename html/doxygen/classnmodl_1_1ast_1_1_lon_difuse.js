@@ -1,14 +1,14 @@
 var classnmodl_1_1ast_1_1_lon_difuse =
 [
-    [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#a2fbecca1992e283734d7442b9f8f0d2f", null ],
-    [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#a50a07ad7fec4f0661ec87a832362ebc4", null ],
+    [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#ab6f88673069db12dc64657be4ac8b2bd", null ],
+    [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#a93354babca04d4ecc6d59823646375e0", null ],
     [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#ad78032fb8400b52df4162e5daec86e4c", null ],
     [ "~LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html#aba2f64f12e3105da24cbe9f30d6098e3", null ],
     [ "accept", "classnmodl_1_1ast_1_1_lon_difuse.html#aea396c682f7ed06ee53274b9613decba", null ],
     [ "accept", "classnmodl_1_1ast_1_1_lon_difuse.html#ad08eed1afbd29703cd49665dffd6a12d", null ],
     [ "clone", "classnmodl_1_1ast_1_1_lon_difuse.html#a0f9dfa76b9544f383470f44efd4b1cd3", null ],
-    [ "get_expression", "classnmodl_1_1ast_1_1_lon_difuse.html#a8a5b06209388627badeb9c3db43f0cc9", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_lon_difuse.html#ac1621b0e2172b4f0a3ca6591f783ca10", null ],
+    [ "get_expression", "classnmodl_1_1ast_1_1_lon_difuse.html#aff6ee9f07b6fb8f543a9a2587afb8775", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_lon_difuse.html#a5ee82a178a0fc6038afe6fb5cfcb6ed7", null ],
     [ "get_names", "classnmodl_1_1ast_1_1_lon_difuse.html#a421ee46478af8f26d973d50fd3ef93a8", null ],
     [ "get_nmodl_name", "classnmodl_1_1ast_1_1_lon_difuse.html#ac91a99cc1d5f124bd6aadfffc2ca5435", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_lon_difuse.html#ae8d283b36d6a82aca4cff94e459b92fc", null ],

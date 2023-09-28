@@ -12,7 +12,7 @@ var structnmodl_1_1ast_1_1_ast =
     [ "get_parent", "group__ast__class.html#ga8e133edb6222fbee34e5f0d342797ee4", null ],
     [ "get_shared_ptr", "group__ast__class.html#gacb568ad839f6ec0eae735e8cf96c8ae7", null ],
     [ "get_shared_ptr", "group__ast__class.html#ga153cbb003a93974756d7842f01679902", null ],
-    [ "get_statement_block", "group__ast__class.html#ga684e856f3a95a7ec25941fdf5ebf53e3", null ],
+    [ "get_statement_block", "group__ast__class.html#gaff1198162aa1868c30e0e6e335890c5e", null ],
     [ "get_symbol_table", "group__ast__class.html#ga656b6af0e85f80cdaa43212b01108b42", null ],
     [ "get_token", "group__ast__class.html#ga4892777c5b32b112d588b05d07f28549", null ],
     [ "is_after_block", "group__ast__class.html#ga17c42e3c60a25fe417647c5937b682c9", null ],

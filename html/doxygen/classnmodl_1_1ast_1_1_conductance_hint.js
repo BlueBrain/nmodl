@@ -1,14 +1,14 @@
 var classnmodl_1_1ast_1_1_conductance_hint =
 [
     [ "ConductanceHint", "classnmodl_1_1ast_1_1_conductance_hint.html#a86c9deff0d7740b92bf1a71696b0cb3e", null ],
-    [ "ConductanceHint", "classnmodl_1_1ast_1_1_conductance_hint.html#afbf542c5cd83bf9d5ad2bcab404c3143", null ],
+    [ "ConductanceHint", "classnmodl_1_1ast_1_1_conductance_hint.html#a5422768e0c3fc9430fd5c374aa6c7a8c", null ],
     [ "ConductanceHint", "classnmodl_1_1ast_1_1_conductance_hint.html#a8ef842be7cb85d0db8f0a376d8520f4f", null ],
     [ "~ConductanceHint", "classnmodl_1_1ast_1_1_conductance_hint.html#a40fd521c2c5486fdebf9789f24d0f927", null ],
     [ "accept", "classnmodl_1_1ast_1_1_conductance_hint.html#a7c49183edad40fef963569e2d95f6a25", null ],
     [ "accept", "classnmodl_1_1ast_1_1_conductance_hint.html#a01d66f42b292eb846f58931a338aac24", null ],
     [ "clone", "classnmodl_1_1ast_1_1_conductance_hint.html#ab99826b8d25144cf106c9bbe4faa0042", null ],
-    [ "get_conductance", "classnmodl_1_1ast_1_1_conductance_hint.html#af81b6bbf5a031ed33a04b0b8f77d6a1d", null ],
-    [ "get_ion", "classnmodl_1_1ast_1_1_conductance_hint.html#a18a8eaa7bc497a816f66b34513051d76", null ],
+    [ "get_conductance", "classnmodl_1_1ast_1_1_conductance_hint.html#ac59a5fb05c56205eba584342d447f916", null ],
+    [ "get_ion", "classnmodl_1_1ast_1_1_conductance_hint.html#adf67f1ecd474929db5a6a92fe9b1c907", null ],
     [ "get_nmodl_name", "classnmodl_1_1ast_1_1_conductance_hint.html#a11d2226019f1f882a001c04d72d479d6", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_conductance_hint.html#a7004113bed275d1cb0e52342414685c5", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_conductance_hint.html#afa8bd2d1310b620788e17d6b780b00fe", null ],

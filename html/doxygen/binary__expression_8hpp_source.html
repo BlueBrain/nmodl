@@ -119,344 +119,304 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="binary__operator_8hpp.html">ast/binary_operator.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="expression_8hpp.html">ast/expression.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl.html">nmodl</a> {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>ast {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> * @addtogroup ast_class</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"> * @ingroup ast</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment"> * @{</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> */</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">/**</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment"> * \brief Represents binary expression in the NMODL</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment"> *</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment"> * Any binary expression in the mod file is represented by this node type.</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">  * For example, in below example, there are three binary expressions :</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">  * </span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">  * \code{.mod}</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">  *     BREAKPOINT {</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">  *         SOLVE states METHOD cnexp</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">  *         ina = gna*(v - ena)</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">  *     }</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">  * \endcode</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">  * </span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">  * Note that the statement itself is stored in another type ast::ExpressionStatement.</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">  * </span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">  * \sa ast::ExpressionStatement</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="comment">  * </span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">*/</span></div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html">   55</a></span>&#160;<span class="keyword">class </span><a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a> : <span class="keyword">public</span> <a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a> {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="comment">    /// LHS of the binary expression</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">   58</a></span>&#160;<span class="comment"></span>      std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>;<span class="comment"></span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">    /// Operator</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">   60</a></span>&#160;<span class="comment"></span>      <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>;<span class="comment"></span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">    /// RHS of the binary expression</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">   62</a></span>&#160;<span class="comment"></span>      std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>;<span class="comment"></span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">    /// token with location information</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">   64</a></span>&#160;<span class="comment"></span>      std::shared_ptr&lt;ModToken&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="comment">  /// \name Ctor &amp; dtor</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="comment">  /// \{</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(<a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>, <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>, <a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;      <span class="keyword">explicit</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>, <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>, std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>&amp; obj);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="keyword">virtual</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ff73389b4a999bd60bdc9088ec4ea9">~BinaryExpression</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="comment">  /// \}</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacenmodl_1_1ast.html">nmodl::ast</a> {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment"> * \addtogroup ast_class</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * \ingroup ast</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment"> * \{</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/**</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment"> * \brief Represents binary expression in the NMODL</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> *</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> * Any binary expression in the mod file is represented by this node type.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="comment">  * For example, in below example, there are three binary expressions :</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="comment">  * </span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="comment">  * \code{.mod}</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="comment">  *     BREAKPOINT {</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="comment">  *         SOLVE states METHOD cnexp</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="comment">  *         ina = gna*(v - ena)</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="comment">  *     }</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="comment">  * \endcode</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="comment">  * </span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="comment">  * Note that the statement itself is stored in another type ast::ExpressionStatement.</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="comment">  * </span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="comment">  * \sa ast::ExpressionStatement</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="comment">  * </span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="comment">*/</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a> : <span class="keyword">public</span> <a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a> {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="comment">    /// LHS of the binary expression</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">   55</a></span>&#160;<span class="comment"></span>    std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>;<span class="comment"></span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">    /// Operator</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">   57</a></span>&#160;<span class="comment"></span>    <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>;<span class="comment"></span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="comment">    /// RHS of the binary expression</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">   59</a></span>&#160;<span class="comment"></span>    std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>;<span class="comment"></span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="comment">    /// token with location information</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">   61</a></span>&#160;<span class="comment"></span>    std::shared_ptr&lt;ModToken&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;  <span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="comment">  /// \name Ctor &amp; dtor</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment">  /// \{</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="comment"></span>    <span class="keyword">explicit</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(<a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>, <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>, <a class="code" href="classnmodl_1_1ast_1_1_expression.html">Expression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(<span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>, <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>, <span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>&amp; obj);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ff73389b4a999bd60bdc9088ec4ea9">~BinaryExpression</a>() = <span class="keywordflow">default</span>;<span class="comment"></span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">  /// \}</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment"></span>  <span class="comment"></span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">   * \brief Check if the ast node is an instance of ast::BinaryExpression</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="comment">   * \return true as object is of type ast::BinaryExpression</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">   76</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">is_binary_expression</a> () const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  }</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;  </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">   * \brief Check if the ast node is an instance of ast::BinaryExpression</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">   * \return true as object is of type ast::BinaryExpression</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">   89</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">is_binary_expression</a> () const noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;  }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">   * \brief Return a copy of the current node</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">   * Recursively make a new copy/clone of the current node including</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">   * all members and return a pointer to the node. This is used for</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">   * passes like nmodl::visitor::InlineVisitor where nodes are cloned in the</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">   * ast.</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">   * @return pointer to the clone/copy of the current node</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;  <span class="comment">// NOLINTBEGIN(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">  104</a></span>&#160;   <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">clone</a>()<span class="keyword"> const override </span>{</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;  }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  <span class="comment">// NOLINTEND(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment">  /// \name Getters</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment">  /// \{</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">   * \brief Return type (ast::AstNodeType) of ast node</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">   * Every node in the ast has a type defined in ast::AstNodeType and this</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">   * function is used to retrieve the same.</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">   * \return ast node type i.e. ast::AstNodeType::BINARY_EXPRESSION</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="comment">   * \brief Return a copy of the current node</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="comment">   * Recursively make a new copy/clone of the current node including</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment">   * all members and return a pointer to the node. This is used for</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">   * passes like nmodl::visitor::InlineVisitor where nodes are cloned in the</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">   * ast.</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   * \return pointer to the clone/copy of the current node</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="comment">// NOLINTBEGIN(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">   91</a></span>&#160;   <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">clone</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="comment">// NOLINTEND(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">  /// \name Getters</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">  /// \{</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">   * \brief Return type (ast::AstNodeType) of ast node</span></div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="comment">   * Every node in the ast has a type defined in ast::AstNodeType and this</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="comment">   * function is used to retrieve the same.</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">   * \return ast node type i.e. ast::AstNodeType::BINARY_EXPRESSION</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">   * \sa Ast::get_node_type_name</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">  109</a></span>&#160;   <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336">AstNodeType::BINARY_EXPRESSION</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment">   * \brief Return type (ast::AstNodeType) of ast node as std::string</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment">   * Every node in the ast has a type defined in ast::AstNodeType.</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment">   * This type name can be returned as a std::string for printing</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">   * node to text/json form.</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">   * \sa Ast::get_node_type_name</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">  122</a></span>&#160;   <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336">AstNodeType::BINARY_EXPRESSION</a>;</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;  }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">   * \brief Return type (ast::AstNodeType) of ast node as std::string</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">   * Every node in the ast has a type defined in ast::AstNodeType.</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment">   * This type name can be returned as a std::string for printing</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">   * node to text/json form.</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment">   * \return name of the node type as a string i.e. &quot;BinaryExpression&quot;</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">   * \sa Ast::get_node_name</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">  137</a></span>&#160;   std::string <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;BinaryExpression&quot;</span>;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  }</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">  145</a></span>&#160;   std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;BinaryExpression&gt;(shared_from_this());</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;  }</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">   * \return name of the node type as a string i.e. &quot;BinaryExpression&quot;</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">   * \sa Ast::get_node_name</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">  124</a></span>&#160;   std::string <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;BinaryExpression&quot;</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">  132</a></span>&#160;   std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;BinaryExpression&gt;(shared_from_this());</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">  139</a></span>&#160;   std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;const BinaryExpression&gt;(shared_from_this());</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="comment">   * \brief Return associated token for the current ast node</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment">   * Not all ast nodes have token information. For example, nmodl::visitor::NeuronSolveVisitor</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">   * can insert new nodes in the ast as a solution of ODEs. In this case, we return</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;<span class="comment">   * nullptr to store in the nmodl::symtab::SymbolTable.</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="comment">   * \return pointer to token if exist otherwise nullptr</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">  152</a></span>&#160;   std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;const BinaryExpression&gt;(shared_from_this());</div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">  152</a></span>&#160;  <span class="keyword">const</span> <a class="code" href="classnmodl_1_1_mod_token.html">ModToken</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">get_token</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a>.get();</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;  }</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;<span class="comment">    /**</span></div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="comment">     * \brief Return associated token for the current ast node</span></div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">     * Not all ast nodes have token information. For example, nmodl::visitor::NeuronSolveVisitor</span></div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">     * can insert new nodes in the ast as a solution of ODEs. In this case, we return</span></div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="comment">     * nullptr to store in the nmodl::symtab::SymbolTable.</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="comment">     * \return pointer to token if exist otherwise nullptr</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00165"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">  165</a></span>&#160;    <span class="keyword">const</span> <a class="code" href="classnmodl_1_1_mod_token.html">ModToken</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">get_token</a>() const noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;      <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a>.get();</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    }</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    </div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">                   /**</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">                    * \brief Getter for member variable \ref BinaryExpression.lhs</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">                    */</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#ad55351e8392cfbf341c2e269773e45c4">  179</a></span>&#160;                   std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad55351e8392cfbf341c2e269773e45c4">get_lhs</a>() const noexcept  {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                       <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                   }</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    </div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">                   /**</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">                    * \brief Getter for member variable \ref BinaryExpression.op</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">                    */</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">  192</a></span>&#160;                   <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">get_op</a>() const noexcept  {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                       <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;                   }</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    </div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;  </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;  </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="comment">   * \brief Getter for member variable \ref BinaryExpression.lhs</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a6551a97385cd083b514a109e1d8fab28">  161</a></span>&#160;  <span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a6551a97385cd083b514a109e1d8fab28">get_lhs</a>() const noexcept  {</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>;</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;  }</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;  </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;  </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;<span class="comment">   * \brief Getter for member variable \ref BinaryExpression.op</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">  170</a></span>&#160;  <span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">get_op</a>() const noexcept  {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>;</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;  }</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;  </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;  </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">   * \brief Getter for member variable \ref BinaryExpression.rhs</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a9f254ac1c6ca2f222b11937fc9765907">  179</a></span>&#160;  <span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a9f254ac1c6ca2f222b11937fc9765907">get_rhs</a>() const noexcept  {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;  }<span class="comment"></span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">  /// \}</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="comment">  /// \name Setters</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="comment">  /// \{</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="comment"></span><span class="comment">  /**</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="comment">   * \brief Set token for the current ast node</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">  189</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">set_token</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1_mod_token.html">ModToken</a>&amp; tok) { <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a> = std::make_shared&lt;ModToken&gt;(tok); }</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.lhs (rvalue reference)</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">set_lhs</a>(std::shared_ptr&lt;Expression&gt;&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>);</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.lhs</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">set_lhs</a>(<span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>);</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">                   /**</span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">                    * \brief Getter for member variable \ref BinaryExpression.rhs</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">                    */</span></div>
-<div class="line"><a name="l00205"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#adaae250a6e6f2e24e41681155b7e5748">  205</a></span>&#160;                   std::shared_ptr&lt;Expression&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#adaae250a6e6f2e24e41681155b7e5748">get_rhs</a>() const noexcept  {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;                       <span class="keywordflow">return</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>;</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                   }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment">  /// \}</span></div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment">  /// \name Setters</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment">  /// \{</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment">    /**</span></div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">     * \brief Set token for the current ast node</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">  220</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">set_token</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1_mod_token.html">ModToken</a>&amp; tok) { <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">token</a> = std::make_shared&lt;ModToken&gt;(tok); }</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.lhs (rvalue reference)</span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">set_lhs</a>(std::shared_ptr&lt;Expression&gt;&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.lhs</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">set_lhs</a>(<span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">lhs</a>);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                    </div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.op (rvalue reference)</span></div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">set_op</a>(<a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.op</span></div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">set_op</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>);</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                    </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="comment"></span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.rhs (rvalue reference)</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">set_rhs</a>(std::shared_ptr&lt;Expression&gt;&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">                       /**</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">                        * \brief Setter for member variable \ref BinaryExpression.rhs</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">                        */</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;                       <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">set_rhs</a>(<span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;                    </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">  /// \}</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">  /// \name Visitor</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">  /// \{</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">   * Different nodes in the AST have different members (i.e. children). This method</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="comment">   * recursively visits children using provided visitor.</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">   * \param v Concrete visitor that will be used to recursively visit children</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">   * Different nodes in the AST have different members (i.e. children). This method</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">   * recursively visits children using provided visitor.</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">   * \param v Concrete constant visitor that will be used to recursively visit children</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="comment">   * \brief accept (or visit) the current AST node using provided visitor</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="comment">   * Instead of visiting children of AST node, like Ast::visit_children,</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="comment">   * accept allows to visit the current node itself using provided concrete</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="comment">   * visitor.</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="comment">   * \param v Concrete visitor that will be used to recursively visit node</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="comment">   *</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="comment">   * \sa Ast::accept for example.</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment">  /**</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="comment">   * \copydoc accept(visitor::Visitor&amp;)</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="comment">  /// \}</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="comment">    /**</span></div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="comment">     * \brief Set this object as parent for all the children</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="comment">     *</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="comment">     * This should be called in every object (with children) constructor</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment">     * to set parents. Since it is called only in the constructors it</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="comment">     * should not be virtual to avoid ambiguities (issue #295).</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a0e71bab15324172e62462d8b909cc926">set_parent_in_children</a>();</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;};</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="comment">/** @} */</span>  <span class="comment">// end of ast_class</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160; </div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;  </div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;  </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;  </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;}  <span class="comment">// namespace ast</span></div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.op (rvalue reference)</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">set_op</a>(<a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>);</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.op</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">set_op</a>(<span class="keyword">const</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_operator.html">BinaryOperator</a>&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">op</a>);</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  <span class="comment"></span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.rhs (rvalue reference)</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">set_rhs</a>(std::shared_ptr&lt;Expression&gt;&amp;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">   * \brief Setter for member variable \ref BinaryExpression.rhs</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">set_rhs</a>(<span class="keyword">const</span> std::shared_ptr&lt;Expression&gt;&amp; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">rhs</a>);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">  /// \}</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment"></span><span class="comment"></span> </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment">  /// \name Visitor</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">  /// \{</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment"></span><span class="comment">  /**</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">   * Different nodes in the AST have different members (i.e. children). This method</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">   * recursively visits children using provided visitor.</span></div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="comment">   * \param v Concrete visitor that will be used to recursively visit children</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="comment">   * Different nodes in the AST have different members (i.e. children). This method</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">   * recursively visits children using provided visitor.</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">   * \param v Concrete constant visitor that will be used to recursively visit children</span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">   * \brief accept (or visit) the current AST node using provided visitor</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="comment">   * Instead of visiting children of AST node, like Ast::visit_children,</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="comment">   * accept allows to visit the current node itself using provided concrete</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="comment">   * visitor.</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="comment">   * \param v Concrete visitor that will be used to recursively visit node</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">   *</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">   * \sa Ast::accept for example.</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">  /**</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">   * \copydoc accept(visitor::Visitor&amp;)</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">   */</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">  /// \}</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">    /**</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">     * \brief Set this object as parent for all the children</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">     *</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">     * This should be called in every object (with children) constructor</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">     * to set parents. Since it is called only in the constructors it</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">     * should not be virtual to avoid ambiguities (issue #295).</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">     */</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;     <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a0e71bab15324172e62462d8b909cc926">set_parent_in_children</a>();</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;};</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">/** \} */</span>  <span class="comment">// end of ast_class</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;  </div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;  </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;  </div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;}  <span class="comment">// namespace nmodl::ast</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a77770f956ec500a00244b749d8d952e6"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">nmodl::ast::BinaryExpression::op</a></div><div class="ttdeci">BinaryOperator op</div><div class="ttdoc">Operator.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00060">binary_expression.hpp:60</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a77770f956ec500a00244b749d8d952e6"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a77770f956ec500a00244b749d8d952e6">nmodl::ast::BinaryExpression::op</a></div><div class="ttdeci">BinaryOperator op</div><div class="ttdoc">Operator.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00057">binary_expression.hpp:57</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_const_visitor_html"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_const_visitor.html">nmodl::visitor::ConstVisitor</a></div><div class="ttdoc">Abstract base class for all constant visitors implementation.</div><div class="ttdef"><b>Definition:</b> <a href="visitor_8hpp_source.html#l00294">visitor.hpp:294</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ae7b30e477152d41c4e3bf213892d64fc"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">nmodl::ast::BinaryExpression::rhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; rhs</div><div class="ttdoc">RHS of the binary expression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00062">binary_expression.hpp:62</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a44fdc9712899953cb9174fb35ac2ec4e"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">nmodl::ast::BinaryExpression::get_shared_ptr</a></div><div class="ttdeci">std::shared_ptr&lt; const Ast &gt; get_shared_ptr() const override</div><div class="ttdoc">Get std::shared_ptr from this pointer of the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00152">binary_expression.hpp:152</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ae7b30e477152d41c4e3bf213892d64fc"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ae7b30e477152d41c4e3bf213892d64fc">nmodl::ast::BinaryExpression::rhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; rhs</div><div class="ttdoc">RHS of the binary expression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00059">binary_expression.hpp:59</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a44fdc9712899953cb9174fb35ac2ec4e"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">nmodl::ast::BinaryExpression::get_shared_ptr</a></div><div class="ttdeci">std::shared_ptr&lt; const Ast &gt; get_shared_ptr() const override</div><div class="ttdoc">Get std::shared_ptr from this pointer of the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00139">binary_expression.hpp:139</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336"><div class="ttname"><a href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336">nmodl::ast::AstNodeType::BINARY_EXPRESSION</a></div><div class="ttdeci">@ BINARY_EXPRESSION</div><div class="ttdoc">type of ast::BinaryExpression</div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a532ee57c94d4c36d115602dea520607c"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">nmodl::ast::BinaryExpression::get_shared_ptr</a></div><div class="ttdeci">std::shared_ptr&lt; Ast &gt; get_shared_ptr() override</div><div class="ttdoc">Get std::shared_ptr from this pointer of the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00145">binary_expression.hpp:145</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a9a64ebe25464f1486d31ad66179ad6aa"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">nmodl::ast::BinaryExpression::set_token</a></div><div class="ttdeci">void set_token(const ModToken &amp;tok)</div><div class="ttdoc">Set token for the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00220">binary_expression.hpp:220</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aa2da27ffae3d553ee7b8bdc2f6caddb1"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">nmodl::ast::BinaryExpression::is_binary_expression</a></div><div class="ttdeci">bool is_binary_expression() const noexcept override</div><div class="ttdoc">Check if the ast node is an instance of ast::BinaryExpression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00089">binary_expression.hpp:89</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a532ee57c94d4c36d115602dea520607c"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">nmodl::ast::BinaryExpression::get_shared_ptr</a></div><div class="ttdeci">std::shared_ptr&lt; Ast &gt; get_shared_ptr() override</div><div class="ttdoc">Get std::shared_ptr from this pointer of the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00132">binary_expression.hpp:132</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a9a64ebe25464f1486d31ad66179ad6aa"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a9a64ebe25464f1486d31ad66179ad6aa">nmodl::ast::BinaryExpression::set_token</a></div><div class="ttdeci">void set_token(const ModToken &amp;tok)</div><div class="ttdoc">Set token for the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00189">binary_expression.hpp:189</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aa2da27ffae3d553ee7b8bdc2f6caddb1"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aa2da27ffae3d553ee7b8bdc2f6caddb1">nmodl::ast::BinaryExpression::is_binary_expression</a></div><div class="ttdeci">bool is_binary_expression() const noexcept override</div><div class="ttdoc">Check if the ast node is an instance of ast::BinaryExpression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00076">binary_expression.hpp:76</a></div></div>
 <div class="ttc" id="aast__decl_8hpp_html"><div class="ttname"><a href="ast__decl_8hpp.html">ast_decl.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
-<div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates code generation backend implementations</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="abinary__operator_8hpp_html"><div class="ttname"><a href="binary__operator_8hpp.html">binary_operator.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ad27d6d2c0eaff9fd80c58dc020dd3196"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">nmodl::ast::BinaryExpression::set_op</a></div><div class="ttdeci">void set_op(BinaryOperator &amp;&amp;op)</div><div class="ttdoc">Setter for member variable BinaryExpression::op (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06514">ast.cpp:6514</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_adaae250a6e6f2e24e41681155b7e5748"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#adaae250a6e6f2e24e41681155b7e5748">nmodl::ast::BinaryExpression::get_rhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; get_rhs() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::rhs.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00205">binary_expression.hpp:205</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ad27d6d2c0eaff9fd80c58dc020dd3196"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ad27d6d2c0eaff9fd80c58dc020dd3196">nmodl::ast::BinaryExpression::set_op</a></div><div class="ttdeci">void set_op(BinaryOperator &amp;&amp;op)</div><div class="ttdoc">Setter for member variable BinaryExpression::op (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06513">ast.cpp:6513</a></div></div>
+<div class="ttc" id="anamespacenmodl_1_1ast_html"><div class="ttname"><a href="namespacenmodl_1_1ast.html">nmodl::ast</a></div><div class="ttdoc">Abstract Syntax Tree (AST) related implementations.</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00029">ast_common.hpp:29</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_gac392e49849e60c05e42ea02c7b445033"><div class="ttname"><a href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">nmodl::ast::AstNodeType</a></div><div class="ttdeci">AstNodeType</div><div class="ttdoc">Enum type for every AST node type.</div><div class="ttdef"><b>Definition:</b> <a href="ast__decl_8hpp_source.html#l00162">ast_decl.hpp:162</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a6436eb794c2b04e823daea56714dfb69"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">nmodl::ast::BinaryExpression::get_node_type</a></div><div class="ttdeci">AstNodeType get_node_type() const noexcept override</div><div class="ttdoc">Return type (ast::AstNodeType) of ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00122">binary_expression.hpp:122</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ab3750c625502e5489e8bab06f9d0ee11"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">nmodl::ast::BinaryExpression::set_rhs</a></div><div class="ttdeci">void set_rhs(std::shared_ptr&lt; Expression &gt; &amp;&amp;rhs)</div><div class="ttdoc">Setter for member variable BinaryExpression::rhs (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06523">ast.cpp:6523</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a2ab3086110f732c5c6d67bb2045846c7"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">nmodl::ast::BinaryExpression::set_lhs</a></div><div class="ttdeci">void set_lhs(std::shared_ptr&lt; Expression &gt; &amp;&amp;lhs)</div><div class="ttdoc">Setter for member variable BinaryExpression::lhs (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06497">ast.cpp:6497</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a6436eb794c2b04e823daea56714dfb69"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">nmodl::ast::BinaryExpression::get_node_type</a></div><div class="ttdeci">AstNodeType get_node_type() const noexcept override</div><div class="ttdoc">Return type (ast::AstNodeType) of ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00109">binary_expression.hpp:109</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ab3750c625502e5489e8bab06f9d0ee11"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ab3750c625502e5489e8bab06f9d0ee11">nmodl::ast::BinaryExpression::set_rhs</a></div><div class="ttdeci">void set_rhs(std::shared_ptr&lt; Expression &gt; &amp;&amp;rhs)</div><div class="ttdoc">Setter for member variable BinaryExpression::rhs (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06522">ast.cpp:6522</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a9f254ac1c6ca2f222b11937fc9765907"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a9f254ac1c6ca2f222b11937fc9765907">nmodl::ast::BinaryExpression::get_rhs</a></div><div class="ttdeci">const std::shared_ptr&lt; Expression &gt; &amp; get_rhs() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::rhs.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00179">binary_expression.hpp:179</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a2ab3086110f732c5c6d67bb2045846c7"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a2ab3086110f732c5c6d67bb2045846c7">nmodl::ast::BinaryExpression::set_lhs</a></div><div class="ttdeci">void set_lhs(std::shared_ptr&lt; Expression &gt; &amp;&amp;lhs)</div><div class="ttdoc">Setter for member variable BinaryExpression::lhs (rvalue reference)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06496">ast.cpp:6496</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_visitor_html"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_visitor.html">nmodl::visitor::Visitor</a></div><div class="ttdoc">Abstract base class for all visitors implementation.</div><div class="ttdef"><b>Definition:</b> <a href="visitor_8hpp_source.html#l00039">visitor.hpp:39</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a0e71bab15324172e62462d8b909cc926"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a0e71bab15324172e62462d8b909cc926">nmodl::ast::BinaryExpression::set_parent_in_children</a></div><div class="ttdeci">void set_parent_in_children()</div><div class="ttdoc">Set this object as parent for all the children.</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06481">ast.cpp:6481</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a3dd816153cf95b89c58b6bdc645c2adb"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">nmodl::ast::BinaryExpression::get_op</a></div><div class="ttdeci">const BinaryOperator &amp; get_op() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::op.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00192">binary_expression.hpp:192</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ad4a9dbe1a21f65812c6df0f39fe9d2e6"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">nmodl::ast::BinaryExpression::accept</a></div><div class="ttdeci">void accept(visitor::Visitor &amp;v) override</div><div class="ttdoc">accept (or visit) the current AST node using provided visitor</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06440">ast.cpp:6440</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aa7d7a2320f1f368121a8d4c9c465ce05"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">nmodl::ast::BinaryExpression::lhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; lhs</div><div class="ttdoc">LHS of the binary expression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00058">binary_expression.hpp:58</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a39ca342fc085f1676c96b62693de5936"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">nmodl::ast::BinaryExpression::token</a></div><div class="ttdeci">std::shared_ptr&lt; ModToken &gt; token</div><div class="ttdoc">token with location information</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00064">binary_expression.hpp:64</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aaaf929bc6951281614a1aa541e0f596d"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">nmodl::ast::BinaryExpression::visit_children</a></div><div class="ttdeci">void visit_children(visitor::Visitor &amp;v) override</div><div class="ttdoc">visit children i.e.</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06416">ast.cpp:6416</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a0e71bab15324172e62462d8b909cc926"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a0e71bab15324172e62462d8b909cc926">nmodl::ast::BinaryExpression::set_parent_in_children</a></div><div class="ttdeci">void set_parent_in_children()</div><div class="ttdoc">Set this object as parent for all the children.</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06480">ast.cpp:6480</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a3dd816153cf95b89c58b6bdc645c2adb"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a3dd816153cf95b89c58b6bdc645c2adb">nmodl::ast::BinaryExpression::get_op</a></div><div class="ttdeci">const BinaryOperator &amp; get_op() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::op.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00170">binary_expression.hpp:170</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a6551a97385cd083b514a109e1d8fab28"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a6551a97385cd083b514a109e1d8fab28">nmodl::ast::BinaryExpression::get_lhs</a></div><div class="ttdeci">const std::shared_ptr&lt; Expression &gt; &amp; get_lhs() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::lhs.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00161">binary_expression.hpp:161</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ad4a9dbe1a21f65812c6df0f39fe9d2e6"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">nmodl::ast::BinaryExpression::accept</a></div><div class="ttdeci">void accept(visitor::Visitor &amp;v) override</div><div class="ttdoc">accept (or visit) the current AST node using provided visitor</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06439">ast.cpp:6439</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aa7d7a2320f1f368121a8d4c9c465ce05"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aa7d7a2320f1f368121a8d4c9c465ce05">nmodl::ast::BinaryExpression::lhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; lhs</div><div class="ttdoc">LHS of the binary expression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00055">binary_expression.hpp:55</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a39ca342fc085f1676c96b62693de5936"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a39ca342fc085f1676c96b62693de5936">nmodl::ast::BinaryExpression::token</a></div><div class="ttdeci">std::shared_ptr&lt; ModToken &gt; token</div><div class="ttdoc">token with location information</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00061">binary_expression.hpp:61</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_aaaf929bc6951281614a1aa541e0f596d"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">nmodl::ast::BinaryExpression::visit_children</a></div><div class="ttdeci">void visit_children(visitor::Visitor &amp;v) override</div><div class="ttdoc">visit children i.e.</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06415">ast.cpp:6415</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a39ff73389b4a999bd60bdc9088ec4ea9"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a39ff73389b4a999bd60bdc9088ec4ea9">nmodl::ast::BinaryExpression::~BinaryExpression</a></div><div class="ttdeci">virtual ~BinaryExpression()=default</div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_abd7336147b7afdba3c1625eaf9dbc55c"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">nmodl::ast::BinaryExpression::BinaryExpression</a></div><div class="ttdeci">BinaryExpression(Expression *lhs, const BinaryOperator &amp;op, Expression *rhs)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06449">ast.cpp:6449</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_operator_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_operator.html">nmodl::ast::BinaryOperator</a></div><div class="ttdoc">Operator used in ast::BinaryExpression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__operator_8hpp_source.html#l00041">binary_operator.hpp:41</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a3001436f70cf6e93be9251d08e5efbac"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">nmodl::ast::BinaryExpression::clone</a></div><div class="ttdeci">BinaryExpression * clone() const override</div><div class="ttdoc">Return a copy of the current node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00104">binary_expression.hpp:104</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_ad55351e8392cfbf341c2e269773e45c4"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#ad55351e8392cfbf341c2e269773e45c4">nmodl::ast::BinaryExpression::get_lhs</a></div><div class="ttdeci">std::shared_ptr&lt; Expression &gt; get_lhs() const noexcept</div><div class="ttdoc">Getter for member variable BinaryExpression::lhs.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00179">binary_expression.hpp:179</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_abd7336147b7afdba3c1625eaf9dbc55c"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">nmodl::ast::BinaryExpression::BinaryExpression</a></div><div class="ttdeci">BinaryExpression(Expression *lhs, const BinaryOperator &amp;op, Expression *rhs)</div><div class="ttdef"><b>Definition:</b> <a href="ast_8cpp_source.html#l06448">ast.cpp:6448</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_operator_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_operator.html">nmodl::ast::BinaryOperator</a></div><div class="ttdoc">Operator used in ast::BinaryExpression.</div><div class="ttdef"><b>Definition:</b> <a href="binary__operator_8hpp_source.html#l00038">binary_operator.hpp:38</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a3001436f70cf6e93be9251d08e5efbac"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">nmodl::ast::BinaryExpression::clone</a></div><div class="ttdeci">BinaryExpression * clone() const override</div><div class="ttdoc">Return a copy of the current node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00091">binary_expression.hpp:91</a></div></div>
 <div class="ttc" id="aexpression_8hpp_html"><div class="ttname"><a href="expression_8hpp.html">expression.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_expression_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_expression.html">nmodl::ast::Expression</a></div><div class="ttdoc">Base class for all expressions in the NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="expression_8hpp_source.html#l00046">expression.hpp:46</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_af6004a7f6f6bfd8facb75a11a8371311"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">nmodl::ast::BinaryExpression::get_node_type_name</a></div><div class="ttdeci">std::string get_node_type_name() const noexcept override</div><div class="ttdoc">Return type (ast::AstNodeType) of ast node as std::string.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00137">binary_expression.hpp:137</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a71af62c0a53f25708ecf69630e28f3ca"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">nmodl::ast::BinaryExpression::get_token</a></div><div class="ttdeci">const ModToken * get_token() const noexcept override</div><div class="ttdoc">Return associated token for the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00165">binary_expression.hpp:165</a></div></div>
-<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html">nmodl::ast::BinaryExpression</a></div><div class="ttdoc">Represents binary expression in the NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00055">binary_expression.hpp:55</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_expression_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_expression.html">nmodl::ast::Expression</a></div><div class="ttdoc">Base class for all expressions in the NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="expression_8hpp_source.html#l00043">expression.hpp:43</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_af6004a7f6f6bfd8facb75a11a8371311"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">nmodl::ast::BinaryExpression::get_node_type_name</a></div><div class="ttdeci">std::string get_node_type_name() const noexcept override</div><div class="ttdoc">Return type (ast::AstNodeType) of ast node as std::string.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00124">binary_expression.hpp:124</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html_a71af62c0a53f25708ecf69630e28f3ca"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html#a71af62c0a53f25708ecf69630e28f3ca">nmodl::ast::BinaryExpression::get_token</a></div><div class="ttdeci">const ModToken * get_token() const noexcept override</div><div class="ttdoc">Return associated token for the current ast node.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00152">binary_expression.hpp:152</a></div></div>
+<div class="ttc" id="aclassnmodl_1_1ast_1_1_binary_expression_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_binary_expression.html">nmodl::ast::BinaryExpression</a></div><div class="ttdoc">Represents binary expression in the NMODL.</div><div class="ttdef"><b>Definition:</b> <a href="binary__expression_8hpp_source.html#l00052">binary_expression.hpp:52</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1_mod_token_html"><div class="ttname"><a href="classnmodl_1_1_mod_token.html">nmodl::ModToken</a></div><div class="ttdoc">Represent token returned by scanner.</div><div class="ttdef"><b>Definition:</b> <a href="modtoken_8hpp_source.html#l00050">modtoken.hpp:50</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

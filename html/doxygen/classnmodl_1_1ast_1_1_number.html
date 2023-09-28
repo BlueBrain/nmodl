@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1ast_1_1_number.html','')
 <div class="textblock"><p>Base class for all numbers. </p>
 <p>Base class for all number types like <a class="el" href="classnmodl_1_1ast_1_1_integer.html" title="Represents an integer variable.">ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html" title="Represents a float variable.">ast::Float</a> and <a class="el" href="classnmodl_1_1ast_1_1_double.html" title="Represents a double variable.">ast::Double</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00042">42</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00039">39</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="number_8hpp_source.html">number.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -552,9 +552,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga656b6af0e85f80cdaa43212b01108b42 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html">symtab::SymbolTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga656b6af0e85f80cdaa43212b01108b42">get_symbol_table</a> () const</td></tr>
 <tr class="memdesc:ga656b6af0e85f80cdaa43212b01108b42 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated symbol table for the AST node.  <a href="group__ast__class.html#ga656b6af0e85f80cdaa43212b01108b42">More...</a><br /></td></tr>
 <tr class="separator:ga656b6af0e85f80cdaa43212b01108b42 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga684e856f3a95a7ec25941fdf5ebf53e3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">StatementBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga684e856f3a95a7ec25941fdf5ebf53e3">get_statement_block</a> () const</td></tr>
-<tr class="memdesc:ga684e856f3a95a7ec25941fdf5ebf53e3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated statement block for the AST node.  <a href="group__ast__class.html#ga684e856f3a95a7ec25941fdf5ebf53e3">More...</a><br /></td></tr>
-<tr class="separator:ga684e856f3a95a7ec25941fdf5ebf53e3 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaff1198162aa1868c30e0e6e335890c5e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">StatementBlock</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gaff1198162aa1868c30e0e6e335890c5e">get_statement_block</a> () const</td></tr>
+<tr class="memdesc:gaff1198162aa1868c30e0e6e335890c5e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated statement block for the AST node.  <a href="group__ast__class.html#gaff1198162aa1868c30e0e6e335890c5e">More...</a><br /></td></tr>
+<tr class="separator:gaff1198162aa1868c30e0e6e335890c5e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga6ca54bc2ec0698aa5a485be7c653781d inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga6ca54bc2ec0698aa5a485be7c653781d">set_symbol_table</a> (<a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html">symtab::SymbolTable</a> *symtab)</td></tr>
 <tr class="memdesc:ga6ca54bc2ec0698aa5a485be7c653781d inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set symbol table for the AST node.  <a href="group__ast__class.html#ga6ca54bc2ec0698aa5a485be7c653781d">More...</a><br /></td></tr>
 <tr class="separator:ga6ca54bc2ec0698aa5a485be7c653781d inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -630,7 +630,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ac8dd1f5a295b2e6d8ad3e4a055449520">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a9fcb818dc136b52d555f03bd01f68c58">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a67785a60d6322fd901f10c4b14c11bc9">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a4f3a837ef4b07a1d8c68031ca572abf2">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00439">439</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00438">438</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -672,7 +672,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a42156110af6119efd3158b47fb81ebb8">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a07bccffd6a1630e0bcd1dfdfa71b756c">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#aae8fbf1b3a33b5ec9698d130e65a8a2d">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#ac34985632d4b4545a9d37c35e1f68a56">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00435">435</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00434">434</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -707,7 +707,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_double.html#a9b2d9201fafdac5dd5756e95e28795d3">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#af992cf43fe08d0e04f7d00f6d1d8ff19">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a349a2295022bd58cb42e20ea57e1d714">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a78ad46b662d53aaf1e64a98907d03ec0">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00084">84</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00071">71</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -743,7 +743,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_double.html#a8a770585b789e3a0835ea69c41d3a1d0">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a8d98fe4b206af16711dba50153c36012">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#aeeb876ecb14b2cbba27fc6d75c5e4131">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a4f93b538f6393efb9ff7d67a2cf5523e">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00102">102</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00089">89</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -779,7 +779,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_double.html#a84ab8904a062adeadac8907703f559ce">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a3f2eaab8d8dfe9da9cb802a5682d3fc6">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#aebe0094c067150e7066f95170eb04c2f">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#ab2ab34428ca0b742d56def2fef597192">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00117">117</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00104">104</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -812,7 +812,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_double.html#affd2d9414872bb91ffd3ea7383cb070b">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a6c408f282ab43d79ecae0ee4825072b4">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a4f25013a240a8c7f413f0fa030ae7438">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a781a5129cac3bf9db3a4f15e77df3331">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00132">132</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00119">119</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -845,7 +845,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_double.html#a0ce226e7891c474d464708a5f48a3604">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_integer.html#aa28e29fe6d73adee81de66853e5bebb2">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a4218f4cb694a438f1c6b6cc6fad867ee">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a45e71aef75372a74f23156a7dc0e44ff">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00125">125</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00112">112</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -877,7 +877,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="group__ast__class.html#ga11d5227fc22968f004fcaf055b2e7cb0">nmodl::ast::Ast</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00069">69</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00056">56</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -906,7 +906,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_integer.html#af166d83638443aab99705e9b4b2a3f7c">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a58ed81b670de0a914109807a37c52318">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#ad5b1e4119487465eac854c2763d35cc5">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a2b51697311a23389f7db5a3320878a52">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00059">59</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="number_8hpp_source.html#l00048">48</a> of file <a class="el" href="number_8hpp_source.html">number.hpp</a>.</p>
 
 </div>
 </div>
@@ -949,7 +949,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_integer.html#ad1738713a8a243f001224230e75875c2">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#aa1a9eb45113df65da38a4142a2cd51f8">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#ac293279ace1fb0bf45a37695a2561d71">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a9b51ef94dc02d0508709db79fa128e5a">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00432">432</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00431">431</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -993,7 +993,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_integer.html#a346b02c7c6e4b66f68f984df05965b54">nmodl::ast::Integer</a>, <a class="el" href="classnmodl_1_1ast_1_1_double.html#a32a1c679fc40ffcdc1e386c706579f69">nmodl::ast::Double</a>, <a class="el" href="classnmodl_1_1ast_1_1_float.html#a0be1afa1793e27ac300fec30aaf83572">nmodl::ast::Float</a>, and <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a7f0965e621672a70bf395d048ce59166">nmodl::ast::Boolean</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00429">429</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00428">428</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_bbcore_pointer_var =
 [
     [ "BbcorePointerVar", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a175e2b7a50b35f1194368c92fdce34bc", null ],
-    [ "BbcorePointerVar", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#aef2bf6917e685fe66d8d9f9b428962be", null ],
+    [ "BbcorePointerVar", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a76c9187f4448f3528eb3406ab23a9e70", null ],
     [ "BbcorePointerVar", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#abd7080a7f5191e02448bf37afd6539b5", null ],
     [ "~BbcorePointerVar", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a0e9859d9bc2f73c00983fb4278495797", null ],
     [ "accept", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a35aa71d120d69b1a972f1e4988ee1345", null ],
     [ "accept", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a1bb00a6fb64fddf1f1efd7555c9b2feb", null ],
     [ "clone", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a3820fedf7999bc2523d8e35db563e311", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a411760e6b55cfcfa8ffd45b625a4c7e1", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a274ebb531148648caa5dfa948b848b2e", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a81c74bdb9143fb967d012f64831ed27c", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a3c4bfd3f115e990040b0d2264ee33713", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_bbcore_pointer_var.html#afadb07f091672c92627835b110b8fbec", null ],

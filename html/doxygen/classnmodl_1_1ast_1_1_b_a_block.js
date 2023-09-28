@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_b_a_block =
 [
     [ "BABlock", "classnmodl_1_1ast_1_1_b_a_block.html#aae3be16ff40624164863121a31129483", null ],
-    [ "BABlock", "classnmodl_1_1ast_1_1_b_a_block.html#a0734c46935edc7d5f21359f56439cac4", null ],
+    [ "BABlock", "classnmodl_1_1ast_1_1_b_a_block.html#a4cd14fa15b186fc2bcc5a04b493ce3c1", null ],
     [ "BABlock", "classnmodl_1_1ast_1_1_b_a_block.html#a5bae6872aab25009712fa8b8fda8fa3a", null ],
     [ "~BABlock", "classnmodl_1_1ast_1_1_b_a_block.html#ae2068e37c905c23e9c9917601a467e10", null ],
     [ "accept", "classnmodl_1_1ast_1_1_b_a_block.html#a0e7ea4007e9d517fba96f4b09df21bc2", null ],
@@ -11,10 +11,10 @@ var classnmodl_1_1ast_1_1_b_a_block =
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_b_a_block.html#a082d520960675e49a1dc882d19a0f20b", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_b_a_block.html#a217bfab8c7d561a9ede3258f4b1a927b", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_b_a_block.html#a6f8555a110633f3ef4c94cd6618dc0b0", null ],
-    [ "get_statement_block", "classnmodl_1_1ast_1_1_b_a_block.html#a82b8182e7f7b6945ca768a902041485e", null ],
+    [ "get_statement_block", "classnmodl_1_1ast_1_1_b_a_block.html#adc801dee58c97e7d2eb30d3e52aa873c", null ],
     [ "get_symbol_table", "classnmodl_1_1ast_1_1_b_a_block.html#a4bba5db6a4851fe38ebf58720637c900", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_b_a_block.html#a133781824e733f35dee7a367965e4409", null ],
-    [ "get_type", "classnmodl_1_1ast_1_1_b_a_block.html#ae704e94c333ebb319f0ec851e3427837", null ],
+    [ "get_type", "classnmodl_1_1ast_1_1_b_a_block.html#af8e4122a8c984b178179bc356be25297", null ],
     [ "is_ba_block", "classnmodl_1_1ast_1_1_b_a_block.html#a0f427517d59f2a131f8c359e5be1b35e", null ],
     [ "set_parent_in_children", "classnmodl_1_1ast_1_1_b_a_block.html#af5c7699487a6274906e635fa8c472e19", null ],
     [ "set_statement_block", "classnmodl_1_1ast_1_1_b_a_block.html#a08b273cf51b6b02d70c031e8b30565ae", null ],

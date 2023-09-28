@@ -1,14 +1,14 @@
 var classnmodl_1_1ast_1_1_limits =
 [
     [ "Limits", "classnmodl_1_1ast_1_1_limits.html#ac055f61903d13a85530746d76df50fef", null ],
-    [ "Limits", "classnmodl_1_1ast_1_1_limits.html#a7972822b98b0628afcd823aeb981a863", null ],
+    [ "Limits", "classnmodl_1_1ast_1_1_limits.html#acfe0888cb8241bcb7f066a9db2ea3e74", null ],
     [ "Limits", "classnmodl_1_1ast_1_1_limits.html#a8cdf54d6d3b4a9351f2bf4fcb2398c07", null ],
     [ "~Limits", "classnmodl_1_1ast_1_1_limits.html#a6d4a6cfc383f588c2bf542194f77b173", null ],
     [ "accept", "classnmodl_1_1ast_1_1_limits.html#a331cd7f1fef000f9794fb546e2bdac83", null ],
     [ "accept", "classnmodl_1_1ast_1_1_limits.html#a363152c7217806d355807ccd82c96836", null ],
     [ "clone", "classnmodl_1_1ast_1_1_limits.html#a738d0bea02ff7334865b339b238bf24c", null ],
-    [ "get_max", "classnmodl_1_1ast_1_1_limits.html#a454027c08a823113d6704af43947394e", null ],
-    [ "get_min", "classnmodl_1_1ast_1_1_limits.html#a778d9d01384f64c8472fd8789efb0044", null ],
+    [ "get_max", "classnmodl_1_1ast_1_1_limits.html#a8bca6f315c2d94b4710d6e9e1fc6771f", null ],
+    [ "get_min", "classnmodl_1_1ast_1_1_limits.html#a2de9b6dcd0707c76c2876b91250cf445", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_limits.html#a13c5e0f79cd5762887035ff88613a533", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_limits.html#a2926f0a0b511255073fd1868677010d9", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_limits.html#aed0d95fa0ba1ea7303bb86dfc7fd6000", null ],

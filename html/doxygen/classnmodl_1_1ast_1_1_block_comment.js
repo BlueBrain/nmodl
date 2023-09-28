@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_block_comment =
 [
     [ "BlockComment", "classnmodl_1_1ast_1_1_block_comment.html#aa4f183cdfb4f5c942359d99a2914a505", null ],
-    [ "BlockComment", "classnmodl_1_1ast_1_1_block_comment.html#a14ae3e6a7a2df526660c2172a2ebfb54", null ],
+    [ "BlockComment", "classnmodl_1_1ast_1_1_block_comment.html#a1a0d9808662ab5ca817bd9879a2ceaff", null ],
     [ "BlockComment", "classnmodl_1_1ast_1_1_block_comment.html#a13f9ddfd5fc32c727bd3c950f106196b", null ],
     [ "~BlockComment", "classnmodl_1_1ast_1_1_block_comment.html#afde1a79c88e22f9ccedc7faa421dbee6", null ],
     [ "accept", "classnmodl_1_1ast_1_1_block_comment.html#a58bfa3c1ce007c1a51f43af740b652bc", null ],
@@ -12,7 +12,7 @@ var classnmodl_1_1ast_1_1_block_comment =
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_block_comment.html#a0e72127134487fddb6951f86ce71a4de", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_block_comment.html#acfe20613c50c8e308a4bd7a6cb0a7c17", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_block_comment.html#ae06ef13fe51dde77ffb06906b94c43c6", null ],
-    [ "get_statement", "classnmodl_1_1ast_1_1_block_comment.html#a83787ef30d7cf8161084f98b0f2d72b5", null ],
+    [ "get_statement", "classnmodl_1_1ast_1_1_block_comment.html#a252d9876db5d388c65954a06752fb1d5", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_block_comment.html#a5a60ab290086043dad5e7dbce146778a", null ],
     [ "is_block_comment", "classnmodl_1_1ast_1_1_block_comment.html#ac4eafdb8c72a332c4c40aea92cb47123", null ],
     [ "set_parent_in_children", "classnmodl_1_1ast_1_1_block_comment.html#a2ba5982ab5d66c1f6851e348e6607585", null ],

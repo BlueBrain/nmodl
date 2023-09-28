@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_model =
 [
     [ "Model", "classnmodl_1_1ast_1_1_model.html#a14199a245675d674c7afc55fc5562b80", null ],
-    [ "Model", "classnmodl_1_1ast_1_1_model.html#ac932988f18367e70fcacd6447a0cc6dd", null ],
+    [ "Model", "classnmodl_1_1ast_1_1_model.html#a38b66f52738d470733987432060922f8", null ],
     [ "Model", "classnmodl_1_1ast_1_1_model.html#afb8cc9debd5dd0ff67f777fae173a409", null ],
     [ "~Model", "classnmodl_1_1ast_1_1_model.html#aa6cc67002c27d29f648d9261214791c4", null ],
     [ "accept", "classnmodl_1_1ast_1_1_model.html#aa909ef014985e0eb4456d518dd018bc8", null ],
@@ -12,7 +12,7 @@ var classnmodl_1_1ast_1_1_model =
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_model.html#a6a9d0fc1c8de5026e281681d0bc5cfd4", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_model.html#a53735060730c3a422af9a52d07a594ec", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_model.html#a32e0f3d2a0a54b80da98721cabc13974", null ],
-    [ "get_title", "classnmodl_1_1ast_1_1_model.html#aff183a36f1f7a28f52e7e2e6d4ef8ac0", null ],
+    [ "get_title", "classnmodl_1_1ast_1_1_model.html#a69680e8598a85b9665692e1526b44414", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_model.html#a31808afdb6b46d213ba8f0c1f2dc2d50", null ],
     [ "is_model", "classnmodl_1_1ast_1_1_model.html#a5f9200326f12de6acc51967e6d8e5256", null ],
     [ "set_parent_in_children", "classnmodl_1_1ast_1_1_model.html#a99a94ec922a9e84a786fe608aa30a8d6", null ],

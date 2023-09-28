@@ -1,14 +1,14 @@
 var classnmodl_1_1ast_1_1_lin_equation =
 [
     [ "LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html#a5346cc44ec07d95c5ac346fcedef6a07", null ],
-    [ "LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html#a7580817abec8d0faefbe1603a17ec8cf", null ],
+    [ "LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html#afbec6fe38fd8714ea74b2716fc29ed5e", null ],
     [ "LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html#a85da7fe856a41422aea1564dc18c332a", null ],
     [ "~LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html#a6003b26185fe65cb221385bcf29f2968", null ],
     [ "accept", "classnmodl_1_1ast_1_1_lin_equation.html#a595a6a9131fc42d418504b152f260f3a", null ],
     [ "accept", "classnmodl_1_1ast_1_1_lin_equation.html#aef1ff0de59c2c96407d2a9f9eaa2bd03", null ],
     [ "clone", "classnmodl_1_1ast_1_1_lin_equation.html#a1a539ebeda49d58120dad3fa5ab16fb4", null ],
-    [ "get_left_linxpression", "classnmodl_1_1ast_1_1_lin_equation.html#a36201576f35dc6ea441a67a90dcbcd5d", null ],
-    [ "get_linxpression", "classnmodl_1_1ast_1_1_lin_equation.html#a0cf5eadd0f27cd4b166fe320b7dba0c8", null ],
+    [ "get_left_linxpression", "classnmodl_1_1ast_1_1_lin_equation.html#a296016bbf5919fe5770cda3bc30a863b", null ],
+    [ "get_linxpression", "classnmodl_1_1ast_1_1_lin_equation.html#a00120b5a1206d7954035feb3857e15b5", null ],
     [ "get_nmodl_name", "classnmodl_1_1ast_1_1_lin_equation.html#a29eefd5d9a9c0ba3bb209fa204581716", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_lin_equation.html#aefee9ac4126023fa7a1c08e5baff5e23", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_lin_equation.html#a0c23230790d608889b43049bda4cddde", null ],

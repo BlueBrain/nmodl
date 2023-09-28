@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_protect_statement =
 [
     [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html#a2e3696649c62500722f38c881d27a0f0", null ],
-    [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html#a63355c255867a5b19880f2fa82b4992e", null ],
+    [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html#aacd00392c08a306a7b5ba9ca4008c297", null ],
     [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html#ae0d5dfc2a596a6f07541dd042d471e06", null ],
     [ "~ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html#a3814425c257067871751d897fc9e00aa", null ],
     [ "accept", "classnmodl_1_1ast_1_1_protect_statement.html#a2d440c3c2f10f58e10f8072c59cc26c8", null ],
     [ "accept", "classnmodl_1_1ast_1_1_protect_statement.html#ac999addff0d7d2bd164166f227247691", null ],
     [ "clone", "classnmodl_1_1ast_1_1_protect_statement.html#a657712db4ee373af2fcbdbb0e7f25f53", null ],
-    [ "get_expression", "classnmodl_1_1ast_1_1_protect_statement.html#adc35d27bf26deec62c3753c12d29c2ac", null ],
+    [ "get_expression", "classnmodl_1_1ast_1_1_protect_statement.html#ad41be941c4918c274089b27b7e2ba0a3", null ],
     [ "get_nmodl_name", "classnmodl_1_1ast_1_1_protect_statement.html#a55b9734cc47f957b13c7c494449a6de2", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_protect_statement.html#add76d982e52c9e14ef1eeb3bd39585f6", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_protect_statement.html#ad8753bcefb2267592ba0ec4b56790b61", null ],

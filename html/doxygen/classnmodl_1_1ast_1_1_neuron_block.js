@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_neuron_block =
 [
     [ "NeuronBlock", "classnmodl_1_1ast_1_1_neuron_block.html#ad1567c092bd438aace789b5c61f00211", null ],
-    [ "NeuronBlock", "classnmodl_1_1ast_1_1_neuron_block.html#a24315b71c59e3231d7c6be5f876a1fa0", null ],
+    [ "NeuronBlock", "classnmodl_1_1ast_1_1_neuron_block.html#a2aa4972da60e4d7276e534ac427c1e72", null ],
     [ "NeuronBlock", "classnmodl_1_1ast_1_1_neuron_block.html#afdf6e422b504167abf9b004718a8f2a3", null ],
     [ "~NeuronBlock", "classnmodl_1_1ast_1_1_neuron_block.html#afdb951132332b1eacad60657d19a65ff", null ],
     [ "accept", "classnmodl_1_1ast_1_1_neuron_block.html#ab25c0f4b3ea7a8177013f4a0517b993e", null ],
@@ -12,7 +12,7 @@ var classnmodl_1_1ast_1_1_neuron_block =
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_neuron_block.html#a20702699516c626d347347c574aaeadc", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_neuron_block.html#affbdb5aa62a3b8eb43297fcd8eb76679", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_neuron_block.html#ac4127ca220945a0d54c3504e38147960", null ],
-    [ "get_statement_block", "classnmodl_1_1ast_1_1_neuron_block.html#a863fb62339e889fca3b29a8f5e0d2c17", null ],
+    [ "get_statement_block", "classnmodl_1_1ast_1_1_neuron_block.html#ac52bdf7187f4289f7a82f69e4da69161", null ],
     [ "get_symbol_table", "classnmodl_1_1ast_1_1_neuron_block.html#aea617ec7a84566ecc1063ac2e6b8c1d7", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_neuron_block.html#a582f3940e9b1a275aa6aec176be32343", null ],
     [ "is_neuron_block", "classnmodl_1_1ast_1_1_neuron_block.html#a127f082c859a3b90b95f16f3d366b5aa", null ],

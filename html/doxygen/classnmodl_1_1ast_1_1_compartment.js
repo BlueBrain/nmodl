@@ -1,14 +1,14 @@
 var classnmodl_1_1ast_1_1_compartment =
 [
-    [ "Compartment", "classnmodl_1_1ast_1_1_compartment.html#a367b11f3033cc0b0bfbf43c06b35dd50", null ],
-    [ "Compartment", "classnmodl_1_1ast_1_1_compartment.html#abbe42d50f84590bccf4eb75de848592a", null ],
+    [ "Compartment", "classnmodl_1_1ast_1_1_compartment.html#aaec2f5b08588c2a164ae2ab28da031b2", null ],
+    [ "Compartment", "classnmodl_1_1ast_1_1_compartment.html#a3821d44399556d867601eda1d5c87a1f", null ],
     [ "Compartment", "classnmodl_1_1ast_1_1_compartment.html#a408f24f0d785cfcbb2d0fc78c44d2216", null ],
     [ "~Compartment", "classnmodl_1_1ast_1_1_compartment.html#a8ec02af1a56ee3848e9a400c9fd527f8", null ],
     [ "accept", "classnmodl_1_1ast_1_1_compartment.html#a614332a2c2f1f03a5166a326cd3beb84", null ],
     [ "accept", "classnmodl_1_1ast_1_1_compartment.html#a39857d8697abfcd9b5ed8f733c8039d3", null ],
     [ "clone", "classnmodl_1_1ast_1_1_compartment.html#a9a9676a5169012d3255b2202152f87dc", null ],
-    [ "get_expression", "classnmodl_1_1ast_1_1_compartment.html#a9b836338bee4c554f4fc4b496caf5c5b", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_compartment.html#ad9229fa93359bd3e0220657de89c03e0", null ],
+    [ "get_expression", "classnmodl_1_1ast_1_1_compartment.html#a55377e3ec409ef2e4af65b3e90a1baae", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_compartment.html#a08b209dee3d64dfe033e6fdfabf1832a", null ],
     [ "get_names", "classnmodl_1_1ast_1_1_compartment.html#a2eb62d66f3d0904d73404f3983e2584d", null ],
     [ "get_nmodl_name", "classnmodl_1_1ast_1_1_compartment.html#acbd3bca4fc2ee1401c6c8f579fb80e88", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_compartment.html#abef767bf00ed7d7292dcd1be6feaa791", null ],

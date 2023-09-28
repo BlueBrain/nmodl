@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_integer =
 [
     [ "Integer", "classnmodl_1_1ast_1_1_integer.html#a6691fb68715002d61e7bc73e6a456edc", null ],
-    [ "Integer", "classnmodl_1_1ast_1_1_integer.html#a6b967f28a94f0690ef6b7115f10d159d", null ],
+    [ "Integer", "classnmodl_1_1ast_1_1_integer.html#a45d2906f85affca925d10b4ef49d4664", null ],
     [ "Integer", "classnmodl_1_1ast_1_1_integer.html#a0b2060eb015fdec2b620ba48468f152e", null ],
     [ "Integer", "classnmodl_1_1ast_1_1_integer.html#a4d92952b349dcfcf0cd02b8910773815", null ],
     [ "~Integer", "classnmodl_1_1ast_1_1_integer.html#a97e09809a51684d9c0d2ae4535984a40", null ],
@@ -9,7 +9,7 @@ var classnmodl_1_1ast_1_1_integer =
     [ "accept", "classnmodl_1_1ast_1_1_integer.html#a42156110af6119efd3158b47fb81ebb8", null ],
     [ "clone", "classnmodl_1_1ast_1_1_integer.html#af992cf43fe08d0e04f7d00f6d1d8ff19", null ],
     [ "eval", "classnmodl_1_1ast_1_1_integer.html#abe2a66daa9e7d376d954a41596daec23", null ],
-    [ "get_macro", "classnmodl_1_1ast_1_1_integer.html#acad94d856ab869866b5b5e030d57ab25", null ],
+    [ "get_macro", "classnmodl_1_1ast_1_1_integer.html#ab67ef1d0c601e31efa93fda7fac866af", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_integer.html#a8d98fe4b206af16711dba50153c36012", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_integer.html#a3f2eaab8d8dfe9da9cb802a5682d3fc6", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_integer.html#a6c408f282ab43d79ecae0ee4825072b4", null ],

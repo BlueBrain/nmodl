@@ -1,7 +1,7 @@
 var classnmodl_1_1ast_1_1_line_comment =
 [
     [ "LineComment", "classnmodl_1_1ast_1_1_line_comment.html#a25beb642245a9a113d508b945779c49d", null ],
-    [ "LineComment", "classnmodl_1_1ast_1_1_line_comment.html#aa211f836b7d7f3da04f67a02bb0781bf", null ],
+    [ "LineComment", "classnmodl_1_1ast_1_1_line_comment.html#a4d77eed465511a579f19de03c043901d", null ],
     [ "LineComment", "classnmodl_1_1ast_1_1_line_comment.html#a57de000b7e5d458be5962b557010a460", null ],
     [ "~LineComment", "classnmodl_1_1ast_1_1_line_comment.html#a653b1bbc0702aed57e1ec007d61a045b", null ],
     [ "accept", "classnmodl_1_1ast_1_1_line_comment.html#ae313f6b66631f6488465b34bc90d81f5", null ],
@@ -11,7 +11,7 @@ var classnmodl_1_1ast_1_1_line_comment =
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_line_comment.html#af23127c88cbb31703cb730a52f8c7e22", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_line_comment.html#ac2343477a7ef780371a882676efdf524", null ],
     [ "get_shared_ptr", "classnmodl_1_1ast_1_1_line_comment.html#a37c6dde0aaa49925b30495355c5b34f4", null ],
-    [ "get_statement", "classnmodl_1_1ast_1_1_line_comment.html#a748c7b4cfd592feada7c2ef08d497755", null ],
+    [ "get_statement", "classnmodl_1_1ast_1_1_line_comment.html#a84103acd73936829836e9702de419251", null ],
     [ "get_token", "classnmodl_1_1ast_1_1_line_comment.html#a2f779e010927053d71b333d9cdf15731", null ],
     [ "is_line_comment", "classnmodl_1_1ast_1_1_line_comment.html#acce4abefb44400890998f38cff02122e", null ],
     [ "set_parent_in_children", "classnmodl_1_1ast_1_1_line_comment.html#a0ec458b7ed8313ac31fecda6eecbb4ef", null ],
