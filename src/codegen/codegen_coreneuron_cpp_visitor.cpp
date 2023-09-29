@@ -44,60 +44,8 @@ using symtab::syminfo::NmodlType;
 extern const std::regex regex_special_chars;
 
 /****************************************************************************************/
-/*                               Common helper routines                                 */
+/*                     Common helper routines accross codegen functions                 */
 /****************************************************************************************/
-
-
-bool CodegenCoreneuronCppVisitor::net_send_buffer_required() const noexcept {
-    if (net_receive_required() && !info.artificial_cell) {
-        if (info.net_event_used || info.net_send_used || info.is_watch_used()) {
-            return true;
-        }
-    }
-    return false;
-}
-
-
-bool CodegenCoreneuronCppVisitor::net_receive_buffering_required() const noexcept {
-    return info.point_process && !info.artificial_cell && info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCoreneuronCppVisitor::nrn_state_required() const noexcept {
-    if (info.artificial_cell) {
-        return false;
-    }
-    return info.nrn_state_block != nullptr || breakpoint_exist();
-}
-
-
-bool CodegenCoreneuronCppVisitor::nrn_cur_required() const noexcept {
-    return info.breakpoint_node != nullptr && !info.currents.empty();
-}
-
-
-bool CodegenCoreneuronCppVisitor::net_receive_exist() const noexcept {
-    return info.net_receive_node != nullptr;
-}
-
-
-bool CodegenCoreneuronCppVisitor::breakpoint_exist() const noexcept {
-    return info.breakpoint_node != nullptr;
-}
-
-
-bool CodegenCoreneuronCppVisitor::net_receive_required() const noexcept {
-    return net_receive_exist();
-}
-
-
-/**
- * \details When floating point data type is not default (i.e. double) then we
- * have to copy old array to new type (for range variables).
- */
-bool CodegenCoreneuronCppVisitor::range_variable_setup_required() const noexcept {
-    return codegen::naming::DEFAULT_FLOAT_TYPE != float_data_type();
-}
 
 
 int CodegenCoreneuronCppVisitor::position_of_float_var(const std::string& name) const {
@@ -121,14 +69,6 @@ int CodegenCoreneuronCppVisitor::position_of_int_var(const std::string& name) co
         index += var.symbol->get_length();
     }
     throw std::logic_error(name + " variable not found");
-}
-
-
-// check if there is a function or procedure defined with given name
-bool CodegenCoreneuronCppVisitor::defined_method(const std::string& name) const {
-    const auto& function = program_symtab->lookup(name);
-    auto properties = NmodlType::function_block | NmodlType::procedure_block;
-    return function && function->has_any_property(properties);
 }
 
 
@@ -856,7 +796,7 @@ void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
 }
 
 /****************************************************************************************/
-/*              printing routines for code generation                                   */
+/*                         Printing routines for code generation                        */
 /****************************************************************************************/
 
 
@@ -1797,7 +1737,6 @@ void CodegenCoreneuronCppVisitor::print_namespace_stop() {
  * thread_data_index is increased at various places and it is used to
  * decide the index of thread.
  */
-
 void CodegenCoreneuronCppVisitor::print_thread_getters() {
     if (info.vectorize && info.derivimplicit_used()) {
         int tid = info.derivimplicit_var_thread_id;
@@ -2362,6 +2301,7 @@ void CodegenCoreneuronCppVisitor::print_global_variables_for_hoc() {
     printer->decrease_indent();
     printer->add_line("};");
 }
+
 
 /**
  * Return registration type for a given BEFORE/AFTER block

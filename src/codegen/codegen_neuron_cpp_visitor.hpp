@@ -76,123 +76,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
-    /**
-     * Add quotes to string to be output
-     *
-     * \param text The string to be quoted
-     * \return     The same string with double-quotes pre- and postfixed
-     */
-    std::string add_escape_quote(const std::string& text) const {
-        return "\"" + text + "\"";
-    }
-
-    /**
-     * Data type for the local variables
-     */
-    const char* local_var_type() const noexcept {
-        return codegen::naming::DEFAULT_LOCAL_VAR_TYPE;
-    }
+    /****************************************************************************************/
+    /*                                    Member variables                                  */
+    /****************************************************************************************/
 
 
-    /**
-     * Default data type for floating point elements
-     */
-    const char* default_float_data_type() const noexcept {
-        return codegen::naming::DEFAULT_FLOAT_TYPE;
-    }
-
-
-    /**
-     * Data type for floating point elements specified on command line
-     */
-    const std::string& float_data_type() const noexcept {
-        return float_type;
-    }
-
-
-    /**
-     * Default data type for integer (offset) elements
-     */
-    const char* default_int_data_type() const noexcept {
-        return codegen::naming::DEFAULT_INTEGER_TYPE;
-    }
-
-
-    /**
-     * Constructs the name of a function or procedure
-     * \param name The name of the function or procedure
-     * \return     The name of the function or procedure postfixed with the model name
-     */
-    std::string method_name(const std::string& name) const {
-        return name + "_" + info.mod_suffix;
-    }
-
-
-    /**
-     * Creates a temporary symbol
-     * \param name The name of the symbol
-     * \return     A symbol based on the given name
-     */
-    SymbolType make_symbol(const std::string& name) const {
-        return std::make_shared<symtab::Symbol>(name, ModToken());
-    }
-
-
-    /**
-     * Check if nrn_state function is required
-     */
-    bool nrn_state_required() const noexcept;
-
-
-    /**
-     * Check if nrn_cur function is required
-     */
-    bool nrn_cur_required() const noexcept;
-
-
-    /**
-     * Check if net_receive function is required
-     */
-    bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
-
-
-    /**
-     * Check if setup_range_variable function is required
-     * \return
-     */
-    bool range_variable_setup_required() const noexcept;
-
-
-    /**
-     * Check if breakpoint node exist
-     */
-    bool breakpoint_exist() const noexcept;
-
-
-    /**
-     * Check if a semicolon is required at the end of given statement
-     * \param node The AST Statement node to check
-     * \return     \c true if this Statement requires a semicolon
-     */
-    static bool need_semicolon(const ast::Statement& node);
-
-
-    /**
-     * Number of float variables in the model
-     */
-    int float_variables_size() const;
-
-
-    /**
-     * Number of integer variables in the model
-     */
-    int int_variables_size() const;
+    /****************************************************************************************/
+    /*                              Generic information getters                             */
+    /****************************************************************************************/
 
 
     /**
@@ -207,21 +98,71 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     virtual std::string backend_name() const;
 
 
-    /**
-     * Convert a given \c double value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
-     */
-    virtual std::string format_double_string(const std::string& value);
+    /****************************************************************************************/
+    /*                     Common helper routines accross codegen functions                 */
+    /****************************************************************************************/
 
 
     /**
-     * Convert a given \c float value to its string representation
-     * \param value The number to convert given as string as it is parsed by the modfile
-     * \return      Its string representation
+     * Number of float variables in the model
      */
-    virtual std::string format_float_string(const std::string& value);
+    int float_variables_size() const;
 
+
+    /**
+     * Number of integer variables in the model
+     */
+    int int_variables_size() const;
+
+
+    /****************************************************************************************/
+    /*                                Backend specific routines                             */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                         Printing routines for code generation                        */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                             Code-specific helper routines                            */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                  Code-specific printing routines for code generations                */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                         Routines for returning variable name                         */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                      Main printing routines for code generation                      */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                                 Print nrn_state routine                              */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Print nrn_cur related routines                          */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Main code printing entry points                         */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                            Overloaded visitor routines                               */
+    /****************************************************************************************/
 
     /**
      * Determine the name of a \c float variable given its symbol
@@ -305,24 +246,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \return A \c vector of \c int variables
      */
     std::vector<IndexVariableInfo> get_int_variables();
-
-
-    /**
-     * Print the items in a vector as a list
-     *
-     * This function prints a given vector of elements as a list with given separator onto the
-     * current printer. Elements are expected to be of type nmodl::ast::Ast and are printed by being
-     * visited. Care is taken to omit the separator after the the last element.
-     *
-     * \tparam T The element type in the vector, which must be of type nmodl::ast::Ast
-     * \param  elements The vector of elements to be printed
-     * \param  separator The separator string to print between all elements
-     * \param  prefix A prefix string to print before each element
-     */
-    template <typename T>
-    void print_vector_elements(const std::vector<T>& elements,
-                               const std::string& separator,
-                               const std::string& prefix = "");
 
 
     /**
@@ -808,20 +731,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 };
-
-
-template <typename T>
-void CodegenNeuronCppVisitor::print_vector_elements(const std::vector<T>& elements,
-                                                    const std::string& separator,
-                                                    const std::string& prefix) {
-    for (auto iter = elements.begin(); iter != elements.end(); iter++) {
-        printer->add_text(prefix);
-        (*iter)->accept(*this);
-        if (!separator.empty() && !nmodl::utils::is_last(iter, elements)) {
-            printer->add_text(separator);
-        }
-    }
-}
 
 
 /**

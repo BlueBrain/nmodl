@@ -66,6 +66,66 @@ bool CodegenCppVisitor::statement_to_skip(const Statement& node) {
 }
 
 
+bool CodegenCppVisitor::net_send_buffer_required() const noexcept {
+    if (net_receive_required() && !info.artificial_cell) {
+        if (info.net_event_used || info.net_send_used || info.is_watch_used()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool CodegenCppVisitor::net_receive_buffering_required() const noexcept {
+    return info.point_process && !info.artificial_cell && info.net_receive_node != nullptr;
+}
+
+
+bool CodegenCppVisitor::nrn_state_required() const noexcept {
+    if (info.artificial_cell) {
+        return false;
+    }
+    return info.nrn_state_block != nullptr || breakpoint_exist();
+}
+
+
+bool CodegenCppVisitor::nrn_cur_required() const noexcept {
+    return info.breakpoint_node != nullptr && !info.currents.empty();
+}
+
+
+bool CodegenCppVisitor::net_receive_exist() const noexcept {
+    return info.net_receive_node != nullptr;
+}
+
+
+bool CodegenCppVisitor::breakpoint_exist() const noexcept {
+    return info.breakpoint_node != nullptr;
+}
+
+
+bool CodegenCppVisitor::net_receive_required() const noexcept {
+    return net_receive_exist();
+}
+
+
+/**
+ * \details When floating point data type is not default (i.e. double) then we
+ * have to copy old array to new type (for range variables).
+ */
+bool CodegenCppVisitor::range_variable_setup_required() const noexcept {
+    return codegen::naming::DEFAULT_FLOAT_TYPE != float_data_type();
+}
+
+
+// check if there is a function or procedure defined with given name
+bool CodegenCppVisitor::defined_method(const std::string& name) const {
+    const auto& function = program_symtab->lookup(name);
+    auto properties = NmodlType::function_block | NmodlType::procedure_block;
+    return function && function->has_any_property(properties);
+}
+
+
 /**
  * \details We can directly print value but if user specify value as integer then
  * then it gets printed as an integer. To avoid this, we use below wrapper.

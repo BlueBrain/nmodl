@@ -318,6 +318,46 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     static bool need_semicolon(const ast::Statement& node);
 
 
+    /**
+     * Default data type for floating point elements
+     */
+    const char* default_float_data_type() const noexcept {
+        return codegen::naming::DEFAULT_FLOAT_TYPE;
+    }
+
+
+    /**
+     * Data type for floating point elements specified on command line
+     */
+    const std::string& float_data_type() const noexcept {
+        return float_type;
+    }
+
+
+    /**
+     * Default data type for integer (offset) elements
+     */
+    const char* default_int_data_type() const noexcept {
+        return codegen::naming::DEFAULT_INTEGER_TYPE;
+    }
+
+
+    /**
+     * Operator for rhs vector update (matrix update)
+     */
+    const char* operator_for_rhs() const noexcept {
+        return info.electrode_current ? "+=" : "-=";
+    }
+
+
+    /**
+     * Operator for diagonal vector update (matrix update)
+     */
+    const char* operator_for_d() const noexcept {
+        return info.electrode_current ? "-=" : "+=";
+    }
+
+
     /****************************************************************************************/
     /*                     Common helper routines accross codegen functions                 */
     /****************************************************************************************/
@@ -341,6 +381,63 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return     \c true if this Statement is to be skipped
      */
     static bool statement_to_skip(const ast::Statement& node);
+
+
+    /**
+     * Check if net receive/send buffering kernels required
+     */
+    bool net_receive_buffering_required() const noexcept;
+
+
+    /**
+     * Check if nrn_state function is required
+     */
+    bool nrn_state_required() const noexcept;
+
+
+    /**
+     * Check if nrn_cur function is required
+     */
+    bool nrn_cur_required() const noexcept;
+
+
+    /**
+     * Check if net_receive function is required
+     */
+    bool net_receive_required() const noexcept;
+
+
+    /**
+     * Check if net_send_buffer is required
+     */
+    bool net_send_buffer_required() const noexcept;
+
+
+    /**
+     * Check if setup_range_variable function is required
+     * \return
+     */
+    bool range_variable_setup_required() const noexcept;
+
+
+    /**
+     * Check if net_receive node exist
+     */
+    bool net_receive_exist() const noexcept;
+
+
+    /**
+     * Check if breakpoint node exist
+     */
+    bool breakpoint_exist() const noexcept;
+
+
+    /**
+     * Check if given method is defined in this model
+     * \param name The name of the method to check
+     * \return     \c true if the method is defined
+     */
+    bool defined_method(const std::string& name) const;
 
 
     /**
@@ -454,6 +551,27 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return     The code with all variables renamed as needed
      */
     virtual std::string process_verbatim_text(std::string const& text) = 0;
+
+
+    /**
+     * Add quotes to string to be output
+     *
+     * \param text The string to be quoted
+     * \return     The same string with double-quotes pre- and postfixed
+     */
+    std::string add_escape_quote(const std::string& text) const {
+        return "\"" + text + "\"";
+    }
+
+
+    /**
+     * Constructs the name of a function or procedure
+     * \param name The name of the function or procedure
+     * \return     The name of the function or procedure postfixed with the model name
+     */
+    std::string method_name(const std::string& name) const {
+        return name + "_" + info.mod_suffix;
+    }
 
 
     /**

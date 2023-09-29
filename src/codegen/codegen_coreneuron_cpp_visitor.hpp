@@ -33,7 +33,6 @@
 #include "visitors/ast_visitor.hpp"
 
 
-/// encapsulates code generation backend implementations
 namespace nmodl {
 
 namespace codegen {
@@ -76,91 +75,26 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
-    /**
-     * Add quotes to string to be output
-     *
-     * \param text The string to be quoted
-     * \return     The same string with double-quotes pre- and postfixed
-     */
-    std::string add_escape_quote(const std::string& text) const {
-        return "\"" + text + "\"";
-    }
+    /****************************************************************************************/
+    /*                                    Member variables                                  */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Generic information getters                             */
+    /****************************************************************************************/
 
 
     /**
-     * Operator for rhs vector update (matrix update)
+     * Name of the code generation backend
      */
-    const char* operator_for_rhs() const noexcept {
-        return info.electrode_current ? "+=" : "-=";
-    }
+    virtual std::string backend_name() const;
 
 
     /**
-     * Operator for diagonal vector update (matrix update)
+     * Name of the simulator the code was generated for
      */
-    const char* operator_for_d() const noexcept {
-        return info.electrode_current ? "-=" : "+=";
-    }
-
-
-    /**
-     * Data type for the local variables
-     */
-    const char* local_var_type() const noexcept {
-        return codegen::naming::DEFAULT_LOCAL_VAR_TYPE;
-    }
-
-
-    /**
-     * Default data type for floating point elements
-     */
-    const char* default_float_data_type() const noexcept {
-        return codegen::naming::DEFAULT_FLOAT_TYPE;
-    }
-
-
-    /**
-     * Data type for floating point elements specified on command line
-     */
-    const std::string& float_data_type() const noexcept {
-        return float_type;
-    }
-
-
-    /**
-     * Default data type for integer (offset) elements
-     */
-    const char* default_int_data_type() const noexcept {
-        return codegen::naming::DEFAULT_INTEGER_TYPE;
-    }
-
-
-    /**
-     * Checks if given function name is \c net_send
-     * \param name The function name to check
-     * \return     \c true if the function is net_send
-     */
-    bool is_net_send(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_SEND_METHOD;
-    }
-
-    /**
-     * Checks if given function name is \c net_move
-     * \param name The function name to check
-     * \return     \c true if the function is net_move
-     */
-    bool is_net_move(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_MOVE_METHOD;
-    }
-
-    /**
-     * Checks if given function name is \c net_event
-     * \param name The function name to check
-     * \return     \c true if the function is net_event
-     */
-    bool is_net_event(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_EVENT_METHOD;
-    }
+    std::string simulator_name() override;
 
 
     /**
@@ -188,78 +122,16 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Constructs the name of a function or procedure
-     * \param name The name of the function or procedure
-     * \return     The name of the function or procedure postfixed with the model name
-     */
-    std::string method_name(const std::string& name) const {
-        return name + "_" + info.mod_suffix;
-    }
-
-
-    /**
-     * Check if net receive/send buffering kernels required
-     */
-    bool net_receive_buffering_required() const noexcept;
-
-
-    /**
-     * Check if nrn_state function is required
-     */
-    bool nrn_state_required() const noexcept;
-
-
-    /**
-     * Check if nrn_cur function is required
-     */
-    bool nrn_cur_required() const noexcept;
-
-
-    /**
-     * Check if net_receive function is required
-     */
-    bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
-
-
-    /**
-     * Check if setup_range_variable function is required
-     * \return
-     */
-    bool range_variable_setup_required() const noexcept;
-
-
-    /**
-     * Check if net_receive node exist
-     */
-    bool net_receive_exist() const noexcept;
-
-
-    /**
-     * Check if breakpoint node exist
-     */
-    bool breakpoint_exist() const noexcept;
-
-
-    /**
-     * Check if given method is defined in this model
-     * \param name The name of the method to check
-     * \return     \c true if the method is defined
-     */
-    bool defined_method(const std::string& name) const;
-
-
-    /**
      * Determine the number of threads to allocate
      */
     int num_thread_objects() const noexcept {
         return info.vectorize ? (info.thread_data_index + 1) : 0;
     }
+
+
+    /****************************************************************************************/
+    /*                     Common helper routines accross codegen functions                 */
+    /****************************************************************************************/
 
 
     /**
@@ -291,22 +163,66 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Checks if given function name is \c net_send
+     * \param name The function name to check
+     * \return     \c true if the function is net_send
+     */
+    bool is_net_send(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_SEND_METHOD;
+    }
+
+
+    /**
+     * Checks if given function name is \c net_move
+     * \param name The function name to check
+     * \return     \c true if the function is net_move
+     */
+    bool is_net_move(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_MOVE_METHOD;
+    }
+
+
+    /**
+     * Checks if given function name is \c net_event
+     * \param name The function name to check
+     * \return     \c true if the function is net_event
+     */
+    bool is_net_event(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_EVENT_METHOD;
+    }
+
+
+    /****************************************************************************************/
+    /*                                Backend specific routines                             */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                         Printing routines for code generation                        */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                             Code-specific helper routines                            */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                  Code-specific printing routines for code generations                */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                         Routines for returning variable name                         */
+    /****************************************************************************************/
+
+
+    /**
      * Determine the updated name if the ion variable has been optimized
      * \param name The ion variable name
      * \return     The updated name of the variable has been optimized (e.g. \c ena --> \c ion_ena)
      */
     std::string update_if_ion_variable_name(const std::string& name) const;
-
-    /**
-     * Name of the simulator the code was generated for
-     */
-    std::string simulator_name() override;
-
-
-    /**
-     * Name of the code generation backend
-     */
-    virtual std::string backend_name() const;
 
 
     /**
@@ -362,6 +278,40 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
+
+
+    /****************************************************************************************/
+    /*                      Main printing routines for code generation                      */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                                 Print nrn_state routine                              */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Print nrn_cur related routines                          */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Main code printing entry points                         */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                            Overloaded visitor routines                               */
+    /****************************************************************************************/
+
+
+    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
+    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
+    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
+    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
+    void visit_for_netcon(const ast::ForNetcon& node) override;
+    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
+    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 
 
     /**
@@ -1469,13 +1419,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
-    void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
-    void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
-    void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
-    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
-    void visit_for_netcon(const ast::ForNetcon& node) override;
-    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
-    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 };
 
 
