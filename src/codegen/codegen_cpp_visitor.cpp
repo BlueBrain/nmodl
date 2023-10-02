@@ -3420,7 +3420,7 @@ void CodegenCppVisitor::print_nrn_init(bool skip_init_check) {
         printer->fmt_line("int vec_size = 2*{}*pnodecount*sizeof(double);", nequation);
         printer->fmt_line("double* vec = makevector(vec_size);", nequation);
         printer->fmt_line("th.pval = vec;", list_num);
-        printer->fmt_line("*ns = nrn_cons_newtonspace({}, pnodecount);", nequation);
+        printer->fmt_line("*ns = nrn_cons_newtonspace({}, pnodecount, true);", nequation);
         print_newtonspace_transfer_to_device();
         printer->pop_block();
         // clang-format on
