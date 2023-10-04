@@ -177,6 +177,114 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Arguments for functions that are defined and used internally.
+     * \return the method arguments
+     */
+    std::string internal_method_arguments();
+
+
+    /**
+     * Parameters for internally defined functions
+     * \return the method parameters
+     */
+    ParamVector internal_method_parameters();
+
+
+    /**
+     * Arguments for external functions called from generated code
+     * \return A string representing the arguments passed to an external function
+     */
+    static const char* external_method_arguments() noexcept;
+
+
+    /**
+     * Parameters for functions in generated code that are called back from external code
+     *
+     * Functions registered in NEURON during initialization for callback must adhere to a prescribed
+     * calling convention. This method generates the string representing the function parameters for
+     * these externally called functions.
+     * \param table
+     * \return      A string representing the parameters of the function
+     */
+    static const char* external_method_parameters(bool table = false) noexcept;
+
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    std::string nrn_thread_arguments() const override;
+
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    std::string nrn_thread_internal_arguments();
+
+
+    /**
+     * Replace commonly used verbatim variables
+     * \param name A variable name to be checked and possibly updated
+     * \return     The possibly replace variable name
+     */
+    std::string replace_if_verbatim_variable(std::string name);
+
+
+    /**
+     * Process a verbatim block for possible variable renaming
+     * \param text The verbatim code to be processed
+     * \return     The code with all variables renamed as needed
+     */
+    std::string process_verbatim_text(std::string const& text) override;
+
+
+    /**
+     * Arguments for register_mech or point_register_mech function
+     */
+    std::string register_mechanism_arguments() const;
+
+
+    /**
+     * Return ion variable name and corresponding ion read variable name
+     * \param name The ion variable name
+     * \return     The ion read variable name
+     */
+    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
+
+
+    /**
+     * Return ion variable name and corresponding ion write variable name
+     * \param name The ion variable name
+     * \return     The ion write variable name
+     */
+    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
+
+
+    /**
+     * Generate Function call statement for nrn_wrote_conc
+     * \param ion_name      The name of the ion variable
+     * \param concentration The name of the concentration variable
+     * \param index
+     * \return              The string representing the function call
+     */
+    std::string conc_write_statement(const std::string& ion_name,
+                                     const std::string& concentration,
+                                     int index);
+
+    /**
+     * Process shadow update statement
+     *
+     * If the statement requires reduction then add it to vector of reduction statement and return
+     * statement using shadow update
+     *
+     * \param statement The statement that might require shadow updates
+     * \param type      The target backend code block type
+     * \return          The generated target backend code
+     */
+    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
+                                                BlockType type);
+
+
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
     /****************************************************************************************/
@@ -811,14 +919,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
-     */
-    std::string process_verbatim_text(std::string const& text) override;
-
-
-    /**
      * Process a token in a verbatim block for possible variable renaming
      * \param token The verbatim token to be processed
      * \return      The code after variable renaming
@@ -851,93 +951,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return     A \c vector of strings representing the write-back of ion variables
      */
     std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
-
-
-    /**
-     * Return ion variable name and corresponding ion read variable name
-     * \param name The ion variable name
-     * \return     The ion read variable name
-     */
-    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
-
-
-    /**
-     * Return ion variable name and corresponding ion write variable name
-     * \param name The ion variable name
-     * \return     The ion write variable name
-     */
-    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
-
-
-    /**
-     * Generate Function call statement for nrn_wrote_conc
-     * \param ion_name      The name of the ion variable
-     * \param concentration The name of the concentration variable
-     * \param index
-     * \return              The string representing the function call
-     */
-    std::string conc_write_statement(const std::string& ion_name,
-                                     const std::string& concentration,
-                                     int index);
-
-
-    /**
-     * Arguments for functions that are defined and used internally.
-     * \return the method arguments
-     */
-    std::string internal_method_arguments();
-
-
-    /**
-     * Parameters for internally defined functions
-     * \return the method parameters
-     */
-    ParamVector internal_method_parameters();
-
-
-    /**
-     * Arguments for external functions called from generated code
-     * \return A string representing the arguments passed to an external function
-     */
-    static const char* external_method_arguments() noexcept;
-
-
-    /**
-     * Parameters for functions in generated code that are called back from external code
-     *
-     * Functions registered in NEURON during initialization for callback must adhere to a prescribed
-     * calling convention. This method generates the string representing the function parameters for
-     * these externally called functions.
-     * \param table
-     * \return      A string representing the parameters of the function
-     */
-    static const char* external_method_parameters(bool table = false) noexcept;
-
-
-    /**
-     * Arguments for register_mech or point_register_mech function
-     */
-    std::string register_mechanism_arguments() const;
-
-
-    /**
-     * Arguments for "_threadargs_" macro in neuron implementation
-     */
-    std::string nrn_thread_arguments() const override;
-
-
-    /**
-     * Arguments for "_threadargs_" macro in neuron implementation
-     */
-    std::string nrn_thread_internal_arguments();
-
-
-    /**
-     * Replace commonly used verbatim variables
-     * \param name A variable name to be checked and possibly updated
-     * \return     The possibly replace variable name
-     */
-    std::string replace_if_verbatim_variable(std::string name);
 
 
     /**
@@ -1220,20 +1233,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *
      */
     void print_shadow_reduction_statements();
-
-
-    /**
-     * Process shadow update statement
-     *
-     * If the statement requires reduction then add it to vector of reduction statement and return
-     * statement using shadow update
-     *
-     * \param statement The statement that might require shadow updates
-     * \param type      The target backend code block type
-     * \return          The generated target backend code
-     */
-    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                BlockType type);
 
 
     /**
