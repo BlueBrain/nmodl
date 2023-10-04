@@ -216,6 +216,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print top file header printed in generated code
+     */
+    void print_backend_info() override;
+
+
     /****************************************************************************************/
     /*                                 Print nrn_state routine                              */
     /****************************************************************************************/
@@ -468,12 +474,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \endcode
      */
     virtual void print_nmodl_constants();
-
-
-    /**
-     * Print top file header printed in generated code
-     */
-    void print_backend_info();
 
 
     /**

@@ -264,6 +264,320 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print top file header printed in generated code
+     */
+    void print_backend_info() override;
+
+
+    /**
+     * Print standard C/C++ includes
+     */
+    void print_standard_includes();
+
+
+    /**
+     * Print includes from coreneuron
+     */
+    void print_coreneuron_includes();
+
+
+    void print_sdlists_init(bool print_initializers) override;
+
+
+    /**
+     * Print the structure that wraps all global variables used in the NMODL
+     *
+     * \param print_initializers Whether to include default values in the struct
+     *                           definition (true: int foo{42}; false: int foo;)
+     */
+    void print_mechanism_global_var_structure(bool print_initializers);
+
+
+    /**
+     * Print static assertions about the global variable struct.
+     */
+    virtual void print_global_var_struct_assertions() const;
+
+
+    /**
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+
+    /**
+     * Print backend code for byte array that has mechanism information (to be registered
+     * with coreneuron)
+     */
+    void print_mechanism_info();
+
+
+    /**
+     * Print byte arrays that register scalar and vector variables for hoc interface
+     *
+     */
+    void print_global_variables_for_hoc();
+
+
+    /**
+     * Print the mechanism registration function
+     *
+     */
+    void print_mechanism_register() override;
+
+
+    /**
+     * Print thread related memory allocation and deallocation callbacks
+     */
+    void print_thread_memory_callbacks();
+
+
+    /**
+     * Print structure of ion variables used for local copies
+     */
+    void print_ion_var_structure();
+
+
+    /**
+     * Print constructor of ion variables
+     * \param members The ion variable names
+     */
+    virtual void print_ion_var_constructor(const std::vector<std::string>& members);
+
+
+    /**
+     * Print the ion variable struct
+     */
+    virtual void print_ion_variable();
+
+
+    /**
+     * Print the pragma annotation to update global variables from host to the device
+     *
+     * \note This is not used for the C++ backend
+     */
+    virtual void print_global_variable_device_update_annotation();
+
+
+    /**
+     * Print the function that initialize range variable with different data type
+     */
+    void print_setup_range_variable();
+
+
+    /**
+     * Returns floating point type for given range variable symbol
+     * \param symbol A range variable symbol
+     */
+    std::string get_range_var_float_type(const SymbolType& symbol);
+
+
+    /**
+     * Print initial block statements
+     *
+     * Generate the target backend code corresponding to the NMODL initial block statements
+     *
+     * \param node The AST Node representing a NMODL initial block
+     */
+    void print_initial_block(const ast::InitialBlock* node);
+
+
+    /**
+     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
+     * \param type The target backend code block type
+     */
+    virtual void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "");
+
+
+    /**
+     * Print the \c nrn\_init function definition
+     * \param skip_init_check \c true to generate code executing the initialization conditionally
+     */
+    void print_nrn_init(bool skip_init_check = true);
+
+
+    /**
+     * Print NMODL before / after block in target backend code
+     * \param node AST node of type before/after type being printed
+     * \param block_id Index of the before/after block
+     */
+    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
+
+
+    /**
+     * Print nrn_constructor function definition
+     *
+     */
+    void print_nrn_constructor();
+
+
+    /**
+     * Print nrn_destructor function definition
+     *
+     */
+    void print_nrn_destructor();
+
+
+    /**
+     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
+     * and print the functor definitions before the definitions of the functions of the generated
+     * file
+     *
+     */
+    void print_functors_definitions();
+
+
+
+    /**
+     * Print nrn_alloc function definition
+     *
+     */
+    void print_nrn_alloc();
+
+
+    /**
+     * Print watch activate function
+     *
+     */
+    void print_watch_activate();
+
+
+    /**
+     * Print watch activate function
+     */
+    void print_watch_check();
+
+
+    /**
+     * Print the common code section for net receive related methods
+     *
+     * \param node The AST node representing the corresponding NMODL block
+     * \param need_mech_inst \c true if a local \c inst variable needs to be defined in generated
+     * code
+     */
+    void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true);
+
+
+    /**
+     * Print call to \c net\_send
+     * \param node The AST node representing the function call
+     */
+    void print_net_send_call(const ast::FunctionCall& node);
+
+
+    /**
+     * Print call to net\_move
+     * \param node The AST node representing the function call
+     */
+    void print_net_move_call(const ast::FunctionCall& node);
+
+
+    /**
+     * Print call to net\_event
+     * \param node The AST node representing the function call
+     */
+    void print_net_event_call(const ast::FunctionCall& node);
+
+
+    /**
+     * Print initial block in the net receive block
+     */
+    void print_net_init();
+
+
+    /**
+     * Print send event move block used in net receive as well as watch
+     */
+    void print_send_event_move();
+
+
+    /**
+     * Generate the target backend code for the \c net\_receive\_buffering function delcaration
+     * \return The target code string
+     */
+    virtual std::string net_receive_buffering_declaration();
+
+
+    /**
+     * Print the target backend code for defining and checking a local \c Memb\_list variable
+     */
+    virtual void print_get_memb_list();
+
+
+    /**
+     * Print the code for the main \c net\_receive loop
+     */
+    virtual void print_net_receive_loop_begin();
+
+
+    /**
+     * Print the code for closing the main \c net\_receive loop
+     */
+    virtual void print_net_receive_loop_end();
+
+
+    /**
+     * Print kernel for buffering net_receive events
+     *
+     * This kernel is only needed for accelerator backends where \c net\_receive needs to be
+     * executed in two stages as the actual communication must be done in the host code. \param
+     * need_mech_inst \c true if the generated code needs a local inst variable to be defined
+     */
+    void print_net_receive_buffering(bool need_mech_inst = true);
+
+
+    /**
+     * Print the code related to the update of NetSendBuffer_t cnt. For GPU this needs to be done
+     * with atomic operation, on CPU it's not needed.
+     *
+     */
+    virtual void print_net_send_buffering_cnt_update() const;
+
+
+    /**
+     * Print statement that grows NetSendBuffering_t structure if needed.
+     * This function should be overridden for backends that cannot dynamically reallocate the buffer
+     */
+    virtual void print_net_send_buffering_grow();
+
+
+    /**
+     * Print kernel for buffering net_send events
+     *
+     * This kernel is only needed for accelerator backends where \c net\_send needs to be executed
+     * in two stages as the actual communication must be done in the host code.
+     */
+    void print_net_send_buffering();
+
+
+    /**
+     * Print \c net\_receive kernel function definition
+     */
+    void print_net_receive_kernel();
+
+
+    /**
+     * Print \c net\_receive function definition
+     */
+    void print_net_receive();
+
+
+    /**
+     * Print derivative kernel when \c derivimplicit method is used
+     *
+     * \param block The corresponding AST node representing an NMODL \c derivimplicit block
+     */
+    void print_derivimplicit_kernel(const ast::Block& block);
+
+
+    /**
+     * Print code block to transfer newtonspace structure to device
+     */
+    virtual void print_newtonspace_transfer_to_device() const;
+
+
     /****************************************************************************************/
     /*                                 Print nrn_state routine                              */
     /****************************************************************************************/
@@ -572,10 +886,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     virtual void print_global_var_struct_decl();
 
-    /**
-     * Print static assertions about the global variable struct.
-     */
-    virtual void print_global_var_struct_assertions() const;
 
     /**
      * Prints the start of the \c coreneuron namespace
@@ -621,12 +931,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print top file header printed in generated code
-     */
-    void print_backend_info();
-
-
-    /**
      * Print memory allocation routine
      */
     virtual void print_memory_allocation_routine() const;
@@ -636,18 +940,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print backend specific abort routine
      */
     virtual void print_abort_routine() const;
-
-
-    /**
-     * Print standard C/C++ includes
-     */
-    void print_standard_includes();
-
-
-    /**
-     * Print includes from coreneuron
-     */
-    void print_coreneuron_includes();
 
 
     /**
@@ -685,61 +977,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *            is an array otherwise <false, 0>
      */
     std::tuple<bool, int> check_if_var_is_array(const std::string& name);
-
-    /**
-     * Print declaration of macro NRN_PRCELLSTATE for debugging
-     */
-    void print_prcellstate_macros() const;
-
-    /**
-     * Print backend code for byte array that has mechanism information (to be registered
-     * with coreneuron)
-     */
-    void print_mechanism_info();
-
-
-    void print_sdlists_init(bool print_initializers) override;
-
-
-    /**
-     * Print the structure that wraps all global variables used in the NMODL
-     *
-     * \param print_initializers Whether to include default values in the struct
-     *                           definition (true: int foo{42}; false: int foo;)
-     */
-    void print_mechanism_global_var_structure(bool print_initializers);
-
-
-    /**
-     * Print structure of ion variables used for local copies
-     */
-    void print_ion_var_structure();
-
-
-    /**
-     * Print constructor of ion variables
-     * \param members The ion variable names
-     */
-    virtual void print_ion_var_constructor(const std::vector<std::string>& members);
-
-
-    /**
-     * Print the ion variable struct
-     */
-    virtual void print_ion_variable();
-
-
-    /**
-     * Returns floating point type for given range variable symbol
-     * \param symbol A range variable symbol
-     */
-    std::string get_range_var_float_type(const SymbolType& symbol);
-
-
-    /**
-     * Print the function that initialize range variable with different data type
-     */
-    void print_setup_range_variable();
 
 
     /**
@@ -812,13 +1049,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print byte arrays that register scalar and vector variables for hoc interface
-     *
-     */
-    void print_global_variables_for_hoc();
-
-
-    /**
      * Print the getter method for thread variables and ids
      *
      */
@@ -861,14 +1091,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print the pragma annotation to update global variables from host to the device
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_global_variable_device_update_annotation();
-
-
-    /**
      * Print the setup method for setting matrix shadow vectors
      *
      */
@@ -896,27 +1118,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param node The AST node representing a function call
      */
     void print_function_call(const ast::FunctionCall& node) override;
-
-
-    /**
-     * Print call to \c net\_send
-     * \param node The AST node representing the function call
-     */
-    void print_net_send_call(const ast::FunctionCall& node);
-
-
-    /**
-     * Print call to net\_move
-     * \param node The AST node representing the function call
-     */
-    void print_net_move_call(const ast::FunctionCall& node);
-
-
-    /**
-     * Print call to net\_event
-     * \param node The AST node representing the function call
-     */
-    void print_net_event_call(const ast::FunctionCall& node);
 
 
     /**
@@ -986,11 +1187,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     void print_function_procedure_helper(const ast::Block& node);
 
-    /**
-     * Print thread related memory allocation and deallocation callbacks
-     */
-    void print_thread_memory_callbacks();
-
 
     /**
      * Print top level (global scope) verbatim blocks
@@ -1006,107 +1202,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     template <typename T>
     void print_function_declaration(const T& node, const std::string& name);
-
-
-    /**
-     * Print initial block statements
-     *
-     * Generate the target backend code corresponding to the NMODL initial block statements
-     *
-     * \param node The AST Node representing a NMODL initial block
-     */
-    void print_initial_block(const ast::InitialBlock* node);
-
-
-    /**
-     * Print initial block in the net receive block
-     */
-    void print_net_init();
-
-
-    /**
-     * Print the common code section for net receive related methods
-     *
-     * \param node The AST node representing the corresponding NMODL block
-     * \param need_mech_inst \c true if a local \c inst variable needs to be defined in generated
-     * code
-     */
-    void print_net_receive_common_code(const ast::Block& node, bool need_mech_inst = true);
-
-
-    /**
-     * Print the code related to the update of NetSendBuffer_t cnt. For GPU this needs to be done
-     * with atomic operation, on CPU it's not needed.
-     *
-     */
-    virtual void print_net_send_buffering_cnt_update() const;
-
-
-    /**
-     * Print statement that grows NetSendBuffering_t structure if needed.
-     * This function should be overridden for backends that cannot dynamically reallocate the buffer
-     */
-    virtual void print_net_send_buffering_grow();
-
-
-    /**
-     * Print kernel for buffering net_send events
-     *
-     * This kernel is only needed for accelerator backends where \c net\_send needs to be executed
-     * in two stages as the actual communication must be done in the host code.
-     */
-    void print_net_send_buffering();
-
-
-    /**
-     * Print send event move block used in net receive as well as watch
-     */
-    void print_send_event_move();
-
-
-    /**
-     * Generate the target backend code for the \c net\_receive\_buffering function delcaration
-     * \return The target code string
-     */
-    virtual std::string net_receive_buffering_declaration();
-
-
-    /**
-     * Print the target backend code for defining and checking a local \c Memb\_list variable
-     */
-    virtual void print_get_memb_list();
-
-
-    /**
-     * Print the code for the main \c net\_receive loop
-     */
-    virtual void print_net_receive_loop_begin();
-
-
-    /**
-     * Print the code for closing the main \c net\_receive loop
-     */
-    virtual void print_net_receive_loop_end();
-
-
-    /**
-     * Print \c net\_receive function definition
-     */
-    void print_net_receive();
-
-
-    /**
-     * Print derivative kernel when \c derivimplicit method is used
-     *
-     * \param block The corresponding AST node representing an NMODL \c derivimplicit block
-     */
-    void print_derivimplicit_kernel(const ast::Block& block);
-
-
-    /**
-     * Print code block to transfer newtonspace structure to device
-     */
-    virtual void print_newtonspace_transfer_to_device() const;
 
 
     /**
@@ -1155,49 +1250,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     virtual void print_nrn_cur_matrix_shadow_reduction();
 
 
-    /**
-     * Print nrn_constructor function definition
-     *
-     */
-    void print_nrn_constructor();
-
-
-    /**
-     * Print nrn_destructor function definition
-     *
-     */
-    void print_nrn_destructor();
-
-
-    /**
-     * Print nrn_alloc function definition
-     *
-     */
-    void print_nrn_alloc();
-
-
-    /**
-     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
-     * \param type The target backend code block type
-     */
-    virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "");
-
-
-    /**
-     * Print the mechanism registration function
-     *
-     */
-    void print_mechanism_register() override;
-
-
-    /**
-     * Print watch activate function
-     *
-     */
-    void print_watch_activate();
-
-
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -1243,34 +1295,19 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
                                 const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
-
     /**
-     * Print the \c nrn\_init function definition
-     * \param skip_init_check \c true to generate code executing the initialization conditionally
+     * Print the function that initialize instance structure
      */
-    void print_nrn_init(bool skip_init_check = true);
+    void print_instance_variable_setup();
 
 
     /**
-     * Print kernel for buffering net_receive events
+     * Print the structure that wraps all range and int variables required for the NMODL
      *
-     * This kernel is only needed for accelerator backends where \c net\_receive needs to be
-     * executed in two stages as the actual communication must be done in the host code. \param
-     * need_mech_inst \c true if the generated code needs a local inst variable to be defined
+     * \param print_initializers Whether or not default values for variables
+     *                           be included in the struct declaration.
      */
-    void print_net_receive_buffering(bool need_mech_inst = true);
-
-
-    /**
-     * Print \c net\_receive kernel function definition
-     */
-    void print_net_receive_kernel();
-
-
-    /**
-     * Print watch activate function
-     */
-    void print_watch_check();
+    void print_mechanism_range_var_structure(bool print_initializers);
 
 
     /**
@@ -1307,12 +1344,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
 
-    /**
-     * Print NMODL before / after block in target backend code
-     * \param node AST node of type before/after type being printed
-     * \param block_id Index of the before/after block
-     */
-    virtual void print_before_after_block(const ast::Block* node, size_t block_id);
 
     /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
@@ -1322,26 +1353,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string find_var_unique_name(const std::string& original_name) const;
 
-    /**
-     * Print the structure that wraps all range and int variables required for the NMODL
-     *
-     * \param print_initializers Whether or not default values for variables
-     *                           be included in the struct declaration.
-     */
-    void print_mechanism_range_var_structure(bool print_initializers);
-
-    /**
-     * Print the function that initialize instance structure
-     */
-    void print_instance_variable_setup();
-
-    /**
-     * Go through the map of \c EigenNewtonSolverBlock s and their corresponding functor names
-     * and print the functor definitions before the definitions of the functions of the generated
-     * file
-     *
-     */
-    void print_functors_definitions();
 
     /**
      * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its

@@ -705,6 +705,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print top file header printed in generated code
+     */
+    virtual void print_backend_info() = 0;
+
+
     virtual void print_sdlists_init(bool print_initializers) = 0;
 
 

@@ -1942,6 +1942,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
     print_global_var_struct_decl();
 }
 
+
 void CodegenCoreneuronCppVisitor::print_global_var_struct_assertions() const {
     // Assert some things that we assume when copying instances of this struct
     // to the GPU and so on.
@@ -3262,15 +3263,18 @@ void CodegenCoreneuronCppVisitor::print_net_receive_buffering(bool need_mech_ins
     printer->pop_block();
 }
 
+
 void CodegenCoreneuronCppVisitor::print_net_send_buffering_cnt_update() const {
     printer->add_line("i = nsb->_cnt++;");
 }
+
 
 void CodegenCoreneuronCppVisitor::print_net_send_buffering_grow() {
     printer->push_block("if (i >= nsb->_size)");
     printer->add_line("nsb->grow();");
     printer->pop_block();
 }
+
 
 void CodegenCoreneuronCppVisitor::print_net_send_buffering() {
     if (!net_send_buffer_required()) {
@@ -3299,43 +3303,6 @@ void CodegenCoreneuronCppVisitor::print_net_send_buffering() {
     printer->pop_block();
 }
 
-
-void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
-    // For_netcon should take the same arguments as net_receive and apply the operations
-    // in the block to the weights of the netcons. Since all the weights are on the same vector,
-    // weights, we have a mask of operations that we apply iteratively, advancing the offset
-    // to the next netcon.
-    const auto& args = node.get_parameters();
-    RenameVisitor v;
-    const auto& statement_block = node.get_statement_block();
-    for (size_t i_arg = 0; i_arg < args.size(); ++i_arg) {
-        // sanitize node_name since we want to substitute names like (*w) as they are
-        auto old_name =
-            std::regex_replace(args[i_arg]->get_node_name(), regex_special_chars, R"(\$&)");
-        const auto& new_name = fmt::format("weights[{} + nt->_fornetcon_weight_perm[i]]", i_arg);
-        v.set(old_name, new_name);
-        statement_block->accept(v);
-    }
-
-    const auto index =
-        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
-            return a.name == naming::FOR_NETCON_SEMANTIC;
-        })->index;
-
-    printer->fmt_text("const size_t offset = {}*pnodecount + id;", index);
-    printer->add_newline();
-    printer->add_line(
-        "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]];");
-    printer->add_line(
-        "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1];");
-
-    printer->add_line("for (auto i = for_netcon_start; i < for_netcon_end; ++i) {");
-    printer->increase_indent();
-    print_statement_block(*statement_block, false, false);
-    printer->decrease_indent();
-
-    printer->add_line("}");
-}
 
 void CodegenCoreneuronCppVisitor::print_net_receive_kernel() {
     if (!net_receive_required()) {
@@ -3530,27 +3497,6 @@ void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block)
 
 void CodegenCoreneuronCppVisitor::print_newtonspace_transfer_to_device() const {
     // nothing to do on cpu
-}
-
-
-void CodegenCoreneuronCppVisitor::visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) {
-    if (!codegen) {
-        return;
-    }
-    printer->fmt_line("{}_{}({});",
-                      node.get_node_to_solve()->get_node_name(),
-                      info.mod_suffix,
-                      external_method_arguments());
-}
-
-void CodegenCoreneuronCppVisitor::visit_solution_expression(const SolutionExpression& node) {
-    auto block = node.get_node_to_solve().get();
-    if (block->is_statement_block()) {
-        auto statement_block = dynamic_cast<ast::StatementBlock*>(block);
-        print_statement_block(*statement_block, false, false);
-    } else {
-        block->accept(*this);
-    }
 }
 
 
@@ -3845,6 +3791,7 @@ void CodegenCoreneuronCppVisitor::print_data_structures(bool print_initializers)
     print_ion_var_structure();
 }
 
+
 void CodegenCoreneuronCppVisitor::print_v_unused() const {
     if (!info.vectorize) {
         return;
@@ -3856,6 +3803,7 @@ void CodegenCoreneuronCppVisitor::print_v_unused() const {
     )CODE");
 }
 
+
 void CodegenCoreneuronCppVisitor::print_g_unused() const {
     printer->add_multi_line(R"CODE(
         #if NRN_PRCELLSTATE
@@ -3863,6 +3811,7 @@ void CodegenCoreneuronCppVisitor::print_g_unused() const {
         #endif
     )CODE");
 }
+
 
 void CodegenCoreneuronCppVisitor::print_compute_functions() {
     print_top_verbatim_blocks();
@@ -3920,6 +3869,71 @@ void CodegenCoreneuronCppVisitor::print_codegen_routines() {
     print_mechanism_register();
     print_namespace_end();
     codegen = false;
+}
+
+
+/****************************************************************************************/
+/*                            Overloaded visitor routines                               */
+/****************************************************************************************/
+
+
+void CodegenCoreneuronCppVisitor::visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) {
+    if (!codegen) {
+        return;
+    }
+    printer->fmt_line("{}_{}({});",
+                      node.get_node_to_solve()->get_node_name(),
+                      info.mod_suffix,
+                      external_method_arguments());
+}
+
+
+void CodegenCoreneuronCppVisitor::visit_solution_expression(const SolutionExpression& node) {
+    auto block = node.get_node_to_solve().get();
+    if (block->is_statement_block()) {
+        auto statement_block = dynamic_cast<ast::StatementBlock*>(block);
+        print_statement_block(*statement_block, false, false);
+    } else {
+        block->accept(*this);
+    }
+}
+
+
+void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+    // For_netcon should take the same arguments as net_receive and apply the operations
+    // in the block to the weights of the netcons. Since all the weights are on the same vector,
+    // weights, we have a mask of operations that we apply iteratively, advancing the offset
+    // to the next netcon.
+    const auto& args = node.get_parameters();
+    RenameVisitor v;
+    const auto& statement_block = node.get_statement_block();
+    for (size_t i_arg = 0; i_arg < args.size(); ++i_arg) {
+        // sanitize node_name since we want to substitute names like (*w) as they are
+        auto old_name =
+            std::regex_replace(args[i_arg]->get_node_name(), regex_special_chars, R"(\$&)");
+        const auto& new_name = fmt::format("weights[{} + nt->_fornetcon_weight_perm[i]]", i_arg);
+        v.set(old_name, new_name);
+        statement_block->accept(v);
+    }
+
+    const auto index =
+        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+            return a.name == naming::FOR_NETCON_SEMANTIC;
+        })->index;
+
+    printer->fmt_text("const size_t offset = {}*pnodecount + id;", index);
+    printer->add_newline();
+    printer->add_line(
+        "const size_t for_netcon_start = nt->_fornetcon_perm_indices[indexes[offset]];");
+    printer->add_line(
+        "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1];");
+
+    printer->add_line("for (auto i = for_netcon_start; i < for_netcon_end; ++i) {");
+    printer->increase_indent();
+    print_statement_block(*statement_block, false, false);
+    printer->decrease_indent();
+
+    printer->add_line("}");
 }
 
 }  // namespace codegen
