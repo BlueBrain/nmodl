@@ -279,6 +279,67 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print all includes
+     *
+     */
+    void print_headers_include() override;
+
+
+    /**
+     * Print start of namespaces
+     *
+     */
+    void print_namespace_begin();
+
+
+    /**
+     * Print end of namespaces
+     *
+     */
+    void print_namespace_end();
+
+
+    /**
+     * Print common getters
+     *
+     */
+    void print_common_getters();
+
+
+    /**
+     * Print all classes
+     * \param print_initializers Whether to include default values.
+     */
+    void print_data_structures(bool print_initializers);
+
+
+    /**
+     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
+     */
+    void print_v_unused() const;
+
+
+    /**
+     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
+     */
+    void print_g_unused() const;
+
+
+    /**
+     * Print all compute functions for every backend
+     *
+     */
+    virtual void print_compute_functions();
+
+
+    /**
+     * Print entry point to code generation
+     *
+     */
+    virtual void print_codegen_routines() override;
+
+
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
@@ -1119,67 +1180,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void print_watch_activate();
 
 
-    /**
-     * Print all includes
-     *
-     */
-    void print_headers_include() override;
-
-
-    /**
-     * Print start of namespaces
-     *
-     */
-    void print_namespace_begin();
-
-
-    /**
-     * Print end of namespaces
-     *
-     */
-    void print_namespace_end();
-
-
-    /**
-     * Print common getters
-     *
-     */
-    void print_common_getters();
-
-
-    /**
-     * Print all classes
-     * \param print_initializers Whether to include default values.
-     */
-    void print_data_structures(bool print_initializers);
-
-
-    /**
-     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
-     */
-    void print_v_unused() const;
-
-
-    /**
-     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
-     */
-    void print_g_unused() const;
-
-
-    /**
-     * Print all compute functions for every backend
-     *
-     */
-    virtual void print_compute_functions();
-
-
-    /**
-     * Print entry point to code generation
-     *
-     */
-    virtual void print_codegen_routines() override;
-
-
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -1312,13 +1312,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param block_id Index of the before/after block
      */
     virtual void print_before_after_block(const ast::Block* node, size_t block_id);
-
-
-    /**
-     * Set the global variables to be generated in target backend code
-     * \param global_vars
-     */
-    void set_codegen_global_variables(const std::vector<SymbolType>& global_vars);
 
     /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the

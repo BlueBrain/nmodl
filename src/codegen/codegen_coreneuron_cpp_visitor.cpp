@@ -3920,10 +3920,5 @@ void CodegenCoreneuronCppVisitor::print_codegen_routines() {
     codegen = false;
 }
 
-
-void CodegenCoreneuronCppVisitor::set_codegen_global_variables(const std::vector<SymbolType>& global_vars) {
-    codegen_global_variables = global_vars;
-}
-
 }  // namespace codegen
 }  // namespace nmodl
