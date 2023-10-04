@@ -182,6 +182,75 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print the nmodl constants used in backend code
+     *
+     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
+     * in the backend code:
+     *
+     * \code
+     * static const double FARADAY = 96485.3;
+     * static const double PI = 3.14159;
+     * static const double R = 8.3145;
+     * \endcode
+     */
+    virtual void print_nmodl_constants();
+
+
+    /**
+     * Print the getter method for index position of first pointer variable
+     *
+     */
+    void print_first_pointer_var_index_getter();
+
+
+    /**
+     * Print the getter methods for float and integer variables count
+     *
+     */
+    void print_num_variable_getter();
+
+
+    /**
+     * Print the getter method for getting number of arguments for net_receive
+     *
+     */
+    void print_net_receive_arg_size_getter();
+
+
+    /**
+     * Print the getter method for returning mechtype
+     *
+     */
+    void print_mech_type_getter();
+
+
+    /**
+     * Print the getter method for returning membrane list from NrnThread
+     *
+     */
+    void print_memb_list_getter();
+
+
+    /**
+     * Prints the start of the \c coreneuron namespace
+     */
+    void print_namespace_start();
+
+
+    /**
+     * Prints the end of the \c coreneuron namespace
+     */
+    void print_namespace_stop();
+
+
+    /**
+     * Print the getter method for thread variables and ids
+     *
+     */
+    void print_thread_getters();
+
+
     /****************************************************************************************/
     /*                         Routines for returning variable name                         */
     /****************************************************************************************/
@@ -888,18 +957,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Prints the start of the \c coreneuron namespace
-     */
-    void print_namespace_start();
-
-
-    /**
-     * Prints the end of the \c coreneuron namespace
-     */
-    void print_namespace_stop();
-
-
-    /**
      * Prints the start of namespace for the backend-specific code
      *
      * For the C++ backend no additional namespace is required
@@ -913,21 +970,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * For the C++ backend no additional namespace is required
      */
     virtual void print_backend_namespace_stop();
-
-
-    /**
-     * Print the nmodl constants used in backend code
-     *
-     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
-     * in the backend code:
-     *
-     * \code
-     * static const double FARADAY = 96485.3;
-     * static const double PI = 3.14159;
-     * static const double R = 8.3145;
-     * \endcode
-     */
-    virtual void print_nmodl_constants();
 
 
     /**
@@ -1046,48 +1088,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print the code to synchronise/wait on stream specific to NrnThread
      */
     virtual void print_device_stream_wait() const;
-
-
-    /**
-     * Print the getter method for thread variables and ids
-     *
-     */
-    void print_thread_getters();
-
-
-    /**
-     * Print the getter method for index position of first pointer variable
-     *
-     */
-    void print_first_pointer_var_index_getter();
-
-
-    /**
-     * Print the getter methods for float and integer variables count
-     *
-     */
-    void print_num_variable_getter();
-
-
-    /**
-     * Print the getter method for getting number of arguments for net_receive
-     *
-     */
-    void print_net_receive_arg_size_getter();
-
-
-    /**
-     * Print the getter method for returning membrane list from NrnThread
-     *
-     */
-    void print_memb_list_getter();
-
-
-    /**
-     * Print the getter method for returning mechtype
-     *
-     */
-    void print_mech_type_getter();
 
 
     /**
