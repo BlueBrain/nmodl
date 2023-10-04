@@ -724,6 +724,54 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print the \c nrn_current kernel
+     *
+     * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    virtual void print_nrn_current(const ast::BreakpointBlock& node) = 0;
+
+
+    /**
+     * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     *
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    virtual void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node) = 0;
+
+
+    /**
+     * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     */
+    virtual void print_nrn_cur_non_conductance_kernel() = 0;
+
+
+    /**
+     * Print main body of nrn_cur function
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    virtual void print_nrn_cur_kernel(const ast::BreakpointBlock& node) = 0;
+
+
+    /**
+     * Print fast membrane current calculation code
+     */
+    virtual void print_fast_imem_calculation() = 0;
+
+
+    /**
+     * Print nrn_cur / current update function definition
+     */
+    virtual void print_nrn_cur() = 0;
+
+
     /****************************************************************************************/
     /*                              Main code printing entry points                         */
     /****************************************************************************************/

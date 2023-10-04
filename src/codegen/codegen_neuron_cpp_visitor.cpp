@@ -199,264 +199,6 @@ std::vector<ShadowUseStatement> CodegenNeuronCppVisitor::ion_write_statements(Bl
 }
 
 
-// TODO: Move to CodegenCppVisitor
-/**
- * \details Once variables are populated, update index semantics to register with coreneuron
- */
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void CodegenNeuronCppVisitor::update_index_semantics() {
-    int index = 0;
-    info.semantics.clear();
-
-    if (info.point_process) {
-        info.semantics.emplace_back(index++, naming::AREA_SEMANTIC, 1);
-        info.semantics.emplace_back(index++, naming::POINT_PROCESS_SEMANTIC, 1);
-    }
-    for (const auto& ion: info.ions) {
-        for (auto i = 0; i < ion.reads.size(); ++i) {
-            info.semantics.emplace_back(index++, ion.name + "_ion", 1);
-        }
-        for (const auto& var: ion.writes) {
-            /// add if variable is not present in the read list
-            if (std::find(ion.reads.begin(), ion.reads.end(), var) == ion.reads.end()) {
-                info.semantics.emplace_back(index++, ion.name + "_ion", 1);
-            }
-            if (ion.is_ionic_current(var)) {
-                info.semantics.emplace_back(index++, ion.name + "_ion", 1);
-            }
-        }
-        if (ion.need_style) {
-            info.semantics.emplace_back(index++, fmt::format("{}_ion", ion.name), 1);
-            info.semantics.emplace_back(index++, fmt::format("#{}_ion", ion.name), 1);
-        }
-    }
-    for (auto& var: info.pointer_variables) {
-        if (info.first_pointer_var_index == -1) {
-            info.first_pointer_var_index = index;
-        }
-        int size = var->get_length();
-        if (var->has_any_property(NmodlType::pointer_var)) {
-            info.semantics.emplace_back(index, naming::POINTER_SEMANTIC, size);
-        } else {
-            info.semantics.emplace_back(index, naming::CORE_POINTER_SEMANTIC, size);
-        }
-        index += size;
-    }
-
-    if (info.diam_used) {
-        info.semantics.emplace_back(index++, naming::DIAM_VARIABLE, 1);
-    }
-
-    if (info.area_used) {
-        info.semantics.emplace_back(index++, naming::AREA_VARIABLE, 1);
-    }
-
-    if (info.net_send_used) {
-        info.semantics.emplace_back(index++, naming::NET_SEND_SEMANTIC, 1);
-    }
-
-    /*
-     * Number of semantics for watch is one greater than number of
-     * actual watch statements in the mod file
-     */
-    if (!info.watch_statements.empty()) {
-        for (int i = 0; i < info.watch_statements.size() + 1; i++) {
-            info.semantics.emplace_back(index++, naming::WATCH_SEMANTIC, 1);
-        }
-    }
-
-    if (info.for_netcon_used) {
-        info.semantics.emplace_back(index++, naming::FOR_NETCON_SEMANTIC, 1);
-    }
-}
-
-// TODO: Move to CodegenCppVisitor
-std::vector<CodegenNeuronCppVisitor::SymbolType> CodegenNeuronCppVisitor::get_float_variables()
-    const {
-    // sort with definition order
-    auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
-        return first->get_definition_order() < second->get_definition_order();
-    };
-
-    auto assigned = info.assigned_vars;
-    auto states = info.state_vars;
-
-    // each state variable has corresponding Dstate variable
-    for (const auto& state: states) {
-        auto name = "D" + state->get_name();
-        auto symbol = make_symbol(name);
-        if (state->is_array()) {
-            symbol->set_as_array(state->get_length());
-        }
-        symbol->set_definition_order(state->get_definition_order());
-        assigned.push_back(symbol);
-    }
-    std::sort(assigned.begin(), assigned.end(), comparator);
-
-    auto variables = info.range_parameter_vars;
-    variables.insert(variables.end(),
-                     info.range_assigned_vars.begin(),
-                     info.range_assigned_vars.end());
-    variables.insert(variables.end(), info.range_state_vars.begin(), info.range_state_vars.end());
-    variables.insert(variables.end(), assigned.begin(), assigned.end());
-
-    if (info.vectorize) {
-        variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
-    }
-
-    if (breakpoint_exist()) {
-        std::string name = info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
-                                          : naming::CONDUCTANCE_VARIABLE;
-
-        // make sure conductance variable like `g` is not already defined
-        if (auto r = std::find_if(variables.cbegin(),
-                                  variables.cend(),
-                                  [&](const auto& s) { return name == s->get_name(); });
-            r == variables.cend()) {
-            variables.push_back(make_symbol(name));
-        }
-    }
-
-    // if (net_receive_exist()) {
-    //     variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
-    // }
-    return variables;
-}
-
-// TODO: Move to CodegenCppVisitor
-/**
- * IndexVariableInfo has following constructor arguments:
- *      - symbol
- *      - is_vdata   (false)
- *      - is_index   (false
- *      - is_integer (false)
- *
- * Which variables are constant qualified?
- *
- *  - node area is read only
- *  - read ion variables are read only
- *  - style_ionname is index / offset
- */
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-std::vector<IndexVariableInfo> CodegenNeuronCppVisitor::get_int_variables() {
-    std::vector<IndexVariableInfo> variables;
-    if (info.point_process) {
-        variables.emplace_back(make_symbol(naming::NODE_AREA_VARIABLE));
-        variables.back().is_constant = true;
-        /// note that this variable is not printed in neuron implementation
-        if (info.artificial_cell) {
-            variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), true);
-        } else {
-            variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), false, false, true);
-            variables.back().is_constant = true;
-        }
-    }
-
-    for (auto& ion: info.ions) {
-        bool need_style = false;
-        std::unordered_map<std::string, int> ion_vars;  // used to keep track of the variables to
-                                                        // not have doubles between read/write. Same
-                                                        // name variables are allowed
-        // See if we need to add extra readion statements to match NEURON with SoA data
-        auto const has_var = [&ion](const char* suffix) -> bool {
-            auto const pred = [name = ion.name + suffix](auto const& x) { return x == name; };
-            return std::any_of(ion.reads.begin(), ion.reads.end(), pred) ||
-                   std::any_of(ion.writes.begin(), ion.writes.end(), pred);
-        };
-        auto const add_implicit_read = [&ion](const char* suffix) {
-            auto name = ion.name + suffix;
-            ion.reads.push_back(name);
-            ion.implicit_reads.push_back(std::move(name));
-        };
-        bool const have_ionin{has_var("i")}, have_ionout{has_var("o")};
-        if (have_ionin && !have_ionout) {
-            add_implicit_read("o");
-        } else if (have_ionout && !have_ionin) {
-            add_implicit_read("i");
-        }
-        for (const auto& var: ion.reads) {
-            const std::string name = naming::ION_VARNAME_PREFIX + var;
-            variables.emplace_back(make_symbol(name));
-            variables.back().is_constant = true;
-            ion_vars[name] = static_cast<int>(variables.size() - 1);
-        }
-
-        /// symbol for di_ion_dv var
-        std::shared_ptr<symtab::Symbol> ion_di_dv_var = nullptr;
-
-        for (const auto& var: ion.writes) {
-            const std::string name = naming::ION_VARNAME_PREFIX + var;
-
-            const auto ion_vars_it = ion_vars.find(name);
-            if (ion_vars_it != ion_vars.end()) {
-                variables[ion_vars_it->second].is_constant = false;
-            } else {
-                variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + var));
-            }
-            if (ion.is_ionic_current(var)) {
-                ion_di_dv_var = make_symbol(std::string(naming::ION_VARNAME_PREFIX) + "di" +
-                                            ion.name + "dv");
-            }
-            if (ion.is_intra_cell_conc(var) || ion.is_extra_cell_conc(var)) {
-                need_style = true;
-            }
-        }
-
-        /// insert after read/write variables but before style ion variable
-        if (ion_di_dv_var != nullptr) {
-            variables.emplace_back(ion_di_dv_var);
-        }
-
-        if (need_style) {
-            variables.emplace_back(make_symbol(naming::ION_VARNAME_PREFIX + ion.name + "_erev"));
-            variables.emplace_back(make_symbol("style_" + ion.name), false, true);
-            variables.back().is_constant = true;
-        }
-    }
-
-    for (const auto& var: info.pointer_variables) {
-        auto name = var->get_name();
-        if (var->has_any_property(NmodlType::pointer_var)) {
-            variables.emplace_back(make_symbol(name));
-        } else {
-            variables.emplace_back(make_symbol(name), true);
-        }
-    }
-
-    if (info.diam_used) {
-        variables.emplace_back(make_symbol(naming::DIAM_VARIABLE));
-    }
-
-    if (info.area_used) {
-        variables.emplace_back(make_symbol(naming::AREA_VARIABLE));
-    }
-
-    // for non-artificial cell, when net_receive buffering is enabled
-    // then tqitem is an offset
-    if (info.net_send_used) {
-        if (info.artificial_cell) {
-            variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), true);
-        } else {
-            variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), false, false, true);
-            variables.back().is_constant = true;
-        }
-        info.tqitem_index = static_cast<int>(variables.size() - 1);
-    }
-
-    /**
-     * \note Variables for watch statements : there is one extra variable
-     * used in coreneuron compared to actual watch statements for compatibility
-     * with neuron (which uses one extra Datum variable)
-     */
-    if (!info.watch_statements.empty()) {
-        for (int i = 0; i < info.watch_statements.size() + 1; i++) {
-            variables.emplace_back(make_symbol(fmt::format("watch{}", i)), false, false, true);
-        }
-    }
-    return variables;
-}
-
-
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
 /****************************************************************************************/
@@ -1141,7 +883,7 @@ void CodegenNeuronCppVisitor::visit_solution_expression(const SolutionExpression
 
 
 /****************************************************************************************/
-/*                                Print nrn_state routine                                */
+/*                                 Print nrn_state routine                              */
 /****************************************************************************************/
 
 
@@ -1153,6 +895,47 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
 
     printer->add_line("nrn_state");
     // TODO: Write for NEURON
+
+    codegen = false;
+}
+
+
+/****************************************************************************************/
+/*                              Print nrn_cur related routines                          */
+/****************************************************************************************/
+
+
+void CodegenNeuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
+    return;
+}
+
+
+void CodegenNeuronCppVisitor::print_nrn_cur_conductance_kernel(const BreakpointBlock& node) {
+    return;
+}
+
+
+void CodegenNeuronCppVisitor::print_nrn_cur_non_conductance_kernel() {
+    return;
+}
+
+
+void CodegenNeuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
+    return;
+}
+
+
+void CodegenNeuronCppVisitor::print_fast_imem_calculation() {
+    return;
+}
+
+
+void CodegenNeuronCppVisitor::print_nrn_cur() {
+    if (!nrn_cur_required()) {
+        return;
+    }
+
+    codegen = true;
 
     codegen = false;
 }
@@ -1189,6 +972,7 @@ void CodegenNeuronCppVisitor::print_data_structures(bool print_initializers) {
     print_mechanism_range_var_structure(print_initializers);
 }
 
+
 void CodegenNeuronCppVisitor::print_v_unused() const {
     if (!info.vectorize) {
         return;
@@ -1199,6 +983,7 @@ void CodegenNeuronCppVisitor::print_v_unused() const {
         #endif
     )CODE");
 }
+
 
 void CodegenNeuronCppVisitor::print_g_unused() const {
     printer->add_multi_line(R"CODE(

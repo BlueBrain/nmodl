@@ -221,9 +221,63 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print nrn_state / state update function definition
+     */
+    void print_nrn_state() override;
+
+
     /****************************************************************************************/
     /*                              Print nrn_cur related routines                          */
     /****************************************************************************************/
+
+
+    /**
+     * Print the \c nrn_current kernel
+     *
+     * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_current(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     *
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     */
+    void print_nrn_cur_non_conductance_kernel() override;
+
+
+    /**
+     * Print main body of nrn_cur function
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_cur_kernel(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print fast membrane current calculation code
+     */
+    virtual void print_fast_imem_calculation() override;
+
+
+    /**
+     * Print nrn_cur / current update function definition
+     */
+    void print_nrn_cur() override;
 
 
     /****************************************************************************************/
@@ -676,12 +730,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
                             std::string float_type,
                             const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
-
-
-    /**
-     * Print nrn_state / state update function definition
-     */
-    void print_nrn_state() override;
 
 
     /**

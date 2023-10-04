@@ -269,9 +269,63 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print nrn_state / state update function definition
+     */
+    void print_nrn_state() override;
+
+
     /****************************************************************************************/
     /*                              Print nrn_cur related routines                          */
     /****************************************************************************************/
+
+
+    /**
+     * Print the \c nrn_current kernel
+     *
+     * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_current(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     *
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
+     *
+     * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
+     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
+     */
+    void print_nrn_cur_non_conductance_kernel() override;
+
+
+    /**
+     * Print main body of nrn_cur function
+     * \param node the AST node representing the NMODL breakpoint block
+     */
+    void print_nrn_cur_kernel(const ast::BreakpointBlock& node) override;
+
+
+    /**
+     * Print fast membrane current calculation code
+     */
+    virtual void print_fast_imem_calculation() override;
+
+
+    /**
+     * Print nrn_cur / current update function definition
+     */
+    void print_nrn_cur() override;
 
 
     /****************************************************************************************/
@@ -1088,42 +1142,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print main body of nrn_cur function
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_cur_kernel(const ast::BreakpointBlock& node);
-
-
-    /**
-     * Print the \c nrn\_cur kernel with NMODL \c conductance keyword provisions
-     *
-     * If the NMODL \c conductance keyword is used in the \c breakpoint block, then
-     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
-     *
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_cur_conductance_kernel(const ast::BreakpointBlock& node);
-
-
-    /**
-     * Print the \c nrn\_cur kernel without NMODL \c conductance keyword provisions
-     *
-     * If the NMODL \c conductance keyword is \b not used in the \c breakpoint block, then
-     * CodegenCoreneuronCppVisitor::print_nrn_cur_kernel will use this printer
-     */
-    void print_nrn_cur_non_conductance_kernel();
-
-
-    /**
-     * Print the \c nrn_current kernel
-     *
-     * \note nrn_cur_kernel will have two calls to nrn_current if no conductance keywords specified
-     * \param node the AST node representing the NMODL breakpoint block
-     */
-    void print_nrn_current(const ast::BreakpointBlock& node);
-
-
-    /**
      * Print the update to matrix elements with/without shadow vectors
      *
      */
@@ -1231,23 +1249,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param skip_init_check \c true to generate code executing the initialization conditionally
      */
     void print_nrn_init(bool skip_init_check = true);
-
-
-    /**
-     * Print nrn_state / state update function definition
-     */
-    void print_nrn_state() override;
-
-
-    /**
-     * Print nrn_cur / current update function definition
-     */
-    void print_nrn_cur();
-
-    /**
-     * Print fast membrane current calculation code
-     */
-    virtual void print_fast_imem_calculation();
 
 
     /**

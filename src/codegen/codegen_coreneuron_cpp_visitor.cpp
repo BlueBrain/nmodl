@@ -3741,6 +3741,7 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& no
     print_g_unused();
 }
 
+
 void CodegenCoreneuronCppVisitor::print_fast_imem_calculation() {
     if (!info.electrode_current) {
         return;
@@ -3768,6 +3769,7 @@ void CodegenCoreneuronCppVisitor::print_fast_imem_calculation() {
     }
     printer->pop_block();
 }
+
 
 void CodegenCoreneuronCppVisitor::print_nrn_cur() {
     if (!nrn_cur_required()) {
