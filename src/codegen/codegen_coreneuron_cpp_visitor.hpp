@@ -167,6 +167,241 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Generate the string representing the procedure parameter declaration
+     *
+     * The procedure parameters are stored in a vector of 4-tuples each representing a parameter.
+     *
+     * \param params The parameters that should be concatenated into the function parameter
+     * declaration
+     * \return The string representing the declaration of function parameters
+     */
+    static std::string get_parameter_str(const ParamVector& params);
+
+
+    /**
+     * Print the code to copy derivative advance flag to device
+     */
+    virtual void print_deriv_advance_flag_transfer_to_device() const;
+
+
+    /**
+     * Print pragma annotation for increase and capture of variable in automatic way
+     */
+    virtual void print_device_atomic_capture_annotation() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from device to host
+     */
+    virtual void print_net_send_buf_count_update_to_host() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t from device to host
+     */
+    virtual void print_net_send_buf_update_to_host() const;
+
+
+    /**
+     * Print the code to update NetSendBuffer_t count from host to device
+     */
+    virtual void print_net_send_buf_count_update_to_device() const;
+
+    /**
+     * Print the code to update dt from host to device
+     */
+    virtual void print_dt_update_to_device() const;
+
+    /**
+     * Print the code to synchronise/wait on stream specific to NrnThread
+     */
+    virtual void print_device_stream_wait() const;
+
+
+        /**
+     * Print accelerator annotations indicating data presence on device
+     */
+    virtual void print_kernel_data_present_annotation_block_begin();
+
+
+    /**
+     * Print matching block end of accelerator annotations for data presence on device
+     */
+    virtual void print_kernel_data_present_annotation_block_end();
+
+
+    /**
+     * Print accelerator kernels begin annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_begin();
+
+
+    /**
+     * Print accelerator kernels end annotation for net_init kernel
+     */
+    virtual void print_net_init_acc_serial_annotation_block_end();
+
+
+    /**
+     * Print pragma annotations for channel iterations
+     *
+     * This can be overriden by backends to provide additonal annotations or pragmas to enable
+     * for example SIMD code generation (e.g. through \c ivdep)
+     * The default implementation prints
+     *
+     * \code
+     * #pragma ivdep
+     * \endcode
+     *
+     * \param type The block type
+     */
+    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
+                                                             const ast::Block* block);
+
+
+    /**
+     * Check if reduction block in \c nrn\_cur required
+     */
+    virtual bool nrn_cur_reduction_loop_required();
+
+
+    /**
+     * Print the setup method for setting matrix shadow vectors
+     *
+     */
+    virtual void print_rhs_d_shadow_variables();
+
+
+    /**
+     * Print the update to matrix elements with/without shadow vectors
+     *
+     */
+    virtual void print_nrn_cur_matrix_shadow_update();
+
+
+    /**
+     * Print the reduction to matrix elements from shadow vectors
+     *
+     */
+    virtual void print_nrn_cur_matrix_shadow_reduction();
+
+
+    /**
+     * Print atomic update pragma for reduction statements
+     */
+    virtual void print_atomic_reduction_pragma() override;
+
+
+    /**
+     * Print the backend specific device method annotation
+     *
+     * \note This is not used for the C++ backend
+     */
+    virtual void print_device_method_annotation();
+
+
+    /**
+     * Print backend specific global method annotation
+     *
+     * \note This is not used for the C++ backend
+     */
+    virtual void print_global_method_annotation();
+
+
+    /**
+     * Prints the start of namespace for the backend-specific code
+     *
+     * For the C++ backend no additional namespace is required
+     */
+    virtual void print_backend_namespace_start();
+
+
+    /**
+     * Prints the end of namespace for the backend-specific code
+     *
+     * For the C++ backend no additional namespace is required
+     */
+    virtual void print_backend_namespace_stop();
+
+
+    /**
+     * Print backend specific includes (none needed for C++ backend)
+     */
+    virtual void print_backend_includes();
+
+
+    /**
+     * Check if ion variable copies should be avoided
+     */
+    bool optimize_ion_variable_copies() const;
+
+
+    /**
+     * Print memory allocation routine
+     */
+    virtual void print_memory_allocation_routine() const;
+
+
+    /**
+     * Print backend specific abort routine
+     */
+    virtual void print_abort_routine() const;
+
+
+    /**
+     * Return the name of main compute kernels
+     * \param type A block type
+     */
+    virtual std::string compute_method_name(BlockType type) const;
+
+
+    /**
+     * Instantiate global var instance
+     *
+     * For C++ code generation this is empty
+     * \return ""
+     */
+    virtual void print_global_var_struct_decl();
+
+
+    /**
+     * Print declarations of the functions used by \ref
+     * print_instance_struct_copy_to_device and \ref
+     * print_instance_struct_delete_from_device.
+     */
+    virtual void print_instance_struct_transfer_routine_declarations() {}
+
+    /**
+     * Print the definitions of the functions used by \ref
+     * print_instance_struct_copy_to_device and \ref
+     * print_instance_struct_delete_from_device. Declarations of these functions
+     * are printed by \ref print_instance_struct_transfer_routine_declarations.
+     *
+     * This updates the (pointer) member variables in the device copy of the
+     * instance struct to contain device pointers, which is why you must pass a
+     * list of names of those member variables.
+     *
+     * \param ptr_members List of instance struct member names.
+     */
+    virtual void print_instance_struct_transfer_routines(
+        std::vector<std::string> const& /* ptr_members */) {}
+
+
+    /**
+     * Transfer the instance struct to the device. This calls a function
+     * declared by \ref print_instance_struct_transfer_routine_declarations.
+     */
+    virtual void print_instance_struct_copy_to_device() {}
+
+
+    /**
+     * Delete the instance struct from the device. This calls a function
+     * declared by \ref print_instance_struct_transfer_routine_declarations.
+     */
+    virtual void print_instance_struct_delete_from_device() {}
+
+
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
     /****************************************************************************************/
@@ -998,18 +1233,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Generate the string representing the procedure parameter declaration
-     *
-     * The procedure parameters are stored in a vector of 4-tuples each representing a parameter.
-     *
-     * \param params The parameters that should be concatenated into the function parameter
-     * declaration
-     * \return The string representing the declaration of function parameters
-     */
-    static std::string get_parameter_str(const ParamVector& params);
-
-
-    /**
      * Check if a structure for ion variables is required
      * \return \c true if a structure fot ion variables must be generated
      */
@@ -1052,206 +1275,11 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Return the name of main compute kernels
-     * \param type A block type
-     */
-    virtual std::string compute_method_name(BlockType type) const;
-
-
-    /**
-     * Instantiate global var instance
-     *
-     * For C++ code generation this is empty
-     * \return ""
-     */
-    virtual void print_global_var_struct_decl();
-
-
-    /**
-     * Prints the start of namespace for the backend-specific code
-     *
-     * For the C++ backend no additional namespace is required
-     */
-    virtual void print_backend_namespace_start();
-
-
-    /**
-     * Prints the end of namespace for the backend-specific code
-     *
-     * For the C++ backend no additional namespace is required
-     */
-    virtual void print_backend_namespace_stop();
-
-
-    /**
-     * Print memory allocation routine
-     */
-    virtual void print_memory_allocation_routine() const;
-
-
-    /**
-     * Print backend specific abort routine
-     */
-    virtual void print_abort_routine() const;
-
-
-    /**
-     * Print backend specific includes (none needed for C++ backend)
-     */
-    virtual void print_backend_includes();
-
-
-    /**
-     * Check if ion variable copies should be avoided
-     */
-    bool optimize_ion_variable_copies() const;
-
-
-    /**
-     * Check if reduction block in \c nrn\_cur required
-     */
-    virtual bool nrn_cur_reduction_loop_required();
-
-
-    /**
      * Check if variable is qualified as constant
      * \param name The name of variable
      * \return \c true if it is constant
      */
     virtual bool is_constant_variable(const std::string& name) const;
-
-
-    /**
-     * Print declarations of the functions used by \ref
-     * print_instance_struct_copy_to_device and \ref
-     * print_instance_struct_delete_from_device.
-     */
-    virtual void print_instance_struct_transfer_routine_declarations() {}
-
-    /**
-     * Print the definitions of the functions used by \ref
-     * print_instance_struct_copy_to_device and \ref
-     * print_instance_struct_delete_from_device. Declarations of these functions
-     * are printed by \ref print_instance_struct_transfer_routine_declarations.
-     *
-     * This updates the (pointer) member variables in the device copy of the
-     * instance struct to contain device pointers, which is why you must pass a
-     * list of names of those member variables.
-     *
-     * \param ptr_members List of instance struct member names.
-     */
-    virtual void print_instance_struct_transfer_routines(
-        std::vector<std::string> const& /* ptr_members */) {}
-
-
-    /**
-     * Transfer the instance struct to the device. This calls a function
-     * declared by \ref print_instance_struct_transfer_routine_declarations.
-     */
-    virtual void print_instance_struct_copy_to_device() {}
-
-    /**
-     * Delete the instance struct from the device. This calls a function
-     * declared by \ref print_instance_struct_transfer_routine_declarations.
-     */
-    virtual void print_instance_struct_delete_from_device() {}
-
-
-    /**
-     * Print the code to copy derivative advance flag to device
-     */
-    virtual void print_deriv_advance_flag_transfer_to_device() const;
-
-
-    /**
-     * Print the code to update NetSendBuffer_t count from device to host
-     */
-    virtual void print_net_send_buf_count_update_to_host() const;
-
-    /**
-     * Print the code to update NetSendBuffer_t from device to host
-     */
-    virtual void print_net_send_buf_update_to_host() const;
-
-
-    /**
-     * Print the code to update NetSendBuffer_t count from host to device
-     */
-    virtual void print_net_send_buf_count_update_to_device() const;
-
-    /**
-     * Print the code to update dt from host to device
-     */
-    virtual void print_dt_update_to_device() const;
-
-    /**
-     * Print the code to synchronise/wait on stream specific to NrnThread
-     */
-    virtual void print_device_stream_wait() const;
-
-
-    /**
-     * Print the setup method for setting matrix shadow vectors
-     *
-     */
-    virtual void print_rhs_d_shadow_variables();
-
-
-    /**
-     * Print the backend specific device method annotation
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_device_method_annotation();
-
-
-    /**
-     * Print backend specific global method annotation
-     *
-     * \note This is not used for the C++ backend
-     */
-    virtual void print_global_method_annotation();
-
-
-    /**
-     * Print pragma annotations for channel iterations
-     *
-     * This can be overriden by backends to provide additonal annotations or pragmas to enable
-     * for example SIMD code generation (e.g. through \c ivdep)
-     * The default implementation prints
-     *
-     * \code
-     * #pragma ivdep
-     * \endcode
-     *
-     * \param type The block type
-     */
-    virtual void print_channel_iteration_block_parallel_hint(BlockType type,
-                                                             const ast::Block* block);
-
-
-    /**
-     * Print accelerator annotations indicating data presence on device
-     */
-    virtual void print_kernel_data_present_annotation_block_begin();
-
-
-    /**
-     * Print matching block end of accelerator annotations for data presence on device
-     */
-    virtual void print_kernel_data_present_annotation_block_end();
-
-
-    /**
-     * Print accelerator kernels begin annotation for net_init kernel
-     */
-    virtual void print_net_init_acc_serial_annotation_block_begin();
-
-
-    /**
-     * Print accelerator kernels end annotation for net_init kernel
-     */
-    virtual void print_net_init_acc_serial_annotation_block_end();
 
 
     /**
@@ -1265,35 +1293,10 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print pragma annotation for increase and capture of variable in automatic way
-     */
-    virtual void print_device_atomic_capture_annotation() const;
-
-    /**
-     * Print atomic update pragma for reduction statements
-     */
-    virtual void print_atomic_reduction_pragma() override;
-
-
-    /**
      * Print all reduction statements
      *
      */
     void print_shadow_reduction_statements();
-
-
-    /**
-     * Print the update to matrix elements with/without shadow vectors
-     *
-     */
-    virtual void print_nrn_cur_matrix_shadow_update();
-
-
-    /**
-     * Print the reduction to matrix elements from shadow vectors
-     *
-     */
-    virtual void print_nrn_cur_matrix_shadow_reduction();
 
 
   public:

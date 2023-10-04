@@ -200,7 +200,7 @@ std::vector<ShadowUseStatement> CodegenNeuronCppVisitor::ion_write_statements(Bl
 
 
 /****************************************************************************************/
-/*                      Routines must be overloaded in backend                          */
+/*                                Backend specific routines                             */
 /****************************************************************************************/
 
 

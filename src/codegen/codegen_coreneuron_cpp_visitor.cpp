@@ -44,6 +44,21 @@ using symtab::syminfo::NmodlType;
 extern const std::regex regex_special_chars;
 
 /****************************************************************************************/
+/*                              Generic information getters                             */
+/****************************************************************************************/
+
+
+std::string CodegenCoreneuronCppVisitor::backend_name() const {
+    return "C++ (api-compatibility)";
+}
+
+
+std::string CodegenCoreneuronCppVisitor::simulator_name() {
+    return "CoreNEURON";
+}
+
+
+/****************************************************************************************/
 /*                     Common helper routines accross codegen functions                 */
 /****************************************************************************************/
 
@@ -284,7 +299,7 @@ bool CodegenCoreneuronCppVisitor::is_constant_variable(const std::string& name) 
 
 
 /****************************************************************************************/
-/*                      Routines must be overloaded in backend                          */
+/*                                Backend specific routines                             */
 /****************************************************************************************/
 
 std::string CodegenCoreneuronCppVisitor::get_parameter_str(const ParamVector& params) {
@@ -310,29 +325,36 @@ void CodegenCoreneuronCppVisitor::print_deriv_advance_flag_transfer_to_device() 
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_device_atomic_capture_annotation() const {
     // backend specific, do nothing
 }
+
 
 void CodegenCoreneuronCppVisitor::print_net_send_buf_count_update_to_host() const {
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_net_send_buf_update_to_host() const {
     // backend specific, do nothing
 }
+
 
 void CodegenCoreneuronCppVisitor::print_net_send_buf_count_update_to_device() const {
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_dt_update_to_device() const {
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_device_stream_wait() const {
     // backend specific, do nothing
 }
+
 
 /**
  * \details Each kernel such as \c nrn\_init, \c nrn\_state and \c nrn\_cur could be offloaded
@@ -357,13 +379,16 @@ void CodegenCoreneuronCppVisitor::print_kernel_data_present_annotation_block_end
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_begin() {
     // backend specific, do nothing
 }
 
+
 void CodegenCoreneuronCppVisitor::print_net_init_acc_serial_annotation_block_end() {
     // backend specific, do nothing
 }
+
 
 /**
  * \details Depending programming model and compiler, we print compiler hint
@@ -472,16 +497,6 @@ void CodegenCoreneuronCppVisitor::print_backend_includes() {
 }
 
 
-std::string CodegenCoreneuronCppVisitor::simulator_name() {
-    return "CoreNEURON";
-}
-
-
-std::string CodegenCoreneuronCppVisitor::backend_name() const {
-    return "C++ (api-compatibility)";
-}
-
-
 bool CodegenCoreneuronCppVisitor::optimize_ion_variable_copies() const {
     return optimize_ionvar_copies;
 }
@@ -538,6 +553,7 @@ std::string CodegenCoreneuronCppVisitor::compute_method_name(BlockType type) con
 void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
     printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
 }
+
 
 /****************************************************************************************/
 /*                         Printing routines for code generation                        */
