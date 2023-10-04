@@ -172,6 +172,105 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print call to internal or external function
+     * \param node The AST node representing a function call
+     */
+    void print_function_call(const ast::FunctionCall& node) override;
+
+
+    /**
+     * Print top level (global scope) verbatim blocks
+     */
+    void print_top_verbatim_blocks();
+
+
+    /**
+     * Print function and procedures prototype declaration
+     */
+    void print_function_prototypes();
+
+
+    /**
+     * Check if the given name exist in the symbol
+     * \return \c return a tuple <true, array_length> if variable
+     *            is an array otherwise <false, 0>
+     */
+    std::tuple<bool, int> check_if_var_is_array(const std::string& name);
+
+
+    /**
+     * Print \c check\_function() for functions or procedure using table
+     * \param node The AST node representing a function or procedure block
+     */
+    void print_table_check_function(const ast::Block& node);
+
+
+    /**
+     * Print replacement function for function or procedure using table
+     * \param node The AST node representing a function or procedure block
+     */
+    void print_table_replacement_function(const ast::Block& node);
+
+
+    /**
+     * Print check_table functions
+     */
+    void print_check_table_thread_function();
+
+
+    /**
+     * Print nmodl function or procedure (common code)
+     * \param node the AST node representing the function or procedure in NMODL
+     * \param name the name of the function or procedure
+     */
+    void print_function_or_procedure(const ast::Block& node, const std::string& name);
+
+
+    /**
+     * Common helper function to help printing function or procedure blocks
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    void print_function_procedure_helper(const ast::Block& node);
+
+
+    /**
+     * Print NMODL procedure in target backend code
+     * \param node
+     */
+    virtual void print_procedure(const ast::ProcedureBlock& node);
+
+
+    /**
+     * Print NMODL function in target backend code
+     * \param node
+     */
+    void print_function(const ast::FunctionBlock& node);
+
+
+    /**
+     * Print NMODL function_table in target backend code
+     * \param node
+     */
+    void print_function_tables(const ast::FunctionTableBlock& node);
+
+
+    bool is_functor_const(const ast::StatementBlock& variable_block,
+                          const ast::StatementBlock& functor_block);
+
+
+    /**
+     * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
+     * functor
+     *
+     * \param node \c EigenNewtonSolverBlock for which to print the functor
+     */
+    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
+
+
+    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
+
+
     /****************************************************************************************/
     /*                             Code-specific helper routines                            */
     /****************************************************************************************/
@@ -893,7 +992,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_eigen_newton_solver_block(const ast::EigenNewtonSolverBlock& node) override;
     void visit_eigen_linear_solver_block(const ast::EigenLinearSolverBlock& node) override;
-    virtual void print_eigen_linear_solver(const std::string& float_type, int N);
     void visit_for_netcon(const ast::ForNetcon& node) override;
     virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
@@ -1023,17 +1121,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     virtual bool is_constant_variable(const std::string& name) const;
 
 
-    bool is_functor_const(const ast::StatementBlock& variable_block,
-                          const ast::StatementBlock& functor_block);
-
-    /**
-     * Check if the given name exist in the symbol
-     * \return \c return a tuple <true, array_length> if variable
-     *            is an array otherwise <false, 0>
-     */
-    std::tuple<bool, int> check_if_var_is_array(const std::string& name);
-
-
     /**
      * Print declarations of the functions used by \ref
      * print_instance_struct_copy_to_device and \ref
@@ -1127,13 +1214,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print call to internal or external function
-     * \param node The AST node representing a function call
-     */
-    void print_function_call(const ast::FunctionCall& node) override;
-
-
-    /**
      * Print pragma annotations for channel iterations
      *
      * This can be overriden by backends to provide additonal annotations or pragmas to enable
@@ -1172,39 +1252,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print accelerator kernels end annotation for net_init kernel
      */
     virtual void print_net_init_acc_serial_annotation_block_end();
-
-
-    /**
-     * Print function and procedures prototype declaration
-     */
-    void print_function_prototypes();
-
-
-    /**
-     * Print check_table functions
-     */
-    void print_check_table_thread_function();
-
-
-    /**
-     * Print nmodl function or procedure (common code)
-     * \param node the AST node representing the function or procedure in NMODL
-     * \param name the name of the function or procedure
-     */
-    void print_function_or_procedure(const ast::Block& node, const std::string& name);
-
-
-    /**
-     * Common helper function to help printing function or procedure blocks
-     * \param node the AST node representing the function or procedure in NMODL
-     */
-    void print_function_procedure_helper(const ast::Block& node);
-
-
-    /**
-     * Print top level (global scope) verbatim blocks
-     */
-    void print_top_verbatim_blocks();
 
 
     /**
@@ -1310,56 +1357,12 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print \c check\_function() for functions or procedure using table
-     * \param node The AST node representing a function or procedure block
-     */
-    void print_table_check_function(const ast::Block& node);
-
-
-    /**
-     * Print replacement function for function or procedure using table
-     * \param node The AST node representing a function or procedure block
-     */
-    void print_table_replacement_function(const ast::Block& node);
-
-
-    /**
-     * Print NMODL function in target backend code
-     * \param node
-     */
-    void print_function(const ast::FunctionBlock& node);
-
-
-    /**
-     * Print NMODL function_table in target backend code
-     * \param node
-     */
-    void print_function_tables(const ast::FunctionTableBlock& node);
-
-
-    /**
-     * Print NMODL procedure in target backend code
-     * \param node
-     */
-    virtual void print_procedure(const ast::ProcedureBlock& node);
-
-
-    /**
      * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
      * nmodl::visitor::SympySolverVisitor
      * \param original_name Original name of variable to change
      * \return std::string Unique name produced as [original_name]_[random_string]
      */
     std::string find_var_unique_name(const std::string& original_name) const;
-
-
-    /**
-     * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
-     * functor
-     *
-     * \param node \c EigenNewtonSolverBlock for which to print the functor
-     */
-    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
 };
 
