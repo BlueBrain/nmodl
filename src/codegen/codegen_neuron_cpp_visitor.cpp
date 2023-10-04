@@ -1243,29 +1243,5 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     codegen = false;
 }
 
-
-void CodegenNeuronCppVisitor::setup(const Program& node) {
-    program_symtab = node.get_symbol_table();
-
-    CodegenHelperVisitor v;
-    info = v.analyze(node);
-    info.mod_file = mod_filename;
-
-    if (!info.vectorize) {
-        logger->warn("CodegenNeuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
-    }
-
-    codegen_float_variables = get_float_variables();
-    codegen_int_variables = get_int_variables();
-
-    update_index_semantics();
-}
-
-
-void CodegenNeuronCppVisitor::visit_program(const Program& node) {
-    setup(node);
-    print_codegen_routines();
-}
-
 }  // namespace codegen
 }  // namespace nmodl

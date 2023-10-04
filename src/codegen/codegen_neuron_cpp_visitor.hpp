@@ -115,6 +115,22 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     int int_variables_size() const;
 
 
+    /**
+     * Determine the position in the data array for a given float variable
+     * \param name The name of a float variable
+     * \return     The position index in the data array
+     */
+    int position_of_float_var(const std::string& name) const override;
+
+
+    /**
+     * Determine the position in the data array for a given int variable
+     * \param name The name of an int variable
+     * \return     The position index in the data array
+     */
+    int position_of_int_var(const std::string& name) const override;
+
+
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/
@@ -140,31 +156,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
-    /****************************************************************************************/
-    /*                      Main printing routines for code generation                      */
-    /****************************************************************************************/
-
-
-    /****************************************************************************************/
-    /*                                 Print nrn_state routine                              */
-    /****************************************************************************************/
-
-
-    /****************************************************************************************/
-    /*                              Print nrn_cur related routines                          */
-    /****************************************************************************************/
-
-
-    /****************************************************************************************/
-    /*                              Main code printing entry points                         */
-    /****************************************************************************************/
-
-
-    /****************************************************************************************/
-    /*                            Overloaded visitor routines                               */
-    /****************************************************************************************/
-
-    /**
+        /**
      * Determine the name of a \c float variable given its symbol
      *
      * This function typically returns the accessor expression in backend code for the given symbol.
@@ -217,6 +209,31 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
+
+
+    /****************************************************************************************/
+    /*                      Main printing routines for code generation                      */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                                 Print nrn_state routine                              */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Print nrn_cur related routines                          */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                              Main code printing entry points                         */
+    /****************************************************************************************/
+
+
+    /****************************************************************************************/
+    /*                            Overloaded visitor routines                               */
+    /****************************************************************************************/
 
 
     /**
@@ -534,22 +551,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine the position in the data array for a given float variable
-     * \param name The name of a float variable
-     * \return     The position index in the data array
-     */
-    int position_of_float_var(const std::string& name) const override;
-
-
-    /**
-     * Determine the position in the data array for a given int variable
-     * \param name The name of an int variable
-     * \return     The position index in the data array
-     */
-    int position_of_int_var(const std::string& name) const override;
-
-
-    /**
      * Print the mechanism registration function
      *
      */
@@ -628,7 +629,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print entry point to code generation
      *
      */
-    virtual void print_codegen_routines();
+    void print_codegen_routines() override;
 
 
   public:
@@ -676,12 +677,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
                             const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
-    /**
-     * Main and only member function to call after creating an instance of this class.
-     * \param program the AST to translate to C++ code
-     */
-    void visit_program(const ast::Program& program) override;
-
 
     /**
      * Print nrn_state / state update function definition
@@ -701,14 +696,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param node
      */
     virtual void print_procedure(const ast::ProcedureBlock& node);
-
-
-    /** Setup the target backend code generator
-     *
-     * Typically called from within \c visit\_program but may be called from
-     * specialized targets to setup this Code generator as fallback.
-     */
-    void setup(const ast::Program& node);
 
 
     /**

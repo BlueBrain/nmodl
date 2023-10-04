@@ -162,36 +162,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     int position_of_int_var(const std::string& name) const override;
 
 
-    /**
-     * Checks if given function name is \c net_send
-     * \param name The function name to check
-     * \return     \c true if the function is net_send
-     */
-    bool is_net_send(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_SEND_METHOD;
-    }
-
-
-    /**
-     * Checks if given function name is \c net_move
-     * \param name The function name to check
-     * \return     \c true if the function is net_move
-     */
-    bool is_net_move(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_MOVE_METHOD;
-    }
-
-
-    /**
-     * Checks if given function name is \c net_event
-     * \param name The function name to check
-     * \return     \c true if the function is net_event
-     */
-    bool is_net_event(const std::string& name) const noexcept {
-        return name == codegen::naming::NET_EVENT_METHOD;
-    }
-
-
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/
@@ -280,6 +250,15 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
 
 
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C++
+     */
+    std::string breakpoint_current(std::string current) const;
+
+
     /****************************************************************************************/
     /*                      Main printing routines for code generation                      */
     /****************************************************************************************/
@@ -312,35 +291,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void visit_for_netcon(const ast::ForNetcon& node) override;
     virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
-
-
-    /**
-     * Determine the variable name for the "current" used in breakpoint block taking into account
-     * intermediate code transformations.
-     * \param current The variable name for the current used in the model
-     * \return        The name for the current to be printed in C++
-     */
-    std::string breakpoint_current(std::string current) const;
-
-
-    /**
-     * populate all index semantics needed for registration with coreneuron
-     */
-    void update_index_semantics();
-
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    std::vector<SymbolType> get_float_variables() const;
-
-
-    /**
-     * Determine all \c int variables required during code generation
-     * \return A \c vector of \c int variables
-     */
-    std::vector<IndexVariableInfo> get_int_variables();
 
 
     /**
@@ -1227,7 +1177,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print entry point to code generation
      *
      */
-    virtual void print_codegen_routines();
+    virtual void print_codegen_routines() override;
 
 
   public:
@@ -1275,11 +1225,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
                                 const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
-    /**
-     * Main and only member function to call after creating an instance of this class.
-     * \param program the AST to translate to C++ code
-     */
-    void visit_program(const ast::Program& program) override;
 
     /**
      * Print the \c nrn\_init function definition
@@ -1367,13 +1312,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param block_id Index of the before/after block
      */
     virtual void print_before_after_block(const ast::Block* node, size_t block_id);
-
-    /** Setup the target backend code generator
-     *
-     * Typically called from within \c visit\_program but may be called from
-     * specialized targets to setup this Code generator as fallback.
-     */
-    void setup(const ast::Program& node);
 
 
     /**

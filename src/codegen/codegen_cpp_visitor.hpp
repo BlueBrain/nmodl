@@ -441,6 +441,36 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Checks if given function name is \c net_send
+     * \param name The function name to check
+     * \return     \c true if the function is net_send
+     */
+    bool is_net_send(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_SEND_METHOD;
+    }
+
+
+    /**
+     * Checks if given function name is \c net_move
+     * \param name The function name to check
+     * \return     \c true if the function is net_move
+     */
+    bool is_net_move(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_MOVE_METHOD;
+    }
+
+
+    /**
+     * Checks if given function name is \c net_event
+     * \param name The function name to check
+     * \return     \c true if the function is net_event
+     */
+    bool is_net_event(const std::string& name) const noexcept {
+        return name == codegen::naming::NET_EVENT_METHOD;
+    }
+
+
+    /**
      * Determine the position in the data array for a given float variable
      * \param name The name of a float variable
      * \return     The position index in the data array
@@ -470,6 +500,26 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return      Its string representation
      */
     std::string format_float_string(const std::string& value);
+
+
+    /**
+     * populate all index semantics needed for registration with coreneuron
+     */
+    void update_index_semantics();
+
+
+    /**
+     * Determine all \c float variables required during code generation
+     * \return A \c vector of \c float variables
+     */
+    std::vector<SymbolType> get_float_variables() const;
+
+
+    /**
+     * Determine all \c int variables required during code generation
+     * \return A \c vector of \c int variables
+     */
+    std::vector<IndexVariableInfo> get_int_variables();
 
 
     /****************************************************************************************/
@@ -693,6 +743,13 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_mechanism_register() = 0;
 
 
+    /**
+     * Print entry point to code generation
+     *
+     */
+    virtual void print_codegen_routines() = 0;
+
+
     /****************************************************************************************/
     /*                                  Protected constructors                              */
     /****************************************************************************************/
@@ -750,6 +807,24 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_protect_statement(const ast::ProtectStatement& node) override;
     void visit_mutex_lock(const ast::MutexLock& node) override;
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+
+
+public:
+
+    /** Setup the target backend code generator
+     *
+     * Typically called from within \c visit\_program but may be called from
+     * specialized targets to setup this Code generator as fallback.
+     */
+    void setup(const ast::Program& node);
+
+
+    /**
+     * Main and only member function to call after creating an instance of this class.
+     * \param program the AST to translate to C++ code
+     */
+    void visit_program(const ast::Program& program) override;
+
 };
 
 /* Templated functions need to be defined in header file */
@@ -765,6 +840,7 @@ void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
         }
     }
 }
+
 
 /** \} */  // end of codegen_backends
 
