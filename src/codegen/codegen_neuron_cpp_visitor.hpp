@@ -104,18 +104,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Number of float variables in the model
-     */
-    int float_variables_size() const;
-
-
-    /**
-     * Number of integer variables in the model
-     */
-    int int_variables_size() const;
-
-
-    /**
      * Determine the position in the data array for a given float variable
      * \param name The name of a float variable
      * \return     The position index in the data array
@@ -129,6 +117,18 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \return     The position index in the data array
      */
     int position_of_int_var(const std::string& name) const override;
+
+
+    /**
+     * Number of float variables in the model
+     */
+    int float_variables_size() const;
+
+
+    /**
+     * Number of integer variables in the model
+     */
+    int int_variables_size() const;
 
 
     /****************************************************************************************/

@@ -135,18 +135,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Number of float variables in the model
-     */
-    int float_variables_size() const;
-
-
-    /**
-     * Number of integer variables in the model
-     */
-    int int_variables_size() const;
-
-
-    /**
      * Determine the position in the data array for a given float variable
      * \param name The name of a float variable
      * \return     The position index in the data array
@@ -160,6 +148,77 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return     The position index in the data array
      */
     int position_of_int_var(const std::string& name) const override;
+
+
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C++
+     */
+    std::string breakpoint_current(std::string current) const;
+
+
+    /**
+     * Number of float variables in the model
+     */
+    int float_variables_size() const;
+
+
+    /**
+     * Number of integer variables in the model
+     */
+    int int_variables_size() const;
+
+
+    /**
+     * For a given output block type, return statements for all read ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the reading of ion variables
+     */
+    std::vector<std::string> ion_read_statements(BlockType type) const;
+
+
+    /**
+     * For a given output block type, return minimal statements for all read ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the reading of ion variables
+     */
+    std::vector<std::string> ion_read_statements_optimized(BlockType type) const;
+
+
+    /**
+     * For a given output block type, return statements for writing back ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the write-back of ion variables
+     */
+    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
+
+
+    /**
+     * Process a token in a verbatim block for possible variable renaming
+     * \param token The verbatim token to be processed
+     * \return      The code after variable renaming
+     */
+    std::string process_verbatim_token(const std::string& token);
+
+
+    /**
+     * Check if a structure for ion variables is required
+     * \return \c true if a structure fot ion variables must be generated
+     */
+    bool ion_variable_struct_required() const;
+
+
+    /**
+     * Check if variable is qualified as constant
+     * \param name The name of variable
+     * \return \c true if it is constant
+     */
+    virtual bool is_constant_variable(const std::string& name) const;
 
 
     /****************************************************************************************/
@@ -761,15 +820,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
 
 
-    /**
-     * Determine the variable name for the "current" used in breakpoint block taking into account
-     * intermediate code transformations.
-     * \param current The variable name for the current used in the model
-     * \return        The name for the current to be printed in C++
-     */
-    std::string breakpoint_current(std::string current) const;
-
-
     /****************************************************************************************/
     /*                      Main printing routines for code generation                      */
     /****************************************************************************************/
@@ -1231,57 +1281,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 
-
-    /**
-     * Check if a structure for ion variables is required
-     * \return \c true if a structure fot ion variables must be generated
-     */
-    bool ion_variable_struct_required() const;
-
-
-    /**
-     * Process a token in a verbatim block for possible variable renaming
-     * \param token The verbatim token to be processed
-     * \return      The code after variable renaming
-     */
-    std::string process_verbatim_token(const std::string& token);
-
-
-    /**
-     * For a given output block type, return statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return minimal statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements_optimized(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return statements for writing back ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the write-back of ion variables
-     */
-    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
-
-
-    /**
-     * Check if variable is qualified as constant
-     * \param name The name of variable
-     * \return \c true if it is constant
-     */
-    virtual bool is_constant_variable(const std::string& name) const;
-
-
     /**
      * Print prototype declarations of functions or procedures
      * \tparam T   The AST node type of the node (must be of nmodl::ast::Ast or subclass)
@@ -1290,13 +1289,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     template <typename T>
     void print_function_declaration(const T& node, const std::string& name);
-
-
-    /**
-     * Print all reduction statements
-     *
-     */
-    void print_shadow_reduction_statements();
 
 
   public:
@@ -1344,6 +1336,12 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
                                 const bool optimize_ionvar_copies)
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
+
+    /****************************************************************************************/
+    /*          Public printing routines for code generation for use in unit tests          */
+    /****************************************************************************************/
+
+
     /**
      * Print the function that initialize instance structure
      */
@@ -1357,15 +1355,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *                           be included in the struct declaration.
      */
     void print_mechanism_range_var_structure(bool print_initializers);
-
-
-    /**
-     * Find unique variable name defined in nmodl::utils::SingletonRandomString by the
-     * nmodl::visitor::SympySolverVisitor
-     * \param original_name Original name of variable to change
-     * \return std::string Unique name produced as [original_name]_[random_string]
-     */
-    std::string find_var_unique_name(const std::string& original_name) const;
 
 };
 
