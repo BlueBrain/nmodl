@@ -31,6 +31,7 @@
  * 5. Check if an independent variable is not 't'.
  * 6. Check that mutex are not badly use
  * 7. Check than function table got at least one argument.
+ * 8. Check that the RANDOM variable declaration has a valid distribution
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -54,6 +55,13 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     bool is_point_process = false;
     /// true if we are inside a mutex locked part
     bool in_mutex = false;
+
+
+    const std::map<std::string, int> distributions = {
+        {"UNIFORM", 2},
+        {"NEGEXP", 1},
+        {"NORMAL", 2},
+    };
 
     /// Store if we are in a procedure and if the arity of this is 1
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
@@ -81,6 +89,9 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Look if MUTEXUNLOCK is outside a locked block
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+
+    /// Check that random declaration has a valid distribution
+    void visit_random(const ast::Random& node) override;
 
   public:
     SemanticAnalysisVisitor(bool accel_backend = false)

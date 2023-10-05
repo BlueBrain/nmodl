@@ -24,6 +24,7 @@
 #include <string_view>
 #include <utility>
 
+#include "ast/random_var.hpp"
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "printer/code_printer.hpp"
@@ -637,6 +638,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Return a vector of symbols of the random variables
+     */
+    std::vector<SymbolType> get_random_vars() const;
+
+    /**
      * Print the items in a vector as a list
      *
      * This function prints a given vector of elements as a list with given separator onto the
@@ -775,7 +781,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Parameters for internally defined functions
      * \return the method parameters
      */
-    ParamVector internal_method_parameters();
+    ParamVector internal_method_parameters() const;
 
 
     /**
@@ -906,6 +912,15 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print memory allocation routine
      */
     virtual void print_memory_allocation_routine() const;
+
+
+    /**
+     * Print callback from HOC/Python to initialize random var streams
+     */
+    virtual void print_random_vars_init() const;
+
+
+    virtual void print_random_var_sample(const SymbolType& random_var);
 
 
     /**
@@ -1149,7 +1164,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      * \note This is not used for the C++ backend
      */
-    virtual void print_device_method_annotation();
+    virtual void print_device_method_annotation() const;
 
 
     /**

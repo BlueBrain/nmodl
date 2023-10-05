@@ -165,3 +165,17 @@ SCENARIO("FUNCTION_TABLE block", "[visitor][semantic_analysis]") {
         }
     }
 }
+
+
+SCENARIO("RANDOM variable declrations has invalid distributions", "[visitor][semantic_analysis]") {
+    GIVEN("Wrong number of parameters to the RANDOM distribution type") {
+        THEN("parser throws an error") {
+            std::string construct = R"(
+            NEURON {
+                RANDOM NORMAL(1.0) nr1, nr2
+            }
+            )";
+            REQUIRE(run_semantic_analysis_visitor(construct));
+        }
+    }
+}

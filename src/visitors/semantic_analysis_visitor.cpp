@@ -11,6 +11,7 @@
 #include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
+#include "ast/random.hpp"
 #include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
@@ -169,6 +170,28 @@ void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node
     in_mutex = false;
     /// -->
 }
+
+
+void SemanticAnalysisVisitor::visit_random(const ast::Random& node) {
+    /// <-- This code is for check 8
+    auto distribution = node.get_distribution();
+    auto distribution_name = distribution->get_node_name();
+    auto& params = node.get_distribution_params();
+    if (distributions.find(distribution_name) != distributions.end()) {
+        if (distributions.at(distribution_name) != params.size()) {
+            logger->error("SemanticAnalysisVisitor :: {} declared with {} instead of {} parameters",
+                            distribution_name,
+                            params.size(),
+                            distributions.at(distribution_name));
+            check_fail = true;
+        }
+    } else {
+      logger->error("SemanticAnalysisVisitor :: random distribution {} unknown", distribution_name);
+      check_fail = true;
+    }
+    /// -->
+}
+
 
 }  // namespace visitor
 }  // namespace nmodl

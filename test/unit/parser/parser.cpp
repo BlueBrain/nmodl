@@ -21,8 +21,8 @@
 #include "test/unit/utils/nmodl_constructs.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "utils/common_utils.hpp"
-#include "visitors/check_random_statement_visitor.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/semantic_analysis_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
@@ -288,7 +288,6 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
             )";
             nmodl::parser::NmodlDriver driver;
             auto ast = driver.parse_string(construct);
-            nmodl::visitor::CheckRandomStatementVisitor().visit_program(*ast);
             const auto& random_statements = nmodl::collect_nodes(*ast,
                                                                  {nmodl::ast::AstNodeType::RANDOM});
 
@@ -305,20 +304,6 @@ SCENARIO("NEURON block can add RANDOM variable", "[parser][random]") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { RANDOM UNIFORM ur1, ur2 }"),
                                 Catch::Matchers::ContainsSubstring("Parser Error"));
-        }
-    }
-    GIVEN("Wrong number of parameters to the RANDOM distribution type") {
-        THEN("parser throws an error") {
-            std::string construct = R"(
-            NEURON {
-                RANDOM NORMAL(1.0) nr1, nr2
-            }
-            )";
-            nmodl::parser::NmodlDriver driver;
-            auto ast = driver.parse_string(construct);
-            REQUIRE_THROWS_WITH(nmodl::visitor::CheckRandomStatementVisitor().visit_program(
-                                    static_cast<const nmodl::ast::Program&>(*ast)),
-                                Catch::Matchers::ContainsSubstring("Validation Error"));
         }
     }
 }

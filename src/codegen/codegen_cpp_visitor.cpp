@@ -968,6 +968,13 @@ std::vector<IndexVariableInfo> CodegenCppVisitor::get_int_variables() {
     return variables;
 }
 
+std::vector<CodegenCppVisitor::SymbolType> CodegenCppVisitor::get_random_vars() const {
+  std::vector<SymbolType> rvs;
+  for (const auto& rv : info.random_vars) {
+    rvs.emplace_back(rv.first);
+  }
+  return rvs;
+}
 
 /****************************************************************************************/
 /*                      Routines must be overloaded in backend                          */
@@ -1132,7 +1139,7 @@ void CodegenCppVisitor::print_atomic_reduction_pragma() {
 }
 
 
-void CodegenCppVisitor::print_device_method_annotation() {
+void CodegenCppVisitor::print_device_method_annotation() const {
     // backend specific, nothing for cpu
 }
 
@@ -1181,6 +1188,50 @@ void CodegenCppVisitor::print_memory_allocation_routine() const {
     printer->push_block("static inline void mem_free(void* ptr)");
     printer->add_line("free(ptr);");
     printer->pop_block();
+}
+
+
+void CodegenCppVisitor::print_random_vars_init() const {
+    printer->add_newline(2);
+    std::string fun_args = fmt::format("void** pv, {}", external_method_parameters(false));
+    printer->fmt_push_block("int inline initrng_{}({})",
+                      info.mod_suffix,
+                      fun_args);
+    printer->add_line("int ret_initrng = 0;");
+    printer->add_line("nrnran123_State** randptr = (nrnran123_State**)(pv[indexes[2*pnodecount + id]]);");
+    printer->push_block("if (*randptr)");
+    printer->add_line("nrnran123_deletestream(*randptr);");
+    printer->add_line("*randptr = nullptr;");
+    printer->pop_block();
+    printer->add_line("*randptr = nrnran123_newstream3((uint32_t)*getarg(1), (uint32_t)*getarg(2), (uint32_t)*getarg(3));");
+    printer->add_line("return ret_initrng;");
+    printer->pop_block();
+}
+
+
+void CodegenCppVisitor::print_random_var_sample(const SymbolType& random_var) {
+    const auto& args = internal_method_parameters();
+    printer->add_newline(2);
+    print_device_method_annotation();
+    printer->fmt_push_block("inline double sample_{}_{}({})",
+                                    random_var->get_name(),                             
+                                    info.mod_suffix,
+                                    get_parameter_str(args));
+    
+    const auto& distribution = info.random_vars[random_var];
+    if (distribution.name == "uniform") {
+      printer->add_line("nrnran123_dblpick(...);");
+    } else if (distribution.name == "negexp") {
+      printer->add_line("nrnran123_negexp(...);");
+    } else if (distribution.name == "normal") {
+      printer->add_line("nrnran123_normal(...);");
+    } else {
+      // error
+      std::cout << "error\n";
+    }
+
+    printer->pop_block();
+
 }
 
 
@@ -1934,7 +1985,7 @@ std::string CodegenCppVisitor::internal_method_arguments() {
 /**
  * @todo: figure out how to correctly handle qualifiers
  */
-CodegenCppVisitor::ParamVector CodegenCppVisitor::internal_method_parameters() {
+CodegenCppVisitor::ParamVector CodegenCppVisitor::internal_method_parameters() const {
     ParamVector params;
     params.emplace_back("", "int", "", "id");
     params.emplace_back("", "int", "", "pnodecount");
@@ -2727,6 +2778,7 @@ void CodegenCppVisitor::print_mechanism_info() {
         }
     };
 
+
     printer->add_newline(2);
     printer->add_line("/** channel information */");
     printer->add_line("static const char *mechanism[] = {");
@@ -2740,6 +2792,8 @@ void CodegenCppVisitor::print_mechanism_info() {
     variable_printer(info.range_state_vars);
     printer->add_line("0,");
     variable_printer(info.pointer_variables);
+    printer->add_line("0,");
+    variable_printer(get_random_vars());
     printer->add_line("0");
     printer->decrease_indent();
     printer->add_line("};");
@@ -3094,6 +3148,11 @@ void CodegenCppVisitor::print_mechanism_range_var_structure(bool print_initializ
         }
     }
 
+    for (const auto& random_var : get_random_vars()) {
+        printer->fmt_line("void** {};", random_var->get_name());
+
+    }
+
     printer->fmt_line("{}* {}{};",
                       global_struct(),
                       naming::INST_GLOBAL_MEMBER,
@@ -3298,6 +3357,10 @@ void CodegenCppVisitor::print_instance_variable_setup() {
         printer->fmt_line("inst->{} = {};", name, variable);
         ptr_members.push_back(std::move(name));
     }
+    for (const auto& rv : get_random_vars()) {
+        printer->fmt_line("inst->{} = nt->_vdata;", rv->get_name());
+    }
+
     print_instance_struct_copy_to_device();
     printer->pop_block();  // setup_instance
     printer->add_newline();
@@ -4643,6 +4706,12 @@ void CodegenCppVisitor::print_codegen_routines() {
     print_global_variables_for_hoc();
     print_common_getters();
     print_memory_allocation_routine();
+    print_random_vars_init();
+    
+    for (const auto& rv : get_random_vars()) {
+      print_random_var_sample(rv);
+    }
+    
     print_abort_routine();
     print_thread_memory_callbacks();
     print_instance_variable_setup();

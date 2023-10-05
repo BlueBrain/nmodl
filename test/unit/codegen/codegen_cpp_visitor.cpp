@@ -105,6 +105,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
               SUFFIX cal
               USEION ca READ cai,cao WRITE ica
               RANGE gcalbar, cai, ica, gcal, ggk
+              RANDOM NEGEXP(1.0) r
               RANGE minf, tau
             }
             STATE {
@@ -145,6 +146,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
                     inst->ion_cao = nt->_data;
                     inst->ion_ica = nt->_data;
                     inst->ion_dicadv = nt->_data;
+                    inst->r = nt->_vdata;
                 }
             )";
             auto const expected = reindent_text(generated_code);
@@ -1178,6 +1180,59 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
 
             REQUIRE_THAT(generated, ContainsSubstring(expected_code_initial));
             REQUIRE_THAT(generated, ContainsSubstring(expected_code_proc));
+        }
+    }
+}
+
+
+SCENARIO("Check codegen for RANDOM variables", "[codegen][random]") {
+    GIVEN("A mod file containing RANDOM") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                SUFFIX TEST
+                RANDOM NEGEXP(1.0) r
+            }
+        )";
+
+        THEN("Code with random number variable declrations is generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_channel_info = R"(static const char *mechanism[] = {
+        "6.2.0",
+        "TEST",
+        0,
+        0,
+        0,
+        0,
+        "r_TEST",
+        0
+    };)";
+            std::string expected_instance_struct = R"(struct TEST_Instance  {
+        double* v_unused{};
+        void** r;
+        TEST_Store* global{&TEST_global};
+    };)";
+            
+            REQUIRE_THAT(generated, ContainsSubstring(expected_channel_info));
+            REQUIRE_THAT(generated, ContainsSubstring(expected_instance_struct));
+
+        }
+        THEN("boilerplate functions for random variable interaction are generated") {
+            auto const generated = get_cpp_code(nmodl_text);
+            std::string expected_init_func = R"(int inline initrng_TEST(void** pv, int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) {
+        int ret_initrng = 0;
+        nrnran123_State** randptr = (nrnran123_State**)(pv[indexes[2*pnodecount + id]]);
+        if (*randptr) {
+            nrnran123_deletestream(*randptr);
+            *randptr = nullptr;
+        }
+        *randptr = nrnran123_newstream3((uint32_t)*getarg(1), (uint32_t)*getarg(2), (uint32_t)*getarg(3));
+        return ret_initrng;
+    })";
+            std::cout << "\n====\n" << expected_init_func;
+            std::cout << "\n====\n";
+            std::cout << generated << std::endl;
+            REQUIRE_THAT(generated, ContainsSubstring(expected_init_func));
+
         }
     }
 }
