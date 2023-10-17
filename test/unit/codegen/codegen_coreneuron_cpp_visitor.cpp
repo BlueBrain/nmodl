@@ -78,7 +78,8 @@ std::string get_instance_var_setup_function(std::string& nmodl_text) {
 }
 
 /// print entire code
-std::string get_cpp_code(const std::string& nmodl_text, const bool generate_gpu_code = false) {
+std::string get_coreneuron_cpp_code(const std::string& nmodl_text,
+                                    const bool generate_gpu_code = false) {
     const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
     if (generate_gpu_code) {
@@ -443,7 +444,7 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
             }
         )";
         THEN("Array and global variables should be correctly generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             REQUIRE_THAT(generated, ContainsSubstring("double t_inf[2][201]{};"));
             REQUIRE_THAT(generated, ContainsSubstring("double t_tau[201]{};"));
 
@@ -480,7 +481,7 @@ SCENARIO("Check code generation for TABLE statements", "[codegen][array_variable
             }
         )";
         THEN("It should throw") {
-            REQUIRE_THROWS(get_cpp_code(nmodl_text));
+            REQUIRE_THROWS(get_coreneuron_cpp_code(nmodl_text));
         }
     }
 }
@@ -515,7 +516,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             }
         )";
         THEN("They should be well registered") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             // BEFORE BREAKPOINT
             {
                 REQUIRE_THAT(generated,
@@ -644,7 +645,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
             AFTER SOLVE {}
         )";
         THEN("They should be all registered") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             REQUIRE_THAT(generated,
                          ContainsSubstring("hoc_reg_ba(mech_type, nrn_before_after_0_ba1, "
                                            "BAType::Before + BAType::Step);"));
@@ -679,7 +680,7 @@ SCENARIO("Check CONSTANT variables are added to global variable structure",
             }
         )";
         THEN("The global struct should contain these variables") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code = R"(
     struct CONST_Store {
         int reset{};
@@ -703,7 +704,7 @@ SCENARIO("Check code generation for FUNCTION_TABLE block", "[codegen][function_t
             FUNCTION_TABLE uuu(l, k)
         )";
         THEN("Code should be generated correctly") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             REQUIRE_THAT(generated, ContainsSubstring("double ttt_glia("));
             REQUIRE_THAT(generated, ContainsSubstring("double table_ttt_glia("));
             REQUIRE_THAT(generated,
@@ -738,7 +739,7 @@ SCENARIO("Check that loops are well generated", "[codegen][loops]") {
             })";
 
         THEN("Correct code is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code = R"(double a, b;
         if (a == 1.0) {
             b = 5.0;
@@ -775,7 +776,7 @@ SCENARIO("Check that top verbatim blocks are well generated", "[codegen][top ver
         )";
 
         THEN("Correct code is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code = R"(using namespace coreneuron;
 
 
@@ -804,7 +805,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         )";
 
         THEN("Correct code is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string cpu_net_send_expected_code =
                 R"(static inline void net_send_buffering(const NrnThread* nt, NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
         int i = 0;
@@ -822,7 +823,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         }
     })";
             REQUIRE_THAT(generated, ContainsSubstring(cpu_net_send_expected_code));
-            auto const gpu_generated = get_cpp_code(nmodl_text, true);
+            auto const gpu_generated = get_coreneuron_cpp_code(nmodl_text, true);
             std::string gpu_net_send_expected_code =
                 R"(static inline void net_send_buffering(const NrnThread* nt, NetSendBuffer_t* nsb, int type, int vdata_index, int weight_index, int point_index, double t, double flag) {
         int i = 0;
@@ -942,7 +943,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             }
         )";
         THEN("It should generate a net_init") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code =
                 R"(static void net_init(Point_process* pnt, int weight_index, double flag) {
         int tid = pnt->_tid;
@@ -974,7 +975,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             }
         )";
         THEN("It should generate a net_send_buffering with weight_index as parameter variable") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code(
                 "net_send_buffering(nt, ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], "
                 "weight_index, point_process, nt->_t+5.0, 1.0);");
@@ -989,7 +990,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             }
         )";
         THEN("It should generate a net_send_buffering with weight_index parameter as 0") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string expected_code(
                 "net_send_buffering(nt, ml->_net_send_buffer, 0, inst->tqitem[0*pnodecount+id], 0, "
                 "point_process, nt->_t+5.0, 1.0);");
@@ -1006,7 +1007,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             }
         )";
         THEN("New code is generated for for_netcons") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string net_receive_kernel_expected_code =
                 R"(static inline void net_receive_kernel_(double t, Point_process* pnt, _Instance* inst, NrnThread* nt, Memb_list* ml, int weight_index, double flag) {
         int tid = pnt->_tid;
@@ -1044,7 +1045,7 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
             }
         )";
         THEN("It should throw") {
-            REQUIRE_THROWS(get_cpp_code(nmodl_text));
+            REQUIRE_THROWS(get_coreneuron_cpp_code(nmodl_text));
         }
     }
 }
@@ -1064,7 +1065,7 @@ SCENARIO("Some tests on derivimplicit", "[codegen][derivimplicit_solver]") {
             }
         )";
         THEN("Correct code is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string newton_state_expected_code = R"(namespace {
         struct _newton_state_ {
             int operator()(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) const {
@@ -1129,7 +1130,7 @@ SCENARIO("Some tests on euler solver", "[codegen][euler_solver]") {
             }
         )";
         THEN("Correct code is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             std::string nrn_state_expected_code = R"(inst->Dm[id] = 2.0 * inst->m[id];
             inf = inf * 3.0;
             inst->Dn[id] = (2.0 + inst->m[id] - inf) * inst->n[id];
@@ -1164,7 +1165,7 @@ SCENARIO("Check codegen for MUTEX and PROTECT", "[codegen][mutex_protect]") {
         )";
 
         THEN("Code with OpenMP critical sections is generated") {
-            auto const generated = get_cpp_code(nmodl_text);
+            auto const generated = get_coreneuron_cpp_code(nmodl_text);
             // critical section for the mutex block
             std::string expected_code_initial = R"(#pragma omp critical (TEST)
                 {
