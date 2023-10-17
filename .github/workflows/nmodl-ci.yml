@@ -79,12 +79,6 @@ jobs:
         run: |
           python3 -m pip install -U pip setuptools
           python3 -m pip install --user -r requirements.txt
-      
-      - name: Install newer CMake for Ubuntu 20.04
-        if: ${{matrix.config.os == 'ubuntu-20.04'}}
-        working-directory: ${{runner.workspace}}/nmodl
-        run: |
-          python3 -m pip install cmake==3.17.3
 
       - name: Register compiler warning problem matcher
         if: ${{matrix.config.flag_warnings == 'ON'}}

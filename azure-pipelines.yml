@@ -93,8 +93,8 @@ stages:
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
       env:
-        CMAKE_VER: 'v3.15.0'
-        CMAKE_PKG: 'cmake-3.15.0-Linux-x86_64'
+        CMAKE_VER: 'v3.17.5'
+        CMAKE_PKG: 'cmake-3.17.5-Linux-x86_64'
       displayName: 'Install Dependencies'
     - script: |
         export PATH=$(pwd)/$CMAKE_PKG/bin:/home/vsts/.local/bin:$PATH
