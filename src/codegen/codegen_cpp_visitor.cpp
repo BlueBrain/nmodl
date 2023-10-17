@@ -656,8 +656,7 @@ void CodegenCppVisitor::update_index_semantics() {
 }
 
 
-std::vector<CodegenCppVisitor::SymbolType>
-CodegenCppVisitor::get_float_variables() const {
+std::vector<CodegenCppVisitor::SymbolType> CodegenCppVisitor::get_float_variables() const {
     // sort with definition order
     auto comparator = [](const SymbolType& first, const SymbolType& second) -> bool {
         return first->get_definition_order() < second->get_definition_order();
@@ -842,7 +841,6 @@ std::vector<IndexVariableInfo> CodegenCppVisitor::get_int_variables() {
 }
 
 
-
 void CodegenCppVisitor::setup(const Program& node) {
     program_symtab = node.get_symbol_table();
 
@@ -851,7 +849,8 @@ void CodegenCppVisitor::setup(const Program& node) {
     info.mod_file = mod_filename;
 
     if (!info.vectorize) {
-        logger->warn("CodegenCoreneuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
+        logger->warn(
+            "CodegenCoreneuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
     }
 
     codegen_float_variables = get_float_variables();

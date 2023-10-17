@@ -387,22 +387,22 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     /// TODO: Write HocParmLimits and other HOC global variables (delta_t)
     // Probably needs more changes
     auto variable_printer =
-    [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
-        for (const auto& variable: variables) {
-            if (variable->is_array() == if_array) {
-                // false => do not use the instance struct, which is not
-                // defined in the global declaration that we are printing
-                auto name = get_variable_name(variable->get_name(), false);
-                auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
-                auto length = variable->get_length();
-                if (if_vector) {
-                    printer->fmt_line("{{{}, {}, {}}},", ename, name, length);
-                } else {
-                    printer->fmt_line("{{{}, &{}}},", ename, name);
+        [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
+            for (const auto& variable: variables) {
+                if (variable->is_array() == if_array) {
+                    // false => do not use the instance struct, which is not
+                    // defined in the global declaration that we are printing
+                    auto name = get_variable_name(variable->get_name(), false);
+                    auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
+                    auto length = variable->get_length();
+                    if (if_vector) {
+                        printer->fmt_line("{{{}, {}, {}}},", ename, name, length);
+                    } else {
+                        printer->fmt_line("{{{}, &{}}},", ename, name);
+                    }
                 }
             }
-        }
-    };
+        };
 
     auto globals = info.global_variables;
     auto thread_vars = info.thread_variables;
@@ -431,7 +431,6 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->decrease_indent();
     printer->add_line("};");
 }
-
 
 
 void CodegenNeuronCppVisitor::print_mechanism_register() {
@@ -711,7 +710,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_mechanism_info();
     print_data_structures(true);
     print_global_variables_for_hoc();
-    print_compute_functions();    // only nrn_cur and nrn_state
+    print_compute_functions();  // only nrn_cur and nrn_state
     print_mechanism_register();
     print_namespace_end();
     codegen = false;
@@ -721,7 +720,6 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
 /****************************************************************************************/
 /*                            Overloaded visitor routines                               */
 /****************************************************************************************/
-
 
 
 /// TODO: Edit for NEURON

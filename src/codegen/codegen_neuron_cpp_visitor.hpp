@@ -62,7 +62,6 @@ using printer::CodePrinter;
  */
 class CodegenNeuronCppVisitor: public CodegenCppVisitor {
   protected:
-
     /****************************************************************************************/
     /*                                    Member variables                                  */
     /****************************************************************************************/
@@ -250,7 +249,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
-        /**
+    /**
      * Determine the name of a \c float variable given its symbol
      *
      * This function typically returns the accessor expression in backend code for the given symbol.
@@ -611,7 +610,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *                           be included in the struct declaration.
      */
     void print_mechanism_range_var_structure(bool print_initializers) override;
-
 };
 
 

@@ -179,7 +179,6 @@ using printer::CodePrinter;
  */
 class CodegenCppVisitor: public visitor::ConstAstVisitor {
   protected:
-
     using SymbolType = std::shared_ptr<symtab::Symbol>;
 
 
@@ -1105,8 +1104,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 
 
-public:
-
+  public:
     /** Setup the target backend code generator
      *
      * Typically called from within \c visit\_program but may be called from
@@ -1134,7 +1132,6 @@ public:
      *                           be included in the struct declaration.
      */
     virtual void print_mechanism_range_var_structure(bool print_initializers) = 0;
-
 };
 
 /* Templated functions need to be defined in header file */

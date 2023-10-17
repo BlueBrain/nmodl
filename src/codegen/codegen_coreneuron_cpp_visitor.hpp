@@ -61,7 +61,6 @@ using printer::CodePrinter;
  */
 class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
   protected:
-
     /****************************************************************************************/
     /*                                    Member variables                                  */
     /****************************************************************************************/
@@ -253,7 +252,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     virtual void print_device_stream_wait() const;
 
 
-        /**
+    /**
      * Print accelerator annotations indicating data presence on device
      */
     virtual void print_kernel_data_present_annotation_block_begin();
@@ -944,7 +943,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void print_functors_definitions();
 
 
-
     /**
      * Print nrn_alloc function definition
      *
@@ -1310,7 +1308,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      *                           be included in the struct declaration.
      */
     void print_mechanism_range_var_structure(bool print_initializers) override;
-
 };
 
 
