@@ -14,30 +14,15 @@
 #include <regex>
 
 #include "ast/all.hpp"
-#include "codegen/codegen_helper_visitor.hpp"
-#include "codegen/codegen_naming.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "config/config.h"
-#include "lexer/token_mapping.hpp"
-#include "parser/c11_driver.hpp"
-#include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
-#include "visitors/defuse_analyze_visitor.hpp"
-#include "visitors/rename_visitor.hpp"
-#include "visitors/symtab_visitor.hpp"
-#include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace codegen {
 
 using namespace ast;
-
-using visitor::DefUseAnalyzeVisitor;
-using visitor::DUState;
-using visitor::RenameVisitor;
-using visitor::SymtabVisitor;
-using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
 
