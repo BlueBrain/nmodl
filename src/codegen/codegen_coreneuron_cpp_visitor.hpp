@@ -61,19 +61,6 @@ using printer::CodePrinter;
  */
 class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
   protected:
-    using SymbolType = std::shared_ptr<symtab::Symbol>;
-
-    /**
-     * A vector of parameters represented by a 4-tuple of strings:
-     *
-     * - type qualifier (e.g. \c const)
-     * - type (e.g. \c double)
-     * - pointer qualifier (e.g. \c \_\_restrict\_\_)
-     * - parameter name (e.g. \c data)
-     *
-     */
-    using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
-
 
     /****************************************************************************************/
     /*                                    Member variables                                  */
@@ -157,18 +144,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \return        The name for the current to be printed in C++
      */
     std::string breakpoint_current(std::string current) const;
-
-
-    /**
-     * Number of float variables in the model
-     */
-    int float_variables_size() const;
-
-
-    /**
-     * Number of integer variables in the model
-     */
-    int int_variables_size() const;
 
 
     /**
@@ -574,21 +549,21 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Arguments for functions that are defined and used internally.
      * \return the method arguments
      */
-    std::string internal_method_arguments();
+    std::string internal_method_arguments() override;
 
 
     /**
      * Parameters for internally defined functions
      * \return the method parameters
      */
-    ParamVector internal_method_parameters();
+    ParamVector internal_method_parameters() override;
 
 
     /**
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    static const char* external_method_arguments() noexcept;
+    const char* external_method_arguments() noexcept override;
 
 
     /**
@@ -600,7 +575,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    static const char* external_method_parameters(bool table = false) noexcept;
+    const char* external_method_parameters(bool table = false) noexcept override;
 
 
     /**

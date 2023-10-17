@@ -179,7 +179,20 @@ using printer::CodePrinter;
  */
 class CodegenCppVisitor: public visitor::ConstAstVisitor {
   protected:
+
     using SymbolType = std::shared_ptr<symtab::Symbol>;
+
+
+    /**
+     * A vector of parameters represented by a 4-tuple of strings:
+     *
+     * - type qualifier (e.g. \c const)
+     * - type (e.g. \c double)
+     * - pointer qualifier (e.g. \c \_\_restrict\_\_)
+     * - parameter name (e.g. \c data)
+     *
+     */
+    using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
     /****************************************************************************************/
@@ -487,6 +500,18 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Number of float variables in the model
+     */
+    int float_variables_size() const;
+
+
+    /**
+     * Number of integer variables in the model
+     */
+    int int_variables_size() const;
+
+
+    /**
      * Convert a given \c double value to its string representation
      * \param value The number to convert given as string as it is parsed by the modfile
      * \return      Its string representation
@@ -587,6 +612,39 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /****************************************************************************************/
     /*                             Code-specific helper routines                            */
     /****************************************************************************************/
+
+
+    /**
+     * Arguments for functions that are defined and used internally.
+     * \return the method arguments
+     */
+    virtual std::string internal_method_arguments() = 0;
+
+
+    /**
+     * Parameters for internally defined functions
+     * \return the method parameters
+     */
+    virtual ParamVector internal_method_parameters() = 0;
+
+
+    /**
+     * Arguments for external functions called from generated code
+     * \return A string representing the arguments passed to an external function
+     */
+    virtual const char* external_method_arguments() noexcept = 0;
+
+
+    /**
+     * Parameters for functions in generated code that are called back from external code
+     *
+     * Functions registered in NEURON during initialization for callback must adhere to a prescribed
+     * calling convention. This method generates the string representing the function parameters for
+     * these externally called functions.
+     * \param table
+     * \return      A string representing the parameters of the function
+     */
+    virtual const char* external_method_parameters(bool table = false) noexcept = 0;
 
 
     /**

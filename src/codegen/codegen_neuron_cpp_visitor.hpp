@@ -62,19 +62,6 @@ using printer::CodePrinter;
  */
 class CodegenNeuronCppVisitor: public CodegenCppVisitor {
   protected:
-    using SymbolType = std::shared_ptr<symtab::Symbol>;
-
-    /**
-     * A vector of parameters represented by a 4-tuple of strings:
-     *
-     * - type qualifier (e.g. \c const)
-     * - type (e.g. \c double)
-     * - pointer qualifier (e.g. \c \_\_restrict\_\_)
-     * - parameter name (e.g. \c data)
-     *
-     */
-    using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
-
 
     /****************************************************************************************/
     /*                                    Member variables                                  */
@@ -120,15 +107,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Number of float variables in the model
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C++
      */
-    int float_variables_size() const;
-
-
-    /**
-     * Number of integer variables in the model
-     */
-    int int_variables_size() const;
+    std::string breakpoint_current(std::string current) const;
 
 
     /****************************************************************************************/
@@ -297,111 +281,24 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine the variable name for the "current" used in breakpoint block taking into account
-     * intermediate code transformations.
-     * \param current The variable name for the current used in the model
-     * \return        The name for the current to be printed in C++
-     */
-    std::string breakpoint_current(std::string current) const;
-
-
-    /**
-     * populate all index semantics needed for registration with NEURON
-     */
-    void update_index_semantics();
-
-
-    /**
-     * Determine all \c float variables required during code generation
-     * \return A \c vector of \c float variables
-     */
-    std::vector<SymbolType> get_float_variables() const;
-
-
-    /**
-     * Determine all \c int variables required during code generation
-     * \return A \c vector of \c int variables
-     */
-    std::vector<IndexVariableInfo> get_int_variables();
-
-
-    /**
-     * Print any statement block in nmodl with option to (not) print braces
-     *
-     * The individual statements (of type nmodl::ast::Statement) in the StatementBlock are printed
-     * by accepting \c this visistor.
-     *
-     * \param node        A (possibly empty) statement block AST node
-     * \param open_brace  Print an opening brace if \c false
-     * \param close_brace Print a closing brace if \c true
-     */
-    void print_statement_block(const ast::StatementBlock& node,
-                               bool open_brace = true,
-                               bool close_brace = true);
-
-
-    /**
-     * For a given output block type, return statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return minimal statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements_optimized(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return statements for writing back ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the write-back of ion variables
-     */
-    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
-
-
-    /**
-     * Return ion variable name and corresponding ion read variable name
-     * \param name The ion variable name
-     * \return     The ion read variable name
-     */
-    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
-
-
-    /**
-     * Return ion variable name and corresponding ion write variable name
-     * \param name The ion variable name
-     * \return     The ion write variable name
-     */
-    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
-
-
-    /**
      * Arguments for functions that are defined and used internally.
      * \return the method arguments
      */
-    std::string internal_method_arguments();
+    std::string internal_method_arguments() override;
 
 
     /**
      * Parameters for internally defined functions
      * \return the method parameters
      */
-    ParamVector internal_method_parameters();
+    ParamVector internal_method_parameters() override;
 
 
     /**
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    static const char* external_method_arguments() noexcept;
+    const char* external_method_arguments() noexcept override;
 
 
     /**
@@ -413,7 +310,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    static const char* external_method_parameters(bool table = false) noexcept;
+    const char* external_method_parameters(bool table = false) noexcept override;
 
 
     /**
@@ -432,13 +329,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Arguments for "_threadargs_" macro in neuron implementation
      */
     std::string nrn_thread_internal_arguments();
-
-
-    /**
-     * Return the name of main compute kernels
-     * \param type A block type
-     */
-    virtual std::string compute_method_name(BlockType type) const;
 
 
     /**
@@ -474,18 +364,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \endcode
      */
     virtual void print_nmodl_constants();
-
-
-    /**
-     * Print memory allocation routine
-     */
-    virtual void print_memory_allocation_routine() const;
-
-
-    /**
-     * Print backend specific abort routine
-     */
-    virtual void print_abort_routine() const;
 
 
     /**

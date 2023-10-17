@@ -114,17 +114,6 @@ std::string CodegenCoreneuronCppVisitor::breakpoint_current(std::string current)
 }
 
 
-int CodegenCoreneuronCppVisitor::float_variables_size() const {
-    return codegen_float_variables.size();
-}
-
-
-int CodegenCoreneuronCppVisitor::int_variables_size() const {
-    const auto count_semantics = [](int sum, const IndexSemantics& sem) { return sum += sem.size; };
-    return std::accumulate(info.semantics.begin(), info.semantics.end(), 0, count_semantics);
-}
-
-
 /**
  * \details Depending upon the block type, we have to print read/write ion variables
  * during code generation. Depending on block/procedure being printed, this
