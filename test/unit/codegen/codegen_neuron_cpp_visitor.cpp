@@ -47,7 +47,8 @@ std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
 
 
 /// print entire code
-std::string get_neuron_cpp_code(const std::string& nmodl_text, const bool generate_gpu_code = false) {
+std::string get_neuron_cpp_code(const std::string& nmodl_text,
+                                const bool generate_gpu_code = false) {
     const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
     auto cvisitor = create_neuron_cpp_visitor(ast, nmodl_text, ss);
@@ -106,7 +107,9 @@ SCENARIO("Check NEURON codegen for simple MOD file", "[codegen][neuron_boilerpla
                 s' = ar[0]
             }
         )";
-        auto const reindent_and_trim_text = [](const auto& text) { return reindent_text(stringutils::trim(text)); };
+        auto const reindent_and_trim_text = [](const auto& text) {
+            return reindent_text(stringutils::trim(text));
+        };
         auto const generated = reindent_and_trim_text(get_neuron_cpp_code(nmodl_text));
         THEN("Correct includes are printed") {
             std::string expected_includes = R"(#include <math.h>
@@ -121,10 +124,12 @@ SCENARIO("Check NEURON codegen for simple MOD file", "[codegen][neuron_boilerpla
             REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_includes)));
         }
         THEN("Correct number of variables are printed") {
-            std::string expected_num_variables = R"(static constexpr auto number_of_datum_variables = 3;
+            std::string expected_num_variables =
+                R"(static constexpr auto number_of_datum_variables = 3;
 static constexpr auto number_of_floating_point_variables = 10;)";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_num_variables)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_num_variables)));
         }
         THEN("Correct using-directives are printed ") {
             std::string expected_using_directives = R"(namespace {
@@ -143,7 +148,8 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 }
 }  // namespace)";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_using_directives)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_using_directives)));
         }
         THEN("Correct namespace is printed") {
             std::string expected_namespace = R"(namespace neuron {)";
@@ -166,12 +172,15 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         0
     };)";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_channel_info)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_channel_info)));
         }
         THEN("Correct global variables are printed") {
-            std::string expected_global_variables = R"(static neuron::container::field_index _slist1[1], _dlist1[1];)";
+            std::string expected_global_variables =
+                R"(static neuron::container::field_index _slist1[1], _dlist1[1];)";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_global_variables)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_global_variables)));
         }
         THEN("Correct range variables' macros are printed") {
             std::string expected_range_macros = R"(/* NEURON RANGE variables macro definitions */
@@ -186,10 +195,12 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
     #define v_unused(id) _ml->template fpfield<8>(id)
     #define g_unused(id) _ml->template fpfield<9>(id))";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_range_macros)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_range_macros)));
         }
         THEN("Correct HOC global variables are printed") {
-            std::string expected_hoc_global_variables = R"(/** connect global (scalar) variables to hoc -- */
+            std::string expected_hoc_global_variables =
+                R"(/** connect global (scalar) variables to hoc -- */
     static DoubScal hoc_scalar_double[] = {
         {nullptr, nullptr}
     };
@@ -200,17 +211,20 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         {nullptr, nullptr, 0}
     };)";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_hoc_global_variables)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_hoc_global_variables)));
         }
         THEN("Placeholder nrn_cur function is printed") {
             std::string expected_placeholder_nrn_cur = R"(void nrn_cur() {})";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_cur)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_cur)));
         }
         THEN("Placeholder nrn_state function is printed") {
             std::string expected_placeholder_nrn_state = R"(void nrn_state() {})";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));
         }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"(/** register channel with the simulator */
@@ -236,7 +250,8 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
     })";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));
         }
     }
 }
