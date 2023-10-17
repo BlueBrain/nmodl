@@ -81,7 +81,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Name of the code generation backend
      */
-    virtual std::string backend_name() const;
+    virtual std::string backend_name() const override;
 
 
     /**

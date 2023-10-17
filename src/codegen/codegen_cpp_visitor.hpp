@@ -316,6 +316,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Name of the code generation backend
+     */
+    virtual std::string backend_name() const = 0;
+
+
+    /**
      * Data type for the local variables
      */
     const char* local_var_type() const noexcept {

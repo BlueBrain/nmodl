@@ -82,7 +82,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Name of the code generation backend
      */
-    virtual std::string backend_name() const;
+    virtual std::string backend_name() const override;
 
 
     /****************************************************************************************/
@@ -514,7 +514,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print all classes
      * \param print_initializers Whether to include default values.
      */
-    void print_data_structures(bool print_initializers);
+    void print_data_structures(bool print_initializers) override;
 
 
     /**
