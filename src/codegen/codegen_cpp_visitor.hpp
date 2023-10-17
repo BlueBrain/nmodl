@@ -403,6 +403,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Check if net_send_buffer is required
+     */
+    bool net_send_buffer_required() const noexcept;
+
+
+    /**
      * Check if net receive/send buffering kernels required
      */
     bool net_receive_buffering_required() const noexcept;
@@ -424,12 +430,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Check if net_receive function is required
      */
     bool net_receive_required() const noexcept;
-
-
-    /**
-     * Check if net_send_buffer is required
-     */
-    bool net_send_buffer_required() const noexcept;
 
 
     /**

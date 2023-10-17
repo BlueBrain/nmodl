@@ -106,15 +106,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     int position_of_int_var(const std::string& name) const override;
 
 
-    /**
-     * Determine the variable name for the "current" used in breakpoint block taking into account
-     * intermediate code transformations.
-     * \param current The variable name for the current used in the model
-     * \return        The name for the current to be printed in C++
-     */
-    std::string breakpoint_current(std::string current) const;
-
-
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/
