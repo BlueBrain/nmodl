@@ -193,6 +193,18 @@ bool CodegenCppVisitor::need_semicolon(const Statement& node) {
 
 
 /****************************************************************************************/
+/*                      Main printing routines for code generation                      */
+/****************************************************************************************/
+
+
+void CodegenCppVisitor::print_prcellstate_macros() const {
+    printer->add_line("#ifndef NRN_PRCELLSTATE");
+    printer->add_line("#define NRN_PRCELLSTATE 0");
+    printer->add_line("#endif");
+}
+
+
+/****************************************************************************************/
 /*                         Printing routines for code generation                        */
 /****************************************************************************************/
 
@@ -250,6 +262,27 @@ void CodegenCppVisitor::rename_function_arguments() {
             if (has_parameter_of_name(function, arg)) {
                 function->accept(v);
             }
+        }
+    }
+}
+
+
+/****************************************************************************************/
+/*                              Main code printing entry points                         */
+/****************************************************************************************/
+
+
+/**
+ * NMODL constants from unit database
+ *
+ */
+void CodegenCppVisitor::print_nmodl_constants() {
+    if (!info.factor_definitions.empty()) {
+        printer->add_newline(2);
+        printer->add_line("/** constants used in nmodl from UNITS */");
+        for (const auto& it: info.factor_definitions) {
+            const std::string format_string = "static const double {} = {};";
+            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
         }
     }
 }

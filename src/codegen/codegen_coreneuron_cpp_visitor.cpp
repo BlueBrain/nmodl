@@ -1336,22 +1336,6 @@ std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(
 /****************************************************************************************/
 
 
-/**
- * NMODL constants from unit database
- *
- */
-void CodegenCoreneuronCppVisitor::print_nmodl_constants() {
-    if (!info.factor_definitions.empty()) {
-        printer->add_newline(2);
-        printer->add_line("/** constants used in nmodl from UNITS */");
-        for (const auto& it: info.factor_definitions) {
-            const std::string format_string = "static const double {} = {};";
-            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
-        }
-    }
-}
-
-
 void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
     print_device_method_annotation();
@@ -1904,13 +1888,6 @@ void CodegenCoreneuronCppVisitor::print_global_var_struct_assertions() const {
     printer->fmt_line("static_assert(std::is_trivially_copy_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_move_assignable_v<{}>);", global_struct());
     printer->fmt_line("static_assert(std::is_trivially_destructible_v<{}>);", global_struct());
-}
-
-
-void CodegenCoreneuronCppVisitor::print_prcellstate_macros() const {
-    printer->add_line("#ifndef NRN_PRCELLSTATE");
-    printer->add_line("#define NRN_PRCELLSTATE 0");
-    printer->add_line("#endif");
 }
 
 

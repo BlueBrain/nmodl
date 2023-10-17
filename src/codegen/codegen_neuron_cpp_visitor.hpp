@@ -141,7 +141,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print function and procedures prototype declaration
      */
-    void print_function_prototypes();
+    void print_function_prototypes() override;
 
 
     /**
@@ -149,37 +149,28 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param node the AST node representing the function or procedure in NMODL
      * \param name the name of the function or procedure
      */
-    void print_function_or_procedure(const ast::Block& node, const std::string& name);
+    void print_function_or_procedure(const ast::Block& node, const std::string& name) override;
 
 
     /**
      * Common helper function to help printing function or procedure blocks
      * \param node the AST node representing the function or procedure in NMODL
      */
-    void print_function_procedure_helper(const ast::Block& node);
+    void print_function_procedure_helper(const ast::Block& node) override;
 
 
     /**
      * Print NMODL procedure in target backend code
      * \param node
      */
-    virtual void print_procedure(const ast::ProcedureBlock& node);
+    virtual void print_procedure(const ast::ProcedureBlock& node) override;
 
 
     /**
      * Print NMODL function in target backend code
      * \param node
      */
-    void print_function(const ast::FunctionBlock& node);
-
-
-    /**
-     * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
-     * functor
-     *
-     * \param node \c EigenNewtonSolverBlock for which to print the functor
-     */
-    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
+    void print_function(const ast::FunctionBlock& node) override;
 
 
     /****************************************************************************************/
@@ -229,7 +220,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
-    std::string nrn_thread_internal_arguments();
+    std::string nrn_thread_internal_arguments() override;
 
 
     /**
@@ -243,7 +234,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Arguments for register_mech or point_register_mech function
      */
-    std::string register_mechanism_arguments() const;
+    std::string register_mechanism_arguments() const override;
 
 
     /****************************************************************************************/
@@ -252,30 +243,15 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print the nmodl constants used in backend code
-     *
-     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
-     * in the backend code:
-     *
-     * \code
-     * static const double FARADAY = 96485.3;
-     * static const double PI = 3.14159;
-     * static const double R = 8.3145;
-     * \endcode
-     */
-    virtual void print_nmodl_constants();
-
-
-    /**
      * Prints the start of the \c neuron namespace
      */
-    void print_namespace_start();
+    void print_namespace_start() override;
 
 
     /**
      * Prints the end of the \c neuron namespace
      */
-    void print_namespace_stop();
+    void print_namespace_stop() override;
 
 
     /****************************************************************************************/
@@ -352,7 +328,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print standard C/C++ includes
      */
-    void print_standard_includes();
+    void print_standard_includes() override;
 
 
     /**
@@ -370,27 +346,21 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param print_initializers Whether to include default values in the struct
      *                           definition (true: int foo{42}; false: int foo;)
      */
-    void print_mechanism_global_var_structure(bool print_initializers);
-
-
-    /**
-     * Print declaration of macro NRN_PRCELLSTATE for debugging
-     */
-    void print_prcellstate_macros() const;
+    void print_mechanism_global_var_structure(bool print_initializers) override;
 
 
     /**
      * Print backend code for byte array that has mechanism information (to be registered
      * with NEURON)
      */
-    void print_mechanism_info();
+    void print_mechanism_info() override;
 
 
     /**
      * Print byte arrays that register scalar and vector variables for hoc interface
      *
      */
-    void print_global_variables_for_hoc();
+    void print_global_variables_for_hoc() override;
 
 
     /**
@@ -405,28 +375,28 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param type The target backend code block type
      */
     virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "");
+                                                   const std::string& function_name = "") override;
 
 
     /**
      * Print nrn_constructor function definition
      *
      */
-    void print_nrn_constructor();
+    void print_nrn_constructor() override;
 
 
     /**
      * Print nrn_destructor function definition
      *
      */
-    void print_nrn_destructor();
+    void print_nrn_destructor() override;
 
 
     /**
      * Print nrn_alloc function definition
      *
      */
-    void print_nrn_alloc();
+    void print_nrn_alloc() override;
 
 
     /****************************************************************************************/
@@ -530,14 +500,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print start of namespaces
      *
      */
-    void print_namespace_begin();
+    void print_namespace_begin() override;
 
 
     /**
      * Print end of namespaces
      *
      */
-    void print_namespace_end();
+    void print_namespace_end() override;
 
 
     /**
@@ -550,20 +520,20 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Set v_unused (voltage) for NRN_PRCELLSTATE feature
      */
-    void print_v_unused() const;
+    void print_v_unused() const override;
 
 
     /**
      * Set g_unused (conductance) for NRN_PRCELLSTATE feature
      */
-    void print_g_unused() const;
+    void print_g_unused() const override;
 
 
     /**
      * Print all compute functions for every backend
      *
      */
-    virtual void print_compute_functions();
+    virtual void print_compute_functions() override;
 
 
     /**
@@ -649,7 +619,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param print_initializers Whether or not default values for variables
      *                           be included in the struct declaration.
      */
-    void print_mechanism_range_var_structure(bool print_initializers);
+    void print_mechanism_range_var_structure(bool print_initializers) override;
 
 };
 

@@ -586,6 +586,41 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Print function and procedures prototype declaration
+     */
+    virtual void print_function_prototypes() = 0;
+
+
+    /**
+     * Print nmodl function or procedure (common code)
+     * \param node the AST node representing the function or procedure in NMODL
+     * \param name the name of the function or procedure
+     */
+    virtual void print_function_or_procedure(const ast::Block& node, const std::string& name) = 0;
+
+
+    /**
+     * Common helper function to help printing function or procedure blocks
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    virtual void print_function_procedure_helper(const ast::Block& node) = 0;
+
+
+    /**
+     * Print NMODL procedure in target backend code
+     * \param node
+     */
+    virtual void print_procedure(const ast::ProcedureBlock& node) = 0;
+
+
+    /**
+     * Print NMODL function in target backend code
+     * \param node
+     */
+    virtual void print_function(const ast::FunctionBlock& node) = 0;
+
+
+    /**
      * Rename function/procedure arguments that conflict with default arguments
      */
     void rename_function_arguments();
@@ -654,11 +689,22 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    virtual std::string nrn_thread_internal_arguments() = 0;
+
+    /**
      * Process a verbatim block for possible variable renaming
      * \param text The verbatim code to be processed
      * \return     The code with all variables renamed as needed
      */
     virtual std::string process_verbatim_text(std::string const& text) = 0;
+
+
+    /**
+     * Arguments for register_mech or point_register_mech function
+     */
+    virtual std::string register_mechanism_arguments() const = 0;
 
 
     /**
@@ -695,6 +741,18 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
     /****************************************************************************************/
+
+
+    /**
+     * Prints the start of the simulator namespace
+     */
+    virtual void print_namespace_start() = 0;
+
+
+    /**
+     * Prints the end of the simulator namespace
+     */
+    virtual void print_namespace_stop() = 0;
 
 
     /****************************************************************************************/
@@ -769,7 +827,78 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_backend_info() = 0;
 
 
+    /**
+     * Print standard C/C++ includes
+     */
+    virtual void print_standard_includes() = 0;
+
+
     virtual void print_sdlists_init(bool print_initializers) = 0;
+
+
+    /**
+     * Print the structure that wraps all global variables used in the NMODL
+     *
+     * \param print_initializers Whether to include default values in the struct
+     *                           definition (true: int foo{42}; false: int foo;)
+     */
+    virtual void print_mechanism_global_var_structure(bool print_initializers) = 0;
+
+
+    /**
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+
+    /**
+     * Print backend code for byte array that has mechanism information (to be registered
+     * with NEURON/CoreNEURON)
+     */
+    virtual void print_mechanism_info() = 0;
+
+
+    /**
+     * Print byte arrays that register scalar and vector variables for hoc interface
+     *
+     */
+    virtual void print_global_variables_for_hoc() = 0;
+
+
+    /**
+     * Print the mechanism registration function
+     *
+     */
+    virtual void print_mechanism_register() = 0;
+
+
+    /**
+     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
+     * \param type The target backend code block type
+     */
+    virtual void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "") = 0;
+
+
+    /**
+     * Print nrn_constructor function definition
+     *
+     */
+    virtual void print_nrn_constructor() = 0;
+
+
+    /**
+     * Print nrn_destructor function definition
+     *
+     */
+    virtual void print_nrn_destructor() = 0;
+
+
+    /**
+     * Print nrn_alloc function definition
+     *
+     */
+    virtual void print_nrn_alloc() = 0;
 
 
     /****************************************************************************************/
@@ -849,10 +978,43 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Print the mechanism registration function
+     * Print start of namespaces
      *
      */
-    virtual void print_mechanism_register() = 0;
+    virtual void print_namespace_begin() = 0;
+
+
+    /**
+     * Print end of namespaces
+     *
+     */
+    virtual void print_namespace_end() = 0;
+
+
+    /**
+     * Print all classes
+     * \param print_initializers Whether to include default values.
+     */
+    virtual void print_data_structures(bool print_initializers) = 0;
+
+
+    /**
+     * Set v_unused (voltage) for NRN_PRCELLSTATE feature
+     */
+    virtual void print_v_unused() const = 0;
+
+
+    /**
+     * Set g_unused (conductance) for NRN_PRCELLSTATE feature
+     */
+    virtual void print_g_unused() const = 0;
+
+
+    /**
+     * Print all compute functions for every backend
+     *
+     */
+    virtual void print_compute_functions() = 0;
 
 
     /**
@@ -860,6 +1022,21 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      *
      */
     virtual void print_codegen_routines() = 0;
+
+
+    /**
+     * Print the nmodl constants used in backend code
+     *
+     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
+     * in the backend code:
+     *
+     * \code
+     * static const double FARADAY = 96485.3;
+     * static const double PI = 3.14159;
+     * static const double R = 8.3145;
+     * \endcode
+     */
+    void print_nmodl_constants();
 
 
     /****************************************************************************************/
@@ -887,6 +1064,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         , mod_filename(std::move(mod_filename))
         , float_type(std::move(float_type))
         , optimize_ionvar_copies(optimize_ionvar_copies) {}
+
 
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
@@ -936,6 +1114,20 @@ public:
      * \param program the AST to translate to C++ code
      */
     void visit_program(const ast::Program& program) override;
+
+
+    /****************************************************************************************/
+    /*          Public printing routines for code generation for use in unit tests          */
+    /****************************************************************************************/
+
+
+    /**
+     * Print the structure that wraps all range and int variables required for the NMODL
+     *
+     * \param print_initializers Whether or not default values for variables
+     *                           be included in the struct declaration.
+     */
+    virtual void print_mechanism_range_var_structure(bool print_initializers) = 0;
 
 };
 

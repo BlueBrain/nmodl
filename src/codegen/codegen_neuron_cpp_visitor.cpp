@@ -169,25 +169,15 @@ std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& te
 }
 
 
+/// TODO: Write for NEURON
+std::string CodegenNeuronCppVisitor::register_mechanism_arguments() const {
+    return {};
+};
+
+
 /****************************************************************************************/
 /*               Code-specific printing routines for code generation                    */
 /****************************************************************************************/
-
-
-/**
- * NMODL constants from unit database
- *
- */
-void CodegenNeuronCppVisitor::print_nmodl_constants() {
-    if (!info.factor_definitions.empty()) {
-        printer->add_newline(2);
-        printer->add_line("/** constants used in nmodl from UNITS */");
-        for (const auto& it: info.factor_definitions) {
-            const std::string format_string = "static const double {} = {};";
-            printer->fmt_line(format_string, it->get_node_name(), it->get_value()->get_value());
-        }
-    }
-}
 
 
 void CodegenNeuronCppVisitor::print_namespace_start() {
@@ -339,13 +329,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];",
                           info.primes_size);
     }
-}
-
-
-void CodegenNeuronCppVisitor::print_prcellstate_macros() const {
-    printer->add_line("#ifndef NRN_PRCELLSTATE");
-    printer->add_line("#define NRN_PRCELLSTATE 0");
-    printer->add_line("#endif");
 }
 
 
