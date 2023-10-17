@@ -105,7 +105,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
     codegen = true;
-    // TODO: Fill in
+    /// TODO: Fill in
     codegen = false;
 }
 
@@ -206,31 +206,31 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
 /****************************************************************************************/
 
 
+/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbol,
                                                          bool use_instance) const {
-    // TODO: rewrite for NEURON
     return symbol->get_name();
 }
 
 
+/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                        const std::string& name,
                                                        bool use_instance) const {
-    // TODO: rewrite for NEURON
     return name;
 }
 
 
+/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symbol,
                                                           bool use_instance) const {
-    // TODO: rewrite for NEURON
     return symbol->get_name();
 }
 
 
+/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
                                                        bool use_instance) const {
-    // TODO: rewrite for NEURON
     return name;
 }
 
@@ -327,12 +327,12 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     }
     }  // namespace
     )CODE");
-    // TODO: More prints here?
+    /// TODO: More prints here?
 }
 
 
 void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
-    // TODO: Print only global variables printed in NEURON
+    /// TODO: Print only global variables printed in NEURON
     printer->add_line();
     printer->add_line("/* NEURON global variables */");
     if (info.primes_size != 0) {
@@ -385,7 +385,7 @@ void CodegenNeuronCppVisitor::print_mechanism_info() {
 
 /// TODO: Same as CoreNEURON?
 void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
-    // TODO: Write HocParmLimits and other HOC global variables (delta_t)
+    /// TODO: Write HocParmLimits and other HOC global variables (delta_t)
     // Probably needs more changes
     auto variable_printer =
     [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
@@ -463,14 +463,14 @@ int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const 
 void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
     for (auto i = 0; i < info.prime_variables_by_order.size(); ++i) {
         const auto& prime_var = info.prime_variables_by_order[i];
-        // TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at
+        /// TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at
         // the moment
-        // TODO: We have to do checks and add errors similar to nocmodl in the
+        /// TODO: We have to do checks and add errors similar to nocmodl in the
         // SemanticAnalysisVisitor
         if (prime_var->is_array()) {
-            // TODO: Needs a for loop here. Look at
+            /// TODO: Needs a for loop here. Look at
             // https://github.com/neuronsimulator/nrn/blob/df001a436bcb4e23d698afe66c2a513819a6bfe8/src/nmodl/deriv.cpp#L524
-            // TODO: Also needs a test
+            /// TODO: Also needs a test
             printer->fmt_push_block("for (int _i = 0; _i < {}; ++_i)", prime_var->get_length());
             printer->fmt_line("/* {}[{}] */", prime_var->get_name(), prime_var->get_length());
             printer->fmt_line("_slist1[{}+_i] = {{{}, _i}}",
@@ -498,7 +498,7 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
 
 
 void CodegenNeuronCppVisitor::print_mechanism_register() {
-    // TODO: Write this according to NEURON
+    /// TODO: Write this according to NEURON
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
     printer->fmt_push_block("void _{}_reg()", info.mod_file);
@@ -605,7 +605,7 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     codegen = true;
 
     printer->add_line("void nrn_state() {}");
-    // TODO: Write for NEURON
+    /// TODO: Fill in
 
     codegen = false;
 }
@@ -655,7 +655,7 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
     codegen = true;
 
     printer->add_line("void nrn_cur() {}");
-    // TODO: Write for NEURON
+    /// TODO: Fill in
 
     codegen = false;
 }
