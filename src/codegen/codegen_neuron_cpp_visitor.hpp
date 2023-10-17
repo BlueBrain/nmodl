@@ -120,9 +120,66 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Print atomic update pragma for reduction statements
+     */
+    virtual void print_atomic_reduction_pragma() override;
+
+
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
     /****************************************************************************************/
+
+
+    /**
+     * Print call to internal or external function
+     * \param node The AST node representing a function call
+     */
+    void print_function_call(const ast::FunctionCall& node) override;
+
+
+    /**
+     * Print function and procedures prototype declaration
+     */
+    void print_function_prototypes();
+
+
+    /**
+     * Print nmodl function or procedure (common code)
+     * \param node the AST node representing the function or procedure in NMODL
+     * \param name the name of the function or procedure
+     */
+    void print_function_or_procedure(const ast::Block& node, const std::string& name);
+
+
+    /**
+     * Common helper function to help printing function or procedure blocks
+     * \param node the AST node representing the function or procedure in NMODL
+     */
+    void print_function_procedure_helper(const ast::Block& node);
+
+
+    /**
+     * Print NMODL procedure in target backend code
+     * \param node
+     */
+    virtual void print_procedure(const ast::ProcedureBlock& node);
+
+
+    /**
+     * Print NMODL function in target backend code
+     * \param node
+     */
+    void print_function(const ast::FunctionBlock& node);
+
+
+    /**
+     * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
+     * functor
+     *
+     * \param node \c EigenNewtonSolverBlock for which to print the functor
+     */
+    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
 
 
     /****************************************************************************************/
@@ -130,9 +187,95 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
+    /**
+     * Arguments for functions that are defined and used internally.
+     * \return the method arguments
+     */
+    std::string internal_method_arguments() override;
+
+
+    /**
+     * Parameters for internally defined functions
+     * \return the method parameters
+     */
+    ParamVector internal_method_parameters() override;
+
+
+    /**
+     * Arguments for external functions called from generated code
+     * \return A string representing the arguments passed to an external function
+     */
+    const char* external_method_arguments() noexcept override;
+
+
+    /**
+     * Parameters for functions in generated code that are called back from external code
+     *
+     * Functions registered in NEURON during initialization for callback must adhere to a prescribed
+     * calling convention. This method generates the string representing the function parameters for
+     * these externally called functions.
+     * \param table
+     * \return      A string representing the parameters of the function
+     */
+    const char* external_method_parameters(bool table = false) noexcept override;
+
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    std::string nrn_thread_arguments() const override;
+
+
+    /**
+     * Arguments for "_threadargs_" macro in neuron implementation
+     */
+    std::string nrn_thread_internal_arguments();
+
+
+    /**
+     * Process a verbatim block for possible variable renaming
+     * \param text The verbatim code to be processed
+     * \return     The code with all variables renamed as needed
+     */
+    std::string process_verbatim_text(std::string const& text) override;
+
+
+    /**
+     * Arguments for register_mech or point_register_mech function
+     */
+    std::string register_mechanism_arguments() const;
+
+
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
     /****************************************************************************************/
+
+
+    /**
+     * Print the nmodl constants used in backend code
+     *
+     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
+     * in the backend code:
+     *
+     * \code
+     * static const double FARADAY = 96485.3;
+     * static const double PI = 3.14159;
+     * static const double R = 8.3145;
+     * \endcode
+     */
+    virtual void print_nmodl_constants();
+
+
+    /**
+     * Prints the start of the \c neuron namespace
+     */
+    void print_namespace_start();
+
+
+    /**
+     * Prints the end of the \c neuron namespace
+     */
+    void print_namespace_stop();
 
 
     /****************************************************************************************/
@@ -206,6 +349,86 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_backend_info() override;
 
 
+    /**
+     * Print standard C/C++ includes
+     */
+    void print_standard_includes();
+
+
+    /**
+     * Print includes from NEURON
+     */
+    void print_neuron_includes();
+
+
+    void print_sdlists_init(bool print_initializers) override;
+
+
+    /**
+     * Print the structure that wraps all global variables used in the NMODL
+     *
+     * \param print_initializers Whether to include default values in the struct
+     *                           definition (true: int foo{42}; false: int foo;)
+     */
+    void print_mechanism_global_var_structure(bool print_initializers);
+
+
+    /**
+     * Print declaration of macro NRN_PRCELLSTATE for debugging
+     */
+    void print_prcellstate_macros() const;
+
+
+    /**
+     * Print backend code for byte array that has mechanism information (to be registered
+     * with NEURON)
+     */
+    void print_mechanism_info();
+
+
+    /**
+     * Print byte arrays that register scalar and vector variables for hoc interface
+     *
+     */
+    void print_global_variables_for_hoc();
+
+
+    /**
+     * Print the mechanism registration function
+     *
+     */
+    void print_mechanism_register() override;
+
+
+    /**
+     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
+     * \param type The target backend code block type
+     */
+    virtual void print_global_function_common_code(BlockType type,
+                                                   const std::string& function_name = "");
+
+
+    /**
+     * Print nrn_constructor function definition
+     *
+     */
+    void print_nrn_constructor();
+
+
+    /**
+     * Print nrn_destructor function definition
+     *
+     */
+    void print_nrn_destructor();
+
+
+    /**
+     * Print nrn_alloc function definition
+     *
+     */
+    void print_nrn_alloc();
+
+
     /****************************************************************************************/
     /*                                 Print nrn_state routine                              */
     /****************************************************************************************/
@@ -273,220 +496,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
     /*                              Main code printing entry points                         */
     /****************************************************************************************/
-
-
-    /****************************************************************************************/
-    /*                            Overloaded visitor routines                               */
-    /****************************************************************************************/
-
-
-    /**
-     * Arguments for functions that are defined and used internally.
-     * \return the method arguments
-     */
-    std::string internal_method_arguments() override;
-
-
-    /**
-     * Parameters for internally defined functions
-     * \return the method parameters
-     */
-    ParamVector internal_method_parameters() override;
-
-
-    /**
-     * Arguments for external functions called from generated code
-     * \return A string representing the arguments passed to an external function
-     */
-    const char* external_method_arguments() noexcept override;
-
-
-    /**
-     * Parameters for functions in generated code that are called back from external code
-     *
-     * Functions registered in NEURON during initialization for callback must adhere to a prescribed
-     * calling convention. This method generates the string representing the function parameters for
-     * these externally called functions.
-     * \param table
-     * \return      A string representing the parameters of the function
-     */
-    const char* external_method_parameters(bool table = false) noexcept override;
-
-
-    /**
-     * Arguments for register_mech or point_register_mech function
-     */
-    std::string register_mechanism_arguments() const;
-
-
-    /**
-     * Arguments for "_threadargs_" macro in neuron implementation
-     */
-    std::string nrn_thread_arguments() const override;
-
-
-    /**
-     * Arguments for "_threadargs_" macro in neuron implementation
-     */
-    std::string nrn_thread_internal_arguments();
-
-
-    /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
-     */
-    std::string process_verbatim_text(std::string const& text) override;
-
-
-    /**
-     * Prints the start of the \c neuron namespace
-     */
-    void print_namespace_start();
-
-
-    /**
-     * Prints the end of the \c neuron namespace
-     */
-    void print_namespace_stop();
-
-
-    /**
-     * Print the nmodl constants used in backend code
-     *
-     * Currently we define three basic constants, which are assumed to be present in NMODL, directly
-     * in the backend code:
-     *
-     * \code
-     * static const double FARADAY = 96485.3;
-     * static const double PI = 3.14159;
-     * static const double R = 8.3145;
-     * \endcode
-     */
-    virtual void print_nmodl_constants();
-
-
-    /**
-     * Print standard C/C++ includes
-     */
-    void print_standard_includes();
-
-
-    /**
-     * Print includes from NEURON
-     */
-    void print_neuron_includes();
-
-
-    /**
-     * Print declaration of macro NRN_PRCELLSTATE for debugging
-     */
-    void print_prcellstate_macros() const;
-
-    /**
-     * Print backend code for byte array that has mechanism information (to be registered
-     * with NEURON)
-     */
-    void print_mechanism_info();
-
-
-    /**
-     * Print the structure that wraps all global variables used in the NMODL
-     *
-     * \param print_initializers Whether to include default values in the struct
-     *                           definition (true: int foo{42}; false: int foo;)
-     */
-    void print_mechanism_global_var_structure(bool print_initializers);
-
-
-    /**
-     * Print byte arrays that register scalar and vector variables for hoc interface
-     *
-     */
-    void print_global_variables_for_hoc();
-
-
-    /**
-     * Print atomic update pragma for reduction statements
-     */
-    virtual void print_atomic_reduction_pragma() override;
-
-
-    /**
-     * Print call to internal or external function
-     * \param node The AST node representing a function call
-     */
-    void print_function_call(const ast::FunctionCall& node) override;
-
-
-    /**
-     * Print function and procedures prototype declaration
-     */
-    void print_function_prototypes();
-
-
-    /**
-     * Print nmodl function or procedure (common code)
-     * \param node the AST node representing the function or procedure in NMODL
-     * \param name the name of the function or procedure
-     */
-    void print_function_or_procedure(const ast::Block& node, const std::string& name);
-
-
-    /**
-     * Common helper function to help printing function or procedure blocks
-     * \param node the AST node representing the function or procedure in NMODL
-     */
-    void print_function_procedure_helper(const ast::Block& node);
-
-
-    /**
-     * Print prototype declarations of functions or procedures
-     * \tparam T   The AST node type of the node (must be of nmodl::ast::Ast or subclass)
-     * \param node The AST node representing the function or procedure block
-     * \param name A user defined name for the function
-     */
-    template <typename T>
-    void print_function_declaration(const T& node, const std::string& name);
-
-
-    /**
-     * Print nrn_constructor function definition
-     *
-     */
-    void print_nrn_constructor();
-
-
-    /**
-     * Print nrn_destructor function definition
-     *
-     */
-    void print_nrn_destructor();
-
-
-    /**
-     * Print nrn_alloc function definition
-     *
-     */
-    void print_nrn_alloc();
-
-
-    /**
-     * Print common code for global functions like nrn_init, nrn_cur and nrn_state
-     * \param type The target backend code block type
-     */
-    virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "");
-
-
-    void print_sdlists_init(bool print_initializers) override;
-
-
-    /**
-     * Print the mechanism registration function
-     *
-     */
-    void print_mechanism_register() override;
 
 
     /**
@@ -564,6 +573,25 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_codegen_routines() override;
 
 
+    /****************************************************************************************/
+    /*                            Overloaded visitor routines                               */
+    /****************************************************************************************/
+
+
+    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
+    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
+
+
+    /**
+     * Print prototype declarations of functions or procedures
+     * \tparam T   The AST node type of the node (must be of nmodl::ast::Ast or subclass)
+     * \param node The AST node representing the function or procedure block
+     * \param name A user defined name for the function
+     */
+    template <typename T>
+    void print_function_declaration(const T& node, const std::string& name);
+
+
   public:
     /**
      * \brief Constructs the C++ code generator visitor
@@ -610,18 +638,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
         : CodegenCppVisitor(mod_filename, stream, float_type, optimize_ionvar_copies) {}
 
 
-    /**
-     * Print NMODL function in target backend code
-     * \param node
-     */
-    void print_function(const ast::FunctionBlock& node);
-
-
-    /**
-     * Print NMODL procedure in target backend code
-     * \param node
-     */
-    virtual void print_procedure(const ast::ProcedureBlock& node);
+    /****************************************************************************************/
+    /*          Public printing routines for code generation for use in unit tests          */
+    /****************************************************************************************/
 
 
     /**
@@ -632,17 +651,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_mechanism_range_var_structure(bool print_initializers);
 
-
-    /**
-     * \brief Based on the \c EigenNewtonSolverBlock passed print the definition needed for its
-     * functor
-     *
-     * \param node \c EigenNewtonSolverBlock for which to print the functor
-     */
-    void print_functor_definition(const ast::EigenNewtonSolverBlock& node);
-
-    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
-    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 };
 
 
@@ -670,6 +678,7 @@ void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const st
         return_type = default_float_data_type();
     }
 
+    /// TODO: Edit for NEURON
     printer->add_indent();
     printer->fmt_text("inline {} {}({})", return_type, method_name(name), "params");
 

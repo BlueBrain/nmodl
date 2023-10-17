@@ -73,15 +73,15 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Name of the code generation backend
-     */
-    virtual std::string backend_name() const;
-
-
-    /**
      * Name of the simulator the code was generated for
      */
     std::string simulator_name() override;
+
+
+    /**
+     * Name of the code generation backend
+     */
+    virtual std::string backend_name() const;
 
 
     /**
@@ -1255,6 +1255,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void visit_for_netcon(const ast::ForNetcon& node) override;
     virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
+
 
     /**
      * Print prototype declarations of functions or procedures
