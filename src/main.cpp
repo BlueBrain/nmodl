@@ -181,13 +181,8 @@ int main(int argc, const char* argv[]) {
     app.add_option("--units", units_dir, "Directory of units lib file")
         ->capture_default_str()
         ->ignore_case();
-
-    auto simulator_opt =
-        app.add_subcommand("simulator", "NEURON/CoreNEURON code backends")->ignore_case();
-    simulator_opt->add_flag("--neuron", neuron_code, "Generate C++ code for NEURON")->ignore_case();
-    simulator_opt
-        ->add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)")
-        ->ignore_case();
+    app.add_flag("--neuron", neuron_code, "Generate C++ code for NEURON");
+    app.add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)");
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
     host_opt->add_flag("--c", c_backend, fmt::format("C++ backend ({})", c_backend))->ignore_case();
