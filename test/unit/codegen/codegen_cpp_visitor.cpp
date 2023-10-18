@@ -1193,13 +1193,15 @@ SCENARIO("Array STATE variable", "[codegen][array_state]") {
             }
             STATE {
                 ca[NANN]
+                k
             }
         )";
 
         THEN("nrn_init is printed with proper initialization of the whole array") {
             auto const generated = get_cpp_code(nmodl_text);
             std::string expected_code_init =
-                R"(void nrn_init_ca_test(NrnThread* nt, Memb_list* ml, int type) {
+                R"(/** initialize channel */
+    void nrn_init_ca_test(NrnThread* nt, Memb_list* ml, int type) {
         int nodecount = ml->nodecount;
         int pnodecount = ml->_nodecount_padded;
         const int* node_index = ml->nodeindices;
@@ -1224,6 +1226,7 @@ SCENARIO("Array STATE variable", "[codegen][array_state]") {
                 (inst->ca+id*4)[1] = inst->global->ca0;
                 (inst->ca+id*4)[2] = inst->global->ca0;
                 (inst->ca+id*4)[3] = inst->global->ca0;
+                inst->k[id] = inst->global->k0;
             }
         }
     })";
