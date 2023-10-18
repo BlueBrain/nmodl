@@ -95,7 +95,7 @@ var NAVTREEINDEX =
 "newton_8hpp.html#gaadcb8093205f450fa8b2b7917f3a2dc0",
 "statement_8hpp.html",
 "structnmodl_1_1test__utils_1_1_nmodl_test_case.html#ac4a8ada1c07865b67dd3cbad1565c381",
-"test_2unit_2codegen_2codegen__utils_8cpp_source.html"
+"test_2unit_2codegen_2codegen__utils_8cpp.html#aa8b1cde8cb086bc78a1a9b13ccf40419"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

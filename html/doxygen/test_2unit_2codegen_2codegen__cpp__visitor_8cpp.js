@@ -5,6 +5,7 @@ var test_2unit_2codegen_2codegen__cpp__visitor_8cpp =
     [ "get_cpp_code", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a6d48a7370b11cdab6d1f8a81232554da", null ],
     [ "get_instance_structure", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e", null ],
     [ "get_instance_var_setup_function", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4", null ],
+    [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a0f8302124417a0290de4c61c58348f97", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a41044133b4ee2b429529cfbc7b33dcc3", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aeabcf0ad13cf3e5ae258accc595743e2", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a8bc03b91fe00cb27d1cb6d6f8bdfbb88", null ],

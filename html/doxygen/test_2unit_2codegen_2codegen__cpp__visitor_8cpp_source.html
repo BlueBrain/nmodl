@@ -1163,7 +1163,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;            std::string newton_state_expected_code = R<span class="stringliteral">&quot;(namespace {</span></div>
 <div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;<span class="stringliteral">        struct _newton_state_ {</span></div>
 <div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;<span class="stringliteral">            int operator()(int id, int pnodecount, double* data, Datum* indexes, ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v) const {</span></div>
-<div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;<span class="stringliteral">                auto* const inst = static_cast&lt;_Instance*&gt;(ml-&gt;instance);</span></div>
+<div class="line"><a name="l01070"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a0f8302124417a0290de4c61c58348f97"> 1070</a></span>&#160;<span class="stringliteral">                auto* const inst = static_cast&lt;_Instance*&gt;(ml-&gt;instance);</span></div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;<span class="stringliteral">                double* savstate1 = static_cast&lt;double*&gt;(thread[dith1()].pval);</span></div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;<span class="stringliteral">                auto const&amp; slist1 = inst-&gt;global-&gt;slist1;</span></div>
 <div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;<span class="stringliteral">                auto const&amp; dlist1 = inst-&gt;global-&gt;dlist1;</span></div>
@@ -1277,6 +1277,60 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__cpp__vis
 <div class="line"><a name="l01181"></a><span class="lineno"> 1181</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l01182"></a><span class="lineno"> 1182</span>&#160;<span class="stringliteral">    }</span></div>
 <div class="line"><a name="l01183"></a><span class="lineno"> 1183</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;<span class="stringliteral"><a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604">SCENARIO</a>(</span><span class="stringliteral">&quot;Array STATE variable&quot;</span>, <span class="stringliteral">&quot;[codegen][array_state]&quot;</span>) {</div>
+<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file containing an array STATE variable&quot;</span>) {</div>
+<div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;<span class="stringliteral">            DEFINE NANN  4</span></div>
+<div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;<span class="stringliteral">                SUFFIX ca_test</span></div>
+<div class="line"><a name="l01193"></a><span class="lineno"> 1193</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l01194"></a><span class="lineno"> 1194</span>&#160;<span class="stringliteral">            STATE {</span></div>
+<div class="line"><a name="l01195"></a><span class="lineno"> 1195</span>&#160;<span class="stringliteral">                ca[NANN]</span></div>
+<div class="line"><a name="l01196"></a><span class="lineno"> 1196</span>&#160;<span class="stringliteral">                k</span></div>
+<div class="line"><a name="l01197"></a><span class="lineno"> 1197</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l01198"></a><span class="lineno"> 1198</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l01199"></a><span class="lineno"> 1199</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;nrn_init is printed with proper initialization of the whole array&quot;</span>) {</div>
+<div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a6d48a7370b11cdab6d1f8a81232554da">get_cpp_code</a>(nmodl_text);</div>
+<div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;            std::string expected_code_init =</div>
+<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;                R<span class="stringliteral">&quot;(/** initialize channel */</span></div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;<span class="stringliteral">    void nrn_init_ca_test(NrnThread* nt, Memb_list* ml, int type) {</span></div>
+<div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160;<span class="stringliteral">        int nodecount = ml-&gt;nodecount;</span></div>
+<div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;<span class="stringliteral">        int pnodecount = ml-&gt;_nodecount_padded;</span></div>
+<div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;<span class="stringliteral">        const int* node_index = ml-&gt;nodeindices;</span></div>
+<div class="line"><a name="l01208"></a><span class="lineno"> 1208</span>&#160;<span class="stringliteral">        double* data = ml-&gt;data;</span></div>
+<div class="line"><a name="l01209"></a><span class="lineno"> 1209</span>&#160;<span class="stringliteral">        const double* voltage = nt-&gt;_actual_v;</span></div>
+<div class="line"><a name="l01210"></a><span class="lineno"> 1210</span>&#160;<span class="stringliteral">        Datum* indexes = ml-&gt;pdata;</span></div>
+<div class="line"><a name="l01211"></a><span class="lineno"> 1211</span>&#160;<span class="stringliteral">        ThreadDatum* thread = ml-&gt;_thread;</span></div>
+<div class="line"><a name="l01212"></a><span class="lineno"> 1212</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;<span class="stringliteral">        setup_instance(nt, ml);</span></div>
+<div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;<span class="stringliteral">        auto* const inst = static_cast&lt;ca_test_Instance*&gt;(ml-&gt;instance);</span></div>
+<div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;<span class="stringliteral">        if (_nrn_skip_initmodel == 0) {</span></div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;<span class="stringliteral">            #pragma omp simd</span></div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;<span class="stringliteral">            #pragma ivdep</span></div>
+<div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;<span class="stringliteral">            for (int id = 0; id &lt; nodecount; id++) {</span></div>
+<div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;<span class="stringliteral">                int node_id = node_index[id];</span></div>
+<div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;<span class="stringliteral">                double v = voltage[node_id];</span></div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;<span class="stringliteral">                #if NRN_PRCELLSTATE</span></div>
+<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;<span class="stringliteral">                inst-&gt;v_unused[id] = v;</span></div>
+<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;<span class="stringliteral">                #endif</span></div>
+<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;<span class="stringliteral">                (inst-&gt;ca+id*4)[0] = inst-&gt;global-&gt;ca0;</span></div>
+<div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;<span class="stringliteral">                (inst-&gt;ca+id*4)[1] = inst-&gt;global-&gt;ca0;</span></div>
+<div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;<span class="stringliteral">                (inst-&gt;ca+id*4)[2] = inst-&gt;global-&gt;ca0;</span></div>
+<div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;<span class="stringliteral">                (inst-&gt;ca+id*4)[3] = inst-&gt;global-&gt;ca0;</span></div>
+<div class="line"><a name="l01229"></a><span class="lineno"> 1229</span>&#160;<span class="stringliteral">                inst-&gt;k[id] = inst-&gt;global-&gt;k0;</span></div>
+<div class="line"><a name="l01230"></a><span class="lineno"> 1230</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;<span class="stringliteral">    })&quot;;</span></div>
+<div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_code_init));</span></div>
+<div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;<span class="stringliteral">}</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
