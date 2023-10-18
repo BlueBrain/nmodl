@@ -448,7 +448,7 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
     GIVEN("Simple check of assigned variables") {
         const std::string nmodl_text = R"(
             NEURON {
-                GLOBAL x
+                SUFFIX foo
             }
 
             ASSIGNED {
@@ -456,8 +456,7 @@ SCENARIO("Perform DefUse analysis on NMODL constructs") {
             }
 
             DERIVATIVE states {
-                x = 1
-                y = x
+                y = 1
                 y = y + 2
             }
         )";
