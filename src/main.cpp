@@ -321,6 +321,15 @@ int main(int argc, const char* argv[]) {
             }
         }
 
+        if (json_ast) {
+            std::string file{scratch_dir};
+            file += "/";
+            file += modfile;
+            file += ".ast.json.orig";
+            logger->info("Writing AST into {}", file);
+            JSONVisitor(file).write(*ast);
+        }
+
         /// use cnexp instead of after_cvode solve method
         {
             logger->info("Running CVode to cnexp visitor");
@@ -422,11 +431,29 @@ int main(int argc, const char* argv[]) {
             }
         }
 
+        if (json_ast) {
+            std::string file{scratch_dir};
+            file += "/";
+            file += modfile;
+            file += ".ast.kinetic.json";
+            logger->info("Writing AST into {}", file);
+            JSONVisitor(file).write(*ast);
+        }
+
         {
             logger->info("Running STEADYSTATE visitor");
             SteadystateVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("steadystate"));
+        }
+
+        if (json_ast) {
+            std::string file{scratch_dir};
+            file += "/";
+            file += modfile;
+            file += ".ast.steadystate.json";
+            logger->info("Writing AST into {}", file);
+            JSONVisitor(file).write(*ast);
         }
 
         /// Parsing units fron "nrnunits.lib" and mod files
