@@ -36,7 +36,7 @@ enum SympyRenameType {
 class SympyRenameVisitor: public AstVisitor {
   private: 
     /// string suffix to add to all the variables before passing to sympy
-    const std::string sympy_suffix = "_sympyvar";
+    const std::string sympy_suffix = "sympyvar";
 
     /// rename all VarName nodes before passing them to sympy with "_sympyvar"
     bool rename_to_sympy{false};
@@ -65,6 +65,7 @@ class SympyRenameVisitor: public AstVisitor {
       return sympy_suffix;
     }
 
+    void visit_indexed_name(ast::IndexedName& node) override;
     void visit_prime_name(ast::PrimeName& node) override;
     void visit_name(ast::Name& node) override;
     void visit_solve_block(ast::SolveBlock& node) override;

@@ -14,6 +14,10 @@
 namespace nmodl {
 namespace visitor {
 
+void SympyRenameVisitor::visit_indexed_name(ast::IndexedName& node) {
+    /// TODO: Do this for indexed names as well
+}
+
 void SympyRenameVisitor::visit_prime_name(ast::PrimeName& node) {
     if (!under_sympy) {
         return;
