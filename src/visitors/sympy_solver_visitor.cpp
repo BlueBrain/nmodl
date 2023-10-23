@@ -675,8 +675,8 @@ void SympySolverVisitor::visit_program(ast::Program& node) {
             std::string var_name = v->get_name();
             if (v->is_array()) {
                 for (int i = 0; i < v->get_length(); ++i) {
-                    std::string var_name_i = var_name + "[" + std::to_string(i) + "]";
-                    all_state_vars.push_back(var_name_i + rename_to_visitor.get_suffix());
+                    std::string var_name_i = var_name + rename_to_visitor.get_suffix() + "[" + std::to_string(i) + "]";
+                    all_state_vars.push_back(var_name_i);
                 }
             } else {
                 all_state_vars.push_back(var_name + rename_to_visitor.get_suffix());
