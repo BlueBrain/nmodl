@@ -14,6 +14,7 @@
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
+#include "visitors/sympy_rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 
@@ -367,7 +368,6 @@ void SympySolverVisitor::solve_non_linear_system(
 }
 
 void SympySolverVisitor::visit_var_name(ast::VarName& node) {
-    node.visit_children(*this);
     if (collect_state_vars) {
         std::string var_name = node.get_node_name();
         if (node.get_name()->is_indexed_name()) {
@@ -387,36 +387,7 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
     }
 }
 
-void SympySolverVisitor::visit_prime_name(ast::PrimeName& node) {
-    if (rename_to_sympy) {
-        logger->info("SympySolverVisitor :: Renaming variable {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
-        node.set_value(std::make_shared<ast::String>(node.get_node_name() + sympy_suffix));
-    }
-    if (rename_from_sympy) {
-        const auto var_name = node.get_node_name();
-        if (var_name.length() > sympy_suffix.length() && var_name.substr(var_name.length() - sympy_suffix.length()) == sympy_suffix) {
-            logger->info("SympySolverVisitor :: Renaming variable {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
-            node.set_value(std::make_shared<ast::String>(var_name.substr(0, var_name.length() - sympy_suffix.length())));
-        }
-    }
-}
-
-void SympySolverVisitor::visit_name(ast::Name& node) {
-    if (rename_to_sympy) {
-        logger->info("SympySolverVisitor :: Renaming variable {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
-        node.set_name(node.get_node_name() + sympy_suffix);
-    }
-    if (rename_from_sympy) {
-        const auto var_name = node.get_node_name();
-        if (var_name.length() > sympy_suffix.length() && var_name.substr(var_name.length() - sympy_suffix.length()) == sympy_suffix) {
-            logger->info("SympySolverVisitor :: Renaming variable {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
-            node.set_name(var_name.substr(0, var_name.length() - sympy_suffix.length()));
-        }
-    }
-}
-
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
-    node.visit_children(*this);
     const auto& lhs = node.get_expression()->get_lhs();
 
     if (!lhs->is_var_name()) {
@@ -519,22 +490,7 @@ void SympySolverVisitor::visit_conserve(ast::Conserve& node) {
     conserve_equation[conserve_equation_statevar] = conserve_equation_str;
 }
 
-
-void SympySolverVisitor::rename_variables(ast::StatementBlock& statement_block) {
-    auto renamed_statements{statement_block.get_statements()};
-    for (auto& statement : renamed_statements) {
-        logger->info("SympySolverVisitor :: statement block {} :: {}", statement->get_node_type_name(), to_nmodl(statement));
-        statement->visit_children(*this);
-    }
-    statement_block.set_statements(std::move(renamed_statements));
-}
-
-
 void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
-    rename_to_sympy = true;
-    rename_variables(*(node.get_statement_block()));
-    rename_to_sympy = false;
-    logger->info("SympySolverVisitor :: Renaming done");
     /// clear information from previous block, get global vars + block local vars
     init_block_data(&node);
 
@@ -612,9 +568,6 @@ void SympySolverVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
         } else {
             logger->error("SympySolverVisitor :: Solve method {} not supported", solve_method);
         }
-        rename_from_sympy = true;
-        rename_variables(*(node.get_statement_block()));
-        rename_from_sympy = false;
     }
 }
 
@@ -689,6 +642,10 @@ void SympySolverVisitor::visit_statement_block(ast::StatementBlock& node) {
 }
 
 void SympySolverVisitor::visit_program(ast::Program& node) {
+    /// Add certain suffix to all variables and names existing in the Sympy related AST Nodes
+    SympyRenameVisitor rename_to_visitor{SympyRenameType::to_sympy};
+    rename_to_visitor.visit_program(node);
+
     derivative_block_solve_method.clear();
 
     global_vars = get_global_vars(node);
@@ -705,7 +662,7 @@ void SympySolverVisitor::visit_program(ast::Program& node) {
                 logger->debug("SympySolverVisitor :: Found SOLVE statement: using {} for {}",
                               solve_method,
                               block_name);
-                derivative_block_solve_method[block_name] = solve_method;
+                derivative_block_solve_method[block_name + rename_to_visitor.get_suffix()] = solve_method;
             }
         }
     }
@@ -719,15 +676,19 @@ void SympySolverVisitor::visit_program(ast::Program& node) {
             if (v->is_array()) {
                 for (int i = 0; i < v->get_length(); ++i) {
                     std::string var_name_i = var_name + "[" + std::to_string(i) + "]";
-                    all_state_vars.push_back(var_name_i + sympy_suffix);
+                    all_state_vars.push_back(var_name_i + rename_to_visitor.get_suffix());
                 }
             } else {
-                all_state_vars.push_back(var_name + sympy_suffix);
+                all_state_vars.push_back(var_name + rename_to_visitor.get_suffix());
             }
         }
     }
 
     node.visit_children(*this);
+
+    /// Remove added suffix to all variables and names existing in the Sympy related AST Nodes
+    SympyRenameVisitor rename_from_visitor{SympyRenameType::from_sympy};
+    rename_from_visitor.visit_program(node);
 }
 
 }  // namespace visitor

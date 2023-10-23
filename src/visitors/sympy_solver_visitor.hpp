@@ -102,9 +102,6 @@ class SympySolverVisitor: public AstVisitor {
         const std::string& original_string,
         const std::string& substitution_string);
 
-    /// Go through the statement_block and rename all the variables
-    void rename_variables(ast::StatementBlock& statement_block);
-
     /// global variables
     std::set<std::string> global_vars;
 
@@ -166,15 +163,6 @@ class SympySolverVisitor: public AstVisitor {
 
     /// max number of state vars allowed for small system linear solver
     int SMALL_LINEAR_SYSTEM_MAX_STATES;
-  
-    /// string suffix to add to all the variables before passing to sympy
-    const std::string sympy_suffix = "_sympyvar";
-
-    /// rename all VarName nodes before passing them to sympy with "_sympyvar"
-    bool rename_to_sympy{false};
-  
-    /// remove the "_sympyvar" suffix from all the VarName nodes after sympy solver
-    bool rename_from_sympy{false};
 
   public:
     explicit SympySolverVisitor(bool use_pade_approx = false,
@@ -185,8 +173,6 @@ class SympySolverVisitor: public AstVisitor {
         , SMALL_LINEAR_SYSTEM_MAX_STATES(SMALL_LINEAR_SYSTEM_MAX_STATES){};
 
     void visit_var_name(ast::VarName& node) override;
-    void visit_prime_name(ast::PrimeName& node) override;
-    void visit_name(ast::Name& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_conserve(ast::Conserve& node) override;
     void visit_derivative_block(ast::DerivativeBlock& node) override;

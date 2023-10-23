@@ -28,6 +28,7 @@ add_library(
   solve_block_visitor.cpp
   steadystate_visitor.cpp
   sympy_conductance_visitor.cpp
+  sympy_rename_visitor.cpp
   sympy_replace_solutions_visitor.cpp
   sympy_solver_visitor.cpp
   units_visitor.cpp
