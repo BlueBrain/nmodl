@@ -15,7 +15,22 @@ namespace nmodl {
 namespace visitor {
 
 void SympyRenameVisitor::visit_indexed_name(ast::IndexedName& node) {
-    /// TODO: Do this for indexed names as well
+    if (!under_sympy) {
+        return;
+    }
+    if (rename_to_sympy) {
+        logger->debug("SympyRenameVisitor :: Renaming IndexedName {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
+        node.set_name(std::make_shared<ast::Name>(std::make_shared<ast::String>(node.get_node_name() + sympy_suffix)));
+        return;
+    }
+    if (rename_from_sympy) {
+        const auto var_name = node.get_node_name();
+        if (var_name.length() > sympy_suffix.length() && var_name.substr(var_name.length() - sympy_suffix.length()) == sympy_suffix) {
+            logger->debug("SympyRenameVisitor :: Renaming IndexedName {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
+            node.set_name(std::make_shared<ast::Name>(std::make_shared<ast::String>(var_name.substr(0, var_name.length() - sympy_suffix.length()))));
+        }
+        return;
+    }
 }
 
 void SympyRenameVisitor::visit_prime_name(ast::PrimeName& node) {
@@ -23,14 +38,14 @@ void SympyRenameVisitor::visit_prime_name(ast::PrimeName& node) {
         return;
     }
     if (rename_to_sympy) {
-        logger->debug("SympyRenameVisitor :: Renaming variable {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
+        logger->debug("SympyRenameVisitor :: Renaming PrimeName {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
         node.set_value(std::make_shared<ast::String>(node.get_node_name() + sympy_suffix));
         return;
     }
     if (rename_from_sympy) {
         const auto var_name = node.get_node_name();
         if (var_name.length() > sympy_suffix.length() && var_name.substr(var_name.length() - sympy_suffix.length()) == sympy_suffix) {
-            logger->debug("SympyRenameVisitor :: Renaming variable {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
+            logger->debug("SympyRenameVisitor :: Renaming PrimeName {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
             node.set_value(std::make_shared<ast::String>(var_name.substr(0, var_name.length() - sympy_suffix.length())));
         }
         return;
@@ -42,14 +57,14 @@ void SympyRenameVisitor::visit_name(ast::Name& node) {
         return;
     }
     if (rename_to_sympy) {
-        logger->debug("SympyRenameVisitor :: Renaming variable {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
+        logger->debug("SympyRenameVisitor :: Renaming Name {} to {}", node.get_node_name(), node.get_node_name() + sympy_suffix);
         node.set_name(node.get_node_name() + sympy_suffix);
         return;
     }
     if (rename_from_sympy) {
         const auto var_name = node.get_node_name();
         if (var_name.length() > sympy_suffix.length() && var_name.substr(var_name.length() - sympy_suffix.length()) == sympy_suffix) {
-            logger->debug("SympyRenameVisitor :: Renaming variable {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
+            logger->debug("SympyRenameVisitor :: Renaming Name {} to {}", node.get_node_name(), var_name.substr(0, var_name.length() - sympy_suffix.length()));
             node.set_name(var_name.substr(0, var_name.length() - sympy_suffix.length()));
         }
         return;
