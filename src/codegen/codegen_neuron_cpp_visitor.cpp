@@ -333,39 +333,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
 }
 
 
-void CodegenNeuronCppVisitor::print_mechanism_info() {
-    auto variable_printer = [&](const std::vector<SymbolType>& variables) {
-        for (const auto& v: variables) {
-            auto name = v->get_name();
-            if (!info.point_process) {
-                name += "_" + info.mod_suffix;
-            }
-            if (v->is_array()) {
-                name += fmt::format("[{}]", v->get_length());
-            }
-            printer->add_line(add_escape_quote(name), ",");
-        }
-    };
-
-    printer->add_newline(2);
-    printer->add_line("/** channel information */");
-    printer->add_line("static const char *mechanism[] = {");
-    printer->increase_indent();
-    printer->add_line(add_escape_quote(nmodl_version()), ",");
-    printer->add_line(add_escape_quote(info.mod_suffix), ",");
-    variable_printer(info.range_parameter_vars);
-    printer->add_line("0,");
-    variable_printer(info.range_assigned_vars);
-    printer->add_line("0,");
-    variable_printer(info.range_state_vars);
-    printer->add_line("0,");
-    variable_printer(info.pointer_variables);
-    printer->add_line("0");
-    printer->decrease_indent();
-    printer->add_line("};");
-}
-
-
 /// TODO: Same as CoreNEURON?
 void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     /// TODO: Write HocParmLimits and other HOC global variables (delta_t)

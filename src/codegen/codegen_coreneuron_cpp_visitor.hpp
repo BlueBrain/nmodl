@@ -821,13 +821,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print backend code for byte array that has mechanism information (to be registered
-     * with coreneuron)
-     */
-    void print_mechanism_info() override;
-
-
-    /**
      * Print byte arrays that register scalar and vector variables for hoc interface
      *
      */

@@ -860,7 +860,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print backend code for byte array that has mechanism information (to be registered
      * with NEURON/CoreNEURON)
      */
-    virtual void print_mechanism_info() = 0;
+    void print_mechanism_info();
 
 
     /**
