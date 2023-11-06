@@ -1192,7 +1192,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print all classes
      * \param print_initializers Whether to include default values.
      */
-    void print_data_structures(bool print_initializers);
+    void print_data_structures(bool print_initializers) override;
 
 
     /**
