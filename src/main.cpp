@@ -76,8 +76,8 @@ int main(int argc, const char* argv[]) {
     /// true if code is to be generated for CoreNEURON
     bool coreneuron_code(true);
 
-    /// true if serial c code to be generated
-    bool c_backend(true);
+    /// true if serial C++ code to be generated
+    bool cpp_backend(true);
 
     /// true if c code with openacc to be generated
     bool oacc_backend(false);
@@ -185,7 +185,7 @@ int main(int argc, const char* argv[]) {
     app.add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)");
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", c_backend, fmt::format("C++ backend ({})", c_backend))->ignore_case();
+    host_opt->add_flag("--c", cpp_backend, fmt::format("C++ backend ({})", cpp_backend))->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
@@ -536,7 +536,7 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
             }
 
-            else if (coreneuron_code && !neuron_code && c_backend) {
+            else if (coreneuron_code && !neuron_code && cpp_backend) {
                 logger->info("Running C++ backend code generator for CoreNEURON");
                 CodegenCoreneuronCppVisitor visitor(modfile,
                                                     output_dir,
@@ -545,7 +545,7 @@ int main(int argc, const char* argv[]) {
                 visitor.visit_program(*ast);
             }
 
-            else if (neuron_code && c_backend) {
+            else if (neuron_code && cpp_backend) {
                 logger->info("Running C++ backend code generator for NEURON");
                 CodegenNeuronCppVisitor visitor(modfile,
                                                 output_dir,
