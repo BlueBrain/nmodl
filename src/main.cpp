@@ -185,7 +185,8 @@ int main(int argc, const char* argv[]) {
     app.add_flag("--coreneuron", coreneuron_code, "Generate C++ code for CoreNEURON (Default)");
 
     auto host_opt = app.add_subcommand("host", "HOST/CPU code backends")->ignore_case();
-    host_opt->add_flag("--c", cpp_backend, fmt::format("C++ backend ({})", cpp_backend))->ignore_case();
+    host_opt->add_flag("--c", cpp_backend, fmt::format("C++ backend ({})", cpp_backend))
+        ->ignore_case();
 
     auto acc_opt = app.add_subcommand("acc", "Accelerator code backends")->ignore_case();
     acc_opt
