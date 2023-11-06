@@ -1679,7 +1679,15 @@ void CodegenCoreneuronCppVisitor::print_sdlists_init(bool print_initializers) {
     if (info.primes_size == 0) {
         return;
     }
-    if (info.primes_size != info.prime_variables_by_order.size()) {
+    const auto count_prime_variables = [](auto size, const SymbolType& symbol) {
+        return size += symbol->get_length();
+    };
+    const auto prime_variables_by_order_size =
+            std::accumulate(info.prime_variables_by_order.begin(),
+                            info.prime_variables_by_order.end(),
+                            0,
+                            count_prime_variables);
+    if (info.primes_size != prime_variables_by_order_size) {
         throw std::runtime_error{
             fmt::format("primes_size = {} differs from prime_variables_by_order.size() = {}, "
                         "this should not happen.",
@@ -2478,11 +2486,9 @@ void CodegenCoreneuronCppVisitor::print_initial_block(const InitialBlock* node) 
             auto lhs = get_variable_name(name);
             auto rhs = get_variable_name(name + "0");
             if (var->is_array()) {
-                printer->fmt_push_block(
-                    "for (std::size_t arr_index = 0; arr_index < {}; ++arr_index)",
-                    var->get_length());
-                printer->add_line(lhs, "[arr_index] = ", rhs, ";");
-                printer->pop_block();
+                for (int i = 0; i < var->get_length(); ++i) {
+                    printer->fmt_line("{}[{}] = {};", lhs, i, rhs);
+                }
             } else {
                 printer->fmt_line("{} = {};", lhs, rhs);
             }
