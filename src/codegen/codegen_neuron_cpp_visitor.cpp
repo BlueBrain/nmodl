@@ -333,7 +333,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
 }
 
 
-/// TODO: Same as CoreNEURON?
 void CodegenNeuronCppVisitor::print_mechanism_info() {
     auto variable_printer = [&](const std::vector<SymbolType>& variables) {
         for (const auto& v: variables) {
@@ -623,10 +622,8 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     template <typename T>
     using _nrn_mechanism_std_vector = std::vector<T>;
     using _nrn_model_sorted_token = neuron::model_sorted_token;
-    using _nrn_mechanism_cache_range =
-        neuron::cache::MechanismRange<number_of_floating_point_variables, number_of_datum_variables>;
-    using _nrn_mechanism_cache_instance =
-        neuron::cache::MechanismInstance<number_of_floating_point_variables, number_of_datum_variables>;
+    using _nrn_mechanism_cache_range = neuron::cache::MechanismRange<number_of_floating_point_variables, number_of_datum_variables>;
+    using _nrn_mechanism_cache_instance = neuron::cache::MechanismInstance<number_of_floating_point_variables, number_of_datum_variables>;
     template <typename T>
     using _nrn_mechanism_field = neuron::mechanism::field<T>;
     template <typename... Args>
