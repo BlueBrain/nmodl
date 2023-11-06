@@ -1683,10 +1683,10 @@ void CodegenCoreneuronCppVisitor::print_sdlists_init(bool print_initializers) {
         return size += symbol->get_length();
     };
     const auto prime_variables_by_order_size =
-            std::accumulate(info.prime_variables_by_order.begin(),
-                            info.prime_variables_by_order.end(),
-                            0,
-                            count_prime_variables);
+        std::accumulate(info.prime_variables_by_order.begin(),
+                        info.prime_variables_by_order.end(),
+                        0,
+                        count_prime_variables);
     if (info.primes_size != prime_variables_by_order_size) {
         throw std::runtime_error{
             fmt::format("primes_size = {} differs from prime_variables_by_order.size() = {}, "
