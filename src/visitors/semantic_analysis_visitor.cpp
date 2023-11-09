@@ -182,7 +182,8 @@ void SemanticAnalysisVisitor::visit_breakpoint_block(const ast::BreakpointBlock&
 void SemanticAnalysisVisitor::visit_solve_block(const ast::SolveBlock& /* node */) {
     /// <-- This code is for check 8
     if (solve_block_found_in_this_breakpoint_block) {
-        logger->critical("It is not allowed to have several solve blocks in the same breakpoint block");
+        logger->critical(
+            "It is not allowed to have several solve blocks in the same breakpoint block");
         check_fail = true;
     } else {
         solve_block_found_in_this_breakpoint_block = true;
