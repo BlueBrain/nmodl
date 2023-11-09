@@ -385,7 +385,7 @@ bool CodegenCppVisitor::nrn_state_required() const noexcept {
     if (info.artificial_cell) {
         return false;
     }
-    return info.nrn_state_block != nullptr || breakpoint_exist();
+    return info.nrn_state_block != nullptr || info.breakpoint_with_solve || info.currents.empty();
 }
 
 
