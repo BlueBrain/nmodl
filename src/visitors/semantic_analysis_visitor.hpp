@@ -29,8 +29,9 @@
  * 3. A TABLE statement in functions cannot have name list, and should have one in procedures.
  * 4. Check if ion variables from a `USEION` statement are not declared in `CONSTANT` block.
  * 5. Check if an independent variable is not 't'.
- * 6. Check that mutex are not badly use
+ * 6. Check that mutex are not badly use.
  * 7. Check than function table got at least one argument.
+ * 8. Check that unit always have a name.
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -81,6 +82,9 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Look if MUTEXUNLOCK is outside a locked block
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+
+    /// Visit an unit and check that name is not empty
+    void visit_unit(const ast::Unit& node) override;
 
   public:
     SemanticAnalysisVisitor(bool accel_backend = false)

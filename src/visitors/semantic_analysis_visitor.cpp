@@ -14,6 +14,7 @@
 #include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
+#include "ast/unit.hpp"
 #include "symtab/symbol_properties.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -168,6 +169,14 @@ void SemanticAnalysisVisitor::visit_mutex_unlock(const ast::MutexUnlock& /* node
     }
     in_mutex = false;
     /// -->
+}
+
+void SemanticAnalysisVisitor::visit_unit(const ast::Unit& node) {
+    /// <-- This code is for check 8
+    if (node.get_name()->get_value().empty()) {
+        logger->error("SemanticAnalysisVisitor:: An unit cannot be created without name.");
+        check_fail = true;
+    }
 }
 
 }  // namespace visitor
