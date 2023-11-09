@@ -15,9 +15,7 @@
 
 namespace fs = std::filesystem;
 
-namespace nmodl {
-
-namespace pybind_wrappers {
+namespace nmodl::pybind_wrappers {
 
 bool EmbeddedPythonLoader::have_wrappers() {
 #if defined(NMODL_STATIC_PYWRAPPER)
@@ -89,6 +87,4 @@ const pybind_wrap_api* EmbeddedPythonLoader::api() {
 }
 
 
-}  // namespace pybind_wrappers
-
-}  // namespace nmodl
+}  // namespace nmodl::pybind_wrappers

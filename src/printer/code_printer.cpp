@@ -8,8 +8,7 @@
 #include "printer/code_printer.hpp"
 #include "utils/string_utils.hpp"
 
-namespace nmodl {
-namespace printer {
+namespace nmodl::printer {
 
 CodePrinter::CodePrinter(const std::string& filename) {
     if (filename.empty()) {
@@ -110,5 +109,4 @@ void CodePrinter::pop_block(const std::string_view& suffix, std::size_t num_newl
     add_newline(num_newlines);
 }
 
-}  // namespace printer
-}  // namespace nmodl
+}  // namespace nmodl::printer

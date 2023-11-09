@@ -17,8 +17,7 @@
 #include <memory>
 #include <sstream>
 
-namespace nmodl {
-namespace printer {
+namespace nmodl::printer {
 
 /**
  * @addtogroup printer
@@ -70,5 +69,4 @@ class NMODLPrinter {
 
 /** @} */  // end of printer
 
-}  // namespace printer
-}  // namespace nmodl
+}  // namespace nmodl::printer

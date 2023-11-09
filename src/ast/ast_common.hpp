@@ -23,10 +23,8 @@
 #include "symtab/symbol_table.hpp"
 #include "visitors/visitor.hpp"
 
-namespace nmodl {
-
 /// Abstract Syntax Tree (AST) related implementations
-namespace ast {
+namespace nmodl::ast {
 
 /**
  * @defgroup ast AST Implementation
@@ -96,5 +94,4 @@ static const std::string ReactionOpNames[] = {"<->", "<<", "->"};
 
 /** @} */  // end of ast_prop
 
-}  // namespace ast
-}  // namespace nmodl
+}  // namespace nmodl::ast

@@ -12,8 +12,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "lexer/token_mapping.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
     auto function_name = node.get_node_name();
@@ -53,5 +52,4 @@ void ImplicitArgumentVisitor::visit_function_call(ast::FunctionCall& node) {
     node.visit_children(*this);
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -24,8 +24,7 @@
  * \brief Units processing while being processed from lexer and parser
  */
 
-namespace nmodl {
-namespace units {
+namespace nmodl::units {
 
 Prefix::Prefix(std::string name, const std::string& factor) {
     if (name.back() == '-') {
@@ -330,5 +329,4 @@ void UnitTable::print_base_units(std::ostream& base_units_details) const {
     base_units_details << '\n';
 }
 
-}  // namespace units
-}  // namespace nmodl
+}  // namespace nmodl::units

@@ -10,8 +10,7 @@
 #include <iostream>
 
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * @addtogroup parser
@@ -47,8 +46,7 @@ class VerbatimDriver {
 
 /** @} */  // end of parser
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser
 
 
 int Verbatim_parse(nmodl::parser::VerbatimDriver*);

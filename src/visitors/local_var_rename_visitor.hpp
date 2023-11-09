@@ -18,8 +18,7 @@
 #include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \addtogroup visitor_classes
@@ -77,5 +76,4 @@ class LocalVarRenameVisitor: public AstVisitor {
 
 /** \} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

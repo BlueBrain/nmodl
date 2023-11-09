@@ -196,13 +196,17 @@ class ChildNode(BaseNode):
 
         return type_name
 
+    @classmethod
+    def add_const_rvalue_reference(cls, type):
+        return f"const {type}&"
+
     def get_rvalue_typename(self):
         """returns rvalue reference type of the node"""
         typename = self.get_typename()
         if self.is_vector:
-            return "const " + typename + "&"
+            return self.add_const_rvalue_reference(typename)
         if self.is_base_type_node and not self.is_integral_type_node or self.is_ptr_excluded_node:
-            return "const " + typename + "&"
+            return self.add_const_rvalue_reference(typename)
         return typename
 
     def get_shared_typename(self):
@@ -245,7 +249,7 @@ class ChildNode(BaseNode):
         """returns rvalue reference type when used as returned or parameter type"""
         typename = self.member_typename
         if not self.is_integral_type_node:
-            return "const " + typename + "&"
+            return self.add_const_rvalue_reference(typename)
         return typename
 
     def get_add_methods_declaration(self):

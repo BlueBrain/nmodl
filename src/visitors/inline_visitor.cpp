@@ -16,8 +16,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using namespace ast;
 
@@ -326,5 +325,4 @@ void InlineVisitor::visit_program(Program& node) {
     node.visit_children(*this);
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -15,8 +15,7 @@
 
 namespace fs = std::filesystem;
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 NmodlDriver::NmodlDriver(bool strace, bool ptrace)
     : trace_scanner(strace)
@@ -164,5 +163,4 @@ std::string NmodlDriver::check_include_argument(const location& location,
     return filename.substr(1, filename.size() - 2);
 }
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

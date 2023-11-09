@@ -16,8 +16,7 @@
 #include <string>
 #include <vector>
 
-namespace nmodl {
-namespace utils {
+namespace nmodl::utils {
 
 /**
  * @addtogroup utils
@@ -108,5 +107,4 @@ struct PerfStat {
 
 /** @} */  // end of utils
 
-}  // namespace utils
-}  // namespace nmodl
+}  // namespace nmodl::utils

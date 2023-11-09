@@ -14,8 +14,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void SolveBlockVisitor::visit_breakpoint_block(ast::BreakpointBlock& node) {
     in_breakpoint_block = true;
@@ -93,5 +92,4 @@ void SolveBlockVisitor::visit_program(ast::Program& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

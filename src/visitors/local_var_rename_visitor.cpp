@@ -14,8 +14,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using symtab::SymbolTable;
 
@@ -75,5 +74,4 @@ void LocalVarRenameVisitor::visit_statement_block(ast::StatementBlock& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

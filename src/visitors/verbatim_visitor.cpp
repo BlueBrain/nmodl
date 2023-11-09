@@ -12,8 +12,7 @@
 #include "ast/string.hpp"
 #include "ast/verbatim.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void VerbatimVisitor::visit_verbatim(const ast::Verbatim& node) {
     std::string block;
@@ -28,5 +27,4 @@ void VerbatimVisitor::visit_verbatim(const ast::Verbatim& node) {
     blocks.push_back(block);
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

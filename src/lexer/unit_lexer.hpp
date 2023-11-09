@@ -28,8 +28,7 @@
 #include "FlexLexer.h"
 #endif
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * @addtogroup lexer
@@ -83,5 +82,4 @@ class UnitLexer: public UnitFlexLexer {
     virtual UnitParser::symbol_type next_token();
 };
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

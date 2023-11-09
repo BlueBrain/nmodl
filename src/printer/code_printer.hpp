@@ -22,9 +22,7 @@
 #include <sstream>
 #include <string_view>
 
-namespace nmodl {
-/// implementation of various printers
-namespace printer {
+namespace nmodl::printer {
 
 /**
  * @defgroup printer Code Printers
@@ -131,5 +129,4 @@ class CodePrinter {
 
 /** @} */  // end of printer
 
-}  // namespace printer
-}  // namespace nmodl
+}  // namespace nmodl::printer

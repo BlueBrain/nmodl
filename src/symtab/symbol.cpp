@@ -9,8 +9,7 @@
 #include "utils/logger.hpp"
 #include <ast/ast.hpp>
 
-namespace nmodl {
-namespace symtab {
+namespace nmodl::symtab {
 
 using syminfo::NmodlType;
 using syminfo::Status;
@@ -63,5 +62,4 @@ std::vector<ast::Ast*> Symbol::get_nodes_by_type(
     return _nodes;
 }
 
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab

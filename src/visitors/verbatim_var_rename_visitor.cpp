@@ -14,8 +14,7 @@
 #include "src/utils/logger.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void VerbatimVarRenameVisitor::visit_statement_block(ast::StatementBlock& node) {
     if (node.get_statements().empty()) {
@@ -93,5 +92,4 @@ void VerbatimVarRenameVisitor::visit_verbatim(ast::Verbatim& node) {
     statement->set(oss.str());
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

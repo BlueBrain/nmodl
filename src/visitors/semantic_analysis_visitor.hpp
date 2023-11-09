@@ -35,8 +35,7 @@
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
@@ -90,5 +89,4 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
 /** \} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

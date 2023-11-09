@@ -12,10 +12,8 @@
  * \brief Forward references of symbols defined in namespace nmodl::printer
  */
 
-namespace nmodl {
-namespace printer {
+namespace nmodl::printer {
 
 class JSONPrinter;
 
-}
-}  // namespace nmodl
+}  // namespace nmodl::printer

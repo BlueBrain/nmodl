@@ -9,8 +9,7 @@
 #include "ast/binary_expression.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 void IndexedNameVisitor::visit_indexed_name(ast::IndexedName& node) {
     indexed_name = nmodl::get_indexed_name(node);
@@ -34,5 +33,4 @@ std::string IndexedNameVisitor::get_indexed_name() {
     return indexed_name;
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

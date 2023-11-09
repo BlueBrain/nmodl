@@ -10,11 +10,9 @@
 /// \file
 /// \brief Forward declarations of symbols in namespace nmodl::symtab
 
-namespace nmodl {
-namespace symtab {
+namespace nmodl::symtab {
 
 class Symbol;
 class SymbolTable;
 
-}  // namespace symtab
-}  // namespace nmodl
+}  // namespace nmodl::symtab

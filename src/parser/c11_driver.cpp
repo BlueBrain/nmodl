@@ -11,8 +11,7 @@
 #include "lexer/c11_lexer.hpp"
 #include "parser/c11_driver.hpp"
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 CDriver::CDriver() = default;
 
@@ -75,5 +74,4 @@ void CDriver::scan_string(const std::string& text) {
     }
 }
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

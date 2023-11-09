@@ -28,8 +28,7 @@
 #include "FlexLexer.h"
 #endif
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * @addtogroup lexer
@@ -108,5 +107,4 @@ class CLexer: public CFlexLexer {
 
 /** @} */  // end of lexer
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

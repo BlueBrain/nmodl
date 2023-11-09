@@ -14,8 +14,7 @@
 #include "visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 using symtab::syminfo::NmodlType;
 
@@ -489,5 +488,4 @@ void KineticBlockVisitor::visit_program(ast::Program& node) {
     node.set_blocks(std::move(blocks));
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

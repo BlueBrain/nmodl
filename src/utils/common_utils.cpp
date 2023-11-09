@@ -22,8 +22,7 @@
 #define IS_WINDOWS
 #endif
 
-namespace nmodl {
-namespace utils {
+namespace nmodl::utils {
 
 std::string generate_random_string(const int len, UseNumbersInString use_numbers) {
     std::string s(len, 0);
@@ -43,5 +42,4 @@ std::string generate_random_string(const int len, UseNumbersInString use_numbers
     return s;
 }
 
-}  // namespace utils
-}  // namespace nmodl
+}  // namespace nmodl::utils

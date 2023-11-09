@@ -13,8 +13,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \class IndexRemover
@@ -130,7 +129,7 @@ static std::shared_ptr<ast::ExpressionStatement> unroll_for_loop(
     }
 
     /// create new statement representing unrolled loop
-    auto block = new ast::StatementBlock(std::move(statements));
+    auto block = std::make_shared<ast::StatementBlock>(statements);
     return std::make_shared<ast::ExpressionStatement>(block);
 }
 
@@ -167,5 +166,4 @@ void LoopUnrollVisitor::visit_statement_block(ast::StatementBlock& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

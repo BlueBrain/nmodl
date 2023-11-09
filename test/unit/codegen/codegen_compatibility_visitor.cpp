@@ -8,7 +8,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/matchers/catch_matchers_string.hpp>
 
-#include "ast/program.hpp"
 #include "codegen/codegen_compatibility_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
@@ -31,7 +30,7 @@ bool runCompatibilityVisitor(const std::string& nmodl_text) {
     return CodegenCompatibilityVisitor().find_unhandled_ast_nodes(*ast);
 }
 
-SCENARIO("Uncompatible constructs should failed", "[codegen][compatibility_visitor]") {
+SCENARIO("Incompatible constructs should failed", "[codegen][compatibility_visitor]") {
     GIVEN("A mod file containing an EXTERNAL construct") {
         std::string const nmodl_text = R"(
             NEURON {

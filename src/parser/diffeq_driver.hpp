@@ -12,8 +12,7 @@
 #include "parser/diffeq_context.hpp"
 
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /// flex generated scanner class (extends base lexer class of flex)
 class DiffeqlLexer;
@@ -60,5 +59,4 @@ class DiffeqDriver {
 
 /** @} */  // end of parser
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

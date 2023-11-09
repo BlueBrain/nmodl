@@ -23,9 +23,7 @@
 
 
 /// encapsulates everything related to NMODL code generation framework
-namespace nmodl {
-/// encapsulate lexer and parsers implementations
-namespace parser {
+namespace nmodl::parser {
 
 /**
  * \defgroup parser Parser Implementation
@@ -162,5 +160,4 @@ class NmodlDriver {
 
 /** \} */  // end of parser
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

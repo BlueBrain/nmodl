@@ -12,8 +12,7 @@
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 std::shared_ptr<ast::DerivativeBlock> SteadystateVisitor::create_steadystate_block(
     const std::shared_ptr<ast::SolveBlock>& solve_block,
@@ -105,5 +104,4 @@ void SteadystateVisitor::visit_program(ast::Program& node) {
     }
 }
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

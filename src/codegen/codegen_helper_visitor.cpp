@@ -16,8 +16,7 @@
 #include "visitors/visitor_utils.hpp"
 
 
-namespace nmodl {
-namespace codegen {
+namespace nmodl::codegen {
 
 using namespace ast;
 
@@ -774,5 +773,4 @@ void CodegenHelperVisitor::visit_after_block(const ast::AfterBlock& node) {
     info.before_after_blocks.push_back(&node);
 }
 
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen

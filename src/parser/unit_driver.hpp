@@ -14,8 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 /// flex generated scanner class (extends base lexer class of flex)
 class UnitLexer;
@@ -75,5 +74,4 @@ class UnitDriver {
     }
 };
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser

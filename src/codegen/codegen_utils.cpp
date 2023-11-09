@@ -9,9 +9,7 @@
 
 #include "codegen/codegen_cpp_visitor.hpp"
 
-namespace nmodl {
-namespace codegen {
-namespace utils {
+namespace nmodl::codegen::utils {
 /**
  * \details We can directly print value but if user specify value as integer then
  * then it gets printed as an integer. To avoid this, we use below wrappers.
@@ -38,6 +36,4 @@ std::string format_float_string<CodegenCppVisitor>(const std::string& s_value) {
     }
     return s_value;
 }
-}  // namespace utils
-}  // namespace codegen
-}  // namespace nmodl
+}  // namespace nmodl::codegen::utils

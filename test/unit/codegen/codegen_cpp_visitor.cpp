@@ -11,7 +11,6 @@
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
-#include "codegen/codegen_helper_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -299,7 +298,7 @@ SCENARIO("Check instance variable definition order", "[codegen][var_order]") {
     }
 }
 
-std::string get_instance_structure(std::string nmodl_text) {
+std::string get_instance_structure(const std::string& nmodl_text) {
     // parse mod file & print mechanism structure
     auto const ast = NmodlDriver{}.parse_string(nmodl_text);
     // add implicit arguments
@@ -535,8 +534,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 inc = inc + 1.0;
             }
         })";
-                auto const expected = generated_code;
-                REQUIRE_THAT(generated, ContainsSubstring(expected));
+                REQUIRE_THAT(generated, ContainsSubstring(generated_code));
             }
             // AFTER SOLVE
             {
@@ -560,8 +558,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 }
             }
         })";
-                auto const expected = generated_code;
-                REQUIRE_THAT(generated, ContainsSubstring(expected));
+                REQUIRE_THAT(generated, ContainsSubstring(generated_code));
             }
             // BEFORE INITIAL
             {
@@ -582,8 +579,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 inc = 0.0;
             }
         })";
-                auto const expected = generated_code;
-                REQUIRE_THAT(generated, ContainsSubstring(expected));
+                REQUIRE_THAT(generated, ContainsSubstring(generated_code));
             }
             // AFTER INITIAL
             {
@@ -604,8 +600,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 inc = 0.0;
             }
         })";
-                auto const expected = generated_code;
-                REQUIRE_THAT(generated, ContainsSubstring(expected));
+                REQUIRE_THAT(generated, ContainsSubstring(generated_code));
             }
             // BEFORE STEP
             {
@@ -626,8 +621,7 @@ SCENARIO("Check that BEFORE/AFTER block are well generated", "[codegen][before/a
                 inc = 0.0;
             }
         })";
-                auto const expected = generated_code;
-                REQUIRE_THAT(generated, ContainsSubstring(expected));
+                REQUIRE_THAT(generated, ContainsSubstring(generated_code));
             }
         }
     }

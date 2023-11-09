@@ -10,9 +10,7 @@
 #include <string>
 #include <utility>
 
-namespace nmodl {
-namespace parser {
-namespace diffeq {
+namespace nmodl::parser::diffeq {
 
 /**
  * \class Term
@@ -127,6 +125,4 @@ class DiffEqContext {
     void print() const;
 };
 
-}  // namespace diffeq
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser::diffeq

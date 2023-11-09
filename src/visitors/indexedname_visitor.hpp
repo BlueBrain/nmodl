@@ -20,8 +20,7 @@
 #include "ast/program.hpp"
 #include "visitors/ast_visitor.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \addtogroup visitor_classes
@@ -64,5 +63,4 @@ class IndexedNameVisitor: public AstVisitor {
 
 /** \} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

@@ -12,8 +12,7 @@
 #include <limits>
 #include <string>
 
-namespace nmodl {
-namespace stringutils {
+namespace nmodl::stringutils {
 
 std::string to_string(double value, const std::string& format_spec) {
     // double containing integer value
@@ -27,5 +26,4 @@ std::string to_string(double value, const std::string& format_spec) {
     return fmt::format(format_spec, value);
 }
 
-}  // namespace stringutils
-}  // namespace nmodl
+}  // namespace nmodl::stringutils

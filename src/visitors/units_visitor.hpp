@@ -20,8 +20,7 @@
 #include "visitors/ast_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-namespace nmodl {
-namespace visitor {
+namespace nmodl::visitor {
 
 /**
  * \addtogroup visitor_classes
@@ -87,5 +86,4 @@ class UnitsVisitor: public AstVisitor {
 
 /** \} */  // end of visitor_classes
 
-}  // namespace visitor
-}  // namespace nmodl
+}  // namespace nmodl::visitor

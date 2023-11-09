@@ -12,8 +12,7 @@
 #include "parser/diffeq_driver.hpp"
 #include "utils/string_utils.hpp"
 
-namespace nmodl {
-namespace parser {
+namespace nmodl::parser {
 
 void DiffeqDriver::parse_equation(const std::string& equation,
                                   std::string& state,
@@ -71,5 +70,4 @@ bool DiffeqDriver::cnexp_possible(const std::string& equation, std::string& solu
     return cnexp_possible;
 }
 
-}  // namespace parser
-}  // namespace nmodl
+}  // namespace nmodl::parser
