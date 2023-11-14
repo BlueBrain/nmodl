@@ -12,8 +12,8 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
-#include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
+#include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
 
