@@ -10,6 +10,7 @@ var dir_bb63d001f2c2d4d23cdeedc048a4b8ac =
     [ "kinetic_block.cpp", "kinetic__block_8cpp.html", "kinetic__block_8cpp" ],
     [ "local_to_assigned.cpp", "local__to__assigned_8cpp.html", "local__to__assigned_8cpp" ],
     [ "localize.cpp", "localize_8cpp.html", "localize_8cpp" ],
+    [ "localrename.cpp", "localrename_8cpp.html", "localrename_8cpp" ],
     [ "lookup.cpp", "lookup_8cpp.html", "lookup_8cpp" ],
     [ "loop_unroll.cpp", "loop__unroll_8cpp.html", "loop__unroll_8cpp" ],
     [ "main.cpp", "test_2unit_2visitor_2main_8cpp.html", "test_2unit_2visitor_2main_8cpp" ],

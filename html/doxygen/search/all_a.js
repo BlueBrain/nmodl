@@ -5,7 +5,7 @@ var searchData=
   ['keys_1122',['keys',['../structnmodl_1_1utils_1_1_perf_stat.html#ae253575915ad0a83b66d3fc740b15bc2',1,'nmodl::utils::PerfStat']]],
   ['keyword_5ftype_1123',['keyword_type',['../namespacenmodl_1_1details.html#ac7dd6707d4aedf9e72c6ea049adc6d79',1,'nmodl::details']]],
   ['keywords_1124',['keywords',['../namespacenmodl_1_1details.html#a19154f9c7b5074c9177b1da18950f29d',1,'nmodl::details']]],
-  ['kinetic_5fblock_1125',['kinetic_block',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba806afad5f66c1de108516de837610832',1,'nmodl::symtab::syminfo::kinetic_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5e16f03b03b7646a6957397f874a5d4',1,'nmodl::ast::KINETIC_BLOCK()']]],
+  ['kinetic_5fblock_1125',['KINETIC_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5e16f03b03b7646a6957397f874a5d4',1,'nmodl::ast::KINETIC_BLOCK()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba806afad5f66c1de108516de837610832',1,'nmodl::symtab::syminfo::kinetic_block()']]],
   ['kinetic_5fblock_2ecpp_1126',['kinetic_block.cpp',['../kinetic__block_8cpp.html',1,'']]],
   ['kinetic_5fblock_2ehpp_1127',['kinetic_block.hpp',['../kinetic__block_8hpp.html',1,'']]],
   ['kinetic_5fblock_5fvisitor_2ecpp_1128',['kinetic_block_visitor.cpp',['../kinetic__block__visitor_8cpp.html',1,'']]],

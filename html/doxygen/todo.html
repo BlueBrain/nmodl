@@ -98,9 +98,9 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>File <a class="el" href="modl_8h.html">modl.h</a>  </dt>
 <dd><a class="anchor" id="_todo000021"></a>Add these bit masks as enum-flags and remove this legacy header  </dd>
 <dt>Class <a class="el" href="structnmodl_1_1ast_1_1_ast.html">nmodl::ast::Ast</a>  </dt>
-<dd><a class="anchor" id="_todo000061"></a>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future.  </dd>
+<dd><a class="anchor" id="_todo000060"></a>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html">nmodl::ast::ConstantStatement</a>  </dt>
-<dd><a class="anchor" id="_todo000062"></a>As <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html" title="Represent statement in CONSTANT block of NMODL.">ConstantStatement</a> wraps a single <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ConstantVar</a>, this or <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ast::ConstantVar</a> can be redundant in the future. </dd>
+<dd><a class="anchor" id="_todo000061"></a>As <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html" title="Represent statement in CONSTANT block of NMODL.">ConstantStatement</a> wraps a single <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ConstantVar</a>, this or <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ast::ConstantVar</a> can be redundant in the future. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6">nmodl::codegen::CodegenAccVisitor::print_abort_routine</a>  () const override</dt>
 <dd><a class="anchor" id="_todo000001"></a>: we need to implement proper error handling mechanism to propogate errors from GPU to CPU. For example, error code can be returned like original neuron implementation. For now we use <code>assert(0==1)</code> pattern which is used for OpenACC.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin</a>  () override</dt>
@@ -216,13 +216,13 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </ul>
 </dd>
 <dt>Member <a class="el" href="structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a50cbab8eb69dbd5808d7da31e983dfde">nmodl::test_utils::NmodlTestCase::NmodlTestCase</a>  ()=delete</dt>
-<dd><a class="anchor" id="_todo000060"></a>: add associated json (to use in visitor test)  </dd>
+<dd><a class="anchor" id="_todo000059"></a>: add associated json (to use in visitor test)  </dd>
 <dt>Member <a class="el" href="namespacenmodl_1_1visitor.html#a93218c244f2658370e096935410f2c42">nmodl::visitor::create_statement</a>  (const std::string &amp;code_statement)</dt>
-<dd><a class="anchor" id="_todo000058"></a>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block.  </dd>
+<dd><a class="anchor" id="_todo000057"></a>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a9c55e7d17ed48d0d64b8acb1dd4cc060">nmodl::visitor::DefUseAnalyzeVisitor::visit_verbatim</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block.">ast::Verbatim</a> &amp;node) override</dt>
 <dd><a class="anchor" id="_todo000044"></a>One simple way would be to look for p_name in the string of verbatim block to find the variable usage.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html">nmodl::visitor::InlineVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000047"></a><ul>
+<dd><a class="anchor" id="_todo000046"></a><ul>
 <li>Recursive function calls are not supported and need to add checks to avoid stack explosion</li>
 <li>Currently we rename variables more than necessary, this could be improved [low priority]</li>
 <li>Function calls as part of an argument of function call itself are not completely inlined [low priority]</li>
@@ -232,44 +232,42 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#aec884c3dd17991a7fb6a4ae7e2d19eb4">nmodl::visitor::InlineVisitor::can_replace_statement</a>  (const std::shared_ptr&lt; ast::Statement &gt; &amp;statement)</dt>
 <dd><a class="anchor" id="_todo000045"></a>Add method to ast itself to simplify this implementation  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#a3ee1887842a2e1379f0510971f4c3933">nmodl::visitor::InlineVisitor::inline_function_call</a>  (<a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> &amp;callee, <a class="el" href="classnmodl_1_1ast_1_1_function_call.html" title="TODO.">ast::FunctionCall</a> &amp;node, <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html" title="Represents block encapsulating list of statements.">ast::StatementBlock</a> &amp;caller)</dt>
-<dd><a class="anchor" id="_todo000046"></a>Have to re-run symtab visitor pass to update symbol table  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_localize_visitor.html">nmodl::visitor::LocalizeVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000052"></a><ul>
+<dd><a class="anchor" id="_todo000051"></a><ul>
 <li>We are excluding procedures/functions because they will be still using global variables. We need to have dead-code removal pass to eliminate unused procedures/ functions before localizer pass.  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_localize_visitor.html#ad865a0eb75ee7212520bfc092162f188">nmodl::visitor::LocalizeVisitor::variables_to_optimize</a>  () const</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000050"></a>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </p>
-<p class="enddd"><a class="anchor" id="_todo000051"></a>Instead of ast node, use symbol properties to check variable type  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000049"></a>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </p>
+<p class="enddd"><a class="anchor" id="_todo000050"></a>Instead of ast node, use symbol properties to check variable type  </p>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_local_to_assigned_visitor.html">nmodl::visitor::LocalToAssignedVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000048"></a><ul>
+<dd><a class="anchor" id="_todo000047"></a><ul>
 <li>Variables like qt are often constant. As long as INITIAL block is executed serially or qt is updated in atomic way then we don't have a problem.  </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_local_var_rename_visitor.html">nmodl::visitor::LocalVarRenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000049"></a><ul>
+<dd><a class="anchor" id="_todo000048"></a><ul>
 <li>Currently we are renaming variables even if there is no inlining candidates. In this case ideally we should not rename.  </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html">nmodl::visitor::NmodlPrintVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000063"></a>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types.  </dd>
+<dd><a class="anchor" id="_todo000062"></a>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html">nmodl::visitor::PerfVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000053"></a><ul>
+<dd><a class="anchor" id="_todo000052"></a><ul>
 <li>To measure the performance of statements like if, elseif and else, we have to find maximum performance from if,elseif,else and then use it to calculate total performance. In the current implementation we are doing sum of all blocks. We need to override IfStatement (which has all sub-blocks) and get maximum performance of all statements recursively. </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_rename_visitor.html">nmodl::visitor::RenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000054"></a>Add log/warning messages.  </dd>
+<dd><a class="anchor" id="_todo000053"></a>Add log/warning messages.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#acecb22d0c928ea76b67abef5e83b989d">nmodl::visitor::SymtabVisitor::visit_table_statement</a>  (<a class="el" href="classnmodl_1_1ast_1_1_table_statement.html" title="Represents TABLE statement in NMODL.">ast::TableStatement</a> &amp;node) override</dt>
-<dd><a class="anchor" id="_todo000055"></a>we assume table statement follows variable declaration  </dd>
+<dd><a class="anchor" id="_todo000054"></a>we assume table statement follows variable declaration  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_var_usage_visitor.html">nmodl::visitor::VarUsageVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000056"></a>Check if macro is considered as variable  </dd>
+<dd><a class="anchor" id="_todo000055"></a>Check if macro is considered as variable  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html">nmodl::visitor::VerbatimVarRenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000057"></a>Check if symbol table lookup is ok or there are cases where this could be error prone.  </dd>
+<dd><a class="anchor" id="_todo000056"></a>Check if symbol table lookup is ok or there are cases where this could be error prone.  </dd>
 <dt>Member <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp.html#a780700b9cd74cc6da7faa0250d3e64d5">SCENARIO</a>  ("Global symbol table (ModelSymbol) allows scope based operations")</dt>
-<dd><a class="anchor" id="_todo000059"></a>: not sure how to capture std::cout </dd>
+<dd><a class="anchor" id="_todo000058"></a>: not sure how to capture std::cout </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

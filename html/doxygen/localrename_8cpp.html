@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>User Guide: /home/runner/work/nmodl/nmodl/test/unit/visitor/kinetic_block.cpp File Reference</title>
+<title>User Guide: /home/runner/work/nmodl/nmodl/test/unit/visitor/localrename.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('kinetic__block_8cpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('localrename_8cpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -93,38 +93,38 @@ $(document).ready(function(){initNavTree('kinetic__block_8cpp.html',''); initRes
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">kinetic_block.cpp File Reference</div>  </div>
+<div class="title">localrename.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch_test_macros.hpp&gt;</code><br />
+<code>#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="checkparent__visitor_8hpp_source.html">visitors/checkparent_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="constant__folder__visitor_8hpp_source.html">visitors/constant_folder_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="kinetic__block__visitor_8hpp_source.html">visitors/kinetic_block_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="loop__unroll__visitor_8hpp_source.html">visitors/loop_unroll_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="inline__visitor_8hpp_source.html">visitors/inline_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="local__var__rename__visitor_8hpp_source.html">visitors/local_var_rename_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="nmodl__visitor_8hpp_source.html">visitors/nmodl_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="visitor__utils_8hpp_source.html">visitors/visitor_utils.hpp</a>&quot;</code><br />
 </div>
-<p><a href="kinetic__block_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="localrename_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ad4deafcf2aae6f96af5d7d9e0a3749c8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__block_8cpp.html#ad4deafcf2aae6f96af5d7d9e0a3749c8">run_kinetic_block_visitor</a> (const std::string &amp;text)</td></tr>
-<tr class="separator:ad4deafcf2aae6f96af5d7d9e0a3749c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d8b2ab9d04421d0b08153f1b1ffb446"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="kinetic__block_8cpp.html#a9d8b2ab9d04421d0b08153f1b1ffb446">SCENARIO</a> (&quot;Convert KINETIC to DERIVATIVE using <a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">KineticBlock</a> visitor&quot;, &quot;[kinetic][visitor]&quot;)</td></tr>
-<tr class="separator:a9d8b2ab9d04421d0b08153f1b1ffb446"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a244df11abf20d3a337e8de123c3a4cbd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="localrename_8cpp.html#a244df11abf20d3a337e8de123c3a4cbd">run_inline_localvarrename_visitor</a> (const std::string &amp;text)</td></tr>
+<tr class="separator:a244df11abf20d3a337e8de123c3a4cbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56b2fc7581fde14cd54ff17c26163258"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="localrename_8cpp.html#a56b2fc7581fde14cd54ff17c26163258">SCENARIO</a> (&quot;LocalVarRenameVisitor works with InlineVisitor&quot;, &quot;[visitor][localvarrename]&quot;)</td></tr>
+<tr class="separator:a56b2fc7581fde14cd54ff17c26163258"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ad4deafcf2aae6f96af5d7d9e0a3749c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4deafcf2aae6f96af5d7d9e0a3749c8">&#9670;&nbsp;</a></span>run_kinetic_block_visitor()</h2>
+<a id="a244df11abf20d3a337e8de123c3a4cbd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a244df11abf20d3a337e8de123c3a4cbd">&#9670;&nbsp;</a></span>run_inline_localvarrename_visitor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;std::string&gt; run_kinetic_block_visitor </td>
+          <td class="memname">std::string run_inline_localvarrename_visitor </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>text</em></td><td>)</td>
@@ -133,12 +133,12 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="kinetic__block_8cpp_source.html#l00032">32</a> of file <a class="el" href="kinetic__block_8cpp_source.html">kinetic_block.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="localrename_8cpp_source.html#l00033">33</a> of file <a class="el" href="localrename_8cpp_source.html">localrename.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a9d8b2ab9d04421d0b08153f1b1ffb446"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d8b2ab9d04421d0b08153f1b1ffb446">&#9670;&nbsp;</a></span>SCENARIO()</h2>
+<a id="a56b2fc7581fde14cd54ff17c26163258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56b2fc7581fde14cd54ff17c26163258">&#9670;&nbsp;</a></span>SCENARIO()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,14 +146,14 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">SCENARIO </td>
           <td>(</td>
-          <td class="paramtype">&quot;Convert KINETIC to DERIVATIVE using <a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">KineticBlock</a> visitor&quot;&#160;</td>
+          <td class="paramtype">&quot;LocalVarRenameVisitor works with InlineVisitor&quot;&#160;</td>
           <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&quot;&quot;&#160;</td>
-          <td class="paramname">[kinetic][visitor]&#160;</td>
+          <td class="paramname">[visitor][localvarrename]&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -163,7 +163,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="kinetic__block_8cpp_source.html#l00065">65</a> of file <a class="el" href="kinetic__block_8cpp_source.html">kinetic_block.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="localrename_8cpp_source.html#l00052">52</a> of file <a class="el" href="localrename_8cpp_source.html">localrename.cpp</a>.</p>
 
 </div>
 </div>
@@ -173,7 +173,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
   <ul>
-    <li class="navelem"><a class="el" href="dir_13e138d54eb8818da29c3992edef070a.html">test</a></li><li class="navelem"><a class="el" href="dir_6a07fdbc4b50e86806a88566ca8f66e4.html">unit</a></li><li class="navelem"><a class="el" href="dir_bb63d001f2c2d4d23cdeedc048a4b8ac.html">visitor</a></li><li class="navelem"><a class="el" href="kinetic__block_8cpp.html">kinetic_block.cpp</a></li>
+    <li class="navelem"><a class="el" href="dir_13e138d54eb8818da29c3992edef070a.html">test</a></li><li class="navelem"><a class="el" href="dir_6a07fdbc4b50e86806a88566ca8f66e4.html">unit</a></li><li class="navelem"><a class="el" href="dir_bb63d001f2c2d4d23cdeedc048a4b8ac.html">visitor</a></li><li class="navelem"><a class="el" href="localrename_8cpp.html">localrename.cpp</a></li>
   </ul>
 </div>
 <hr class="footer"/>

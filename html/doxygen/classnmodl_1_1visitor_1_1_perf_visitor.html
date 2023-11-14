@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_perf_visitor
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Visitor for measuring performance related information </p>
 <p>This visitor used to visit the ast and associated symbol tables to measure the performance of every block in nmodl file. For every symbol in associated symbol table, read/write count is updated which will be used during code generation (to select memory types). Certain statements like useion, valence etc. are not executed in the translated C code and hence need to be skipped (i.e. without visiting children). Note that this pass must be run after symbol table generation pass.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000053">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000052">Todo:</a></b></dt><dd><ul>
 <li>To measure the performance of statements like if, elseif and else, we have to find maximum performance from if,elseif,else and then use it to calculate total performance. In the current implementation we are doing sum of all blocks. We need to override IfStatement (which has all sub-blocks) and get maximum performance of all statements recursively.</li>
 </ul>
 </dd></dl>
