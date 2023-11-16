@@ -85,17 +85,17 @@ var NAVTREEINDEX =
 "classnmodl_1_1visitor_1_1_constant_folder_visitor.html#a9c227c9f375f2ea5140c5718a8c578d9",
 "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a93f67d6d1ee228862066c7bd5797930d",
 "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a78170a8cc6c5d8d48e6bfa747fd90100",
-"classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a4c816a241957e9428daa72eb9af81f7b",
-"classnmodl_1_1visitor_1_1_visitor.html#af80f0ed0c3f251a58dcb86c822297bd8",
-"conserve_8hpp.html",
-"functions_vars_i.html",
-"group__ast__class.html#gac02dd08abb8b9d2e817a1ae09297602b",
-"group__ast__vec__type.html#ga0406a473e874983914ba4adbc2cb881d",
-"initial__block_8hpp.html",
-"newton_8hpp.html#ga73227f2ab37d3b7c9036f3fe7532da73",
-"src_2visitors_2main_8cpp.html#af146cff5801acdca0761ad1abe44e0c9",
-"structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a2343bb5b6add3e9c124673d558789eb3",
-"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aeabcf0ad13cf3e5ae258accc595743e2"
+"classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a47b5650f5dbc0ec0bfef74d8aace8bbd",
+"classnmodl_1_1visitor_1_1_visitor.html#aecd2c5dceb539ce7e095b7da08b9cb2b",
+"conductance__hint_8hpp_source.html",
+"functions_vars_f.html",
+"group__ast__class.html#gabe0d8be79f0e0c0967da29d186c86c3c",
+"group__ast__vec__type.html#ga01881e31722dfd0badd5d35d9db352ec",
+"indexedname__visitor_8cpp_source.html",
+"newton_8hpp.html#ga4cefb4b50d39f5e46a64fb71ec1cae5a",
+"src_2visitors_2main_8cpp.html",
+"structnmodl_1_1test__utils_1_1_diff_eq_test_case.html#ab2ca0050c7f5f00c8e9cc9a52fee5a19",
+"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab0be83be74ced6a50e4809fad44d1957"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
