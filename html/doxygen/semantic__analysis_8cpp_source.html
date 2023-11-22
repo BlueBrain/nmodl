@@ -263,42 +263,31 @@ $(document).ready(function(){initNavTree('semantic__analysis_8cpp_source.html','
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;}</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="semantic__analysis_8cpp.html#ad2a75d8288f2fa99a7814d6ca030820f">  170</a></span>&#160;<a class="code" href="semantic__analysis_8cpp.html#aee0bd47b9ed7e5d067451085fc583edf">SCENARIO</a>(<span class="stringliteral">&quot;At most one solve block per breakpoint block&quot;</span>, <span class="stringliteral">&quot;[visitor][semantic_analysis]&quot;</span>) {</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    GIVEN(<span class="stringliteral">&quot;A breakpoint block with only one solve block&quot;</span>) {</div>
+<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="semantic__analysis_8cpp.html#ae0279626e728160b4caa7a73126f0d1e">  170</a></span>&#160;<a class="code" href="semantic__analysis_8cpp.html#aee0bd47b9ed7e5d067451085fc583edf">SCENARIO</a>(<span class="stringliteral">&quot;At most one DERIVATIVE block&quot;</span>, <span class="stringliteral">&quot;[visitor][semantic_analysis]&quot;</span>) {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    GIVEN(<span class="stringliteral">&quot;Only one DERIVATIVE block&quot;</span>) {</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">                SOLVE dX METHOD cnexp</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;<span class="stringliteral">            DERIVATIVE states {</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">                m&#39; = m/mTau</span></div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">            }</span></div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should success&quot;</span>) {</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            REQUIRE_FALSE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        }</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    GIVEN(<span class="stringliteral">&quot;2 breakpoints block with one solve block each&quot;</span>) {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    GIVEN(<span class="stringliteral">&quot;2 DERIVATIVE blocks&quot;</span>) {</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            PROCEDURE foo() {</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">                SOLVE dX METHOD cnexp</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            DERIVATIVE states1 {</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">                m&#39; = m/mTau</span></div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">                SOLVE dY METHOD cnexp</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">            DERIVATIVE states2 {</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">                h&#39; = h/hTau</span></div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="stringliteral">            }</span></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should success&quot;</span>) {</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            REQUIRE_FALSE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should failed&quot;</span>) {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            REQUIRE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        }</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    }</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    GIVEN(<span class="stringliteral">&quot;A breakpoint block with two solve blocks&quot;</span>) {</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        std::string nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">                SOLVE dX METHOD cnexp</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">                SOLVE dY METHOD cnexp</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Semantic analysis should fail&quot;</span>) {</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            REQUIRE(<a class="code" href="semantic__analysis_8cpp.html#a9fde5e10dcf117bedb1539da0d50d4ac">run_semantic_analysis_visitor</a>(nmodl_text));</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        }</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;}</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>

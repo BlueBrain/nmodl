@@ -1,7 +1,5 @@
 var NAVTREEINDEX31 =
 {
-"structnmodl_1_1test__utils_1_1_diff_eq_test_case.html#ab2ca0050c7f5f00c8e9cc9a52fee5a19":[2,0,0,7,0,0],
-"structnmodl_1_1test__utils_1_1_diff_eq_test_case.html#ad40a4835733303bb88c29707e1a87bd2":[2,0,0,7,0,2],
 "structnmodl_1_1test__utils_1_1_nmodl_test_case.html":[2,0,0,7,1],
 "structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a17b7f6a9e0972dfb3902f88141818aaa":[2,0,0,7,1,5],
 "structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a2343bb5b6add3e9c124673d558789eb3":[2,0,0,7,1,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX31 =
 "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a8bc03b91fe00cb27d1cb6d6f8bdfbb88":[3,0,2,0,0,1,8],
 "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a99202942fd27695fd88c326df4b39e3d":[3,0,2,0,0,1,1],
 "test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#a9c45dd7626fd81cd01383b4f8dc4e604":[3,0,2,0,0,1,10],
-"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4":[3,0,2,0,0,1,4]
+"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4":[3,0,2,0,0,1,4],
+"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab0be83be74ced6a50e4809fad44d1957":[3,0,2,0,0,1,14],
+"test_2unit_2codegen_2codegen__cpp__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e":[3,0,2,0,0,1,3]
 };
