@@ -165,3 +165,30 @@ SCENARIO("FUNCTION_TABLE block", "[visitor][semantic_analysis]") {
         }
     }
 }
+
+
+SCENARIO("At most one DERIVATIVE block", "[visitor][semantic_analysis]") {
+    GIVEN("Only one DERIVATIVE block") {
+        std::string nmodl_text = R"(
+            DERIVATIVE states {
+                m' = m/mTau
+            }
+        )";
+        THEN("Semantic analysis should success") {
+            REQUIRE_FALSE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+    GIVEN("2 DERIVATIVE blocks") {
+        std::string nmodl_text = R"(
+            DERIVATIVE states1 {
+                m' = m/mTau
+            }
+            DERIVATIVE states2 {
+                h' = h/hTau
+            }
+        )";
+        THEN("Semantic analysis should failed") {
+            REQUIRE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+}

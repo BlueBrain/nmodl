@@ -6,6 +6,7 @@
  */
 
 #include "visitors/semantic_analysis_visitor.hpp"
+#include "ast/breakpoint_block.hpp"
 #include "ast/function_block.hpp"
 #include "ast/function_table_block.hpp"
 #include "ast/independent_block.hpp"
@@ -57,6 +58,17 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
 
     visit_program(node);
     return check_fail;
+}
+
+void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
+    /// <-- This code is for check 8
+    const auto& derivative_block_nodes = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
+    if (derivative_block_nodes.size() > 1) {
+        logger->critical("It is not supported to have several DERIVATIVE blocks");
+        check_fail = true;
+    }
+    /// -->
+    node.visit_children(*this);
 }
 
 void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
