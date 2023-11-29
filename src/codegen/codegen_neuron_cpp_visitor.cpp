@@ -298,23 +298,23 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
             /// TODO: Also needs a test
             printer->fmt_push_block("for (int _i = 0; _i < {}; ++_i)", prime_var->get_length());
             printer->fmt_line("/* {}[{}] */", prime_var->get_name(), prime_var->get_length());
-            printer->fmt_line("_slist1[{}+_i] = {{{}, _i}}",
+            printer->fmt_line("_slist1[{}+_i] = {{{}, _i}};",
                               i,
                               position_of_float_var(prime_var->get_name()));
             const auto prime_var_deriv_name = "D" + prime_var->get_name();
             printer->fmt_line("/* {}[{}] */", prime_var_deriv_name, prime_var->get_length());
-            printer->fmt_line("_dlist1[{}+_i] = {{{}, _i}}",
+            printer->fmt_line("_dlist1[{}+_i] = {{{}, _i}};",
                               i,
                               position_of_float_var(prime_var_deriv_name));
             printer->pop_block();
         } else {
             printer->fmt_line("/* {} */", prime_var->get_name());
-            printer->fmt_line("_slist1[{}] = {{{}, 0}}",
+            printer->fmt_line("_slist1[{}] = {{{}, 0}};",
                               i,
                               position_of_float_var(prime_var->get_name()));
             const auto prime_var_deriv_name = "D" + prime_var->get_name();
             printer->fmt_line("/* {} */", prime_var_deriv_name);
-            printer->fmt_line("_dlist1[{}] = {{{}, 0}}",
+            printer->fmt_line("_dlist1[{}] = {{{}, 0}};",
                               i,
                               position_of_float_var(prime_var_deriv_name));
         }

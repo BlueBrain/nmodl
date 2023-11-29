@@ -228,9 +228,9 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
             std::string expected_placeholder_reg = R"(/** register channel with the simulator */
     void __test_reg() {
         /* s */
-        _slist1[0] = {4, 0}
+        _slist1[0] = {4, 0};
         /* Ds */
-        _dlist1[0] = {7, 0}
+        _dlist1[0] = {7, 0};
 
         int mech_type = nrn_get_mechtype("pas_test");
         _nrn_mechanism_register_data_fields(_mechtype,
