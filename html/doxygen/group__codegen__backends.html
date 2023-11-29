@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('group__codegen__backends.html',''); in
 <a href="#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Code generation backends for CoreNEURON. </p>
+<p>Code generation backends for NEURON.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -111,36 +112,45 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html">nmodl::codegen::CodegenCompatibilityVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing compatibility issues of the mod file  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html">nmodl::codegen::CodegenCoreneuronCppVisitor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C++ code compatible with legacy api of CoreNEURON  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C++ code compatible with legacy api of CoreNEURON  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html">nmodl::codegen::CodegenNeuronCppVisitor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing C++ code compatible with legacy api of NEURON  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga4999b23d646ccd6a79c07207369183bb"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:ga4999b23d646ccd6a79c07207369183bb"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb">nmodl::codegen::has_parameter_of_name</a> (const T &amp;node, const std::string &amp;name)</td></tr>
-<tr class="memdesc:ga4999b23d646ccd6a79c07207369183bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if function or procedure node has parameter with given name.  <a href="group__codegen__backends.html#ga4999b23d646ccd6a79c07207369183bb">More...</a><br /></td></tr>
-<tr class="separator:ga4999b23d646ccd6a79c07207369183bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaebe64f7d52f5cb96d8c73c1619bddabf"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gaebe64f7d52f5cb96d8c73c1619bddabf"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gaebe64f7d52f5cb96d8c73c1619bddabf">nmodl::codegen::CodegenCoreneuronCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
+<tr class="memdesc:gaebe64f7d52f5cb96d8c73c1619bddabf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gaebe64f7d52f5cb96d8c73c1619bddabf">More...</a><br /></td></tr>
+<tr class="separator:gaebe64f7d52f5cb96d8c73c1619bddabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">nmodl::codegen::CodegenCppVisitor::print_vector_elements</a> (const std::vector&lt; T &gt; &amp;elements, const std::string &amp;separator, const std::string &amp;prefix=&quot;&quot;)</td></tr>
 <tr class="memdesc:ga743bcd56c5822a14381fd87fe586ed6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the items in a vector as a list.  <a href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">More...</a><br /></td></tr>
 <tr class="separator:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">nmodl::codegen::CodegenCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
-<tr class="memdesc:gac82b533ad70154d8636a533e82c3bb18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">More...</a><br /></td></tr>
-<tr class="separator:gac82b533ad70154d8636a533e82c3bb18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabd283274182774ed39c08a0714842d43"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gabd283274182774ed39c08a0714842d43"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gabd283274182774ed39c08a0714842d43">nmodl::codegen::CodegenNeuronCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
+<tr class="memdesc:gabd283274182774ed39c08a0714842d43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gabd283274182774ed39c08a0714842d43">More...</a><br /></td></tr>
+<tr class="separator:gabd283274182774ed39c08a0714842d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="ga4999b23d646ccd6a79c07207369183bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ga4999b23d646ccd6a79c07207369183bb">&#9670;&nbsp;</a></span>has_parameter_of_name()</h2>
+<a id="gabd283274182774ed39c08a0714842d43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabd283274182774ed39c08a0714842d43">&#9670;&nbsp;</a></span>print_function_declaration() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool nmodl::codegen::has_parameter_of_name </td>
+          <td class="memname">void nmodl::codegen::CodegenNeuronCppVisitor::print_function_declaration </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>node</em>, </td>
@@ -157,30 +167,36 @@ template&lt;typename T &gt; </div>
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Check if function or procedure node has parameter with given name. </p>
+<p>Print prototype declarations of functions or procedures. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">T</td><td>Node type (either procedure or function) </td></tr>
+    <tr><td class="paramname">T</td><td>The AST node type of the node (must be of <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">nmodl::ast::Ast</a> or subclass) </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">node</td><td>AST node (either procedure or function) </td></tr>
-    <tr><td class="paramname">name</td><td>Name of parameter </td></tr>
+    <tr><td class="paramname">node</td><td>The AST node representing the function or procedure block </td></tr>
+    <tr><td class="paramname">name</td><td>A user defined name for the function</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>True if argument with name exist </dd></dl>
+<p>If there is an argument with name (say alpha) same as range variable (say alpha), we want to avoid it being printed as instance-&gt;alpha. And hence we disable variable name lookup during prototype declaration. Note that the name of procedure can be different in case of table statement. </p>
+<p>TODO: Edit for NEURON</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01822">1822</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__neuron__cpp__visitor_8hpp_source.html#l00616">616</a> of file <a class="el" href="codegen__neuron__cpp__visitor_8hpp_source.html">codegen_neuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
-<a id="gac82b533ad70154d8636a533e82c3bb18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac82b533ad70154d8636a533e82c3bb18">&#9670;&nbsp;</a></span>print_function_declaration()</h2>
+<a id="gaebe64f7d52f5cb96d8c73c1619bddabf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaebe64f7d52f5cb96d8c73c1619bddabf">&#9670;&nbsp;</a></span>print_function_declaration() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,7 +207,7 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void nmodl::codegen::CodegenCppVisitor::print_function_declaration </td>
+          <td class="memname">void nmodl::codegen::CodegenCoreneuronCppVisitor::print_function_declaration </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>node</em>, </td>
@@ -231,7 +247,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <p>If there is an argument with name (say alpha) same as range variable (say alpha), we want to avoid it being printed as instance-&gt;alpha. And hence we disable variable name lookup during prototype declaration. Note that the name of procedure can be different in case of table statement. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01839">1839</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l01314">1314</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -294,7 +310,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01800">1800</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01139">1139</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>

@@ -99,7 +99,7 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp.html',''); initResi
 <div class="textblock"><code>#include &lt;catch2/catch_test_macros.hpp&gt;</code><br />
 <code>#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen/codegen_coreneuron_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="checkparent__visitor_8hpp_source.html">visitors/checkparent_visitor.hpp</a>&quot;</code><br />
@@ -142,9 +142,9 @@ Functions</h2></td></tr>
 <tr class="separator:ad0a8c62865eb9c04790005b44712337a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4cc55329ade0a3cd5001f8915c5897b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#a4cc55329ade0a3cd5001f8915c5897b3">SCENARIO</a> (&quot;Solve KINETIC block using SympySolver Visitor&quot;, &quot;[visitor][solver][sympy][kinetic]&quot;)</td></tr>
 <tr class="separator:a4cc55329ade0a3cd5001f8915c5897b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a876dda45eeb8094ff1c8fe0f73f8bc78"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCppVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78">create_c_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss, bool inline_visitor=true, bool pade=false, bool cse=false)</td></tr>
-<tr class="memdesc:a876dda45eeb8094ff1c8fe0f73f8bc78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78">More...</a><br /></td></tr>
-<tr class="separator:a876dda45eeb8094ff1c8fe0f73f8bc78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcd3ba8f8a105bdf68db38e2f180ba96"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenCoreneuronCppVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96">create_coreneuron_cpp_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss, bool inline_visitor=true, bool pade=false, bool cse=false)</td></tr>
+<tr class="memdesc:abcd3ba8f8a105bdf68db38e2f180ba96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96">More...</a><br /></td></tr>
+<tr class="separator:abcd3ba8f8a105bdf68db38e2f180ba96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7518722cbffea33018ffc7c653e1f87"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a> (const std::string &amp;nmodl_text)</td></tr>
 <tr class="memdesc:ab7518722cbffea33018ffc7c653e1f87"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">More...</a><br /></td></tr>
 <tr class="separator:ab7518722cbffea33018ffc7c653e1f87"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -223,14 +223,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a876dda45eeb8094ff1c8fe0f73f8bc78"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a876dda45eeb8094ff1c8fe0f73f8bc78">&#9670;&nbsp;</a></span>create_c_visitor()</h2>
+<a id="abcd3ba8f8a105bdf68db38e2f180ba96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abcd3ba8f8a105bdf68db38e2f180ba96">&#9670;&nbsp;</a></span>create_coreneuron_cpp_visitor()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;CodegenCppVisitor&gt; create_c_visitor </td>
+          <td class="memname">std::shared_ptr&lt;CodegenCoreneuronCppVisitor&gt; create_coreneuron_cpp_visitor </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>ast</em>, </td>
@@ -300,7 +300,7 @@ Functions</h2></td></tr>
 
 <p>print entire code </p>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02280">2280</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02281">2281</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -478,7 +478,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02289">2289</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l02290">2290</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>

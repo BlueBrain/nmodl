@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="program_8hpp.html">ast/program.hpp</a>&quot;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="codegen__cpp__visitor_8hpp.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="codegen__coreneuron__cpp__visitor_8hpp.html">codegen/codegen_coreneuron_cpp_visitor.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="nmodl__driver_8hpp.html">parser/nmodl_driver.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="test__utils_8hpp.html">test/unit/utils/test_utils.hpp</a>&quot;</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="checkparent__visitor_8hpp.html">visitors/checkparent_visitor.hpp</a>&quot;</span></div>
@@ -2333,192 +2333,193 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l02237"></a><span class="lineno"> 2237</span>&#160;}</div>
 <div class="line"><a name="l02238"></a><span class="lineno"> 2238</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l02239"></a><span class="lineno"> 2239</span>&#160;<span class="comment">/// Helper for creating C codegen visitor</span></div>
-<div class="line"><a name="l02240"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78"> 2240</a></span>&#160;<span class="comment"></span>std::shared_ptr&lt;CodegenCppVisitor&gt; <a class="code" href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78">create_c_visitor</a>(<span class="keyword">const</span> std::shared_ptr&lt;ast::Program&gt;&amp; ast,</div>
-<div class="line"><a name="l02241"></a><span class="lineno"> 2241</span>&#160;                                                    <span class="keyword">const</span> std::string&amp; <span class="comment">/* text */</span>,</div>
-<div class="line"><a name="l02242"></a><span class="lineno"> 2242</span>&#160;                                                    std::stringstream&amp; ss,</div>
-<div class="line"><a name="l02243"></a><span class="lineno"> 2243</span>&#160;                                                    <span class="keywordtype">bool</span> inline_visitor = <span class="keyword">true</span>,</div>
-<div class="line"><a name="l02244"></a><span class="lineno"> 2244</span>&#160;                                                    <span class="keywordtype">bool</span> pade = <span class="keyword">false</span>,</div>
-<div class="line"><a name="l02245"></a><span class="lineno"> 2245</span>&#160;                                                    <span class="keywordtype">bool</span> cse = <span class="keyword">false</span>) {<span class="comment"></span></div>
-<div class="line"><a name="l02246"></a><span class="lineno"> 2246</span>&#160;<span class="comment">    /// construct symbol table</span></div>
-<div class="line"><a name="l02247"></a><span class="lineno"> 2247</span>&#160;<span class="comment"></span>    SymtabVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02248"></a><span class="lineno"> 2248</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l02249"></a><span class="lineno"> 2249</span>&#160;<span class="comment">    /// run all necessary pass</span></div>
-<div class="line"><a name="l02250"></a><span class="lineno"> 2250</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (inline_visitor) {</div>
-<div class="line"><a name="l02251"></a><span class="lineno"> 2251</span>&#160;        InlineVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02252"></a><span class="lineno"> 2252</span>&#160;    }</div>
-<div class="line"><a name="l02253"></a><span class="lineno"> 2253</span>&#160;    <span class="comment">// unroll loops and fold constants</span></div>
-<div class="line"><a name="l02254"></a><span class="lineno"> 2254</span>&#160;    ConstantFolderVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02255"></a><span class="lineno"> 2255</span>&#160;    LoopUnrollVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02256"></a><span class="lineno"> 2256</span>&#160;    ConstantFolderVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02257"></a><span class="lineno"> 2257</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02258"></a><span class="lineno"> 2258</span>&#160; </div>
-<div class="line"><a name="l02259"></a><span class="lineno"> 2259</span>&#160;    <span class="comment">// run SympySolver on AST</span></div>
-<div class="line"><a name="l02260"></a><span class="lineno"> 2260</span>&#160;    SympySolverVisitor(pade, cse).visit_program(*ast);</div>
-<div class="line"><a name="l02261"></a><span class="lineno"> 2261</span>&#160;    SymtabVisitor(<span class="keyword">true</span>).visit_program(*ast);</div>
-<div class="line"><a name="l02262"></a><span class="lineno"> 2262</span>&#160; </div>
-<div class="line"><a name="l02263"></a><span class="lineno"> 2263</span>&#160;    <span class="comment">// Solve states</span></div>
-<div class="line"><a name="l02264"></a><span class="lineno"> 2264</span>&#160;    NeuronSolveVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02265"></a><span class="lineno"> 2265</span>&#160;    SolveBlockVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l02266"></a><span class="lineno"> 2266</span>&#160; </div>
-<div class="line"><a name="l02267"></a><span class="lineno"> 2267</span>&#160;    <span class="comment">// Update symtab before CodegenCppVisitor</span></div>
-<div class="line"><a name="l02268"></a><span class="lineno"> 2268</span>&#160;    SymtabVisitor(<span class="keyword">true</span>).visit_program(*ast);</div>
-<div class="line"><a name="l02269"></a><span class="lineno"> 2269</span>&#160; </div>
-<div class="line"><a name="l02270"></a><span class="lineno"> 2270</span>&#160;    <span class="comment">// check that, after visitor rearrangement, parents are still up-to-date</span></div>
-<div class="line"><a name="l02271"></a><span class="lineno"> 2271</span>&#160;    CheckParentVisitor().check_ast(*ast);</div>
-<div class="line"><a name="l02272"></a><span class="lineno"> 2272</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l02273"></a><span class="lineno"> 2273</span>&#160;<span class="comment">    /// create C code generation visitor</span></div>
-<div class="line"><a name="l02274"></a><span class="lineno"> 2274</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> cv = std::make_shared&lt;CodegenCppVisitor&gt;(<span class="stringliteral">&quot;temp.mod&quot;</span>, ss, <span class="stringliteral">&quot;double&quot;</span>, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l02275"></a><span class="lineno"> 2275</span>&#160;    cv-&gt;setup(*ast);</div>
-<div class="line"><a name="l02276"></a><span class="lineno"> 2276</span>&#160;    <span class="keywordflow">return</span> cv;</div>
-<div class="line"><a name="l02277"></a><span class="lineno"> 2277</span>&#160;}</div>
-<div class="line"><a name="l02278"></a><span class="lineno"> 2278</span>&#160;<span class="comment"></span> </div>
-<div class="line"><a name="l02279"></a><span class="lineno"> 2279</span>&#160;<span class="comment">/// print entire code</span></div>
-<div class="line"><a name="l02280"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87"> 2280</a></span>&#160;<span class="comment"></span>std::string <a class="code" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(<span class="keyword">const</span> std::string&amp; nmodl_text) {</div>
-<div class="line"><a name="l02281"></a><span class="lineno"> 2281</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a>().<a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">parse_string</a>(nmodl_text);</div>
-<div class="line"><a name="l02282"></a><span class="lineno"> 2282</span>&#160;    std::stringstream ss;</div>
-<div class="line"><a name="l02283"></a><span class="lineno"> 2283</span>&#160;    <span class="keyword">auto</span> cvisitor = <a class="code" href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78">create_c_visitor</a>(ast, nmodl_text, ss);</div>
-<div class="line"><a name="l02284"></a><span class="lineno"> 2284</span>&#160;    cvisitor-&gt;visit_program(*ast);</div>
-<div class="line"><a name="l02285"></a><span class="lineno"> 2285</span>&#160;    <span class="keyword">auto</span> generated_string = ss.str();</div>
-<div class="line"><a name="l02286"></a><span class="lineno"> 2286</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(generated_string);</div>
-<div class="line"><a name="l02287"></a><span class="lineno"> 2287</span>&#160;}</div>
-<div class="line"><a name="l02288"></a><span class="lineno"> 2288</span>&#160; </div>
-<div class="line"><a name="l02289"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#a2cb1c89431e2ab2d00ac67382f3fa49b"> 2289</a></span>&#160;<a class="code" href="sympy__solver_8cpp.html#adf4f2d9c31ad28c000d133b25203a4bc">SCENARIO</a>(<span class="stringliteral">&quot;Code generation for EigenNewtonSolver&quot;</span>, <span class="stringliteral">&quot;[visitor][solver][sympy][derivimplicit]&quot;</span>) {</div>
-<div class="line"><a name="l02290"></a><span class="lineno"> 2290</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file containing two SOLVE statements&quot;</span>) {</div>
-<div class="line"><a name="l02291"></a><span class="lineno"> 2291</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l02292"></a><span class="lineno"> 2292</span>&#160;<span class="stringliteral">            NEURON {</span></div>
-<div class="line"><a name="l02293"></a><span class="lineno"> 2293</span>&#160;<span class="stringliteral">                SUFFIX cacum</span></div>
-<div class="line"><a name="l02294"></a><span class="lineno"> 2294</span>&#160;<span class="stringliteral">                USEION ca READ ica WRITE cai</span></div>
-<div class="line"><a name="l02295"></a><span class="lineno"> 2295</span>&#160;<span class="stringliteral">                RANGE depth, tau, cai0</span></div>
-<div class="line"><a name="l02296"></a><span class="lineno"> 2296</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02297"></a><span class="lineno"> 2297</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02298"></a><span class="lineno"> 2298</span>&#160;<span class="stringliteral">            UNITS {</span></div>
-<div class="line"><a name="l02299"></a><span class="lineno"> 2299</span>&#160;<span class="stringliteral">                (mM) = (milli/liter)</span></div>
-<div class="line"><a name="l02300"></a><span class="lineno"> 2300</span>&#160;<span class="stringliteral">                (mA) = (milliamp)</span></div>
-<div class="line"><a name="l02301"></a><span class="lineno"> 2301</span>&#160;<span class="stringliteral">                F = 96485.3 (coulombs)</span></div>
-<div class="line"><a name="l02302"></a><span class="lineno"> 2302</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02303"></a><span class="lineno"> 2303</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02304"></a><span class="lineno"> 2304</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
-<div class="line"><a name="l02305"></a><span class="lineno"> 2305</span>&#160;<span class="stringliteral">                depth = 1 (nm)  : assume volume = area*depth</span></div>
-<div class="line"><a name="l02306"></a><span class="lineno"> 2306</span>&#160;<span class="stringliteral">                tau = 10 (ms)</span></div>
-<div class="line"><a name="l02307"></a><span class="lineno"> 2307</span>&#160;<span class="stringliteral">                cai0 = 50e-6 (mM)   : Requires explicit use in INITIAL</span></div>
-<div class="line"><a name="l02308"></a><span class="lineno"> 2308</span>&#160;<span class="stringliteral">                        : block for it to take precedence over cai0_ca_ion</span></div>
-<div class="line"><a name="l02309"></a><span class="lineno"> 2309</span>&#160;<span class="stringliteral">                        : Do not forget to initialize in hoc if different</span></div>
-<div class="line"><a name="l02310"></a><span class="lineno"> 2310</span>&#160;<span class="stringliteral">                        : from this default.</span></div>
-<div class="line"><a name="l02311"></a><span class="lineno"> 2311</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02312"></a><span class="lineno"> 2312</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02313"></a><span class="lineno"> 2313</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
-<div class="line"><a name="l02314"></a><span class="lineno"> 2314</span>&#160;<span class="stringliteral">                ica (mA/cm2)</span></div>
-<div class="line"><a name="l02315"></a><span class="lineno"> 2315</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02316"></a><span class="lineno"> 2316</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02317"></a><span class="lineno"> 2317</span>&#160;<span class="stringliteral">            STATE {</span></div>
-<div class="line"><a name="l02318"></a><span class="lineno"> 2318</span>&#160;<span class="stringliteral">                cai (mM)</span></div>
-<div class="line"><a name="l02319"></a><span class="lineno"> 2319</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02320"></a><span class="lineno"> 2320</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02321"></a><span class="lineno"> 2321</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
-<div class="line"><a name="l02322"></a><span class="lineno"> 2322</span>&#160;<span class="stringliteral">                cai = cai0</span></div>
-<div class="line"><a name="l02323"></a><span class="lineno"> 2323</span>&#160;<span class="stringliteral">                extra_solve()</span></div>
-<div class="line"><a name="l02324"></a><span class="lineno"> 2324</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02325"></a><span class="lineno"> 2325</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02326"></a><span class="lineno"> 2326</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l02327"></a><span class="lineno"> 2327</span>&#160;<span class="stringliteral">                SOLVE integrate METHOD derivimplicit</span></div>
-<div class="line"><a name="l02328"></a><span class="lineno"> 2328</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02329"></a><span class="lineno"> 2329</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02330"></a><span class="lineno"> 2330</span>&#160;<span class="stringliteral">            DERIVATIVE integrate {</span></div>
-<div class="line"><a name="l02331"></a><span class="lineno"> 2331</span>&#160;<span class="stringliteral">                cai&#39; = -ica/depth/F/2 * (1e7) + (cai0 - cai)/tau</span></div>
-<div class="line"><a name="l02332"></a><span class="lineno"> 2332</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02333"></a><span class="lineno"> 2333</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02334"></a><span class="lineno"> 2334</span>&#160;<span class="stringliteral">            PROCEDURE extra_solve() {</span></div>
-<div class="line"><a name="l02335"></a><span class="lineno"> 2335</span>&#160;<span class="stringliteral">                SOLVE integrate</span></div>
-<div class="line"><a name="l02336"></a><span class="lineno"> 2336</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l02337"></a><span class="lineno"> 2337</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l02338"></a><span class="lineno"> 2338</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02339"></a><span class="lineno"> 2339</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Three different functor structs defined and used&quot;</span>) {</div>
-<div class="line"><a name="l02340"></a><span class="lineno"> 2340</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
-<div class="line"><a name="l02341"></a><span class="lineno"> 2341</span>&#160; </div>
-<div class="line"><a name="l02342"></a><span class="lineno"> 2342</span>&#160;            <span class="comment">// Expected functor definitions</span></div>
-<div class="line"><a name="l02343"></a><span class="lineno"> 2343</span>&#160;            std::string expected_functor_cacum_0_definition =</div>
-<div class="line"><a name="l02344"></a><span class="lineno"> 2344</span>&#160;                R<span class="stringliteral">&quot;(struct functor_cacum_0 {</span></div>
-<div class="line"><a name="l02345"></a><span class="lineno"> 2345</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
-<div class="line"><a name="l02346"></a><span class="lineno"> 2346</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
-<div class="line"><a name="l02347"></a><span class="lineno"> 2347</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
-<div class="line"><a name="l02348"></a><span class="lineno"> 2348</span>&#160;<span class="stringliteral">        double v;</span></div>
-<div class="line"><a name="l02349"></a><span class="lineno"> 2349</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
-<div class="line"><a name="l02350"></a><span class="lineno"> 2350</span>&#160;<span class="stringliteral">        double* data;</span></div>
-<div class="line"><a name="l02351"></a><span class="lineno"> 2351</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
-<div class="line"><a name="l02352"></a><span class="lineno"> 2352</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
-<div class="line"><a name="l02353"></a><span class="lineno"> 2353</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02354"></a><span class="lineno"> 2354</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
-<div class="line"><a name="l02355"></a><span class="lineno"> 2355</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
-<div class="line"><a name="l02356"></a><span class="lineno"> 2356</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02357"></a><span class="lineno"> 2357</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02358"></a><span class="lineno"> 2358</span>&#160;<span class="stringliteral">        functor_cacum_0(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
-<div class="line"><a name="l02359"></a><span class="lineno"> 2359</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
-<div class="line"><a name="l02360"></a><span class="lineno"> 2360</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
-<div class="line"><a name="l02361"></a><span class="lineno"> 2361</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
-<div class="line"><a name="l02362"></a><span class="lineno"> 2362</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
-<div class="line"><a name="l02363"></a><span class="lineno"> 2363</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02364"></a><span class="lineno"> 2364</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
-<div class="line"><a name="l02365"></a><span class="lineno"> 2365</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_definition =</span></div>
-<div class="line"><a name="l02366"></a><span class="lineno"> 2366</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_1 {</span></div>
-<div class="line"><a name="l02367"></a><span class="lineno"> 2367</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
-<div class="line"><a name="l02368"></a><span class="lineno"> 2368</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
-<div class="line"><a name="l02369"></a><span class="lineno"> 2369</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
-<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;<span class="stringliteral">        double v;</span></div>
-<div class="line"><a name="l02371"></a><span class="lineno"> 2371</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
-<div class="line"><a name="l02372"></a><span class="lineno"> 2372</span>&#160;<span class="stringliteral">        double* data;</span></div>
-<div class="line"><a name="l02373"></a><span class="lineno"> 2373</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
-<div class="line"><a name="l02374"></a><span class="lineno"> 2374</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
-<div class="line"><a name="l02375"></a><span class="lineno"> 2375</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02376"></a><span class="lineno"> 2376</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
-<div class="line"><a name="l02377"></a><span class="lineno"> 2377</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
-<div class="line"><a name="l02378"></a><span class="lineno"> 2378</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02379"></a><span class="lineno"> 2379</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02380"></a><span class="lineno"> 2380</span>&#160;<span class="stringliteral">        functor_cacum_1(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
-<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
-<div class="line"><a name="l02382"></a><span class="lineno"> 2382</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
-<div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
-<div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
-<div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
-<div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_definition =</span></div>
-<div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_2 {</span></div>
-<div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
-<div class="line"><a name="l02390"></a><span class="lineno"> 2390</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
-<div class="line"><a name="l02391"></a><span class="lineno"> 2391</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
-<div class="line"><a name="l02392"></a><span class="lineno"> 2392</span>&#160;<span class="stringliteral">        double v;</span></div>
-<div class="line"><a name="l02393"></a><span class="lineno"> 2393</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
-<div class="line"><a name="l02394"></a><span class="lineno"> 2394</span>&#160;<span class="stringliteral">        double* data;</span></div>
-<div class="line"><a name="l02395"></a><span class="lineno"> 2395</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
-<div class="line"><a name="l02396"></a><span class="lineno"> 2396</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
-<div class="line"><a name="l02397"></a><span class="lineno"> 2397</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02398"></a><span class="lineno"> 2398</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
-<div class="line"><a name="l02399"></a><span class="lineno"> 2399</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
-<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02401"></a><span class="lineno"> 2401</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02402"></a><span class="lineno"> 2402</span>&#160;<span class="stringliteral">        functor_cacum_2(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
-<div class="line"><a name="l02403"></a><span class="lineno"> 2403</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
-<div class="line"><a name="l02404"></a><span class="lineno"> 2404</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
-<div class="line"><a name="l02405"></a><span class="lineno"> 2405</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
-<div class="line"><a name="l02406"></a><span class="lineno"> 2406</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
-<div class="line"><a name="l02407"></a><span class="lineno"> 2407</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
-<div class="line"><a name="l02408"></a><span class="lineno"> 2408</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
-<div class="line"><a name="l02409"></a><span class="lineno"> 2409</span>&#160;<span class="stringliteral">            </span><span class="comment">// Expected functor usages</span></div>
-<div class="line"><a name="l02410"></a><span class="lineno"> 2410</span>&#160;            std::string expected_functor_cacum_0_usage =</div>
-<div class="line"><a name="l02411"></a><span class="lineno"> 2411</span>&#160;                R<span class="stringliteral">&quot;(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02412"></a><span class="lineno"> 2412</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_usage =</span></div>
-<div class="line"><a name="l02413"></a><span class="lineno"> 2413</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02414"></a><span class="lineno"> 2414</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_usage =</span></div>
-<div class="line"><a name="l02415"></a><span class="lineno"> 2415</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
-<div class="line"><a name="l02416"></a><span class="lineno"> 2416</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l02417"></a><span class="lineno"> 2417</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_0_definition));</span></div>
-<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_1_definition));</span></div>
-<div class="line"><a name="l02419"></a><span class="lineno"> 2419</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_2_definition));</span></div>
-<div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_0_usage));</span></div>
-<div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_1_usage));</span></div>
-<div class="line"><a name="l02422"></a><span class="lineno"> 2422</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_2_usage));</span></div>
-<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l02424"></a><span class="lineno"> 2424</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l02425"></a><span class="lineno"> 2425</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l02240"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96"> 2240</a></span>&#160;<span class="comment"></span>std::shared_ptr&lt;CodegenCoreneuronCppVisitor&gt; <a class="code" href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96">create_coreneuron_cpp_visitor</a>(</div>
+<div class="line"><a name="l02241"></a><span class="lineno"> 2241</span>&#160;    <span class="keyword">const</span> std::shared_ptr&lt;ast::Program&gt;&amp; ast,</div>
+<div class="line"><a name="l02242"></a><span class="lineno"> 2242</span>&#160;    <span class="keyword">const</span> std::string&amp; <span class="comment">/* text */</span>,</div>
+<div class="line"><a name="l02243"></a><span class="lineno"> 2243</span>&#160;    std::stringstream&amp; ss,</div>
+<div class="line"><a name="l02244"></a><span class="lineno"> 2244</span>&#160;    <span class="keywordtype">bool</span> inline_visitor = <span class="keyword">true</span>,</div>
+<div class="line"><a name="l02245"></a><span class="lineno"> 2245</span>&#160;    <span class="keywordtype">bool</span> pade = <span class="keyword">false</span>,</div>
+<div class="line"><a name="l02246"></a><span class="lineno"> 2246</span>&#160;    <span class="keywordtype">bool</span> cse = <span class="keyword">false</span>) {<span class="comment"></span></div>
+<div class="line"><a name="l02247"></a><span class="lineno"> 2247</span>&#160;<span class="comment">    /// construct symbol table</span></div>
+<div class="line"><a name="l02248"></a><span class="lineno"> 2248</span>&#160;<span class="comment"></span>    SymtabVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02249"></a><span class="lineno"> 2249</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l02250"></a><span class="lineno"> 2250</span>&#160;<span class="comment">    /// run all necessary pass</span></div>
+<div class="line"><a name="l02251"></a><span class="lineno"> 2251</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (inline_visitor) {</div>
+<div class="line"><a name="l02252"></a><span class="lineno"> 2252</span>&#160;        InlineVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02253"></a><span class="lineno"> 2253</span>&#160;    }</div>
+<div class="line"><a name="l02254"></a><span class="lineno"> 2254</span>&#160;    <span class="comment">// unroll loops and fold constants</span></div>
+<div class="line"><a name="l02255"></a><span class="lineno"> 2255</span>&#160;    ConstantFolderVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02256"></a><span class="lineno"> 2256</span>&#160;    LoopUnrollVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02257"></a><span class="lineno"> 2257</span>&#160;    ConstantFolderVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02258"></a><span class="lineno"> 2258</span>&#160;    SymtabVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02259"></a><span class="lineno"> 2259</span>&#160; </div>
+<div class="line"><a name="l02260"></a><span class="lineno"> 2260</span>&#160;    <span class="comment">// run SympySolver on AST</span></div>
+<div class="line"><a name="l02261"></a><span class="lineno"> 2261</span>&#160;    SympySolverVisitor(pade, cse).visit_program(*ast);</div>
+<div class="line"><a name="l02262"></a><span class="lineno"> 2262</span>&#160;    SymtabVisitor(<span class="keyword">true</span>).visit_program(*ast);</div>
+<div class="line"><a name="l02263"></a><span class="lineno"> 2263</span>&#160; </div>
+<div class="line"><a name="l02264"></a><span class="lineno"> 2264</span>&#160;    <span class="comment">// Solve states</span></div>
+<div class="line"><a name="l02265"></a><span class="lineno"> 2265</span>&#160;    NeuronSolveVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02266"></a><span class="lineno"> 2266</span>&#160;    SolveBlockVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l02267"></a><span class="lineno"> 2267</span>&#160; </div>
+<div class="line"><a name="l02268"></a><span class="lineno"> 2268</span>&#160;    <span class="comment">// Update symtab before CodegenCoreneuronCppVisitor</span></div>
+<div class="line"><a name="l02269"></a><span class="lineno"> 2269</span>&#160;    SymtabVisitor(<span class="keyword">true</span>).visit_program(*ast);</div>
+<div class="line"><a name="l02270"></a><span class="lineno"> 2270</span>&#160; </div>
+<div class="line"><a name="l02271"></a><span class="lineno"> 2271</span>&#160;    <span class="comment">// check that, after visitor rearrangement, parents are still up-to-date</span></div>
+<div class="line"><a name="l02272"></a><span class="lineno"> 2272</span>&#160;    CheckParentVisitor().check_ast(*ast);</div>
+<div class="line"><a name="l02273"></a><span class="lineno"> 2273</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l02274"></a><span class="lineno"> 2274</span>&#160;<span class="comment">    /// create C code generation visitor</span></div>
+<div class="line"><a name="l02275"></a><span class="lineno"> 2275</span>&#160;<span class="comment"></span>    <span class="keyword">auto</span> cv = std::make_shared&lt;CodegenCoreneuronCppVisitor&gt;(<span class="stringliteral">&quot;temp.mod&quot;</span>, ss, <span class="stringliteral">&quot;double&quot;</span>, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l02276"></a><span class="lineno"> 2276</span>&#160;    cv-&gt;setup(*ast);</div>
+<div class="line"><a name="l02277"></a><span class="lineno"> 2277</span>&#160;    <span class="keywordflow">return</span> cv;</div>
+<div class="line"><a name="l02278"></a><span class="lineno"> 2278</span>&#160;}</div>
+<div class="line"><a name="l02279"></a><span class="lineno"> 2279</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l02280"></a><span class="lineno"> 2280</span>&#160;<span class="comment">/// print entire code</span></div>
+<div class="line"><a name="l02281"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87"> 2281</a></span>&#160;<span class="comment"></span>std::string <a class="code" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(<span class="keyword">const</span> std::string&amp; nmodl_text) {</div>
+<div class="line"><a name="l02282"></a><span class="lineno"> 2282</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a>().<a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">parse_string</a>(nmodl_text);</div>
+<div class="line"><a name="l02283"></a><span class="lineno"> 2283</span>&#160;    std::stringstream ss;</div>
+<div class="line"><a name="l02284"></a><span class="lineno"> 2284</span>&#160;    <span class="keyword">auto</span> cvisitor = <a class="code" href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96">create_coreneuron_cpp_visitor</a>(ast, nmodl_text, ss);</div>
+<div class="line"><a name="l02285"></a><span class="lineno"> 2285</span>&#160;    cvisitor-&gt;visit_program(*ast);</div>
+<div class="line"><a name="l02286"></a><span class="lineno"> 2286</span>&#160;    <span class="keyword">auto</span> generated_string = ss.str();</div>
+<div class="line"><a name="l02287"></a><span class="lineno"> 2287</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(generated_string);</div>
+<div class="line"><a name="l02288"></a><span class="lineno"> 2288</span>&#160;}</div>
+<div class="line"><a name="l02289"></a><span class="lineno"> 2289</span>&#160; </div>
+<div class="line"><a name="l02290"></a><span class="lineno"><a class="line" href="sympy__solver_8cpp.html#a2cb1c89431e2ab2d00ac67382f3fa49b"> 2290</a></span>&#160;<a class="code" href="sympy__solver_8cpp.html#adf4f2d9c31ad28c000d133b25203a4bc">SCENARIO</a>(<span class="stringliteral">&quot;Code generation for EigenNewtonSolver&quot;</span>, <span class="stringliteral">&quot;[visitor][solver][sympy][derivimplicit]&quot;</span>) {</div>
+<div class="line"><a name="l02291"></a><span class="lineno"> 2291</span>&#160;    GIVEN(<span class="stringliteral">&quot;A mod file containing two SOLVE statements&quot;</span>) {</div>
+<div class="line"><a name="l02292"></a><span class="lineno"> 2292</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l02293"></a><span class="lineno"> 2293</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l02294"></a><span class="lineno"> 2294</span>&#160;<span class="stringliteral">                SUFFIX cacum</span></div>
+<div class="line"><a name="l02295"></a><span class="lineno"> 2295</span>&#160;<span class="stringliteral">                USEION ca READ ica WRITE cai</span></div>
+<div class="line"><a name="l02296"></a><span class="lineno"> 2296</span>&#160;<span class="stringliteral">                RANGE depth, tau, cai0</span></div>
+<div class="line"><a name="l02297"></a><span class="lineno"> 2297</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02298"></a><span class="lineno"> 2298</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02299"></a><span class="lineno"> 2299</span>&#160;<span class="stringliteral">            UNITS {</span></div>
+<div class="line"><a name="l02300"></a><span class="lineno"> 2300</span>&#160;<span class="stringliteral">                (mM) = (milli/liter)</span></div>
+<div class="line"><a name="l02301"></a><span class="lineno"> 2301</span>&#160;<span class="stringliteral">                (mA) = (milliamp)</span></div>
+<div class="line"><a name="l02302"></a><span class="lineno"> 2302</span>&#160;<span class="stringliteral">                F = 96485.3 (coulombs)</span></div>
+<div class="line"><a name="l02303"></a><span class="lineno"> 2303</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02304"></a><span class="lineno"> 2304</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02305"></a><span class="lineno"> 2305</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
+<div class="line"><a name="l02306"></a><span class="lineno"> 2306</span>&#160;<span class="stringliteral">                depth = 1 (nm)  : assume volume = area*depth</span></div>
+<div class="line"><a name="l02307"></a><span class="lineno"> 2307</span>&#160;<span class="stringliteral">                tau = 10 (ms)</span></div>
+<div class="line"><a name="l02308"></a><span class="lineno"> 2308</span>&#160;<span class="stringliteral">                cai0 = 50e-6 (mM)   : Requires explicit use in INITIAL</span></div>
+<div class="line"><a name="l02309"></a><span class="lineno"> 2309</span>&#160;<span class="stringliteral">                        : block for it to take precedence over cai0_ca_ion</span></div>
+<div class="line"><a name="l02310"></a><span class="lineno"> 2310</span>&#160;<span class="stringliteral">                        : Do not forget to initialize in hoc if different</span></div>
+<div class="line"><a name="l02311"></a><span class="lineno"> 2311</span>&#160;<span class="stringliteral">                        : from this default.</span></div>
+<div class="line"><a name="l02312"></a><span class="lineno"> 2312</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02313"></a><span class="lineno"> 2313</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02314"></a><span class="lineno"> 2314</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
+<div class="line"><a name="l02315"></a><span class="lineno"> 2315</span>&#160;<span class="stringliteral">                ica (mA/cm2)</span></div>
+<div class="line"><a name="l02316"></a><span class="lineno"> 2316</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02317"></a><span class="lineno"> 2317</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02318"></a><span class="lineno"> 2318</span>&#160;<span class="stringliteral">            STATE {</span></div>
+<div class="line"><a name="l02319"></a><span class="lineno"> 2319</span>&#160;<span class="stringliteral">                cai (mM)</span></div>
+<div class="line"><a name="l02320"></a><span class="lineno"> 2320</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02321"></a><span class="lineno"> 2321</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02322"></a><span class="lineno"> 2322</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
+<div class="line"><a name="l02323"></a><span class="lineno"> 2323</span>&#160;<span class="stringliteral">                cai = cai0</span></div>
+<div class="line"><a name="l02324"></a><span class="lineno"> 2324</span>&#160;<span class="stringliteral">                extra_solve()</span></div>
+<div class="line"><a name="l02325"></a><span class="lineno"> 2325</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02326"></a><span class="lineno"> 2326</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02327"></a><span class="lineno"> 2327</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
+<div class="line"><a name="l02328"></a><span class="lineno"> 2328</span>&#160;<span class="stringliteral">                SOLVE integrate METHOD derivimplicit</span></div>
+<div class="line"><a name="l02329"></a><span class="lineno"> 2329</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02330"></a><span class="lineno"> 2330</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02331"></a><span class="lineno"> 2331</span>&#160;<span class="stringliteral">            DERIVATIVE integrate {</span></div>
+<div class="line"><a name="l02332"></a><span class="lineno"> 2332</span>&#160;<span class="stringliteral">                cai&#39; = -ica/depth/F/2 * (1e7) + (cai0 - cai)/tau</span></div>
+<div class="line"><a name="l02333"></a><span class="lineno"> 2333</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02334"></a><span class="lineno"> 2334</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02335"></a><span class="lineno"> 2335</span>&#160;<span class="stringliteral">            PROCEDURE extra_solve() {</span></div>
+<div class="line"><a name="l02336"></a><span class="lineno"> 2336</span>&#160;<span class="stringliteral">                SOLVE integrate</span></div>
+<div class="line"><a name="l02337"></a><span class="lineno"> 2337</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l02338"></a><span class="lineno"> 2338</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l02339"></a><span class="lineno"> 2339</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02340"></a><span class="lineno"> 2340</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Three different functor structs defined and used&quot;</span>) {</div>
+<div class="line"><a name="l02341"></a><span class="lineno"> 2341</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a>(nmodl_text);</div>
+<div class="line"><a name="l02342"></a><span class="lineno"> 2342</span>&#160; </div>
+<div class="line"><a name="l02343"></a><span class="lineno"> 2343</span>&#160;            <span class="comment">// Expected functor definitions</span></div>
+<div class="line"><a name="l02344"></a><span class="lineno"> 2344</span>&#160;            std::string expected_functor_cacum_0_definition =</div>
+<div class="line"><a name="l02345"></a><span class="lineno"> 2345</span>&#160;                R<span class="stringliteral">&quot;(struct functor_cacum_0 {</span></div>
+<div class="line"><a name="l02346"></a><span class="lineno"> 2346</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
+<div class="line"><a name="l02347"></a><span class="lineno"> 2347</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
+<div class="line"><a name="l02348"></a><span class="lineno"> 2348</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
+<div class="line"><a name="l02349"></a><span class="lineno"> 2349</span>&#160;<span class="stringliteral">        double v;</span></div>
+<div class="line"><a name="l02350"></a><span class="lineno"> 2350</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
+<div class="line"><a name="l02351"></a><span class="lineno"> 2351</span>&#160;<span class="stringliteral">        double* data;</span></div>
+<div class="line"><a name="l02352"></a><span class="lineno"> 2352</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
+<div class="line"><a name="l02353"></a><span class="lineno"> 2353</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
+<div class="line"><a name="l02354"></a><span class="lineno"> 2354</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02355"></a><span class="lineno"> 2355</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
+<div class="line"><a name="l02356"></a><span class="lineno"> 2356</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
+<div class="line"><a name="l02357"></a><span class="lineno"> 2357</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02358"></a><span class="lineno"> 2358</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02359"></a><span class="lineno"> 2359</span>&#160;<span class="stringliteral">        functor_cacum_0(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
+<div class="line"><a name="l02360"></a><span class="lineno"> 2360</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
+<div class="line"><a name="l02361"></a><span class="lineno"> 2361</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
+<div class="line"><a name="l02362"></a><span class="lineno"> 2362</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
+<div class="line"><a name="l02363"></a><span class="lineno"> 2363</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
+<div class="line"><a name="l02364"></a><span class="lineno"> 2364</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
+<div class="line"><a name="l02365"></a><span class="lineno"> 2365</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02366"></a><span class="lineno"> 2366</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_definition =</span></div>
+<div class="line"><a name="l02367"></a><span class="lineno"> 2367</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_1 {</span></div>
+<div class="line"><a name="l02368"></a><span class="lineno"> 2368</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
+<div class="line"><a name="l02369"></a><span class="lineno"> 2369</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
+<div class="line"><a name="l02370"></a><span class="lineno"> 2370</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
+<div class="line"><a name="l02371"></a><span class="lineno"> 2371</span>&#160;<span class="stringliteral">        double v;</span></div>
+<div class="line"><a name="l02372"></a><span class="lineno"> 2372</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
+<div class="line"><a name="l02373"></a><span class="lineno"> 2373</span>&#160;<span class="stringliteral">        double* data;</span></div>
+<div class="line"><a name="l02374"></a><span class="lineno"> 2374</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
+<div class="line"><a name="l02375"></a><span class="lineno"> 2375</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
+<div class="line"><a name="l02376"></a><span class="lineno"> 2376</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02377"></a><span class="lineno"> 2377</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
+<div class="line"><a name="l02378"></a><span class="lineno"> 2378</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
+<div class="line"><a name="l02379"></a><span class="lineno"> 2379</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02380"></a><span class="lineno"> 2380</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;<span class="stringliteral">        functor_cacum_1(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
+<div class="line"><a name="l02382"></a><span class="lineno"> 2382</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
+<div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
+<div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
+<div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
+<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
+<div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_definition =</span></div>
+<div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(struct functor_cacum_2 {</span></div>
+<div class="line"><a name="l02390"></a><span class="lineno"> 2390</span>&#160;<span class="stringliteral">        NrnThread* nt;</span></div>
+<div class="line"><a name="l02391"></a><span class="lineno"> 2391</span>&#160;<span class="stringliteral">        cacum_Instance* inst;</span></div>
+<div class="line"><a name="l02392"></a><span class="lineno"> 2392</span>&#160;<span class="stringliteral">        int id, pnodecount;</span></div>
+<div class="line"><a name="l02393"></a><span class="lineno"> 2393</span>&#160;<span class="stringliteral">        double v;</span></div>
+<div class="line"><a name="l02394"></a><span class="lineno"> 2394</span>&#160;<span class="stringliteral">        const Datum* indexes;</span></div>
+<div class="line"><a name="l02395"></a><span class="lineno"> 2395</span>&#160;<span class="stringliteral">        double* data;</span></div>
+<div class="line"><a name="l02396"></a><span class="lineno"> 2396</span>&#160;<span class="stringliteral">        ThreadDatum* thread;</span></div>
+<div class="line"><a name="l02397"></a><span class="lineno"> 2397</span>&#160;<span class="stringliteral">        double old_cai;</span></div>
+<div class="line"><a name="l02398"></a><span class="lineno"> 2398</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02399"></a><span class="lineno"> 2399</span>&#160;<span class="stringliteral">        void initialize() {</span></div>
+<div class="line"><a name="l02400"></a><span class="lineno"> 2400</span>&#160;<span class="stringliteral">            old_cai = inst-&gt;cai[id];</span></div>
+<div class="line"><a name="l02401"></a><span class="lineno"> 2401</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02402"></a><span class="lineno"> 2402</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02403"></a><span class="lineno"> 2403</span>&#160;<span class="stringliteral">        functor_cacum_2(NrnThread* nt, cacum_Instance* inst, int id, int pnodecount, double v, const Datum* indexes, double* data, ThreadDatum* thread) : nt{nt}, inst{inst}, id{id}, pnodecount{pnodecount}, v{v}, indexes{indexes}, data{data}, thread{thread} {}</span></div>
+<div class="line"><a name="l02404"></a><span class="lineno"> 2404</span>&#160;<span class="stringliteral">        void operator()(const Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_xm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_fm, Eigen::Matrix&lt;double, 1, 1&gt;&amp; nmodl_eigen_jm) const {</span></div>
+<div class="line"><a name="l02405"></a><span class="lineno"> 2405</span>&#160;<span class="stringliteral">            const double* nmodl_eigen_x = nmodl_eigen_xm.data();</span></div>
+<div class="line"><a name="l02406"></a><span class="lineno"> 2406</span>&#160;<span class="stringliteral">            double* nmodl_eigen_j = nmodl_eigen_jm.data();</span></div>
+<div class="line"><a name="l02407"></a><span class="lineno"> 2407</span>&#160;<span class="stringliteral">            double* nmodl_eigen_f = nmodl_eigen_fm.data();</span></div>
+<div class="line"><a name="l02408"></a><span class="lineno"> 2408</span>&#160;<span class="stringliteral">            nmodl_eigen_f[static_cast&lt;int&gt;(0)] =  -nmodl_eigen_x[static_cast&lt;int&gt;(0)] * nt-&gt;_dt / inst-&gt;tau[id] - nmodl_eigen_x[static_cast&lt;int&gt;(0)] + inst-&gt;cai0[id] * nt-&gt;_dt / inst-&gt;tau[id] + old_cai - 5000000.0 * nt-&gt;_dt * inst-&gt;ica[id] / (F * inst-&gt;depth[id]);</span></div>
+<div class="line"><a name="l02409"></a><span class="lineno"> 2409</span>&#160;<span class="stringliteral">            nmodl_eigen_j[static_cast&lt;int&gt;(0)] =)&quot;;</span></div>
+<div class="line"><a name="l02410"></a><span class="lineno"> 2410</span>&#160;<span class="stringliteral">            </span><span class="comment">// Expected functor usages</span></div>
+<div class="line"><a name="l02411"></a><span class="lineno"> 2411</span>&#160;            std::string expected_functor_cacum_0_usage =</div>
+<div class="line"><a name="l02412"></a><span class="lineno"> 2412</span>&#160;                R<span class="stringliteral">&quot;(functor_cacum_0 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02413"></a><span class="lineno"> 2413</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_1_usage =</span></div>
+<div class="line"><a name="l02414"></a><span class="lineno"> 2414</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_1 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02415"></a><span class="lineno"> 2415</span>&#160;<span class="stringliteral">            std::string expected_functor_cacum_2_usage =</span></div>
+<div class="line"><a name="l02416"></a><span class="lineno"> 2416</span>&#160;<span class="stringliteral">                R</span><span class="stringliteral">&quot;(functor_cacum_2 newton_functor(nt, inst, id, pnodecount, v, indexes, data, thread);)&quot;;</span></div>
+<div class="line"><a name="l02417"></a><span class="lineno"> 2417</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l02418"></a><span class="lineno"> 2418</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_0_definition));</span></div>
+<div class="line"><a name="l02419"></a><span class="lineno"> 2419</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_1_definition));</span></div>
+<div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_2_definition));</span></div>
+<div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_0_usage));</span></div>
+<div class="line"><a name="l02422"></a><span class="lineno"> 2422</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_1_usage));</span></div>
+<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(expected_functor_cacum_2_usage));</span></div>
+<div class="line"><a name="l02424"></a><span class="lineno"> 2424</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l02425"></a><span class="lineno"> 2425</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l02426"></a><span class="lineno"> 2426</span>&#160;<span class="stringliteral">}</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
@@ -2532,15 +2533,15 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="ttc" id="aconstant__folder__visitor_8hpp_html"><div class="ttname"><a href="constant__folder__visitor_8hpp.html">constant_folder_visitor.hpp</a></div><div class="ttdoc">Perform constant folding of integer/float/double expressions.</div></div>
 <div class="ttc" id="asympy__solver_8cpp_html_a49d921f0d08fe1a20a91c3d9bd6d6996"><div class="ttname"><a href="sympy__solver_8cpp.html#a49d921f0d08fe1a20a91c3d9bd6d6996">compare_blocks</a></div><div class="ttdeci">void compare_blocks(const std::string &amp;result, const std::string &amp;expected, const bool require_fail=false)</div><div class="ttdoc">Compare nmodl blocks that contain systems of equations (i.e.</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l00126">sympy_solver.cpp:126</a></div></div>
 <div class="ttc" id="agroup__ast__type_html_gac392e49849e60c05e42ea02c7b445033"><div class="ttname"><a href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">nmodl::ast::AstNodeType</a></div><div class="ttdeci">AstNodeType</div><div class="ttdoc">Enum type for every AST node type.</div><div class="ttdef"><b>Definition:</b> <a href="ast__decl_8hpp_source.html#l00162">ast_decl.hpp:162</a></div></div>
-<div class="ttc" id="acodegen__cpp__visitor_8hpp_html"><div class="ttname"><a href="codegen__cpp__visitor_8hpp.html">codegen_cpp_visitor.hpp</a></div><div class="ttdoc">Visitor for printing C++ code compatible with legacy api of CoreNEURON</div></div>
 <div class="ttc" id="akinetic__block__visitor_8hpp_html"><div class="ttname"><a href="kinetic__block__visitor_8hpp.html">kinetic_block_visitor.hpp</a></div><div class="ttdoc">Visitor for kinetic block statements</div></div>
+<div class="ttc" id="asympy__solver_8cpp_html_abcd3ba8f8a105bdf68db38e2f180ba96"><div class="ttname"><a href="sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96">create_coreneuron_cpp_visitor</a></div><div class="ttdeci">std::shared_ptr&lt; CodegenCoreneuronCppVisitor &gt; create_coreneuron_cpp_visitor(const std::shared_ptr&lt; ast::Program &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss, bool inline_visitor=true, bool pade=false, bool cse=false)</div><div class="ttdoc">Helper for creating C codegen visitor.</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l02240">sympy_solver.cpp:2240</a></div></div>
 <div class="ttc" id="aprogram_8hpp_html"><div class="ttname"><a href="program_8hpp.html">program.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="asympy__solver_8cpp_html_a8f0ff0be2e8dad02c17647d3f39c1baf"><div class="ttname"><a href="sympy__solver_8cpp.html#a8f0ff0be2e8dad02c17647d3f39c1baf">run_sympy_solver_visitor</a></div><div class="ttdeci">std::vector&lt; std::string &gt; run_sympy_solver_visitor(const std::string &amp;text, bool pade=false, bool cse=false, AstNodeType ret_nodetype=AstNodeType::DIFF_EQ_EXPRESSION, bool kinetic=false)</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l00045">sympy_solver.cpp:45</a></div></div>
 <div class="ttc" id="aunits_2parser_8cpp_html_adb772fffa624f2b39f88e66cafd5b05a"><div class="ttname"><a href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a></div><div class="ttdeci">nmodl::parser::UnitDriver driver</div><div class="ttdef"><b>Definition:</b> <a href="units_2parser_8cpp_source.html#l00028">parser.cpp:28</a></div></div>
+<div class="ttc" id="acodegen__coreneuron__cpp__visitor_8hpp_html"><div class="ttname"><a href="codegen__coreneuron__cpp__visitor_8hpp.html">codegen_coreneuron_cpp_visitor.hpp</a></div><div class="ttdoc">Visitor for printing C++ code compatible with legacy api of CoreNEURON</div></div>
 <div class="ttc" id="agroup__units_html_ga53666d277469c1f00a3b0fd26a094178"><div class="ttname"><a href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">nmodl::parser::UnitDriver::parse_string</a></div><div class="ttdeci">bool parse_string(const std::string &amp;input)</div><div class="ttdoc">parser Units provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8cpp_source.html#l00040">unit_driver.cpp:40</a></div></div>
 <div class="ttc" id="anamespacenmodl_1_1test__utils_html_af64fc17c60e5c8a5b8114147591aec3d"><div class="ttname"><a href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">nmodl::test_utils::reindent_text</a></div><div class="ttdeci">std::string reindent_text(const std::string &amp;text)</div><div class="ttdoc">Reindent nmodl text for text-to-text comparison.</div><div class="ttdef"><b>Definition:</b> <a href="test__utils_8cpp_source.html#l00057">test_utils.cpp:57</a></div></div>
 <div class="ttc" id="anamespacenmodl_html_a0d49270a6c751e2e1a0e2c2db0012e4d"><div class="ttname"><a href="namespacenmodl.html#a0d49270a6c751e2e1a0e2c2db0012e4d">nmodl::collect_nodes</a></div><div class="ttdeci">std::vector&lt; std::shared_ptr&lt; const ast::Ast &gt; &gt; collect_nodes(const ast::Ast &amp;node, const std::vector&lt; ast::AstNodeType &gt; &amp;types)</div><div class="ttdoc">traverse node recursively and collect nodes of given types</div><div class="ttdef"><b>Definition:</b> <a href="visitor__utils_8cpp_source.html#l00204">visitor_utils.cpp:204</a></div></div>
-<div class="ttc" id="asympy__solver_8cpp_html_a876dda45eeb8094ff1c8fe0f73f8bc78"><div class="ttname"><a href="sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78">create_c_visitor</a></div><div class="ttdeci">std::shared_ptr&lt; CodegenCppVisitor &gt; create_c_visitor(const std::shared_ptr&lt; ast::Program &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss, bool inline_visitor=true, bool pade=false, bool cse=false)</div><div class="ttdoc">Helper for creating C codegen visitor.</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l02240">sympy_solver.cpp:2240</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1parser_1_1_nmodl_driver_html_a1d8d4a11126fc6e8e79f8422f7b4532c"><div class="ttname"><a href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">nmodl::parser::NmodlDriver::parse_string</a></div><div class="ttdeci">std::shared_ptr&lt; ast::Program &gt; parse_string(const std::string &amp;input)</div><div class="ttdoc">parser nmodl provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="nmodl__driver_8cpp_source.html#l00078">nmodl_driver.cpp:78</a></div></div>
 <div class="ttc" id="aneuron__solve__visitor_8hpp_html"><div class="ttname"><a href="neuron__solve__visitor_8hpp.html">neuron_solve_visitor.hpp</a></div><div class="ttdoc">Visitor that solves ODEs using old solvers of NEURON</div></div>
 <div class="ttc" id="acheckparent__visitor_8hpp_html"><div class="ttname"><a href="checkparent__visitor_8hpp.html">checkparent_visitor.hpp</a></div><div class="ttdoc">Visitor for checking parents of ast nodes</div></div>
@@ -2552,7 +2553,7 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="ttc" id="asymtab__visitor_8hpp_html"><div class="ttname"><a href="symtab__visitor_8hpp.html">symtab_visitor.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
 <div class="ttc" id="asympy__solver__visitor_8hpp_html"><div class="ttname"><a href="sympy__solver__visitor_8hpp.html">sympy_solver_visitor.hpp</a></div><div class="ttdoc">Visitor for systems of algebraic and differential equations</div></div>
 <div class="ttc" id="anmodl__visitor_8hpp_html"><div class="ttname"><a href="nmodl__visitor_8hpp.html">nmodl_visitor.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
-<div class="ttc" id="asympy__solver_8cpp_html_ab7518722cbffea33018ffc7c653e1f87"><div class="ttname"><a href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a></div><div class="ttdeci">std::string get_cpp_code(const std::string &amp;nmodl_text)</div><div class="ttdoc">print entire code</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l02280">sympy_solver.cpp:2280</a></div></div>
+<div class="ttc" id="asympy__solver_8cpp_html_ab7518722cbffea33018ffc7c653e1f87"><div class="ttname"><a href="sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87">get_cpp_code</a></div><div class="ttdeci">std::string get_cpp_code(const std::string &amp;nmodl_text)</div><div class="ttdoc">print entire code</div><div class="ttdef"><b>Definition:</b> <a href="sympy__solver_8cpp_source.html#l02281">sympy_solver.cpp:2281</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">

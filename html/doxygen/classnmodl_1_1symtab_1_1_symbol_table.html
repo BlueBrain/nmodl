@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1symtab_1_1_symbol_table.
 <div class="textblock"><p>Represent symbol table for a NMODL block. </p>
 <p><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html" title="Represent symbol in symbol table.">Symbol</a> <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table_1_1_table.html" title="Helper class for implementing symbol table.">Table</a> is used to track information about every block construct encountered in the nmodl. In NMODL, block constructs are NEURON, PARAMETER NET_RECEIVE etc. Each block is considered a new scope.</p>
 <p>NMODL supports nested block definitions (i.e. nested blocks). One specific example of this is INITIAL block in NET_RECEIVE block. In this case we need multiple scopes for single top level block of NMODL. In the future if we enable block level scopes, we will need symbol tables per block. Hence we are implementing BlockSymbolTable which stores all symbol table information for specific NMODL block. Note that each BlockSymbolTable implementation is recursive because while symbol lookup we have to search first into local/current block. If lookup is unsuccessful then we have to traverse parent blocks until the end.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000040">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000042">Todo:</a></b></dt><dd><ul>
 <li>Revisit when clone method is used and implementation of copy constructor</li>
 <li>Name may not require as we have added AST node </li>
 </ul>
@@ -292,7 +292,7 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Create a copy of symbol table. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000043">Todo:</a></b></dt><dd>Revisit the usage as tokens will be pointing to old nodes </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000045">Todo:</a></b></dt><dd>Revisit the usage as tokens will be pointing to old nodes </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="symbol__table_8hpp_source.html#l00194">194</a> of file <a class="el" href="symbol__table_8hpp_source.html">symbol_table.hpp</a>.</p>
 

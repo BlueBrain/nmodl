@@ -103,7 +103,8 @@ $(document).ready(function(){initNavTree('src_2main_8cpp.html',''); initResizabl
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__acc__visitor_8hpp_source.html">codegen/codegen_acc_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen/codegen_compatibility_visitor.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen/codegen_coreneuron_cpp_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__neuron__cpp__visitor_8hpp_source.html">codegen/codegen_neuron_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__transform__visitor_8hpp_source.html">codegen/codegen_transform_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="config_8h_source.html">config/config.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
@@ -171,7 +172,9 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>list of mod files to process</p>
 <p>true if debug logger statements should be shown</p>
-<p>true if serial c code to be generated</p>
+<p>true if code is to be generated for NEURON</p>
+<p>true if code is to be generated for CoreNEURON</p>
+<p>true if serial C++ code to be generated</p>
 <p>true if c code with openacc to be generated</p>
 <p>true if sympy should be used for solving ODEs analytically</p>
 <p>true if Pade approximation to be used</p>
@@ -213,7 +216,7 @@ Functions</h2></td></tr>
 <p>Parsing units fron "nrnunits.lib" and mod files</p>
 <p>once we start modifying (especially removing) older constructs from ast then we should run symtab visitor in update mode so that old symbols (e.g. prime variables) are not lost</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00062">62</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2main_8cpp_source.html#l00063">63</a> of file <a class="el" href="src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>

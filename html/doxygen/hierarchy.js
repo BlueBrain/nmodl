@@ -13,7 +13,10 @@ var hierarchy =
     [ "nmodl::visitor::ConstVisitor", "classnmodl_1_1visitor_1_1_const_visitor.html", [
       [ "nmodl::visitor::ConstAstVisitor", "classnmodl_1_1visitor_1_1_const_ast_visitor.html", [
         [ "nmodl::codegen::CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html", [
-          [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ]
+          [ "nmodl::codegen::CodegenCoreneuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html", [
+            [ "nmodl::codegen::CodegenAccVisitor", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html", null ]
+          ] ],
+          [ "nmodl::codegen::CodegenNeuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html", null ]
         ] ],
         [ "nmodl::codegen::CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html", null ],
         [ "nmodl::visitor::DefUseAnalyzeVisitor", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html", null ],

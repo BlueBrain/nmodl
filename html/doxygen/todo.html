@@ -96,45 +96,51 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><dl class="reflist">
 <dt>File <a class="el" href="modl_8h.html">modl.h</a>  </dt>
-<dd><a class="anchor" id="_todo000021"></a>Add these bit masks as enum-flags and remove this legacy header  </dd>
+<dd><a class="anchor" id="_todo000023"></a>Add these bit masks as enum-flags and remove this legacy header  </dd>
 <dt>Class <a class="el" href="structnmodl_1_1ast_1_1_ast.html">nmodl::ast::Ast</a>  </dt>
-<dd><a class="anchor" id="_todo000060"></a>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future.  </dd>
+<dd><a class="anchor" id="_todo000062"></a>With the <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a> as another top level node, this can be removed in the future.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html">nmodl::ast::ConstantStatement</a>  </dt>
-<dd><a class="anchor" id="_todo000061"></a>As <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html" title="Represent statement in CONSTANT block of NMODL.">ConstantStatement</a> wraps a single <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ConstantVar</a>, this or <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ast::ConstantVar</a> can be redundant in the future. </dd>
+<dd><a class="anchor" id="_todo000063"></a>As <a class="el" href="classnmodl_1_1ast_1_1_constant_statement.html" title="Represent statement in CONSTANT block of NMODL.">ConstantStatement</a> wraps a single <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ConstantVar</a>, this or <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html" title="Represents a variable in the ast::ConstantBlock.">ast::ConstantVar</a> can be redundant in the future. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6">nmodl::codegen::CodegenAccVisitor::print_abort_routine</a>  () const override</dt>
 <dd><a class="anchor" id="_todo000001"></a>: we need to implement proper error handling mechanism to propogate errors from GPU to CPU. For example, error code can be returned like original neuron implementation. For now we use <code>assert(0==1)</code> pattern which is used for OpenACC.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin</a>  () override</dt>
 <dd><a class="anchor" id="_todo000002"></a>: With the current code structure for NMODL and MOD2C, we use <code>serial</code> construct to launch serial kernels. This is during initialization but still inefficient. This should be improved when we drop MOD2C.  </dd>
+<dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html">nmodl::codegen::CodegenCoreneuronCppVisitor</a>  </dt>
+<dd><a class="anchor" id="_todo000011"></a><ul>
+<li>Handle define statement (i.e. macros)</li>
+<li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block.  </li>
+</ul>
+</dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af48766525e3a1c8f88471a9338ae59e7">nmodl::codegen::CodegenCoreneuronCppVisitor::internal_method_parameters</a>  () override</dt>
+<dd><a class="anchor" id="_todo000004"></a>: figure out how to correctly handle qualifiers  </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0c07a4568bf732ccc7a6ec9b763bc71b">nmodl::codegen::CodegenCoreneuronCppVisitor::ion_write_statements</a>  (BlockType type)</dt>
+<dd><a class="anchor" id="_todo000003"></a>Unhandled case in neuron implementation  </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a93aa5868249076c8b0766369cbbba993">nmodl::codegen::CodegenCoreneuronCppVisitor::print_derivimplicit_kernel</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> &amp;block)</dt>
+<dd><a class="anchor" id="_todo000009"></a>Data is not derived. </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a38c76390b1d1c0a5cf1fe8df3f27fb57">nmodl::codegen::CodegenCoreneuronCppVisitor::print_nrn_state</a>  () override</dt>
+<dd><a class="anchor" id="_todo000010"></a>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block  </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8366981bc5ecb9b4d52af74865e16bb6">nmodl::codegen::CodegenCoreneuronCppVisitor::print_watch_activate</a>  ()</dt>
+<dd><p class="startdd"><a class="anchor" id="_todo000006"></a>Number of watch could be more than number of statements according to grammar.</p>
+<p class="enddd"><a class="anchor" id="_todo000007"></a>Similar to neuron/coreneuron we are using first watch and ignoring rest.  </p>
+</dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a3ea1bf8ef47090b926d8738d18306de7">nmodl::codegen::CodegenCoreneuronCppVisitor::print_watch_check</a>  ()</dt>
+<dd><a class="anchor" id="_todo000008"></a>Similar to print_watch_activate, we are using only first watch. </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a592905dcf5bb27083ec0a84f1ab29508">nmodl::codegen::CodegenCoreneuronCppVisitor::process_verbatim_text</a>  (std::string const &amp;text) override</dt>
+<dd><a class="anchor" id="_todo000005"></a>: this is still ad-hoc and requires re-implementation to handle it more elegantly.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000014"></a><ul>
+<dd><a class="anchor" id="_todo000015"></a><ul>
 <li>Handle define statement (i.e. macros)</li>
 <li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block.  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2a1e5337a20e3f1dad1d1dfbb89fbb1b">nmodl::codegen::CodegenCppVisitor::codegen_global_variables</a>  </dt>
-<dd><a class="anchor" id="_todo000015"></a>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a>  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a694e89a1a5859b0aa43061a36a44e85f">nmodl::codegen::CodegenCppVisitor::internal_method_parameters</a>  ()</dt>
-<dd><a class="anchor" id="_todo000006"></a>: figure out how to correctly handle qualifiers  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">nmodl::codegen::CodegenCppVisitor::ion_write_statements</a>  (BlockType type)</dt>
-<dd><a class="anchor" id="_todo000004"></a>Unhandled case in neuron implementation  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a623775545db96c3447e7df1a4313be38">nmodl::codegen::CodegenCppVisitor::print_derivimplicit_kernel</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> &amp;block)</dt>
-<dd><a class="anchor" id="_todo000011"></a>Data is not derived. </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa2c90a000de6b21866c1a667c29e3210">nmodl::codegen::CodegenCppVisitor::print_nrn_state</a>  ()</dt>
-<dd><a class="anchor" id="_todo000012"></a>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a89a6745455933a1dc6a9e792d2727b3a">nmodl::codegen::CodegenCppVisitor::print_watch_activate</a>  ()</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000008"></a>Number of watch could be more than number of statements according to grammar.</p>
-<p class="enddd"><a class="anchor" id="_todo000009"></a>Similar to neuron/coreneuron we are using first watch and ignoring rest.  </p>
-</dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a61777f8bad11d00afa7917561b102882">nmodl::codegen::CodegenCppVisitor::print_watch_check</a>  ()</dt>
-<dd><a class="anchor" id="_todo000010"></a>Similar to print_watch_activate, we are using only first watch. </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c21fe2f09c7911acadbbfa9a71dfabe">nmodl::codegen::CodegenCppVisitor::process_verbatim_text</a>  (std::string const &amp;text)</dt>
-<dd><a class="anchor" id="_todo000007"></a>: this is still ad-hoc and requires re-implementation to handle it more elegantly.  </dd>
+<dd><a class="anchor" id="_todo000016"></a>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a>  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e">nmodl::codegen::CodegenCppVisitor::rename_function_arguments</a>  ()</dt>
-<dd><a class="anchor" id="_todo000005"></a>Issue with verbatim renaming. </dd>
+<dd><a class="anchor" id="_todo000012"></a>Issue with verbatim renaming. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4f2304d508e3d9645581004c676d94ca">nmodl::codegen::CodegenCppVisitor::visit_var_name</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html" title="Represents a variable.">ast::VarName</a> &amp;node) override</dt>
-<dd><a class="anchor" id="_todo000003"></a>: Validate how @ is being handled in neuron implementation  </dd>
+<dd><a class="anchor" id="_todo000013"></a>: Validate how @ is being handled in neuron implementation  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html">nmodl::codegen::CodegenHelperVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000018"></a><ul>
+<dd><a class="anchor" id="_todo000019"></a><ul>
 <li>Determine <code>vectorize</code> as part of the pass</li>
 <li>Determine <code>threadsafe</code> as part of the pass</li>
 <li>Global variable order is not preserved, for example, below gives different order:<ul>
@@ -146,50 +152,56 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaa15452418bc8a98d8a205e8fcfb110">nmodl::codegen::CodegenHelperVisitor::find_non_range_variables</a>  ()</dt>
-<dd><a class="anchor" id="_todo000016"></a>Below we calculate thread related id and sizes. This will need to do from global analysis pass as here we are handling top local variables, global variables, derivimplicit method. There might be more use cases with other solver methods.  </dd>
+<dd><a class="anchor" id="_todo000017"></a>Below we calculate thread related id and sizes. This will need to do from global analysis pass as here we are handling top local variables, global variables, derivimplicit method. There might be more use cases with other solver methods.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab0efef492595d0e818b6ad5ab50ea595">nmodl::codegen::CodegenHelperVisitor::visit_statement_block</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html" title="Represents block encapsulating list of statements.">ast::StatementBlock</a> &amp;node) override</dt>
-<dd><a class="anchor" id="_todo000017"></a>AST can have duplicate DERIVATIVE blocks if a mod file uses SOLVE statements in its INITIAL block (e.g. in case of kinetic schemes using <code>STEADYSTATE sparse</code> solver). Such duplicated DERIVATIVE blocks could be removed by <code>SolveBlockVisitor</code>, or we have to avoid visiting them here. See e.g. SH_na8st.mod test and original reduced_dentate .mod.  </dd>
+<dd><a class="anchor" id="_todo000018"></a>AST can have duplicate DERIVATIVE blocks if a mod file uses SOLVE statements in its INITIAL block (e.g. in case of kinetic schemes using <code>STEADYSTATE sparse</code> solver). Such duplicated DERIVATIVE blocks could be removed by <code>SolveBlockVisitor</code>, or we have to avoid visiting them here. See e.g. SH_na8st.mod test and original reduced_dentate .mod.  </dd>
 <dt>Class <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html">nmodl::codegen::CodegenInfo</a>  </dt>
-<dd><a class="anchor" id="_todo000019"></a>Need to store all Define i.e. macro definitions?  </dd>
-<dt>Member <a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#a86a9d3a0e50e4b2647e45c1ea5fd2e07">nmodl::codegen::naming::NMODL_VERSION</a>  []</dt>
-<dd><a class="anchor" id="_todo000020"></a>: should be moved from codegen to global scope  </dd>
-<dt>Class <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">nmodl::codegen::ShadowUseStatement</a>  </dt>
-<dd><a class="anchor" id="_todo000013"></a>If shadow_lhs is empty then we assume shadow statement not required  </dd>
-<dt>Member <a class="el" href="namespacenmodl_1_1details.html#a19154f9c7b5074c9177b1da18950f29d">nmodl::details::keywords</a>  </dt>
-<dd><a class="anchor" id="_todo000024"></a>Some keywords have different token names, e.g. TITLE keyword has MODEL as a keyword. These token names are used in multiple context and hence we are keeping original names. Once we finish code generation part then we change this.  </dd>
-<dt>Member <a class="el" href="namespacenmodl_1_1details.html#a4f8e77160ea60cb0cd045106de94bf92">nmodl::details::methods</a>  </dt>
-<dd><a class="anchor" id="_todo000025"></a><a class="el" href="structnmodl_1_1details_1_1_method_info.html#aeab10f5665538150a35f61b30b71e64b" title="block types where this method will work with">MethodInfo::subtype</a> should be changed from integer flag to proper type  </dd>
-<dt>Class <a class="el" href="classnmodl_1_1_mod_token.html">nmodl::ModToken</a>  </dt>
+<dd><a class="anchor" id="_todo000020"></a>Need to store all Define i.e. macro definitions?  </dd>
+<dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html">nmodl::codegen::CodegenNeuronCppVisitor</a>  </dt>
 <dd><a class="anchor" id="_todo000022"></a><ul>
+<li>Handle define statement (i.e. macros)</li>
+<li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block.  </li>
+</ul>
+</dd>
+<dt>Member <a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#a86a9d3a0e50e4b2647e45c1ea5fd2e07">nmodl::codegen::naming::NMODL_VERSION</a>  []</dt>
+<dd><a class="anchor" id="_todo000021"></a>: should be moved from codegen to global scope  </dd>
+<dt>Class <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">nmodl::codegen::ShadowUseStatement</a>  </dt>
+<dd><a class="anchor" id="_todo000014"></a>If shadow_lhs is empty then we assume shadow statement not required  </dd>
+<dt>Member <a class="el" href="namespacenmodl_1_1details.html#a19154f9c7b5074c9177b1da18950f29d">nmodl::details::keywords</a>  </dt>
+<dd><a class="anchor" id="_todo000026"></a>Some keywords have different token names, e.g. TITLE keyword has MODEL as a keyword. These token names are used in multiple context and hence we are keeping original names. Once we finish code generation part then we change this.  </dd>
+<dt>Member <a class="el" href="namespacenmodl_1_1details.html#a4f8e77160ea60cb0cd045106de94bf92">nmodl::details::methods</a>  </dt>
+<dd><a class="anchor" id="_todo000027"></a><a class="el" href="structnmodl_1_1details_1_1_method_info.html#aeab10f5665538150a35f61b30b71e64b" title="block types where this method will work with">MethodInfo::subtype</a> should be changed from integer flag to proper type  </dd>
+<dt>Class <a class="el" href="classnmodl_1_1_mod_token.html">nmodl::ModToken</a>  </dt>
+<dd><a class="anchor" id="_todo000024"></a><ul>
 <li><a class="el" href="classnmodl_1_1_mod_token.html#a5edc9d18c2001be5017e2e2afc484ae1">LocationType</a> object is copyable except if we specify the stream name. It would be good to track filename when we go for multi-channel optimization and code generation. </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="namespacenmodl.html#aa7c0916e51ccaf5779b7db1d1cd9fd8d">nmodl::name_symbol</a>  (const std::string &amp;text, PositionType &amp;pos, TokenType type)</dt>
-<dd><a class="anchor" id="_todo000023"></a> In addition to keywords and methods, there are also external definitions for math and neuron specific functions/variables. In the token we should mark those as external.  </dd>
+<dd><a class="anchor" id="_todo000025"></a> In addition to keywords and methods, there are also external definitions for math and neuron specific functions/variables. In the token we should mark those as external.  </dd>
 <dt>Namespace <a class="el" href="namespacenmodl_1_1parser_1_1diffeq.html">nmodl::parser::diffeq</a>  </dt>
-<dd><a class="anchor" id="_todo000030"></a>The implementations here are verbose and has duplicate code. Need to revisit this, may be using better library like symengine altogether.  </dd>
+<dd><a class="anchor" id="_todo000032"></a>The implementations here are verbose and has duplicate code. Need to revisit this, may be using better library like symengine altogether.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#ae54e71ef0da95411bf97f69e456da2d7">nmodl::parser::diffeq::DiffEqContext::cvode_deriv</a>  () const</dt>
-<dd><a class="anchor" id="_todo000028"></a>Methods inherited neuron implementation  </dd>
+<dd><a class="anchor" id="_todo000030"></a>Methods inherited neuron implementation  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a8c0e2e1e95d94888911b16a94c5c1421">nmodl::parser::diffeq::DiffEqContext::get_solution</a>  (bool &amp;cnexp_possible)</dt>
-<dd><a class="anchor" id="_todo000026"></a>Currently we have tested cnexp, euler and derivimplicit methods with all equations from BBP models. Need to test this against various other mod files, especially kinetic schemes, reaction-diffusion etc.  </dd>
+<dd><a class="anchor" id="_todo000028"></a>Currently we have tested cnexp, euler and derivimplicit methods with all equations from BBP models. Need to test this against various other mod files, especially kinetic schemes, reaction-diffusion etc.  </dd>
 <dt>Member <a class="el" href="structnmodl_1_1parser_1_1diffeq_1_1_term.html#a405c13be238d68f836a1f118f6407991">nmodl::parser::diffeq::Term::a</a>  </dt>
-<dd><a class="anchor" id="_todo000027"></a>Need to check in neuron implementation?  </dd>
+<dd><a class="anchor" id="_todo000029"></a>Need to check in neuron implementation?  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae">nmodl::parser::DiffeqDriver::cnexp_possible</a>  (const std::string &amp;equation, std::string &amp;solution)</dt>
-<dd><a class="anchor" id="_todo000029"></a>Instead of using neuron like api, we need to refactor  </dd>
+<dd><a class="anchor" id="_todo000031"></a>Instead of using neuron like api, we need to refactor  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html">nmodl::parser::NmodlDriver</a>  </dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000031"></a>Lexer, parser and ast member variables are used inside lexer/ parser instances. The local instaces are created inside parse_stream and hence the pointers are no longer valid except ast. Need better way to handle this.</p>
-<p class="enddd"><a class="anchor" id="_todo000032"></a>Stream name is not used as it will need better support as location object used in scanner takes string pointer which could be invalid when we copy location object.  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000033"></a>Lexer, parser and ast member variables are used inside lexer/ parser instances. The local instaces are created inside parse_stream and hence the pointers are no longer valid except ast. Need better way to handle this.</p>
+<p class="enddd"><a class="anchor" id="_todo000034"></a>Stream name is not used as it will need better support as location object used in scanner takes string pointer which could be invalid when we copy location object.  </p>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html">nmodl::printer::JSONPrinter</a>  </dt>
-<dd><a class="anchor" id="_todo000033"></a>We need to explicitly call <code><a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a0fafa2042d3c4868e7571614702b9d00" title="Dump json object to stream (typically at the end) nspaces is number of spaces used for indentation.">flush()</a></code> in order to get write/return results. We simply can't dump block in <code>popBlock()</code> because block itself will be part of other parent elements. Also we are writing results to file, <code>stringstream</code> and <code>cout</code>. And hence we can't simply reset/clear previously written text.  </dd>
+<dd><a class="anchor" id="_todo000035"></a>We need to explicitly call <code><a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a0fafa2042d3c4868e7571614702b9d00" title="Dump json object to stream (typically at the end) nspaces is number of spaces used for indentation.">flush()</a></code> in order to get write/return results. We simply can't dump block in <code>popBlock()</code> because block itself will be part of other parent elements. Also we are writing results to file, <code>stringstream</code> and <code>cout</code>. And hence we can't simply reset/clear previously written text.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html">nmodl::printer::NMODLPrinter</a>  </dt>
-<dd><a class="anchor" id="_todo000034"></a>Implement Printer as base class to avoid duplication code between <a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html" title="Helper class for printing AST in JSON form.">JSONPrinter</a> and <a class="el" href="classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html" title="Helper class for printing AST back to NMDOL test.">NMODLPrinter</a>.  </dd>
+<dd><a class="anchor" id="_todo000036"></a>Implement Printer as base class to avoid duplication code between <a class="el" href="classnmodl_1_1printer_1_1_j_s_o_n_printer.html" title="Helper class for printing AST in JSON form.">JSONPrinter</a> and <a class="el" href="classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html" title="Helper class for printing AST back to NMDOL test.">NMODLPrinter</a>.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html">nmodl::symtab::ModelSymbolTable</a>  </dt>
-<dd><a class="anchor" id="_todo000041"></a>Unique name should be based on location. Use <a class="el" href="classnmodl_1_1_mod_token.html" title="Represent token returned by scanner.">ModToken</a> to get position.  </dd>
+<dd><a class="anchor" id="_todo000043"></a>Unique name should be based on location. Use <a class="el" href="classnmodl_1_1_mod_token.html" title="Represent token returned by scanner.">ModToken</a> to get position.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1symtab_1_1_model_symbol_table.html#a830dc2c0db6cba986b58d977996d0b3e">nmodl::symtab::ModelSymbolTable::get_unique_name</a>  (const std::string &amp;name, <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> *node, bool is_global)</dt>
-<dd><a class="anchor" id="_todo000039"></a>We should add position information to make name unique  </dd>
+<dd><a class="anchor" id="_todo000041"></a>We should add position information to make name unique  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">nmodl::symtab::Symbol</a>  </dt>
-<dd><a class="anchor" id="_todo000035"></a><ul>
+<dd><a class="anchor" id="_todo000037"></a><ul>
 <li>Multiple tokens (i.e. location information) for symbol should be tracked</li>
 <li>Scope information should be more than just string</li>
 <li>Perf block should track information about all usage of the symbol (would be helpful for perf modeling)</li>
@@ -197,32 +209,32 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#aea4355d4eb499282cfcad1b29372efd3">nmodl::symtab::Symbol::is_external_variable</a>  () const noexcept</dt>
-<dd><a class="anchor" id="_todo000036"></a>Need to check if we should check two properties using has_any_property instead of exact comparison </dd>
+<dd><a class="anchor" id="_todo000038"></a>Need to check if we should check two properties using has_any_property instead of exact comparison </dd>
 <dt>Class <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html">nmodl::symtab::SymbolTable</a>  </dt>
-<dd><a class="anchor" id="_todo000040"></a><ul>
+<dd><a class="anchor" id="_todo000042"></a><ul>
 <li>Revisit when clone method is used and implementation of copy constructor</li>
 <li>Name may not require as we have added AST node  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html#ae1ec2b128700c6eb7321f5a1a641d78f">nmodl::symtab::SymbolTable::clone</a>  () const</dt>
-<dd><a class="anchor" id="_todo000043"></a>Revisit the usage as tokens will be pointing to old nodes  </dd>
+<dd><a class="anchor" id="_todo000045"></a>Revisit the usage as tokens will be pointing to old nodes  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table_1_1_table.html">nmodl::symtab::SymbolTable::Table</a>  </dt>
-<dd><a class="anchor" id="_todo000042"></a>Re-implement pretty printing  </dd>
+<dd><a class="anchor" id="_todo000044"></a>Re-implement pretty printing  </dd>
 <dt>Member <a class="el" href="namespacenmodl_1_1symtab_1_1syminfo.html#ae05efbc3da8258a5240bcb2d605efaef">nmodl::symtab::syminfo::enum_type</a>  </dt>
-<dd><a class="anchor" id="_todo000037"></a>Error with pybind if std::underlying_typ is used  </dd>
+<dd><a class="anchor" id="_todo000039"></a>Error with pybind if std::underlying_typ is used  </dd>
 <dt>Member <a class="el" href="namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db">nmodl::symtab::syminfo::NmodlType</a>  </dt>
-<dd><a class="anchor" id="_todo000038"></a><ul>
+<dd><a class="anchor" id="_todo000040"></a><ul>
 <li>Rename param_assign to parameter_var  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a50cbab8eb69dbd5808d7da31e983dfde">nmodl::test_utils::NmodlTestCase::NmodlTestCase</a>  ()=delete</dt>
-<dd><a class="anchor" id="_todo000059"></a>: add associated json (to use in visitor test)  </dd>
+<dd><a class="anchor" id="_todo000061"></a>: add associated json (to use in visitor test)  </dd>
 <dt>Member <a class="el" href="namespacenmodl_1_1visitor.html#a93218c244f2658370e096935410f2c42">nmodl::visitor::create_statement</a>  (const std::string &amp;code_statement)</dt>
-<dd><a class="anchor" id="_todo000057"></a>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block.  </dd>
+<dd><a class="anchor" id="_todo000059"></a>Need to revisit this during code generation passes to make sure if all statements can be part of procedure block.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a9c55e7d17ed48d0d64b8acb1dd4cc060">nmodl::visitor::DefUseAnalyzeVisitor::visit_verbatim</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block.">ast::Verbatim</a> &amp;node) override</dt>
-<dd><a class="anchor" id="_todo000044"></a>One simple way would be to look for p_name in the string of verbatim block to find the variable usage.  </dd>
+<dd><a class="anchor" id="_todo000046"></a>One simple way would be to look for p_name in the string of verbatim block to find the variable usage.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html">nmodl::visitor::InlineVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000046"></a><ul>
+<dd><a class="anchor" id="_todo000048"></a><ul>
 <li>Recursive function calls are not supported and need to add checks to avoid stack explosion</li>
 <li>Currently we rename variables more than necessary, this could be improved [low priority]</li>
 <li>Function calls as part of an argument of function call itself are not completely inlined [low priority]</li>
@@ -231,43 +243,43 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_inline_visitor.html#aec884c3dd17991a7fb6a4ae7e2d19eb4">nmodl::visitor::InlineVisitor::can_replace_statement</a>  (const std::shared_ptr&lt; ast::Statement &gt; &amp;statement)</dt>
-<dd><a class="anchor" id="_todo000045"></a>Add method to ast itself to simplify this implementation  </dd>
+<dd><a class="anchor" id="_todo000047"></a>Add method to ast itself to simplify this implementation  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_localize_visitor.html">nmodl::visitor::LocalizeVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000051"></a><ul>
+<dd><a class="anchor" id="_todo000053"></a><ul>
 <li>We are excluding procedures/functions because they will be still using global variables. We need to have dead-code removal pass to eliminate unused procedures/ functions before localizer pass.  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_localize_visitor.html#ad865a0eb75ee7212520bfc092162f188">nmodl::visitor::LocalizeVisitor::variables_to_optimize</a>  () const</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000049"></a>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </p>
-<p class="enddd"><a class="anchor" id="_todo000050"></a>Instead of ast node, use symbol properties to check variable type  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000051"></a>Voltage v can be global variable as well as external. In order to avoid optimizations, we need to handle this case properly </p>
+<p class="enddd"><a class="anchor" id="_todo000052"></a>Instead of ast node, use symbol properties to check variable type  </p>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_local_to_assigned_visitor.html">nmodl::visitor::LocalToAssignedVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000047"></a><ul>
+<dd><a class="anchor" id="_todo000049"></a><ul>
 <li>Variables like qt are often constant. As long as INITIAL block is executed serially or qt is updated in atomic way then we don't have a problem.  </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_local_var_rename_visitor.html">nmodl::visitor::LocalVarRenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000048"></a><ul>
+<dd><a class="anchor" id="_todo000050"></a><ul>
 <li>Currently we are renaming variables even if there is no inlining candidates. In this case ideally we should not rename.  </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html">nmodl::visitor::NmodlPrintVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000062"></a>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types.  </dd>
+<dd><a class="anchor" id="_todo000064"></a>Note that AstNodeType::INDEPENDENT_BLOCK is now trimmed-down in the AST. So if we need to make provide something like <code>nmodl-format</code> then we should exclude this node type i.e. add that in the exclude_types.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html">nmodl::visitor::PerfVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000052"></a><ul>
+<dd><a class="anchor" id="_todo000054"></a><ul>
 <li>To measure the performance of statements like if, elseif and else, we have to find maximum performance from if,elseif,else and then use it to calculate total performance. In the current implementation we are doing sum of all blocks. We need to override IfStatement (which has all sub-blocks) and get maximum performance of all statements recursively. </li>
 </ul>
 </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_rename_visitor.html">nmodl::visitor::RenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000053"></a>Add log/warning messages.  </dd>
+<dd><a class="anchor" id="_todo000055"></a>Add log/warning messages.  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#acecb22d0c928ea76b67abef5e83b989d">nmodl::visitor::SymtabVisitor::visit_table_statement</a>  (<a class="el" href="classnmodl_1_1ast_1_1_table_statement.html" title="Represents TABLE statement in NMODL.">ast::TableStatement</a> &amp;node) override</dt>
-<dd><a class="anchor" id="_todo000054"></a>we assume table statement follows variable declaration  </dd>
+<dd><a class="anchor" id="_todo000056"></a>we assume table statement follows variable declaration  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_var_usage_visitor.html">nmodl::visitor::VarUsageVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000055"></a>Check if macro is considered as variable  </dd>
+<dd><a class="anchor" id="_todo000057"></a>Check if macro is considered as variable  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1visitor_1_1_verbatim_var_rename_visitor.html">nmodl::visitor::VerbatimVarRenameVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000056"></a>Check if symbol table lookup is ok or there are cases where this could be error prone.  </dd>
+<dd><a class="anchor" id="_todo000058"></a>Check if symbol table lookup is ok or there are cases where this could be error prone.  </dd>
 <dt>Member <a class="el" href="test_2unit_2symtab_2symbol__table_8cpp.html#a780700b9cd74cc6da7faa0250d3e64d5">SCENARIO</a>  ("Global symbol table (ModelSymbol) allows scope based operations")</dt>
-<dd><a class="anchor" id="_todo000058"></a>: not sure how to capture std::cout </dd>
+<dd><a class="anchor" id="_todo000060"></a>: not sure how to capture std::cout </dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

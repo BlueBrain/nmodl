@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1symtab_1_1_symbol.html',
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represent symbol in symbol table. </p>
 <p><a class="el" href="classnmodl_1_1symtab_1_1_symbol.html" title="Represent symbol in symbol table.">Symbol</a> table generator pass visit the AST and insert symbol for each node into <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html" title="Represent symbol table for a NMODL block.">symtab::SymbolTable</a>. <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html" title="Represent symbol in symbol table.">Symbol</a> could appear multiple times in a block or different global blocks. NmodlType object has all nmodl properties information.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000035">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000037">Todo:</a></b></dt><dd><ul>
 <li>Multiple tokens (i.e. location information) for symbol should be tracked</li>
 <li>Scope information should be more than just string</li>
 <li>Perf block should track information about all usage of the symbol (would be helpful for perf modeling)</li>
@@ -1160,7 +1160,7 @@ Private Attributes</h2></td></tr>
 
 <p>Check if symbol represent an external variable. </p>
 <p>External variables are the variables that are defined in NEURON and available in mod file.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000036">Todo:</a></b></dt><dd>Need to check if we should check two properties using has_any_property instead of exact comparison</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000038">Todo:</a></b></dt><dd>Need to check if we should check two properties using has_any_property instead of exact comparison</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacenmodl_1_1details.html#aca8ea385dc064f4648544878cd05da9a" title="Variables from NEURON that are directly used in NMODL.">nmodl::details::NEURON_VARIABLES</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="symbol_8hpp_source.html#l00283">283</a> of file <a class="el" href="symbol_8hpp_source.html">symbol.hpp</a>.</p>

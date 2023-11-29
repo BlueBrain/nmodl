@@ -2,7 +2,7 @@ var sympy__solver_8cpp =
 [
     [ "ast_to_string", "sympy__solver_8cpp.html#a8dc22e44bd661fd27f684c3d48d0f407", null ],
     [ "compare_blocks", "sympy__solver_8cpp.html#a49d921f0d08fe1a20a91c3d9bd6d6996", null ],
-    [ "create_c_visitor", "sympy__solver_8cpp.html#a876dda45eeb8094ff1c8fe0f73f8bc78", null ],
+    [ "create_coreneuron_cpp_visitor", "sympy__solver_8cpp.html#abcd3ba8f8a105bdf68db38e2f180ba96", null ],
     [ "get_cpp_code", "sympy__solver_8cpp.html#ab7518722cbffea33018ffc7c653e1f87", null ],
     [ "is_unique_vars", "sympy__solver_8cpp.html#aa066f9850f2790f938c260601aa62623", null ],
     [ "run_sympy_solver_visitor", "sympy__solver_8cpp.html#a8f0ff0be2e8dad02c17647d3f39c1baf", null ],
