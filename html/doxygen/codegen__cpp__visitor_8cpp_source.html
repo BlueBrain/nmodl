@@ -315,7 +315,7 @@ $(document).ready(function(){initNavTree('codegen__cpp__visitor_8cpp_source.html
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    printer-&gt;add_newline(2);</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;/** channel information */&quot;</span>);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;static const char *mechanism[] = {&quot;</span>);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    printer-&gt;fmt_line(<span class="stringliteral">&quot;static const char *{}[] = {{&quot;</span>, get_channel_info_var_name());</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    printer-&gt;increase_indent();</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    printer-&gt;add_line(add_escape_quote(nmodl_version()), <span class="stringliteral">&quot;,&quot;</span>);</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    printer-&gt;add_line(add_escape_quote(info.mod_suffix), <span class="stringliteral">&quot;,&quot;</span>);</div>
