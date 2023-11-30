@@ -286,6 +286,12 @@ void CodegenNeuronCppVisitor::print_neuron_includes() {
 
 
 void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
+    printer->add_line("static void _initlists() {");
+    printer->increase_indent();
+    printer->add_multi_line(R"CODE(
+        static int _first = 1;
+        if (!_first) return;
+    )CODE");
     for (auto i = 0; i < info.prime_variables_by_order.size(); ++i) {
         const auto& prime_var = info.prime_variables_by_order[i];
         /// TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at
@@ -319,6 +325,9 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
                               position_of_float_var(prime_var_deriv_name));
         }
     }
+    printer->add_line("_first = 0;");
+    printer->decrease_indent();
+    printer->add_line("};");
 }
 
 
@@ -389,7 +398,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
     printer->fmt_push_block("void _{}_reg()", info.mod_file);
-    print_sdlists_init(true);
+    printer->add_line("_initlists();");
     // type related information
     printer->add_newline();
     printer->fmt_line("int mech_type = nrn_get_mechtype({}[1]);", get_channel_info_var_name());
@@ -659,6 +668,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_data_structures(true);
     print_global_variables_for_hoc();
     print_compute_functions();  // only nrn_cur and nrn_state
+    print_sdlists_init(true);
     print_mechanism_register();
     print_namespace_end();
     codegen = false;
