@@ -232,8 +232,8 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         /* Ds */
         _dlist1[0] = {7, 0};
 
-        int mech_type = nrn_get_mechtype("pas_test");
-        _nrn_mechanism_register_data_fields(_mechtype,
+        int mech_type = nrn_get_mechtype(mechanism_info[1]);
+        _nrn_mechanism_register_data_fields(mech_type,
             _nrn_mechanism_field<double>{"g"} /* 0 */,
             _nrn_mechanism_field<double>{"e"} /* 1 */,
             _nrn_mechanism_field<double>{"i"} /* 2 */,
