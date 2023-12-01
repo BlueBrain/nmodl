@@ -360,6 +360,17 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     virtual void print_global_function_common_code(BlockType type,
                                                    const std::string& function_name = "") override;
 
+    /**
+     * Print nrn_init function definition
+     *
+     */
+    void print_nrn_init();
+
+    /**
+     * Print nrn_init function definition
+     *
+     */
+    void print_nrn_jacob();
 
     /**
      * Print nrn_constructor function definition
