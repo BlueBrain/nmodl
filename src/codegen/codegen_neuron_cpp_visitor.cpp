@@ -97,9 +97,7 @@ void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_prototypes() {
-    if (info.functions.empty() && info.procedures.empty()) {
-        return;
-    }
+
     codegen = true;
     if (info.point_process) {
         printer->add_multi_line(R"CODE(
@@ -108,7 +106,22 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
                 return create_point_process(_pointtype, _ho);
             }
         )CODE");
-        printer->add_line("static void _hoc_destroy_pnt(void*);");
+        printer->push_block("static void _hoc_destroy_pnt(void* _vptr)");
+        if (info.is_watch_used() || info.for_netcon_used) {
+            printer->add_line("Prop* _prop = ((Point_process*)_vptr)->prop;");
+        }
+        if (info.is_watch_used()) {
+            printer->push_block("if (_prop)");
+            printer->fmt_line("_nrn_free_watch(_nrn_mechanism_access_dparam(_prop), {}, {});", info.watch_count, info.is_watch_used());
+            printer->pop_block();
+        }
+        if (info.for_netcon_used) {
+            printer->push_block("if (_prop)");
+            printer->fmt_line("_nrn_free_fornetcon(&(_nrn_mechanism_access_dparam(_prop)[_fnc_index].literal_value<void*>()));");
+            printer->pop_block();
+        }
+        printer->add_line("destroy_point_process(_vptr);");
+        printer->pop_block();
         printer->add_multi_line(R"CODE(
             static double _hoc_loc_pnt(void* _vptr) {
                 double loc_point_process(int, void*);
@@ -149,7 +162,7 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->push_block("static void _hoc_setdata(void* _vptr)");
         printer->add_multi_line(R"CODE(
             Prop* _prop;
-            _prop = ((Point_process*)_vptr)->_prop;
+            _prop = ((Point_process*)_vptr)->prop;
             _setdata(_prop);
         )CODE");
     } else {
