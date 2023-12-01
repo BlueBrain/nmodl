@@ -14,6 +14,7 @@
 #include <regex>
 
 #include "ast/all.hpp"
+#include "codegen/codegen_naming.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "config/config.h"
 #include "utils/string_utils.hpp"
@@ -454,14 +455,15 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
 }
 
 void CodegenNeuronCppVisitor::print_nrn_init() {
-    printer->add_line(
-        "void nrn_init(_nrn_model_sorted_token const&, NrnThread*, Memb_list*, int) {}");
+    printer->fmt_line("void {}(_nrn_model_sorted_token const&, NrnThread*, Memb_list*, int) {{}}",
+                      method_name(naming::NRN_INIT_METHOD));
 }
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
-    printer->add_line(
-        "void nrn_jacob(_nrn_model_sorted_token const&, NrnThread* _nt, Memb_list* _ml_arg, int "
-        "_type) {}");
+    printer->fmt_line(
+        "void {}(_nrn_model_sorted_token const&, NrnThread* _nt, Memb_list* _ml_arg, int "
+        "_type) {{}}",
+        method_name(naming::NRN_JACOB_METHOD));
 }
 
 /// TODO: Edit for NEURON
@@ -478,8 +480,7 @@ void CodegenNeuronCppVisitor::print_nrn_destructor() {
 
 /// TODO: Print the equivalent of `nrn_alloc_<mech_name>`
 void CodegenNeuronCppVisitor::print_nrn_alloc() {
-    printer->add_line("void nrn_alloc(Prop*) {}");
-    return;
+    printer->fmt_line("void {}(Prop*) {{}}", method_name(naming::NRN_ALLOC_METHOD));
 }
 
 
@@ -495,9 +496,11 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     }
     codegen = true;
 
-    printer->add_line(
-        "void nrn_state(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, "
-        "int type) {}");
+    printer->fmt_line(
+        "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* nt, Memb_list* "
+        "ml, int type) {{}}",
+        method_name(naming::NRN_STATE_METHOD));
+
     /// TODO: Fill in
 
     codegen = false;
@@ -548,8 +551,9 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
     codegen = true;
 
     printer->add_line(
-        "void nrn_cur(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, "
-        "int type) {}");
+        "void {}(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, "
+        "int type) {{}}",
+        method_name(naming::NRN_CUR_METHOD));
     /// TODO: Fill in
 
     codegen = false;
@@ -656,8 +660,6 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_compute_functions() {
-    print_nrn_init();
-    print_nrn_alloc();
     print_nrn_cur();
     print_nrn_state();
     print_nrn_jacob();
@@ -676,6 +678,8 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_mechanism_info();
     print_data_structures(true);
     print_global_variables_for_hoc();
+    print_nrn_init();
+    print_nrn_alloc();
     print_compute_functions();  // only nrn_cur and nrn_state
     print_mechanism_register();
     print_namespace_end();
