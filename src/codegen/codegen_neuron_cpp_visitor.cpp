@@ -454,11 +454,14 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
 }
 
 void CodegenNeuronCppVisitor::print_nrn_init() {
-    printer->add_line("void nrn_init(_nrn_model_sorted_token const&, NrnThread*, Memb_list*, int) {}");
+    printer->add_line(
+        "void nrn_init(_nrn_model_sorted_token const&, NrnThread*, Memb_list*, int) {}");
 }
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
-    printer->add_line("void nrn_jacob(_nrn_model_sorted_token const&, NrnThread* _nt, Memb_list* _ml_arg, int _type) {}");
+    printer->add_line(
+        "void nrn_jacob(_nrn_model_sorted_token const&, NrnThread* _nt, Memb_list* _ml_arg, int "
+        "_type) {}");
 }
 
 /// TODO: Edit for NEURON
@@ -492,7 +495,9 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     }
     codegen = true;
 
-    printer->add_line("void nrn_state(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, int type) {}");
+    printer->add_line(
+        "void nrn_state(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, "
+        "int type) {}");
     /// TODO: Fill in
 
     codegen = false;
@@ -542,7 +547,9 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
 
     codegen = true;
 
-    printer->add_line("void nrn_cur(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, int type) {}");
+    printer->add_line(
+        "void nrn_cur(_nrn_model_sorted_token const& sorted_token, NrnThread* nt, Memb_list* ml, "
+        "int type) {}");
     /// TODO: Fill in
 
     codegen = false;
