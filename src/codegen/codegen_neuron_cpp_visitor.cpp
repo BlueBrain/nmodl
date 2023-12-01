@@ -657,6 +657,7 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_compute_functions() {
     print_nrn_init();
+    print_nrn_alloc();
     print_nrn_cur();
     print_nrn_state();
     print_nrn_jacob();
