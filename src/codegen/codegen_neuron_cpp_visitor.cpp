@@ -99,7 +99,9 @@ void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
 void CodegenNeuronCppVisitor::print_function_prototypes() {
 
     codegen = true;
+    printer->add_newline(2);
     if (info.point_process) {
+        printer->add_line("/* Point Process specific functions */");
         printer->add_multi_line(R"CODE(
             static void* _hoc_create_pnt(Object* _ho) {
                 void* create_point_process(int, Object*);
@@ -142,6 +144,7 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         )CODE");
     }
 
+    printer->add_line("/* Neuron setdata functions */");
     printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
     printer->push_block("static void _setdata(Prop* _prop)");
     if (!info.point_process) {
@@ -177,6 +180,7 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
     printer->pop_block();
 
     printer->add_newline(2);
+    printer->add_line("/* Mechanism procedures and functions */");
     for (const auto& node: info.functions) {
         print_function_declaration(*node, node->get_node_name());
         printer->add_text(';');
@@ -373,6 +377,7 @@ void CodegenNeuronCppVisitor::print_neuron_includes() {
 
 
 void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
+    printer->add_newline(2);
     printer->add_line("static void _initlists() {");
     printer->increase_indent();
     printer->add_multi_line(R"CODE(
@@ -420,7 +425,7 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
 
 void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
     /// TODO: Print only global variables printed in NEURON
-    printer->add_line();
+    printer->add_newline(2);
     printer->add_line("/* NEURON global variables */");
     if (info.primes_size != 0) {
         printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];",
@@ -440,8 +445,7 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         printer->add_multi_line(R"CODE(
         static Prop* _extcall_prop;
         /* _prop_id kind of shadows _extcall_prop to allow validity checking. */
-        static _nrn_non_owning_id_without_container _prop_id{};
-        )CODE");
+        static _nrn_non_owning_id_without_container _prop_id{};)CODE");
     }
 
     printer->fmt_line("static int hoc_nrnpointerindex = {};", info.pointer_variables.size() > 0 ? static_cast<int>(info.pointer_variables.size()) : -1);
@@ -497,6 +501,7 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->decrease_indent();
     printer->add_line("};");
 
+    printer->add_newline(2);
     printer->add_line("/* connect user functions to hoc names */");
     printer->add_line("static VoidFunc hoc_intfunc[] = {");
     printer->increase_indent();
@@ -535,7 +540,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     for (const auto& ion : info.ions) {
         printer->fmt_line("ion_reg(\"{}\", {});", ion.name, "-10000.");
     }
-
     printer->add_newline();
 
     if (info.diam_used) {
@@ -546,6 +550,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     for (const auto& ion : info.ions) {
         printer->fmt_line("_{0}_sym = hoc_lookup(\"{0}_ion\");", ion.name);
     }
+    printer->add_newline();
 
     const auto compute_functions_parameters = breakpoint_exist() ? fmt::format("{}, {}, {}", method_name(naming::NRN_CUR_METHOD), method_name(naming::NRN_JACOB_METHOD), method_name(naming::NRN_STATE_METHOD)) : "nullptr, nullptr, nullptr";
     const auto register_mech_args = fmt::format("{}, {}, {}, {}, {}, {}", get_channel_info_var_name(), method_name(naming::NRN_ALLOC_METHOD), compute_functions_parameters, method_name(naming::NRN_INIT_METHOD), naming::NRN_POINTERINDEX, 1 + info.thread_data_index);
@@ -592,6 +597,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
 
 void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_initializers) {
+    printer->add_newline(2);
     printer->add_line("/* NEURON RANGE variables macro definitions */");
     for (auto i = 0; i < codegen_float_variables.size(); ++i) {
         const auto float_var = codegen_float_variables[i];
@@ -638,7 +644,7 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->add_line("/** nrn_jacob function */");
 
     printer->fmt_line("static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
-          "_nt, Memb_list* _ml_arg, int _type) {{}};", method_name(naming::NRN_JACOB_METHOD));
+          "_nt, Memb_list* _ml_arg, int _type) {{}}", method_name(naming::NRN_JACOB_METHOD));
 
     codegen = false;
 }
@@ -677,6 +683,7 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
         return;
     }
     codegen = true;
+    printer->add_newline(2);
 
     printer->fmt_line("void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt,  Memb_list* _ml_arg, int _type) {{}}", method_name(naming::NRN_STATE_METHOD));
     /// TODO: Fill in
@@ -727,6 +734,7 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
     }
 
     codegen = true;
+    printer->add_newline(2);
 
     printer->fmt_line("void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt, Memb_list* _ml_arg, int _type) {{}}", method_name(naming::NRN_CUR_METHOD));
     /// TODO: Fill in
@@ -839,6 +847,7 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     print_nrn_init();
     print_nrn_cur();
     print_nrn_state();
+    print_nrn_jacob();
 }
 
 
@@ -854,7 +863,6 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_mechanism_info();
     print_data_structures(true);
     print_nrn_alloc();
-    print_nrn_jacob();
     print_function_prototypes();
     print_global_variables_for_hoc();
     print_compute_functions();  // only nrn_cur and nrn_state
