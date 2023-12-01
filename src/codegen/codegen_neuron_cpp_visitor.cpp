@@ -499,35 +499,25 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
     printer->add_line("/* connect user functions to hoc names */");
     printer->add_line("static VoidFunc hoc_intfunc[] = {");
-    // printer->add_indent();
+    printer->increase_indent();
     if (info.point_process) {
         printer->add_line("{0, 0}");
-        // printer->decrease_indent();
+        printer->decrease_indent();
         printer->add_line("};");
         printer->add_line("static Member_func _member_func[] = {");
-        // printer->add_indent();
+        printer->increase_indent();
         printer->add_multi_line(R"CODE(
         {"loc", _hoc_loc_pnt},
         {"has_loc", _hoc_has_loc},
-        {"get_loc", _hoc_get_loc_pnt},
-        )CODE");
+        {"get_loc", _hoc_get_loc_pnt},)CODE");
     } else {
         printer->fmt_line("{{\"setdata_{}\", _hoc_setdata}},", info.mod_suffix);
     }
-    // for (const auto& procedure: info.procedures) {
-    //     const auto proc_name = procedure->get_node_name();
-    //     if (proc_name[0] != '_') {
-    //         printer->fmt_line("{{\"{}{}\", _hoc_{}}},", proc_name, info.rsuffix, proc_name);
-    //     }
-    // }
-    // for (const auto& function: info.functions) {
-    //     const auto func_name = function->get_node_name();
-    //     if (func_name[0] != '_') {
-    //         printer->fmt_line("{{\"{}{}\", _hoc_{}}},", func_name, info.rsuffix, func_name);
-    //     }
-    // }
+
+    /// TODO: Add _hoc_procedures and _hoc_functions
+
     printer->add_line("{0, 0}");
-    // printer->decrease_indent();
+    printer->decrease_indent();
     printer->add_line("};");
 
 }
