@@ -213,16 +213,24 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
                          ContainsSubstring(reindent_and_trim_text(expected_hoc_global_variables)));
         }
         THEN("Placeholder nrn_cur function is printed") {
-            std::string expected_placeholder_nrn_cur = R"(void nrn_cur() {})";
-
-            REQUIRE_THAT(generated,
-                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_cur)));
+            std::string expected = R"(void nrn_cur()";
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
         }
         THEN("Placeholder nrn_state function is printed") {
-            std::string expected_placeholder_nrn_state = R"(void nrn_state() {})";
-
-            REQUIRE_THAT(generated,
-                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));
+            std::string expected = R"(void nrn_state()";
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
+        }
+        THEN("Placeholder nrn_jacob function is printed") {
+            std::string expected = R"(void nrn_jacob()";
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
+        }
+        THEN("Placeholder nrn_init function is printed") {
+            std::string expected = R"(void nrn_init()";
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
+        }
+        THEN("Placeholder nrn_alloc function is printed") {
+            std::string expected = R"(void nrn_alloc()";
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
         }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"(/** register channel with the simulator */
