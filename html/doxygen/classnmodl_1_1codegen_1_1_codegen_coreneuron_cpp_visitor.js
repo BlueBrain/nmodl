@@ -10,7 +10,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "external_method_arguments", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ada7cc9156da44d1e34fd0e0ca42032ec", null ],
     [ "external_method_parameters", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adabf97eae5508fe69a5298c9ce6b627d", null ],
     [ "float_variable_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a18e0834ef774dd2bb5e5adc4ff2df5ae", null ],
-    [ "get_parameter_str", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeee5d213f9ef167e8cdd8ef2f2a75e3a", null ],
     [ "get_range_var_float_type", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a1b309a0bd2939736aadba430634ce52d", null ],
     [ "get_variable_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#afdb445887173a3e006e72772cfffffbc", null ],
     [ "global_struct", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aa2fc9281fb07384c291232a0c940321b", null ],

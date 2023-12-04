@@ -20,6 +20,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "get_channel_info_var_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1383d59c91539e205ef2ade35d1dafcb", null ],
     [ "get_float_variables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a035e8d807028affb949365cac3c000c1", null ],
     [ "get_int_variables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9fd66cb8986ef84feaa63fdd0f072e45", null ],
+    [ "get_parameter_str", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50cbee5029c7f2bc22d697b7cd09f0cf", null ],
     [ "get_variable_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac87b0baf7ca05124b07a2cb0c405a165", null ],
     [ "global_variable_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abe4fe9f14753f16e3b1014cdb4e9f846", null ],
     [ "has_parameter_of_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acf8e00aaf5cd53b7be12cfeeee66c5b7", null ],
