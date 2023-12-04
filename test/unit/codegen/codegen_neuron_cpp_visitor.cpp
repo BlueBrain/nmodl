@@ -214,13 +214,15 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
                          ContainsSubstring(reindent_and_trim_text(expected_hoc_global_variables)));
         }
         THEN("Placeholder nrn_cur function is printed") {
-            std::string expected_placeholder_nrn_cur = R"(void nrn_cur_pas_test(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt, Memb_list* _ml_arg, int _type) {})";
+            std::string expected_placeholder_nrn_cur =
+                R"(void nrn_cur_pas_test(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt, Memb_list* _ml_arg, int _type) {})";
 
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_cur)));
         }
         THEN("Placeholder nrn_state function is printed") {
-            std::string expected_placeholder_nrn_state = R"(void nrn_state_pas_test(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt,  Memb_list* _ml_arg, int _type) {})";
+            std::string expected_placeholder_nrn_state =
+                R"(void nrn_state_pas_test(_nrn_model_sorted_token const& _sorted_token, NrnThread* _nt,  Memb_list* _ml_arg, int _type) {})";
 
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));
