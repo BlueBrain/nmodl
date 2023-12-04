@@ -537,7 +537,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     /// TODO: Write this according to NEURON
     printer->add_newline(2);
     printer->add_line("/** register channel with the simulator */");
-    printer->fmt_push_block("void _{}_reg()", info.mod_file);
+    printer->fmt_push_block("extern \"C\" void _{}_reg()", info.mod_file);
     printer->add_line("_initlists();");
 
     printer->add_newline();
