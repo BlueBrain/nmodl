@@ -400,11 +400,12 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline();
 
     const auto compute_functions_parameters =
-        breakpoint_exist() ? fmt::format("{}, {}, {}",
-                                         nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "nullptr",
-                                         method_name(naming::NRN_JACOB_METHOD),
-                                         nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr")
-                           : "nullptr, nullptr, nullptr";
+        breakpoint_exist()
+            ? fmt::format("{}, {}, {}",
+                          nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "nullptr",
+                          method_name(naming::NRN_JACOB_METHOD),
+                          nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr")
+            : "nullptr, nullptr, nullptr";
     const auto register_mech_args = fmt::format("{}, {}, {}, {}, {}, {}",
                                                 get_channel_info_var_name(),
                                                 method_name(naming::NRN_ALLOC_METHOD),
