@@ -229,7 +229,7 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"CODE(/** register channel with the simulator */
-    void __test_reg() {
+    extern "C" void __test_reg() {
         _initlists();
 
         ion_reg("na", -10000.);
