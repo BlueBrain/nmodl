@@ -401,9 +401,9 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     const auto compute_functions_parameters =
         breakpoint_exist() ? fmt::format("{}, {}, {}",
-                                         method_name(naming::NRN_CUR_METHOD),
+                                         nrn_cur_required() ? method_name(naming::NRN_CUR_METHOD) : "nullptr",
                                          method_name(naming::NRN_JACOB_METHOD),
-                                         method_name(naming::NRN_STATE_METHOD))
+                                         nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr")
                            : "nullptr, nullptr, nullptr";
     const auto register_mech_args = fmt::format("{}, {}, {}, {}, {}, {}",
                                                 get_channel_info_var_name(),
