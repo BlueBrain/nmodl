@@ -547,7 +547,6 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
         "_ml_arg, int _type) {{}}",
         method_name(naming::NRN_STATE_METHOD));
 
-    printer->add_line("void nrn_state() {}");
     /// TODO: Fill in
 
     codegen = false;
