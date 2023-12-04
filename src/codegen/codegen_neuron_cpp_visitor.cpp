@@ -603,7 +603,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
         "int _type) {{}}",
         method_name(naming::NRN_CUR_METHOD));
 
-    printer->add_line("void nrn_cur() {}");
     /// TODO: Fill in
 
     codegen = false;
