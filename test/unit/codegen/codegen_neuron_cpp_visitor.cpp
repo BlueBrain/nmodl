@@ -227,10 +227,7 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"(/** register channel with the simulator */
     void __test_reg() {
-        /* s */
-        _slist1[0] = {4, 0};
-        /* Ds */
-        _dlist1[0] = {7, 0};
+        _initlists();
 
         int mech_type = nrn_get_mechtype(mechanism_info[1]);
         _nrn_mechanism_register_data_fields(mech_type,
