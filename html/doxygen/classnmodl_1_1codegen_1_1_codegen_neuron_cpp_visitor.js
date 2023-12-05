@@ -50,6 +50,8 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "print_nrn_cur_non_conductance_kernel", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a5429cb9990f7cbe91dc33522da5ad76d", null ],
     [ "print_nrn_current", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a111784a1f5c4ef8a2c04edb714cca60f", null ],
     [ "print_nrn_destructor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a085966219db2e0b51d168738421df098", null ],
+    [ "print_nrn_init", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ad4ac4cce1ce357ab264dde505128f5e5", null ],
+    [ "print_nrn_jacob", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#acc60913cbeb34f75a125224f6a3a79bd", null ],
     [ "print_nrn_state", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a24c55a8420d179cbbd7bc6968f3c12e3", null ],
     [ "print_procedure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab5ead6dc1ad6f664019b6713d3238622", null ],
     [ "print_sdlists_init", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a9b04c504442be8eaffd17f52376b265a", null ],

@@ -29,6 +29,8 @@ var codegen__naming_8hpp =
     [ "NRN_CUR_METHOD", "codegen__naming_8hpp.html#a7ce13f3e1c0fa0a6c79d11edc14ab6aa", null ],
     [ "NRN_DESTRUCTOR_METHOD", "codegen__naming_8hpp.html#aa8e13564c94423c5e0bbb8ff593da54f", null ],
     [ "NRN_INIT_METHOD", "codegen__naming_8hpp.html#a1db378304b1b4c6ce0e1410895c179dd", null ],
+    [ "NRN_JACOB_METHOD", "codegen__naming_8hpp.html#ae3ea2c8bbb68ba105e3b52fc943fdfb2", null ],
+    [ "NRN_POINTERINDEX", "codegen__naming_8hpp.html#acbfc5a69c547f361f9cea6ee9c28e9d2", null ],
     [ "NRN_PRIVATE_CONSTRUCTOR_METHOD", "codegen__naming_8hpp.html#a94260c747e3bd80e4511ffaa0b848b93", null ],
     [ "NRN_PRIVATE_DESTRUCTOR_METHOD", "codegen__naming_8hpp.html#a6108e73069a9c39b784cdca1253d59d1", null ],
     [ "NRN_STATE_METHOD", "codegen__naming_8hpp.html#a343317dffc3ceb9e924174d642ca07fe", null ],
