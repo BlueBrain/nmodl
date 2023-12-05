@@ -227,6 +227,21 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));
         }
+        THEN("Initialization function for slist/dlist is printed correctly") {
+            std::string expected_initlists = R"(
+    static void _initlists() {
+        static int _first = 1;
+        if (!_first) return;
+        /* s */
+        _slist1[0] = {4, 0};
+        /* Ds */
+        _dlist1[0] = {7, 0};
+        _first = 0;
+    };)";
+
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_initlists)));
+        }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"CODE(/** register channel with the simulator */
     extern "C" void __test_reg() {
