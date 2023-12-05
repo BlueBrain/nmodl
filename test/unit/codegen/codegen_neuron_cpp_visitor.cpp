@@ -239,8 +239,7 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         _first = 0;
     };)";
 
-            REQUIRE_THAT(generated,
-                         ContainsSubstring(reindent_and_trim_text(expected_initlists)));
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_initlists)));
         }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"CODE(/** register channel with the simulator */
