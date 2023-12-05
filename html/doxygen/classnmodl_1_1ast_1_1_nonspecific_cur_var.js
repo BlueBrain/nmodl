@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_nonspecific_cur_var =
 [
     [ "NonspecificCurVar", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a15e6556257e86721861e518034bfec66", null ],
-    [ "NonspecificCurVar", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a7e2dd6a719fa01fd8f507bfa81e0ef3a", null ],
+    [ "NonspecificCurVar", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a74bb4c3c2172c5da154442ffcdc79488", null ],
     [ "NonspecificCurVar", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a95b3fab3710731319694b04a5fb21914", null ],
     [ "~NonspecificCurVar", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a77b4a51fd83272899f8bdc86ae3addee", null ],
     [ "accept", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a37cb50157a0f1b7907f1314795c56c84", null ],
     [ "accept", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#ab2f4c51db443f6343210d0c22749a29b", null ],
     [ "clone", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a79d7b26e8590350c070d55015e253cf2", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a8c773da50f1f192705d8d471ffa86cc7", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a9efdebf65dfb47d2a691196871206134", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a6a93f755df4b18801393c69d8fe2e4a1", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#aa444f721f7fd7c6019f56ad14f1c5cdc", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a89ecec4d2acbe8e23853f08012d24c4b", null ],

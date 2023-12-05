@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_extern_var =
 [
     [ "ExternVar", "classnmodl_1_1ast_1_1_extern_var.html#aa47e1e5defef0b9defa83d714bb0ae6f", null ],
-    [ "ExternVar", "classnmodl_1_1ast_1_1_extern_var.html#af1604acf2902d30e4d0376af8a6cdd2e", null ],
+    [ "ExternVar", "classnmodl_1_1ast_1_1_extern_var.html#a2df43ac6f4bdd596ece9bba91b1b9969", null ],
     [ "ExternVar", "classnmodl_1_1ast_1_1_extern_var.html#a117a44f2aa87096e75bce619957d51d3", null ],
     [ "~ExternVar", "classnmodl_1_1ast_1_1_extern_var.html#a9fa82116d55190a78b3da80c865b9798", null ],
     [ "accept", "classnmodl_1_1ast_1_1_extern_var.html#ae00af57db9c6499d2f045bfdce4a3916", null ],
     [ "accept", "classnmodl_1_1ast_1_1_extern_var.html#a3bcb72620f32f5481b851cccd377a855", null ],
     [ "clone", "classnmodl_1_1ast_1_1_extern_var.html#a5b02abcfaf9e3677a6986d51c9fa2e2b", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_extern_var.html#afb004e6cf926a93f938f9c1426b3f5f8", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_extern_var.html#a0e976426e5634dfc80a51c521f8cc162", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_extern_var.html#a39b0a66330d4fccf06e00b70a6121747", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_extern_var.html#addba5e33abe67740fd4c6c63e6d7a339", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_extern_var.html#a57d6c6ce744ae7ef3e54634bd9566ba4", null ],

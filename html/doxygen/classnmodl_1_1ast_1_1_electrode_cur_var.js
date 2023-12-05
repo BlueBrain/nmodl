@@ -1,13 +1,13 @@
 var classnmodl_1_1ast_1_1_electrode_cur_var =
 [
     [ "ElectrodeCurVar", "classnmodl_1_1ast_1_1_electrode_cur_var.html#ad1bbc58b60f90b3ccca3c2148e144013", null ],
-    [ "ElectrodeCurVar", "classnmodl_1_1ast_1_1_electrode_cur_var.html#ac2a1247cae29f8899aa49eba33b5f4f6", null ],
+    [ "ElectrodeCurVar", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a1394195f770635d873383c15e65adaf7", null ],
     [ "ElectrodeCurVar", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a2019908c5ceb035addf1dacca64e0060", null ],
     [ "~ElectrodeCurVar", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a10efcfaed2d7b986d3df6ca5f44261e5", null ],
     [ "accept", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a2b587fd98be722c5ebd7d38c887949c5", null ],
     [ "accept", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a93d6eb999fb5a850f201e0ae1ea64207", null ],
     [ "clone", "classnmodl_1_1ast_1_1_electrode_cur_var.html#af09070e846995f2948f27349d168e11a", null ],
-    [ "get_name", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a847e6da684709da4ed350c7e9de9bd5a", null ],
+    [ "get_name", "classnmodl_1_1ast_1_1_electrode_cur_var.html#afd60c436d2f8528b6126296f7ef719f1", null ],
     [ "get_node_name", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a80169eb6a9e52702bb54201c18d52f9e", null ],
     [ "get_node_type", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a47af4153e5cb1a8a101932dc3ce3c124", null ],
     [ "get_node_type_name", "classnmodl_1_1ast_1_1_electrode_cur_var.html#a54de37f1fab2f5b490174dac9982350f", null ],
