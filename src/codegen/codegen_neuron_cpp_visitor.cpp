@@ -286,13 +286,10 @@ void CodegenNeuronCppVisitor::print_neuron_includes() {
 
 
 void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
+    /// _initlists() should only be called once by the mechanism registration function
+    /// (_<mod_file>_reg())
     printer->add_newline(2);
-    printer->add_line("static void _initlists() {");
-    printer->increase_indent();
-    printer->add_multi_line(R"CODE(
-        static int _first = 1;
-        if (!_first) return;
-    )CODE");
+    printer->push_block("static void _initlists()");
     for (auto i = 0; i < info.prime_variables_by_order.size(); ++i) {
         const auto& prime_var = info.prime_variables_by_order[i];
         /// TODO: Something similar needs to happen for slist/dlist2 but I don't know their usage at
@@ -326,9 +323,7 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
                               position_of_float_var(prime_var_deriv_name));
         }
     }
-    printer->add_line("_first = 0;");
-    printer->decrease_indent();
-    printer->add_line("};");
+    printer->pop_block(";");
 }
 
 
