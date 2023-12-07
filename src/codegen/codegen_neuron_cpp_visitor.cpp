@@ -103,7 +103,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->add_line("/* Point Process specific functions */");
         printer->add_multi_line(R"CODE(
             static void* _hoc_create_pnt(Object* _ho) {
-                void* create_point_process(int, Object*);
                 return create_point_process(_pointtype, _ho);
             }
         )CODE");
@@ -129,19 +128,16 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->pop_block();
         printer->add_multi_line(R"CODE(
             static double _hoc_loc_pnt(void* _vptr) {
-                double loc_point_process(int, void*);
                 return loc_point_process(_pointtype, _vptr);
             }
         )CODE");
         printer->add_multi_line(R"CODE(
             static double _hoc_has_loc(void* _vptr) {
-                double has_loc_point(void*);
                 return has_loc_point(_vptr);
             }
         )CODE");
         printer->add_multi_line(R"CODE(
             static double _hoc_get_loc_pnt(void* _vptr) {
-                double get_loc_point_process(void*);
                 return (get_loc_point_process(_vptr));
             }
         )CODE");
