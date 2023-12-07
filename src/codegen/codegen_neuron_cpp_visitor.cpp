@@ -285,7 +285,7 @@ void CodegenNeuronCppVisitor::print_neuron_includes() {
 }
 
 
-void CodegenNeuronCppVisitor::print_sdlists_init(bool [[maybe_unused]] print_initializers) {
+void CodegenNeuronCppVisitor::print_sdlists_init([[maybe_unused]] bool print_initializers) {
     /// _initlists() should only be called once by the mechanism registration function
     /// (_<mod_file>_reg())
     printer->add_newline(2);
