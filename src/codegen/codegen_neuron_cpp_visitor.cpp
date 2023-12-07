@@ -285,7 +285,7 @@ void CodegenNeuronCppVisitor::print_neuron_includes() {
 }
 
 
-void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
+void CodegenNeuronCppVisitor::print_sdlists_init(bool [[maybe_unused]] print_initializers) {
     /// _initlists() should only be called once by the mechanism registration function
     /// (_<mod_file>_reg())
     printer->add_newline(2);
@@ -323,7 +323,7 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool print_initializers) {
                               position_of_float_var(prime_var_deriv_name));
         }
     }
-    printer->pop_block(";");
+    printer->pop_block();
 }
 
 
@@ -454,7 +454,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 }
 
 
-void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_initializers) {
+void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool [[maybe_unused]] print_initializers) {
     printer->add_newline(2);
     printer->add_line("/* NEURON RANGE variables macro definitions */");
     for (auto i = 0; i < codegen_float_variables.size(); ++i) {
