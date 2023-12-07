@@ -418,7 +418,7 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         printer->fmt_line("static neuron::container::field_index _slist1[{0}], _dlist1[{0}];",
                           info.primes_size);
     }
-    
+
     for (const auto& ion: info.ions) {
         printer->fmt_line("static Symbol* _{}_sym;", ion.name);
     }
