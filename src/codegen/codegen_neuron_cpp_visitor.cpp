@@ -454,7 +454,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 }
 
 
-void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool [[maybe_unused]] print_initializers) {
+void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(
+    bool [[maybe_unused]] print_initializers) {
     printer->add_newline(2);
     printer->add_line("/* NEURON RANGE variables macro definitions */");
     for (auto i = 0; i < codegen_float_variables.size(); ++i) {

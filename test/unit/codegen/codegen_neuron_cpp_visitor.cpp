@@ -231,8 +231,10 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
             std::string expected_initlists_s_var = "_slist1[0] = {4, 0};";
             std::string expected_initlists_Ds_var = "_dlist1[0] = {7, 0};";
 
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_initlists_s_var)));
-            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_initlists_Ds_var)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_initlists_s_var)));
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_initlists_Ds_var)));
         }
         THEN("Placeholder registration function is printed") {
             std::string expected_placeholder_reg = R"CODE(/** register channel with the simulator */
