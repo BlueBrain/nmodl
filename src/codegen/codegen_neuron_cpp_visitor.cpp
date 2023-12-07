@@ -276,6 +276,21 @@ std::string CodegenNeuronCppVisitor::register_mechanism_arguments() const {
 };
 
 
+std::string CodegenNeuronCppVisitor::hoc_function_name(
+    const std::string& function_or_procedure_name) const {
+    return fmt::format("_hoc_{}", function_or_procedure_name);
+}
+
+
+std::string CodegenNeuronCppVisitor::hoc_function_signature(
+    const std::string& function_or_procedure_name) const {
+    return fmt::format("static {} {}(void{})",
+                       info.point_process ? "double" : "void",
+                       hoc_function_name(function_or_procedure_name),
+                       info.point_process ? "*" : "");
+}
+
+
 /****************************************************************************************/
 /*               Code-specific printing routines for code generation                    */
 /****************************************************************************************/
@@ -500,6 +515,23 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("};");
 
     printer->add_newline(2);
+    printer->add_line("/* declaration of user functions */");
+    for (const auto& procedure: info.procedures) {
+        const auto proc_name = procedure->get_node_name();
+        if (proc_name[0] == '_') {
+            continue;
+        }
+        printer->fmt_line("{};", hoc_function_signature(proc_name));
+    }
+    for (const auto& function: info.functions) {
+        const auto func_name = function->get_node_name();
+        if (func_name[0] == '_') {
+            continue;
+        }
+        printer->fmt_line("{};", hoc_function_signature(func_name));
+    }
+
+    printer->add_newline(2);
     printer->add_line("/* connect user functions to hoc names */");
     printer->add_line("static VoidFunc hoc_intfunc[] = {");
     printer->increase_indent();
@@ -517,7 +549,26 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         printer->fmt_line("{{\"setdata_{}\", _hoc_setdata}},", info.mod_suffix);
     }
 
-    /// TODO: Add _hoc_procedures and _hoc_functions
+    for (const auto& procedure: info.procedures) {
+        const auto proc_name = procedure->get_node_name();
+        if (proc_name[0] == '_') {
+            continue;
+        }
+        printer->fmt_line("{{\"{}{}\", {}}},",
+                          proc_name,
+                          info.rsuffix,
+                          hoc_function_name(proc_name));
+    }
+    for (const auto& function: info.functions) {
+        const auto func_name = function->get_node_name();
+        if (func_name[0] == '_') {
+            continue;
+        }
+        printer->fmt_line("{{\"{}{}\", {}}},",
+                          func_name,
+                          info.rsuffix,
+                          hoc_function_name(func_name));
+    }
 
     printer->add_line("{0, 0}");
     printer->decrease_indent();
