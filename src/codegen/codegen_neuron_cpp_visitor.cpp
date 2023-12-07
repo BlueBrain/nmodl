@@ -182,7 +182,18 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
     }
     printer->pop_block();
 
-    /// TODO: Add mechanism function and procedures declarations
+    printer->add_newline(2);
+    printer->add_line("/* Mechanism procedures and functions */");
+    for (const auto& node: info.functions) {
+        print_function_declaration(*node, node->get_node_name());
+        printer->add_text(';');
+        printer->add_newline();
+    }
+    for (const auto& node: info.procedures) {
+        print_function_declaration(*node, node->get_node_name());
+        printer->add_text(';');
+        printer->add_newline();
+    }
 
     /// TODO: Fill in
     codegen = false;
