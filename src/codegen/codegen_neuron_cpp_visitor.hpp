@@ -43,6 +43,17 @@ using printer::CodePrinter;
 
 
 /**
+ * @brief Enum to switch between HOC and Python wrappers for functions and
+ *        procedures defined in mechanisms
+ * 
+ */
+enum InterpreterWrapper {
+    HOC,
+    Python
+};
+
+
+/**
  * \defgroup codegen_backends Codegen Backends
  * \ingroup codegen
  * \brief Code generation backends for NEURON
@@ -161,6 +172,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param node
      */
     void print_function(const ast::FunctionBlock& node) override;
+
+
+    template <typename T>
+    void print_hoc_py_wrapper_function_body(const T* function_or_procedure_block, InterpreterWrapper wrapper_type) const;
+
+
+    void print_hoc_py_wrapper_function_definitions() const;
+
 
 
     /****************************************************************************************/

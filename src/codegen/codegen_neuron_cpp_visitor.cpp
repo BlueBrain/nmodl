@@ -222,6 +222,23 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
     return;
 }
 
+template <typename T>
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(const T* function_or_procedure_block, InterpreterWrapper wrapper_type) const {
+    
+}
+
+
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() const {
+    for (const auto& procedure: info.procedures) {
+        print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::HOC);
+        print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::Python);
+    }
+    for (const auto& function: info.functions) {
+        print_hoc_py_wrapper_function_body(function, InterpreterWrapper::HOC);
+        print_hoc_py_wrapper_function_body(function, InterpreterWrapper::Python);
+    }
+}
+
 
 /****************************************************************************************/
 /*                           Code-specific helper routines                              */
@@ -920,6 +937,7 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_compute_functions() {
+    print_hoc_py_wrapper_function_definitions();
     print_nrn_init();
     print_nrn_cur();
     print_nrn_state();
