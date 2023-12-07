@@ -485,7 +485,6 @@ void CodegenHelperVisitor::visit_suffix(const Suffix& node) {
         info.point_process = true;
     }
     info.mod_suffix = node.get_node_name();
-    info.rsuffix = info.point_process ? "" : info.mod_suffix;
 }
 
 
