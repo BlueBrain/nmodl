@@ -552,7 +552,7 @@ void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
 
     printer->add_newline(2);
     printer->add_line("using namespace coreneuron;");
-    
+
     printing_top_verbatim_blocks = true;
 
     for (const auto& block: info.top_blocks) {
@@ -563,7 +563,7 @@ void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
     }
 
     printing_top_verbatim_blocks = false;
-    
+
     print_namespace_start();
 }
 
@@ -572,7 +572,7 @@ void CodegenCoreneuronCppVisitor::print_function_prototypes() {
     if (info.functions.empty() && info.procedures.empty()) {
         return;
     }
-    
+
     printer->add_newline(2);
     for (const auto& node: info.functions) {
         print_function_declaration(*node, node->get_node_name());
@@ -584,7 +584,6 @@ void CodegenCoreneuronCppVisitor::print_function_prototypes() {
         printer->add_text(';');
         printer->add_newline();
     }
-    
 }
 
 
@@ -869,7 +868,6 @@ void CodegenCoreneuronCppVisitor::print_function_or_procedure(const ast::Block& 
 
 
 void CodegenCoreneuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
-    
     auto name = node.get_node_name();
 
     if (info.function_uses_table(name)) {
@@ -880,8 +878,6 @@ void CodegenCoreneuronCppVisitor::print_function_procedure_helper(const ast::Blo
     } else {
         print_function_or_procedure(node, name);
     }
-
-    
 }
 
 
@@ -2523,7 +2519,6 @@ void CodegenCoreneuronCppVisitor::print_global_function_common_code(
 }
 
 void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
-    
     printer->add_newline(2);
     printer->add_line("/** initialize channel */");
 
@@ -2596,13 +2591,10 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
     if (skip_init_check) {
         printer->pop_block();
     }
-    
 }
 
 void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* node,
                                                            size_t block_id) {
-    
-
     std::string ba_type;
     std::shared_ptr<ast::BABlock> ba_block;
 
@@ -2653,8 +2645,6 @@ void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* nod
     printer->pop_block();
     printer->pop_block();
     print_kernel_data_present_annotation_block_end();
-
-    
 }
 
 void CodegenCoreneuronCppVisitor::print_nrn_constructor() {
@@ -2682,12 +2672,10 @@ void CodegenCoreneuronCppVisitor::print_nrn_destructor() {
 
 
 void CodegenCoreneuronCppVisitor::print_functors_definitions() {
-    
     for (const auto& functor_name: info.functor_names) {
         printer->add_newline(2);
         print_functor_definition(*functor_name.first);
     }
-    
 }
 
 
@@ -2708,7 +2696,7 @@ void CodegenCoreneuronCppVisitor::print_watch_activate() {
     if (info.watch_statements.empty()) {
         return;
     }
-    
+
     printer->add_newline(2);
     auto inst = fmt::format("{}* inst", instance_struct());
 
@@ -2745,7 +2733,6 @@ void CodegenCoreneuronCppVisitor::print_watch_activate() {
         printer->pop_block();
     }
     printer->pop_block();
-    
 }
 
 
@@ -2757,7 +2744,7 @@ void CodegenCoreneuronCppVisitor::print_watch_check() {
     if (info.watch_statements.empty()) {
         return;
     }
-    
+
     printer->add_newline(2);
     printer->add_line("/** routine to check watch activation */");
     print_global_function_common_code(BlockType::Watch);
@@ -2832,7 +2819,6 @@ void CodegenCoreneuronCppVisitor::print_watch_check() {
     print_send_event_move();
     print_kernel_data_present_annotation_block_end();
     printer->pop_block();
-    
 }
 
 

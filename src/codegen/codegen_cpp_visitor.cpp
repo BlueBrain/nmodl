@@ -415,7 +415,6 @@ void CodegenCppVisitor::visit_var_name(const VarName& node) {
 
 
 void CodegenCppVisitor::visit_indexed_name(const IndexedName& node) {
-
     node.get_name()->accept(*this);
     printer->add_text("[");
     printer->add_text("static_cast<int>(");
