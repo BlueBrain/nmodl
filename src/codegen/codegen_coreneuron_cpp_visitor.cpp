@@ -2993,7 +2993,6 @@ void CodegenCoreneuronCppVisitor::print_net_init() {
     // rename net_receive arguments used in the initial block of net_receive
     rename_net_receive_arguments(*info.net_receive_node, *node);
 
-    
     printing_net_init = true;
     auto args = "Point_process* pnt, int weight_index, double flag";
     printer->add_newline(2);
@@ -3013,7 +3012,6 @@ void CodegenCoreneuronCppVisitor::print_net_init() {
         }
     }
     printer->pop_block();
-    
     printing_net_init = false;
 }
 
@@ -3155,7 +3153,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_kernel() {
     if (!net_receive_required()) {
         return;
     }
-    
+
     printing_net_receive = true;
     const auto node = info.net_receive_node;
 
@@ -3207,7 +3205,6 @@ void CodegenCoreneuronCppVisitor::print_net_receive_kernel() {
     printer->pop_block();
 
     printing_net_receive = false;
-    
 }
 
 
@@ -3215,7 +3212,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive() {
     if (!net_receive_required()) {
         return;
     }
-    
+
     printing_net_receive = true;
     if (!info.artificial_cell) {
         const auto& name = method_name("net_receive");
@@ -3242,7 +3239,6 @@ void CodegenCoreneuronCppVisitor::print_net_receive() {
         printer->pop_block();
     }
     printing_net_receive = false;
-    
 }
 
 
@@ -3293,9 +3289,9 @@ void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block)
     printer->add_line(slist1);
     printer->add_line(dlist1);
     printer->add_line(dlist2);
-    
+
     print_statement_block(*block.get_statement_block(), false, false);
-    
+
     printer->add_line("int counter = -1;");
             printer->fmt_push_block("for (int i=0; i<{}; i++)", info.num_primes);
             printer->fmt_push_block("if (*deriv{}_advance(thread))", list_num);
@@ -3356,7 +3352,6 @@ void CodegenCoreneuronCppVisitor::print_nrn_state() {
     if (!nrn_state_required()) {
         return;
     }
-    
 
     printer->add_newline(2);
     printer->add_line("/** update state */");
@@ -3400,7 +3395,6 @@ void CodegenCoreneuronCppVisitor::print_nrn_state() {
     print_kernel_data_present_annotation_block_end();
 
     printer->pop_block();
-    
 }
 
 
@@ -3569,7 +3563,6 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur() {
         return;
     }
 
-    
     if (info.conductances.empty()) {
         print_nrn_current(*info.breakpoint_node);
     }
@@ -3595,7 +3588,6 @@ void CodegenCoreneuronCppVisitor::print_nrn_cur() {
 
     print_kernel_data_present_annotation_block_end();
     printer->pop_block();
-    
 }
 
 
@@ -3692,7 +3684,6 @@ void CodegenCoreneuronCppVisitor::print_compute_functions() {
 
 
 void CodegenCoreneuronCppVisitor::print_codegen_routines() {
-    
     print_backend_info();
     print_headers_include();
     print_namespace_begin();
@@ -3715,7 +3706,6 @@ void CodegenCoreneuronCppVisitor::print_codegen_routines() {
     print_check_table_thread_function();
     print_mechanism_register();
     print_namespace_end();
-    
 }
 
 
