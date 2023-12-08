@@ -1,5 +1,9 @@
 var NAVTREEINDEX32 =
 {
+"symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75a9c70933aff6b2a6d08c687a6cbb6b765":[3,0,1,8,4,4,1],
+"symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75aa4d4b8da5f27c882ed2155dc406467a7":[3,0,1,8,4,4,2],
+"symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75af5ddaf0ca7929578b408c909429f68f2":[3,0,1,8,4,4,0],
+"symbol__properties_8hpp.html#a907d41ef19a14c703ec166b47a7d9f61":[3,0,1,8,4,9],
 "symbol__properties_8hpp.html#a9615978047cc9d7b43df2f549f2baffe":[3,0,1,8,4,16],
 "symbol__properties_8hpp.html#aa95fe1f73412bdb6bedaffb689a2a400":[3,0,1,8,4,11],
 "symbol__properties_8hpp.html#ac2ce7dd65a7614b9137c9be6bd9f0f8d":[3,0,1,8,4,15],
@@ -245,9 +249,5 @@ var NAVTREEINDEX32 =
 "valence_8hpp.html":[3,0,0,0,0,0,0,116],
 "valence_8hpp_source.html":[3,0,0,0,0,0,0,116],
 "var__name_8hpp.html":[3,0,0,0,0,0,0,117],
-"var__name_8hpp_source.html":[3,0,0,0,0,0,0,117],
-"var__usage_8cpp.html":[3,0,2,0,10,26],
-"var__usage_8cpp.html#ab2c5538fecec788ffd560fce9bfd8ca6":[3,0,2,0,10,26,0],
-"var__usage_8cpp.html#abded330b1e70df5d1e8e7a6bacaf8739":[3,0,2,0,10,26,1],
-"var__usage_8cpp_source.html":[3,0,2,0,10,26]
+"var__name_8hpp_source.html":[3,0,0,0,0,0,0,117]
 };
