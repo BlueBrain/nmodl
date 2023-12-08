@@ -5,7 +5,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#acfddae56ef5e91b7394b6f4c91748698", null ],
     [ "breakpoint_current", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a40430cd5a36ba2b612adc095952d50a9", null ],
     [ "check_if_var_is_array", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a293512e33ee9a6a4585664e73e5897ed", null ],
-    [ "compute_method_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9ce1427e3d0d6aa86456f3706d75abaf", null ],
     [ "conc_write_statement", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a805dff5f277ea3b3536a553818fb917a", null ],
     [ "external_method_arguments", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ada7cc9156da44d1e34fd0e0ca42032ec", null ],
     [ "external_method_parameters", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adabf97eae5508fe69a5298c9ce6b627d", null ],

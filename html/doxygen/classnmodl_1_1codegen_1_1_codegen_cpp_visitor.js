@@ -7,6 +7,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "add_escape_quote", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2", null ],
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a30af017ff0f7101ed71d9b43e56031ca", null ],
     [ "breakpoint_exist", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a578f6c60b4ca495b24e5b7ae2db448cc", null ],
+    [ "compute_method_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae022e99573f663fc0db935c5c1bb7199", null ],
     [ "default_float_data_type", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afba5ac1d4636d7ba57ac3fd7c7b5e2ba", null ],
     [ "default_int_data_type", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a199a281ca182a40a40331fa29e45828a", null ],
     [ "defined_method", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2f6825fbb587362e1ed38f03e3b97d86", null ],

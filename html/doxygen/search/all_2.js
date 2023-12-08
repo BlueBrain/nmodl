@@ -89,7 +89,7 @@ var searchData=
   ['compartment_5ffactors_272',['compartment_factors',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a72550d8a5a75013331226a988041e95d',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['compartmentvector_273',['CompartmentVector',['../group__ast__vec__type.html#gad0cfa4a0add172b3fc0998e4038ed91d',1,'nmodl::ast']]],
   ['compute_274',['compute',['../namespacenmodl_1_1visitor.html#a7b08d91645042b3be9ad57d18fe5af74',1,'nmodl::visitor']]],
-  ['compute_5fmethod_5fname_275',['compute_method_name',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9ce1427e3d0d6aa86456f3706d75abaf',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]],
+  ['compute_5fmethod_5fname_275',['compute_method_name',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae022e99573f663fc0db935c5c1bb7199',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['conc_5fwrite_5fstatement_276',['conc_write_statement',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a805dff5f277ea3b3536a553818fb917a',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]],
   ['condition_277',['condition',['../classnmodl_1_1ast_1_1_else_if_statement.html#ad9dd476d7781f451d28d8e334c5379a1',1,'nmodl::ast::ElseIfStatement::condition()'],['../classnmodl_1_1ast_1_1_if_statement.html#a48db5ea965ce751850a0957a12da5e4a',1,'nmodl::ast::IfStatement::condition()'],['../classnmodl_1_1ast_1_1_while_statement.html#a1c759c07ef39aa1cbc714441472cff14',1,'nmodl::ast::WhileStatement::condition()']]],
   ['conditional_5fblock_278',['CONDITIONAL_BLOCK',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a3a7cacb52c86f2098ddb46d24c3c9763',1,'nmodl::visitor']]],
