@@ -56,6 +56,9 @@ std::string get_neuron_cpp_code(const std::string& nmodl_text,
     return ss.str();
 }
 
+std::string reindent_and_trim_text(const std::string& text) {
+    return reindent_text(stringutils::trim(text));
+};
 
 SCENARIO("Check NEURON codegen for simple MOD file", "[codegen][neuron_boilerplate]") {
     GIVEN("A simple mod file with RANGE, ARRAY and ION variables") {
@@ -107,9 +110,6 @@ SCENARIO("Check NEURON codegen for simple MOD file", "[codegen][neuron_boilerpla
                 s' = ar[0]
             }
         )";
-        auto const reindent_and_trim_text = [](const auto& text) {
-            return reindent_text(stringutils::trim(text));
-        };
         auto const generated = reindent_and_trim_text(get_neuron_cpp_code(nmodl_text));
         THEN("Correct includes are printed") {
             std::string expected_includes = R"(#include <math.h>
@@ -265,6 +265,21 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));
+        }
+    }
+    GIVEN("A simple point process mod file") {
+        std::string const nmodl_text = R"(
+            NEURON {
+                POINT_PROCESS test_pp
+            }
+        )";
+        THEN("Correct mechanism registration function is called") {
+            std::string expected_placeholder_point_reg = "_pointtype = point_register_mech(mechanism_info, nrn_alloc_test_pp, nullptr, nullptr, nullptr, nrn_init_test_pp, hoc_nrnpointerindex, 1, _hoc_create_pnt, _hoc_destroy_pnt, _member_func);";
+            
+            auto const generated = reindent_and_trim_text(get_neuron_cpp_code(nmodl_text));
+            
+            REQUIRE_THAT(generated,
+                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_point_reg)));
         }
     }
 }
