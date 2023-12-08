@@ -274,10 +274,13 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
             }
         )";
         THEN("Correct mechanism registration function is called") {
-            std::string expected_placeholder_point_reg = "_pointtype = point_register_mech(mechanism_info, nrn_alloc_test_pp, nullptr, nullptr, nullptr, nrn_init_test_pp, hoc_nrnpointerindex, 1, _hoc_create_pnt, _hoc_destroy_pnt, _member_func);";
-            
+            std::string expected_placeholder_point_reg =
+                "_pointtype = point_register_mech(mechanism_info, nrn_alloc_test_pp, nullptr, "
+                "nullptr, nullptr, nrn_init_test_pp, hoc_nrnpointerindex, 1, _hoc_create_pnt, "
+                "_hoc_destroy_pnt, _member_func);";
+
             auto const generated = reindent_and_trim_text(get_neuron_cpp_code(nmodl_text));
-            
+
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_point_reg)));
         }
