@@ -95,10 +95,7 @@ void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
 }
 
 
-/// TODO: Edit for NEURON
-void CodegenNeuronCppVisitor::print_function_prototypes() {
-    codegen = true;
-    printer->add_newline(2);
+void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
     if (info.point_process) {
         printer->add_line("/* Point Process specific functions */");
         printer->add_multi_line(R"CODE(
@@ -142,7 +139,10 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
             }
         )CODE");
     }
+}
 
+
+void CodegenNeuronCppVisitor::print_setdata_functions() {
     printer->add_line("/* Neuron setdata functions */");
     printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
     printer->push_block("static void _setdata(Prop* _prop)");
@@ -177,6 +177,16 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         )CODE");
     }
     printer->pop_block();
+}
+
+
+/// TODO: Edit for NEURON
+void CodegenNeuronCppVisitor::print_function_prototypes() {
+    codegen = true;
+    printer->add_newline(2);
+
+    print_point_process_function_definitions();
+    print_setdata_functions();
 
     /// TODO: Add mechanism function and procedures declarations
 
