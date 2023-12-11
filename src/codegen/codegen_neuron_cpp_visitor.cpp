@@ -132,7 +132,19 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
 
 template <typename T>
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(const T* function_or_procedure_block, InterpreterWrapper wrapper_type) const {
+    if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
+        return;
+    }
+    if (info.point_process) {
+        printer->fmt_push_block("static double _hoc_{}(void* _vptr)", function_or_procedure_block->get_node_name());
+    } else if (wrapper_type == InterpreterWrapper::HOC) {
+        printer->fmt_push_block("static void _hoc_{}(void)", function_or_procedure_block->get_node_name());
+    } else {
+        printer->fmt_push_block("static double _npy_{}(Prop* _prop)", function_or_procedure_block->get_node_name());
+    }
+    printer->add_line("double _r{};");
     
+    printer->pop_block();
 }
 
 
