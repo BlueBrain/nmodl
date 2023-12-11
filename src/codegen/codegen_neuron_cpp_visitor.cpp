@@ -89,12 +89,6 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 /****************************************************************************************/
 
 
-/// TODO: Edit for NEURON
-void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
-    return;
-}
-
-
 void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
     if (info.point_process) {
         printer->add_line("/* Point Process specific functions */");
@@ -182,16 +176,12 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_prototypes() {
-    codegen = true;
     printer->add_newline(2);
 
     print_point_process_function_definitions();
     print_setdata_functions();
 
     /// TODO: Add mechanism function and procedures declarations
-
-    /// TODO: Fill in
-    codegen = false;
 }
 
 
@@ -204,9 +194,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
-    codegen = true;
-    /// TODO: Fill in
-    codegen = false;
+    return;
 }
 
 
@@ -653,7 +641,6 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
-    codegen = true;
     printer->add_newline(2);
     printer->add_line("/** nrn_jacob function */");
 
@@ -661,8 +648,6 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
         "_nt, Memb_list* _ml_arg, int _type) {{}}",
         method_name(naming::NRN_JACOB_METHOD));
-
-    codegen = false;
 }
 
 
@@ -753,7 +738,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
         return;
     }
 
-    codegen = true;
     printer->add_newline(2);
 
     printer->fmt_line(
@@ -762,8 +746,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
         method_name(naming::NRN_CUR_METHOD));
 
     /// TODO: Fill in
-
-    codegen = false;
 }
 
 
@@ -894,6 +876,18 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_mechanism_register();
     print_namespace_end();
     codegen = false;
+}
+
+void CodegenNeuronCppVisitor::print_net_send_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
+}
+
+void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
+}
+
+void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
 }
 
 

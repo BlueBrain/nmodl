@@ -371,13 +371,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Return the name of main compute kernels
-     * \param type A block type
-     */
-    virtual std::string compute_method_name(BlockType type) const;
-
-
-    /**
      * Instantiate global var instance
      *
      * For C++ code generation this is empty
@@ -426,13 +419,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
     /****************************************************************************************/
-
-
-    /**
-     * Print call to internal or external function
-     * \param node The AST node representing a function call
-     */
-    void print_function_call(const ast::FunctionCall& node) override;
 
 
     /**
@@ -958,21 +944,21 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Print call to \c net\_send
      * \param node The AST node representing the function call
      */
-    void print_net_send_call(const ast::FunctionCall& node);
+    void print_net_send_call(const ast::FunctionCall& node) override;
 
 
     /**
      * Print call to net\_move
      * \param node The AST node representing the function call
      */
-    void print_net_move_call(const ast::FunctionCall& node);
+    void print_net_move_call(const ast::FunctionCall& node) override;
 
 
     /**
      * Print call to net\_event
      * \param node The AST node representing the function call
      */
-    void print_net_event_call(const ast::FunctionCall& node);
+    void print_net_event_call(const ast::FunctionCall& node) override;
 
 
     /**

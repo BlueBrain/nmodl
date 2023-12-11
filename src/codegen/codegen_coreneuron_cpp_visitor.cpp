@@ -497,29 +497,6 @@ void CodegenCoreneuronCppVisitor::print_abort_routine() const {
 }
 
 
-std::string CodegenCoreneuronCppVisitor::compute_method_name(BlockType type) const {
-    if (type == BlockType::Initial) {
-        return method_name(naming::NRN_INIT_METHOD);
-    }
-    if (type == BlockType::Constructor) {
-        return method_name(naming::NRN_CONSTRUCTOR_METHOD);
-    }
-    if (type == BlockType::Destructor) {
-        return method_name(naming::NRN_DESTRUCTOR_METHOD);
-    }
-    if (type == BlockType::State) {
-        return method_name(naming::NRN_STATE_METHOD);
-    }
-    if (type == BlockType::Equation) {
-        return method_name(naming::NRN_CUR_METHOD);
-    }
-    if (type == BlockType::Watch) {
-        return method_name(naming::NRN_WATCH_CHECK_METHOD);
-    }
-    throw std::logic_error("compute_method_name not implemented");
-}
-
-
 void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
     printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
 }
@@ -528,43 +505,6 @@ void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
 /****************************************************************************************/
 /*                         Printing routines for code generation                        */
 /****************************************************************************************/
-
-
-void CodegenCoreneuronCppVisitor::print_function_call(const FunctionCall& node) {
-    const auto& name = node.get_node_name();
-    auto function_name = name;
-    if (defined_method(name)) {
-        function_name = method_name(name);
-    }
-
-    if (is_net_send(name)) {
-        print_net_send_call(node);
-        return;
-    }
-
-    if (is_net_move(name)) {
-        print_net_move_call(node);
-        return;
-    }
-
-    if (is_net_event(name)) {
-        print_net_event_call(node);
-        return;
-    }
-
-    const auto& arguments = node.get_arguments();
-    printer->add_text(function_name, '(');
-
-    if (defined_method(name)) {
-        printer->add_text(internal_method_arguments());
-        if (!arguments.empty()) {
-            printer->add_text(", ");
-        }
-    }
-
-    print_vector_elements(arguments, ", ");
-    printer->add_text(')');
-}
 
 
 void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
