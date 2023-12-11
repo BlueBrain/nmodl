@@ -129,6 +129,20 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
+     * Print POINT_PROCESS related functions
+     * Wrap external NEURON functions related to POINT_PROCESS mechanisms
+     *
+     */
+    void print_point_process_func_definitions();
+
+    /**
+     * Print NEURON functions related to setting global variables of the mechanism
+     *
+     */
+    void print_setdata_functions();
+
+
+    /**
      * Print function and procedures prototype declaration
      */
     void print_function_prototypes() override;
