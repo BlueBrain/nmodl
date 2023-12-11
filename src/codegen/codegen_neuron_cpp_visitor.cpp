@@ -90,94 +90,7 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 
 
 /// TODO: Edit for NEURON
-void CodegenNeuronCppVisitor::print_function_call(const FunctionCall& node) {
-    return;
-}
-
-
-/// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_prototypes() {
-    codegen = true;
-    printer->add_newline(2);
-    if (info.point_process) {
-        printer->add_line("/* Point Process specific functions */");
-        printer->add_multi_line(R"CODE(
-            static void* _hoc_create_pnt(Object* _ho) {
-                return create_point_process(_pointtype, _ho);
-            }
-        )CODE");
-        printer->push_block("static void _hoc_destroy_pnt(void* _vptr)");
-        if (info.is_watch_used() || info.for_netcon_used) {
-            printer->add_line("Prop* _prop = ((Point_process*)_vptr)->prop;");
-        }
-        if (info.is_watch_used()) {
-            printer->push_block("if (_prop)");
-            printer->fmt_line("_nrn_free_watch(_nrn_mechanism_access_dparam(_prop), {}, {});",
-                              info.watch_count,
-                              info.is_watch_used());
-            printer->pop_block();
-        }
-        if (info.for_netcon_used) {
-            printer->push_block("if (_prop)");
-            printer->fmt_line(
-                "_nrn_free_fornetcon(&(_nrn_mechanism_access_dparam(_prop)[_fnc_index].literal_"
-                "value<void*>()));");
-            printer->pop_block();
-        }
-        printer->add_line("destroy_point_process(_vptr);");
-        printer->pop_block();
-        printer->add_multi_line(R"CODE(
-            static double _hoc_loc_pnt(void* _vptr) {
-                return loc_point_process(_pointtype, _vptr);
-            }
-        )CODE");
-        printer->add_multi_line(R"CODE(
-            static double _hoc_has_loc(void* _vptr) {
-                return has_loc_point(_vptr);
-            }
-        )CODE");
-        printer->add_multi_line(R"CODE(
-            static double _hoc_get_loc_pnt(void* _vptr) {
-                return (get_loc_point_process(_vptr));
-            }
-        )CODE");
-    }
-
-    printer->add_line("/* Neuron setdata functions */");
-    printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
-    printer->push_block("static void _setdata(Prop* _prop)");
-    if (!info.point_process) {
-        printer->add_multi_line(R"CODE(
-            _extcall_prop = _prop;
-            _prop_id = _nrn_get_prop_id(_prop);
-        )CODE");
-    }
-    if (!info.vectorize) {
-        printer->add_multi_line(R"CODE(
-            neuron::legacy::set_globals_from_prop(_prop, _ml_real, _ml, _iml);
-            _ppvar = _nrn_mechanism_access_dparam(_prop);
-        )CODE");
-    }
-    printer->pop_block();
-
-    if (info.point_process) {
-        printer->push_block("static void _hoc_setdata(void* _vptr)");
-        printer->add_multi_line(R"CODE(
-            Prop* _prop;
-            _prop = ((Point_process*)_vptr)->prop;
-            _setdata(_prop);
-        )CODE");
-    } else {
-        printer->push_block("static void _hoc_setdata()");
-        printer->add_multi_line(R"CODE(
-            Prop *_prop, *hoc_getdata_range(int);
-            _prop = hoc_getdata_range(mech_type);
-            _setdata(_prop);
-            hoc_retpushx(1.);
-        )CODE");
-    }
-    printer->pop_block();
-
     printer->add_newline(2);
     printer->add_line("/* Mechanism procedures and functions */");
     for (const auto& node: info.functions) {
@@ -190,9 +103,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->add_text(';');
         printer->add_newline();
     }
-
-    /// TODO: Fill in
-    codegen = false;
 }
 
 
@@ -205,9 +115,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
-    codegen = true;
-    /// TODO: Fill in
-    codegen = false;
+    return;
 }
 
 
@@ -722,7 +630,6 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
-    codegen = true;
     printer->add_newline(2);
     printer->add_line("/** nrn_jacob function */");
 
@@ -730,8 +637,6 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
         "_nt, Memb_list* _ml_arg, int _type) {{}}",
         method_name(naming::NRN_JACOB_METHOD));
-
-    codegen = false;
 }
 
 
@@ -822,7 +727,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
         return;
     }
 
-    codegen = true;
     printer->add_newline(2);
 
     printer->fmt_line(
@@ -831,8 +735,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
         method_name(naming::NRN_CUR_METHOD));
 
     /// TODO: Fill in
-
-    codegen = false;
 }
 
 
@@ -964,6 +866,18 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_mechanism_register();
     print_namespace_end();
     codegen = false;
+}
+
+void CodegenNeuronCppVisitor::print_net_send_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
+}
+
+void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
+}
+
+void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
 }
 
 

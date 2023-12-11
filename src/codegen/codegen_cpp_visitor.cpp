@@ -214,6 +214,42 @@ bool CodegenCppVisitor::need_semicolon(const Statement& node) {
 /*                      Main printing routines for code generation                      */
 /****************************************************************************************/
 
+void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
+    const auto& name = node.get_node_name();
+    auto function_name = name;
+    if (defined_method(name)) {
+        function_name = method_name(name);
+    }
+
+    if (is_net_send(name)) {
+        print_net_send_call(node);
+        return;
+    }
+
+    if (is_net_move(name)) {
+        print_net_move_call(node);
+        return;
+    }
+
+    if (is_net_event(name)) {
+        print_net_event_call(node);
+        return;
+    }
+
+    const auto& arguments = node.get_arguments();
+    printer->add_text(function_name, '(');
+
+    if (defined_method(name)) {
+        printer->add_text(internal_method_arguments());
+        if (!arguments.empty()) {
+            printer->add_text(", ");
+        }
+    }
+
+    print_vector_elements(arguments, ", ");
+    printer->add_text(')');
+}
+
 
 void CodegenCppVisitor::print_prcellstate_macros() const {
     printer->add_line("#ifndef NRN_PRCELLSTATE");
@@ -909,6 +945,28 @@ void CodegenCppVisitor::setup(const Program& node) {
 
     update_index_semantics();
     rename_function_arguments();
+}
+
+std::string CodegenCppVisitor::compute_method_name(BlockType type) const {
+    if (type == BlockType::Initial) {
+        return method_name(naming::NRN_INIT_METHOD);
+    }
+    if (type == BlockType::Constructor) {
+        return method_name(naming::NRN_CONSTRUCTOR_METHOD);
+    }
+    if (type == BlockType::Destructor) {
+        return method_name(naming::NRN_DESTRUCTOR_METHOD);
+    }
+    if (type == BlockType::State) {
+        return method_name(naming::NRN_STATE_METHOD);
+    }
+    if (type == BlockType::Equation) {
+        return method_name(naming::NRN_CUR_METHOD);
+    }
+    if (type == BlockType::Watch) {
+        return method_name(naming::NRN_WATCH_CHECK_METHOD);
+    }
+    throw std::logic_error("compute_method_name not implemented");
 }
 
 

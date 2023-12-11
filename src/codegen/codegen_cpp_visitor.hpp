@@ -607,8 +607,27 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print call to internal or external function
      * \param node The AST node representing a function call
      */
-    virtual void print_function_call(const ast::FunctionCall& node) = 0;
+    virtual void print_function_call(const ast::FunctionCall& node);
 
+    /**
+     * Print call to \c net\_send
+     * \param node The AST node representing the function call
+     */
+    virtual void print_net_send_call(const ast::FunctionCall& node) = 0;
+
+
+    /**
+     * Print call to net\_move
+     * \param node The AST node representing the function call
+     */
+    virtual void print_net_move_call(const ast::FunctionCall& node) = 0;
+
+
+    /**
+     * Print call to net\_event
+     * \param node The AST node representing the function call
+     */
+    virtual void print_net_event_call(const ast::FunctionCall& node) = 0;
 
     /**
      * Print function and procedures prototype declaration
@@ -1123,6 +1142,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_mutex_lock(const ast::MutexLock& node) override;
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
 
+    std::string compute_method_name(BlockType type) const;
 
   public:
     /** Setup the target backend code generator
