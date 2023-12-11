@@ -333,7 +333,6 @@ var group__codegen__backends =
       [ "visit_var_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4f2304d508e3d9645581004c676d94ca", null ],
       [ "visit_verbatim", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad283ce438acd2faea2bbb309251890a1", null ],
       [ "visit_while_statement", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad488bc63dac24ac7e5c29a1138172ed7", null ],
-      [ "codegen", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a5fc56969d513e56e2478a64f98af7ca8", null ],
       [ "codegen_float_variables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae63ddf806884e983a264346f21794168", null ],
       [ "codegen_global_variables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2a1e5337a20e3f1dad1d1dfbb89fbb1b", null ],
       [ "codegen_int_variables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a661794563709a984308164abcdd543ee", null ],

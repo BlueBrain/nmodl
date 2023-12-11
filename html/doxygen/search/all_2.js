@@ -41,7 +41,7 @@ var searchData=
   ['cnexp_5fpossible_224',['cnexp_possible',['../classnmodl_1_1parser_1_1_diffeq_driver.html#ab89e4d42c0781358310684a3d5fc59ae',1,'nmodl::parser::DiffeqDriver']]],
   ['code_5fprinter_2ecpp_225',['code_printer.cpp',['../code__printer_8cpp.html',1,'']]],
   ['code_5fprinter_2ehpp_226',['code_printer.hpp',['../code__printer_8hpp.html',1,'']]],
-  ['codegen_227',['codegen',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a5fc56969d513e56e2478a64f98af7ca8',1,'nmodl::codegen::CodegenCppVisitor::codegen()'],['../group__codegen.html',1,'(Global Namespace)']]],
+  ['code_20generation_20implementation_227',['Code Generation Implementation',['../group__codegen.html',1,'']]],
   ['codegen_5facc_5fvisitor_2ecpp_228',['codegen_acc_visitor.cpp',['../codegen__acc__visitor_8cpp.html',1,'']]],
   ['codegen_5facc_5fvisitor_2ehpp_229',['codegen_acc_visitor.hpp',['../codegen__acc__visitor_8hpp.html',1,'']]],
   ['codegen_20backends_230',['Codegen Backends',['../group__codegen__backends.html',1,'']]],
