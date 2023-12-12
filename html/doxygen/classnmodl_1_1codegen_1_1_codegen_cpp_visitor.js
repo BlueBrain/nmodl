@@ -120,6 +120,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "visit_prime_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a0c937b0ca36a6489bbc6630db5df0cf5", null ],
     [ "visit_program", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02", null ],
     [ "visit_protect_statement", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a946c6fc559c23573210285ed47e28570", null ],
+    [ "visit_solution_expression", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a40bc1308f847c66bc91d9c93368db6ec", null ],
     [ "visit_statement_block", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8eb67dab884cc678e541ff5cc77b5e03", null ],
     [ "visit_string", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a502fd875dc95e68f905fe2070abaeff8", null ],
     [ "visit_unary_operator", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6e7b32701d8bf69f1ba8995e4bf50ad3", null ],

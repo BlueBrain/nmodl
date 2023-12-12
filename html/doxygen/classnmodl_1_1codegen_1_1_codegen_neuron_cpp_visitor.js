@@ -62,6 +62,5 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "process_verbatim_text", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a13af4fa40fc5b97bfcf91d199fe6a8e2", null ],
     [ "register_mechanism_arguments", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c", null ],
     [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a77ac6349ba709a4ef7ecd6a4c34b9e0c", null ],
-    [ "visit_solution_expression", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aaf5e58f5a33a545e01d5720d6812fa4f", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ]
 ];

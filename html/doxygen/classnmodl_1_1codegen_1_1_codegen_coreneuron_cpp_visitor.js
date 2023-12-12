@@ -152,7 +152,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "visit_eigen_linear_solver_block", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#afa72e4268acf4beee9e0297e7efa9f3f", null ],
     [ "visit_eigen_newton_solver_block", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a06aa792160b4f021f66b58a21d3a296c", null ],
     [ "visit_for_netcon", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a524be3f8fa4165f983647ed8ebbb9f01", null ],
-    [ "visit_solution_expression", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#abab2d506aa44fb0e53561f38b69c35ef", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8d05784b3300be188775cf2ec9958dc6", null ],
     [ "write_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4c6c17a2eeafae316e104bf5722337fa", null ]
 ];
