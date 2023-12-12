@@ -131,19 +131,68 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
 }
 
 template <typename T>
-void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(const T* function_or_procedure_block, InterpreterWrapper wrapper_type) const {
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
+    const T* function_or_procedure_block,
+    InterpreterWrapper wrapper_type) const {
     if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
         return;
     }
+    const auto block_name = function_or_procedure_block->get_node_name();
     if (info.point_process) {
-        printer->fmt_push_block("static double _hoc_{}(void* _vptr)", function_or_procedure_block->get_node_name());
+        printer->fmt_push_block("static double _hoc_{}(void* _vptr)", block_name);
     } else if (wrapper_type == InterpreterWrapper::HOC) {
-        printer->fmt_push_block("static void _hoc_{}(void)", function_or_procedure_block->get_node_name());
+        printer->fmt_push_block("static void _hoc_{}(void)", block_name);
     } else {
-        printer->fmt_push_block("static double _npy_{}(Prop* _prop)", function_or_procedure_block->get_node_name());
+        printer->fmt_push_block("static double _npy_{}(Prop* _prop)", block_name);
     }
     printer->add_line("double _r{};");
-    
+    printer->add_multi_line(R"CODE(
+        Datum* _ppvar;
+        Datum* _thread;
+        NrnThread* _nt;
+    )CODE");
+    if (info.point_process) {
+        printer->add_multi_line(R"CODE(
+            auto* const _pnt = static_cast<Point_process*>(_vptr);
+            auto* const _p = _pnt->_prop;
+            if (!_p) {
+                hoc_execerror(\"POINT_PROCESS data instance not valid\", NULL);
+            }
+            _nrn_mechanism_cache_instance _ml_real{_p};
+            auto* const _ml = &_ml_real;
+            size_t const _iml{};
+            _ppvar = _nrn_mechanism_access_dparam(_p);
+            _thread = _extcall_thread.data();
+            _nt = static_cast<NrnThread*>(_pnt->_vnt);
+        )CODE");
+    } else {
+        printer->add_multi_line(R"CODE(
+            _nrn_mechanism_cache_instance _ml_real{_local_prop};
+            auto* const _ml = &_ml_real;
+            size_t const _iml{};
+            _ppvar = _local_prop ? _nrn_mechanism_access_dparam(_local_prop) : nullptr;
+            _thread = _extcall_thread.data();
+            _nt = nrn_threads;
+        )CODE");
+    }
+    if (info.function_uses_table(block_name)) {
+        printer->fmt_line("_check_{}({})", block_name, internal_method_arguments());
+    }
+    if (function_or_procedure_block->is_function_block()) {
+        printer->add_text("_r = ");
+        print_vector_elements(function_or_procedure_block->get_parameters(),
+                              ", ",
+                              fmt::format("{}{", block_name));
+        printer->add_text(");");
+        printer->add_newline();
+    } else {
+        printer->fmt_line("_r = 1.;");
+    }
+    if (info.point_process || wrapper_type != InterpreterWrapper::HOC) {
+        printer->add_line("return(_r);");
+    } else if (wrapper_type == InterpreterWrapper::HOC) {
+        printer->add_line("hoc_retpushx(_r);");
+    }
     printer->pop_block();
 }
 
@@ -167,7 +216,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() const 
 
 /// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::internal_method_arguments() {
-    return {};
+    return "_ml, _iml, _ppvar, _thread, _nt";
 }
 
 
