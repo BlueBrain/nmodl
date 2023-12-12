@@ -552,8 +552,6 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
     }
     for (auto& var: codegen_float_variables) {
         const auto& name = var->get_name();
-        // auto type = get_range_var_float_type(var);
-        // auto qualifier = is_constant_variable(name) ? "const " : "";
         printer->fmt_line("double* {}{};", name, value_initialize);
     }
     for (auto& var: codegen_int_variables) {
