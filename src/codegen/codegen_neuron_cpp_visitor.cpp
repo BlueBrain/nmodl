@@ -206,7 +206,7 @@ std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbo
         if (use_instance) {
             return fmt::format("(inst.{}+id*{})", name, dimension);
         }
-        throw std::runtime_error("Not implemented.");
+        throw std::runtime_error("Printing non-instance variables is not implemented.");
         // return fmt::format("(data + {}*pnodecount + id*{})", position, dimension);
     }
     if (use_instance) {
@@ -273,7 +273,7 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
     }
 
     // t in net_receive method is an argument to function and hence it should
-    // ne used instead of nt->_t which is current time of thread
+    // be used instead of nt->_t which is current time of thread
     if (varname == naming::NTHREAD_T_VARIABLE && !printing_net_receive) {
         return std::string("_nt->_") + naming::NTHREAD_T_VARIABLE;
     }
@@ -599,6 +599,7 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
 
 void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     printer->add_newline(2);
+
     print_global_function_common_code(BlockType::Initial);
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");
