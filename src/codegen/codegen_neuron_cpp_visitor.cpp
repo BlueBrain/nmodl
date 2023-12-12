@@ -575,6 +575,15 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
 }
 
 
+void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
+    // initial block
+    if (node != nullptr) {
+        const auto& block = node->get_statement_block();
+        print_statement_block(*block, false, false);
+    }
+}
+
+
 void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
                                                                 const std::string& function_name) {
     std::string method = function_name.empty() ? compute_method_name(type) : function_name;
@@ -599,15 +608,6 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
     printer->pop_block();
 }
-
-void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
-    // initial block
-    if (node != nullptr) {
-        const auto& block = node->get_statement_block();
-        print_statement_block(*block, false, false);
-    }
-}
-
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->add_newline(2);
