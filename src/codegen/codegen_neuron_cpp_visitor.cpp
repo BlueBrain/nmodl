@@ -277,7 +277,7 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
     }
 
     // t in net_receive method is an argument to function and hence it should
-    // ne used instead of nt->_t which is current time of thread
+    // be used instead of nt->_t which is current time of thread
     if (varname == naming::NTHREAD_T_VARIABLE && !printing_net_receive) {
         return std::string("_nt->_") + naming::NTHREAD_T_VARIABLE;
     }
