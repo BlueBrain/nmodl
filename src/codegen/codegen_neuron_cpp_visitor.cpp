@@ -207,7 +207,7 @@ std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbo
         if (use_instance) {
             return fmt::format("(inst.{}+id*{})", name, dimension);
         }
-        throw std::runtime_error("Not implemented.");
+        throw std::runtime_error("Printing non-instance variables is not implemented.");
         // return fmt::format("(data + {}*pnodecount + id*{})", position, dimension);
     }
     if (use_instance) {
