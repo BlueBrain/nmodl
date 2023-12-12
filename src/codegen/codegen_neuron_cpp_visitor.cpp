@@ -232,7 +232,6 @@ std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symb
 }
 
 
-/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
                                                        bool use_instance) const {
     // const std::string& varname = update_if_ion_variable_name(name);
