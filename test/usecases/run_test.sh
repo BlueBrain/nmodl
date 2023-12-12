@@ -2,13 +2,14 @@
 set -e
 
 nmodl="$1"
+output_dir="$(uname -m)"
 usecase_dir="$2"
 
 pushd "${usecase_dir}"
 
-rm -r x86_64 tmp || true
+rm -r "${output_dir}" tmp || true
 
 nrnivmodl -nmodl "${nmodl}"
-x86_64/special simulate.py
+"$(uname -m)/special" simulate.py
 
 popd
