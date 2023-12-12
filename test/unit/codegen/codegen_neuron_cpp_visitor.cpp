@@ -181,6 +181,26 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_global_variables)));
         }
+        THEN("Correct pas_test_Instance") {
+            std::string expected =
+                R"(      struct pas_test_Instance  {
+        double* g{};
+        double* e{};
+        double* i{};
+        double* ar{};
+        double* s{};
+        double* ena{};
+        double* ina{};
+        double* Ds{};
+        double* v_unused{};
+        double* g_unused{};
+        const double* ion_ena{};
+        double* ion_ina{};
+        double* ion_dinadv{};
+    };)";
+
+            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));
+        }
         THEN("Correct HOC global variables are printed") {
             std::string expected_hoc_global_variables =
                 R"(/** connect global (scalar) variables to hoc -- */
