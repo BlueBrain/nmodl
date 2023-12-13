@@ -187,10 +187,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     template <typename T>
     void print_hoc_py_wrapper_function_body(const T* function_or_procedure_block,
-                                            InterpreterWrapper wrapper_type) const;
+                                            InterpreterWrapper wrapper_type);
 
 
-    void print_hoc_py_wrapper_function_definitions() const;
+    void print_hoc_py_wrapper_function_definitions();
 
 
     /****************************************************************************************/

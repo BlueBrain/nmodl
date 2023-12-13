@@ -133,7 +133,7 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
 template <typename T>
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     const T* function_or_procedure_block,
-    InterpreterWrapper wrapper_type) const {
+    InterpreterWrapper wrapper_type) {
     if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
         return;
     }
@@ -197,7 +197,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
 }
 
 
-void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() const {
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
     for (const auto& procedure: info.procedures) {
         print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::HOC);
         print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::Python);
