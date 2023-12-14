@@ -844,7 +844,61 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     printer->add_newline(2);
     auto method = method_name(naming::NRN_ALLOC_METHOD);
     printer->fmt_push_block("static void {}(Prop* _prop)", method);
-    printer->add_line("// do nothing");
+    printer->add_multi_line(R"CODE(
+        Prop *prop_ion{};
+        Datum *_ppvar{};
+    )CODE");
+    if (info.point_process) {
+        printer->push_block("if (nrn_point_prop_)");
+        printer->add_multi_line(R"CODE(
+                _nrn_mechanism_access_alloc_seq(_prop) = _nrn_mechanism_access_alloc_seq(nrn_point_prop_);
+                _ppvar = _nrn_mechanism_access_dparam(nrn_point_prop_);
+        )CODE");
+        printer->chain_block("else");
+    }
+    if (info.ppvar_count) {
+        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);", info.ppvar_count);
+        printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
+    }
+    printer->add_multi_line(R"CODE(
+        _nrn_mechanism_cache_instance _ml_real{_prop};
+        auto* const _ml = &_ml_real;
+        size_t const _iml{};
+    )CODE");
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
+    if (float_variables_size()) {
+        printer->add_line("/*initialize range parameters*/");
+        for (const auto& var: info.range_parameter_vars) {
+            if (var->is_array()) {
+                continue;
+            }
+            const auto& var_name = var->get_name();
+            printer->fmt_line("_ml->template fpfield<{}>(_iml) = {}; /* {} */",
+                              position_of_float_var(var_name),
+                              *var->get_value(),
+                              var_name);
+        }
+    }
+    if (info.point_process) {
+        printer->pop_block();
+    }
+
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
+
+    if (info.ppvar_count) {
+        printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
+    }
+
+    if (info.diam_used) {
+        throw std::runtime_error("Diam allocation not implemented.");
+    }
+
+    if (info.area_used) {
+        throw std::runtime_error("Area allocation not implemented.");
+    }
+
+    /// TODO: IONs setup and CONSTRUCTOR call
+
     printer->pop_block();
 }
 
