@@ -710,6 +710,19 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
+
+    printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});", float_variables_size(), int_variables_size());
+    for (auto i = 0; i < codegen_int_variables.size(); ++i) {
+        const auto& int_var = codegen_int_variables[i];
+        const auto& int_var_name = int_var.symbol->get_name();
+        auto nrn_name = int_var_name;
+        if (nrn_name == naming::NODE_AREA_VARIABLE) {
+            nrn_name = naming::AREA_VARIABLE; 
+        } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
+            nrn_name = "pntproc";
+        }
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");", i, nrn_name);
+    }
     printer->pop_block();
 }
 
