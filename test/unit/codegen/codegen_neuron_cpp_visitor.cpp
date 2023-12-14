@@ -253,18 +253,25 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
         mech_type = nrn_get_mechtype(mechanism_info[1]);
         _nrn_mechanism_register_data_fields(mech_type,
-            _nrn_mechanism_field<double>{"g"} /* 0 */,
-            _nrn_mechanism_field<double>{"e"} /* 1 */,
-            _nrn_mechanism_field<double>{"i"} /* 2 */,
-            _nrn_mechanism_field<double>{"ar", 2} /* 3 */,
-            _nrn_mechanism_field<double>{"s"} /* 4 */,
-            _nrn_mechanism_field<double>{"ena"} /* 5 */,
-            _nrn_mechanism_field<double>{"ina"} /* 6 */,
-            _nrn_mechanism_field<double>{"Ds"} /* 7 */,
-            _nrn_mechanism_field<double>{"v_unused"} /* 8 */,
-            _nrn_mechanism_field<double>{"g_unused"} /* 9 */
+            _nrn_mechanism_field<double>{"g"}, /* float var index 0 */
+            _nrn_mechanism_field<double>{"e"}, /* float var index 1 */
+            _nrn_mechanism_field<double>{"i"}, /* float var index 2 */
+            _nrn_mechanism_field<double>{"ar", 2}, /* float var index 3 */
+            _nrn_mechanism_field<double>{"s"}, /* float var index 4 */
+            _nrn_mechanism_field<double>{"ena"}, /* float var index 5 */
+            _nrn_mechanism_field<double>{"ina"}, /* float var index 6 */
+            _nrn_mechanism_field<double>{"Ds"}, /* float var index 7 */
+            _nrn_mechanism_field<double>{"v_unused"}, /* float var index 8 */
+            _nrn_mechanism_field<double>{"g_unused"}, /* float var index 9 */
+            _nrn_mechanism_field<double*>{"ion_ena", "ion_ena"}, /* int var index 0 */
+            _nrn_mechanism_field<double*>{"ion_ina", "ion_ina"}, /* int var index 1 */
+            _nrn_mechanism_field<double*>{"ion_dinadv", "ion_dinadv"} /* int var index 2 */
         );
 
+        hoc_register_prop_size(mech_type, 10, 3);
+        hoc_register_dparam_semantics(mech_type, 0, "ion_ena");
+        hoc_register_dparam_semantics(mech_type, 1, "ion_ina");
+        hoc_register_dparam_semantics(mech_type, 2, "ion_dinadv");
     })CODE";
 
             REQUIRE_THAT(generated,
