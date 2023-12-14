@@ -494,7 +494,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     printer->add_line("static int mech_type;");
 
     if (info.point_process) {
-        printer->add_line("extern Prop* nrn_point_prop_;");
         printer->add_line("static int _pointtype;");
     } else {
         printer->add_multi_line(R"CODE(
@@ -933,6 +932,10 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     }
     }  // namespace
     )CODE");
+
+    if (info.point_process) {
+        printer->add_line("extern Prop* nrn_point_prop_;");
+    }
     /// TODO: More prints here?
 }
 
