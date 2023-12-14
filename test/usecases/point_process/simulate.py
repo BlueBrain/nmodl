@@ -11,3 +11,5 @@ s = h.Section()
 test_pp_s = h.test_pp(s(0.5))
 
 assert test_pp_s.has_loc() == 1
+
+assert test_pp_s.get_segment() == s(0.5)
