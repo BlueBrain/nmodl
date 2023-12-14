@@ -596,7 +596,9 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
         const auto& float_var = codegen_float_variables[i];
         printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
                           i,
-                          i < codegen_float_variables_size - 1 || codegen_int_variables.size() > 0 ? "," : "",
+                          i < codegen_float_variables_size - 1 || codegen_int_variables.size() > 0
+                              ? ","
+                              : "",
                           float_var->get_name());
     }
     const auto codegen_int_variables_size = codegen_int_variables.size();
@@ -607,7 +609,11 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
         }
         printer->fmt_line("_ml.template dptr_field<{0}>(0){1} /* {2} */",
                           i,
-                          i < codegen_int_variables_size - 1 && codegen_int_variables[i+1].symbol->get_name() != naming::POINT_PROCESS_VARIABLE ? "," : "",
+                          i < codegen_int_variables_size - 1 &&
+                                  codegen_int_variables[i + 1].symbol->get_name() !=
+                                      naming::POINT_PROCESS_VARIABLE
+                              ? ","
+                              : "",
                           int_var_name);
     }
     printer->pop_block(";");
@@ -673,18 +679,21 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        const auto print_comma = i < codegen_float_variables_size - 1 || codegen_int_variables_size > 0 || info.emit_cvode;
+        const auto print_comma = i < codegen_float_variables_size - 1 ||
+                                 codegen_int_variables_size > 0 || info.emit_cvode;
         if (float_var->is_array()) {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{0}\", {1}}}{2} /* float var index {3} */",
-                              float_var->get_name(),
-                              float_var->get_length(),
-                              print_comma ? "," : "",
-                              i);
+            printer->fmt_line(
+                "_nrn_mechanism_field<double>{{\"{0}\", {1}}}{2} /* float var index {3} */",
+                float_var->get_name(),
+                float_var->get_length(),
+                print_comma ? "," : "",
+                i);
         } else {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{0}\"}}{1} /* float var index {2} */",
-                              float_var->get_name(),
-                              print_comma ? "," : "",
-                              i);
+            printer->fmt_line(
+                "_nrn_mechanism_field<double>{{\"{0}\"}}{1} /* float var index {2} */",
+                float_var->get_name(),
+                print_comma ? "," : "",
+                i);
         }
     }
     for (int i = 0; i < codegen_int_variables_size; ++i) {
@@ -693,16 +702,17 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         const auto print_comma = i < codegen_int_variables_size - 1 || info.emit_cvode;
         auto nrn_name = int_var_name;
         if (nrn_name == naming::NODE_AREA_VARIABLE) {
-            nrn_name = naming::AREA_VARIABLE; 
+            nrn_name = naming::AREA_VARIABLE;
         } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
             nrn_name = "pntproc";
         }
-        printer->fmt_line("_nrn_mechanism_field<{0}>{{\"{1}\", \"{2}\"}}{3} /* int var index {4} */",
-                        int_var_name == naming::POINT_PROCESS_VARIABLE ? "Point_process*" : "double*",
-                        int_var_name,
-                        nrn_name,
-                        print_comma ? "," : "",
-                        i);
+        printer->fmt_line(
+            "_nrn_mechanism_field<{0}>{{\"{1}\", \"{2}\"}}{3} /* int var index {4} */",
+            int_var_name == naming::POINT_PROCESS_VARIABLE ? "Point_process*" : "double*",
+            int_var_name,
+            nrn_name,
+            print_comma ? "," : "",
+            i);
     }
     if (info.emit_cvode) {
         printer->add_line("_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
@@ -711,13 +721,15 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_line(");");
     printer->add_newline();
 
-    printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});", float_variables_size(), int_variables_size());
+    printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
+                      float_variables_size(),
+                      int_variables_size());
     for (auto i = 0; i < codegen_int_variables.size(); ++i) {
         const auto& int_var = codegen_int_variables[i];
         const auto& int_var_name = int_var.symbol->get_name();
         auto nrn_name = int_var_name;
         if (nrn_name == naming::NODE_AREA_VARIABLE) {
-            nrn_name = naming::AREA_VARIABLE; 
+            nrn_name = naming::AREA_VARIABLE;
         } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
             nrn_name = "pntproc";
         }
