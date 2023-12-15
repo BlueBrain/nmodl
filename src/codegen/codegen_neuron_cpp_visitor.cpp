@@ -89,9 +89,89 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 /****************************************************************************************/
 
 
-/// TODO: Edit for NEURON
-void CodegenNeuronCppVisitor::print_function_prototypes() {
-    printer->add_newline(2);
+void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
+    if (info.point_process) {
+        printer->add_line("/* Point Process specific functions */");
+        printer->add_multi_line(R"CODE(
+            static void* _hoc_create_pnt(Object* _ho) {
+                return create_point_process(_pointtype, _ho);
+            }
+        )CODE");
+        printer->push_block("static void _hoc_destroy_pnt(void* _vptr)");
+        if (info.is_watch_used() || info.for_netcon_used) {
+            printer->add_line("Prop* _prop = ((Point_process*)_vptr)->prop;");
+        }
+        if (info.is_watch_used()) {
+            printer->push_block("if (_prop)");
+            printer->fmt_line("_nrn_free_watch(_nrn_mechanism_access_dparam(_prop), {}, {});",
+                              info.watch_count,
+                              info.is_watch_used());
+            printer->pop_block();
+        }
+        if (info.for_netcon_used) {
+            printer->push_block("if (_prop)");
+            printer->fmt_line(
+                "_nrn_free_fornetcon(&(_nrn_mechanism_access_dparam(_prop)[_fnc_index].literal_"
+                "value<void*>()));");
+            printer->pop_block();
+        }
+        printer->add_line("destroy_point_process(_vptr);");
+        printer->pop_block();
+        printer->add_multi_line(R"CODE(
+            static double _hoc_loc_pnt(void* _vptr) {
+                return loc_point_process(_pointtype, _vptr);
+            }
+        )CODE");
+        printer->add_multi_line(R"CODE(
+            static double _hoc_has_loc(void* _vptr) {
+                return has_loc_point(_vptr);
+            }
+        )CODE");
+        printer->add_multi_line(R"CODE(
+            static double _hoc_get_loc_pnt(void* _vptr) {
+                return (get_loc_point_process(_vptr));
+            }
+        )CODE");
+    }
+}
+
+
+void CodegenNeuronCppVisitor::print_setdata_functions() {
+    printer->add_line("/* Neuron setdata functions */");
+    printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
+    printer->push_block("static void _setdata(Prop* _prop)");
+    if (!info.point_process) {
+        printer->add_multi_line(R"CODE(
+            _extcall_prop = _prop;
+            _prop_id = _nrn_get_prop_id(_prop);
+        )CODE");
+    }
+    if (!info.vectorize) {
+        printer->add_multi_line(R"CODE(
+            neuron::legacy::set_globals_from_prop(_prop, _ml_real, _ml, _iml);
+            _ppvar = _nrn_mechanism_access_dparam(_prop);
+        )CODE");
+    }
+    printer->pop_block();
+
+    if (info.point_process) {
+        printer->push_block("static void _hoc_setdata(void* _vptr)");
+        printer->add_multi_line(R"CODE(
+            Prop* _prop;
+            _prop = ((Point_process*)_vptr)->prop;
+            _setdata(_prop);
+        )CODE");
+    } else {
+        printer->push_block("static void _hoc_setdata()");
+        printer->add_multi_line(R"CODE(
+            Prop *_prop, *hoc_getdata_range(int);
+            _prop = hoc_getdata_range(mech_type);
+            _setdata(_prop);
+            hoc_retpushx(1.);
+        )CODE");
+    }
+    printer->pop_block();
+
     printer->add_line("/* Mechanism procedures and functions */");
     for (const auto& node: info.functions) {
         print_function_declaration(*node, node->get_node_name());
@@ -103,6 +183,17 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->add_text(';');
         printer->add_newline();
     }
+}
+
+
+/// TODO: Edit for NEURON
+void CodegenNeuronCppVisitor::print_function_prototypes() {
+    printer->add_newline(2);
+
+    print_point_process_function_definitions();
+    print_setdata_functions();
+
+    /// TODO: Add mechanism function and procedures declarations
 }
 
 
@@ -508,7 +599,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     printer->add_line("static int mech_type;");
 
     if (info.point_process) {
-        printer->add_line("extern Prop* nrn_point_prop_;");
         printer->add_line("static int _pointtype;");
     } else {
         printer->add_multi_line(R"CODE(
@@ -645,9 +735,27 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
     const auto codegen_float_variables_size = codegen_float_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        printer->fmt_line("&_ml.template fpfield<{}>(0){}",
+        printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
                           i,
-                          i < codegen_float_variables_size - 1 ? "," : "");
+                          i < codegen_float_variables_size - 1 || codegen_int_variables.size() > 0
+                              ? ","
+                              : "",
+                          float_var->get_name());
+    }
+    const auto codegen_int_variables_size = codegen_int_variables.size();
+    for (int i = 0; i < codegen_int_variables_size; ++i) {
+        const auto& int_var_name = codegen_int_variables[i].symbol->get_name();
+        if (int_var_name == naming::POINT_PROCESS_VARIABLE) {
+            continue;
+        }
+        printer->fmt_line("_ml.template dptr_field<{0}>(0){1} /* {2} */",
+                          i,
+                          i < codegen_int_variables_size - 1 &&
+                                  codegen_int_variables[i + 1].symbol->get_name() !=
+                                      naming::POINT_PROCESS_VARIABLE
+                              ? ","
+                              : "",
+                          int_var_name);
     }
     printer->pop_block(";");
     printer->pop_block();
@@ -709,21 +817,43 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_line("_nrn_mechanism_register_data_fields(mech_type,");
     printer->increase_indent();
     const auto codegen_float_variables_size = codegen_float_variables.size();
+    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        const auto print_comma = i < codegen_float_variables_size - 1 || info.emit_cvode;
+        const auto print_comma = i < codegen_float_variables_size - 1 ||
+                                 codegen_int_variables_size > 0 || info.emit_cvode;
         if (float_var->is_array()) {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\", {}}} /* {} */{}",
-                              float_var->get_name(),
-                              float_var->get_length(),
-                              i,
-                              print_comma ? "," : "");
+            printer->fmt_line(
+                "_nrn_mechanism_field<double>{{\"{0}\", {1}}}{2} /* float var index {3} */",
+                float_var->get_name(),
+                float_var->get_length(),
+                print_comma ? "," : "",
+                i);
         } else {
-            printer->fmt_line("_nrn_mechanism_field<double>{{\"{}\"}} /* {} */{}",
-                              float_var->get_name(),
-                              i,
-                              print_comma ? "," : "");
+            printer->fmt_line(
+                "_nrn_mechanism_field<double>{{\"{0}\"}}{1} /* float var index {2} */",
+                float_var->get_name(),
+                print_comma ? "," : "",
+                i);
         }
+    }
+    for (int i = 0; i < codegen_int_variables_size; ++i) {
+        const auto& int_var = codegen_int_variables[i];
+        const auto& int_var_name = int_var.symbol->get_name();
+        const auto print_comma = i < codegen_int_variables_size - 1 || info.emit_cvode;
+        auto nrn_name = int_var_name;
+        if (nrn_name == naming::NODE_AREA_VARIABLE) {
+            nrn_name = naming::AREA_VARIABLE;
+        } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
+            nrn_name = "pntproc";
+        }
+        printer->fmt_line(
+            "_nrn_mechanism_field<{0}>{{\"{1}\", \"{2}\"}}{3} /* int var index {4} */",
+            int_var_name == naming::POINT_PROCESS_VARIABLE ? "Point_process*" : "double*",
+            int_var_name,
+            nrn_name,
+            print_comma ? "," : "",
+            i);
     }
     if (info.emit_cvode) {
         printer->add_line("_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
@@ -731,6 +861,21 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
+
+    printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
+                      float_variables_size(),
+                      int_variables_size());
+    for (auto i = 0; i < codegen_int_variables.size(); ++i) {
+        const auto& int_var = codegen_int_variables[i];
+        const auto& int_var_name = int_var.symbol->get_name();
+        auto nrn_name = int_var_name;
+        if (nrn_name == naming::NODE_AREA_VARIABLE) {
+            nrn_name = naming::AREA_VARIABLE;
+        } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
+            nrn_name = "pntproc";
+        }
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");", i, nrn_name);
+    }
     printer->pop_block();
 }
 
@@ -756,7 +901,9 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
     }
     for (auto& var: codegen_int_variables) {
         const auto& name = var.symbol->get_name();
-        if (var.is_index || var.is_integer) {
+        if (name == naming::POINT_PROCESS_VARIABLE) {
+            continue;
+        } else if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? "const " : "";
             printer->fmt_line("{}{}* {}{};", qualifier, int_type, name, value_initialize);
         } else {
@@ -838,7 +985,61 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     printer->add_newline(2);
     auto method = method_name(naming::NRN_ALLOC_METHOD);
     printer->fmt_push_block("static void {}(Prop* _prop)", method);
-    printer->add_line("// do nothing");
+    printer->add_multi_line(R"CODE(
+        Prop *prop_ion{};
+        Datum *_ppvar{};
+    )CODE");
+    if (info.point_process) {
+        printer->push_block("if (nrn_point_prop_)");
+        printer->add_multi_line(R"CODE(
+                _nrn_mechanism_access_alloc_seq(_prop) = _nrn_mechanism_access_alloc_seq(nrn_point_prop_);
+                _ppvar = _nrn_mechanism_access_dparam(nrn_point_prop_);
+        )CODE");
+        printer->chain_block("else");
+    }
+    if (info.ppvar_count) {
+        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);", info.ppvar_count);
+        printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
+    }
+    printer->add_multi_line(R"CODE(
+        _nrn_mechanism_cache_instance _ml_real{_prop};
+        auto* const _ml = &_ml_real;
+        size_t const _iml{};
+    )CODE");
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
+    if (float_variables_size()) {
+        printer->add_line("/*initialize range parameters*/");
+        for (const auto& var: info.range_parameter_vars) {
+            if (var->is_array()) {
+                continue;
+            }
+            const auto& var_name = var->get_name();
+            printer->fmt_line("_ml->template fpfield<{}>(_iml) = {}; /* {} */",
+                              position_of_float_var(var_name),
+                              *var->get_value(),
+                              var_name);
+        }
+    }
+    if (info.point_process) {
+        printer->pop_block();
+    }
+
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
+
+    if (info.ppvar_count) {
+        printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
+    }
+
+    if (info.diam_used) {
+        throw std::runtime_error("Diam allocation not implemented.");
+    }
+
+    if (info.area_used) {
+        throw std::runtime_error("Area allocation not implemented.");
+    }
+
+    /// TODO: IONs setup and CONSTRUCTOR call
+
     printer->pop_block();
 }
 
@@ -983,6 +1184,10 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     }
     }  // namespace
     )CODE");
+
+    if (info.point_process) {
+        printer->add_line("extern Prop* nrn_point_prop_;");
+    }
     /// TODO: More prints here?
 }
 
