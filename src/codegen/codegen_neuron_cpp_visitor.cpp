@@ -17,12 +17,15 @@
 #include "codegen/codegen_utils.hpp"
 #include "config/config.h"
 #include "utils/string_utils.hpp"
+#include "visitors/rename_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace codegen {
 
 using namespace ast;
+
+using visitor::RenameVisitor;
 
 using symtab::syminfo::NmodlType;
 
@@ -200,25 +203,63 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
                                                           const std::string& name) {
-    return;
+    printer->add_newline(2);
+    print_function_declaration(node, name);
+    printer->add_text(" ");
+    printer->push_block();
+
+    printer->fmt_line("auto inst = make_instance_{}(*_ml);", info.mod_suffix);
+
+    // function requires return variable declaration
+    if (node.is_function_block()) {
+        auto type = default_float_data_type();
+        printer->fmt_line("{} ret_{} = 0.0;", type, name);
+    } else {
+        printer->fmt_line("int ret_{} = 0;", name);
+    }
+
+    print_statement_block(*node.get_statement_block(), false, false);
+    printer->fmt_line("return ret_{};", name);
+    printer->pop_block();
 }
 
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
-    return;
+    auto name = node.get_node_name();
+
+    if (info.function_uses_table(name)) {
+        throw std::runtime_error("Function tables not implemented.");
+    } else {
+        print_function_or_procedure(node, name);
+    }
 }
 
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_procedure(const ast::ProcedureBlock& node) {
-    return;
+   print_function_procedure_helper(node);
 }
 
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
-    return;
+    auto name = node.get_node_name();
+
+    // name of return variable
+    std::string return_var;
+    if (info.function_uses_table(name)) {
+        throw std::runtime_error("Function tables not implemented.");
+    } else {
+        return_var = "ret_" + name;
+    }
+
+    // first rename return variable name
+    auto block = node.get_statement_block().get();
+    RenameVisitor v(name, return_var);
+    block->accept(v);
+
+    print_function_procedure_helper(node);
 }
 
 template <typename T>
@@ -284,7 +325,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     }
     const auto get_func_call_str = [&]() {
         const auto params = function_or_procedure_block->get_parameters();
-        auto func_call = fmt::format("{}({}", block_name, internal_method_arguments());
+        const auto func_proc_name = block_name + "_" + info.mod_suffix;
+        auto func_call = fmt::format("{}({}", func_proc_name, internal_method_arguments());
         for (int i = 0; i < params.size(); ++i) {
             func_call.append(fmt::format(", *getarg({})", i + 1));
         }
@@ -333,7 +375,13 @@ std::string CodegenNeuronCppVisitor::internal_method_arguments() {
 
 /// TODO: Edit for NEURON
 CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
-    return {};
+    ParamVector params;
+    params.emplace_back("", "_nrn_mechanism_cache_range*", "", "_ml");
+    params.emplace_back("", "size_t", "", "id");
+    params.emplace_back("", "Datum*", "", "_ppvar");
+    params.emplace_back("", "Datum*", "", "_thread");
+    params.emplace_back("", "NrnThread*", "", "_nt");
+    return params;
 }
 
 
@@ -1255,6 +1303,12 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_compute_functions() {
     print_hoc_py_wrapper_function_definitions();
+    for (const auto& procedure: info.procedures) {
+        print_procedure(*procedure);
+    }
+    for (const auto& function: info.functions) {
+        print_function(*function);
+    }
     print_nrn_init();
     print_nrn_cur();
     print_nrn_state();
