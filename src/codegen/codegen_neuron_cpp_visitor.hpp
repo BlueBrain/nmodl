@@ -24,13 +24,13 @@
 #include <string_view>
 #include <utility>
 
+#include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "printer/code_printer.hpp"
 #include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
-#include <codegen/codegen_cpp_visitor.hpp>
 
 
 /// encapsulates code generation backend implementations
@@ -91,6 +91,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     virtual std::string backend_name() const override;
 
+    /**
+     * Name of structure that wraps range variables
+     */
+    std::string instance_struct() const {
+        return fmt::format("{}_Instance", info.mod_suffix);
+    }
 
     /****************************************************************************************/
     /*                     Common helper routines accross codegen functions                 */
@@ -410,6 +416,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_nrn_init(bool skip_init_check = true);
 
+    /** Print the initial block. */
+    void print_initial_block(const ast::InitialBlock* node);
 
     /**
      * Print nrn_constructor function definition
@@ -556,6 +564,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_data_structures(bool print_initializers) override;
 
+    /** Print `make_*_instance`.
+     */
+    void print_make_instance() const;
 
     /**
      * Set v_unused (voltage) for NRN_PRCELLSTATE feature
@@ -588,7 +599,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
-    virtual void visit_solution_expression(const ast::SolutionExpression& node) override;
     virtual void visit_watch_statement(const ast::WatchStatement& node) override;
 
 

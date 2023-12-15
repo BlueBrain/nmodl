@@ -254,12 +254,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * Flag to indicate if visitor should print the visited nodes
-     */
-    bool codegen = false;
-
-
-    /**
      * Variable name should be converted to instance name (but not for function arguments)
      */
     bool enable_variable_name_lookup = true;
@@ -1141,6 +1135,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_protect_statement(const ast::ProtectStatement& node) override;
     void visit_mutex_lock(const ast::MutexLock& node) override;
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+    void visit_solution_expression(const ast::SolutionExpression& node) override;
 
     std::string compute_method_name(BlockType type) const;
 
