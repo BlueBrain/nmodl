@@ -256,8 +256,12 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _thread = _extcall_thread.data();
             _nt = static_cast<NrnThread*>(_pnt->_vnt);
         )CODE");
-    } else {
+    } else if (wrapper_type == InterpreterWrapper::HOC) {
+        /// TODO: figure out what
+        /// https://github.com/neuronsimulator/nrn/blob/f71c64e2a0e56aa628a6196bc9110937ad91c47e/src/nmodl/nocpout.cpp#L3217
+        /// does
         printer->add_multi_line(R"CODE(
+            Prop* _local_prop = _prop_id ? _extcall_prop : nullptr;
             _nrn_mechanism_cache_instance _ml_real{_local_prop};
             auto* const _ml = &_ml_real;
             size_t const _iml{};
@@ -265,19 +269,35 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _thread = _extcall_thread.data();
             _nt = nrn_threads;
         )CODE");
+    } else {
+        printer->add_multi_line(R"CODE(
+            _nrn_mechanism_cache_instance _ml_real{_prop};
+            auto* const _ml = &_ml_real;
+            size_t const _iml{};
+            _ppvar = _nrn_mechanism_access_dparam(_prop);
+            _thread = _extcall_thread.data();
+            _nt = nrn_threads;
+        )CODE");
     }
     if (info.function_uses_table(block_name)) {
         printer->fmt_line("_check_{}({})", block_name, internal_method_arguments());
     }
+    const auto get_func_call_str = [&]() {
+        const auto params = function_or_procedure_block->get_parameters();
+        auto func_call = fmt::format("{}({}", block_name, internal_method_arguments());
+        for (int i = 0; i < params.size(); ++i) {
+            func_call.append(fmt::format(", *getarg({})", i + 1));
+        }
+        func_call.append(")");
+        return func_call;
+    };
     if (function_or_procedure_block->is_function_block()) {
-        printer->add_text("_r = ");
-        print_vector_elements(function_or_procedure_block->get_parameters(),
-                              ", ",
-                              fmt::format("{}{", block_name));
-        printer->add_text(");");
+        printer->add_indent();
+        printer->fmt_text("_r = {};", get_func_call_str());
         printer->add_newline();
     } else {
-        printer->fmt_line("_r = 1.;");
+        printer->add_line("_r = 1.;");
+        printer->fmt_line("{};", get_func_call_str());
     }
     if (info.point_process || wrapper_type != InterpreterWrapper::HOC) {
         printer->add_line("return(_r);");
@@ -612,6 +632,8 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
                       info.pointer_variables.size() > 0
                           ? static_cast<int>(info.pointer_variables.size())
                           : -1);
+
+    printer->add_line("static _nrn_mechanism_std_vector<Datum> _extcall_thread;");
 }
 
 
