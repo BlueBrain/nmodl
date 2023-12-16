@@ -290,6 +290,18 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     std::string hoc_function_signature(const std::string& function_or_procedure_name) const;
 
 
+    /**
+     * In non POINT_PROCESS mechanisms all functions and procedures need a \c
+     * _py_<func_or_proc_name> to be available to the HOC interpreter
+     */
+    std::string py_function_name(const std::string& function_or_procedure_name) const;
+
+    /**
+     * Get the signature of the \c _npy_<func_or_proc_name> function
+     */
+    std::string py_function_signature(const std::string& function_or_procedure_name) const;
+
+
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
     /****************************************************************************************/

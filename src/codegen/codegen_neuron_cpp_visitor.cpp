@@ -238,7 +238,7 @@ void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& 
 
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_procedure(const ast::ProcedureBlock& node) {
-   print_function_procedure_helper(node);
+    print_function_procedure_helper(node);
 }
 
 
@@ -433,6 +433,18 @@ std::string CodegenNeuronCppVisitor::hoc_function_signature(
                        info.point_process ? "double" : "void",
                        hoc_function_name(function_or_procedure_name),
                        info.point_process ? "*" : "");
+}
+
+
+std::string CodegenNeuronCppVisitor::py_function_name(
+    const std::string& function_or_procedure_name) const {
+    return fmt::format("_npy_{}", function_or_procedure_name);
+}
+
+
+std::string CodegenNeuronCppVisitor::py_function_signature(
+    const std::string& function_or_procedure_name) const {
+    return fmt::format("static double {}(Prop*)", py_function_name(function_or_procedure_name));
 }
 
 
@@ -750,6 +762,22 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         }
         printer->fmt_line("{};", hoc_function_signature(func_name));
     }
+    if (!info.point_process) {
+        for (const auto& procedure: info.procedures) {
+            const auto proc_name = procedure->get_node_name();
+            if (proc_name[0] == '_') {
+                continue;
+            }
+            printer->fmt_line("{};", py_function_signature(proc_name));
+        }
+        for (const auto& function: info.functions) {
+            const auto func_name = function->get_node_name();
+            if (func_name[0] == '_') {
+                continue;
+            }
+            printer->fmt_line("{};", py_function_signature(func_name));
+        }
+    }
 
     printer->add_newline(2);
     printer->add_line("/* connect user functions to hoc names */");
@@ -774,7 +802,7 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         if (proc_name[0] == '_') {
             continue;
         }
-        printer->fmt_line("{{\"{}{}\", {}}},",
+        printer->fmt_line("{{\"{}_{}\", {}}},",
                           proc_name,
                           info.rsuffix,
                           hoc_function_name(proc_name));
@@ -784,7 +812,7 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         if (func_name[0] == '_') {
             continue;
         }
-        printer->fmt_line("{{\"{}{}\", {}}},",
+        printer->fmt_line("{{\"{}_{}\", {}}},",
                           func_name,
                           info.rsuffix,
                           hoc_function_name(func_name));
@@ -793,6 +821,30 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("{0, 0}");
     printer->decrease_indent();
     printer->add_line("};");
+    if (!info.point_process) {
+        printer->push_block("static NPyDirectMechFunc npy_direct_func_proc[] =");
+        for (const auto& procedure: info.procedures) {
+            const auto proc_name = procedure->get_node_name();
+            if (proc_name[0] == '_') {
+                continue;
+            }
+            printer->fmt_line("{{\"{}_{}\", {}}},",
+                              proc_name,
+                              info.mod_suffix,
+                              py_function_name(proc_name));
+        }
+        for (const auto& function: info.functions) {
+            const auto func_name = function->get_node_name();
+            if (func_name[0] == '_') {
+                continue;
+            }
+            printer->fmt_line("{{\"{}_{}\", {}}},",
+                              func_name,
+                              info.mod_suffix,
+                              py_function_name(func_name));
+        }
+        printer->pop_block(";");
+    }
 }
 
 void CodegenNeuronCppVisitor::print_make_instance() const {
@@ -945,6 +997,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
             nrn_name = "pntproc";
         }
         printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");", i, nrn_name);
+    }
+
+    printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
+    if (!info.point_process) {
+        printer->add_line("hoc_register_npy_direct(mech_type, npy_direct_func_proc);");
     }
     printer->pop_block();
 }
