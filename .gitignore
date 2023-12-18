@@ -50,3 +50,7 @@ venv.bak/
 .pre-commit-config.yaml
 .ipynb_checkpoints
 .bbp-project-venv/
+
+# Generated files
+test/usecases/*/x86_64
+test/usecases/*/amd64
