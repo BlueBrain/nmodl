@@ -145,6 +145,16 @@ bool CodegenCppVisitor::defined_method(const std::string& name) const {
     return function && function->has_any_property(properties);
 }
 
+static std::unordered_map<std::string, std::string> name2cppname{
+#include "extdef_rand.h"
+};
+
+const std::string& CodegenCppVisitor::possibly_rename(const std::string& name) {
+    if (name2cppname.count(name)) {
+        return name2cppname[name];
+    }
+    return name;
+}
 
 int CodegenCppVisitor::float_variables_size() const {
     return codegen_float_variables.size();
@@ -235,7 +245,7 @@ void CodegenCppVisitor::print_global_var_struct_decl() {
 
 void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
     const auto& name = node.get_node_name();
-    auto function_name = name;
+    auto function_name = possibly_rename(name);  // e.g. random_negexp to nrnran123_negexp
     if (defined_method(name)) {
         function_name = method_name(name);
     }
@@ -684,6 +694,15 @@ void CodegenCppVisitor::update_index_semantics() {
         index += size;
     }
 
+    for (auto& var: info.random_variables) {
+        if (info.first_random_var_index == -1) {
+            info.first_random_var_index = index;
+        }
+        int size = var->get_length();
+        info.semantics.emplace_back(index, naming::RANDOM_SEMANTIC, size);
+        index += size;
+    }
+
     if (info.diam_used) {
         info.semantics.emplace_back(index++, naming::DIAM_VARIABLE, 1);
     }
@@ -861,6 +880,12 @@ std::vector<IndexVariableInfo> CodegenCppVisitor::get_int_variables() {
         } else {
             variables.emplace_back(make_symbol(name), true);
         }
+    }
+
+    for (const auto& var: info.random_variables) {
+        auto name = var->get_name();
+        variables.emplace_back(make_symbol(name), true);
+        variables.back().symbol->add_properties(NmodlType::random_var);
     }
 
     if (info.diam_used) {

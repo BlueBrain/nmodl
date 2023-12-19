@@ -119,6 +119,9 @@ static constexpr char POINTER_SEMANTIC[] = "pointer";
 /// semantic type for core pointer variable
 static constexpr char CORE_POINTER_SEMANTIC[] = "bbcorepointer";
 
+/// semantic type for RANDOM variable
+static constexpr char RANDOM_SEMANTIC[] = "random";
+
 /// semantic type for net send call
 static constexpr char NET_SEND_SEMANTIC[] = "netsend";
 
