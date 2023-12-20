@@ -418,7 +418,7 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     printer->fmt_push_block("struct {}", global_struct());
 
     if (!info.ions.empty()) {
-        throw std::runtime_error("Not implemented, global ions.");
+        // TODO implement these when needed.
     }
 
     if (info.point_process) {
