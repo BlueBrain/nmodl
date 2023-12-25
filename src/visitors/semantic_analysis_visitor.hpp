@@ -32,6 +32,7 @@
  * 6. Check that mutex are not badly use
  * 7. Check than function table got at least one argument.
  * 8. Check that at most one derivative block is present.
+ * 9. Check that RANDOM variable is mentioned only as first arg in random function.
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -42,6 +43,7 @@ namespace visitor {
 class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
     bool check_fail = false;
+    symtab::SymbolTable* current_symbol_table;
 
     /// true if accelerator backend is used for code generation
     bool accel_backend = false;
@@ -85,6 +87,15 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
 
     /// Look if MUTEXUNLOCK is outside a locked block
     void visit_mutex_unlock(const ast::MutexUnlock& node) override;
+
+    /// Only use of random_var is as first arg in random function.
+    void visit_name(const ast::Name& node) override;
+
+    /// random function first arg must be random_var
+    void visit_function_call(const ast::FunctionCall& node) override;
+
+    /// Maintain current_symbol_table.
+    void visit_statement_block(const ast::StatementBlock& node) override;
 
   public:
     SemanticAnalysisVisitor(bool accel_backend = false)

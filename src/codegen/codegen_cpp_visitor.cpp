@@ -145,17 +145,6 @@ bool CodegenCppVisitor::defined_method(const std::string& name) const {
     return function && function->has_any_property(properties);
 }
 
-static std::unordered_map<std::string, std::string> name2cppname{
-#include "extdef_rand.h"
-};
-
-const std::string& CodegenCppVisitor::possibly_rename(const std::string& name) {
-    if (name2cppname.count(name)) {
-        return name2cppname[name];
-    }
-    return name;
-}
-
 int CodegenCppVisitor::float_variables_size() const {
     return codegen_float_variables.size();
 }
@@ -245,7 +234,8 @@ void CodegenCppVisitor::print_global_var_struct_decl() {
 
 void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
     const auto& name = node.get_node_name();
-    auto function_name = possibly_rename(name);  // e.g. random_negexp to nrnran123_negexp
+    auto function_name = symtab::syminfo::possibly_rename(name);  // e.g. random_negexp to
+                                                                  // nrnran123_negexp
     if (defined_method(name)) {
         function_name = method_name(name);
     }

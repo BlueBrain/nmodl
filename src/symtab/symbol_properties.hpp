@@ -254,6 +254,12 @@ inline T& operator&=(T& lhs, T rhs) {
 }
 
 
+/// Return name or redefined name of random function
+const std::string& possibly_rename(const std::string& name);
+
+/// Is name a random function.
+bool is_random_function(const std::string& name);
+
 /// check if any property is set
 inline bool has_property(const NmodlType& obj, NmodlType property) {
     return static_cast<bool>(obj & property);
