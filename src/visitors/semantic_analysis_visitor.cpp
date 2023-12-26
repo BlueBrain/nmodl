@@ -149,10 +149,12 @@ void SemanticAnalysisVisitor::visit_name(const ast::Name& node) {
         }
     }
     if (!ok) {
+        auto position = node.get_token()->position();  // ast::Name has a token
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: RANDOM variable {} can be used only"
-                        " as the first arg of a random function",
-                        node.get_node_name()));
+            fmt::format("SemanticAnalysisVisitor :: RANDOM variable {} at {}"
+                        " can be used only as the first arg of a random function",
+                        node.get_node_name(),
+                        position));
         check_fail = true;
     }
     node.visit_children(*this);
@@ -182,10 +184,12 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
         }
     }
     if (!ok) {
+        auto position = node.get_name()->get_token()->position();
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: random function {} first arg must be"
-                        " a random variable",
-                        fname));
+            fmt::format("SemanticAnalysisVisitor :: random function {} at {} ::"
+                        " The first arg must be a random variable",
+                        fname,
+                        position));
         check_fail = true;
     }
     node.visit_children(*this);
