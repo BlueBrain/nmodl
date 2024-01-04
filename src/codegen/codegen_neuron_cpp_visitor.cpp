@@ -286,9 +286,9 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     if (info.point_process) {
         printer->add_multi_line(R"CODE(
             auto* const _pnt = static_cast<Point_process*>(_vptr);
-            auto* const _p = _pnt->_prop;
+            auto* const _p = _pnt->prop;
             if (!_p) {
-                hoc_execerror(\"POINT_PROCESS data instance not valid\", NULL);
+                hoc_execerror("POINT_PROCESS data instance not valid", NULL);
             }
             _nrn_mechanism_cache_instance _ml_real{_p};
             auto* const _ml = &_ml_real;
@@ -802,7 +802,7 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         if (proc_name[0] == '_') {
             continue;
         }
-        printer->fmt_line("{{\"{}_{}\", {}}},",
+        printer->fmt_line("{{\"{}{}\", {}}},",
                           proc_name,
                           info.rsuffix,
                           hoc_function_name(proc_name));
@@ -812,7 +812,7 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         if (func_name[0] == '_') {
             continue;
         }
-        printer->fmt_line("{{\"{}_{}\", {}}},",
+        printer->fmt_line("{{\"{}{}\", {}}},",
                           func_name,
                           info.rsuffix,
                           hoc_function_name(func_name));
@@ -828,9 +828,8 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
             if (proc_name[0] == '_') {
                 continue;
             }
-            printer->fmt_line("{{\"{}_{}\", {}}},",
+            printer->fmt_line("{{\"{}\", {}}},",
                               proc_name,
-                              info.mod_suffix,
                               py_function_name(proc_name));
         }
         for (const auto& function: info.functions) {
@@ -838,9 +837,8 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
             if (func_name[0] == '_') {
                 continue;
             }
-            printer->fmt_line("{{\"{}_{}\", {}}},",
+            printer->fmt_line("{{\"{}\", {}}},",
                               func_name,
-                              info.mod_suffix,
                               py_function_name(func_name));
         }
         printer->pop_block(";");

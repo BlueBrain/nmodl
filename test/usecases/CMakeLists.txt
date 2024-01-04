@@ -1,4 +1,4 @@
-set(NMODL_USECASE_DIRS cnexp_scalar point_process parameter func_proc)
+set(NMODL_USECASE_DIRS cnexp_scalar point_process parameter func_proc func_proc_pnt)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
