@@ -557,15 +557,16 @@ void CodegenHelperVisitor::visit_var_name(const ast::VarName& node) {
     auto sym = psymtab->lookup(node.get_node_name());
     const auto properties = NmodlType::range_var | NmodlType::pointer_var | NmodlType::bbcore_pointer_var;
     if (sym && sym->has_any_property(properties)) {
-        const auto is_function = function_or_procedure_stack.top().is_function_block();
+        const auto is_function = function_or_procedure_stack.top()->is_function_block();
         const auto func_or_proc_str = is_function ? "Function" : "Procedure";
         std::cout << func_or_proc_str << " has range var: " << node.get_node_name() << std::endl;
+        info.function_proc_need_setdata.insert(function_or_procedure_stack.top());
     }
 }
 
 
 void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    function_or_procedure_stack.push(node);
+    function_or_procedure_stack.push(&node);
     info.procedures.push_back(&node);
     node.visit_children(*this);
     if (table_statement_used) {
@@ -577,7 +578,7 @@ void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node
 
 
 void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) {
-    function_or_procedure_stack.push(node);
+    function_or_procedure_stack.push(&node);
     info.functions.push_back(&node);
     node.visit_children(*this);
     if (table_statement_used) {

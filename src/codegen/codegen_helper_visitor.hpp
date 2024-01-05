@@ -65,7 +65,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     /// table statement found
     bool table_statement_used = false;
 
-    std::stack<ast::Block> function_or_procedure_stack;
+    std::stack<const ast::Block*> function_or_procedure_stack;
 
     /// symbol table for the program
     symtab::SymbolTable* psymtab = nullptr;

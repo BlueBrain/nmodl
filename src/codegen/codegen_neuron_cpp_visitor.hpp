@@ -205,8 +205,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_function(const ast::FunctionBlock& node) override;
 
 
-    template <typename T>
-    void print_hoc_py_wrapper_function_body(const T* function_or_procedure_block,
+    void print_hoc_py_wrapper_function_body(const ast::Block* function_or_procedure_block,
                                             InterpreterWrapper wrapper_type);
 
 

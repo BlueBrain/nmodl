@@ -262,9 +262,8 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
     print_function_procedure_helper(node);
 }
 
-template <typename T>
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
-    const T* function_or_procedure_block,
+    const ast::Block* function_or_procedure_block,
     InterpreterWrapper wrapper_type) {
     if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
         return;
@@ -298,11 +297,15 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _nt = static_cast<NrnThread*>(_pnt->_vnt);
         )CODE");
     } else if (wrapper_type == InterpreterWrapper::HOC) {
-        /// TODO: figure out what
-        /// https://github.com/neuronsimulator/nrn/blob/f71c64e2a0e56aa628a6196bc9110937ad91c47e/src/nmodl/nocpout.cpp#L3217
-        /// does
+        if (info.function_proc_need_setdata.find(function_or_procedure_block) != info.function_proc_need_setdata.end()) {
+            printer->push_block("if (!_prop_id)");
+            printer->fmt_line("hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the specified mechanism instance still be in existence.\", NULL);", function_or_procedure_block->get_node_name(), info.mod_suffix, info.mod_suffix);
+            printer->pop_block();
+            printer->add_line("Prop* _local_prop = _extcall_prop;");
+        } else {
+            printer->add_line("Prop* _local_prop = _prop_id ? _extcall_prop : nullptr;");
+        }
         printer->add_multi_line(R"CODE(
-            Prop* _local_prop = _prop_id ? _extcall_prop : nullptr;
             _nrn_mechanism_cache_instance _ml_real{_local_prop};
             auto* const _ml = &_ml_real;
             size_t const _iml{};
@@ -310,7 +313,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _thread = _extcall_thread.data();
             _nt = nrn_threads;
         )CODE");
-    } else {
+    } else {  // wrapper_type == InterpreterWrapper::Python
         printer->add_multi_line(R"CODE(
             _nrn_mechanism_cache_instance _ml_real{_prop};
             auto* const _ml = &_ml_real;
