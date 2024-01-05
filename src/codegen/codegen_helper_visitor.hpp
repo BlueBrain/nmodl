@@ -13,10 +13,12 @@
  */
 
 #include <string>
+#include <stack>
 
 #include "codegen/codegen_info.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
+#include "ast/block.hpp"
 
 namespace nmodl {
 namespace codegen {
@@ -63,6 +65,8 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     /// table statement found
     bool table_statement_used = false;
 
+    std::stack<ast::Block> function_or_procedure_stack;
+
     /// symbol table for the program
     symtab::SymbolTable* psymtab = nullptr;
 
@@ -87,6 +91,7 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_conductance_hint(const ast::ConductanceHint& node) override;
+    void visit_var_name(const ast::VarName& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_table_block(const ast::FunctionTableBlock& node) override;
