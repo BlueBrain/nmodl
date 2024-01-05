@@ -300,12 +300,19 @@ pade approx:         m = m*(-a*dt-2.0)/(a*dt-2.0)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 exact solution:      m = minf-(-m+minf)*exp(-dt/mtau)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 </pre></div></div>
 </div>
@@ -330,12 +337,19 @@ pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 exact solution:      m = minf+(m-minf)*exp(dt/mtau)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 </pre></div></div>
 </div>
@@ -360,12 +374,19 @@ pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 exact solution:      m = sqrt(-pow(m, 2)/(2.0*dt*pow(m, 2)-1.0))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 pade approx:         m = m*(dt*pow(m, 2)-2.0)/(3.0*dt*pow(m, 2)-2.0)
 </pre></div></div>
 </div>
@@ -390,12 +411,19 @@ pade approx:         m = m*(dt*pow(m, 2)-2.0)/(3.0*dt*pow(m, 2)-2.0)
 </pre></div>
 </div>
 </div>
-<div class="nboutput nblast docutils container">
+<div class="nboutput docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 exact solution:      m = 0.5*log(-exp(2*m)/(2*dt*exp(2*m)-1))
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
 pade approx:         m = 0.5*(dt*(log(exp(2*m))-2.0)*exp(2*m)-log(exp(2*m)))/(dt*exp(2*m)-1.0)
 </pre></div></div>
 </div>
