@@ -217,7 +217,10 @@ enum class NmodlType : enum_type {
     define = 1L << 32,
 
     /// Codegen specific variable
-    codegen_var = 1L << 33
+    codegen_var = 1L << 33,
+
+    /// FUNCTION or PROCEDURE needs setdata check
+    need_setdata = 1L << 34
 };
 
 template <typename T>

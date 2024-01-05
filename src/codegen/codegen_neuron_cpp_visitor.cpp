@@ -297,7 +297,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _nt = static_cast<NrnThread*>(_pnt->_vnt);
         )CODE");
     } else if (wrapper_type == InterpreterWrapper::HOC) {
-        if (info.function_proc_need_setdata.find(function_or_procedure_block) != info.function_proc_need_setdata.end()) {
+        if (program_symtab->lookup(block_name)->has_all_properties(NmodlType::need_setdata)) {
             printer->push_block("if (!_prop_id)");
             printer->fmt_line("hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the specified mechanism instance still be in existence.\", NULL);", function_or_procedure_block->get_node_name(), info.mod_suffix, info.mod_suffix);
             printer->pop_block();

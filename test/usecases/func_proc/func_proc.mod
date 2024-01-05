@@ -8,7 +8,7 @@ ASSIGNED {
 }
 
 PROCEDURE set_x_42() {
-    x = 42
+    set_x_a(42)
 }
 
 PROCEDURE set_x_a(a) {

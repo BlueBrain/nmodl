@@ -35,6 +35,7 @@
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
+#include "visitors/needsetdata_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/perf_visitor.hpp"
@@ -527,6 +528,15 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("TransformVisitor"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
+
+        {
+            logger->info("Running NeedSetDataVisitor");
+            NeedSetDataVisitor().visit_program(*ast);
+            logger->info("Printing symbol table after NeedSetDataVisitor");
+            auto symtab = ast->get_model_symbol_table();
+            symtab->print(std::cout);
+        }
+
 
         {
             if (coreneuron_code && oacc_backend) {

@@ -621,6 +621,13 @@ void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
     if (name == naming::NET_EVENT_METHOD) {
         info.net_event_used = true;
     }
+    // std::cout << "Calling " << node.get_node_name() << std::endl;
+    // const auto func_symbol = psymtab->lookup(node.get_node_name());
+    // const auto func_block = func_symbol->get_nodes()[0];
+    // func_block->accept(*this);
+    // if (info.function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) != info.function_proc_need_setdata.end()) {
+    //     info.function_proc_need_setdata.insert(function_or_procedure_stack.top());
+    // }
 }
 
 
