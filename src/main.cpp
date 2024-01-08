@@ -530,15 +530,6 @@ int main(int argc, const char* argv[]) {
         }
 
         {
-            logger->info("Running NeedSetDataVisitor");
-            NeedSetDataVisitor().visit_program(*ast);
-            logger->info("Printing symbol table after NeedSetDataVisitor");
-            auto symtab = ast->get_model_symbol_table();
-            symtab->print(std::cout);
-        }
-
-
-        {
             if (coreneuron_code && oacc_backend) {
                 logger->info("Running OpenACC backend code generator for CoreNEURON");
                 CodegenAccVisitor visitor(modfile,
@@ -558,6 +549,8 @@ int main(int argc, const char* argv[]) {
             }
 
             else if (neuron_code && cpp_backend) {
+                logger->info("Running NeedSetDataVisitor");
+                NeedSetDataVisitor().visit_program(*ast);
                 logger->info("Running C++ backend code generator for NEURON");
                 CodegenNeuronCppVisitor visitor(modfile,
                                                 output_dir,
