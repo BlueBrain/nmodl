@@ -71,27 +71,33 @@ void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
     node.visit_children(*this);
 }
 
+void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node) {
+    /// <-- This code is for check 9
+    /// TODO: Check whether the function being called exists already in the visited_function_or_procedure_blocks
+    /// -->
+}
+
 void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     /// <-- This code is for check 1
-    in_procedure = true;
+    visited_function_or_procedure_blocks.push_front(&node);
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    in_procedure = false;
+    visited_function_or_procedure_blocks.pop_front();
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& node) {
     /// <-- This code is for check 1
-    in_function = true;
+    visited_function_or_procedure_blocks.push_front(&node);
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    in_function = false;
+    visited_function_or_procedure_blocks.pop_front();
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& tableStmt) {
     /// <-- This code is for check 1
-    if ((in_function || in_procedure) && !one_arg_in_procedure_function) {
+    if (!visited_function_or_procedure_blocks.empty() && !one_arg_in_procedure_function) {
         logger->critical(
             "SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement "
             "should contains exactly one argument.");
@@ -100,11 +106,14 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& t
     /// -->
     /// <-- This code is for check 3
     const auto& table_vars = tableStmt.get_table_vars();
+    const auto first_element_iter = visited_function_or_procedure_blocks.cbegin();
+    const auto in_function = !visited_function_or_procedure_blocks.empty() && (*first_element_iter)->is_function_block();
     if (in_function && !table_vars.empty()) {
         logger->critical(
             "SemanticAnalysisVisitor :: TABLE statement in FUNCTION cannot have a table name "
             "list.");
     }
+    const auto in_procedure = !visited_function_or_procedure_blocks.empty() && (*first_element_iter)->is_procedure_block();
     if (in_procedure && table_vars.empty()) {
         logger->critical(
             "SemanticAnalysisVisitor :: TABLE statement in PROCEDURE must have a table name list.");

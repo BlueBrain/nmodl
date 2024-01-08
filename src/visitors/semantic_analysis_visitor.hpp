@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <forward_list>
+
 /**
  * \file
  * \brief \copybrief nmodl::visitor::SemanticAnalysisVisitor
@@ -32,6 +34,7 @@
  * 6. Check that mutex are not badly use
  * 7. Check than function table got at least one argument.
  * 8. Check that at most one derivative block is present.
+ * 9. Check that there are no infinite loops with function calls
  */
 #include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -47,10 +50,8 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     bool accel_backend = false;
     /// true if the procedure or the function contains only one argument
     bool one_arg_in_procedure_function = false;
-    /// true if we are in a procedure block
-    bool in_procedure = false;
-    /// true if we are in a function block
-    bool in_function = false;
+    /// set of visited Function or Procedure Blocks
+    std::forward_list<const ast::Block*> visited_function_or_procedure_blocks;
     /// true if the mod file is of type point process
     bool is_point_process = false;
     /// true if we are inside a mutex locked part
@@ -59,10 +60,13 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     /// Check number of DERIVATIVE blocks
     void visit_program(const ast::Program& node) override;
 
-    /// Store if we are in a procedure and if the arity of this is 1
+    /// Check whether there is an infinite loop with function calls
+    void visit_function_call(const ast::FunctionCall& node) override;
+
+    /// Store nodes to the \c visited_function_or_procedure_blocks
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
 
-    /// Store if we are in a function and if the arity of this is 1
+    /// Store nodes to the \c visited_function_or_procedure_blocks
     void visit_function_block(const ast::FunctionBlock& node) override;
 
     /// Visit a table statement and check that the arity of the block were 1
