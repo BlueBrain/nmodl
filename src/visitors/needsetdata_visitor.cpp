@@ -24,19 +24,15 @@ void NeedSetDataVisitor::visit_var_name(const ast::VarName& node) {
     }
     const auto var_sym = psymtab->lookup(node.get_node_name());
     const auto properties = NmodlType::range_var | NmodlType::pointer_var | NmodlType::bbcore_pointer_var;
-    if (var_sym && var_sym->has_any_property(properties)) {
-        const auto is_function = function_or_procedure_stack.top()->is_function_block();
-        const auto func_or_proc_str = is_function ? "Function" : "Procedure";
-        std::cout << func_or_proc_str << " " << function_or_procedure_stack.top()->get_node_name() << " has range var: " << node.get_node_name() << std::endl;
+    if (!var_sym || !var_sym->has_any_property(properties)) {
+        return;
     }
     function_proc_need_setdata.insert(function_or_procedure_stack.top());
     auto func_symbol = psymtab->lookup(function_or_procedure_stack.top()->get_node_name());
-    std::cout << "1Adding NmodlType::need_setdata to " << func_symbol->get_name() << std::endl;
     func_symbol->add_property(NmodlType::need_setdata);
 }
 
 void NeedSetDataVisitor::visit_function_call(const ast::FunctionCall& node) {
-    std::cout << "Calling " << node.get_node_name() << std::endl;
     auto func_symbol = psymtab->lookup(node.get_node_name());
     // If symbol is not found or there are no AST nodes for it return
     if (!func_symbol || func_symbol->get_nodes().empty()) {
@@ -45,28 +41,21 @@ void NeedSetDataVisitor::visit_function_call(const ast::FunctionCall& node) {
     const auto func_block = func_symbol->get_nodes()[0];
     func_block->accept(*this);
     if (function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) != function_proc_need_setdata.end()) {
-        std::cout << "Adding to the set " << node.get_node_name() << std::endl;
         function_proc_need_setdata.insert(function_or_procedure_stack.top());
     }
     auto caller_func_symbol = psymtab->lookup(function_or_procedure_stack.top()->get_node_name());
-    std::cout << "2Adding NmodlType::need_setdata to " << caller_func_symbol->get_name() << std::endl;
     caller_func_symbol->add_property(NmodlType::need_setdata);
-    std::cout << "Leaving " << node.get_node_name() << std::endl;
 }
 
 void NeedSetDataVisitor::visit_function_block(const ast::FunctionBlock& node) {
     function_or_procedure_stack.push(&node);
-    std::cout << "In " << node.get_node_name() << std::endl;
     node.visit_children(*this);
-    std::cout << "Leaving " << node.get_node_name() << std::endl;
     function_or_procedure_stack.pop();
 }
 
 void NeedSetDataVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     function_or_procedure_stack.push(&node);
-    std::cout << "In " << node.get_node_name() << std::endl;
     node.visit_children(*this);
-    std::cout << "Leaving " << node.get_node_name() << std::endl;
     function_or_procedure_stack.pop();
 }
 
