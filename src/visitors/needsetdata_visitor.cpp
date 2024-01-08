@@ -38,6 +38,10 @@ void NeedSetDataVisitor::visit_var_name(const ast::VarName& node) {
 void NeedSetDataVisitor::visit_function_call(const ast::FunctionCall& node) {
     std::cout << "Calling " << node.get_node_name() << std::endl;
     auto func_symbol = psymtab->lookup(node.get_node_name());
+    // If symbol is not found or there are no AST nodes for it return
+    if (!func_symbol || func_symbol->get_nodes().empty()) {
+        return;
+    }
     const auto func_block = func_symbol->get_nodes()[0];
     func_block->accept(*this);
     if (function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) != function_proc_need_setdata.end()) {
