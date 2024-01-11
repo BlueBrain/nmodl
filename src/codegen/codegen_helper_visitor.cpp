@@ -555,7 +555,8 @@ void CodegenHelperVisitor::visit_var_name(const ast::VarName& node) {
         return;
     }
     auto sym = psymtab->lookup(node.get_node_name());
-    const auto properties = NmodlType::range_var | NmodlType::pointer_var | NmodlType::bbcore_pointer_var;
+    const auto properties = NmodlType::range_var | NmodlType::pointer_var |
+                            NmodlType::bbcore_pointer_var;
     if (sym && sym->has_any_property(properties)) {
         const auto is_function = function_or_procedure_stack.top()->is_function_block();
         const auto func_or_proc_str = is_function ? "Function" : "Procedure";
@@ -625,7 +626,8 @@ void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
     // const auto func_symbol = psymtab->lookup(node.get_node_name());
     // const auto func_block = func_symbol->get_nodes()[0];
     // func_block->accept(*this);
-    // if (info.function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) != info.function_proc_need_setdata.end()) {
+    // if (info.function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) !=
+    // info.function_proc_need_setdata.end()) {
     //     info.function_proc_need_setdata.insert(function_or_procedure_stack.top());
     // }
 }

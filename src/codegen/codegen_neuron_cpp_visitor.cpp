@@ -299,7 +299,12 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     } else if (wrapper_type == InterpreterWrapper::HOC) {
         if (program_symtab->lookup(block_name)->has_all_properties(NmodlType::need_setdata)) {
             printer->push_block("if (!_prop_id)");
-            printer->fmt_line("hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the specified mechanism instance still be in existence.\", NULL);", function_or_procedure_block->get_node_name(), info.mod_suffix, info.mod_suffix);
+            printer->fmt_line(
+                "hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the "
+                "specified mechanism instance still be in existence.\", NULL);",
+                function_or_procedure_block->get_node_name(),
+                info.mod_suffix,
+                info.mod_suffix);
             printer->pop_block();
             printer->add_line("Prop* _local_prop = _extcall_prop;");
         } else {
@@ -831,18 +836,14 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
             if (proc_name[0] == '_') {
                 continue;
             }
-            printer->fmt_line("{{\"{}\", {}}},",
-                              proc_name,
-                              py_function_name(proc_name));
+            printer->fmt_line("{{\"{}\", {}}},", proc_name, py_function_name(proc_name));
         }
         for (const auto& function: info.functions) {
             const auto func_name = function->get_node_name();
             if (func_name[0] == '_') {
                 continue;
             }
-            printer->fmt_line("{{\"{}\", {}}},",
-                              func_name,
-                              py_function_name(func_name));
+            printer->fmt_line("{{\"{}\", {}}},", func_name, py_function_name(func_name));
         }
         printer->pop_block(";");
     }
@@ -857,8 +858,10 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
 
     const auto codegen_float_variables_size = codegen_float_variables.size();
     const auto codegen_int_variables_size = codegen_int_variables.size();
-    const auto needs_comma = [&] (int i) {
-        return i < codegen_float_variables_size - 1 || (codegen_int_variables_size > 0 && codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE);
+    const auto needs_comma = [&](int i) {
+        return i < codegen_float_variables_size - 1 ||
+               (codegen_int_variables_size > 0 &&
+                codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE);
     };
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
@@ -868,9 +871,7 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
                               float_var->get_length(),
                               needs_comma(i) ? "," : "");
         } else {
-            printer->fmt_line("&_ml.template fpfield<{}>(0){}",
-                              i,
-                              needs_comma(i) ? "," : "");
+            printer->fmt_line("&_ml.template fpfield<{}>(0){}", i, needs_comma(i) ? "," : "");
         }
     }
     for (int i = 0; i < codegen_int_variables_size; ++i) {

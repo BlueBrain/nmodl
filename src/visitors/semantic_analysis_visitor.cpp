@@ -7,8 +7,8 @@
 
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "ast/breakpoint_block.hpp"
-#include "ast/function_call.hpp"
 #include "ast/function_block.hpp"
+#include "ast/function_call.hpp"
 #include "ast/function_table_block.hpp"
 #include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
@@ -79,9 +79,16 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
         return;
     }
     const auto func_name = node.get_node_name();
-    const auto func_already_visited = std::find_if(visited_function_or_procedure_blocks.begin(), visited_function_or_procedure_blocks.end(), [&func_name](const ast::Block* block){ return func_name == block->get_node_name(); });
+    const auto func_already_visited = std::find_if(visited_function_or_procedure_blocks.begin(),
+                                                   visited_function_or_procedure_blocks.end(),
+                                                   [&func_name](const ast::Block* block) {
+                                                       return func_name == block->get_node_name();
+                                                   });
     if (func_already_visited != visited_function_or_procedure_blocks.end()) {
-        logger->critical(fmt::format("SemanticAnalysisVisitor :: Recursive function call of \"{}\" in {}", func_name, node.get_token()->position()));
+        logger->critical(
+            fmt::format("SemanticAnalysisVisitor :: Recursive function call of \"{}\" in {}",
+                        func_name,
+                        node.get_token()->position()));
         check_fail = true;
         return;
     }
@@ -125,16 +132,21 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& t
     /// <-- This code is for check 3
     const auto& table_vars = tableStmt.get_table_vars();
     const auto first_element = (*visited_function_or_procedure_blocks.cbegin());
-    const auto in_function = !visited_function_or_procedure_blocks.empty() && first_element->is_function_block();
+    const auto in_function = !visited_function_or_procedure_blocks.empty() &&
+                             first_element->is_function_block();
     if (in_function && !table_vars.empty()) {
-        logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: TABLE statement in FUNCTION {} cannot have a table name "
-            "list.", first_element->get_node_name()));
+        logger->critical(fmt::format(
+            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION {} cannot have a table name "
+            "list.",
+            first_element->get_node_name()));
     }
-    const auto in_procedure = !visited_function_or_procedure_blocks.empty() && first_element->is_procedure_block();
+    const auto in_procedure = !visited_function_or_procedure_blocks.empty() &&
+                              first_element->is_procedure_block();
     if (in_procedure && table_vars.empty()) {
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: TABLE statement in PROCEDURE {} must have a table name list.", first_element->get_node_name()));
+            fmt::format("SemanticAnalysisVisitor :: TABLE statement in PROCEDURE {} must have a "
+                        "table name list.",
+                        first_element->get_node_name()));
     }
     /// -->
 }

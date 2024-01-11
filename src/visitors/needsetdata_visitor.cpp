@@ -23,7 +23,8 @@ void NeedSetDataVisitor::visit_var_name(const ast::VarName& node) {
         return;
     }
     const auto var_sym = psymtab->lookup(node.get_node_name());
-    const auto properties = NmodlType::range_var | NmodlType::pointer_var | NmodlType::bbcore_pointer_var;
+    const auto properties = NmodlType::range_var | NmodlType::pointer_var |
+                            NmodlType::bbcore_pointer_var;
     if (!var_sym || !var_sym->has_any_property(properties)) {
         return;
     }
@@ -40,7 +41,8 @@ void NeedSetDataVisitor::visit_function_call(const ast::FunctionCall& node) {
     }
     const auto func_block = func_symbol->get_nodes()[0];
     func_block->accept(*this);
-    if (function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) != function_proc_need_setdata.end()) {
+    if (function_proc_need_setdata.find(dynamic_cast<const ast::Block*>(func_block)) !=
+        function_proc_need_setdata.end()) {
         function_proc_need_setdata.insert(function_or_procedure_stack.top());
     }
     auto caller_func_symbol = psymtab->lookup(function_or_procedure_stack.top()->get_node_name());
