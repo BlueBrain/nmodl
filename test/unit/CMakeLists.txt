@@ -47,6 +47,7 @@ add_executable(
   visitor/lookup.cpp
   visitor/loop_unroll.cpp
   visitor/misc.cpp
+  visitor/need_setdata.cpp
   visitor/neuron_solve.cpp
   visitor/nmodl.cpp
   visitor/perf.cpp
