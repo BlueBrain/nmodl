@@ -856,16 +856,23 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
     printer->fmt_push_block("return {}", instance_struct());
 
     const auto codegen_float_variables_size = codegen_float_variables.size();
+    const auto codegen_int_variables_size = codegen_int_variables.size();
+    const auto needs_comma = [&] (int i) {
+        return i < codegen_float_variables_size - 1 || (codegen_int_variables_size > 0 && codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE);
+    };
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
-                          i,
-                          i < codegen_float_variables_size - 1 || codegen_int_variables.size() > 0
-                              ? ","
-                              : "",
-                          float_var->get_name());
+        if (float_var->is_array()) {
+            printer->fmt_line("_ml.template data_array<{}, {}>(0){}",
+                              i,
+                              float_var->get_length(),
+                              needs_comma(i) ? "," : "");
+        } else {
+            printer->fmt_line("&_ml.template fpfield<{}>(0){}",
+                              i,
+                              needs_comma(i) ? "," : "");
+        }
     }
-    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var_name = codegen_int_variables[i].symbol->get_name();
         if (int_var_name == naming::POINT_PROCESS_VARIABLE) {
