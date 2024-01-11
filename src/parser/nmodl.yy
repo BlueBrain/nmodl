@@ -1328,6 +1328,7 @@ term            :   variable_name
 function_call   :   NAME_PTR "(" expression_list ")"
                     {
                         auto expression = new ast::FunctionCall($1, $3);
+                        expression->set_token(*($1->get_token()));
                         $$ = new ast::WrappedExpression(expression);
                     }
                 ;
