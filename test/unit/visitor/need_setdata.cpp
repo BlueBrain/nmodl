@@ -61,7 +61,8 @@ SCENARIO("Check whether PROCEDURE and FUNCTION need setdata call", "[visitor][ne
         auto ast = run_NeedSetData_visitor(input_nmodl);
         auto symtab = ast->get_symbol_table();
         THEN("need_setdata property is added to needed FUNC and PROC") {
-            auto need_setdata_funcs = symtab->get_variables_with_properties(NmodlType::need_setdata);
+            auto need_setdata_funcs = symtab->get_variables_with_properties(
+                NmodlType::need_setdata);
             REQUIRE(need_setdata_funcs.size() == 2);
             const auto a = symtab->lookup("a");
             REQUIRE(a->has_any_property(NmodlType::need_setdata));
