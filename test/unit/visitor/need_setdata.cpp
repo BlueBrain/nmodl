@@ -22,7 +22,7 @@ using nmodl::parser::NmodlDriver;
 using symtab::syminfo::NmodlType;
 
 //=============================================================================
-// GlobalToRange visitor tests
+// NeedSetData visitor tests
 //=============================================================================
 
 std::shared_ptr<ast::Program> run_NeedSetData_visitor(const std::string& text) {
