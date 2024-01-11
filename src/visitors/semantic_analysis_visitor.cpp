@@ -81,7 +81,7 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
     const auto func_name = node.get_node_name();
     const auto func_already_visited = std::find_if(visited_function_or_procedure_blocks.begin(), visited_function_or_procedure_blocks.end(), [&func_name](const ast::Block* block){ return func_name == block->get_node_name(); });
     if (func_already_visited != visited_function_or_procedure_blocks.end()) {
-        logger->critical(fmt::format("Recursive function call of \"{}\" in {}", func_name, node.get_token()->position()));
+        logger->critical(fmt::format("SemanticAnalysisVisitor :: Recursive function call of \"{}\" in {}", func_name, node.get_token()->position()));
         check_fail = true;
         return;
     }
@@ -124,17 +124,17 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& t
     /// -->
     /// <-- This code is for check 3
     const auto& table_vars = tableStmt.get_table_vars();
-    const auto first_element_iter = visited_function_or_procedure_blocks.cbegin();
-    const auto in_function = !visited_function_or_procedure_blocks.empty() && (*first_element_iter)->is_function_block();
+    const auto first_element = (*visited_function_or_procedure_blocks.cbegin());
+    const auto in_function = !visited_function_or_procedure_blocks.empty() && first_element->is_function_block();
     if (in_function && !table_vars.empty()) {
         logger->critical(
-            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION cannot have a table name "
-            "list.");
+            fmt::format("SemanticAnalysisVisitor :: TABLE statement in FUNCTION {} cannot have a table name "
+            "list.", first_element->get_node_name()));
     }
-    const auto in_procedure = !visited_function_or_procedure_blocks.empty() && (*first_element_iter)->is_procedure_block();
+    const auto in_procedure = !visited_function_or_procedure_blocks.empty() && first_element->is_procedure_block();
     if (in_procedure && table_vars.empty()) {
         logger->critical(
-            "SemanticAnalysisVisitor :: TABLE statement in PROCEDURE must have a table name list.");
+            fmt::format("SemanticAnalysisVisitor :: TABLE statement in PROCEDURE {} must have a table name list.", first_element->get_node_name()));
     }
     /// -->
 }
