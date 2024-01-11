@@ -46,6 +46,8 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
   private:
     bool check_fail = false;
 
+    /// program symbol table
+    symtab::SymbolTable* psymtab = nullptr;
     /// true if accelerator backend is used for code generation
     bool accel_backend = false;
     /// true if the procedure or the function contains only one argument

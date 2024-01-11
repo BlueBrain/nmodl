@@ -192,3 +192,19 @@ SCENARIO("At most one DERIVATIVE block", "[visitor][semantic_analysis]") {
         }
     }
 }
+
+SCENARIO("Recursive function calls", "[visitor][semantic_analysis]") {
+    GIVEN("A file with recursive function calls") {
+        std::string nmodl_text = R"(
+            FUNCTION a() {
+                b()
+            }
+            PROCEDURE b() {
+                a()
+            }
+        )";
+        THEN("Semantic analysis should fail") {
+            REQUIRE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+}

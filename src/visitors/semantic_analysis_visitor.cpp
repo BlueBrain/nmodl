@@ -7,6 +7,7 @@
 
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "ast/breakpoint_block.hpp"
+#include "ast/function_call.hpp"
 #include "ast/function_block.hpp"
 #include "ast/function_table_block.hpp"
 #include "ast/independent_block.hpp"
@@ -38,11 +39,11 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     using namespace symtab::syminfo;
     const auto& with_prop = NmodlType::read_ion_var | NmodlType::write_ion_var;
 
-    const auto& sym_table = node.get_symbol_table();
-    assert(sym_table != nullptr);
+    psymtab = node.get_symbol_table();
+    assert(psymtab != nullptr);
 
     // get all ion variables
-    const auto& ion_variables = sym_table->get_variables_with_properties(with_prop, false);
+    const auto& ion_variables = psymtab->get_variables_with_properties(with_prop, false);
 
     /// make sure ion variables aren't redefined in a `CONSTANT` block.
     for (const auto& var: ion_variables) {
@@ -61,6 +62,7 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
 }
 
 void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
+    psymtab = node.get_symbol_table();
     /// <-- This code is for check 8
     const auto& derivative_block_nodes = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
     if (derivative_block_nodes.size() > 1) {
@@ -73,7 +75,23 @@ void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
 
 void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node) {
     /// <-- This code is for check 9
-    /// TODO: Check whether the function being called exists already in the visited_function_or_procedure_blocks
+    if (visited_function_or_procedure_blocks.empty()) {
+        return;
+    }
+    const auto func_name = node.get_node_name();
+    const auto func_already_visited = std::find_if(visited_function_or_procedure_blocks.begin(), visited_function_or_procedure_blocks.end(), [&func_name](const ast::Block* block){ return func_name == block->get_node_name(); });
+    if (func_already_visited != visited_function_or_procedure_blocks.end()) {
+        logger->critical(fmt::format("Recursive function call of \"{}\" in {}", func_name, node.get_token()->position()));
+        check_fail = true;
+        return;
+    }
+    auto func_symbol = psymtab->lookup(func_name);
+    // If symbol is not found or there are no AST nodes for it return
+    if (!func_symbol || func_symbol->get_nodes().empty()) {
+        return;
+    }
+    const auto func_block = func_symbol->get_nodes()[0];
+    func_block->accept(*this);
     /// -->
 }
 
