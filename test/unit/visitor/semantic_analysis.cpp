@@ -198,9 +198,11 @@ SCENARIO("Recursive function calls", "[visitor][semantic_analysis]") {
         std::string nmodl_text = R"(
             FUNCTION a() {
                 b()
+                a = 42
             }
             PROCEDURE b() {
-                a()
+                LOCAL x
+                x = a()
             }
         )";
         THEN("Semantic analysis should fail") {

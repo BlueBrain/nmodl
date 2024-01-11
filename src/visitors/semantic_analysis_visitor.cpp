@@ -23,6 +23,8 @@
 namespace nmodl {
 namespace visitor {
 
+using symtab::syminfo::NmodlType;
+
 bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     check_fail = false;
 
@@ -93,8 +95,10 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
         return;
     }
     auto func_symbol = psymtab->lookup(func_name);
-    // If symbol is not found or there are no AST nodes for it return
-    if (!func_symbol || func_symbol->get_nodes().empty()) {
+    // If symbol is not found or there are no AST nodes for it or it's not a function or procedure
+    // return
+    if (!func_symbol || func_symbol->get_nodes().empty() ||
+        !func_symbol->has_any_property(NmodlType::function_block | NmodlType::procedure_block)) {
         return;
     }
     const auto func_block = func_symbol->get_nodes()[0];
