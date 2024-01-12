@@ -8,7 +8,6 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "float_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#acfd3c1256b1d34de5fef97cff079cb8a", null ],
     [ "get_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3e4bdc70a4d2eb6169d656c1ec9c9fe1", null ],
     [ "global_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3af0b90beeeec4a0e17e84a11a76ecbc", null ],
-    [ "instance_struct", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8c1b83f9ee311f5d493142c5e6cfe160", null ],
     [ "int_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ad5b66ea20129a4cf098f744a8d449893", null ],
     [ "internal_method_arguments", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#af66d9e0ce20ea0c75375aa354f9446bc", null ],
     [ "internal_method_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a68499754b87764b2eba30bf38a1edbb4", null ],

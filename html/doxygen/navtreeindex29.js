@@ -1,6 +1,5 @@
 var NAVTREEINDEX29 =
 {
-"lon__difuse_8hpp.html":[3,0,0,0,0,0,0,68],
 "lon__difuse_8hpp_source.html":[3,0,0,0,0,0,0,68],
 "lookup_8cpp.html":[3,0,2,0,10,11],
 "lookup_8cpp.html#a67c2c4b0c051efa0234b307a2e4ef12d":[3,0,2,0,10,11,0],
@@ -71,8 +70,8 @@ var NAVTREEINDEX29 =
 "namespacemembers_v.html":[1,1,0,20],
 "namespacemembers_vars.html":[1,1,2],
 "namespacemembers_w.html":[1,1,0,21],
-"namespacenmodl.html":[1,0,0],
 "namespacenmodl.html":[2,0,0],
+"namespacenmodl.html":[1,0,0],
 "namespacenmodl_1_1ast.html":[2,0,0,0],
 "namespacenmodl_1_1ast.html":[1,0,0,0],
 "namespacenmodl_1_1codegen.html":[2,0,0,1],
@@ -80,14 +79,14 @@ var NAVTREEINDEX29 =
 "namespacenmodl_1_1codegen_1_1naming.html":[1,0,0,1,0],
 "namespacenmodl_1_1codegen_1_1utils.html":[1,0,0,1,1],
 "namespacenmodl_1_1crout.html":[1,0,0,2],
-"namespacenmodl_1_1details.html":[1,0,0,3],
 "namespacenmodl_1_1details.html":[2,0,0,2],
+"namespacenmodl_1_1details.html":[1,0,0,3],
 "namespacenmodl_1_1docstring.html":[1,0,0,4],
 "namespacenmodl_1_1newton.html":[1,0,0,5],
-"namespacenmodl_1_1parser.html":[2,0,0,3],
 "namespacenmodl_1_1parser.html":[1,0,0,6],
-"namespacenmodl_1_1parser_1_1diffeq.html":[1,0,0,6,0],
+"namespacenmodl_1_1parser.html":[2,0,0,3],
 "namespacenmodl_1_1parser_1_1diffeq.html":[2,0,0,3,0],
+"namespacenmodl_1_1parser_1_1diffeq.html":[1,0,0,6,0],
 "namespacenmodl_1_1printer.html":[2,0,0,4],
 "namespacenmodl_1_1printer.html":[1,0,0,7],
 "namespacenmodl_1_1pybind__wrappers.html":[2,0,0,5],
@@ -104,8 +103,8 @@ var NAVTREEINDEX29 =
 "namespacenmodl_1_1utils.html":[1,0,0,13],
 "namespacenmodl_1_1visitor.html":[1,0,0,14],
 "namespacenmodl_1_1visitor.html":[2,0,0,10],
-"namespacenmodl_1_1visitor_1_1test.html":[1,0,0,14,0],
 "namespacenmodl_1_1visitor_1_1test.html":[2,0,0,10,0],
+"namespacenmodl_1_1visitor_1_1test.html":[1,0,0,14,0],
 "namespaces.html":[1,0],
 "net__receive__block_8hpp.html":[3,0,0,0,0,0,0,73],
 "net__receive__block_8hpp_source.html":[3,0,0,0,0,0,0,73],
@@ -249,5 +248,6 @@ var NAVTREEINDEX29 =
 "perf_8cpp.html#a76c6f0aac162f66fa43da97f096120b1":[3,0,2,0,10,18,0],
 "perf_8cpp_source.html":[3,0,2,0,10,18],
 "perf__stat_8cpp.html":[3,0,1,10,6],
-"perf__stat_8cpp.html#abd71d3764885442ea947cc4b19465543":[3,0,1,10,6,0]
+"perf__stat_8cpp.html#abd71d3764885442ea947cc4b19465543":[3,0,1,10,6,0],
+"perf__stat_8cpp_source.html":[3,0,1,10,6]
 };
