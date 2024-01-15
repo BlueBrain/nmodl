@@ -28,6 +28,7 @@ try:
         .decode()
     )
     __version__ = v[: v.rfind("-")].replace("-", ".") if "-" in v else v
+    print("VERSION INFO FROM GIT:: ", v, __version__)
     # allow to override version during development/testing
     if "NMODL_WHEEL_VERSION" in os.environ:
         __version__ = os.environ['NMODL_WHEEL_VERSION']
@@ -111,7 +112,7 @@ setup(
         docs=Docs, doctest=get_sphinx_command, buildhtml=get_sphinx_command,
     ),
     zip_safe=False,
-    # myst_parser 2.0.0 want sphinx >= 6 but it leads to incompatibily with sphinxcontrib-applehelp and 
+    # myst_parser 2.0.0 want sphinx >= 6 but it leads to incompatibily with sphinxcontrib-applehelp and
     # sphinxcontrib-htmlhelp that want PEP-517 support instead of setup.py (name clash with '-' and '.')
     # So we pin low versions of packages
     setup_requires=[
