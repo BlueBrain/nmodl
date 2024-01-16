@@ -549,23 +549,54 @@ void CodegenHelperVisitor::visit_nrn_state_block(const ast::NrnStateBlock& node)
 }
 
 
-void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    info.procedures.push_back(&node);
-    node.visit_children(*this);
-    if (table_statement_used) {
-        table_statement_used = false;
-        info.functions_with_table.push_back(&node);
+void CodegenHelperVisitor::visit_var_name(const ast::VarName& node) {
+    if (function_or_procedure_stack.empty()) {
+        return;
+    }
+    auto sym = psymtab->lookup(node.get_node_name());
+    const auto properties = NmodlType::range_var | NmodlType::pointer_var |
+                            NmodlType::bbcore_pointer_var;
+    if (sym && sym->has_any_property(properties)) {
+        const auto top = function_or_procedure_stack.top();
+        auto caller_func_name =
+            top->is_function_block()
+                ? dynamic_cast<const ast::FunctionBlock*>(top)->get_node_name()
+                : dynamic_cast<const ast::ProcedureBlock*>(top)->get_node_name();
+        auto caller_func_proc_sym = psymtab->lookup(caller_func_name);
+        caller_func_proc_sym->add_properties(NmodlType::need_setdata);
     }
 }
 
 
-void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) {
-    info.functions.push_back(&node);
+void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
+    function_or_procedure_stack.push(&node);
     node.visit_children(*this);
+    if (function_call_counter) {
+        function_or_procedure_stack.pop();
+        return;
+    }
+    info.procedures.push_back(&node);
     if (table_statement_used) {
         table_statement_used = false;
         info.functions_with_table.push_back(&node);
     }
+    function_or_procedure_stack.pop();
+}
+
+
+void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) {
+    function_or_procedure_stack.push(&node);
+    node.visit_children(*this);
+    if (function_call_counter) {
+        function_or_procedure_stack.pop();
+        return;
+    }
+    info.functions.push_back(&node);
+    if (table_statement_used) {
+        table_statement_used = false;
+        info.functions_with_table.push_back(&node);
+    }
+    function_or_procedure_stack.pop();
 }
 
 
@@ -594,6 +625,7 @@ void CodegenHelperVisitor::visit_eigen_linear_solver_block(
 }
 
 void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
+    function_call_counter++;
     auto name = node.get_node_name();
     if (name == naming::NET_SEND_METHOD) {
         info.net_send_used = true;
@@ -601,6 +633,29 @@ void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
     if (name == naming::NET_EVENT_METHOD) {
         info.net_event_used = true;
     }
+    if (function_or_procedure_stack.empty()) {
+        function_call_counter--;
+        return;
+    }
+    const auto func_symbol = psymtab->lookup(node.get_node_name());
+    if (!func_symbol ||
+        !func_symbol->has_any_property(NmodlType::function_block | NmodlType::procedure_block) ||
+        func_symbol->get_nodes().empty()) {
+        function_call_counter--;
+        return;
+    }
+    const auto func_block = func_symbol->get_nodes()[0];
+    func_block->accept(*this);
+    if (func_symbol->has_any_property(NmodlType::need_setdata)) {
+        const auto top = function_or_procedure_stack.top();
+        auto caller_func_name =
+            top->is_function_block()
+                ? dynamic_cast<const ast::FunctionBlock*>(top)->get_node_name()
+                : dynamic_cast<const ast::ProcedureBlock*>(top)->get_node_name();
+        auto caller_func_proc_sym = psymtab->lookup(caller_func_name);
+        caller_func_proc_sym->add_properties(NmodlType::need_setdata);
+    }
+    function_call_counter--;
 }
 
 

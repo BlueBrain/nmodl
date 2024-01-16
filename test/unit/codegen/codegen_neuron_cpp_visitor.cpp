@@ -25,6 +25,7 @@ using namespace codegen;
 
 using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
+using symtab::syminfo::NmodlType;
 
 /// Helper for creating C codegen visitor
 std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
@@ -47,8 +48,7 @@ std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
 
 
 /// print entire code
-std::string get_neuron_cpp_code(const std::string& nmodl_text,
-                                const bool generate_gpu_code = false) {
+std::string get_neuron_cpp_code(const std::string& nmodl_text) {
     const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
     auto cvisitor = create_neuron_cpp_visitor(ast, nmodl_text, ss);
@@ -265,6 +265,50 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));
+        }
+    }
+}
+
+
+SCENARIO("Check whether PROCEDURE and FUNCTION need setdata call", "[codegen][needsetdata]") {
+    GIVEN("mod file with GLOBAL and RANGE variables used in FUNC and PROC") {
+        std::string input_nmodl = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x
+                GLOBAL s
+            }
+            PARAMETER {
+                s = 2
+            }
+            ASSIGNED {
+                x
+            }
+            PROCEDURE a() {
+                x = get_42()
+            }
+            FUNCTION b() {
+                a()
+            }
+            FUNCTION get_42() {
+                get_42 = 42
+            }
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+        cvisitor->visit_program(*ast);
+        const auto symtab = ast->get_symbol_table();
+        THEN("need_setdata property is added to needed FUNC and PROC") {
+            auto need_setdata_funcs = symtab->get_variables_with_properties(
+                NmodlType::need_setdata);
+            REQUIRE(need_setdata_funcs.size() == 2);
+            const auto a = symtab->lookup("a");
+            REQUIRE(a->has_any_property(NmodlType::need_setdata));
+            const auto b = symtab->lookup("b");
+            REQUIRE(b->has_any_property(NmodlType::need_setdata));
+            const auto get_42 = symtab->lookup("get_42");
+            REQUIRE(!get_42->has_any_property(NmodlType::need_setdata));
         }
     }
 }
