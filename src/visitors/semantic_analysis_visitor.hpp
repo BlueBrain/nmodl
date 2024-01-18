@@ -52,8 +52,8 @@ class SemanticAnalysisVisitor: public ConstAstVisitor {
     bool accel_backend = false;
     /// true if the procedure or the function contains only one argument
     bool one_arg_in_procedure_function = false;
-    /// list of visited Function or Procedure Blocks
-    std::forward_list<const ast::Block*> visited_function_or_procedure_blocks;
+    /// vector of visited Function or Procedure Blocks (used as a searchable stack)
+    std::vector<const ast::Block*> visited_function_or_procedure_blocks;
     /// true if the mod file is of type point process
     bool is_point_process = false;
     /// true if we are inside a mutex locked part

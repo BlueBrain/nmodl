@@ -108,19 +108,19 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
 
 void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     /// <-- This code is for check 1
-    visited_function_or_procedure_blocks.push_front(&node);
+    visited_function_or_procedure_blocks.push_back(&node);
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    visited_function_or_procedure_blocks.pop_front();
+    visited_function_or_procedure_blocks.pop_back();
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& node) {
     /// <-- This code is for check 1
-    visited_function_or_procedure_blocks.push_front(&node);
+    visited_function_or_procedure_blocks.push_back(&node);
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    visited_function_or_procedure_blocks.pop_front();
+    visited_function_or_procedure_blocks.pop_back();
     /// -->
 }
 
