@@ -21,7 +21,6 @@ add_library(
   local_var_rename_visitor.cpp
   localize_visitor.cpp
   loop_unroll_visitor.cpp
-  needsetdata_visitor.cpp
   neuron_solve_visitor.cpp
   perf_visitor.cpp
   rename_visitor.cpp
