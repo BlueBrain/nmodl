@@ -592,6 +592,7 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
     printer->fmt_push_block("return {}", instance_struct());
 
     const auto codegen_float_variables_size = codegen_float_variables.size();
+    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
         /// print comma only if there are codegen_int_variables needed to be printer afterwards
@@ -606,7 +607,6 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
                           print_comma ? "," : "",
                           float_var->get_name());
     }
-    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var_name = codegen_int_variables[i].symbol->get_name();
         if (int_var_name == naming::POINT_PROCESS_VARIABLE) {
