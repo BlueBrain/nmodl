@@ -672,16 +672,16 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
              codegen_int_variables[0].symbol->get_name() == naming::POINT_PROCESS_VARIABLE);
         if (float_var->is_array()) {
             printer->fmt_line("_ml.template data_array<{0}, {1}>(0){2} /* {3} */",
-                            i,
-                            float_var->get_length(),
-                            print_comma ? "," : "",
-                            float_var->get_name());
+                              i,
+                              float_var->get_length(),
+                              print_comma ? "," : "",
+                              float_var->get_name());
         } else {
             printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
-                          i,
-                          print_comma ? "," : "",
-                          float_var->get_name());
-            }
+                              i,
+                              print_comma ? "," : "",
+                              float_var->get_name());
+        }
     }
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var_name = codegen_int_variables[i].symbol->get_name();
