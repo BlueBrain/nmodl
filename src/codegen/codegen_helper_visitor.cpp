@@ -553,6 +553,9 @@ void CodegenHelperVisitor::visit_var_name(const ast::VarName& node) {
     if (visited_functions_or_procedures.empty()) {
         return;
     }
+    /// If node is either a RANGE var, a POINTER or a BBCOREPOINTER then
+    /// the FUNCTION or PROCEDURE it exists in should have the `need_setdata`
+    /// property
     auto sym = psymtab->lookup(node.get_node_name());
     const auto properties = NmodlType::range_var | NmodlType::pointer_var |
                             NmodlType::bbcore_pointer_var;
@@ -569,7 +572,7 @@ void CodegenHelperVisitor::visit_var_name(const ast::VarName& node) {
 
 
 void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
-    // Avoid recursive calls
+    /// Avoid recursive calls
     if (std::find(visited_functions_or_procedures.begin(),
                   visited_functions_or_procedures.end(),
                   &node) != visited_functions_or_procedures.end()) {
@@ -577,6 +580,8 @@ void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node
     }
     visited_functions_or_procedures.push_back(&node);
     node.visit_children(*this);
+    /// Avoid handling PROCEDUREs when they are visited from
+    /// visit_function_call
     if (under_function_call) {
         visited_functions_or_procedures.pop_back();
         return;
@@ -599,6 +604,8 @@ void CodegenHelperVisitor::visit_function_block(const ast::FunctionBlock& node) 
     }
     visited_functions_or_procedures.push_back(&node);
     node.visit_children(*this);
+    /// Avoid handling FUNCTIONs when they are visited from
+    /// visit_function_call
     if (under_function_call) {
         visited_functions_or_procedures.pop_back();
         return;
@@ -645,6 +652,7 @@ void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
     if (name == naming::NET_EVENT_METHOD) {
         info.net_event_used = true;
     }
+    /// If function call is not in a FUNCTION or PROCEDURE there is nothing else needed
     if (visited_functions_or_procedures.empty()) {
         under_function_call--;
         return;
@@ -656,6 +664,9 @@ void CodegenHelperVisitor::visit_function_call(const FunctionCall& node) {
         under_function_call--;
         return;
     }
+    /// Visit the called FUNCTION/PROCEDURE AST node to check whether
+    /// it has `need_setdata` property. If it does the currently called
+    /// function needs to have it too.
     const auto func_block = func_symbol->get_nodes()[0];
     func_block->accept(*this);
     if (func_symbol->has_any_property(NmodlType::need_setdata)) {
