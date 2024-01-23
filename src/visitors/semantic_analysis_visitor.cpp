@@ -8,7 +8,6 @@
 #include "visitors/semantic_analysis_visitor.hpp"
 #include "ast/breakpoint_block.hpp"
 #include "ast/function_block.hpp"
-#include "ast/function_call.hpp"
 #include "ast/function_table_block.hpp"
 #include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
@@ -39,11 +38,11 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     using namespace symtab::syminfo;
     const auto& with_prop = NmodlType::read_ion_var | NmodlType::write_ion_var;
 
-    psymtab = node.get_symbol_table();
-    assert(psymtab != nullptr);
+    const auto& sym_table = node.get_symbol_table();
+    assert(sym_table != nullptr);
 
     // get all ion variables
-    const auto& ion_variables = psymtab->get_variables_with_properties(with_prop, false);
+    const auto& ion_variables = sym_table->get_variables_with_properties(with_prop, false);
 
     /// make sure ion variables aren't redefined in a `CONSTANT` block.
     for (const auto& var: ion_variables) {
@@ -62,7 +61,6 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
 }
 
 void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
-    psymtab = node.get_symbol_table();
     /// <-- This code is for check 8
     const auto& derivative_block_nodes = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
     if (derivative_block_nodes.size() > 1) {
@@ -73,56 +71,27 @@ void SemanticAnalysisVisitor::visit_program(const ast::Program& node) {
     node.visit_children(*this);
 }
 
-void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node) {
-    /// <-- This code is for check 9
-    if (visited_function_or_procedure_blocks.empty()) {
-        return;
-    }
-    const auto func_name = node.get_node_name();
-    const auto func_already_visited = std::find_if(visited_function_or_procedure_blocks.begin(),
-                                                   visited_function_or_procedure_blocks.end(),
-                                                   [&func_name](const ast::Block* block) {
-                                                       return func_name == block->get_node_name();
-                                                   });
-    if (func_already_visited != visited_function_or_procedure_blocks.end()) {
-        logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: Recursive function call of \"{}\" in {}",
-                        func_name,
-                        node.get_token()->position()));
-        check_fail = true;
-        return;
-    }
-    auto func_symbol = psymtab->lookup(func_name);
-    // If symbol is not found or there are no AST nodes for it return
-    if (!func_symbol || func_symbol->get_nodes().empty()) {
-        return;
-    }
-    const auto func_block = func_symbol->get_nodes()[0];
-    func_block->accept(*this);
-    /// -->
-}
-
 void SemanticAnalysisVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     /// <-- This code is for check 1
-    visited_function_or_procedure_blocks.push_front(&node);
+    in_procedure = true;
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    visited_function_or_procedure_blocks.pop_front();
+    in_procedure = false;
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& node) {
     /// <-- This code is for check 1
-    visited_function_or_procedure_blocks.push_front(&node);
+    in_function = true;
     one_arg_in_procedure_function = node.get_parameters().size() == 1;
     node.visit_children(*this);
-    visited_function_or_procedure_blocks.pop_front();
+    in_function = false;
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& tableStmt) {
     /// <-- This code is for check 1
-    if (!visited_function_or_procedure_blocks.empty() && !one_arg_in_procedure_function) {
+    if ((in_function || in_procedure) && !one_arg_in_procedure_function) {
         logger->critical(
             "SemanticAnalysisVisitor :: The procedure or function containing the TABLE statement "
             "should contains exactly one argument.");
@@ -131,22 +100,14 @@ void SemanticAnalysisVisitor::visit_table_statement(const ast::TableStatement& t
     /// -->
     /// <-- This code is for check 3
     const auto& table_vars = tableStmt.get_table_vars();
-    const auto first_element = (*visited_function_or_procedure_blocks.cbegin());
-    const auto in_function = !visited_function_or_procedure_blocks.empty() &&
-                             first_element->is_function_block();
     if (in_function && !table_vars.empty()) {
-        logger->critical(fmt::format(
-            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION {} cannot have a table name "
-            "list.",
-            first_element->get_node_name()));
+        logger->critical(
+            "SemanticAnalysisVisitor :: TABLE statement in FUNCTION cannot have a table name "
+            "list.");
     }
-    const auto in_procedure = !visited_function_or_procedure_blocks.empty() &&
-                              first_element->is_procedure_block();
     if (in_procedure && table_vars.empty()) {
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: TABLE statement in PROCEDURE {} must have a "
-                        "table name list.",
-                        first_element->get_node_name()));
+            "SemanticAnalysisVisitor :: TABLE statement in PROCEDURE must have a table name list.");
     }
     /// -->
 }
