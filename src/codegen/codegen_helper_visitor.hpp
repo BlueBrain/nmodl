@@ -65,11 +65,12 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     /// table statement found
     bool table_statement_used = false;
 
-    /// if visiting function or procedure from visit_function_call counter is increased
-    int function_call_counter{};
+    /// under_function_call is increased when a function/procedure is visited from
+    /// visit_function_call
+    int under_function_call{};
 
-    /// stack of currently visited functions or procedures
-    std::stack<const ast::Block*> function_or_procedure_stack;
+    /// Vector of currently visited functions or procedures (used as a searchable stack)
+    std::vector<const ast::Block*> visited_functions_or_procedures;
 
     /// symbol table for the program
     symtab::SymbolTable* psymtab = nullptr;
