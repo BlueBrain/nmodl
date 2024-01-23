@@ -896,8 +896,7 @@ void CodegenCppVisitor::setup(const Program& node) {
     update_index_semantics();
     rename_function_arguments();
 
-    /// TODO: Calculate \c ppvar_count properly
-    info.ppvar_count = int_variables_size() + info.emit_cvode;
+    info.int_variable_count = int_variables_size();
 }
 
 std::string CodegenCppVisitor::compute_method_name(BlockType type) const {

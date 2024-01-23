@@ -856,8 +856,8 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         )CODE");
         printer->chain_block("else");
     }
-    if (info.ppvar_count) {
-        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);", info.ppvar_count);
+    if (info.int_variable_count) {
+        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);", info.int_variable_count);
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
     printer->add_multi_line(R"CODE(
@@ -885,7 +885,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
 
     printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
 
-    if (info.ppvar_count) {
+    if (info.int_variable_count) {
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
 
