@@ -672,11 +672,19 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("register_mech({});", register_mech_args);
     }
 
-    // type related information
+    /// type related information
     printer->add_newline();
     printer->fmt_line("mech_type = nrn_get_mechtype({}[1]);", get_channel_info_var_name());
 
-    // More things to add here
+    /// Call _nrn_mechanism_register_data_fields() with the correct arguments
+    /// Geenerated code follows the style underneath
+    ///
+    ///     _nrn_mechanism_register_data_fields(mech_type,
+    ///         _nrn_mechanism_field<double>{"var_name"}, /* float var index 0 */
+    ///         ...
+    ///     );
+    ///
+    /// TODO: More things to add here
     printer->add_line("_nrn_mechanism_register_data_fields(mech_type,");
     printer->increase_indent();
     const auto codegen_float_variables_size = codegen_float_variables.size();
