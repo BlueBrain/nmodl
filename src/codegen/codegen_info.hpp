@@ -256,11 +256,8 @@ struct CodegenInfo {
     /// typically equal to number of primes
     int num_equations = 0;
 
-    /// number of ppvar variables (ints and pointers)
-    /// In \c nocmodl it's calculated like the following:
-    /// ppvar_count = ioncount + diamdec + pointercount + areadec + net_send_seen_
-    /// + watch_seen_ + for_netcons_ + cvode_emit
-    int ppvar_count;
+    /// number of semantic variables
+    int semantic_variable_count;
 
     /// True if we have to emit CVODE code
     /// TODO: Figure out when this needs to be true

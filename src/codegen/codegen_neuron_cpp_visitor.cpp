@@ -506,10 +506,13 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
 }
 
 
-/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symbol,
                                                           bool use_instance) const {
-    return symbol->get_name();
+    if (use_instance) {
+        return fmt::format("inst.{}->{}", naming::INST_GLOBAL_MEMBER, symbol->get_name());
+    } else {
+        return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
+    }
 }
 
 
@@ -672,6 +675,8 @@ void CodegenNeuronCppVisitor::print_sdlists_init([[maybe_unused]] bool print_ini
 
 
 void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_initializers) {
+    const auto value_initialize = print_initializers ? "{}" : "";
+
     /// TODO: Print only global variables printed in NEURON
     printer->add_newline(2);
     printer->add_line("/* NEURON global variables */");
@@ -702,6 +707,69 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
                           : -1);
 
     printer->add_line("static _nrn_mechanism_std_vector<Datum> _extcall_thread;");
+
+    // Start printing the CNRN-style global variables.
+    auto float_type = default_float_data_type();
+    printer->add_newline(2);
+    printer->add_line("/** all global variables */");
+    printer->fmt_push_block("struct {}", global_struct());
+
+    if (!info.ions.empty()) {
+        // TODO implement these when needed.
+    }
+
+    if (!info.vectorize && !info.top_local_variables.empty()) {
+        throw std::runtime_error("Not implemented, global vectorize something.");
+    }
+
+    if (!info.thread_variables.empty()) {
+        throw std::runtime_error("Not implemented, global thread variables.");
+    }
+
+    if (info.table_count > 0) {
+        throw std::runtime_error("Not implemented, global table count.");
+    }
+
+    for (const auto& var: info.state_vars) {
+        auto name = var->get_name() + "0";
+        auto symbol = program_symtab->lookup(name);
+        if (symbol == nullptr) {
+            printer->fmt_line("{} {}{};", float_type, name, value_initialize);
+            codegen_global_variables.push_back(make_symbol(name));
+        }
+    }
+
+    for (const auto& var: info.global_variables) {
+        auto name = var->get_name();
+        auto length = var->get_length();
+        if (var->is_array()) {
+            printer->fmt_line("{} {}[{}] /* TODO init const-array */;", float_type, name, length);
+        } else {
+            double value{};
+            if (auto const& value_ptr = var->get_value()) {
+                value = *value_ptr;
+            }
+            printer->fmt_line("{} {}{};",
+                              float_type,
+                              name,
+                              print_initializers ? fmt::format("{{{:g}}}", value) : std::string{});
+        }
+        codegen_global_variables.push_back(var);
+    }
+
+
+    for (const auto& f: info.function_tables) {
+        throw std::runtime_error("Not implemented, global function tables.");
+    }
+
+    if (info.vectorize && info.thread_data_index) {
+        throw std::runtime_error("Not implemented, global vectorize something else.");
+    }
+
+    printer->pop_block(";");
+
+    print_global_var_struct_assertions();
+    print_global_var_struct_decl();
 }
 
 
@@ -858,20 +926,26 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
 
     const auto codegen_float_variables_size = codegen_float_variables.size();
     const auto codegen_int_variables_size = codegen_int_variables.size();
-    const auto needs_comma = [&](int i) {
-        return i < codegen_float_variables_size - 1 ||
-               (codegen_int_variables_size > 0 &&
-                codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE);
-    };
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
+        /// print comma only if there are codegen_int_variables needed to be printer afterwards
+        const auto print_comma =
+            i < codegen_float_variables_size - 1 ||
+            (codegen_int_variables_size > 0 &&
+             codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE) ||
+            (codegen_int_variables_size > 1 &&
+             codegen_int_variables[0].symbol->get_name() == naming::POINT_PROCESS_VARIABLE);
         if (float_var->is_array()) {
-            printer->fmt_line("_ml.template data_array<{}, {}>(0){}",
+            printer->fmt_line("_ml.template data_array<{0}, {1}>(0){2} /* {3} */",
                               i,
                               float_var->get_length(),
-                              needs_comma(i) ? "," : "");
+                              print_comma ? "," : "",
+                              float_var->get_name());
         } else {
-            printer->fmt_line("&_ml.template fpfield<{}>(0){}", i, needs_comma(i) ? "," : "");
+            printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
+                              i,
+                              print_comma ? "," : "",
+                              float_var->get_name());
         }
     }
     for (int i = 0; i < codegen_int_variables_size; ++i) {
@@ -879,13 +953,12 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
         if (int_var_name == naming::POINT_PROCESS_VARIABLE) {
             continue;
         }
+        const auto print_comma = i < codegen_int_variables_size - 1 &&
+                                 codegen_int_variables[i + 1].symbol->get_name() !=
+                                     naming::POINT_PROCESS_VARIABLE;
         printer->fmt_line("_ml.template dptr_field<{0}>(0){1} /* {2} */",
                           i,
-                          i < codegen_int_variables_size - 1 &&
-                                  codegen_int_variables[i + 1].symbol->get_name() !=
-                                      naming::POINT_PROCESS_VARIABLE
-                              ? ","
-                              : "",
+                          print_comma ? "," : "",
                           int_var_name);
     }
     printer->pop_block(";");
@@ -940,11 +1013,19 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("register_mech({});", register_mech_args);
     }
 
-    // type related information
+    /// type related information
     printer->add_newline();
     printer->fmt_line("mech_type = nrn_get_mechtype({}[1]);", get_channel_info_var_name());
 
-    // More things to add here
+    /// Call _nrn_mechanism_register_data_fields() with the correct arguments
+    /// Geenerated code follows the style underneath
+    ///
+    ///     _nrn_mechanism_register_data_fields(mech_type,
+    ///         _nrn_mechanism_field<double>{"var_name"}, /* float var index 0 */
+    ///         ...
+    ///     );
+    ///
+    /// TODO: More things to add here
     printer->add_line("_nrn_mechanism_register_data_fields(mech_type,");
     printer->increase_indent();
     const auto codegen_float_variables_size = codegen_float_variables.size();
@@ -1049,11 +1130,11 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
         }
     }
 
-    // printer->fmt_line("{}* {}{};",
-    //                   global_struct(),
-    //                   naming::INST_GLOBAL_MEMBER,
-    //                   print_initializers ? fmt::format("{{&{}}}", global_struct_instance())
-    //                                      : std::string{});
+    printer->fmt_line("{}* {}{};",
+                      global_struct(),
+                      naming::INST_GLOBAL_MEMBER,
+                      print_initializers ? fmt::format("{{&{}}}", global_struct_instance())
+                                         : std::string{});
     printer->pop_block(";");
 }
 
@@ -1133,8 +1214,9 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         )CODE");
         printer->chain_block("else");
     }
-    if (info.ppvar_count) {
-        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);", info.ppvar_count);
+    if (info.semantic_variable_count) {
+        printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);",
+                          info.semantic_variable_count);
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
     printer->add_multi_line(R"CODE(
@@ -1162,7 +1244,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
 
     printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
 
-    if (info.ppvar_count) {
+    if (info.semantic_variable_count) {
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
 
