@@ -301,16 +301,16 @@ SCENARIO("Check whether PROCEDURE and FUNCTION need setdata call", "[codegen][ne
         auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
         cvisitor->visit_program(*ast);
         const auto symtab = ast->get_symbol_table();
-        THEN("need_setdata property is added to needed FUNC and PROC") {
-            auto need_setdata_funcs = symtab->get_variables_with_properties(
-                NmodlType::need_setdata);
-            REQUIRE(need_setdata_funcs.size() == 2);
+        THEN("use_range_ptr_var property is added to needed FUNC and PROC") {
+            auto use_range_ptr_var_funcs = symtab->get_variables_with_properties(
+                NmodlType::use_range_ptr_var);
+            REQUIRE(use_range_ptr_var_funcs.size() == 2);
             const auto a = symtab->lookup("a");
-            REQUIRE(a->has_any_property(NmodlType::need_setdata));
+            REQUIRE(a->has_any_property(NmodlType::use_range_ptr_var));
             const auto b = symtab->lookup("b");
-            REQUIRE(b->has_any_property(NmodlType::need_setdata));
+            REQUIRE(b->has_any_property(NmodlType::use_range_ptr_var));
             const auto get_42 = symtab->lookup("get_42");
-            REQUIRE(!get_42->has_any_property(NmodlType::need_setdata));
+            REQUIRE(!get_42->has_any_property(NmodlType::use_range_ptr_var));
         }
     }
 }

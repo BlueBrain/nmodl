@@ -220,7 +220,7 @@ enum class NmodlType : enum_type {
     codegen_var = 1L << 33,
 
     /// FUNCTION or PROCEDURE needs setdata check
-    need_setdata = 1L << 34
+    use_range_ptr_var = 1L << 34
 };
 
 template <typename T>

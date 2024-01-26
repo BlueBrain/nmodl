@@ -33,10 +33,10 @@ namespace visitor {
  * It visits the \c FunctionBlock s and \c ProcedureBlock s and if there is a \c FunctionCall
  * in those, it visits the \c FunctionBlock or \c ProcedureBlock of the \c FunctionCall.
  * Currently it only checks whether in this path of function calls there is any use of \c RANGE ,
- * \c POINTER or \c BBCOREPOINTER variable. In case there is it adds the \c need_setdata property
- * in the \c Symbol of the function or procedure in the program \c SymbolTable and does the same
- * recursively for all the caller functions.
- * The \c need_setdata property is used later in the \c CodegenNeuronCppVisitor .
+ * \c POINTER or \c BBCOREPOINTER variable. In case there is it adds the \c use_range_ptr_var
+ * property in the \c Symbol of the function or procedure in the program \c SymbolTable and does the
+ * same recursively for all the caller functions. The \c use_range_ptr_var property is used later in
+ * the \c CodegenNeuronCppVisitor .
  *
  */
 class FunctionCallpathVisitor: public ConstAstVisitor {
@@ -48,7 +48,6 @@ class FunctionCallpathVisitor: public ConstAstVisitor {
     symtab::SymbolTable* psymtab = nullptr;
 
   public:
-
     void visit_var_name(const ast::VarName& node) override;
 
     void visit_function_call(const ast::FunctionCall& node) override;
