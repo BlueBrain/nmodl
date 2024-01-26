@@ -12,10 +12,8 @@
  * \brief \copybrief nmodl::codegen::CodegenHelperVisitor
  */
 
-#include <stack>
 #include <string>
 
-#include "ast/block.hpp"
 #include "codegen/codegen_info.hpp"
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
@@ -65,13 +63,6 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     /// table statement found
     bool table_statement_used = false;
 
-    /// under_function_call is increased when a function/procedure is visited from
-    /// visit_function_call
-    int under_function_call{};
-
-    /// Vector of currently visited functions or procedures (used as a searchable stack)
-    std::vector<const ast::Block*> visited_functions_or_procedures;
-
     /// symbol table for the program
     symtab::SymbolTable* psymtab = nullptr;
 
@@ -96,7 +87,6 @@ class CodegenHelperVisitor: public visitor::ConstAstVisitor {
     void visit_function_call(const ast::FunctionCall& node) override;
     void visit_binary_expression(const ast::BinaryExpression& node) override;
     void visit_conductance_hint(const ast::ConductanceHint& node) override;
-    void visit_var_name(const ast::VarName& node) override;
     void visit_procedure_block(const ast::ProcedureBlock& node) override;
     void visit_function_block(const ast::FunctionBlock& node) override;
     void visit_function_table_block(const ast::FunctionTableBlock& node) override;

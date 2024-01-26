@@ -12,6 +12,7 @@
 #include "codegen/codegen_neuron_cpp_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
+#include "visitors/function_callpath_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
@@ -39,6 +40,7 @@ std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
     InlineVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
+    FunctionCallpathVisitor().visit_program(*ast);
 
     /// create C code generation visitor
     auto cv = std::make_shared<CodegenNeuronCppVisitor>("_test", ss, "double", false);
