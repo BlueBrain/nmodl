@@ -196,7 +196,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 }
 
 
-/// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
                                                           const std::string& name) {
     printer->add_newline(2);
@@ -220,7 +219,6 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
 }
 
 
-/// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
     auto name = node.get_node_name();
 
@@ -232,13 +230,11 @@ void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& 
 }
 
 
-/// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_procedure(const ast::ProcedureBlock& node) {
     print_function_procedure_helper(node);
 }
 
 
-/// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
     auto name = node.get_node_name();
 
@@ -371,13 +367,11 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
 /****************************************************************************************/
 
 
-/// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::internal_method_arguments() {
     return "_ml, id, _ppvar, _thread, _nt";
 }
 
 
-/// TODO: Edit for NEURON
 CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
     ParamVector params;
     params.emplace_back("", "_nrn_mechanism_cache_range*", "", "_ml");
