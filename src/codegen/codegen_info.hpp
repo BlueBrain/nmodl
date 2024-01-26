@@ -367,11 +367,6 @@ struct CodegenInfo {
     /// function or procedures with table statement
     std::vector<const ast::Block*> functions_with_table;
 
-    /// function or procedure has RANGE or POINTER variable or calls
-    /// function or procedure that has one of those and needs to throw
-    /// if setdata() is not priorly called
-    std::unordered_set<const ast::Block*> function_proc_need_setdata;
-
     /// represent conductance statements used in mod file
     std::vector<Conductance> conductances;
 

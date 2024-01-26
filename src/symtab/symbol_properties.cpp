@@ -159,8 +159,8 @@ std::vector<std::string> to_string_vector(const NmodlType& obj) {
         properties.emplace_back("codegen_var");
     }
 
-    if (has_property(obj, NmodlType::need_setdata)) {
-        properties.emplace_back("need_setdata");
+    if (has_property(obj, NmodlType::use_range_ptr_var)) {
+        properties.emplace_back("use_range_ptr_var");
     }
 
     return properties;
