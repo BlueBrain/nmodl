@@ -289,7 +289,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _nt = static_cast<NrnThread*>(_pnt->_vnt);
         )CODE");
     } else if (wrapper_type == InterpreterWrapper::HOC) {
-        if (program_symtab->lookup(block_name)->has_all_properties(NmodlType::need_setdata)) {
+        if (program_symtab->lookup(block_name)->has_all_properties(NmodlType::use_range_ptr_var)) {
             printer->push_block("if (!_prop_id)");
             printer->fmt_line(
                 "hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the "
