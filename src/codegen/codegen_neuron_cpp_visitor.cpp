@@ -94,8 +94,8 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 
 void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
     if (info.point_process) {
-        printer->add_line("/* Point Process specific functions */");
         printer->add_multi_line(R"CODE(
+            /* Point Process specific functions */
             static void* _hoc_create_pnt(Object* _ho) {
                 return create_point_process(_pointtype, _ho);
             }
@@ -124,13 +124,9 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
             static double _hoc_loc_pnt(void* _vptr) {
                 return loc_point_process(_pointtype, _vptr);
             }
-        )CODE");
-        printer->add_multi_line(R"CODE(
             static double _hoc_has_loc(void* _vptr) {
                 return has_loc_point(_vptr);
             }
-        )CODE");
-        printer->add_multi_line(R"CODE(
             static double _hoc_get_loc_pnt(void* _vptr) {
                 return (get_loc_point_process(_vptr));
             }
@@ -276,8 +272,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     } else {
         printer->fmt_push_block("static double _npy_{}(Prop* _prop)", block_name);
     }
-    printer->add_line("double _r{};");
     printer->add_multi_line(R"CODE(
+        double _r{};
         Datum* _ppvar;
         Datum* _thread;
         NrnThread* _nt;
