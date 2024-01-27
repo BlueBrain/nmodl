@@ -214,10 +214,10 @@ enum class NmodlType : enum_type {
     discrete_block = 1L << 31,
 
     /// Define variable / macro
-    define = 1L << 32,
+    define = 1LL << 32,
 
     /// Codegen specific variable
-    codegen_var = 1L << 33
+    codegen_var = 1LL << 33
 };
 
 template <typename T>
