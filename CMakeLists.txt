@@ -216,6 +216,9 @@ if(NOT NMODL_AS_SUBPROJECT AND NMODL_ENABLE_TESTS)
 
   if(NMODL_ENABLE_USECASES)
     add_subdirectory(test/usecases)
+    # usecases require numpy and neuron
+    cpp_cc_find_python_module(numpy REQUIRED)
+    cpp_cc_find_python_module(neuron REQUIRED)
   endif()
 endif()
 
