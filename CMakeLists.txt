@@ -165,7 +165,7 @@ include(cmake/hpc-coding-conventions/cpp/cmake/bbp-find-python-module.cmake)
 cpp_cc_find_python_module(jinja2 2.9.3 REQUIRED)
 # only require pytest if the test flag is set
 if(NMODL_ENABLE_TESTS)
-    cpp_cc_find_python_module(pytest 3.3.0 REQUIRED)
+  cpp_cc_find_python_module(pytest 3.3.0 REQUIRED)
 endif()
 cpp_cc_find_python_module(sympy 1.3 REQUIRED)
 cpp_cc_find_python_module(textwrap 0.9 REQUIRED)
