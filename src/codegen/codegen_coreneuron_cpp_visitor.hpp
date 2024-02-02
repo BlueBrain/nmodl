@@ -557,7 +557,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param name The ion variable name
      * \return     The ion read variable name
      */
-    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
+    std::pair<std::string, std::string> read_ion_variable_name(const std::string& name) const;
 
 
     /**
@@ -565,7 +565,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param name The ion variable name
      * \return     The ion write variable name
      */
-    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
+    std::pair<std::string, std::string> write_ion_variable_name(const std::string& name) const;
 
 
     /**

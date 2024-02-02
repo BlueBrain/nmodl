@@ -1190,13 +1190,13 @@ std::string CodegenCoreneuronCppVisitor::register_mechanism_arguments() const {
 
 
 std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::read_ion_variable_name(
-    const std::string& name) {
+    const std::string& name) const {
     return {name, naming::ION_VARNAME_PREFIX + name};
 }
 
 
 std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::write_ion_variable_name(
-    const std::string& name) {
+    const std::string& name) const {
     return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
