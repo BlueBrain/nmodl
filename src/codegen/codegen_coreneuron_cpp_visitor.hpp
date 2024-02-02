@@ -122,33 +122,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * For a given output block type, return statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return minimal statements for all read ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the reading of ion variables
-     */
-    std::vector<std::string> ion_read_statements_optimized(BlockType type) const;
-
-
-    /**
-     * For a given output block type, return statements for writing back ion variables
-     *
-     * \param type The type of code block being generated
-     * \return     A \c vector of strings representing the write-back of ion variables
-     */
-    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
-
-
-    /**
      * Process a token in a verbatim block for possible variable renaming
      * \param token The verbatim token to be processed
      * \return      The code after variable renaming

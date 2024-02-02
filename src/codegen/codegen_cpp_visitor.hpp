@@ -590,6 +590,35 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     std::vector<IndexVariableInfo> get_int_variables();
 
 
+    /**
+     * For a given output block type, return statements for all read ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the reading of ion variables
+     */
+    std::vector<std::string> ion_read_statements(BlockType type) const;
+
+
+    /**
+     * For a given output block type, return minimal statements for all read ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the reading of ion variables
+     */
+    std::vector<std::string> ion_read_statements_optimized(BlockType type) const;
+
+
+    /**
+     * For a given output block type, return statements for writing back ion variables
+     *
+     * \param type The type of code block being generated
+     * \return     A \c vector of strings representing the write-back of ion variables
+     */
+    std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
+
+
+
+
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/
