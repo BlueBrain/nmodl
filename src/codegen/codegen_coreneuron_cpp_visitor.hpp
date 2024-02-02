@@ -113,15 +113,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine the variable name for the "current" used in breakpoint block taking into account
-     * intermediate code transformations.
-     * \param current The variable name for the current used in the model
-     * \return        The name for the current to be printed in C++
-     */
-    std::string breakpoint_current(std::string current) const;
-
-
-    /**
      * Process a token in a verbatim block for possible variable renaming
      * \param token The verbatim token to be processed
      * \return      The code after variable renaming
@@ -526,22 +517,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Return ion variable name and corresponding ion read variable name
-     * \param name The ion variable name
-     * \return     The ion read variable name
-     */
-    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
-
-
-    /**
-     * Return ion variable name and corresponding ion write variable name
-     * \param name The ion variable name
-     * \return     The ion write variable name
-     */
-    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
-
-
-    /**
      * Generate Function call statement for nrn_wrote_conc
      * \param ion_name      The name of the ion variable
      * \param concentration The name of the concentration variable
@@ -550,7 +525,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string conc_write_statement(const std::string& ion_name,
                                      const std::string& concentration,
-                                     int index);
+                                     int index) override;
 
     /**
      * Process shadow update statement

@@ -88,33 +88,6 @@ int CodegenCoreneuronCppVisitor::position_of_int_var(const std::string& name) co
 
 
 /**
- * \details Current variable used in breakpoint block could be local variable.
- * In this case, neuron has already renamed the variable name by prepending
- * "_l". In our implementation, the variable could have been renamed by
- * one of the pass. And hence, we search all local variables and check if
- * the variable is renamed. Note that we have to look into the symbol table
- * of statement block and not breakpoint.
- */
-std::string CodegenCoreneuronCppVisitor::breakpoint_current(std::string current) const {
-    auto breakpoint = info.breakpoint_node;
-    if (breakpoint == nullptr) {
-        return current;
-    }
-    auto symtab = breakpoint->get_statement_block()->get_symbol_table();
-    auto variables = symtab->get_variables_with_properties(NmodlType::local_var);
-    for (const auto& var: variables) {
-        auto renamed_name = var->get_name();
-        auto original_name = var->get_original_name();
-        if (current == original_name) {
-            current = renamed_name;
-            break;
-        }
-    }
-    return current;
-}
-
-
-/**
  * \details Often top level verbatim blocks use variables with old names.
  * Here we process if we are processing verbatim block at global scope.
  */
@@ -1079,18 +1052,6 @@ std::string CodegenCoreneuronCppVisitor::register_mechanism_arguments() const {
                        nrn_init,
                        nrn_private_constructor,
                        nrn_private_destructor);
-}
-
-
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::read_ion_variable_name(
-    const std::string& name) {
-    return {name, naming::ION_VARNAME_PREFIX + name};
-}
-
-
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::write_ion_variable_name(
-    const std::string& name) {
-    return {naming::ION_VARNAME_PREFIX + name, name};
 }
 
 

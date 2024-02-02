@@ -617,6 +617,13 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     std::vector<ShadowUseStatement> ion_write_statements(BlockType type);
 
 
+    /**
+     * Determine the variable name for the "current" used in breakpoint block taking into account
+     * intermediate code transformations.
+     * \param current The variable name for the current used in the model
+     * \return        The name for the current to be printed in C++
+     */
+    std::string breakpoint_current(std::string current) const;
 
 
     /****************************************************************************************/
@@ -837,6 +844,16 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         return std::make_shared<symtab::Symbol>(name, ModToken());
     }
 
+    /**
+     * Generate Function call statement for nrn_wrote_conc
+     * \param ion_name      The name of the ion variable
+     * \param concentration The name of the concentration variable
+     * \param index
+     * \return              The string representing the function call
+     */
+    virtual std::string conc_write_statement(const std::string& ion_name,
+                                     const std::string& concentration,
+                                     int index) = 0;
 
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
@@ -914,6 +931,30 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual std::string get_variable_name(const std::string& name,
                                           bool use_instance = true) const = 0;
+
+
+    /**
+     * Return ion variable name and corresponding ion read variable name.
+     *
+     * Example:
+     *   {"ena", "ion_ena"} = read_ion_variable_name("ena");
+     *
+     * \param name The ion variable name
+     * \return     The ion read variable name
+     */
+    static std::pair<std::string, std::string> read_ion_variable_name(const std::string& name);
+
+
+    /**
+     * Return ion variable name and corresponding ion write variable name
+     *
+     * Example:
+     *   {"ion_ena", "ena"} = write_ion_variable_name("ena");
+     *
+     * \param name The ion variable name
+     * \return     The ion write variable name
+     */
+    static std::pair<std::string, std::string> write_ion_variable_name(const std::string& name);
 
 
     /****************************************************************************************/

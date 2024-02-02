@@ -315,6 +315,47 @@ std::vector<ShadowUseStatement> CodegenCppVisitor::ion_write_statements(BlockTyp
     return statements;
 }
 
+/**
+ * \details Current variable used in breakpoint block could be local variable.
+ * In this case, neuron has already renamed the variable name by prepending
+ * "_l". In our implementation, the variable could have been renamed by
+ * one of the pass. And hence, we search all local variables and check if
+ * the variable is renamed. Note that we have to look into the symbol table
+ * of statement block and not breakpoint.
+ */
+std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
+    auto breakpoint = info.breakpoint_node;
+    if (breakpoint == nullptr) {
+        return current;
+    }
+    auto symtab = breakpoint->get_statement_block()->get_symbol_table();
+    auto variables = symtab->get_variables_with_properties(NmodlType::local_var);
+    for (const auto& var: variables) {
+        auto renamed_name = var->get_name();
+        auto original_name = var->get_original_name();
+        if (current == original_name) {
+            current = renamed_name;
+            break;
+        }
+    }
+    return current;
+}
+
+
+/****************************************************************************************/
+/*                         Routines for returning variable name                         */
+/****************************************************************************************/
+
+std::pair<std::string, std::string> CodegenCppVisitor::read_ion_variable_name(
+    const std::string& name) {
+    return {name, naming::ION_VARNAME_PREFIX + name};
+}
+
+
+std::pair<std::string, std::string> CodegenCppVisitor::write_ion_variable_name(
+    const std::string& name) {
+    return {naming::ION_VARNAME_PREFIX + name, name};
+}
 
 
 /****************************************************************************************/
