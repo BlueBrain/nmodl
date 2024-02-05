@@ -8,6 +8,7 @@ license = {file = "LICENSE"}
 readme = {file = "README.rst", content-type = "text/x-rst"}
 dynamic = ["version"]
 dependencies = [
+    "find_libpython",
     "sympy>=1.3",
     "Jinja2>=2.9.3",
     "PyYAML>=3.13",
