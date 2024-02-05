@@ -53,7 +53,7 @@ build_wheel_linux() {
     rm -rf dist _skbuild
     # Workaround for https://github.com/pypa/manylinux/issues/1309
     git config --global --add safe.directory "*"
-    python -m pip wheel --dist-dir dist/ -vvv .
+    python -m pip wheel --wheel-dir dist/ -vvv .
 
     echo " - Repairing..."
     auditwheel repair dist/*.whl
@@ -73,7 +73,7 @@ build_wheel_osx() {
 
     echo " - Building..."
     rm -rf dist _skbuild
-    python -m pip wheel --dist-dir dist/ -vvv .
+    python -m pip wheel --wheel-dir dist/ -vvv .
 
     echo " - Repairing..."
     delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
