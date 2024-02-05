@@ -406,6 +406,12 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /*                     Common helper routines accross codegen functions                 */
     /****************************************************************************************/
 
+    /**
+     * Check if a structure for ion variables is required
+     * \return \c true if a structure fot ion variables must be generated
+     */
+    bool ion_variable_struct_required() const;
+
 
     /**
      * Generate the string representing the procedure parameter declaration
@@ -889,6 +895,13 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /****************************************************************************************/
     /*                         Routines for returning variable name                         */
     /****************************************************************************************/
+
+    /**
+     * Determine the updated name if the ion variable has been optimized
+     * \param name The ion variable name
+     * \return     The updated name of the variable has been optimized (e.g. \c ena --> \c ion_ena)
+     */
+    std::string update_if_ion_variable_name(const std::string& name) const;
 
 
     /**

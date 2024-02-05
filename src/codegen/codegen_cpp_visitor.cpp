@@ -25,6 +25,10 @@ using symtab::syminfo::NmodlType;
 /*                     Common helper routines accross codegen functions                 */
 /****************************************************************************************/
 
+bool CodegenCppVisitor::ion_variable_struct_required() const {
+    return optimize_ion_variable_copies() && info.ion_has_write_variable();
+}
+
 
 std::string CodegenCppVisitor::get_parameter_str(const ParamVector& params) {
     std::string str;
@@ -368,6 +372,24 @@ std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
 /****************************************************************************************/
 /*                         Routines for returning variable name                         */
 /****************************************************************************************/
+
+std::string CodegenCppVisitor::update_if_ion_variable_name(
+    const std::string& name) const {
+    std::string result(name);
+    if (ion_variable_struct_required()) {
+        if (info.is_ion_read_variable(name)) {
+            result = naming::ION_VARNAME_PREFIX + name;
+        }
+        if (info.is_ion_write_variable(name)) {
+            result = "ionvar." + name;
+        }
+        if (info.is_current(name)) {
+            result = "ionvar." + name;
+        }
+    }
+    return result;
+}
+
 
 std::pair<std::string, std::string> CodegenCppVisitor::read_ion_variable_name(
     const std::string& name) {

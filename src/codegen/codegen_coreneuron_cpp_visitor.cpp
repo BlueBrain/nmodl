@@ -122,11 +122,6 @@ std::string CodegenCoreneuronCppVisitor::process_verbatim_token(const std::strin
 }
 
 
-bool CodegenCoreneuronCppVisitor::ion_variable_struct_required() const {
-    return optimize_ion_variable_copies() && info.ion_has_write_variable();
-}
-
-
 /**
  * \details This can be override in the backend. For example, parameters can be constant
  * except in INITIAL block where they are set to 0. As initial block is/can be
@@ -1264,24 +1259,6 @@ std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& 
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
-}
-
-
-std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(
-    const std::string& name) const {
-    std::string result(name);
-    if (ion_variable_struct_required()) {
-        if (info.is_ion_read_variable(name)) {
-            result = naming::ION_VARNAME_PREFIX + name;
-        }
-        if (info.is_ion_write_variable(name)) {
-            result = "ionvar." + name;
-        }
-        if (info.is_current(name)) {
-            result = "ionvar." + name;
-        }
-    }
-    return result;
 }
 
 
