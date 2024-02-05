@@ -527,20 +527,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
                                      const std::string& concentration,
                                      int index) override;
 
-    /**
-     * Process shadow update statement
-     *
-     * If the statement requires reduction then add it to vector of reduction statement and return
-     * statement using shadow update
-     *
-     * \param statement The statement that might require shadow updates
-     * \param type      The target backend code block type
-     * \return          The generated target backend code
-     */
-    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
-                                                BlockType type);
-
-
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
     /****************************************************************************************/

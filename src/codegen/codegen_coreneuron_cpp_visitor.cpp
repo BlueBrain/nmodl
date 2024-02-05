@@ -1077,28 +1077,6 @@ std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string&
 }
 
 
-/**
- * If mechanisms dependency level execution is enabled then certain updates
- * like ionic current contributions needs to be atomically updated. In this
- * case we first update current mechanism's shadow vector and then add statement
- * to queue that will be used in reduction queue.
- */
-std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(
-    const ShadowUseStatement& statement,
-    BlockType /* type */) {
-    // when there is no operator or rhs then that statement doesn't need shadow update
-    if (statement.op.empty() && statement.rhs.empty()) {
-        auto text = statement.lhs + ";";
-        return text;
-    }
-
-    // return regular statement
-    auto lhs = get_variable_name(statement.lhs);
-    auto text = fmt::format("{} {} {};", lhs, statement.op, statement.rhs);
-    return text;
-}
-
-
 /****************************************************************************************/
 /*               Code-specific printing routines for code generation                    */
 /****************************************************************************************/

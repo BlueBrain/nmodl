@@ -618,6 +618,20 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
+     * Process shadow update statement
+     *
+     * If the statement requires reduction then add it to vector of reduction statement and return
+     * statement using shadow update
+     *
+     * \param statement The statement that might require shadow updates
+     * \param type      The target backend code block type
+     * \return          The generated target backend code
+     */
+    std::string process_shadow_update_statement(const ShadowUseStatement& statement,
+                                                BlockType type);
+
+
+    /**
      * Determine the variable name for the "current" used in breakpoint block taking into account
      * intermediate code transformations.
      * \param current The variable name for the current used in the model
