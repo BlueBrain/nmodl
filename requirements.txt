@@ -1,8 +1,0 @@
-Jinja2>=2.9.3
-PyYAML>=3.13
-pytest
-pytest-cov
-sympy
-numpy
-find_libpython
-scikit-build

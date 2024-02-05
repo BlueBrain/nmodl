@@ -138,7 +138,6 @@ void init_symtab_module(py::module& m);
 
 PYBIND11_MODULE(_nmodl, m_nmodl) {
     m_nmodl.doc() = "NMODL : Source-to-Source Code Generation Framework";
-    m_nmodl.attr("__version__") = nmodl::Version::NMODL_VERSION;
 
     py::class_<nmodl::parser::NmodlDriver> _{m_nmodl, "nmodl::parser::NmodlDriver"};
     py::class_<nmodl::PyNmodlDriver, nmodl::parser::NmodlDriver> nmodl_driver(
