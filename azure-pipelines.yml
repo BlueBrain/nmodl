@@ -239,7 +239,7 @@ stages:
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
-        packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
+        packaging/test_wheel.bash python$(python.version) wheelhouse/NMODL*.whl
       condition: succeeded()
       displayName: 'Test ManyLinux Wheel with Python $(python.version)'
     - template: ci/upload-wheels.yml
@@ -304,7 +304,7 @@ stages:
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
     - script: |
-        packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
+        packaging/test_wheel.bash python$(python.version) wheelhouse/NMODL*.whl
       condition: succeeded()
       displayName: 'Test macos Wheel with Python $(python.version)'
     - template: ci/upload-wheels.yml
