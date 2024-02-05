@@ -288,7 +288,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Check if ion variable copies should be avoided
      */
-    bool optimize_ion_variable_copies() const;
+    bool optimize_ion_variable_copies() const override;
 
 
     /**
