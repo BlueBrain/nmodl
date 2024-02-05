@@ -665,6 +665,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_global_var_struct_decl();
 
+    /**
+     * Check if ion variable copies should be avoided
+     */
+    virtual bool optimize_ion_variable_copies() const = 0;
 
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
