@@ -56,7 +56,7 @@ build_wheel_linux() {
     python -m pip wheel --wheel-dir dist/ -vvv .
 
     echo " - Repairing..."
-    auditwheel repair dist/*.whl
+    auditwheel repair dist/NMODL*.whl
 
     deactivate
 }
@@ -76,7 +76,7 @@ build_wheel_osx() {
     python -m pip wheel --wheel-dir dist/ -vvv .
 
     echo " - Repairing..."
-    delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
+    delocate-wheel -w wheelhouse -v dist/NMODL*.whl  # we started clean, there's a single wheel
 
     deactivate
 }
