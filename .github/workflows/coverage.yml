@@ -82,7 +82,7 @@ jobs:
           lcov --capture  --directory . --no-external --output-file build/coverage-run.info --exclude "*/ext/*"
           (cd build; lcov --add-tracefile coverage-base.info --add-tracefile coverage-run.info --output-file coverage.info)
           (cd build; lcov --list coverage.info)
-      - uses: codecov/codecov-action@v3
+      - uses: codecov/codecov-action@v4
         with:
           files: ./build/coverage.info
           fail_ci_if_error: true
