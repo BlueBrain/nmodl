@@ -141,7 +141,7 @@ jobs:
           echo -----
 
       - name: Restore compiler cache
-        uses: pat-s/always-upload-cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ${{runner.workspace}}/ccache
@@ -149,6 +149,7 @@ jobs:
           restore-keys: |
             ${{hashfiles('matrix.json')}}-${{github.ref}}-
             ${{hashfiles('matrix.json')}}-
+          save-always: true
 
       - name: Build
         shell: bash
