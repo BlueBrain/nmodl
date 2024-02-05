@@ -73,11 +73,11 @@ jobs:
         shell: bash
 
       - name: Set up Python3
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
@@ -184,7 +184,7 @@ jobs:
         run:  |
           cmake --build . --target install
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ctest-results-${{hashfiles('matrix.json')}}
           path: ${{runner.workspace}}/nmodl/build/Testing/*/Test.xml
