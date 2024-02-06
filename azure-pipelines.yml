@@ -222,6 +222,10 @@ stages:
         else
           export TAG=""
         fi
+        # the following 2 lines are a workaround for PEP 621 not allowing a
+        # dynamic `name` in `pyproject.toml`
+        python3 -m pip install --user tomli tomli-w
+        python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
         docker run --rm \
           -w /root/nmodl \
           -v $PWD:/root/nmodl \
@@ -295,6 +299,10 @@ stages:
         else
           export NMODL_NIGHTLY_TAG=""
         fi
+        # the following 2 lines are a workaround for PEP 621 not allowing a
+        # dynamic `name` in `pyproject.toml`
+        python3 -m pip install tomli tomli-w
+        python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
         packaging/build_wheels.bash osx $(python.version)
       condition: succeeded()
       displayName: 'Build macos Wheel'
