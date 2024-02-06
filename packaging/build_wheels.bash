@@ -47,16 +47,16 @@ build_wheel_linux() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install pip auditwheel setuptools
+    pip install pip auditwheel setuptools build
 
     echo " - Building..."
     rm -rf dist _skbuild
     # Workaround for https://github.com/pypa/manylinux/issues/1309
     git config --global --add safe.directory "*"
-    python -m pip wheel --wheel-dir dist/ -vvv .
+    python -m build --wheel -o dist/
 
     echo " - Repairing..."
-    auditwheel repair dist/NMODL*.whl
+    auditwheel repair dist/*.whl
 
     deactivate
 }
@@ -69,14 +69,14 @@ build_wheel_osx() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install --upgrade delocate
+    pip install --upgrade delocate build
 
     echo " - Building..."
     rm -rf dist _skbuild
-    python -m pip wheel --wheel-dir dist/ -vvv .
+    python -m build --wheel -o dist/
 
     echo " - Repairing..."
-    delocate-wheel -w wheelhouse -v dist/NMODL*.whl  # we started clean, there's a single wheel
+    delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
 
     deactivate
 }
