@@ -497,14 +497,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
 
     /**
-     * If name is in rename map then return the value. Otherwise name.
-     * \param name The name of the method to check
-     * \return     \c reference to name or value.
-     */
-    const std::string& possibly_rename(const std::string& name);
-
-
-    /**
      * Checks if given function name is \c net_send
      * \param name The function name to check
      * \return     \c true if the function is net_send

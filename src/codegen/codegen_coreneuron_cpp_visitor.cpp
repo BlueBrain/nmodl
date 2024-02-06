@@ -2305,7 +2305,8 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
     printer->fmt_push_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                             method_name(naming::NRN_PRIVATE_DESTRUCTOR_METHOD));
     cast_inst_and_assert_validity();
-    // Should we delete random streams here?
+
+    // delete random streams
     if (info.random_variables.size()) {
         printer->add_line("int pnodecount = ml->_nodecount_padded;");
         printer->add_line("int nodecount = ml->nodecount;");

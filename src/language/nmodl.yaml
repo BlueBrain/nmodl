@@ -398,7 +398,7 @@
                             brief: "Single variable of type RANDOM. pointer to a nrnran123_State"
                             members:
                               - name:
-                                  brief: "TODO"
+                                  brief: "Name of the a RANDOM variable"
                                   type: Name
                                   node_name: true
 

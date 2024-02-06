@@ -10,6 +10,7 @@
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
 namespace codegen {
@@ -234,8 +235,17 @@ void CodegenCppVisitor::print_global_var_struct_decl() {
 
 void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
     const auto& name = node.get_node_name();
-    auto function_name = symtab::syminfo::possibly_rename(name);  // e.g. random_negexp to
-                                                                  // nrnran123_negexp
+
+    // return C++ function name for RANDOM construct function
+    // e.g. nrnran123_negexp for random_negexp
+    auto get_renamed_random_function = [&](const std::string& name) {
+        if (codegen::naming::RANDOM_FUNCTIONS_MAPPING.count(name)) {
+            return codegen::naming::RANDOM_FUNCTIONS_MAPPING[name];
+        }
+        return name;
+    };
+    auto function_name = get_renamed_random_function(name);
+
     if (defined_method(name)) {
         function_name = method_name(name);
     }

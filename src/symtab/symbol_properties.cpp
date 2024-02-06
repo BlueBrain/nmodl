@@ -6,9 +6,10 @@
  */
 
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
+#include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_properties.hpp"
 #include "utils/string_utils.hpp"
 
@@ -210,22 +211,6 @@ std::ostream& operator<<(std::ostream& os, const NmodlType& obj) {
 std::ostream& operator<<(std::ostream& os, const Status& obj) {
     return os << to_string(obj);
 }
-
-static std::unordered_map<std::string, std::string> name2cppname{
-#include "extdef_rand.h"
-};
-
-const std::string& possibly_rename(const std::string& name) {
-    if (name2cppname.count(name)) {
-        return name2cppname[name];
-    }
-    return name;
-}
-
-bool is_random_function(const std::string& name) {
-    return name2cppname.count(name) != 0;
-}
-
 
 }  // namespace syminfo
 }  // namespace symtab

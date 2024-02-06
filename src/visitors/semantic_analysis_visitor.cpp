@@ -6,7 +6,6 @@
  */
 
 #include "visitors/semantic_analysis_visitor.hpp"
-#include "ast/statement_block.hpp"
 #include "ast/breakpoint_block.hpp"
 #include "ast/function_block.hpp"
 #include "ast/function_call.hpp"
@@ -14,6 +13,7 @@
 #include "ast/independent_block.hpp"
 #include "ast/procedure_block.hpp"
 #include "ast/program.hpp"
+#include "ast/statement_block.hpp"
 #include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
@@ -129,7 +129,7 @@ void SemanticAnalysisVisitor::visit_name(const ast::Name& node) {
                     if (parent && parent->is_function_call()) {
                         // The function must be a random function
                         auto fname = parent->get_node_name();
-                        if (symtab::syminfo::is_random_function(fname)) {
+                        if (is_random_construct_function(fname)) {
                             // but is name the first arg?
                             ast::FunctionCall* rfun = (ast::FunctionCall*) parent;
                             const auto& arguments = rfun->get_arguments();
@@ -166,7 +166,7 @@ void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node)
     //  The first arg of a random function must be a random_var
     auto fname = node.get_node_name();
     bool ok = true;
-    if (symtab::syminfo::is_random_function(fname)) {
+    if (is_random_construct_function(fname)) {
         const auto& arguments = node.get_arguments();
         if (arguments.empty()) {
             ok = false;
