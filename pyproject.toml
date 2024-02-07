@@ -15,6 +15,21 @@ dependencies = [
 ]
 scripts = {nmodl = "nmodl._binwrapper:main"}
 
+optional-dependencies.test = ["pytest>=3.3.0", "pytest-cov"]
+optional-dependencies.docs = [
+        "jupyter-client",
+        "jupyter",
+        "myst_parser<2.0.0",
+        "mistune<3",
+        "nbconvert",
+        "nbsphinx>=0.3.2",
+        "sphinxcontrib-applehelp<1.0.3", # After this version it needs a toml file to work, no more setup.py
+        "sphinxcontrib-htmlhelp<=2.0.0", # After this version it needs a toml file to work, no more setup.py
+        "sphinx<6",
+        "sphinx-rtd-theme", # needs sphinx < 7
+        "docutils<0.20", # needed by sphinx
+]
+
 [build-system]
 requires = [
     "scikit-build-core",
