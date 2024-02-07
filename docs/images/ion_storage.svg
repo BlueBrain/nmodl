@@ -268,10 +268,6 @@
          id="path14-3-94-8-9-3"
          sodipodi:nodetypes="cc" />
     </g>
-    <path
-       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
-       d="M 118.53561,81.619536 47.929421,105.45784"
-       id="path58" />
     <g
        id="g55-2"
        style="fill:#0088aa;stroke-width:0.3;stroke-dasharray:none"
@@ -420,6 +416,10 @@
          id="path14-3-94-7-9-4"
          sodipodi:nodetypes="cc" />
     </g>
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#ConcaveTriangle)"
+       d="M 118.53561,81.619536 47.929421,105.45784"
+       id="path58" />
     <g
        id="g22-0"
        style="fill:#0088aa;stroke-width:0.3;stroke-dasharray:none"
@@ -656,7 +656,7 @@
          id="tspan63">ion_ena</tspan></text>
     <text
        xml:space="preserve"
-       transform="matrix(0.26458333,0,0,0.26458333,52.379223,14.313268)"
+       transform="matrix(0.26458333,0,0,0.26458333,52.379223,15.371602)"
        id="text6"
        style="font-size:12px;line-height:1.25;font-family:'Noto Sans';-inkscape-font-specification:'Noto Sans';letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect6);display:inline"><tspan
          x="303.2168"
