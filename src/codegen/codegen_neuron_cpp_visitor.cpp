@@ -84,8 +84,8 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
 }
 
 bool CodegenNeuronCppVisitor::optimize_ion_variable_copies() const {
-    if(optimize_ionvar_copies) {
-      throw std::runtime_error("Not implemented.");
+    if (optimize_ionvar_copies) {
+        throw std::runtime_error("Not implemented.");
     }
     return false;
 }
@@ -199,8 +199,8 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
 
 
 std::string CodegenNeuronCppVisitor::conc_write_statement(const std::string& ion_name,
-                                                              const std::string& concentration,
-                                                              int index) {
+                                                          const std::string& concentration,
+                                                          int index) {
     throw std::runtime_error("Not implemented.");
 }
 

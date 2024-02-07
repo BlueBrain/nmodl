@@ -250,8 +250,7 @@ std::vector<std::string> CodegenCppVisitor::ion_read_statements(BlockType type) 
 }
 
 
-std::vector<std::string> CodegenCppVisitor::ion_read_statements_optimized(
-    BlockType type) const {
+std::vector<std::string> CodegenCppVisitor::ion_read_statements_optimized(BlockType type) const {
     std::vector<std::string> statements;
     for (const auto& ion: info.ions) {
         for (const auto& var: ion.writes) {
@@ -325,9 +324,8 @@ std::vector<ShadowUseStatement> CodegenCppVisitor::ion_write_statements(BlockTyp
  * case we first update current mechanism's shadow vector and then add statement
  * to queue that will be used in reduction queue.
  */
-std::string CodegenCppVisitor::process_shadow_update_statement(
-    const ShadowUseStatement& statement,
-    BlockType /* type */) {
+std::string CodegenCppVisitor::process_shadow_update_statement(const ShadowUseStatement& statement,
+                                                               BlockType /* type */) {
     // when there is no operator or rhs then that statement doesn't need shadow update
     if (statement.op.empty() && statement.rhs.empty()) {
         auto text = statement.lhs + ";";
@@ -339,7 +337,6 @@ std::string CodegenCppVisitor::process_shadow_update_statement(
     auto text = fmt::format("{} {} {};", lhs, statement.op, statement.rhs);
     return text;
 }
-
 
 
 /**
@@ -373,8 +370,7 @@ std::string CodegenCppVisitor::breakpoint_current(std::string current) const {
 /*                         Routines for returning variable name                         */
 /****************************************************************************************/
 
-std::string CodegenCppVisitor::update_if_ion_variable_name(
-    const std::string& name) const {
+std::string CodegenCppVisitor::update_if_ion_variable_name(const std::string& name) const {
     std::string result(name);
     if (ion_variable_struct_required()) {
         if (info.is_ion_read_variable(name)) {

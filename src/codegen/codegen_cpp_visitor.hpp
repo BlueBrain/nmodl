@@ -876,8 +876,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \return              The string representing the function call
      */
     virtual std::string conc_write_statement(const std::string& ion_name,
-                                     const std::string& concentration,
-                                     int index) = 0;
+                                             const std::string& concentration,
+                                             int index) = 0;
 
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */
