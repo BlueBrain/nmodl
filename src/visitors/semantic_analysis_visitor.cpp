@@ -26,7 +26,7 @@ namespace visitor {
 
 bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     check_fail = false;
-    current_symbol_table = node.get_symbol_table();
+    program_symtab = node.get_symbol_table();
 
     /// <-- This code is for check 2
     const auto& suffix_node = collect_nodes(node, {ast::AstNodeType::SUFFIX});
@@ -43,17 +43,6 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
 
     const auto& sym_table = node.get_symbol_table();
     assert(sym_table != nullptr);
-
-    // this block is going nowhere since nodes below is just its declaration
-    // and not all the nodes where it is used.
-    auto property = NmodlType::random_var;
-    auto random_variables = sym_table->get_variables_with_properties(property);
-    for (const auto& var: random_variables) {
-        auto nodes = var->get_nodes();
-        for (auto node: nodes) {
-            //            std::cout << "    " << node->get_node_type_name() << std::endl;
-        }
-    }
 
     // get all ion variables
     const auto& ion_variables = sym_table->get_variables_with_properties(with_prop, false);
@@ -103,91 +92,84 @@ void SemanticAnalysisVisitor::visit_function_block(const ast::FunctionBlock& nod
     /// -->
 }
 
-void SemanticAnalysisVisitor::visit_statement_block(const ast::StatementBlock& node) {
-    auto last_symbol_table = current_symbol_table;
-    current_symbol_table = node.get_symbol_table();
-    node.visit_children(*this);
-    current_symbol_table = last_symbol_table;
-}
-
 void SemanticAnalysisVisitor::visit_name(const ast::Name& node) {
     /// <-- This code is a portion of  check 9
     // There are only two contexts where a random_var is allowed. As the first arg of a random
     // function or as an item in the RANDOM declaration.
     // Only the former needs checking.
     bool ok = true;
-    if (node.is_name()) {  // E.g. for some reason SUFFIX arrives in visit_name
-        auto name = node.get_node_name();
-        auto symbol = current_symbol_table->lookup_in_scope(name);
-        bool is_random_var =
-            symbol ? (symbol->get_properties() == symtab::syminfo::NmodlType::random_var) : false;
-        if (is_random_var) {
-            auto parent = node.get_parent();
-            if (parent) {
-                if (parent->is_var_name()) {
-                    parent = parent->get_parent();
-                    if (parent && parent->is_function_call()) {
-                        // The function must be a random function
-                        auto fname = parent->get_node_name();
-                        if (is_random_construct_function(fname)) {
-                            // but is name the first arg?
-                            ast::FunctionCall* rfun = (ast::FunctionCall*) parent;
-                            const auto& arguments = rfun->get_arguments();
-                            if (arguments[0]->get_node_name() != name) {
-                                ok = false;
-                            }
-                        } else {
-                            ok = false;
-                        }
-                    } else {
-                        ok = false;
-                    }
-                } else {
-                    assert(parent->is_random_var());
+    auto name = node.get_node_name();
+
+    // only check for variables exist in the symbol table (e.g. SUFFIX has type Name but it's not
+    // variable)
+    // if variable is not RANDOM then nothing to check for it
+    auto symbol = program_symtab->lookup(name);
+    if (!symbol || !symbol->has_any_property(symtab::syminfo::NmodlType::random_var)) {
+        return;
+    }
+
+    auto parent = node.get_parent();
+
+    // if it's RANDOM var declaration in NEURON block then nothing to do
+    if (parent && parent->is_random_var()) {
+        return;
+    }
+
+    if (parent && parent->is_var_name()) {
+        parent = parent->get_parent();
+        if (parent && parent->is_function_call()) {
+            auto fname = parent->get_node_name();
+            // if function is a random function then check if the current
+            // name is the function's first argument
+            if (is_random_construct_function(fname)) {
+                auto rfun = dynamic_cast<ast::FunctionCall*>(parent);
+                const auto& arguments = rfun->get_arguments();
+                if (!arguments.empty() && arguments.front()->is_var_name() &&
+                    arguments.front()->get_node_name() == name) {
+                    // if this is a first argument to function then there
+                    // is no problem
+                    node.visit_children(*this);
+                    return;
                 }
             }
         }
     }
-    if (!ok) {
-        auto position = node.get_token()->position();  // ast::Name has a token
-        logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: RANDOM variable {} at {}"
-                        " can be used only as the first arg of a random function",
-                        node.get_node_name(),
-                        position));
-        check_fail = true;
-    }
+
+    // Otherwise, we have an error
+    auto position = node.get_token()->position();
+    logger->critical(
+        fmt::format("SemanticAnalysisVisitor :: RANDOM variable {} at {}"
+                    " can be used only as the first arg of a random function",
+                    node.get_node_name(),
+                    position));
+    check_fail = true;
+
     node.visit_children(*this);
     /// -->
 }
 
 void SemanticAnalysisVisitor::visit_function_call(const ast::FunctionCall& node) {
     /// <-- This code is a portion of  check 9
-    //  The first arg of a random function must be a random_var
+    //  The first arg of a RANDOM function must be a random_var
+    // Otherwise it's an error
     auto fname = node.get_node_name();
-    bool ok = true;
     if (is_random_construct_function(fname)) {
         const auto& arguments = node.get_arguments();
-        if (arguments.empty()) {
-            ok = false;
-        } else {
-            auto arg0 = arguments[0];
+        if (!arguments.empty()) {
+            auto arg0 = arguments.front();
             if (arg0->is_var_name()) {
                 auto name = arg0->get_node_name();
-                auto symbol = current_symbol_table->lookup_in_scope(name);
-                if (!symbol || symbol->get_properties() != symtab::syminfo::NmodlType::random_var) {
-                    ok = false;
+                auto symbol = program_symtab->lookup(name);
+                if (symbol->has_any_property(symtab::syminfo::NmodlType::random_var)) {
+                    node.visit_children(*this);
+                    return;
                 }
-            } else {
-                ok = false;
             }
         }
-    }
-    if (!ok) {
         auto position = node.get_name()->get_token()->position();
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: random function {} at {} ::"
-                        " The first arg must be a random variable",
+            fmt::format("SemanticAnalysisVisitor :: random function {} at {} :: The first arg must "
+                        "be a random variable",
                         fname,
                         position));
         check_fail = true;
