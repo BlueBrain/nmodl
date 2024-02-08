@@ -14,7 +14,6 @@ if "bdist_wheel" in sys.argv:
 
 setup(
     packages=["nmodl"],
-    scripts=["pywheel/shim/nmodl"],
     include_package_data=True,
     cmake_minimum_required_version="3.15.0",
     cmake_args=cmake_args,
