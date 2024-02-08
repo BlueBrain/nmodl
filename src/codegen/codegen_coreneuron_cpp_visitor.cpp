@@ -2154,9 +2154,6 @@ void CodegenCoreneuronCppVisitor::print_mechanism_range_var_structure(bool print
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
-            if (var.symbol->has_all_properties(NmodlType::random_var)) {
-                type = "nrnran123_State*";
-            }
             printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialize);
         }
     }
@@ -2314,7 +2311,7 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
         printer->push_block("for (int id = 0; id < nodecount; id++)");
         for (const auto& var: info.random_variables) {
             const auto& name = get_variable_name(var->get_name());
-            printer->fmt_line("nrnran123_deletestream({});", name);
+            printer->fmt_line("nrnran123_deletestream((nrnran123_State*){});", name);
         }
         printer->pop_block();
     }
@@ -2371,11 +2368,7 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
             if (var.is_index || var.is_integer) {
                 return "ml->pdata";
             } else if (var.is_vdata) {
-                if (var.symbol->has_all_properties(NmodlType::random_var)) {
-                    return "(nrnran123_State**)nt->_vdata";
-                } else {
-                    return "nt->_vdata";
-                }
+                return "nt->_vdata";
             } else {
                 return "nt->_data";
             }

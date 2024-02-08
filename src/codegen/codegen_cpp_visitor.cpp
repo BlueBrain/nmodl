@@ -238,13 +238,16 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
 
     // return C++ function name for RANDOM construct function
     // e.g. nrnran123_negexp for random_negexp
-    auto get_renamed_random_function = [&](const std::string& name) {
+    auto get_renamed_random_function =
+        [&](const std::string& name) -> std::pair<std::string, bool> {
         if (codegen::naming::RANDOM_FUNCTIONS_MAPPING.count(name)) {
-            return codegen::naming::RANDOM_FUNCTIONS_MAPPING[name];
+            return {codegen::naming::RANDOM_FUNCTIONS_MAPPING[name], true};
         }
-        return name;
+        return {name, false};
     };
-    auto function_name = get_renamed_random_function(name);
+    std::string function_name;
+    bool is_random_function;
+    std::tie(function_name, is_random_function) = get_renamed_random_function(name);
 
     if (defined_method(name)) {
         function_name = method_name(name);
@@ -273,6 +276,12 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
         if (!arguments.empty()) {
             printer->add_text(", ");
         }
+    }
+
+    // first argument to random functions need to be type casted
+    // from void* to nrnran123_State*.
+    if (is_random_function && !arguments.empty()) {
+        printer->add_text("(nrnran123_State*)");
     }
 
     print_vector_elements(arguments, ", ");
