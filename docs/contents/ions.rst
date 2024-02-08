@@ -1,16 +1,16 @@
 Ions
 ====
 
-NEURON supports computing the ion currents. For each segment there can be
-separate current for separate ions, i.e. one for sodium ions and another for
-calcium ions.
+NEURON supports computing the ion currents and ion concentrations. For each segment
+there can be separate current for separate ions, i.e. one for sodium ions and
+another for calcium ions.
 
 There are five variables associated with ions: the current (``ina``), the
-concentration inside the segment (``nai``), the concentration outside the
-segment (``nao``), the reversal potential (``ena``) and the derivative if the
-current w.r.t. the voltage (``dinadv``). The names should be split as ``i{na}``
-and therefore refer to the value for sodium, for calcium it would have been
-``ica``.
+concentration inside the segment adjacent to the membrane (``nai``), the
+concentration outside the segment adjacent to the membrane (``nao``), the
+reversal potential (``ena``) and the derivative if the current w.r.t. the
+voltage (``dinadv``). The names should be split as ``i{na}`` and therefore
+refer to the value for sodium, for calcium it would have been ``ica``.
 
 These variables are physical properties of the segment. Therefore, there exists
 one mechanism per ion. MOD files can include code to read or write these
