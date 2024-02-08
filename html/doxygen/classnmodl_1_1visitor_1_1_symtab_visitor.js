@@ -50,6 +50,7 @@ var classnmodl_1_1visitor_1_1_symtab_visitor =
     [ "visit_prime_name", "classnmodl_1_1visitor_1_1_symtab_visitor.html#af8cc7d8f0b8dfbc05bfe248bd686fb85", null ],
     [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#ae89cf84d4e3a08c1e3b359715c5c73b8", null ],
     [ "visit_program", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429", null ],
+    [ "visit_random_var", "classnmodl_1_1visitor_1_1_symtab_visitor.html#ade66693c6c4af9b3425b12ef701d7f72", null ],
     [ "visit_range_var", "classnmodl_1_1visitor_1_1_symtab_visitor.html#aa7604096ae1ae2c90a1af3bea941fd79", null ],
     [ "visit_read_ion_var", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a4e5db16d684a583cf21fa488d00b9a36", null ],
     [ "visit_solve_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a11535840b7c80307f912854c3d190a2c", null ],

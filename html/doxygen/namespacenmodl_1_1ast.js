@@ -90,6 +90,8 @@ var namespacenmodl_1_1ast =
     [ "ProcedureBlock", "classnmodl_1_1ast_1_1_procedure_block.html", "classnmodl_1_1ast_1_1_procedure_block" ],
     [ "Program", "classnmodl_1_1ast_1_1_program.html", "classnmodl_1_1ast_1_1_program" ],
     [ "ProtectStatement", "classnmodl_1_1ast_1_1_protect_statement.html", "classnmodl_1_1ast_1_1_protect_statement" ],
+    [ "RandomVar", "classnmodl_1_1ast_1_1_random_var.html", "classnmodl_1_1ast_1_1_random_var" ],
+    [ "RandomVarList", "classnmodl_1_1ast_1_1_random_var_list.html", "classnmodl_1_1ast_1_1_random_var_list" ],
     [ "Range", "classnmodl_1_1ast_1_1_range.html", "classnmodl_1_1ast_1_1_range" ],
     [ "RangeVar", "classnmodl_1_1ast_1_1_range_var.html", "classnmodl_1_1ast_1_1_range_var" ],
     [ "ReactionOperator", "classnmodl_1_1ast_1_1_reaction_operator.html", "classnmodl_1_1ast_1_1_reaction_operator" ],

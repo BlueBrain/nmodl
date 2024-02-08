@@ -65,6 +65,7 @@ var classnmodl_1_1visitor_1_1_perf_visitor =
     [ "num_localized_global_variables", "classnmodl_1_1visitor_1_1_perf_visitor.html#a46f79ceaac24cfe5055eddba54026e4d", null ],
     [ "num_localized_instance_variables", "classnmodl_1_1visitor_1_1_perf_visitor.html#a87e38453d237f0bdf0c02e706b5b53fe", null ],
     [ "num_pointer_variables", "classnmodl_1_1visitor_1_1_perf_visitor.html#a3c14d6944f47993e0acafb5f00b966ee", null ],
+    [ "num_random_variables", "classnmodl_1_1visitor_1_1_perf_visitor.html#a4587489be8c87ecc45acbb66060823af", null ],
     [ "num_state_variables", "classnmodl_1_1visitor_1_1_perf_visitor.html#acfcf3e4d4fccc81b0d3f7a413da7bfa6", null ],
     [ "printer", "classnmodl_1_1visitor_1_1_perf_visitor.html#a9592639b1c1c3e2b801ad4338ce2e39e", null ],
     [ "start_measurement", "classnmodl_1_1visitor_1_1_perf_visitor.html#aeaab694b2635c7c0d6187ab382c976cb", null ],

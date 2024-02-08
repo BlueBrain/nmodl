@@ -43,13 +43,15 @@ var codegen__naming_8hpp =
     [ "POINT_PROCESS_SEMANTIC", "codegen__naming_8hpp.html#a0270814558507d8f98795e1974ba89d4", null ],
     [ "POINT_PROCESS_VARIABLE", "codegen__naming_8hpp.html#a0aba259ea5b6d63ecc6a049f6d8e078a", null ],
     [ "POINTER_SEMANTIC", "codegen__naming_8hpp.html#ac3bac65aec638d379bd0312327e3998f", null ],
+    [ "RANDOM_FUNCTIONS_MAPPING", "codegen__naming_8hpp.html#ac0d9c70989ee31d4db8abea7a7d17bc6", null ],
+    [ "RANDOM_SEMANTIC", "codegen__naming_8hpp.html#ac11291570be0eb853ba0e233c4b63839", null ],
     [ "SPARSE_METHOD", "codegen__naming_8hpp.html#ab99ca442353e35fef1d26ce063842717", null ],
     [ "T_SAVE_VARIABLE", "codegen__naming_8hpp.html#a1eba843c1c643b075a5d050a3b51e04b", null ],
     [ "THREAD_ARGS", "codegen__naming_8hpp.html#a30bcd393b84cd89c6251460be772be41", null ],
     [ "THREAD_ARGS_PROTO", "codegen__naming_8hpp.html#a17075cdc0d5eb824684e8a23b586715c", null ],
     [ "TQITEM_VARIABLE", "codegen__naming_8hpp.html#ab0eff3f8a66e2b05c20db750539a0c3d", null ],
     [ "USE_TABLE_VARIABLE", "codegen__naming_8hpp.html#a455c076b1730ea445eb1bddf38d6457b", null ],
-    [ "VERBATIM_VARIABLES_MAPPING", "codegen__naming_8hpp.html#a3f22b0c45b6de3c589dba54e7c6f747c", null ],
+    [ "VERBATIM_VARIABLES_MAPPING", "codegen__naming_8hpp.html#ad5b00e2793a4cd687d494db5cf0df40a", null ],
     [ "VOLTAGE_UNUSED_VARIABLE", "codegen__naming_8hpp.html#af0055a58a06cf6773bbee19359213eb8", null ],
     [ "WATCH_SEMANTIC", "codegen__naming_8hpp.html#a541ebb982e881d70f677482da7c54e73", null ]
 ];

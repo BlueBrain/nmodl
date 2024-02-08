@@ -155,6 +155,34 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:adca0e7871a590ebb9ee6c29939fecf4c"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classnmodl_1_1_mod_token.html">ModToken</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#adca0e7871a590ebb9ee6c29939fecf4c">get_token</a> () const noexcept override</td></tr>
 <tr class="memdesc:adca0e7871a590ebb9ee6c29939fecf4c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return associated token for the current ast node.  <a href="classnmodl_1_1ast_1_1_pointer.html#adca0e7871a590ebb9ee6c29939fecf4c">More...</a><br /></td></tr>
 <tr class="separator:adca0e7871a590ebb9ee6c29939fecf4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a8ed60a72a9bdd611a41714f40f5f1b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#a6a8ed60a72a9bdd611a41714f40f5f1b">emplace_back_pointer_var</a> (<a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> *n)</td></tr>
+<tr class="memdesc:a6a8ed60a72a9bdd611a41714f40f5f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add member to variables by raw pointer.  <a href="classnmodl_1_1ast_1_1_pointer.html#a6a8ed60a72a9bdd611a41714f40f5f1b">More...</a><br /></td></tr>
+<tr class="separator:a6a8ed60a72a9bdd611a41714f40f5f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aecdfd5bb56ccd8325c197eeb0bb9255e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aecdfd5bb56ccd8325c197eeb0bb9255e">emplace_back_pointer_var</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt; n)</td></tr>
+<tr class="memdesc:aecdfd5bb56ccd8325c197eeb0bb9255e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add member to variables by shared_ptr.  <a href="classnmodl_1_1ast_1_1_pointer.html#aecdfd5bb56ccd8325c197eeb0bb9255e">More...</a><br /></td></tr>
+<tr class="separator:aecdfd5bb56ccd8325c197eeb0bb9255e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb960f3ee07880542016160d29b3abdd"><td class="memItemLeft" align="right" valign="top">PointerVarVector::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#adb960f3ee07880542016160d29b3abdd">erase_pointer_var</a> (PointerVarVector::const_iterator first)</td></tr>
+<tr class="memdesc:adb960f3ee07880542016160d29b3abdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase member to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#adb960f3ee07880542016160d29b3abdd">More...</a><br /></td></tr>
+<tr class="separator:adb960f3ee07880542016160d29b3abdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea891924908099c15ef8fa20e31edc09"><td class="memItemLeft" align="right" valign="top">PointerVarVector::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aea891924908099c15ef8fa20e31edc09">erase_pointer_var</a> (PointerVarVector::const_iterator first, PointerVarVector::const_iterator last)</td></tr>
+<tr class="memdesc:aea891924908099c15ef8fa20e31edc09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase members to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#aea891924908099c15ef8fa20e31edc09">More...</a><br /></td></tr>
+<tr class="separator:aea891924908099c15ef8fa20e31edc09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af07ff3d37033e7c42a597f212fa1955b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#af07ff3d37033e7c42a597f212fa1955b">erase_pointer_var</a> (std::unordered_set&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> * &gt; &amp;to_be_erased)</td></tr>
+<tr class="memdesc:af07ff3d37033e7c42a597f212fa1955b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Erase non-consecutive members to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#af07ff3d37033e7c42a597f212fa1955b">More...</a><br /></td></tr>
+<tr class="separator:af07ff3d37033e7c42a597f212fa1955b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90dbcbd7672ca2a574dfc72a12836fff"><td class="memItemLeft" align="right" valign="top">PointerVarVector::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#a90dbcbd7672ca2a574dfc72a12836fff">insert_pointer_var</a> (PointerVarVector::const_iterator position, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt; &amp;n)</td></tr>
+<tr class="memdesc:a90dbcbd7672ca2a574dfc72a12836fff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert member to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#a90dbcbd7672ca2a574dfc72a12836fff">More...</a><br /></td></tr>
+<tr class="separator:a90dbcbd7672ca2a574dfc72a12836fff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa196b79b6b3ece948a251aa3e42303bc"><td class="memTemplParams" colspan="2">template&lt;class NodeType , class InputIterator &gt; </td></tr>
+<tr class="memitem:aa196b79b6b3ece948a251aa3e42303bc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa196b79b6b3ece948a251aa3e42303bc">insert_pointer_var</a> (PointerVarVector::const_iterator position, NodeType &amp;to, InputIterator first, InputIterator last)</td></tr>
+<tr class="memdesc:aa196b79b6b3ece948a251aa3e42303bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert members to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#aa196b79b6b3ece948a251aa3e42303bc">More...</a><br /></td></tr>
+<tr class="separator:aa196b79b6b3ece948a251aa3e42303bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51355da1efa83b647e0e78941fa800f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#a51355da1efa83b647e0e78941fa800f1">reset_pointer_var</a> (PointerVarVector::const_iterator position, <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> *n)</td></tr>
+<tr class="memdesc:a51355da1efa83b647e0e78941fa800f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset member to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#a51355da1efa83b647e0e78941fa800f1">More...</a><br /></td></tr>
+<tr class="separator:a51355da1efa83b647e0e78941fa800f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1624e7a093bc9035f406c4967697323b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#a1624e7a093bc9035f406c4967697323b">reset_pointer_var</a> (PointerVarVector::const_iterator position, std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt; n)</td></tr>
+<tr class="memdesc:a1624e7a093bc9035f406c4967697323b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset member to variables.  <a href="classnmodl_1_1ast_1_1_pointer.html#a1624e7a093bc9035f406c4967697323b">More...</a><br /></td></tr>
+<tr class="separator:a1624e7a093bc9035f406c4967697323b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a73036e87dc68b96a864e65f7379f90d5"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="group__ast__vec__type.html#gace13f87d6d747e92c366e3c8021e1e17">PointerVarVector</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_pointer.html#a73036e87dc68b96a864e65f7379f90d5">get_variables</a> () const noexcept</td></tr>
 <tr class="memdesc:a73036e87dc68b96a864e65f7379f90d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa83414a99a22fdc0fbe490fead92f307">Pointer::variables</a>.  <a href="classnmodl_1_1ast_1_1_pointer.html#a73036e87dc68b96a864e65f7379f90d5">More...</a><br /></td></tr>
 <tr class="separator:a73036e87dc68b96a864e65f7379f90d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -263,6 +291,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga53d7bf2c18bac0edb78e1123e947988e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga53d7bf2c18bac0edb78e1123e947988e">is_pointer_var</a> () const noexcept</td></tr>
 <tr class="memdesc:ga53d7bf2c18bac0edb78e1123e947988e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html" title="TODO.">ast::PointerVar</a>.  <a href="group__ast__class.html#ga53d7bf2c18bac0edb78e1123e947988e">More...</a><br /></td></tr>
 <tr class="separator:ga53d7bf2c18bac0edb78e1123e947988e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga4bf5fa72138683149071b4b4e24c0805 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga4bf5fa72138683149071b4b4e24c0805">is_random_var</a> () const noexcept</td></tr>
+<tr class="memdesc:ga4bf5fa72138683149071b4b4e24c0805 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_random_var.html" title="Single variable of type RANDOM.">ast::RandomVar</a>.  <a href="group__ast__class.html#ga4bf5fa72138683149071b4b4e24c0805">More...</a><br /></td></tr>
+<tr class="separator:ga4bf5fa72138683149071b4b4e24c0805 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga90a102823381b1f8e6047a1af748056e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga90a102823381b1f8e6047a1af748056e">is_bbcore_pointer_var</a> () const noexcept</td></tr>
 <tr class="memdesc:ga90a102823381b1f8e6047a1af748056e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html" title="Represent a single variable of type BBCOREPOINTER.">ast::BbcorePointerVar</a>.  <a href="group__ast__class.html#ga90a102823381b1f8e6047a1af748056e">More...</a><br /></td></tr>
 <tr class="separator:ga90a102823381b1f8e6047a1af748056e inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -503,6 +534,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:gac58c77a74f980986b6588a285c12d408 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gac58c77a74f980986b6588a285c12d408">is_global</a> () const noexcept</td></tr>
 <tr class="memdesc:gac58c77a74f980986b6588a285c12d408 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_global.html" title="Represents GLOBAL statement in NMODL.">ast::Global</a>.  <a href="group__ast__class.html#gac58c77a74f980986b6588a285c12d408">More...</a><br /></td></tr>
 <tr class="separator:gac58c77a74f980986b6588a285c12d408 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga171f5d1d942dd88351be072191077e47 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga171f5d1d942dd88351be072191077e47">is_random_var_list</a> () const noexcept</td></tr>
+<tr class="memdesc:ga171f5d1d942dd88351be072191077e47 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html" title="Represents RANDOM statement in NMODL.">ast::RandomVarList</a>.  <a href="group__ast__class.html#ga171f5d1d942dd88351be072191077e47">More...</a><br /></td></tr>
+<tr class="separator:ga171f5d1d942dd88351be072191077e47 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gaf9abed7526427801c191fbaa4fae2e94 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#gaf9abed7526427801c191fbaa4fae2e94">is_bbcore_pointer</a> () const noexcept</td></tr>
 <tr class="memdesc:gaf9abed7526427801c191fbaa4fae2e94 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer.html" title="Represents BBCOREPOINTER statement in NMODL.">ast::BbcorePointer</a>.  <a href="group__ast__class.html#gaf9abed7526427801c191fbaa4fae2e94">More...</a><br /></td></tr>
 <tr class="separator:gaf9abed7526427801c191fbaa4fae2e94 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -617,7 +651,7 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11965">11965</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12226">12226</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -642,7 +676,7 @@ Private Attributes</h2></td></tr>
 <p>if there is a token, make copy</p>
 <p>set parents</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11971">11971</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12232">12232</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -708,7 +742,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a0cc08003408b2932f40729fee4eeebf4">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11960">11960</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12221">12221</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -748,7 +782,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#addf1e87311cdb1f01d04b449c2b77dab">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11956">11956</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12217">12217</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -782,6 +816,129 @@ Private Attributes</h2></td></tr>
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a5d3a93de6d4f4e2bc4a807fc802f7af7">nmodl::ast::Statement</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00073">73</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6a8ed60a72a9bdd611a41714f40f5f1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a8ed60a72a9bdd611a41714f40f5f1b">&#9670;&nbsp;</a></span>emplace_back_pointer_var() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::ast::Pointer::emplace_back_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> *&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add member to variables by raw pointer. </p>
+<p><a class="el" href="classnmodl_1_1ast_1_1_pointer.html" title="Represents POINTER statement in NMODL.">Pointer</a> member functions definition.</p>
+<p>Add member to variables by raw pointer </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12116">12116</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aecdfd5bb56ccd8325c197eeb0bb9255e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aecdfd5bb56ccd8325c197eeb0bb9255e">&#9670;&nbsp;</a></span>emplace_back_pointer_var() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::ast::Pointer::emplace_back_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt;&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add member to variables by shared_ptr. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12126">12126</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="adb960f3ee07880542016160d29b3abdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb960f3ee07880542016160d29b3abdd">&#9670;&nbsp;</a></span>erase_pointer_var() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PointerVarVector::const_iterator nmodl::ast::Pointer::erase_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>first</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erase member to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12135">12135</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aea891924908099c15ef8fa20e31edc09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea891924908099c15ef8fa20e31edc09">&#9670;&nbsp;</a></span>erase_pointer_var() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PointerVarVector::const_iterator nmodl::ast::Pointer::erase_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erase members to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12141">12141</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af07ff3d37033e7c42a597f212fa1955b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af07ff3d37033e7c42a597f212fa1955b">&#9670;&nbsp;</a></span>erase_pointer_var() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t nmodl::ast::Pointer::erase_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">std::unordered_set&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>to_be_erased</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Erase non-consecutive members to variables. </p>
+<p>loosely following the cpp reference of remove_if </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12149">12149</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1007,7 +1164,85 @@ Private Attributes</h2></td></tr>
 
 <p>Getter for member variable <a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa83414a99a22fdc0fbe490fead92f307">Pointer::variables</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00157">157</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00205">205</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a90dbcbd7672ca2a574dfc72a12836fff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90dbcbd7672ca2a574dfc72a12836fff">&#9670;&nbsp;</a></span>insert_pointer_var() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">PointerVarVector::const_iterator nmodl::ast::Pointer::insert_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Insert member to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12173">12173</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa196b79b6b3ece948a251aa3e42303bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa196b79b6b3ece948a251aa3e42303bc">&#9670;&nbsp;</a></span>insert_pointer_var() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class NodeType , class InputIterator &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::ast::Pointer::insert_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">NodeType &amp;&#160;</td>
+          <td class="paramname"><em>to</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Insert members to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00292">292</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
 
 </div>
 </div>
@@ -1043,6 +1278,70 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a51355da1efa83b647e0e78941fa800f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51355da1efa83b647e0e78941fa800f1">&#9670;&nbsp;</a></span>reset_pointer_var() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::ast::Pointer::reset_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> *&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reset member to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12181">12181</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a1624e7a093bc9035f406c4967697323b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1624e7a093bc9035f406c4967697323b">&#9670;&nbsp;</a></span>reset_pointer_var() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::ast::Pointer::reset_pointer_var </td>
+          <td>(</td>
+          <td class="paramtype">PointerVarVector::const_iterator&#160;</td>
+          <td class="paramname"><em>position</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">PointerVar</a> &gt;&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reset member to variables. </p>
+
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12191">12191</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a1ab5083c1b738ae1042d11f9995261c6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ab5083c1b738ae1042d11f9995261c6">&#9670;&nbsp;</a></span>set_parent_in_children()</h2>
 
@@ -1071,7 +1370,7 @@ Private Attributes</h2></td></tr>
 <p>This should be called in every object (with children) constructor to set parents. Since it is called only in the constructors it should not be virtual to avoid ambiguities (issue #295). </p>
 <p>set parent for each element of the vector</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11988">11988</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12249">12249</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1101,7 +1400,7 @@ Private Attributes</h2></td></tr>
 
 <p>Set token for the current ast node. </p>
 
-<p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00167">167</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pointer_8hpp_source.html#l00215">215</a> of file <a class="el" href="pointer_8hpp_source.html">pointer.hpp</a>.</p>
 
 </div>
 </div>
@@ -1123,7 +1422,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa83414a99a22fdc0fbe490fead92f307">Pointer::variables</a>. </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12008">12008</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12269">12269</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1145,7 +1444,7 @@ Private Attributes</h2></td></tr>
 
 <p>Setter for member variable <a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa83414a99a22fdc0fbe490fead92f307">Pointer::variables</a> (rvalue reference) </p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12000">12000</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12261">12261</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1187,7 +1486,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#ab9753e2c6da4f9a35600897f8fbebc95">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11948">11948</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12209">12209</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1216,7 +1515,6 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>visit children i.e. </p>
-<p><a class="el" href="classnmodl_1_1ast_1_1_pointer.html" title="Represents POINTER statement in NMODL.">Pointer</a> member functions definition.</p>
 <p>member variables of current node using provided visitor</p>
 <p>Different nodes in the AST have different members (i.e. children). This method recursively visits children using provided visitor.</p>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -1230,7 +1528,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1ast_1_1_statement.html#a054725f5508756aa0dac4861c7152b7a">nmodl::ast::Statement</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l11940">11940</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l12201">12201</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

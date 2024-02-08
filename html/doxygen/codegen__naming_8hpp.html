@@ -97,8 +97,8 @@ $(document).ready(function(){initNavTree('codegen__naming_8hpp.html',''); initRe
 <div class="title">codegen_naming.hpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;map&gt;</code><br />
-<code>#include &lt;string&gt;</code><br />
+<div class="textblock"><code>#include &lt;string&gt;</code><br />
+<code>#include &lt;unordered_map&gt;</code><br />
 </div>
 <p><a href="codegen__naming_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -217,6 +217,9 @@ Variables</h2></td></tr>
 <tr class="memitem:a43f0110a0fd2ebf794aecd2cc074bad0"><td class="memItemLeft" align="right" valign="top">static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#a43f0110a0fd2ebf794aecd2cc074bad0">nmodl::codegen::naming::CORE_POINTER_SEMANTIC</a> [] = &quot;bbcorepointer&quot;</td></tr>
 <tr class="memdesc:a43f0110a0fd2ebf794aecd2cc074bad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">semantic type for core pointer variable  <a href="namespacenmodl_1_1codegen_1_1naming.html#a43f0110a0fd2ebf794aecd2cc074bad0">More...</a><br /></td></tr>
 <tr class="separator:a43f0110a0fd2ebf794aecd2cc074bad0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac11291570be0eb853ba0e233c4b63839"><td class="memItemLeft" align="right" valign="top">static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#ac11291570be0eb853ba0e233c4b63839">nmodl::codegen::naming::RANDOM_SEMANTIC</a> [] = &quot;random&quot;</td></tr>
+<tr class="memdesc:ac11291570be0eb853ba0e233c4b63839"><td class="mdescLeft">&#160;</td><td class="mdescRight">semantic type for RANDOM variable  <a href="namespacenmodl_1_1codegen_1_1naming.html#ac11291570be0eb853ba0e233c4b63839">More...</a><br /></td></tr>
+<tr class="separator:ac11291570be0eb853ba0e233c4b63839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c3df50f11ecd03de051f01febaaed44"><td class="memItemLeft" align="right" valign="top">static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#a1c3df50f11ecd03de051f01febaaed44">nmodl::codegen::naming::NET_SEND_SEMANTIC</a> [] = &quot;netsend&quot;</td></tr>
 <tr class="memdesc:a1c3df50f11ecd03de051f01febaaed44"><td class="mdescLeft">&#160;</td><td class="mdescRight">semantic type for net send call  <a href="namespacenmodl_1_1codegen_1_1naming.html#a1c3df50f11ecd03de051f01febaaed44">More...</a><br /></td></tr>
 <tr class="separator:a1c3df50f11ecd03de051f01febaaed44"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -268,9 +271,11 @@ Variables</h2></td></tr>
 <tr class="memitem:acbfc5a69c547f361f9cea6ee9c28e9d2"><td class="memItemLeft" align="right" valign="top">static constexpr char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#acbfc5a69c547f361f9cea6ee9c28e9d2">nmodl::codegen::naming::NRN_POINTERINDEX</a> [] = &quot;hoc_nrnpointerindex&quot;</td></tr>
 <tr class="memdesc:acbfc5a69c547f361f9cea6ee9c28e9d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">hoc_nrnpointerindex name  <a href="namespacenmodl_1_1codegen_1_1naming.html#acbfc5a69c547f361f9cea6ee9c28e9d2">More...</a><br /></td></tr>
 <tr class="separator:acbfc5a69c547f361f9cea6ee9c28e9d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f22b0c45b6de3c589dba54e7c6f747c"><td class="memItemLeft" align="right" valign="top">const std::map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#a3f22b0c45b6de3c589dba54e7c6f747c">nmodl::codegen::naming::VERBATIM_VARIABLES_MAPPING</a></td></tr>
-<tr class="memdesc:a3f22b0c45b6de3c589dba54e7c6f747c"><td class="mdescLeft">&#160;</td><td class="mdescRight">commonly used variables in verbatim block and how they should be mapped to new code generation backends  <a href="namespacenmodl_1_1codegen_1_1naming.html#a3f22b0c45b6de3c589dba54e7c6f747c">More...</a><br /></td></tr>
-<tr class="separator:a3f22b0c45b6de3c589dba54e7c6f747c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5b00e2793a4cd687d494db5cf0df40a"><td class="memItemLeft" align="right" valign="top">static const std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#ad5b00e2793a4cd687d494db5cf0df40a">nmodl::codegen::naming::VERBATIM_VARIABLES_MAPPING</a></td></tr>
+<tr class="memdesc:ad5b00e2793a4cd687d494db5cf0df40a"><td class="mdescLeft">&#160;</td><td class="mdescRight">commonly used variables in verbatim block and how they should be mapped to new code generation backends  <a href="namespacenmodl_1_1codegen_1_1naming.html#ad5b00e2793a4cd687d494db5cf0df40a">More...</a><br /></td></tr>
+<tr class="separator:ad5b00e2793a4cd687d494db5cf0df40a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0d9c70989ee31d4db8abea7a7d17bc6"><td class="memItemLeft" align="right" valign="top">static std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen_1_1naming.html#ac0d9c70989ee31d4db8abea7a7d17bc6">nmodl::codegen::naming::RANDOM_FUNCTIONS_MAPPING</a></td></tr>
+<tr class="separator:ac0d9c70989ee31d4db8abea7a7d17bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

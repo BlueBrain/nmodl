@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_const_visito
 <p>This class defines interface for all concrete constant visitors implementation. Note that this class only provides interface that could be implemented by concrete visitors like ast::ConstAstVisitor.</p>
 <dl class="section see"><dt>See also</dt><dd>ast::ConstAstVisitor </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00294">294</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00298">298</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -206,6 +206,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab482e166bee74524d8c57143b45a35bd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ab482e166bee74524d8c57143b45a35bd">visit_pointer_var</a> (const <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html">ast::PointerVar</a> &amp;node)=0</td></tr>
 <tr class="memdesc:ab482e166bee74524d8c57143b45a35bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_pointer_var.html" title="TODO.">ast::PointerVar</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#ab482e166bee74524d8c57143b45a35bd">More...</a><br /></td></tr>
 <tr class="separator:ab482e166bee74524d8c57143b45a35bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a255202f2f1cc6e55c83e83cf993790b3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a255202f2f1cc6e55c83e83cf993790b3">visit_random_var</a> (const <a class="el" href="classnmodl_1_1ast_1_1_random_var.html">ast::RandomVar</a> &amp;node)=0</td></tr>
+<tr class="memdesc:a255202f2f1cc6e55c83e83cf993790b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_random_var.html" title="Single variable of type RANDOM.">ast::RandomVar</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#a255202f2f1cc6e55c83e83cf993790b3">More...</a><br /></td></tr>
+<tr class="separator:a255202f2f1cc6e55c83e83cf993790b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a44e047de42280ddb96de57a715a26343"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a44e047de42280ddb96de57a715a26343">visit_bbcore_pointer_var</a> (const <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html">ast::BbcorePointerVar</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a44e047de42280ddb96de57a715a26343"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html" title="Represent a single variable of type BBCOREPOINTER.">ast::BbcorePointerVar</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#a44e047de42280ddb96de57a715a26343">More...</a><br /></td></tr>
 <tr class="separator:a44e047de42280ddb96de57a715a26343"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -446,6 +449,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeff095024f8d0785f5502a32eb92abf9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aeff095024f8d0785f5502a32eb92abf9">visit_global</a> (const <a class="el" href="classnmodl_1_1ast_1_1_global.html">ast::Global</a> &amp;node)=0</td></tr>
 <tr class="memdesc:aeff095024f8d0785f5502a32eb92abf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_global.html" title="Represents GLOBAL statement in NMODL.">ast::Global</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#aeff095024f8d0785f5502a32eb92abf9">More...</a><br /></td></tr>
 <tr class="separator:aeff095024f8d0785f5502a32eb92abf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2afa31b56dca4d9442753f3782ae06eb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a2afa31b56dca4d9442753f3782ae06eb">visit_random_var_list</a> (const <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html">ast::RandomVarList</a> &amp;node)=0</td></tr>
+<tr class="memdesc:a2afa31b56dca4d9442753f3782ae06eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html" title="Represents RANDOM statement in NMODL.">ast::RandomVarList</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#a2afa31b56dca4d9442753f3782ae06eb">More...</a><br /></td></tr>
+<tr class="separator:a2afa31b56dca4d9442753f3782ae06eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8e2092e4642484e99e85436b6aa9ffb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#af8e2092e4642484e99e85436b6aa9ffb">visit_pointer</a> (const <a class="el" href="classnmodl_1_1ast_1_1_pointer.html">ast::Pointer</a> &amp;node)=0</td></tr>
 <tr class="memdesc:af8e2092e4642484e99e85436b6aa9ffb"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_pointer.html" title="Represents POINTER statement in NMODL.">ast::Pointer</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#af8e2092e4642484e99e85436b6aa9ffb">More...</a><br /></td></tr>
 <tr class="separator:af8e2092e4642484e99e85436b6aa9ffb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1898,7 +1904,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_function_call.html" title="TODO.">ast::FunctionCall</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3c5c3eba48b2417a66663739a128e05a">nmodl::codegen::CodegenCppVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a8774ba53b98d1498feb6b5d0f7d96460">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a7ba5a993d1fb71a331c05eb42f6aded2">nmodl::visitor::DefUseAnalyzeVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#acabe746f1071dde350371bdd7d97a744">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#aa681f2b7ed7e102537a776e65d02a87d">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#acab524ff678e6cb74f189e18b9f15a17">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a607296c8151d271b619542af871aa3ea">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a3255c362f289b39689fcc76c8bda35ef">nmodl::codegen::CodegenHelperVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3c5c3eba48b2417a66663739a128e05a">nmodl::codegen::CodegenCppVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a8774ba53b98d1498feb6b5d0f7d96460">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a7ba5a993d1fb71a331c05eb42f6aded2">nmodl::visitor::DefUseAnalyzeVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#acabe746f1071dde350371bdd7d97a744">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#aa681f2b7ed7e102537a776e65d02a87d">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#acab524ff678e6cb74f189e18b9f15a17">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a607296c8151d271b619542af871aa3ea">nmodl::visitor::NmodlPrintVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a9252860f652c9cc9972c7a7d958dede4">nmodl::visitor::SemanticAnalysisVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a3255c362f289b39689fcc76c8bda35ef">nmodl::codegen::CodegenHelperVisitor</a>.</p>
 
 </div>
 </div>
@@ -2588,7 +2594,7 @@ Public Member Functions</h2></td></tr>
 
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_name.html" title="Represents a name.">ast::Name</a> </p>
 
-<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8229d44e2e83410c2e28319a64e24f75">nmodl::codegen::CodegenCppVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a31ab644a31190425d9749c05f5aa79f9">nmodl::visitor::DefUseAnalyzeVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a6919523a1b27266d93d0559fafba1e4f">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#aee881c4d2fcf52c0c22be12a641810f7">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a72b7504805fefba72c2e03371181e465">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_rename_visitor.html#a836401a8ced9b26b3fb932d32c0395fd">nmodl::visitor::RenameVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab5caeeb9aa1902655c052e55520dd285">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a9fb2ca6bc3c2f207c2e63c9b44fccede">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_var_usage_visitor.html#ae834700f380bf9c6198128704501342f">nmodl::visitor::VarUsageVisitor</a>.</p>
+<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8229d44e2e83410c2e28319a64e24f75">nmodl::codegen::CodegenCppVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a31ab644a31190425d9749c05f5aa79f9">nmodl::visitor::DefUseAnalyzeVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a6919523a1b27266d93d0559fafba1e4f">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#aee881c4d2fcf52c0c22be12a641810f7">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a72b7504805fefba72c2e03371181e465">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_rename_visitor.html#a836401a8ced9b26b3fb932d32c0395fd">nmodl::visitor::RenameVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a77cc595b0e13a200ee1bed88bd8b1985">nmodl::visitor::SemanticAnalysisVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab5caeeb9aa1902655c052e55520dd285">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a9fb2ca6bc3c2f207c2e63c9b44fccede">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_var_usage_visitor.html#ae834700f380bf9c6198128704501342f">nmodl::visitor::VarUsageVisitor</a>.</p>
 
 </div>
 </div>
@@ -3189,6 +3195,66 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html" title="TODO.">ast::ProtectStatement</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a946c6fc559c23573210285ed47e28570">nmodl::codegen::CodegenCppVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#aa49297003fb2be6b0b2a004a75b60bcd">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#af2bdb091626313753da1b37c0938a551">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a24a229814ae9975a730dcecc4108ee4d">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a1328bf72643e9d7997310c8fae89d568">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">nmodl::visitor::SemanticAnalysisVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a255202f2f1cc6e55c83e83cf993790b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a255202f2f1cc6e55c83e83cf993790b3">&#9670;&nbsp;</a></span>visit_random_var()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nmodl::visitor::ConstVisitor::visit_random_var </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_random_var.html">ast::RandomVar</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_random_var.html" title="Single variable of type RANDOM.">ast::RandomVar</a> </p>
+
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a52968a0544ab88a89d5e1a34be601362">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a1069be85bcfd383c187f5baafc53dc02">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab9eec7147fc89240878f1887aca7f0b2">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a2c66042b3c545d8ece8d651cbbae820c">nmodl::visitor::NmodlPrintVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a2afa31b56dca4d9442753f3782ae06eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2afa31b56dca4d9442753f3782ae06eb">&#9670;&nbsp;</a></span>visit_random_var_list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nmodl::visitor::ConstVisitor::visit_random_var_list </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html">ast::RandomVarList</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html" title="Represents RANDOM statement in NMODL.">ast::RandomVarList</a> </p>
+
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a76ffafc77197d6a0ef2cd309cd8b1af2">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a0c5794d7de53f9518c0f7e8f4161074a">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#adbf6e2f3a3d70b73427d0f38974ba134">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a1510be445462dbc8a12cf207cfa2ef29">nmodl::visitor::NmodlPrintVisitor</a>.</p>
 
 </div>
 </div>

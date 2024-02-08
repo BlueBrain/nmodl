@@ -258,6 +258,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a65f5a4e348e6aae405a2087dc9b003cb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a65f5a4e348e6aae405a2087dc9b003cb">get_full_var_name</a> (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html">ast::VarName</a> &amp;node)</td></tr>
 <tr class="memdesc:a65f5a4e348e6aae405a2087dc9b003cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a VarName node, return the full var name including index.  <a href="namespacenmodl.html#a65f5a4e348e6aae405a2087dc9b003cb">More...</a><br /></td></tr>
 <tr class="separator:a65f5a4e348e6aae405a2087dc9b003cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08015444c35fc7977d0e82173bf23113"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a08015444c35fc7977d0e82173bf23113">is_random_construct_function</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a08015444c35fc7977d0e82173bf23113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is given name a one of the function for RANDOM construct.  <a href="namespacenmodl.html#a08015444c35fc7977d0e82173bf23113">More...</a><br /></td></tr>
+<tr class="separator:a08015444c35fc7977d0e82173bf23113"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_base_of&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>, T &gt;::value, std::string &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a457c69d76cbb7d9318af1fc030946326">to_nmodl</a> (const std::shared_ptr&lt; T &gt; &amp;node, const std::set&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; &amp;exclude_types={})</td></tr>
 <tr class="memdesc:a457c69d76cbb7d9318af1fc030946326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a shared pointer to an AST node, return the NMODL string representation.  <a href="namespacenmodl.html#a457c69d76cbb7d9318af1fc030946326">More...</a><br /></td></tr>
@@ -412,7 +415,7 @@ Variables</h2></td></tr>
 
 <p>traverse <em>node</em> recursively and collect nodes of given <em>types</em> </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00211">211</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00212">212</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -444,7 +447,7 @@ Variables</h2></td></tr>
 
 <p>traverse <em>node</em> recursively and collect nodes of given <em>types</em> </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00204">204</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00205">205</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -506,7 +509,7 @@ Variables</h2></td></tr>
 <p>Return functions that can be used in the NMODL. </p>
 <dl class="section return"><dt>Returns</dt><dd>vector of function names used in NMODL </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00307">307</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00308">308</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
 
 </div>
 </div>
@@ -528,7 +531,7 @@ Variables</h2></td></tr>
 <p>Return variables declared in NEURON that are available to NMODL. </p>
 <dl class="section return"><dt>Returns</dt><dd>vector of NEURON variables </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00298">298</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00299">299</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
 
 </div>
 </div>
@@ -550,7 +553,7 @@ Variables</h2></td></tr>
 
 <p>Given a VarName node, return the full var name including index. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00273">273</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00274">274</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -572,7 +575,7 @@ Variables</h2></td></tr>
 
 <p>Given a Indexed node, return the name with index. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00269">269</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00270">270</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -649,7 +652,7 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if name is a keyword </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00263">263</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00264">264</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
 
 </div>
 </div>
@@ -678,7 +681,29 @@ Variables</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if name is an integration method in NMODL </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00273">273</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00274">274</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a08015444c35fc7977d0e82173bf23113"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08015444c35fc7977d0e82173bf23113">&#9670;&nbsp;</a></span>is_random_construct_function()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::is_random_construct_function </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Is given name a one of the function for RANDOM construct. </p>
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00285">285</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -856,7 +881,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00217">217</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00218">218</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -889,7 +914,7 @@ Variables</h2></td></tr>
 <p>If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on. </p>
 <p>We provide the input with lhs and rhs because there are a few nodes that have this similar structure but slightly different naming (binaryExpression, diff_eq_expression, linExpression) </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00245">245</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00246">246</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -973,7 +998,7 @@ Variables</h2></td></tr>
 
 <p>Given AST node, return the JSON string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00234">234</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00235">235</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -1005,7 +1030,7 @@ Variables</h2></td></tr>
 
 <p>Given AST node, return the NMODL string representation. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00226">226</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00227">227</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -1118,7 +1143,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>type of NMODL token </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00283">283</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00284">284</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
 
 </div>
 </div>

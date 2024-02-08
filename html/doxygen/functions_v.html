@@ -172,6 +172,7 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1ast_1_1_independent_block.html#ac436cdc9a2d986d8d7520f5df14da228">nmodl::ast::IndependentBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_local_list_statement.html#a66769d495363bc06c45327193349d120">nmodl::ast::LocalListStatement</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_pointer.html#aa83414a99a22fdc0fbe490fead92f307">nmodl::ast::Pointer</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html#a7a24e07b94ec85f6ce6d91910c90f439">nmodl::ast::RandomVarList</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_range.html#a9b057c1beb9a03c9c6705d268ebe6de9">nmodl::ast::Range</a>
 </li>
 <li>variables_in_verbatim
@@ -196,7 +197,7 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 : <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a44d3987c596ef9005b1f05fe34cc2b27">nmodl::codegen::CodegenInfo</a>
 </li>
 <li>Verbatim()
-: <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#ac568e7b3802efca85046984ad38bacdc">nmodl::ast::Verbatim</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#a281f774f163f2771775555f104366e96">nmodl::ast::Verbatim</a>
 </li>
 <li>verbatim_blocks()
 : <a class="el" href="classnmodl_1_1visitor_1_1_verbatim_visitor.html#a2a1679f340e006135e3a72a78fb7c7a4">nmodl::visitor::VerbatimVisitor</a>
@@ -415,7 +416,7 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1ast_1_1_block_comment.html#a8703fbc18433c703756a58606895370d">nmodl::ast::BlockComment</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_boolean.html#a7f0965e621672a70bf395d048ce59166">nmodl::ast::Boolean</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_breakpoint_block.html#a684d599f7e1cebef2dc648c874755d1d">nmodl::ast::BreakpointBlock</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#afd73bb5eb3e289695f885aa23edd1cfa">nmodl::ast::Compartment</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#af75fad0ff890058fa1337ca24b0717fb">nmodl::ast::Compartment</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_conductance_hint.html#afb3dc7dd2fbe8895322429a6b73c5bd9">nmodl::ast::ConductanceHint</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_conserve.html#aeaffaf12bd2be969ad5c968977b7f0f4">nmodl::ast::Conserve</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_constant_block.html#ac979c8303be35f766787f43cd0f545a7">nmodl::ast::ConstantBlock</a>
@@ -489,6 +490,8 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html#a14d94dc6ec4ed65d4a3d108d7492855c">nmodl::ast::ProcedureBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_program.html#abbc13ee98c7f3c9650c42f0f43e1fd9d">nmodl::ast::Program</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html#a495ff4739697fd20500353eb33a1d700">nmodl::ast::ProtectStatement</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_random_var.html#a752a462e65eba2f9169589a44631b35c">nmodl::ast::RandomVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html#aea3c8ba3815b5c2b8e42b3101cab7dfb">nmodl::ast::RandomVarList</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_range.html#ac9ac6d920a6f67cb16320be89b2afe6c">nmodl::ast::Range</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_range_var.html#ab11f0fe4ca4507d8a1c0bfff4a861208">nmodl::ast::RangeVar</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_reaction_operator.html#ac5a4b65e1e765e070874bba574e5422e">nmodl::ast::ReactionOperator</a>
@@ -899,6 +902,7 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a1c3d2de2294e20b90ec5fc91483f0814">nmodl::visitor::MetaAstLookupVisitor&lt; DefaultVisitor &gt;</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a607296c8151d271b619542af871aa3ea">nmodl::visitor::NmodlPrintVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#aa681f2b7ed7e102537a776e65d02a87d">nmodl::visitor::PerfVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a9252860f652c9cc9972c7a7d958dede4">nmodl::visitor::SemanticAnalysisVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a8774ba53b98d1498feb6b5d0f7d96460">nmodl::visitor::test::CheckParentVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#aac969cc5226d009638cb0dff682ded18">nmodl::visitor::Visitor</a>
 </li>
@@ -1169,6 +1173,7 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a9fb2ca6bc3c2f207c2e63c9b44fccede">nmodl::visitor::NmodlPrintVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a6919523a1b27266d93d0559fafba1e4f">nmodl::visitor::PerfVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_rename_visitor.html#a836401a8ced9b26b3fb932d32c0395fd">nmodl::visitor::RenameVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a77cc595b0e13a200ee1bed88bd8b1985">nmodl::visitor::SemanticAnalysisVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a72b7504805fefba72c2e03371181e465">nmodl::visitor::test::CheckParentVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_var_usage_visitor.html#ae834700f380bf9c6198128704501342f">nmodl::visitor::VarUsageVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a163c7e199953b592803c5edaf636b9db">nmodl::visitor::Visitor</a>
@@ -1418,6 +1423,27 @@ $(document).ready(function(){initNavTree('functions_v.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd">nmodl::visitor::SemanticAnalysisVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#aa49297003fb2be6b0b2a004a75b60bcd">nmodl::visitor::test::CheckParentVisitor</a>
 , <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a716f9a007901ebe4bf3f7db75f5cde18">nmodl::visitor::Visitor</a>
+</li>
+<li>visit_random_var()
+: <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a932287c650e47a6332137003d58199e7">nmodl::visitor::AstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a52968a0544ab88a89d5e1a34be601362">nmodl::visitor::ConstAstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a255202f2f1cc6e55c83e83cf993790b3">nmodl::visitor::ConstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ab9eec7147fc89240878f1887aca7f0b2">nmodl::visitor::JSONVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#af0fc5059d8095fd033bc9a67a9468f90">nmodl::visitor::MetaAstLookupVisitor&lt; DefaultVisitor &gt;</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a2c66042b3c545d8ece8d651cbbae820c">nmodl::visitor::NmodlPrintVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#ade66693c6c4af9b3425b12ef701d7f72">nmodl::visitor::SymtabVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a1069be85bcfd383c187f5baafc53dc02">nmodl::visitor::test::CheckParentVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#ac4c44775bd478be76e721114ac06ff0d">nmodl::visitor::Visitor</a>
+</li>
+<li>visit_random_var_list()
+: <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#a0edd9895171e1844cc13a71d17287bd8">nmodl::visitor::AstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a0c5794d7de53f9518c0f7e8f4161074a">nmodl::visitor::ConstAstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a2afa31b56dca4d9442753f3782ae06eb">nmodl::visitor::ConstVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#adbf6e2f3a3d70b73427d0f38974ba134">nmodl::visitor::JSONVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#af2cb27d7479e27520b26ae63834c93f1">nmodl::visitor::MetaAstLookupVisitor&lt; DefaultVisitor &gt;</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a1510be445462dbc8a12cf207cfa2ef29">nmodl::visitor::NmodlPrintVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a76ffafc77197d6a0ef2cd309cd8b1af2">nmodl::visitor::test::CheckParentVisitor</a>
+, <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a794f97f4ca5e20f987474a4d9ccd87f0">nmodl::visitor::Visitor</a>
 </li>
 <li>visit_range()
 : <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#adf4af1a83254ec46a77cf75b99ca7074">nmodl::visitor::AstVisitor</a>

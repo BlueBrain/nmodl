@@ -44,7 +44,8 @@ var symbol__properties_8hpp =
       [ "table_assigned_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaaa553f510cc3f449cdb246f8b31b0c16", null ],
       [ "discrete_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaeca37f2a89583c9c95ca500d9a3da84b", null ],
       [ "define", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf1edc500eb1136f10c17eeffb9eecbc5", null ],
-      [ "codegen_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf502fdd34c60ff3223d4f18ec72f4cc8", null ]
+      [ "codegen_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf502fdd34c60ff3223d4f18ec72f4cc8", null ],
+      [ "random_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba697324bc2a726114814b9ae77caa789a", null ]
     ] ],
     [ "Scope", "symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75", [
       [ "local", "symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75af5ddaf0ca7929578b408c909429f68f2", null ],

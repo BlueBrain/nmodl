@@ -93,6 +93,8 @@ var dir_78254c2889ae9e6fc42754872dbb7646 =
     [ "procedure_block.hpp", "procedure__block_8hpp.html", null ],
     [ "program.hpp", "program_8hpp.html", null ],
     [ "protect_statement.hpp", "protect__statement_8hpp.html", null ],
+    [ "random_var.hpp", "random__var_8hpp.html", null ],
+    [ "random_var_list.hpp", "random__var__list_8hpp.html", null ],
     [ "range.hpp", "range_8hpp.html", null ],
     [ "range_var.hpp", "range__var_8hpp.html", null ],
     [ "react_var_name.hpp", "react__var__name_8hpp.html", null ],

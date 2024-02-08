@@ -89,6 +89,8 @@ var group__ast__vec__type =
     [ "ProcedureBlockVector", "group__ast__vec__type.html#ga031b3c7c9f581864fdcf8ff30f466580", null ],
     [ "ProgramVector", "group__ast__vec__type.html#gae0477d36e881ecdd50a5d973e4d8ffe4", null ],
     [ "ProtectStatementVector", "group__ast__vec__type.html#gad88e3f65e35313dec0d5c377bf09fca5", null ],
+    [ "RandomVarListVector", "group__ast__vec__type.html#gaeb3ab612f2295030e0e22a5c5b86e415", null ],
+    [ "RandomVarVector", "group__ast__vec__type.html#ga71f918c56247c3370e58c8cbeaa305d9", null ],
     [ "RangeVarVector", "group__ast__vec__type.html#ga246aa8db5fc687abf00fdc9b53312662", null ],
     [ "RangeVector", "group__ast__vec__type.html#ga44ce674af26e2057d4262412eef87128", null ],
     [ "ReactionOperatorVector", "group__ast__vec__type.html#gab5bc253411d34f6f6795f146c63700ee", null ],

@@ -15,6 +15,7 @@ var visitor__utils_8cpp =
     [ "get_indexed_name", "visitor__utils_8cpp.html#a63b20bd823506ecccb7c2c79d5b153f2", null ],
     [ "get_local_list_statement", "visitor__utils_8cpp.html#adbdbb124708e64f8604f01b60ee326cc", null ],
     [ "get_new_name", "visitor__utils_8cpp.html#a9b51e3f836995236060e8eb8596dd486", null ],
+    [ "is_random_construct_function", "visitor__utils_8cpp.html#a08015444c35fc7977d0e82173bf23113", null ],
     [ "sparse_solver_exists", "visitor__utils_8cpp.html#a21160c42746b7846b552e45572d8e083", null ],
     [ "statement_dependencies", "visitor__utils_8cpp.html#a1cf829797d75f00f7307a89776d9d735", null ],
     [ "suffix_random_string", "visitor__utils_8cpp.html#a7fe096bb1d995226f2875d6cbc2ece0e", null ],
