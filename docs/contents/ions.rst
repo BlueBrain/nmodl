@@ -60,10 +60,10 @@ everything is at the level of segment, we'll not keep repeating "for that
 segment". Similarly, each mechanism computes a `local` contribution, i.e. the
 contribution due to this mechanism to the actual `global` ion current.
 
-Therefore, the following code for the following must be generated:
+Therefore, code for the following must be generated:
 
 1. Compute the local contribution to the sodium current.
-2. Increment the total, local, current contribution.
+2. Increment the total, local, current contribution by ``ina``.
 3. Increment the global sodium current by ``ina``.
 4. Compute local derivative of ``ina`` w.r.t. the voltage.
 5. Increment the global derivative of the sodium current w.r.t. the voltage.
