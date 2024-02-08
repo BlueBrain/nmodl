@@ -15,7 +15,7 @@ var searchData=
   ['unroll_5ffor_5floop_4343',['unroll_for_loop',['../namespacenmodl_1_1visitor.html#a29d224493529dd668adf0ccc5cc51ba8',1,'nmodl::visitor']]],
   ['unwrap_4344',['unwrap',['../namespacenmodl_1_1visitor.html#a2b5db33bfc3c6c9d41c199ad73c3cea7',1,'nmodl::visitor']]],
   ['update_5fdefuse_5fchain_4345',['update_defuse_chain',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#ad4b893f003dec51f192d6f10102630de',1,'nmodl::visitor::DefUseAnalyzeVisitor']]],
-  ['update_5fif_5fion_5fvariable_5fname_4346',['update_if_ion_variable_name',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a992c19b9aa26099d7d1954fe77107b0d',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]],
+  ['update_5fif_5fion_5fvariable_5fname_4346',['update_if_ion_variable_name',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aba3a9521ace5f09f4d2263e4401b33ee',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['update_5findex_5fsemantics_4347',['update_index_semantics',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0d8d4e346e244c764911c0c64c2ac1c',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['update_5fmemory_5fops_4348',['update_memory_ops',['../classnmodl_1_1visitor_1_1_perf_visitor.html#a612892dabaa7522074e18bf3d7a54716',1,'nmodl::visitor::PerfVisitor']]],
   ['update_5fmode_5finsert_4349',['update_mode_insert',['../classnmodl_1_1symtab_1_1_model_symbol_table.html#abf5eab3a8db5ff75e2c8dd3a32c233aa',1,'nmodl::symtab::ModelSymbolTable']]],

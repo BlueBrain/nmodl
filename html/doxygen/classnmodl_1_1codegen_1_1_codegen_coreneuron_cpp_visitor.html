@@ -93,7 +93,6 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_core
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
-<a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
 <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">nmodl::codegen::CodegenCoreneuronCppVisitor Class Reference<div class="ingroups"><a class="el" href="group__codegen.html">Code Generation Implementation</a> &raquo; <a class="el" href="group__codegen__backends.html">Codegen Backends</a></div></div>  </div>
@@ -104,7 +103,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_core
  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#details">More...</a></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Visitor for printing C++ code compatible with legacy api of CoreNEURON </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000011">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd><ul>
 <li>Handle define statement (i.e. macros)</li>
 <li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block. </li>
 </ul>
@@ -535,24 +534,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aeada2d6cff883f8cbd1924f1d9729250"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeada2d6cff883f8cbd1924f1d9729250">position_of_int_var</a> (const std::string &amp;name) const override</td></tr>
 <tr class="memdesc:aeada2d6cff883f8cbd1924f1d9729250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the position in the data array for a given int variable.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeada2d6cff883f8cbd1924f1d9729250">More...</a><br /></td></tr>
 <tr class="separator:aeada2d6cff883f8cbd1924f1d9729250"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40430cd5a36ba2b612adc095952d50a9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a40430cd5a36ba2b612adc095952d50a9">breakpoint_current</a> (std::string current) const</td></tr>
-<tr class="memdesc:a40430cd5a36ba2b612adc095952d50a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for the "current" used in breakpoint block taking into account intermediate code transformations.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a40430cd5a36ba2b612adc095952d50a9">More...</a><br /></td></tr>
-<tr class="separator:a40430cd5a36ba2b612adc095952d50a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ff6b6d552739a604c1c9c19968dafb4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a2ff6b6d552739a604c1c9c19968dafb4">ion_read_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
-<tr class="memdesc:a2ff6b6d552739a604c1c9c19968dafb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a2ff6b6d552739a604c1c9c19968dafb4">More...</a><br /></td></tr>
-<tr class="separator:a2ff6b6d552739a604c1c9c19968dafb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43e3e9beeb7ca80989d361c917491e1e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a43e3e9beeb7ca80989d361c917491e1e">ion_read_statements_optimized</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
-<tr class="memdesc:a43e3e9beeb7ca80989d361c917491e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return minimal statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a43e3e9beeb7ca80989d361c917491e1e">More...</a><br /></td></tr>
-<tr class="separator:a43e3e9beeb7ca80989d361c917491e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c07a4568bf732ccc7a6ec9b763bc71b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0c07a4568bf732ccc7a6ec9b763bc71b">ion_write_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
-<tr class="memdesc:a0c07a4568bf732ccc7a6ec9b763bc71b"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for writing back ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0c07a4568bf732ccc7a6ec9b763bc71b">More...</a><br /></td></tr>
-<tr class="separator:a0c07a4568bf732ccc7a6ec9b763bc71b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ce5f8dd96c5a12646610da8e40de705"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4ce5f8dd96c5a12646610da8e40de705">process_verbatim_token</a> (const std::string &amp;token)</td></tr>
 <tr class="memdesc:a4ce5f8dd96c5a12646610da8e40de705"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process a token in a verbatim block for possible variable renaming.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4ce5f8dd96c5a12646610da8e40de705">More...</a><br /></td></tr>
 <tr class="separator:a4ce5f8dd96c5a12646610da8e40de705"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7089dc9d4bfda5791d6f95388a877c8b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a7089dc9d4bfda5791d6f95388a877c8b">ion_variable_struct_required</a> () const</td></tr>
-<tr class="memdesc:a7089dc9d4bfda5791d6f95388a877c8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a structure for ion variables is required.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a7089dc9d4bfda5791d6f95388a877c8b">More...</a><br /></td></tr>
-<tr class="separator:a7089dc9d4bfda5791d6f95388a877c8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d1ca0fcb615508f88c56b6d7a987419"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5d1ca0fcb615508f88c56b6d7a987419">is_constant_variable</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:a5d1ca0fcb615508f88c56b6d7a987419"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if variable is qualified as constant.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5d1ca0fcb615508f88c56b6d7a987419">More...</a><br /></td></tr>
 <tr class="separator:a5d1ca0fcb615508f88c56b6d7a987419"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -622,9 +606,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:abd6be1c541190358a512f0021ea82b16"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#abd6be1c541190358a512f0021ea82b16">print_backend_includes</a> ()</td></tr>
 <tr class="memdesc:abd6be1c541190358a512f0021ea82b16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print backend specific includes (none needed for C++ backend)  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#abd6be1c541190358a512f0021ea82b16">More...</a><br /></td></tr>
 <tr class="separator:abd6be1c541190358a512f0021ea82b16"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58808da4cf7e64ffb1bcb5be20f977e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a58808da4cf7e64ffb1bcb5be20f977e3">optimize_ion_variable_copies</a> () const</td></tr>
-<tr class="memdesc:a58808da4cf7e64ffb1bcb5be20f977e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if ion variable copies should be avoided.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a58808da4cf7e64ffb1bcb5be20f977e3">More...</a><br /></td></tr>
-<tr class="separator:a58808da4cf7e64ffb1bcb5be20f977e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0620e76a8bf6864c3f4a38680f514158"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0620e76a8bf6864c3f4a38680f514158">optimize_ion_variable_copies</a> () const override</td></tr>
+<tr class="memdesc:a0620e76a8bf6864c3f4a38680f514158"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if ion variable copies should be avoided.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0620e76a8bf6864c3f4a38680f514158">More...</a><br /></td></tr>
+<tr class="separator:a0620e76a8bf6864c3f4a38680f514158"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a421dd82c2f3762ff97fb4d0d646c1565"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a421dd82c2f3762ff97fb4d0d646c1565">print_memory_allocation_routine</a> () const</td></tr>
 <tr class="memdesc:a421dd82c2f3762ff97fb4d0d646c1565"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print memory allocation routine.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a421dd82c2f3762ff97fb4d0d646c1565">More...</a><br /></td></tr>
 <tr class="separator:a421dd82c2f3762ff97fb4d0d646c1565"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -711,12 +695,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:af7e3a49a86646f3b69a3d387aa4116bb"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af7e3a49a86646f3b69a3d387aa4116bb">register_mechanism_arguments</a> () const override</td></tr>
 <tr class="memdesc:af7e3a49a86646f3b69a3d387aa4116bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for register_mech or point_register_mech function.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af7e3a49a86646f3b69a3d387aa4116bb">More...</a><br /></td></tr>
 <tr class="separator:af7e3a49a86646f3b69a3d387aa4116bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a805dff5f277ea3b3536a553818fb917a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a805dff5f277ea3b3536a553818fb917a">conc_write_statement</a> (const std::string &amp;ion_name, const std::string &amp;concentration, int index)</td></tr>
-<tr class="memdesc:a805dff5f277ea3b3536a553818fb917a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Function call statement for nrn_wrote_conc.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a805dff5f277ea3b3536a553818fb917a">More...</a><br /></td></tr>
-<tr class="separator:a805dff5f277ea3b3536a553818fb917a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b99884ba28c9b21c1ff40bb54ca20f5"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a7b99884ba28c9b21c1ff40bb54ca20f5">process_shadow_update_statement</a> (const <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &amp;statement, <a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
-<tr class="memdesc:a7b99884ba28c9b21c1ff40bb54ca20f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process shadow update statement.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a7b99884ba28c9b21c1ff40bb54ca20f5">More...</a><br /></td></tr>
-<tr class="separator:a7b99884ba28c9b21c1ff40bb54ca20f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a542c802c8bea31d9a7702831eb385633"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a542c802c8bea31d9a7702831eb385633">conc_write_statement</a> (const std::string &amp;ion_name, const std::string &amp;concentration, int index) override</td></tr>
+<tr class="memdesc:a542c802c8bea31d9a7702831eb385633"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate Function call statement for nrn_wrote_conc.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a542c802c8bea31d9a7702831eb385633">More...</a><br /></td></tr>
+<tr class="separator:a542c802c8bea31d9a7702831eb385633"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6498ebb631852d55d7585ef179b3008e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a6498ebb631852d55d7585ef179b3008e">print_first_pointer_var_index_getter</a> ()</td></tr>
 <tr class="memdesc:a6498ebb631852d55d7585ef179b3008e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the getter method for index position of first pointer variable.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a6498ebb631852d55d7585ef179b3008e">More...</a><br /></td></tr>
 <tr class="separator:a6498ebb631852d55d7585ef179b3008e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -744,9 +725,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0eb6eb4f68afb0711caa99a0f9ee85d4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0eb6eb4f68afb0711caa99a0f9ee85d4">print_thread_getters</a> ()</td></tr>
 <tr class="memdesc:a0eb6eb4f68afb0711caa99a0f9ee85d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the getter method for thread variables and ids.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0eb6eb4f68afb0711caa99a0f9ee85d4">More...</a><br /></td></tr>
 <tr class="separator:a0eb6eb4f68afb0711caa99a0f9ee85d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a992c19b9aa26099d7d1954fe77107b0d"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a992c19b9aa26099d7d1954fe77107b0d">update_if_ion_variable_name</a> (const std::string &amp;name) const</td></tr>
-<tr class="memdesc:a992c19b9aa26099d7d1954fe77107b0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the updated name if the ion variable has been optimized.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a992c19b9aa26099d7d1954fe77107b0d">More...</a><br /></td></tr>
-<tr class="separator:a992c19b9aa26099d7d1954fe77107b0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a18e0834ef774dd2bb5e5adc4ff2df5ae"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a18e0834ef774dd2bb5e5adc4ff2df5ae">float_variable_name</a> (const <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> &amp;symbol, bool use_instance) const override</td></tr>
 <tr class="memdesc:a18e0834ef774dd2bb5e5adc4ff2df5ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the name of a <code>float</code> variable given its symbol.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a18e0834ef774dd2bb5e5adc4ff2df5ae">More...</a><br /></td></tr>
 <tr class="separator:a18e0834ef774dd2bb5e5adc4ff2df5ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -985,6 +963,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a1383d59c91539e205ef2ade35d1dafcb inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1383d59c91539e205ef2ade35d1dafcb">get_channel_info_var_name</a> () const noexcept</td></tr>
 <tr class="memdesc:a1383d59c91539e205ef2ade35d1dafcb inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Name of channel info variable.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1383d59c91539e205ef2ade35d1dafcb">More...</a><br /></td></tr>
 <tr class="separator:a1383d59c91539e205ef2ade35d1dafcb inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e25890e173635c92d41465a2ee4d3a2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6e25890e173635c92d41465a2ee4d3a2">ion_variable_struct_required</a> () const</td></tr>
+<tr class="memdesc:a6e25890e173635c92d41465a2ee4d3a2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a structure for ion variables is required.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6e25890e173635c92d41465a2ee4d3a2">More...</a><br /></td></tr>
+<tr class="separator:a6e25890e173635c92d41465a2ee4d3a2 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acf8e00aaf5cd53b7be12cfeeee66c5b7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:acf8e00aaf5cd53b7be12cfeeee66c5b7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acf8e00aaf5cd53b7be12cfeeee66c5b7">has_parameter_of_name</a> (const T &amp;node, const std::string &amp;name)</td></tr>
 <tr class="memdesc:acf8e00aaf5cd53b7be12cfeeee66c5b7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if function or procedure node has parameter with given name.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acf8e00aaf5cd53b7be12cfeeee66c5b7">More...</a><br /></td></tr>
@@ -1046,6 +1027,21 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_index_variable_info.html">IndexVariableInfo</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9fd66cb8986ef84feaa63fdd0f072e45">get_int_variables</a> ()</td></tr>
 <tr class="memdesc:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine all <code>int</code> variables required during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9fd66cb8986ef84feaa63fdd0f072e45">More...</a><br /></td></tr>
 <tr class="separator:a9fd66cb8986ef84feaa63fdd0f072e45 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d8c0140086b0f5284e1cf7c23632463">ion_read_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
+<tr class="memdesc:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d8c0140086b0f5284e1cf7c23632463">More...</a><br /></td></tr>
+<tr class="separator:a6d8c0140086b0f5284e1cf7c23632463 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a26ad42be1c7c9a127b2d806d08e426a6">ion_read_statements_optimized</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
+<tr class="memdesc:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return minimal statements for all read ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a26ad42be1c7c9a127b2d806d08e426a6">More...</a><br /></td></tr>
+<tr class="separator:a26ad42be1c7c9a127b2d806d08e426a6 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">ion_write_statements</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
+<tr class="memdesc:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">For a given output block type, return statements for writing back ion variables.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">More...</a><br /></td></tr>
+<tr class="separator:a2e2dd82a055dd830e8efc7f1dce03924 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa539bb6033a8bcd87fc4eb279bad887a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa539bb6033a8bcd87fc4eb279bad887a">process_shadow_update_statement</a> (const <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &amp;statement, <a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type)</td></tr>
+<tr class="memdesc:aa539bb6033a8bcd87fc4eb279bad887a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process shadow update statement.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa539bb6033a8bcd87fc4eb279bad887a">More...</a><br /></td></tr>
+<tr class="separator:aa539bb6033a8bcd87fc4eb279bad887a inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">breakpoint_current</a> (std::string current) const</td></tr>
+<tr class="memdesc:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for the "current" used in breakpoint block taking into account intermediate code transformations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">More...</a><br /></td></tr>
+<tr class="separator:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">print_global_var_struct_decl</a> ()</td></tr>
 <tr class="memdesc:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate global var instance.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">More...</a><br /></td></tr>
 <tr class="separator:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1071,6 +1067,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:abb107f782ba7985c00ac77dc77acd35c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abb107f782ba7985c00ac77dc77acd35c">make_symbol</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:abb107f782ba7985c00ac77dc77acd35c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a temporary symbol.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abb107f782ba7985c00ac77dc77acd35c">More...</a><br /></td></tr>
 <tr class="separator:abb107f782ba7985c00ac77dc77acd35c inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba3a9521ace5f09f4d2263e4401b33ee inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aba3a9521ace5f09f4d2263e4401b33ee">update_if_ion_variable_name</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:aba3a9521ace5f09f4d2263e4401b33ee inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the updated name if the ion variable has been optimized.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aba3a9521ace5f09f4d2263e4401b33ee">More...</a><br /></td></tr>
+<tr class="separator:aba3a9521ace5f09f4d2263e4401b33ee inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49519f5b846f396cd1a4bf0b8775ac65 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a49519f5b846f396cd1a4bf0b8775ac65">print_global_var_struct_assertions</a> () const</td></tr>
 <tr class="memdesc:a49519f5b846f396cd1a4bf0b8775ac65 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print static assertions about the global variable struct.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a49519f5b846f396cd1a4bf0b8775ac65">More...</a><br /></td></tr>
 <tr class="separator:a49519f5b846f396cd1a4bf0b8775ac65 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1174,14 +1173,14 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ae022e99573f663fc0db935c5c1bb7199 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae022e99573f663fc0db935c5c1bb7199">compute_method_name</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type) const</td></tr>
 <tr class="separator:ae022e99573f663fc0db935c5c1bb7199 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
-Static Protected Member Functions</h2></td></tr>
-<tr class="memitem:aeb4f46dc88633a2d367cda3aaa650e1e"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeb4f46dc88633a2d367cda3aaa650e1e">read_ion_variable_name</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:aeb4f46dc88633a2d367cda3aaa650e1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return ion variable name and corresponding ion read variable name.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeb4f46dc88633a2d367cda3aaa650e1e">More...</a><br /></td></tr>
-<tr class="separator:aeb4f46dc88633a2d367cda3aaa650e1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c6c17a2eeafae316e104bf5722337fa"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4c6c17a2eeafae316e104bf5722337fa">write_ion_variable_name</a> (const std::string &amp;name)</td></tr>
-<tr class="memdesc:a4c6c17a2eeafae316e104bf5722337fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return ion variable name and corresponding ion write variable name.  <a href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4c6c17a2eeafae316e104bf5722337fa">More...</a><br /></td></tr>
-<tr class="separator:a4c6c17a2eeafae316e104bf5722337fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
+<tr class="memitem:a84d8220dfbff2afda5d207b6d29f61f8 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> = std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt;</td></tr>
+<tr class="separator:a84d8220dfbff2afda5d207b6d29f61f8 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">ParamVector</a> = std::vector&lt; std::tuple&lt; std::string, std::string, std::string, std::string &gt; &gt;</td></tr>
+<tr class="memdesc:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector of parameters represented by a 4-tuple of strings:  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">More...</a><br /></td></tr>
+<tr class="separator:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
 <tr class="memitem:afdf8d3232526bf1978bb298755f42958 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afdf8d3232526bf1978bb298755f42958">need_semicolon</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> &amp;node)</td></tr>
 <tr class="memdesc:afdf8d3232526bf1978bb298755f42958 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a semicolon is required at the end of given statement.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afdf8d3232526bf1978bb298755f42958">More...</a><br /></td></tr>
@@ -1192,15 +1191,12 @@ Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71">statement_to_skip</a> (const <a class="el" href="classnmodl_1_1ast_1_1_statement.html">ast::Statement</a> &amp;node)</td></tr>
 <tr class="memdesc:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if given statement should be skipped during code generation.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71">More...</a><br /></td></tr>
 <tr class="separator:a789dae2310c3496443a8a51c26cc8b71 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
-<tr class="memitem:a84d8220dfbff2afda5d207b6d29f61f8 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a84d8220dfbff2afda5d207b6d29f61f8">SymbolType</a> = std::shared_ptr&lt; <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html">symtab::Symbol</a> &gt;</td></tr>
-<tr class="separator:a84d8220dfbff2afda5d207b6d29f61f8 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">ParamVector</a> = std::vector&lt; std::tuple&lt; std::string, std::string, std::string, std::string &gt; &gt;</td></tr>
-<tr class="memdesc:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">A vector of parameters represented by a 4-tuple of strings:  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">More...</a><br /></td></tr>
-<tr class="separator:a73d001ad3c271c56d89e09e2cebfceb3 inherit pro_types_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ee489972d8827f03490337c96a74b43 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3ee489972d8827f03490337c96a74b43">read_ion_variable_name</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a3ee489972d8827f03490337c96a74b43 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return ion variable name and corresponding ion read variable name.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3ee489972d8827f03490337c96a74b43">More...</a><br /></td></tr>
+<tr class="separator:a3ee489972d8827f03490337c96a74b43 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8c28e874826634125ad9b5f59511f445">write_ion_variable_name</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return ion variable name and corresponding ion write variable name.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8c28e874826634125ad9b5f59511f445">More...</a><br /></td></tr>
+<tr class="separator:a8c28e874826634125ad9b5f59511f445 inherit pro_static_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a></td></tr>
 <tr class="memitem:aa2be06a920e2103ba838c308a2dcc57e inherit pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classnmodl_1_1printer_1_1_code_printer.html">CodePrinter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa2be06a920e2103ba838c308a2dcc57e">printer</a></td></tr>
 <tr class="memdesc:aa2be06a920e2103ba838c308a2dcc57e inherit pro_attribs_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code printer object for target (C++)  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa2be06a920e2103ba838c308a2dcc57e">More...</a><br /></td></tr>
@@ -1307,7 +1303,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l01198">1198</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l01117">1117</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1369,7 +1365,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l01220">1220</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l01139">1139</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -1407,44 +1403,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a40430cd5a36ba2b612adc095952d50a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40430cd5a36ba2b612adc095952d50a9">&#9670;&nbsp;</a></span>breakpoint_current()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCoreneuronCppVisitor::breakpoint_current </td>
-          <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>current</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determine the variable name for the "current" used in breakpoint block taking into account intermediate code transformations. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">current</td><td>The variable name for the current used in the model </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The name for the current to be printed in C++</dd></dl>
-<p>Current variable used in breakpoint block could be local variable. In this case, neuron has already renamed the variable name by prepending "_l". In our implementation, the variable could have been renamed by one of the pass. And hence, we search all local variables and check if the variable is renamed. Note that we have to look into the symbol table of statement block and not breakpoint. </p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00098">98</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
 <a id="a293512e33ee9a6a4585664e73e5897ed"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a293512e33ee9a6a4585664e73e5897ed">&#9670;&nbsp;</a></span>check_if_var_is_array()</h2>
 
@@ -1472,12 +1430,12 @@ Additional Inherited Members</h2></td></tr>
 <p>Check if the given name exist in the symbol. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>return</code> a tuple &lt;true, array_length&gt; if variable is an array otherwise &lt;false, 0&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00563">563</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00424">424</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a805dff5f277ea3b3536a553818fb917a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a805dff5f277ea3b3536a553818fb917a">&#9670;&nbsp;</a></span>conc_write_statement()</h2>
+<a id="a542c802c8bea31d9a7702831eb385633"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a542c802c8bea31d9a7702831eb385633">&#9670;&nbsp;</a></span>conc_write_statement()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1511,7 +1469,7 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -1527,7 +1485,9 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The string representing the function call </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01204">1204</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae29a1c321357b464d7a67ee4fbfabfe3">nmodl::codegen::CodegenCppVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01053">1053</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1559,7 +1519,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a856bffb7c4dd44eed5f371fc25f5c349">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01078">1078</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00939">939</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1598,7 +1558,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a362f36a540212a3005f56ebf2d3b68b8">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01083">1083</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00944">944</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1649,7 +1609,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6355225bc6f8a723100111beb2af4b7f">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01391">1391</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01218">1218</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1686,7 +1646,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <p>If floating point type like "float" is specified on command line then we can't turn all variables to new type. This is because certain variables are pointers to internal variables (e.g. ions). Hence, we check if given variable can be safely converted to new type. If so, return new type. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02248">2248</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02057">2057</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1736,7 +1696,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac87b0baf7ca05124b07a2cb0c405a165">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01465">1465</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01274">1274</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1786,7 +1746,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abe4fe9f14753f16e3b1014cdb4e9f846">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01437">1437</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01264">1264</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1844,7 +1804,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7c72df642a0d00144470a946f65eb5bc">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01411">1411</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01238">1238</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1876,7 +1836,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeacff81944f23540968aa617d25e3d22">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01050">1050</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00911">911</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1905,154 +1865,11 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Parameters for internally defined functions. </p>
 <dl class="section return"><dt>Returns</dt><dd>the method parameters</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>: figure out how to correctly handle qualifiers </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>: figure out how to correctly handle qualifiers </dd></dl>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a32f908e88bbb1c5070b5e011f2955c07">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01061">1061</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a2ff6b6d552739a604c1c9c19968dafb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ff6b6d552739a604c1c9c19968dafb4">&#9670;&nbsp;</a></span>ion_read_statements()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::string &gt; nmodl::codegen::CodegenCoreneuronCppVisitor::ion_read_statements </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>For a given output block type, return statements for all read ion variables. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">type</td><td>The type of code block being generated </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A <code>vector</code> of strings representing the reading of ion variables</dd></dl>
-<p>Depending upon the block type, we have to print read/write ion variables during code generation. Depending on block/procedure being printed, this method return statements as vector. As different code backends could have different variable names, we rely on backend-specific read_ion_variable_name and write_ion_variable_name method which will be overloaded. </p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00124">124</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a43e3e9beeb7ca80989d361c917491e1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a43e3e9beeb7ca80989d361c917491e1e">&#9670;&nbsp;</a></span>ion_read_statements_optimized()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::string &gt; nmodl::codegen::CodegenCoreneuronCppVisitor::ion_read_statements_optimized </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>For a given output block type, return minimal statements for all read ion variables. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">type</td><td>The type of code block being generated </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A <code>vector</code> of strings representing the reading of ion variables </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00154">154</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a7089dc9d4bfda5791d6f95388a877c8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7089dc9d4bfda5791d6f95388a877c8b">&#9670;&nbsp;</a></span>ion_variable_struct_required()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool nmodl::codegen::CodegenCoreneuronCppVisitor::ion_variable_struct_required </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Check if a structure for ion variables is required. </p>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if a structure fot ion variables must be generated </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00259">259</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a0c07a4568bf732ccc7a6ec9b763bc71b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c07a4568bf732ccc7a6ec9b763bc71b">&#9670;&nbsp;</a></span>ion_write_statements()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &gt; nmodl::codegen::CodegenCoreneuronCppVisitor::ion_write_statements </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>For a given output block type, return statements for writing back ion variables. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">type</td><td>The type of code block being generated </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>A <code>vector</code> of strings representing the write-back of ion variables </dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">Todo:</a></b></dt><dd>Unhandled case in neuron implementation </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00171">171</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00922">922</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2090,7 +1907,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if it is constant</dd></dl>
 <p>This can be override in the backend. For example, parameters can be constant except in INITIAL block where they are set to 0. As initial block is/can be executed on c++/cpu backend, gpu backend can mark the parameter as constant. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00269">269</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00130">130</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2139,7 +1956,7 @@ Additional Inherited Members</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if operator() is const else False </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00905">905</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00766">766</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2169,7 +1986,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Generate the target backend code for the <code>net_receive_buffering</code> function delcaration. </p>
 <dl class="section return"><dt>Returns</dt><dd>The target code string </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03007">3007</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02816">2816</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2200,7 +2017,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00398">398</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00259">259</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2231,7 +2048,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aff92b4a2fed92577dbd5294d54def2e8">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01093">1093</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00954">954</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2263,7 +2080,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#abcf0d5623d10f929b40dd3fc0e8ad00a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01105">1105</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00966">966</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2296,8 +2113,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a58808da4cf7e64ffb1bcb5be20f977e3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58808da4cf7e64ffb1bcb5be20f977e3">&#9670;&nbsp;</a></span>optimize_ion_variable_copies()</h2>
+<a id="a0620e76a8bf6864c3f4a38680f514158"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0620e76a8bf6864c3f4a38680f514158">&#9670;&nbsp;</a></span>optimize_ion_variable_copies()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2314,14 +2131,16 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Check if ion variable copies should be avoided. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00470">470</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a81cded985b616728b55976bf7eca4488">nmodl::codegen::CodegenCppVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00331">331</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2430,7 +2249,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00492">492</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00353">353</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2464,7 +2283,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00440">440</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00301">301</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2495,7 +2314,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a2a52b48b11fbf0757fb037d7e579daf3">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00465">465</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00326">326</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2526,7 +2345,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aad0e75ceecc2e0802555fcd92cb7d437">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01538">1538</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01347">1347</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2556,7 +2375,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Prints the start of namespace for the backend-specific code. </p>
 <p>For the C++ backend no additional namespace is required </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00455">455</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00316">316</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2586,7 +2405,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Prints the end of namespace for the backend-specific code. </p>
 <p>For the C++ backend no additional namespace is required </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00460">460</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00321">321</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2637,7 +2456,7 @@ Additional Inherited Members</h2></td></tr>
 <p>print main body</p>
 <p>loop end including data annotation block</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02563">2563</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02372">2372</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2693,7 +2512,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- fragment --> 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0d8527584a257a10b5685356bea2911d">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00375">375</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00236">236</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2722,7 +2541,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print check_table functions. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00783">783</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00644">644</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2753,7 +2572,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a20666add7b3f75937954a038c51f5b55">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03654">3654</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03463">3463</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2782,7 +2601,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print common getters. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03584">3584</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03393">3393</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2813,7 +2632,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a407af2b73f564d5db79381b5b2699c97">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03623">3623</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03432">3432</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2842,7 +2661,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print includes from coreneuron. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01569">1569</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01378">1378</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2880,7 +2699,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acbb83079b063cd6b48e07030b1f5df84">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03595">3595</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03404">3404</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2911,7 +2730,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00294">294</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00155">155</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2946,10 +2765,10 @@ Additional Inherited Members</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>Data is not derived.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Data is not derived.</dd></dl>
 <p>Need to add instance into instance struct? data used here is wrong in AoS because as in original implementation, data is not incremented every iteration for AoS. May be better to derive actual variable names? [resolved now?] slist needs to added as local variable </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03219">3219</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03028">3028</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2980,7 +2799,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00299">299</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00160">160</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3010,7 +2829,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Print the backend specific device method annotation. </p>
 <dl class="section note"><dt>Note</dt><dd>This is not used for the C++ backend </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00445">445</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00306">306</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3041,7 +2860,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00324">324</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00185">185</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3072,7 +2891,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a3881733a09e8cd01a1829c3c5a9a629f">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00319">319</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00180">180</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3110,7 +2929,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01008">1008</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00869">869</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3143,7 +2962,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af58d26884131b0cc711887c549bc7957">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03499">3499</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03308">3308</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3172,7 +2991,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter method for index position of first pointer variable. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01253">1253</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01080">1080</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3201,7 +3020,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter method for index position of first RANDOM variable. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01262">1262</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01089">1089</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3239,7 +3058,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4b9e335b7f968d36d9cd6bdfc34bba34">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00847">847</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00708">708</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3288,7 +3107,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3836bfe0a9610b9037a73ea727246e71">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00807">807</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00668">668</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3326,7 +3145,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa017bbe95ad7539e72d182dac59f2454">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00828">828</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00689">689</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3357,7 +3176,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50ccadf68055ea9e26439ccaed0d68f7">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00529">529</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00390">390</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3393,7 +3212,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00867">867</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00728">728</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3429,7 +3248,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00941">941</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00802">802</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3458,7 +3277,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Go through the map of <code>EigenNewtonSolverBlock</code> s and their corresponding functor names and print the functor definitions before the definitions of the functions of the generated file. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02641">2641</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02450">2450</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3489,7 +3308,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a430f1ba9b0f5fe9f3b74678f63025384">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03614">3614</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03423">3423</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3518,7 +3337,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the target backend code for defining and checking a local <code>Memb_list</code> variable. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03012">3012</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02821">2821</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3567,7 +3386,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d73d64a97cc8f024e1ee3367bfd119d">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02437">2437</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02246">2246</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3597,7 +3416,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Print backend specific global method annotation. </p>
 <dl class="section note"><dt>Note</dt><dd>This is not used for the C++ backend </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00450">450</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00311">311</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3629,7 +3448,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab76d2ea624e89d175ff3456005e410da">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02222">2222</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02031">2031</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3661,7 +3480,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acd5e0d9dafe7c14f8946e980b77410ae">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01816">1816</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01625">1625</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3692,7 +3511,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a190bf9a0838f05780f727a5a90883813">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03565">3565</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03374">3374</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3729,7 +3548,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02387">2387</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02196">2196</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3761,7 +3580,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a69e320fadc7ed977df7f9c8a7b686e6f">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00376">376</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00333">333</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3793,7 +3612,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a791fea41ba7dc986ed211172d3558e2c">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00383">383</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00340">340</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3824,7 +3643,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4cb9e164e869f63d499d5f4c84f66f90">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00354">354</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00311">311</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3864,7 +3683,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a29cd483e4b7f5819bfaf0db0180318e9">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00368">368</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html#l00325">325</a> of file <a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen_coreneuron_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3885,7 +3704,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the function that initialize instance structure. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02264">2264</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02073">2073</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3921,7 +3740,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02200">2200</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02009">2009</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3950,7 +3769,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print structure of ion variables used for local copies. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02170">2170</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01979">1979</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3979,7 +3798,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the ion variable struct. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02217">2217</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02026">2026</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4017,7 +3836,7 @@ Additional Inherited Members</h2></td></tr>
 </div><!-- fragment --> 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a00ab6b70ec3753d393abd3ccf383a313">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00343">343</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00204">204</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4048,7 +3867,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acfa06ee31afd8591ab20911e53bbef8a">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00348">348</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00209">209</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4077,7 +3896,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter method for returning mechtype. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01298">1298</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01125">1125</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4119,7 +3938,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a96ee5727c24f572b7b25cd2c39b9b776">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01669">1669</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01478">1478</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4157,7 +3976,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aee824eb01f6cf6f9187af509245ffc3a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02128">2128</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01937">1937</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4197,7 +4016,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a022e94245068b1c395e13272d8bc4984">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01923">1923</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01732">1732</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4226,7 +4045,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter method for returning membrane list from NrnThread. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01308">1308</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01135">1135</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4257,7 +4076,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#acc69070aadaba5d5749d249fd7390a31">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00475">475</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00336">336</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4288,7 +4107,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3e2476ccbaa3d2502fa8e6c0e42a628">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03572">3572</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03381">3381</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4319,7 +4138,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2f0c1a7b9127c6248b03b296257e8833">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03578">3578</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03387">3387</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4350,7 +4169,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af2490222aefa83d67238c605e05197a3">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01320">1320</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01147">1147</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4381,7 +4200,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1d253986a351e263db95bb63c51775c3">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01326">1326</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01153">1153</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4419,7 +4238,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae350ed7effbbcf8dbea050231599c8e6">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02902">2902</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02711">2711</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4448,7 +4267,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print initial block in the net receive block. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02954">2954</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02763">2763</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4479,7 +4298,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00353">353</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00214">214</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4510,7 +4329,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a8fa54f732815ba17581f6a30e3f6ec47">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00358">358</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00219">219</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4548,7 +4367,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a36470f1359566ee071015a630deb89cd">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02875">2875</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02684">2684</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4577,7 +4396,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print <code>net_receive</code> function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03178">3178</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02987">2987</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4606,7 +4425,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter method for getting number of arguments for net_receive. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01286">1286</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01113">1113</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4642,7 +4461,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03033">3033</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02842">2842</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4689,7 +4508,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02792">2792</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02601">2601</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4718,7 +4537,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print <code>net_receive</code> kernel function definition. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03119">3119</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02928">2928</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4747,7 +4566,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the code for the main <code>net_receive</code> loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03021">3021</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02830">2830</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4776,7 +4595,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the code for closing the main <code>net_receive</code> loop. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03028">3028</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02837">2837</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4807,7 +4626,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4695bcf11295255ed5827ea2bad81fdf">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00314">314</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00175">175</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4838,7 +4657,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a4977b3b4e02425431c95412ffdad10ed">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00304">304</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00165">165</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4869,7 +4688,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6c88ece1cdc90d7d3e3c4932b69d903a">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00309">309</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00170">170</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4899,7 +4718,7 @@ Additional Inherited Members</h2></td></tr>
 <p>Print kernel for buffering net_send events. </p>
 <p>This kernel is only needed for accelerator backends where <code>net_send</code> needs to be executed in two stages as the actual communication must be done in the host code. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03091">3091</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02900">2900</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4931,7 +4750,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a5c597e0695363715c394aa20e9be86c8">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03079">3079</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02888">2888</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4963,7 +4782,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a7b0b928aacf93947a478e2c37ba2f551">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03084">3084</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02893">2893</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5001,7 +4820,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a78481115d7590930ac4d58d0bdaa2acc">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02843">2843</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02652">2652</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5032,7 +4851,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03308">3308</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03117">3117</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5063,7 +4882,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7b4903b21fc0872bcb8e68fe0a2efb1a">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02649">2649</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02458">2458</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5094,7 +4913,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6145c59148d531ca06c5d6f218e21b02">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02617">2617</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02426">2426</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5125,7 +4944,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a93592e117e3283a0b2e0a5aa647bc155">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03528">3528</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03337">3337</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5164,7 +4983,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a91fdec443327720111f0b8ecad783c87">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03392">3392</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03201">3201</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5202,7 +5021,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7dad6de0caa4a6f50a54db2a87edda5e">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03463">3463</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03272">3272</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5233,7 +5052,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6a6d2369a69a4de0bda555ffe52c946e">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00424">424</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00285">285</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5264,7 +5083,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a645c96bca7fc93af0c4e1898ec06f02e">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00411">411</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00272">272</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5296,7 +5115,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aaf72cbf7288677fa045647df13322804">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03429">3429</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03238">3238</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5335,7 +5154,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4bf65c93bea904102b63553f3e5dd1b3">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03373">3373</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03182">3182</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5366,7 +5185,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a481001b393776c233ccdc069916d2d7c">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02629">2629</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02438">2438</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5402,7 +5221,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02488">2488</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02297">2297</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5430,11 +5249,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print nrn_state / state update function definition. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000010">Todo:</a></b></dt><dd>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000009">Todo:</a></b></dt><dd>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block </dd></dl>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2453a1be52f39c3fa9bab2603f1f4773">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03318">3318</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03127">3127</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5463,7 +5282,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the getter methods for float and integer variables count. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01271">1271</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01098">1098</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5501,7 +5320,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3a37a4c72e59e5b6e5db518f4a88e7ff">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00842">842</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00703">703</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5532,7 +5351,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab2b1180f70d5559ced0633638dd14b5a">nmodl::codegen::CodegenAccVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00403">403</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00264">264</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5562,7 +5381,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a34ae139e68f31b69fa73c9a84c2197e8">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01602">1602</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01411">1411</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5591,7 +5410,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print send event move block used in net receive as well as watch. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02986">2986</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02795">2795</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5620,7 +5439,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print the function that initialize range variable with different data type. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02227">2227</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02036">2036</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5651,7 +5470,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6131bec61397f01d9739e694c57afdbf">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01558">1558</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01367">1367</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5687,7 +5506,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00577">577</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00438">438</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5723,7 +5542,7 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00674">674</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00535">535</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5758,7 +5577,7 @@ Additional Inherited Members</h2></td></tr>
 </ul>
 <p>These variables are allocated into different thread structures and have corresponding thread ids. Thread id start from 0. In mod2c implementation, thread_data_index is increased at various places and it is used to decide the index of thread. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01342">1342</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01169">1169</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5787,7 +5606,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print thread related memory allocation and deallocation callbacks. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02065">2065</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01874">1874</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5816,7 +5635,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Print top level (global scope) verbatim blocks. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00505">505</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00366">366</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5847,7 +5666,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a5d7d3326aaa9849977f0c203078f39e4">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03602">3602</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03411">3411</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5875,11 +5694,11 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print watch activate function. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>Number of watch could be more than number of statements according to grammar.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>Number of watch could be more than number of statements according to grammar.</dd></dl>
 <p>Check if this is correctly handled in neuron and coreneuron. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>Similar to neuron/coreneuron we are using first watch and ignoring rest. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000006">Todo:</a></b></dt><dd>Similar to neuron/coreneuron we are using first watch and ignoring rest. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02662">2662</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02471">2471</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5907,61 +5726,10 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Print watch activate function. </p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000008">Todo:</a></b></dt><dd>Similar to print_watch_activate, we are using only first watch.</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000007">Todo:</a></b></dt><dd>Similar to print_watch_activate, we are using only first watch.</dd></dl>
 <p>need to verify with neuron/coreneuron about rest. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02710">2710</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a7b99884ba28c9b21c1ff40bb54ca20f5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b99884ba28c9b21c1ff40bb54ca20f5">&#9670;&nbsp;</a></span>process_shadow_update_statement()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCoreneuronCppVisitor::process_shadow_update_statement </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a> &amp;&#160;</td>
-          <td class="paramname"><em>statement</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
-          <td class="paramname"><em>type</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Process shadow update statement. </p>
-<p>If mechanisms dependency level execution is enabled then certain updates like ionic current contributions needs to be atomically updated.</p>
-<p>If the statement requires reduction then add it to vector of reduction statement and return statement using shadow update</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">statement</td><td>The statement that might require shadow updates </td></tr>
-    <tr><td class="paramname">type</td><td>The target backend code block type </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The generated target backend code</dd></dl>
-<p>In this case we first update current mechanism's shadow vector and then add statement to queue that will be used in reduction queue. </p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01232">1232</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l02519">2519</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5998,11 +5766,11 @@ Additional Inherited Members</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The code with all variables renamed as needed</dd></dl>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000005">Todo:</a></b></dt><dd>: this is still ad-hoc and requires re-implementation to handle it more elegantly. </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000004">Todo:</a></b></dt><dd>: this is still ad-hoc and requires re-implementation to handle it more elegantly. </dd></dl>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac53419e9abc2d2f9b12acf10507e7954">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01146">1146</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01007">1007</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6040,44 +5808,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The code after variable renaming</dd></dl>
 <p>Often top level verbatim blocks use variables with old names. Here we process if we are processing verbatim block at global scope. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00228">228</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="aeb4f46dc88633a2d367cda3aaa650e1e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb4f46dc88633a2d367cda3aaa650e1e">&#9670;&nbsp;</a></span>read_ion_variable_name()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; std::string, std::string &gt; nmodl::codegen::CodegenCoreneuronCppVisitor::read_ion_variable_name </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return ion variable name and corresponding ion read variable name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The ion variable name </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The ion read variable name </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01192">1192</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00094">94</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6108,7 +5839,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aec3cef47cc3c1e5901b4ff401ce8e725">nmodl::codegen::CodegenCppVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01173">1173</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01034">1034</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6147,7 +5878,7 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>The possibly replace variable name </dd></dl>
 <p>if function is defined the same mod file then the arguments must contain mechanism instance as well.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01117">1117</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l00978">978</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6182,43 +5913,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a992c19b9aa26099d7d1954fe77107b0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a992c19b9aa26099d7d1954fe77107b0d">&#9670;&nbsp;</a></span>update_if_ion_variable_name()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCoreneuronCppVisitor::update_if_ion_variable_name </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Determine the updated name if the ion variable has been optimized. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The ion variable name </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The updated name of the variable has been optimized (e.g. <code>ena</code> --&gt; <code>ion_ena</code>) </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01447">1447</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
 <a id="a97acfbb75ee033066beb784570ad4a04"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a97acfbb75ee033066beb784570ad4a04">&#9670;&nbsp;</a></span>visit_derivimplicit_callback()</h2>
 
@@ -6247,7 +5941,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#afab4e50b8b3fa41bc61d8269d4de0997">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03685">3685</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03494">3494</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6279,7 +5973,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a823773ac45f20e28d2400f7b16f3adca">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03721">3721</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03530">3530</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6311,7 +6005,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#aa237a490b65cf3077675dfd495ebd253">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03693">3693</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03502">3502</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6343,7 +6037,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a7c2beec36345e9b372ddf32c6002c77f">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03747">3747</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03556">3556</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -6375,44 +6069,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a88dbedea2307312541fe8475f054f57a">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03785">3785</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a4c6c17a2eeafae316e104bf5722337fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4c6c17a2eeafae316e104bf5722337fa">&#9670;&nbsp;</a></span>write_ion_variable_name()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; std::string, std::string &gt; nmodl::codegen::CodegenCoreneuronCppVisitor::write_ion_variable_name </td>
-          <td>(</td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Return ion variable name and corresponding ion write variable name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">name</td><td>The ion variable name </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The ion write variable name </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l01198">1198</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html#l03594">3594</a> of file <a class="el" href="src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html">codegen_coreneuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>

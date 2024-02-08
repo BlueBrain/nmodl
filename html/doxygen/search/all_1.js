@@ -80,7 +80,7 @@ var searchData=
   ['bop_5fsubtraction_175',['BOP_SUBTRACTION',['../group__ast__prop.html#gga0296e9888cfe8fbbdfefcd752bba3ef0ab9726ec3e58ecfddc083f26c35c9edd0',1,'nmodl::ast']]],
   ['breakpoint_5fblock_176',['BREAKPOINT_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a018ac26a5a566bf54518e9c2066435d9',1,'nmodl::ast']]],
   ['breakpoint_5fblock_2ehpp_177',['breakpoint_block.hpp',['../breakpoint__block_8hpp.html',1,'']]],
-  ['breakpoint_5fcurrent_178',['breakpoint_current',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a40430cd5a36ba2b612adc095952d50a9',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]],
+  ['breakpoint_5fcurrent_178',['breakpoint_current',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['breakpoint_5fexist_179',['breakpoint_exist',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a578f6c60b4ca495b24e5b7ae2db448cc',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['breakpoint_5fnode_180',['breakpoint_node',['../structnmodl_1_1codegen_1_1_codegen_info.html#a4a46dea1ec9ad861822987e3c53e949a',1,'nmodl::codegen::CodegenInfo']]],
   ['breakpoint_5fto_5fnmodl_181',['breakpoint_to_nmodl',['../sympy__conductance_8cpp.html#a741c4acce9135f2b128dabb4dbc52abb',1,'sympy_conductance.cpp']]],

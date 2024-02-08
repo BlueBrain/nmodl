@@ -106,27 +106,25 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a532e903a7bb7f8c3dfeac467f53e111d">nmodl::codegen::CodegenAccVisitor::print_net_init_acc_serial_annotation_block_begin</a>  () override</dt>
 <dd><a class="anchor" id="_todo000002"></a>: With the current code structure for NMODL and MOD2C, we use <code>serial</code> construct to launch serial kernels. This is during initialization but still inefficient. This should be improved when we drop MOD2C.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html">nmodl::codegen::CodegenCoreneuronCppVisitor</a>  </dt>
-<dd><a class="anchor" id="_todo000011"></a><ul>
+<dd><a class="anchor" id="_todo000010"></a><ul>
 <li>Handle define statement (i.e. macros)</li>
 <li>If there is a return statement in the verbatim block of inlined function then it will be error. Need better error checking. For example, see netstim.mod where we have removed return from verbatim block.  </li>
 </ul>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af48766525e3a1c8f88471a9338ae59e7">nmodl::codegen::CodegenCoreneuronCppVisitor::internal_method_parameters</a>  () override</dt>
-<dd><a class="anchor" id="_todo000004"></a>: figure out how to correctly handle qualifiers  </dd>
-<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0c07a4568bf732ccc7a6ec9b763bc71b">nmodl::codegen::CodegenCoreneuronCppVisitor::ion_write_statements</a>  (BlockType type)</dt>
-<dd><a class="anchor" id="_todo000003"></a>Unhandled case in neuron implementation  </dd>
+<dd><a class="anchor" id="_todo000003"></a>: figure out how to correctly handle qualifiers  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a93aa5868249076c8b0766369cbbba993">nmodl::codegen::CodegenCoreneuronCppVisitor::print_derivimplicit_kernel</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_block.html" title="Base class for all block scoped nodes.">ast::Block</a> &amp;block)</dt>
-<dd><a class="anchor" id="_todo000009"></a>Data is not derived. </dd>
+<dd><a class="anchor" id="_todo000008"></a>Data is not derived. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a38c76390b1d1c0a5cf1fe8df3f27fb57">nmodl::codegen::CodegenCoreneuronCppVisitor::print_nrn_state</a>  () override</dt>
-<dd><a class="anchor" id="_todo000010"></a>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block  </dd>
+<dd><a class="anchor" id="_todo000009"></a>Eigen solver node also emits IonCurVar variable in the functor but that shouldn't update ions in derivative block  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8366981bc5ecb9b4d52af74865e16bb6">nmodl::codegen::CodegenCoreneuronCppVisitor::print_watch_activate</a>  ()</dt>
-<dd><p class="startdd"><a class="anchor" id="_todo000006"></a>Number of watch could be more than number of statements according to grammar.</p>
-<p class="enddd"><a class="anchor" id="_todo000007"></a>Similar to neuron/coreneuron we are using first watch and ignoring rest.  </p>
+<dd><p class="startdd"><a class="anchor" id="_todo000005"></a>Number of watch could be more than number of statements according to grammar.</p>
+<p class="enddd"><a class="anchor" id="_todo000006"></a>Similar to neuron/coreneuron we are using first watch and ignoring rest.  </p>
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a3ea1bf8ef47090b926d8738d18306de7">nmodl::codegen::CodegenCoreneuronCppVisitor::print_watch_check</a>  ()</dt>
-<dd><a class="anchor" id="_todo000008"></a>Similar to print_watch_activate, we are using only first watch. </dd>
+<dd><a class="anchor" id="_todo000007"></a>Similar to print_watch_activate, we are using only first watch. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a592905dcf5bb27083ec0a84f1ab29508">nmodl::codegen::CodegenCoreneuronCppVisitor::process_verbatim_text</a>  (std::string const &amp;text) override</dt>
-<dd><a class="anchor" id="_todo000005"></a>: this is still ad-hoc and requires re-implementation to handle it more elegantly.  </dd>
+<dd><a class="anchor" id="_todo000004"></a>: this is still ad-hoc and requires re-implementation to handle it more elegantly.  </dd>
 <dt>Class <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html">nmodl::codegen::CodegenCppVisitor</a>  </dt>
 <dd><a class="anchor" id="_todo000015"></a><ul>
 <li>Handle define statement (i.e. macros)</li>
@@ -135,6 +133,8 @@ $(document).ready(function(){initNavTree('todo.html',''); initResizable(); });
 </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2a1e5337a20e3f1dad1d1dfbb89fbb1b">nmodl::codegen::CodegenCppVisitor::codegen_global_variables</a>  </dt>
 <dd><a class="anchor" id="_todo000016"></a>: this has become different than <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html" title="Represent information collected from AST for code generation.">CodegenInfo</a>  </dd>
+<dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2e2dd82a055dd830e8efc7f1dce03924">nmodl::codegen::CodegenCppVisitor::ion_write_statements</a>  (BlockType type)</dt>
+<dd><a class="anchor" id="_todo000011"></a>Unhandled case in neuron implementation  </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e">nmodl::codegen::CodegenCppVisitor::rename_function_arguments</a>  ()</dt>
 <dd><a class="anchor" id="_todo000012"></a>Issue with verbatim renaming. </dd>
 <dt>Member <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4f2304d508e3d9645581004c676d94ca">nmodl::codegen::CodegenCppVisitor::visit_var_name</a>  (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html" title="Represents a variable.">ast::VarName</a> &amp;node) override</dt>

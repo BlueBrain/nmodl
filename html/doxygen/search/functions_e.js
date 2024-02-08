@@ -12,5 +12,5 @@ var searchData=
   ['operator_7c_3926',['operator|',['../namespacenmodl_1_1symtab_1_1syminfo.html#ae193a4319089058de3dcf879dcef248f',1,'nmodl::symtab::syminfo']]],
   ['operator_7c_3d_3927',['operator|=',['../namespacenmodl_1_1symtab_1_1syminfo.html#a23dd7c5f633e0adf6322d3f427d8f5a9',1,'nmodl::symtab::syminfo']]],
   ['operator_7e_3928',['operator~',['../namespacenmodl_1_1symtab_1_1syminfo.html#ac2ce7dd65a7614b9137c9be6bd9f0f8d',1,'nmodl::symtab::syminfo']]],
-  ['optimize_5fion_5fvariable_5fcopies_3929',['optimize_ion_variable_copies',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a58808da4cf7e64ffb1bcb5be20f977e3',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]]
+  ['optimize_5fion_5fvariable_5fcopies_3929',['optimize_ion_variable_copies',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0620e76a8bf6864c3f4a38680f514158',1,'nmodl::codegen::CodegenCoreneuronCppVisitor::optimize_ion_variable_copies()'],['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a81cded985b616728b55976bf7eca4488',1,'nmodl::codegen::CodegenCppVisitor::optimize_ion_variable_copies()'],['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a70bd9cedc2fcae2e924ebcc59c7f728b',1,'nmodl::codegen::CodegenNeuronCppVisitor::optimize_ion_variable_copies()']]]
 ];
