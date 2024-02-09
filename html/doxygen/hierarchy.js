@@ -20,6 +20,7 @@ var hierarchy =
         ] ],
         [ "nmodl::codegen::CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html", null ],
         [ "nmodl::visitor::DefUseAnalyzeVisitor", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html", null ],
+        [ "nmodl::visitor::FunctionCallpathVisitor", "classnmodl_1_1visitor_1_1_function_callpath_visitor.html", null ],
         [ "nmodl::visitor::JSONVisitor", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html", null ],
         [ "nmodl::visitor::LocalizeVisitor", "classnmodl_1_1visitor_1_1_localize_visitor.html", null ],
         [ "nmodl::visitor::PerfVisitor", "classnmodl_1_1visitor_1_1_perf_visitor.html", null ],

@@ -102,6 +102,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <code>#include &quot;<a class="el" href="codegen__neuron__cpp__visitor_8hpp_source.html">codegen/codegen_neuron_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="function__callpath__visitor_8hpp_source.html">visitors/function_callpath_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="inline__visitor_8hpp_source.html">visitors/inline_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="neuron__solve__visitor_8hpp_source.html">visitors/neuron_solve_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="solve__block__visitor_8hpp_source.html">visitors/solve_block_visitor.hpp</a>&quot;</code><br />
@@ -114,11 +115,13 @@ Functions</h2></td></tr>
 <tr class="memitem:a47ab3ea80a6131688c22d1dc6b8f1cc4"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; CodegenNeuronCppVisitor &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a47ab3ea80a6131688c22d1dc6b8f1cc4">create_neuron_cpp_visitor</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &gt; &amp;ast, const std::string &amp;, std::stringstream &amp;ss)</td></tr>
 <tr class="memdesc:a47ab3ea80a6131688c22d1dc6b8f1cc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper for creating C codegen visitor.  <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a47ab3ea80a6131688c22d1dc6b8f1cc4">More...</a><br /></td></tr>
 <tr class="separator:a47ab3ea80a6131688c22d1dc6b8f1cc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8e9e0eb3ae92a7e2e6f16a3328ba943"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#aa8e9e0eb3ae92a7e2e6f16a3328ba943">get_neuron_cpp_code</a> (const std::string &amp;nmodl_text, const bool generate_gpu_code=false)</td></tr>
-<tr class="memdesc:aa8e9e0eb3ae92a7e2e6f16a3328ba943"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#aa8e9e0eb3ae92a7e2e6f16a3328ba943">More...</a><br /></td></tr>
-<tr class="separator:aa8e9e0eb3ae92a7e2e6f16a3328ba943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33db5c2eff91499afc3aad328f0806b2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a33db5c2eff91499afc3aad328f0806b2">get_neuron_cpp_code</a> (const std::string &amp;nmodl_text)</td></tr>
+<tr class="memdesc:a33db5c2eff91499afc3aad328f0806b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">print entire code  <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a33db5c2eff91499afc3aad328f0806b2">More...</a><br /></td></tr>
+<tr class="separator:a33db5c2eff91499afc3aad328f0806b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c385aee2be7ca89645c0bfb2f5871a0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a> (&quot;Check NEURON codegen for simple MOD file&quot;, &quot;[codegen][neuron_boilerplate]&quot;)</td></tr>
 <tr class="separator:a5c385aee2be7ca89645c0bfb2f5871a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a1c9926e35547d2044418cee996a451"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a6a1c9926e35547d2044418cee996a451">SCENARIO</a> (&quot;Check whether PROCEDURE and FUNCTION need setdata call&quot;, &quot;[codegen][needsetdata]&quot;)</td></tr>
+<tr class="separator:a6a1c9926e35547d2044418cee996a451"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a47ab3ea80a6131688c22d1dc6b8f1cc4"></a>
@@ -158,12 +161,12 @@ Functions</h2></td></tr>
 <p>run all necessary pass</p>
 <p>create C code generation visitor</p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00030">30</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00032">32</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
-<a id="aa8e9e0eb3ae92a7e2e6f16a3328ba943"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8e9e0eb3ae92a7e2e6f16a3328ba943">&#9670;&nbsp;</a></span>get_neuron_cpp_code()</h2>
+<a id="a33db5c2eff91499afc3aad328f0806b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33db5c2eff91499afc3aad328f0806b2">&#9670;&nbsp;</a></span>get_neuron_cpp_code()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,30 +175,20 @@ Functions</h2></td></tr>
           <td class="memname">std::string get_neuron_cpp_code </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>nmodl_text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>nmodl_text</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const bool&#160;</td>
-          <td class="paramname"><em>generate_gpu_code</em> = <code>false</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>print entire code </p>
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00050">50</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00053">53</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a5c385aee2be7ca89645c0bfb2f5871a0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c385aee2be7ca89645c0bfb2f5871a0">&#9670;&nbsp;</a></span>SCENARIO()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c385aee2be7ca89645c0bfb2f5871a0">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -220,7 +213,37 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00060">60</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00062">62</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a6a1c9926e35547d2044418cee996a451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a1c9926e35547d2044418cee996a451">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;Check whether PROCEDURE and FUNCTION need setdata call&quot;&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;&quot;&#160;</td>
+          <td class="paramname">[codegen][needsetdata]&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00258">258</a> of file <a class="el" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
