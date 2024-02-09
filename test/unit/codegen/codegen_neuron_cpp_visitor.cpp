@@ -12,6 +12,7 @@
 #include "codegen/codegen_neuron_cpp_visitor.hpp"
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
+#include "visitors/function_callpath_visitor.hpp"
 #include "visitors/inline_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
@@ -25,6 +26,7 @@ using namespace codegen;
 
 using nmodl::parser::NmodlDriver;
 using nmodl::test_utils::reindent_text;
+using symtab::syminfo::NmodlType;
 
 /// Helper for creating C codegen visitor
 std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
@@ -38,6 +40,7 @@ std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
     InlineVisitor().visit_program(*ast);
     NeuronSolveVisitor().visit_program(*ast);
     SolveBlockVisitor().visit_program(*ast);
+    FunctionCallpathVisitor().visit_program(*ast);
 
     /// create C code generation visitor
     auto cv = std::make_shared<CodegenNeuronCppVisitor>("_test", ss, "double", false);
@@ -47,8 +50,7 @@ std::shared_ptr<CodegenNeuronCppVisitor> create_neuron_cpp_visitor(
 
 
 /// print entire code
-std::string get_neuron_cpp_code(const std::string& nmodl_text,
-                                const bool generate_gpu_code = false) {
+std::string get_neuron_cpp_code(const std::string& nmodl_text) {
     const auto& ast = NmodlDriver().parse_string(nmodl_text);
     std::stringstream ss;
     auto cvisitor = create_neuron_cpp_visitor(ast, nmodl_text, ss);
@@ -194,9 +196,9 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
         double* Ds{};
         double* v_unused{};
         double* g_unused{};
-        const double* ion_ena{};
-        double* ion_ina{};
-        double* ion_dinadv{};
+        const double* const* ion_ena{};
+        double* const* ion_ina{};
+        double* const* ion_dinadv{};
         pas_test_Store* global{&pas_test_global};
     };)";
 
@@ -254,25 +256,25 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
         mech_type = nrn_get_mechtype(mechanism_info[1]);
         _nrn_mechanism_register_data_fields(mech_type,
-            _nrn_mechanism_field<double>{"g"}, /* float var index 0 */
-            _nrn_mechanism_field<double>{"e"}, /* float var index 1 */
-            _nrn_mechanism_field<double>{"i"}, /* float var index 2 */
-            _nrn_mechanism_field<double>{"ar", 2}, /* float var index 3 */
-            _nrn_mechanism_field<double>{"s"}, /* float var index 4 */
-            _nrn_mechanism_field<double>{"ena"}, /* float var index 5 */
-            _nrn_mechanism_field<double>{"ina"}, /* float var index 6 */
-            _nrn_mechanism_field<double>{"Ds"}, /* float var index 7 */
-            _nrn_mechanism_field<double>{"v_unused"}, /* float var index 8 */
-            _nrn_mechanism_field<double>{"g_unused"}, /* float var index 9 */
-            _nrn_mechanism_field<double*>{"ion_ena", "ion_ena"}, /* int var index 0 */
-            _nrn_mechanism_field<double*>{"ion_ina", "ion_ina"}, /* int var index 1 */
-            _nrn_mechanism_field<double*>{"ion_dinadv", "ion_dinadv"} /* int var index 2 */
+            _nrn_mechanism_field<double>{"g"} /* 0 */,
+            _nrn_mechanism_field<double>{"e"} /* 1 */,
+            _nrn_mechanism_field<double>{"i"} /* 2 */,
+            _nrn_mechanism_field<double>{"ar", 2} /* 3 */,
+            _nrn_mechanism_field<double>{"s"} /* 4 */,
+            _nrn_mechanism_field<double>{"ena"} /* 5 */,
+            _nrn_mechanism_field<double>{"ina"} /* 6 */,
+            _nrn_mechanism_field<double>{"Ds"} /* 7 */,
+            _nrn_mechanism_field<double>{"v_unused"} /* 8 */,
+            _nrn_mechanism_field<double>{"g_unused"} /* 9 */,
+            _nrn_mechanism_field<double*>{"ion_ena", "na_ion"} /* 0 */,
+            _nrn_mechanism_field<double*>{"ion_ina", "na_ion"} /* 1 */,
+            _nrn_mechanism_field<double*>{"ion_dinadv", "na_ion"} /* 2 */
         );
 
         hoc_register_prop_size(mech_type, 10, 3);
-        hoc_register_dparam_semantics(mech_type, 0, "ion_ena");
-        hoc_register_dparam_semantics(mech_type, 1, "ion_ina");
-        hoc_register_dparam_semantics(mech_type, 2, "ion_dinadv");
+        hoc_register_dparam_semantics(mech_type, 0, "na_ion");
+        hoc_register_dparam_semantics(mech_type, 1, "na_ion");
+        hoc_register_dparam_semantics(mech_type, 2, "na_ion");
     })CODE";
 
             REQUIRE_THAT(generated,
@@ -295,6 +297,50 @@ void _nrn_mechanism_register_data_fields(Args&&... args) {
 
             REQUIRE_THAT(generated,
                          ContainsSubstring(reindent_and_trim_text(expected_placeholder_point_reg)));
+        }
+    }
+}
+
+
+SCENARIO("Check whether PROCEDURE and FUNCTION need setdata call", "[codegen][needsetdata]") {
+    GIVEN("mod file with GLOBAL and RANGE variables used in FUNC and PROC") {
+        std::string input_nmodl = R"(
+            NEURON {
+                SUFFIX test
+                RANGE x
+                GLOBAL s
+            }
+            PARAMETER {
+                s = 2
+            }
+            ASSIGNED {
+                x
+            }
+            PROCEDURE a() {
+                x = get_42()
+            }
+            FUNCTION b() {
+                a()
+            }
+            FUNCTION get_42() {
+                get_42 = 42
+            }
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+        cvisitor->visit_program(*ast);
+        const auto symtab = ast->get_symbol_table();
+        THEN("use_range_ptr_var property is added to needed FUNC and PROC") {
+            auto use_range_ptr_var_funcs = symtab->get_variables_with_properties(
+                NmodlType::use_range_ptr_var);
+            REQUIRE(use_range_ptr_var_funcs.size() == 2);
+            const auto a = symtab->lookup("a");
+            REQUIRE(a->has_any_property(NmodlType::use_range_ptr_var));
+            const auto b = symtab->lookup("b");
+            REQUIRE(b->has_any_property(NmodlType::use_range_ptr_var));
+            const auto get_42 = symtab->lookup("get_42");
+            REQUIRE(!get_42->has_any_property(NmodlType::use_range_ptr_var));
         }
     }
 }
