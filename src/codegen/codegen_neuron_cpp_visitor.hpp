@@ -83,12 +83,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     virtual std::string backend_name() const override;
 
-    /**
-     * Name of structure that wraps range variables
-     */
-    std::string instance_struct() const {
-        return fmt::format("{}_Instance", info.mod_suffix);
-    }
 
     /****************************************************************************************/
     /*                     Common helper routines accross codegen functions                 */
@@ -121,6 +115,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     virtual void print_atomic_reduction_pragma() override;
 
+
+    /**
+     * Check if ion variable copies should be avoided
+     */
+    bool optimize_ion_variable_copies() const override;
 
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
@@ -246,6 +245,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     std::string register_mechanism_arguments() const override;
 
+    std::string conc_write_statement(const std::string& ion_name,
+                                     const std::string& concentration,
+                                     int index) override;
 
     /****************************************************************************************/
     /*                  Code-specific printing routines for code generations                */

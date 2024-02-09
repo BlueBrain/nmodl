@@ -88,140 +88,6 @@ int CodegenCoreneuronCppVisitor::position_of_int_var(const std::string& name) co
 
 
 /**
- * \details Current variable used in breakpoint block could be local variable.
- * In this case, neuron has already renamed the variable name by prepending
- * "_l". In our implementation, the variable could have been renamed by
- * one of the pass. And hence, we search all local variables and check if
- * the variable is renamed. Note that we have to look into the symbol table
- * of statement block and not breakpoint.
- */
-std::string CodegenCoreneuronCppVisitor::breakpoint_current(std::string current) const {
-    auto breakpoint = info.breakpoint_node;
-    if (breakpoint == nullptr) {
-        return current;
-    }
-    auto symtab = breakpoint->get_statement_block()->get_symbol_table();
-    auto variables = symtab->get_variables_with_properties(NmodlType::local_var);
-    for (const auto& var: variables) {
-        auto renamed_name = var->get_name();
-        auto original_name = var->get_original_name();
-        if (current == original_name) {
-            current = renamed_name;
-            break;
-        }
-    }
-    return current;
-}
-
-
-/**
- * \details Depending upon the block type, we have to print read/write ion variables
- * during code generation. Depending on block/procedure being printed, this
- * method return statements as vector. As different code backends could have
- * different variable names, we rely on backend-specific read_ion_variable_name
- * and write_ion_variable_name method which will be overloaded.
- */
-std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements(BlockType type) const {
-    if (optimize_ion_variable_copies()) {
-        return ion_read_statements_optimized(type);
-    }
-    std::vector<std::string> statements;
-    for (const auto& ion: info.ions) {
-        auto name = ion.name;
-        for (const auto& var: ion.reads) {
-            auto const iter = std::find(ion.implicit_reads.begin(), ion.implicit_reads.end(), var);
-            if (iter != ion.implicit_reads.end()) {
-                continue;
-            }
-            auto variable_names = read_ion_variable_name(var);
-            auto first = get_variable_name(variable_names.first);
-            auto second = get_variable_name(variable_names.second);
-            statements.push_back(fmt::format("{} = {};", first, second));
-        }
-        for (const auto& var: ion.writes) {
-            if (ion.is_ionic_conc(var)) {
-                auto variables = read_ion_variable_name(var);
-                auto first = get_variable_name(variables.first);
-                auto second = get_variable_name(variables.second);
-                statements.push_back(fmt::format("{} = {};", first, second));
-            }
-        }
-    }
-    return statements;
-}
-
-
-std::vector<std::string> CodegenCoreneuronCppVisitor::ion_read_statements_optimized(
-    BlockType type) const {
-    std::vector<std::string> statements;
-    for (const auto& ion: info.ions) {
-        for (const auto& var: ion.writes) {
-            if (ion.is_ionic_conc(var)) {
-                auto variables = read_ion_variable_name(var);
-                auto first = "ionvar." + variables.first;
-                const auto& second = get_variable_name(variables.second);
-                statements.push_back(fmt::format("{} = {};", first, second));
-            }
-        }
-    }
-    return statements;
-}
-
-// NOLINTNEXTLINE(readability-function-cognitive-complexity)
-std::vector<ShadowUseStatement> CodegenCoreneuronCppVisitor::ion_write_statements(BlockType type) {
-    std::vector<ShadowUseStatement> statements;
-    for (const auto& ion: info.ions) {
-        std::string concentration;
-        auto name = ion.name;
-        for (const auto& var: ion.writes) {
-            auto variable_names = write_ion_variable_name(var);
-            if (ion.is_ionic_current(var)) {
-                if (type == BlockType::Equation) {
-                    auto current = breakpoint_current(var);
-                    auto lhs = variable_names.first;
-                    auto op = "+=";
-                    auto rhs = get_variable_name(current);
-                    if (info.point_process) {
-                        auto area = get_variable_name(naming::NODE_AREA_VARIABLE);
-                        rhs += fmt::format("*(1.e2/{})", area);
-                    }
-                    statements.push_back(ShadowUseStatement{lhs, op, rhs});
-                }
-            } else {
-                if (!ion.is_rev_potential(var)) {
-                    concentration = var;
-                }
-                auto lhs = variable_names.first;
-                auto op = "=";
-                auto rhs = get_variable_name(variable_names.second);
-                statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            }
-        }
-
-        if (type == BlockType::Initial && !concentration.empty()) {
-            int index = 0;
-            if (ion.is_intra_cell_conc(concentration)) {
-                index = 1;
-            } else if (ion.is_extra_cell_conc(concentration)) {
-                index = 2;
-            } else {
-                /// \todo Unhandled case in neuron implementation
-                throw std::logic_error(fmt::format("codegen error for {} ion", ion.name));
-            }
-            auto ion_type_name = fmt::format("{}_type", ion.name);
-            auto lhs = fmt::format("int {}", ion_type_name);
-            auto op = "=";
-            auto rhs = get_variable_name(ion_type_name);
-            statements.push_back(ShadowUseStatement{lhs, op, rhs});
-            auto statement = conc_write_statement(ion.name, concentration, index);
-            statements.push_back(ShadowUseStatement{statement, "", ""});
-        }
-    }
-    return statements;
-}
-
-
-/**
  * \details Often top level verbatim blocks use variables with old names.
  * Here we process if we are processing verbatim block at global scope.
  */
@@ -253,11 +119,6 @@ std::string CodegenCoreneuronCppVisitor::process_verbatim_token(const std::strin
      */
     auto use_instance = !printing_top_verbatim_blocks;
     return get_variable_name(token, use_instance);
-}
-
-
-bool CodegenCoreneuronCppVisitor::ion_variable_struct_required() const {
-    return optimize_ion_variable_copies() && info.ion_has_write_variable();
 }
 
 
@@ -494,11 +355,6 @@ void CodegenCoreneuronCppVisitor::print_abort_routine() const {
     printer->push_block("static inline void coreneuron_abort()");
     printer->add_line("abort();");
     printer->pop_block();
-}
-
-
-void CodegenCoreneuronCppVisitor::print_global_var_struct_decl() {
-    printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
 }
 
 
@@ -1194,18 +1050,6 @@ std::string CodegenCoreneuronCppVisitor::register_mechanism_arguments() const {
 }
 
 
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::read_ion_variable_name(
-    const std::string& name) {
-    return {name, naming::ION_VARNAME_PREFIX + name};
-}
-
-
-std::pair<std::string, std::string> CodegenCoreneuronCppVisitor::write_ion_variable_name(
-    const std::string& name) {
-    return {naming::ION_VARNAME_PREFIX + name, name};
-}
-
-
 std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string& ion_name,
                                                               const std::string& concentration,
                                                               int index) {
@@ -1228,28 +1072,6 @@ std::string CodegenCoreneuronCppVisitor::conc_write_statement(const std::string&
 }
 
 
-/**
- * If mechanisms dependency level execution is enabled then certain updates
- * like ionic current contributions needs to be atomically updated. In this
- * case we first update current mechanism's shadow vector and then add statement
- * to queue that will be used in reduction queue.
- */
-std::string CodegenCoreneuronCppVisitor::process_shadow_update_statement(
-    const ShadowUseStatement& statement,
-    BlockType /* type */) {
-    // when there is no operator or rhs then that statement doesn't need shadow update
-    if (statement.op.empty() && statement.rhs.empty()) {
-        auto text = statement.lhs + ";";
-        return text;
-    }
-
-    // return regular statement
-    auto lhs = get_variable_name(statement.lhs);
-    auto text = fmt::format("{} {} {};", lhs, statement.op, statement.rhs);
-    return text;
-}
-
-
 /****************************************************************************************/
 /*               Code-specific printing routines for code generation                    */
 /****************************************************************************************/
@@ -1260,6 +1082,15 @@ void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
     print_device_method_annotation();
     printer->push_block("static inline int first_pointer_var_index()");
     printer->fmt_line("return {};", info.first_pointer_var_index);
+    printer->pop_block();
+}
+
+
+void CodegenCoreneuronCppVisitor::print_first_random_var_index_getter() {
+    printer->add_newline(2);
+    print_device_method_annotation();
+    printer->push_block("static inline int first_random_var_index()");
+    printer->fmt_line("return {};", info.first_random_var_index);
     printer->pop_block();
 }
 
@@ -1437,24 +1268,6 @@ std::string CodegenCoreneuronCppVisitor::global_variable_name(const SymbolType& 
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
-}
-
-
-std::string CodegenCoreneuronCppVisitor::update_if_ion_variable_name(
-    const std::string& name) const {
-    std::string result(name);
-    if (ion_variable_struct_required()) {
-        if (info.is_ion_read_variable(name)) {
-            result = naming::ION_VARNAME_PREFIX + name;
-        }
-        if (info.is_ion_write_variable(name)) {
-            result = "ionvar." + name;
-        }
-        if (info.is_current(name)) {
-            result = "ionvar." + name;
-        }
-    }
-    return result;
 }
 
 
@@ -1802,19 +1615,6 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
 
     print_global_var_struct_assertions();
     print_global_var_struct_decl();
-}
-
-
-void CodegenCoreneuronCppVisitor::print_global_var_struct_assertions() const {
-    // Assert some things that we assume when copying instances of this struct
-    // to the GPU and so on.
-    printer->fmt_line("static_assert(std::is_trivially_copy_constructible_v<{}>);",
-                      global_struct());
-    printer->fmt_line("static_assert(std::is_trivially_move_constructible_v<{}>);",
-                      global_struct());
-    printer->fmt_line("static_assert(std::is_trivially_copy_assignable_v<{}>);", global_struct());
-    printer->fmt_line("static_assert(std::is_trivially_move_assignable_v<{}>);", global_struct());
-    printer->fmt_line("static_assert(std::is_trivially_destructible_v<{}>);", global_struct());
 }
 
 
@@ -2311,6 +2111,19 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
     printer->fmt_push_block("static void {}(NrnThread* nt, Memb_list* ml, int type)",
                             method_name(naming::NRN_PRIVATE_DESTRUCTOR_METHOD));
     cast_inst_and_assert_validity();
+
+    // delete random streams
+    if (info.random_variables.size()) {
+        printer->add_line("int pnodecount = ml->_nodecount_padded;");
+        printer->add_line("int nodecount = ml->nodecount;");
+        printer->add_line("Datum* indexes = ml->pdata;");
+        printer->push_block("for (int id = 0; id < nodecount; id++)");
+        for (const auto& var: info.random_variables) {
+            const auto& name = get_variable_name(var->get_name());
+            printer->fmt_line("nrnran123_deletestream((nrnran123_State*){});", name);
+        }
+        printer->pop_block();
+    }
     print_instance_struct_delete_from_device();
     printer->add_multi_line(R"CODE(
         delete inst;
@@ -3579,6 +3392,7 @@ void CodegenCoreneuronCppVisitor::print_namespace_end() {
 
 void CodegenCoreneuronCppVisitor::print_common_getters() {
     print_first_pointer_var_index_getter();
+    print_first_random_var_index_getter();
     print_net_receive_arg_size_getter();
     print_thread_getters();
     print_num_variable_getter();
