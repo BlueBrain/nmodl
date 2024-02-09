@@ -290,9 +290,9 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="stringliteral">        double* Ds{};</span></div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="stringliteral">        double* v_unused{};</span></div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">        double* g_unused{};</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">        const double* ion_ena{};</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">        double* ion_ina{};</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">        double* ion_dinadv{};</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">        const double* const* ion_ena{};</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">        double* const* ion_ina{};</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral">        double* const* ion_dinadv{};</span></div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="stringliteral">        pas_test_Store* global{&amp;pas_test_global};</span></div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="stringliteral"></span> </div>
@@ -355,16 +355,23 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ina&quot;} /* 6 */,</span></div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;Ds&quot;} /* 7 */,</span></div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;v_unused&quot;} /* 8 */,</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g_unused&quot;} /* 9 */</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">        );</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">    })CODE&quot;;</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g_unused&quot;} /* 9 */,</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ena&quot;, &quot;na_ion&quot;} /* 0 */,</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ina&quot;, &quot;na_ion&quot;} /* 1 */,</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_dinadv&quot;, &quot;na_ion&quot;} /* 2 */</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">        );</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">        hoc_register_prop_size(mech_type, 10, 3);</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 0, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 1, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 2, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="stringliteral">    })CODE&quot;;</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="stringliteral">}</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>

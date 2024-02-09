@@ -95,8 +95,8 @@ var NAVTREEINDEX =
 "json_8cpp.html",
 "nmodl__driver_8hpp_source.html",
 "string_8hpp_source.html",
-"structnmodl_1_1utils_1_1_perf_stat.html#a199d3a4ce658889efc3bce2c83e90505",
-"test_2unit_2codegen_2main_8cpp_source.html"
+"structnmodl_1_1utils_1_1_perf_stat.html#a133f90d3e38f8b1d12b9a2fc3a71f3d3",
+"test_2unit_2codegen_2codegen__utils_8cpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

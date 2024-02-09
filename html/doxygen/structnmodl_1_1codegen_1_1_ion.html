@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('structnmodl_1_1codegen_1_1_ion.html','
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represent ions used in mod file. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00048">48</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00050">50</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>&gt;</code></p>
 <table class="memberdecls">
@@ -130,6 +130,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab5f7c01c16f44a6fed509aa56a524b55"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#ab5f7c01c16f44a6fed509aa56a524b55">is_ionic_conc</a> (const std::string &amp;text) const</td></tr>
 <tr class="memdesc:ab5f7c01c16f44a6fed509aa56a524b55"><td class="mdescLeft">&#160;</td><td class="mdescRight">check if it is either internal or external concentration  <a href="structnmodl_1_1codegen_1_1_ion.html#ab5f7c01c16f44a6fed509aa56a524b55">More...</a><br /></td></tr>
 <tr class="separator:ab5f7c01c16f44a6fed509aa56a524b55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d313fa97cb0e039c03fbfada122008c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#a6d313fa97cb0e039c03fbfada122008c">is_ionic_variable</a> (const std::string &amp;text) const</td></tr>
+<tr class="memdesc:a6d313fa97cb0e039c03fbfada122008c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is the variable name <code>text</code> related to this ion?  <a href="structnmodl_1_1codegen_1_1_ion.html#a6d313fa97cb0e039c03fbfada122008c">More...</a><br /></td></tr>
+<tr class="separator:a6d313fa97cb0e039c03fbfada122008c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a038d4bcbaa5b9080949425a3330368e3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#a038d4bcbaa5b9080949425a3330368e3">is_current_derivative</a> (const std::string &amp;text) const</td></tr>
+<tr class="separator:a038d4bcbaa5b9080949425a3330368e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae98e70455f4c6bf1829597a9363ebde5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html#ae98e70455f4c6bf1829597a9363ebde5">variable_index</a> (const std::string &amp;var_name) const</td></tr>
+<tr class="memdesc:ae98e70455f4c6bf1829597a9363ebde5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Variable index in the ion mechanism.  <a href="structnmodl_1_1codegen_1_1_ion.html#ae98e70455f4c6bf1829597a9363ebde5">More...</a><br /></td></tr>
+<tr class="separator:ae98e70455f4c6bf1829597a9363ebde5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -205,7 +213,7 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00066">66</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00068">68</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -236,7 +244,35 @@ Public Attributes</h2></td></tr>
 
 <p>for a given ion, return different variable names/properties like internal/external concentration, reversial potential, ionic current etc. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00115">115</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00129">129</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a038d4bcbaa5b9080949425a3330368e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a038d4bcbaa5b9080949425a3330368e3">&#9670;&nbsp;</a></span>is_current_derivative()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::codegen::Ion::is_current_derivative </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00122">122</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -267,7 +303,7 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is external cell concentration. </p>
 <p>This is equivalent of IONOUT flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00094">94</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00096">96</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -298,7 +334,7 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is internal cell concentration. </p>
 <p>This is equivalent of IONIN flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00085">85</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00087">87</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -328,7 +364,7 @@ Public Attributes</h2></td></tr>
 
 <p>check if it is either internal or external concentration </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00108">108</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00110">110</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -359,7 +395,38 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is a ionic current. </p>
 <p>This is equivalent of IONCUR flag in mod2c. If it is read variable then also get NRNCURIN flag. If it is write variables then also get NRNCUROUT flag. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00076">76</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00078">78</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6d313fa97cb0e039c03fbfada122008c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d313fa97cb0e039c03fbfada122008c">&#9670;&nbsp;</a></span>is_ionic_variable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::codegen::Ion::is_ionic_variable </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Is the variable name <code>text</code> related to this ion? </p>
+<p>Example: For sodium this is true for any of <code>"ena"</code>, <code>"ina"</code>, <code>"nai"</code> and <code>"nao"</code>; but not <code>ion_ina</code>, etc. </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00118">118</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -390,7 +457,39 @@ Public Attributes</h2></td></tr>
 <p>Check if variable name is reveral potential. </p>
 <p>This is equivalent of IONEREV flag in mod2c. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00103">103</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00105">105</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae98e70455f4c6bf1829597a9363ebde5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae98e70455f4c6bf1829597a9363ebde5">&#9670;&nbsp;</a></span>variable_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int nmodl::codegen::Ion::variable_index </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>var_name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Variable index in the ion mechanism. </p>
+<p>For sodium (na), the <code>var_name</code> must be one of <code>ina</code>, <code>ena</code>, <code>nai</code>, <code>nao</code> or <code>dinadv</code>. Replace <code>na</code> with the analogous for other ions.</p>
+<p>In NRN the order is: 0: ena 1: nai 2: nao 3: ina 4: dinadv </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00144">144</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -409,7 +508,7 @@ Public Attributes</h2></td></tr>
 
 <p>ion variables that are being implicitly read </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00056">56</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00058">58</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -427,7 +526,7 @@ Public Attributes</h2></td></tr>
 
 <p>name of the ion </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00050">50</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00052">52</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -445,7 +544,7 @@ Public Attributes</h2></td></tr>
 
 <p>if style semantic needed </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00062">62</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00064">64</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -463,7 +562,7 @@ Public Attributes</h2></td></tr>
 
 <p>ion variables that are being read </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00053">53</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00055">55</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>
@@ -481,7 +580,7 @@ Public Attributes</h2></td></tr>
 
 <p>ion variables that are being written </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00059">59</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__info_8hpp_source.html#l00061">61</a> of file <a class="el" href="codegen__info_8hpp_source.html">codegen_info.hpp</a>.</p>
 
 </div>
 </div>

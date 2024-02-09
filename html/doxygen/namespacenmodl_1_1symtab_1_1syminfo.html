@@ -246,7 +246,7 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000039">Todo:</a></b></dt><dd>Error with pybind if std::underlying_typ is used </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000040">Todo:</a></b></dt><dd>Error with pybind if std::underlying_typ is used </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="symbol__properties_8hpp_source.html#l00027">27</a> of file <a class="el" href="symbol__properties_8hpp_source.html">symbol_properties.hpp</a>.</p>
 
@@ -340,7 +340,7 @@ Functions</h2></td></tr>
 <p>NMODL variable properties. </p>
 <p>Certain variables/symbols specified in various places in the same mod file. For example, RANGE variable could be in PARAMETER bloc, ASSIGNED block etc. In this case, the symbol in global scope need to have multiple properties. This is also important while code generation. Hence, in addition to AST node pointer, we define NmodlType so that we can set multiple properties. Note that AST pointer is no longer pointing to all pointers. Same applies for <a class="el" href="classnmodl_1_1_mod_token.html" title="Represent token returned by scanner.">ModToken</a>.</p>
 <p>These is some redundancy between NmodlType and other enums like <a class="el" href="namespacenmodl_1_1symtab_1_1syminfo.html#ac6634cac7a1e74208a7197e34683cd61" title="kind of symbol">syminfo::DeclarationType</a> and <a class="el" href="namespacenmodl_1_1symtab_1_1syminfo.html#a901f9299d7c59b1694463d26928f2a75" title="scope within a mod file">syminfo::Scope</a>. But as AST will become more abstract from NMODL (towards C/C++) then other types will be useful.</p>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000040">Todo:</a></b></dt><dd><ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000041">Todo:</a></b></dt><dd><ul>
 <li>Rename param_assign to parameter_var </li>
 </ul>
 </dd></dl>
