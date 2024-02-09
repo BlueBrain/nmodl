@@ -1002,7 +1002,8 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         auto* const _ml = &_ml_real;
         size_t const _iml{};
     )CODE");
-    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", codegen_float_variables_size());
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});",
+                      codegen_float_variables.size());
     if (float_variables_size()) {
         printer->add_line("/*initialize range parameters*/");
         for (const auto& var: info.range_parameter_vars) {
@@ -1033,11 +1034,6 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     }
 
     const auto codegen_int_variables_size = codegen_int_variables.size();
-
-    // TODO number of datum is the number of integer vars.
-    printer->fmt_line("Datum *_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);",
-                      codegen_int_variables_size);
-    printer->fmt_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
 
     for (const auto& ion: info.ions) {
         printer->fmt_line("Symbol * {}_sym = hoc_lookup(\"{}_ion\");", ion.name, ion.name);
