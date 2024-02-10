@@ -799,7 +799,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     print_global_var_struct_decl();
 }
 
-
 /// TODO: Same as CoreNEURON?
 void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     /// TODO: Write HocParmLimits and other HOC global variables (delta_t)
@@ -853,31 +852,19 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("/* declaration of user functions */");
     for (const auto& procedure: info.procedures) {
         const auto proc_name = procedure->get_node_name();
-        if (proc_name[0] == '_') {
-            continue;
-        }
         printer->fmt_line("{};", hoc_function_signature(proc_name));
     }
     for (const auto& function: info.functions) {
         const auto func_name = function->get_node_name();
-        if (func_name[0] == '_') {
-            continue;
-        }
         printer->fmt_line("{};", hoc_function_signature(func_name));
     }
     if (!info.point_process) {
         for (const auto& procedure: info.procedures) {
             const auto proc_name = procedure->get_node_name();
-            if (proc_name[0] == '_') {
-                continue;
-            }
             printer->fmt_line("{};", py_function_signature(proc_name));
         }
         for (const auto& function: info.functions) {
             const auto func_name = function->get_node_name();
-            if (func_name[0] == '_') {
-                continue;
-            }
             printer->fmt_line("{};", py_function_signature(func_name));
         }
     }
@@ -902,9 +889,6 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
     for (const auto& procedure: info.procedures) {
         const auto proc_name = procedure->get_node_name();
-        if (proc_name[0] == '_') {
-            continue;
-        }
         printer->fmt_line("{{\"{}{}\", {}}},",
                           proc_name,
                           info.rsuffix,
@@ -912,9 +896,6 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     }
     for (const auto& function: info.functions) {
         const auto func_name = function->get_node_name();
-        if (func_name[0] == '_') {
-            continue;
-        }
         printer->fmt_line("{{\"{}{}\", {}}},",
                           func_name,
                           info.rsuffix,
@@ -928,16 +909,10 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         printer->push_block("static NPyDirectMechFunc npy_direct_func_proc[] =");
         for (const auto& procedure: info.procedures) {
             const auto proc_name = procedure->get_node_name();
-            if (proc_name[0] == '_') {
-                continue;
-            }
             printer->fmt_line("{{\"{}\", {}}},", proc_name, py_function_name(proc_name));
         }
         for (const auto& function: info.functions) {
             const auto func_name = function->get_node_name();
-            if (func_name[0] == '_') {
-                continue;
-            }
             printer->fmt_line("{{\"{}\", {}}},", func_name, py_function_name(func_name));
         }
         printer->pop_block(";");
