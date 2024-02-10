@@ -172,8 +172,7 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
     } else {
         printer->push_block("static void _hoc_setdata()");
         printer->add_multi_line(R"CODE(
-            Prop *_prop, *hoc_getdata_range(int);
-            _prop = hoc_getdata_range(mech_type);
+            Prop *_prop = hoc_getdata_range(mech_type);
             _setdata(_prop);
             hoc_retpushx(1.);
         )CODE");
