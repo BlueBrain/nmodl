@@ -1113,6 +1113,10 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                           info.semantics[i].name);
     }
 
+    printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
+    if (!info.point_process) {
+        printer->add_line("hoc_register_npy_direct(mech_type, npy_direct_func_proc);");
+    }
     printer->pop_block();
 }
 
