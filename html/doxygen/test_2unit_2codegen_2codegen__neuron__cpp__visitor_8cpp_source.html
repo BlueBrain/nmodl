@@ -154,61 +154,61 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordflow">return</span> ss.str();</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">   62</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a>(<span class="stringliteral">&quot;Check NEURON codegen for simple MOD file&quot;</span>, <span class="stringliteral">&quot;[codegen][neuron_boilerplate]&quot;</span>) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    GIVEN(<span class="stringliteral">&quot;A simple mod file with RANGE, ARRAY and ION variables&quot;</span>) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="stringliteral">            TITLE unit test based on passive membrane channel</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="stringliteral">            UNITS {</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">                (mV) = (millivolt)</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral">                (mA) = (milliamp)</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">                (S) = (siemens)</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">            NEURON {</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">                SUFFIX pas_test</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">                USEION na READ ena WRITE ina</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">                NONSPECIFIC_CURRENT i</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">                RANGE g, e</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">                RANGE ar</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">                g = .001    (S/cm2) &lt;0,1e9&gt;</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral">                e = -70 (mV)</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">                v (mV)</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral">                i (mA/cm2)</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">                ena (mV)</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">                ina (mA/cm2)</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">                ar[2]</span></div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">                ar[0] = 1</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">                SOLVE states METHOD cnexp</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral">                i = g*(v - e)</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral">                ina = g*(v - ena)</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">            STATE {</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">                s</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">            DERIVATIVE states {</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral">                s&#39; = ar[0]</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> <span class="keyword">const</span> reindent_and_trim_text = [](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; text) {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(<a class="code" href="group__utils.html#ga78d349a9974c648c44f8f47c82a1bb6c">stringutils::trim</a>(text));</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        };</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keyword">auto</span> <span class="keyword">const</span> generated = reindent_and_trim_text(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a33db5c2eff91499afc3aad328f0806b2">get_neuron_cpp_code</a>(nmodl_text));</div>
+<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">   61</a></span>&#160;std::string <a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(<span class="keyword">const</span> std::string&amp; text) {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(<a class="code" href="group__utils.html#ga78d349a9974c648c44f8f47c82a1bb6c">stringutils::trim</a>(text));</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;};</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">   65</a></span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a>(<span class="stringliteral">&quot;Check NEURON codegen for simple MOD file&quot;</span>, <span class="stringliteral">&quot;[codegen][neuron_boilerplate]&quot;</span>) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    GIVEN(<span class="stringliteral">&quot;A simple mod file with RANGE, ARRAY and ION variables&quot;</span>) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;<span class="stringliteral">            TITLE unit test based on passive membrane channel</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="stringliteral">            UNITS {</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="stringliteral">                (mV) = (millivolt)</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="stringliteral">                (mA) = (milliamp)</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="stringliteral">                (S) = (siemens)</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="stringliteral">                SUFFIX pas_test</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="stringliteral">                USEION na READ ena WRITE ina</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="stringliteral">                NONSPECIFIC_CURRENT i</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;<span class="stringliteral">                RANGE g, e</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="stringliteral">                RANGE ar</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="stringliteral">                g = .001    (S/cm2) &lt;0,1e9&gt;</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="stringliteral">                e = -70 (mV)</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="stringliteral">                v (mV)</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="stringliteral">                i (mA/cm2)</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="stringliteral">                ena (mV)</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="stringliteral">                ina (mA/cm2)</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="stringliteral">                ar[2]</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="stringliteral">            INITIAL {</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="stringliteral">                ar[0] = 1</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="stringliteral">            BREAKPOINT {</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="stringliteral">                SOLVE states METHOD cnexp</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="stringliteral">                i = g*(v - e)</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">                ina = g*(v - ena)</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">            STATE {</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">                s</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">            DERIVATIVE states {</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral">                s&#39; = ar[0]</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="stringliteral">        </span><span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a33db5c2eff91499afc3aad328f0806b2">get_neuron_cpp_code</a>(nmodl_text));</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        THEN(<span class="stringliteral">&quot;Correct includes are printed&quot;</span>) {</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            std::string expected_includes = R<span class="stringliteral">&quot;(#include &lt;math.h&gt;</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">#include &lt;stdio.h&gt;</span></div>
@@ -219,7 +219,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="stringliteral">#include &quot;nrniv_mf.h&quot;</span></div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="stringliteral">#include &quot;section_fwd.hpp&quot;)&quot;;</span></div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_includes)));</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_includes)));</span></div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct number of variables are printed&quot;</span>) {</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            std::string expected_num_variables =</div>
@@ -227,7 +227,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="stringliteral">static constexpr auto number_of_floating_point_variables = 10;)&quot;;</span></div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_num_variables)));</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_num_variables)));</span></div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct using-directives are printed &quot;</span>) {</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            std::string expected_using_directives = R<span class="stringliteral">&quot;(namespace {</span></div>
@@ -246,12 +246,12 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="stringliteral">}  // namespace)&quot;;</span></div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_using_directives)));</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_using_directives)));</span></div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct namespace is printed&quot;</span>) {</div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            std::string expected_namespace = R<span class="stringliteral">&quot;(namespace neuron {)&quot;;</span></div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected_namespace)));</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_namespace)));</span></div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct channel information are printed&quot;</span>) {</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            std::string expected_channel_info = R<span class="stringliteral">&quot;(/** channel information */</span></div>
@@ -270,14 +270,14 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_channel_info)));</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_channel_info)));</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct global variables are printed&quot;</span>) {</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            std::string expected_global_variables =</div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                R<span class="stringliteral">&quot;(static neuron::container::field_index _slist1[1], _dlist1[1];)&quot;;</span></div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_global_variables)));</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_global_variables)));</span></div>
 <div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct pas_test_Instance&quot;</span>) {</div>
 <div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::string expected =</div>
@@ -298,7 +298,7 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="stringliteral">        pas_test_Store* global{&amp;pas_test_global};</span></div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="stringliteral">    };)&quot;;</span></div>
 <div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(reindent_and_trim_text(expected)));</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated, ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected)));</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct HOC global variables are printed&quot;</span>) {</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            std::string expected_hoc_global_variables =</div>
@@ -314,110 +314,132 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    };)&quot;;</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            REQUIRE_THAT(generated,</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                         ContainsSubstring(reindent_and_trim_text(expected_hoc_global_variables)));</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_hoc_global_variables)));</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        }</div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        THEN(<span class="stringliteral">&quot;Placeholder nrn_cur function is printed&quot;</span>) {</div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            std::string expected_placeholder_nrn_cur =</div>
 <div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                R<span class="stringliteral">&quot;(void nrn_cur_pas_test(_nrn_model_sorted_token const&amp; _sorted_token, NrnThread* _nt, Memb_list* _ml_arg, int _type) {})&quot;;</span></div>
 <div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_cur)));</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_placeholder_nrn_cur)));</span></div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Placeholder nrn_state function is printed&quot;</span>) {</div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            std::string expected_placeholder_nrn_state =</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                R<span class="stringliteral">&quot;(void nrn_state_pas_test(_nrn_model_sorted_token const&amp; _sorted_token, NrnThread* _nt, Memb_list* _ml_arg, int _type) {)&quot;;</span></div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="stringliteral"></span> </div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_nrn_state)));</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_placeholder_nrn_state)));</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="stringliteral">        }</span></div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Initialization function for slist/dlist is printed correctly&quot;</span>) {</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            std::string expected_initlists_s_var = <span class="stringliteral">&quot;_slist1[0] = {4, 0};&quot;</span>;</div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            std::string expected_initlists_Ds_var = <span class="stringliteral">&quot;_dlist1[0] = {7, 0};&quot;</span>;</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            REQUIRE_THAT(generated,</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                         ContainsSubstring(reindent_and_trim_text(expected_initlists_s_var)));</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_initlists_s_var)));</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            REQUIRE_THAT(generated,</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                         ContainsSubstring(reindent_and_trim_text(expected_initlists_Ds_var)));</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_initlists_Ds_var)));</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        THEN(<span class="stringliteral">&quot;Placeholder registration function is printed&quot;</span>) {</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            std::string expected_placeholder_reg = R<span class="stringliteral">&quot;CODE(/** register channel with the simulator */</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="stringliteral">    extern &quot;C&quot; void __test_reg() {</span></div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="stringliteral">        _initlists();</span></div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="stringliteral">        register_mech(mechanism_info, nrn_alloc_pas_test, nrn_cur_pas_test, nrn_jacob_pas_test, nrn_state_pas_test, nrn_init_pas_test, hoc_nrnpointerindex, 1);</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="stringliteral">        ion_reg(&quot;na&quot;, -10000.);</span></div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="stringliteral">        mech_type = nrn_get_mechtype(mechanism_info[1]);</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="stringliteral">        _nrn_mechanism_register_data_fields(mech_type,</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g&quot;} /* 0 */,</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;e&quot;} /* 1 */,</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;i&quot;} /* 2 */,</span></div>
-<div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a6a1c9926e35547d2044418cee996a451">  258</a></span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ar&quot;, 2} /* 3 */,</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;s&quot;} /* 4 */,</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ena&quot;} /* 5 */,</span></div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ina&quot;} /* 6 */,</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;Ds&quot;} /* 7 */,</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;v_unused&quot;} /* 8 */,</span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g_unused&quot;} /* 9 */,</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ena&quot;, &quot;na_ion&quot;} /* 0 */,</span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ina&quot;, &quot;na_ion&quot;} /* 1 */,</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_dinadv&quot;, &quot;na_ion&quot;} /* 2 */</span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">        );</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="stringliteral">        hoc_register_prop_size(mech_type, 10, 3);</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 0, &quot;na_ion&quot;);</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 1, &quot;na_ion&quot;);</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 2, &quot;na_ion&quot;);</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">    })CODE&quot;;</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="stringliteral">                         ContainsSubstring(reindent_and_trim_text(expected_placeholder_reg)));</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="stringliteral">        }</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="stringliteral">    }</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="stringliteral">}</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="stringliteral"></span> </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="stringliteral"><a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a>(</span><span class="stringliteral">&quot;Check whether PROCEDURE and FUNCTION need setdata call&quot;</span>, <span class="stringliteral">&quot;[codegen][needsetdata]&quot;</span>) {</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    GIVEN(<span class="stringliteral">&quot;mod file with GLOBAL and RANGE variables used in FUNC and PROC&quot;</span>) {</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        std::string input_nmodl = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="stringliteral">        _na_sym = hoc_lookup(&quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="stringliteral">        register_mech(mechanism_info, nrn_alloc_pas_test, nrn_cur_pas_test, nrn_jacob_pas_test, nrn_state_pas_test, nrn_init_pas_test, hoc_nrnpointerindex, 1);</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="stringliteral">        mech_type = nrn_get_mechtype(mechanism_info[1]);</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="stringliteral">        _nrn_mechanism_register_data_fields(mech_type,</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g&quot;} /* 0 */,</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;e&quot;} /* 1 */,</span></div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;i&quot;} /* 2 */,</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ar&quot;, 2} /* 3 */,</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;s&quot;} /* 4 */,</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ena&quot;} /* 5 */,</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;ina&quot;} /* 6 */,</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;Ds&quot;} /* 7 */,</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;v_unused&quot;} /* 8 */,</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double&gt;{&quot;g_unused&quot;} /* 9 */,</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ena&quot;, &quot;na_ion&quot;} /* 0 */,</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_ina&quot;, &quot;na_ion&quot;} /* 1 */,</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral">            _nrn_mechanism_field&lt;double*&gt;{&quot;ion_dinadv&quot;, &quot;na_ion&quot;} /* 2 */</span></div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="stringliteral">        );</span></div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="stringliteral">        hoc_register_prop_size(mech_type, 10, 3);</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 0, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 1, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="stringliteral">        hoc_register_dparam_semantics(mech_type, 2, &quot;na_ion&quot;);</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="stringliteral">    })CODE&quot;;</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00280"></a><span class="lineno"><a class="line" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a6a1c9926e35547d2044418cee996a451">  280</a></span>&#160;<span class="stringliteral">            REQUIRE_THAT(generated,</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="stringliteral">                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_placeholder_reg)));</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="stringliteral">    }</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="stringliteral">    GIVEN(</span><span class="stringliteral">&quot;A simple point process mod file&quot;</span>) {</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        std::string <span class="keyword">const</span> nmodl_text = R<span class="stringliteral">&quot;(</span></div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;<span class="stringliteral">            NEURON {</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="stringliteral">                SUFFIX test</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">                RANGE x</span></div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="stringliteral">                GLOBAL s</span></div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="stringliteral">                s = 2</span></div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="stringliteral">                x</span></div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="stringliteral">            PROCEDURE a() {</span></div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;<span class="stringliteral">                x = get_42()</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="stringliteral">            FUNCTION b() {</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="stringliteral">                a()</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="stringliteral">            FUNCTION get_42() {</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="stringliteral">                get_42 = 42</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="stringliteral">            }</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="stringliteral">        </span><span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a>().<a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">parse_string</a>(input_nmodl);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        std::stringstream ss;</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keyword">auto</span> cvisitor = <a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a47ab3ea80a6131688c22d1dc6b8f1cc4">create_neuron_cpp_visitor</a>(ast, input_nmodl, ss);</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        cvisitor-&gt;visit_program(*ast);</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> symtab = ast-&gt;get_symbol_table();</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        THEN(<span class="stringliteral">&quot;use_range_ptr_var property is added to needed FUNC and PROC&quot;</span>) {</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;            <span class="keyword">auto</span> use_range_ptr_var_funcs = symtab-&gt;get_variables_with_properties(</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                NmodlType::use_range_ptr_var);</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            REQUIRE(use_range_ptr_var_funcs.size() == 2);</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> a = symtab-&gt;lookup(<span class="stringliteral">&quot;a&quot;</span>);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            REQUIRE(a-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> b = symtab-&gt;lookup(<span class="stringliteral">&quot;b&quot;</span>);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            REQUIRE(b-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> get_42 = symtab-&gt;lookup(<span class="stringliteral">&quot;get_42&quot;</span>);</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            REQUIRE(!get_42-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        }</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    }</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;}</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="stringliteral">                POINT_PROCESS test_pp</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="stringliteral">        THEN(</span><span class="stringliteral">&quot;Correct mechanism registration function is called&quot;</span>) {</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            std::string expected_placeholder_point_reg =</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                <span class="stringliteral">&quot;_pointtype = point_register_mech(mechanism_info, nrn_alloc_test_pp, nullptr, &quot;</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                <span class="stringliteral">&quot;nullptr, nullptr, nrn_init_test_pp, hoc_nrnpointerindex, 1, _hoc_create_pnt, &quot;</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                <span class="stringliteral">&quot;_hoc_destroy_pnt, _member_func);&quot;</span>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            <span class="keyword">auto</span> <span class="keyword">const</span> generated = <a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a33db5c2eff91499afc3aad328f0806b2">get_neuron_cpp_code</a>(nmodl_text));</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            REQUIRE_THAT(generated,</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                         ContainsSubstring(<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a>(expected_placeholder_point_reg)));</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        }</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    }</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;}</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a>(<span class="stringliteral">&quot;Check whether PROCEDURE and FUNCTION need setdata call&quot;</span>, <span class="stringliteral">&quot;[codegen][needsetdata]&quot;</span>) {</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    GIVEN(<span class="stringliteral">&quot;mod file with GLOBAL and RANGE variables used in FUNC and PROC&quot;</span>) {</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        std::string input_nmodl = R<span class="stringliteral">&quot;(</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="stringliteral">            NEURON {</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;<span class="stringliteral">                SUFFIX test</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="stringliteral">                RANGE x</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;<span class="stringliteral">                GLOBAL s</span></div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="stringliteral">            PARAMETER {</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="stringliteral">                s = 2</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;<span class="stringliteral">            ASSIGNED {</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;<span class="stringliteral">                x</span></div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="stringliteral">            PROCEDURE a() {</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="stringliteral">                x = get_42()</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="stringliteral">            FUNCTION b() {</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="stringliteral">                a()</span></div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="stringliteral">            FUNCTION get_42() {</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="stringliteral">                get_42 = 42</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral">        )&quot;;</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">        </span><span class="keyword">const</span> <span class="keyword">auto</span>&amp; ast = <a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html">NmodlDriver</a>().<a class="code" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a1d8d4a11126fc6e8e79f8422f7b4532c">parse_string</a>(input_nmodl);</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        std::stringstream ss;</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <span class="keyword">auto</span> cvisitor = <a class="code" href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a47ab3ea80a6131688c22d1dc6b8f1cc4">create_neuron_cpp_visitor</a>(ast, input_nmodl, ss);</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        cvisitor-&gt;visit_program(*ast);</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> symtab = ast-&gt;get_symbol_table();</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        THEN(<span class="stringliteral">&quot;use_range_ptr_var property is added to needed FUNC and PROC&quot;</span>) {</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            <span class="keyword">auto</span> use_range_ptr_var_funcs = symtab-&gt;get_variables_with_properties(</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                NmodlType::use_range_ptr_var);</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            REQUIRE(use_range_ptr_var_funcs.size() == 2);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> a = symtab-&gt;lookup(<span class="stringliteral">&quot;a&quot;</span>);</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            REQUIRE(a-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> b = symtab-&gt;lookup(<span class="stringliteral">&quot;b&quot;</span>);</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;            REQUIRE(b-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> get_42 = symtab-&gt;lookup(<span class="stringliteral">&quot;get_42&quot;</span>);</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            REQUIRE(!get_42-&gt;has_any_property(NmodlType::use_range_ptr_var));</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        }</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
@@ -436,8 +458,9 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__neuron__
 <div class="ttc" id="aneuron__solve__visitor_8hpp_html"><div class="ttname"><a href="neuron__solve__visitor_8hpp.html">neuron_solve_visitor.hpp</a></div><div class="ttdoc">Visitor that solves ODEs using old solvers of NEURON</div></div>
 <div class="ttc" id="ainline__visitor_8hpp_html"><div class="ttname"><a href="inline__visitor_8hpp.html">inline_visitor.hpp</a></div><div class="ttdoc">Visitor to inline local procedure and function calls</div></div>
 <div class="ttc" id="anmodl__driver_8hpp_html"><div class="ttname"><a href="nmodl__driver_8hpp.html">nmodl_driver.hpp</a></div></div>
-<div class="ttc" id="atest_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_html_a5c385aee2be7ca89645c0bfb2f5871a0"><div class="ttname"><a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Check NEURON codegen for simple MOD file&quot;, &quot;[codegen][neuron_boilerplate]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00062">codegen_neuron_cpp_visitor.cpp:62</a></div></div>
+<div class="ttc" id="atest_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_html_a5c385aee2be7ca89645c0bfb2f5871a0"><div class="ttname"><a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a5c385aee2be7ca89645c0bfb2f5871a0">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Check NEURON codegen for simple MOD file&quot;, &quot;[codegen][neuron_boilerplate]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00065">codegen_neuron_cpp_visitor.cpp:65</a></div></div>
 <div class="ttc" id="asymtab__visitor_8hpp_html"><div class="ttname"><a href="symtab__visitor_8hpp.html">symtab_visitor.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
+<div class="ttc" id="atest_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_html_a1ff8c3b1258b14ff5fc934680fc8d849"><div class="ttname"><a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a1ff8c3b1258b14ff5fc934680fc8d849">reindent_and_trim_text</a></div><div class="ttdeci">std::string reindent_and_trim_text(const std::string &amp;text)</div><div class="ttdef"><b>Definition:</b> <a href="test_2unit_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00061">codegen_neuron_cpp_visitor.cpp:61</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
