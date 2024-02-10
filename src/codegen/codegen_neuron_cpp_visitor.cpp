@@ -86,6 +86,13 @@ void CodegenNeuronCppVisitor::print_atomic_reduction_pragma() {
     return;
 }
 
+bool CodegenNeuronCppVisitor::optimize_ion_variable_copies() const {
+    if (optimize_ionvar_copies) {
+        throw std::runtime_error("Not implemented.");
+    }
+    return false;
+}
+
 
 /****************************************************************************************/
 /*                         Printing routines for code generation                        */
@@ -124,9 +131,11 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
             static double _hoc_loc_pnt(void* _vptr) {
                 return loc_point_process(_pointtype, _vptr);
             }
+
             static double _hoc_has_loc(void* _vptr) {
                 return has_loc_point(_vptr);
             }
+
             static double _hoc_get_loc_pnt(void* _vptr) {
                 return (get_loc_point_process(_vptr));
             }
@@ -147,7 +156,7 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
     }
     if (!info.vectorize) {
         printer->add_multi_line(R"CODE(
-            neuron::legacy::set_globals_from_prop(_prop, _ml_real, _ml, id);
+            neuron::legacy::set_globals_from_prop(_prop, _ml_real, _ml, _iml);
             _ppvar = _nrn_mechanism_access_dparam(_prop);
         )CODE");
     }
@@ -163,7 +172,7 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
     } else {
         printer->push_block("static void _hoc_setdata()");
         printer->add_multi_line(R"CODE(
-            Prop *_prop;
+            Prop *_prop, *hoc_getdata_range(int);
             _prop = hoc_getdata_range(mech_type);
             _setdata(_prop);
             hoc_retpushx(1.);
@@ -462,6 +471,13 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
 }
 
 
+std::string CodegenNeuronCppVisitor::conc_write_statement(const std::string& ion_name,
+                                                          const std::string& concentration,
+                                                          int index) {
+    // throw std::runtime_error("Not implemented.");
+    return "";
+}
+
 /****************************************************************************************/
 /*                         Routines for returning variable name                         */
 /****************************************************************************************/
@@ -492,7 +508,30 @@ std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbo
 std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                        const std::string& name,
                                                        bool use_instance) const {
-    return name;
+    auto position = position_of_int_var(name);
+    if (symbol.is_index) {
+        if (use_instance) {
+            throw std::runtime_error("Not implemented. [wiejo]");
+            // return fmt::format("inst->{}[{}]", name, position);
+        }
+        throw std::runtime_error("Not implemented. [ncuwi]");
+        // return fmt::format("indexes[{}]", position);
+    }
+    if (symbol.is_integer) {
+        if (use_instance) {
+            throw std::runtime_error("Not implemented. [cnuoe]");
+            // return fmt::format("inst->{}[{}*pnodecount+id]", name, position);
+        }
+        throw std::runtime_error("Not implemented. [u32ow]");
+        // return fmt::format("indexes[{}*pnodecount+id]", position);
+    }
+    if (use_instance) {
+        return fmt::format("(*inst.{}[id])", name);
+    }
+
+    throw std::runtime_error("Not implemented. [nvueir]");
+    // auto data = symbol.is_vdata ? "_vdata" : "_data";
+    // return fmt::format("nt->{}[indexes[{}*pnodecount + id]]", data, position);
 }
 
 
@@ -508,8 +547,7 @@ std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symb
 
 std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
                                                        bool use_instance) const {
-    // const std::string& varname = update_if_ion_variable_name(name);
-    const std::string& varname = name;
+    const std::string& varname = update_if_ion_variable_name(name);
 
     auto symbol_comparator = [&varname](const SymbolType& sym) {
         return varname == sym->get_name();
@@ -914,43 +952,39 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
                             info.mod_suffix);
     printer->fmt_push_block("return {}", instance_struct());
 
+    std::vector<std::string> make_instance_args;
+
     const auto codegen_float_variables_size = codegen_float_variables.size();
-    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        /// print comma only if there are codegen_int_variables needed to be printer afterwards
-        const auto print_comma =
-            i < codegen_float_variables_size - 1 ||
-            (codegen_int_variables_size > 0 &&
-             codegen_int_variables[0].symbol->get_name() != naming::POINT_PROCESS_VARIABLE) ||
-            (codegen_int_variables_size > 1 &&
-             codegen_int_variables[0].symbol->get_name() == naming::POINT_PROCESS_VARIABLE);
         if (float_var->is_array()) {
-            printer->fmt_line("_ml.template data_array<{0}, {1}>(0){2} /* {3} */",
-                              i,
-                              float_var->get_length(),
-                              print_comma ? "," : "",
-                              float_var->get_name());
+            make_instance_args.push_back(
+                fmt::format("_ml.template data_array_ptr<{}, {}>()", i, float_var->get_length()));
         } else {
-            printer->fmt_line("&_ml.template fpfield<{0}>(0){1} /* {2} */",
-                              i,
-                              print_comma ? "," : "",
-                              float_var->get_name());
+            make_instance_args.push_back(fmt::format("_ml.template fpfield_ptr<{}>()", i));
         }
     }
-    for (int i = 0; i < codegen_int_variables_size; ++i) {
-        const auto& int_var_name = codegen_int_variables[i].symbol->get_name();
-        if (int_var_name == naming::POINT_PROCESS_VARIABLE) {
-            continue;
+
+    const auto codegen_int_variables_size = codegen_int_variables.size();
+    for (size_t i = 0; i < codegen_int_variables_size; ++i) {
+        const auto& var = codegen_int_variables[i];
+        auto name = var.symbol->get_name();
+        auto const variable = [&var, i]() -> std::string {
+            if (var.is_index || var.is_integer) {
+                return "";
+            } else if (var.is_vdata) {
+                return "";
+            } else {
+                return fmt::format("_ml.template dptr_field_ptr<{}>()", i);
+            }
+        }();
+        if (variable != "") {
+            make_instance_args.push_back(variable);
         }
-        const auto print_comma = i < codegen_int_variables_size - 1 &&
-                                 codegen_int_variables[i + 1].symbol->get_name() !=
-                                     naming::POINT_PROCESS_VARIABLE;
-        printer->fmt_line("_ml.template dptr_field<{0}>(0){1} /* {2} */",
-                          i,
-                          print_comma ? "," : "",
-                          int_var_name);
     }
+
+    printer->add_multi_line(fmt::format("{}", fmt::join(make_instance_args, ",\n")));
+
     printer->pop_block(";");
     printer->pop_block();
 }
@@ -1018,71 +1052,67 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     /// TODO: More things to add here
     printer->add_line("_nrn_mechanism_register_data_fields(mech_type,");
     printer->increase_indent();
+
     const auto codegen_float_variables_size = codegen_float_variables.size();
-    const auto codegen_int_variables_size = codegen_int_variables.size();
+    std::vector<std::string> mech_register_args;
+
     for (int i = 0; i < codegen_float_variables_size; ++i) {
         const auto& float_var = codegen_float_variables[i];
-        const auto print_comma = i < codegen_float_variables_size - 1 ||
-                                 codegen_int_variables_size > 0 || info.emit_cvode;
         if (float_var->is_array()) {
-            printer->fmt_line(
-                "_nrn_mechanism_field<double>{{\"{0}\", {1}}}{2} /* float var index {3} */",
-                float_var->get_name(),
-                float_var->get_length(),
-                print_comma ? "," : "",
-                i);
+            mech_register_args.push_back(
+                fmt::format("_nrn_mechanism_field<double>{{\"{}\", {}}} /* {} */",
+                            float_var->get_name(),
+                            float_var->get_length(),
+                            i));
         } else {
-            printer->fmt_line(
-                "_nrn_mechanism_field<double>{{\"{0}\"}}{1} /* float var index {2} */",
-                float_var->get_name(),
-                print_comma ? "," : "",
-                i);
+            mech_register_args.push_back(fmt::format(
+                "_nrn_mechanism_field<double>{{\"{}\"}} /* {} */", float_var->get_name(), i));
         }
     }
+
+    const auto codegen_int_variables_size = codegen_int_variables.size();
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var = codegen_int_variables[i];
-        const auto& int_var_name = int_var.symbol->get_name();
-        const auto print_comma = i < codegen_int_variables_size - 1 || info.emit_cvode;
-        auto nrn_name = int_var_name;
-        if (nrn_name == naming::NODE_AREA_VARIABLE) {
-            nrn_name = naming::AREA_VARIABLE;
-        } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
-            nrn_name = "pntproc";
+        const auto& name = int_var.symbol->get_name();
+        if (i != info.semantics[i].index) {
+            throw std::runtime_error("Broken logic.");
         }
-        printer->fmt_line(
-            "_nrn_mechanism_field<{0}>{{\"{1}\", \"{2}\"}}{3} /* int var index {4} */",
-            int_var_name == naming::POINT_PROCESS_VARIABLE ? "Point_process*" : "double*",
-            int_var_name,
-            nrn_name,
-            print_comma ? "," : "",
-            i);
+
+        auto type = (name == naming::POINT_PROCESS_VARIABLE) ? "Point_process*" : "double*";
+        mech_register_args.push_back(
+            fmt::format("_nrn_mechanism_field<{}>{{\"{}\", \"{}\"}} /* {} */",
+                        type,
+                        name,
+                        info.semantics[i].name,
+                        i));
     }
     if (info.emit_cvode) {
-        printer->add_line("_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
+        mech_register_args.push_back(
+            "_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
     }
+
+    printer->add_multi_line(fmt::format("{}", fmt::join(mech_register_args, ",\n")));
+
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
 
     printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
-                      float_variables_size(),
-                      int_variables_size());
-    for (auto i = 0; i < codegen_int_variables.size(); ++i) {
+                      codegen_float_variables_size,
+                      codegen_int_variables_size);
+
+    for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var = codegen_int_variables[i];
-        const auto& int_var_name = int_var.symbol->get_name();
-        auto nrn_name = int_var_name;
-        if (nrn_name == naming::NODE_AREA_VARIABLE) {
-            nrn_name = naming::AREA_VARIABLE;
-        } else if (nrn_name == naming::POINT_PROCESS_VARIABLE) {
-            nrn_name = "pntproc";
+        const auto& name = int_var.symbol->get_name();
+        if (i != info.semantics[i].index) {
+            throw std::runtime_error("Broken logic.");
         }
-        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");", i, nrn_name);
+
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");",
+                          i,
+                          info.semantics[i].name);
     }
 
-    printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
-    if (!info.point_process) {
-        printer->add_line("hoc_register_npy_direct(mech_type, npy_direct_func_proc);");
-    }
     printer->pop_block();
 }
 
@@ -1112,11 +1142,11 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
             continue;
         } else if (var.is_index || var.is_integer) {
             auto qualifier = var.is_constant ? "const " : "";
-            printer->fmt_line("{}{}* {}{};", qualifier, int_type, name, value_initialize);
+            printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
-            printer->fmt_line("{}{}* {}{};", qualifier, type, name, value_initialize);
+            printer->fmt_line("{}{}* const* {}{};", qualifier, type, name, value_initialize);
         }
     }
 
@@ -1130,10 +1160,23 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
 
 
 void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
+    // read ion statements
+    auto read_statements = ion_read_statements(BlockType::Initial);
+    for (auto& statement: read_statements) {
+        printer->add_line(statement);
+    }
+
     // initial block
     if (node != nullptr) {
         const auto& block = node->get_statement_block();
         print_statement_block(*block, false, false);
+    }
+
+    // write ion statements
+    auto write_statements = ion_write_statements(BlockType::Initial);
+    for (auto& statement: write_statements) {
+        auto text = process_shadow_update_statement(statement, BlockType::Initial);
+        printer->add_line(text);
     }
 }
 
@@ -1190,12 +1233,14 @@ void CodegenNeuronCppVisitor::print_nrn_destructor() {
 /// TODO: Print the equivalent of `nrn_alloc_<mech_name>`
 void CodegenNeuronCppVisitor::print_nrn_alloc() {
     printer->add_newline(2);
+
     auto method = method_name(naming::NRN_ALLOC_METHOD);
     printer->fmt_push_block("static void {}(Prop* _prop)", method);
     printer->add_multi_line(R"CODE(
         Prop *prop_ion{};
         Datum *_ppvar{};
     )CODE");
+
     if (info.point_process) {
         printer->push_block("if (nrn_point_prop_)");
         printer->add_multi_line(R"CODE(
@@ -1212,9 +1257,10 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     printer->add_multi_line(R"CODE(
         _nrn_mechanism_cache_instance _ml_real{_prop};
         auto* const _ml = &_ml_real;
-        size_t const id{};
+        size_t const _iml{};
     )CODE");
-    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
+    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});",
+                      codegen_float_variables.size());
     if (float_variables_size()) {
         printer->add_line("/*initialize range parameters*/");
         for (const auto& var: info.range_parameter_vars) {
@@ -1222,7 +1268,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                 continue;
             }
             const auto& var_name = var->get_name();
-            printer->fmt_line("_ml->template fpfield<{}>(id) = {}; /* {} */",
+            printer->fmt_line("_ml->template fpfield<{}>(_iml) = {}; /* {} */",
                               position_of_float_var(var_name),
                               *var->get_value(),
                               var_name);
@@ -1231,8 +1277,6 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     if (info.point_process) {
         printer->pop_block();
     }
-
-    printer->fmt_line("assert(_nrn_mechanism_get_num_vars(_prop) == {});", float_variables_size());
 
     if (info.semantic_variable_count) {
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
@@ -1246,7 +1290,33 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         throw std::runtime_error("Area allocation not implemented.");
     }
 
-    /// TODO: IONs setup and CONSTRUCTOR call
+    const auto codegen_int_variables_size = codegen_int_variables.size();
+
+    for (const auto& ion: info.ions) {
+        printer->fmt_line("Symbol * {}_sym = hoc_lookup(\"{}_ion\");", ion.name, ion.name);
+        printer->fmt_line("Prop * {}_prop = need_memb({}_sym);", ion.name, ion.name);
+
+        for (size_t i = 0; i < codegen_int_variables_size; ++i) {
+            const auto& var = codegen_int_variables[i];
+
+            // if(var.symbol->has_any_property(NmodlType::useion)) {
+            const std::string& var_name = var.symbol->get_name();
+            if (var_name.rfind("ion_", 0) != 0) {
+                continue;
+            }
+
+            std::string ion_var_name = std::string(var_name.begin() + 4, var_name.end());
+            if (ion.is_ionic_variable(ion_var_name)) {
+                printer->fmt_line("_ppvar[{}] = _nrn_mechanism_get_param_handle({}_prop, {});",
+                                  i,
+                                  ion.name,
+                                  ion.variable_index(ion_var_name));
+            }
+            //}
+        }
+    }
+
+    /// TODO: CONSTRUCTOR call
 
     printer->pop_block();
 }
@@ -1268,6 +1338,19 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");
 
+    /**
+     * \todo Eigen solver node also emits IonCurVar variable in the functor
+     * but that shouldn't update ions in derivative block
+     */
+    if (ion_variable_struct_required()) {
+        throw std::runtime_error("Not implemented.");
+    }
+
+    auto read_statements = ion_read_statements(BlockType::State);
+    for (auto& statement: read_statements) {
+        printer->add_line(statement);
+    }
+
     if (info.nrn_state_block) {
         info.nrn_state_block->visit_children(*this);
     }
@@ -1275,6 +1358,12 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     if (info.currents.empty() && info.breakpoint_node != nullptr) {
         auto block = info.breakpoint_node->get_statement_block();
         print_statement_block(*block, false, false);
+    }
+
+    const auto& write_statements = ion_write_statements(BlockType::State);
+    for (auto& statement: write_statements) {
+        const auto& text = process_shadow_update_statement(statement, BlockType::State);
+        printer->add_line(text);
     }
 
     printer->pop_block();

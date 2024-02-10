@@ -124,6 +124,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     virtual void print_atomic_reduction_pragma() override;
 
 
+    /**
+     * Check if ion variable copies should be avoided
+     */
+    bool optimize_ion_variable_copies() const override;
+
     /****************************************************************************************/
     /*                         Printing routines for code generation                        */
     /****************************************************************************************/
@@ -269,6 +274,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     std::string register_mechanism_arguments() const override;
 
+    std::string conc_write_statement(const std::string& ion_name,
+                                     const std::string& concentration,
+                                     int index) override;
 
     /**
      * All functions and procedures need a \c _hoc_<func_or_proc_name> to be available to the HOC
