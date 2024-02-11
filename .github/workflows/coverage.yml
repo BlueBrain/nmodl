@@ -46,7 +46,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           pip3 install -U pip setuptools
-          pip3 install --user -r requirements.txt
+          pip3 install --user -r <(packaging/show_deps.py -b -r .)
       - name: Restore compiler cache
         uses: actions/cache@v4
         with:

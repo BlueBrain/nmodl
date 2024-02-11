@@ -83,7 +83,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           python3 -m pip install -U pip setuptools
-          python3 -m pip install --user -r requirements.txt
+          python3 -m pip install --user -r <(packaging/show_deps.py -b -r .)
 
       - name: Install neuron-nightly
         if: ${{matrix.config.enable_usecases == 'On'}}

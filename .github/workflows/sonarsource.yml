@@ -32,7 +32,7 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           pip3 install -U pip setuptools
-          pip3 install --user -r requirements.txt
+          pip3 install --user -r <(packaging/show_deps.py -r -b .)
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v2
       - name: Configure project

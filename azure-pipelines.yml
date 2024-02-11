@@ -88,7 +88,7 @@ stages:
         sudo apt-get install -y python3.8 python3.8-dev python3.8-venv ninja-build
         sudo apt-get remove -y python3-importlib-metadata
         python3.8 -m pip install --upgrade pip setuptools
-        python3.8 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
+        python3.8 -m pip install --user -r <($(Build.Repository.LocalPath)/packaging/show_deps.py -r -b $(Build.Repository.LocalPath))
         # we manually get version 3.15.0 to make sure that changes in the cmake
         # files do not require unsupported versions of cmake in our package.
         wget --quiet --output-document=- "https://github.com/Kitware/CMake/releases/download/$CMAKE_VER/$CMAKE_PKG.tar.gz" | tar xzpf -
@@ -149,7 +149,7 @@ stages:
     - script: |
         brew install flex bison cmake python@3
         python3 -m pip install --upgrade pip setuptools
-        python3 -m pip install --user -r $(Build.Repository.LocalPath)/requirements.txt
+        python3 -m pip install --user -r <($(Build.Repository.LocalPath)/packaging/show_deps.py -r -b $(Build.Repository.LocalPath))
       displayName: 'Install Dependencies'
     - script: |
         export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
