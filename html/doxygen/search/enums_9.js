@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['variabletype_5391',['VariableType',['../namespacenmodl_1_1symtab_1_1syminfo.html#afde535fb45789f24916fd1cbafbb2aa2',1,'nmodl::symtab::syminfo']]]
+  ['unaryop_5406',['UnaryOp',['../group__ast__prop.html#gadcf4f5fdf8b60524c688899351105d8a',1,'nmodl::ast']]],
+  ['unitstatetype_5407',['UnitStateType',['../group__ast__prop.html#ga524298752d3913086b9e8bf101091719',1,'nmodl::ast']]],
+  ['usenumbersinstring_5408',['UseNumbersInString',['../group__utils.html#gabf78118141123c84917fbafa57c97b5b',1,'nmodl::utils']]]
 ];

@@ -1,11 +1,8 @@
 var searchData=
 [
-  ['watch_5586',['WATCH',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ae586513b443516b9e00a844bfbacd16e',1,'nmodl::ast::WATCH()'],['../group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaf20658650d987d31063b593c05980397',1,'nmodl::codegen::Watch()']]],
-  ['watch_5fstatement_5587',['WATCH_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a0cb4711609fabe3b8b5692b6e9e41ea6',1,'nmodl::ast']]],
-  ['while_5fstatement_5588',['WHILE_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5134faf37f3fe1bb05273b5e517834dd',1,'nmodl::ast']]],
-  ['withnumbers_5589',['WithNumbers',['../group__utils.html#ggabf78118141123c84917fbafa57c97b5ba6d494c0b7b8c95f1ca055e1afd307200',1,'nmodl::utils']]],
-  ['withoutnumbers_5590',['WithoutNumbers',['../group__utils.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5',1,'nmodl::utils']]],
-  ['wrapped_5fexpression_5591',['WRAPPED_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53',1,'nmodl::ast']]],
-  ['write_5592',['write',['../namespacenmodl_1_1symtab_1_1syminfo.html#a3024cbfc3a7ebf7dd349303e70d82d4daefb2a684e4afb7d55e6147fbe5a332ee',1,'nmodl::symtab::syminfo']]],
-  ['write_5fion_5fvar_5593',['write_ion_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c',1,'nmodl::symtab::syminfo::write_ion_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6a032955d350a7dd5254b35acf0ce26a',1,'nmodl::ast::WRITE_ION_VAR()']]]
+  ['valence_5601',['VALENCE',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ad4c282fc67c65a77faf3d6bf6128a069',1,'nmodl::ast']]],
+  ['value_5602',['VALUE',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1aecc2e9c313faddb07e7da223c1dc5c3f',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]],
+  ['var_5fname_5603',['VAR_NAME',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a04278d9c3e8692412e2d9cb9f7e0af30',1,'nmodl::ast']]],
+  ['variable_5604',['variable',['../namespacenmodl_1_1symtab_1_1syminfo.html#ac6634cac7a1e74208a7197e34683cd61ae04aa5104d082e4a51d241391941ba26',1,'nmodl::symtab::syminfo']]],
+  ['verbatim_5605',['VERBATIM',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033abbbf736d1511689a00bb221cf7a98042',1,'nmodl::ast']]]
 ];

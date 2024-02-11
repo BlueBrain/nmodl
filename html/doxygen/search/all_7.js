@@ -11,5 +11,8 @@ var searchData=
   ['has_5fsympy_5fsolution_847',['has_sympy_solution',['../namespacenmodl_1_1visitor.html#a43c2fe2bb45e58563ca081904ed9833e',1,'nmodl::visitor']]],
   ['has_5ftoken_848',['has_token',['../classnmodl_1_1parser_1_1_c_driver.html#a053c12081e3a1715b66a2ecb27bc7d93',1,'nmodl::parser::CDriver']]],
   ['have_5fwrappers_849',['have_wrappers',['../classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#aee250724a7ffd3c2b6b056d612afdd93',1,'nmodl::pybind_wrappers::EmbeddedPythonLoader']]],
-  ['headers_850',['headers',['../structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7',1,'nmodl::utils::TableData']]]
+  ['headers_850',['headers',['../structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7',1,'nmodl::utils::TableData']]],
+  ['hoc_851',['HOC',['../namespacenmodl_1_1codegen.html#ae9d20aa89d0b81ed34e45cf0dc8e99caa3b78e2828fff7425b896b992aab3f54b',1,'nmodl::codegen']]],
+  ['hoc_5ffunction_5fname_852',['hoc_function_name',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ad2fd467cd42a02e358169e3ada7301d8',1,'nmodl::codegen::CodegenNeuronCppVisitor']]],
+  ['hoc_5ffunction_5fsignature_853',['hoc_function_signature',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#afb9bb4944afddadd2b154bf48a65cffe',1,'nmodl::codegen::CodegenNeuronCppVisitor']]]
 ];

@@ -162,6 +162,7 @@ var group__codegen__details =
       [ "range_parameter_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#a9fc99f3e7bce31fd0529633d31ba1547", null ],
       [ "range_state_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#a1b0772831b48698d9c2236eb6fe8fd01", null ],
       [ "require_wrote_conc", "structnmodl_1_1codegen_1_1_codegen_info.html#a4bcbe36d2867e8a47f8c9770b1542b42", null ],
+      [ "rsuffix", "structnmodl_1_1codegen_1_1_codegen_info.html#a934bcce95f02054d82a0101b39eb0579", null ],
       [ "semantic_variable_count", "structnmodl_1_1codegen_1_1_codegen_info.html#a0300c6f861c67b9585bdcb3d118d49cb", null ],
       [ "semantics", "structnmodl_1_1codegen_1_1_codegen_info.html#a3df07d9392bed844484c8e86232395aa", null ],
       [ "state_vars", "structnmodl_1_1codegen_1_1_codegen_info.html#af49fe1ab8d7c35c937585ce7ac7992df", null ],

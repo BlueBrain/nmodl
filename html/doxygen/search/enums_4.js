@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['nmodltype_5382',['NmodlType',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db',1,'nmodl::symtab::syminfo']]]
+  ['mathop_5398',['MathOp',['../namespacenmodl_1_1parser_1_1diffeq.html#af8927fcf1d528baf607f9640c165ce64',1,'nmodl::parser::diffeq']]],
+  ['membertype_5399',['MemberType',['../group__codegen__details.html#gab185b9278fbfff591fbe3da84ba22d0b',1,'nmodl::codegen']]]
 ];

@@ -1,14 +1,13 @@
 var searchData=
 [
-  ['random_5fvar_5538',['random_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba697324bc2a726114814b9ae77caa789a',1,'nmodl::symtab::syminfo::random_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5da0be2deed1a70402c02d66954e27f0',1,'nmodl::ast::RANDOM_VAR()']]],
-  ['random_5fvar_5flist_5539',['RANDOM_VAR_LIST',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa9c1d875626f5cda48e92ed0f55baa9f',1,'nmodl::ast']]],
-  ['range_5540',['range',['../group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba37b19816109a32106d109e83bbb3c97d',1,'nmodl::codegen::range()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a01036ddcc971d02f6c32c3da31a119f2',1,'nmodl::ast::RANGE()']]],
-  ['range_5fvar_5541',['RANGE_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa68919f7138715983e66e5b1efc0545b',1,'nmodl::ast::RANGE_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaa6ecefaab5c08acc8f2f69a8d98afe9e',1,'nmodl::symtab::syminfo::range_var()']]],
-  ['react_5fvar_5fname_5542',['REACT_VAR_NAME',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2357e8a4eace4bba5ed6f5adfaa4c73e',1,'nmodl::ast']]],
-  ['reaction_5foperator_5543',['REACTION_OPERATOR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a69544ee794713280d8afa47cde91bf31',1,'nmodl::ast']]],
-  ['reaction_5fstatement_5544',['REACTION_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a701e48c3ad78eac11c35eaec7cdff7d2',1,'nmodl::ast']]],
-  ['read_5545',['read',['../namespacenmodl_1_1symtab_1_1syminfo.html#a3024cbfc3a7ebf7dd349303e70d82d4daecae13117d6f0584c25a9da6c8f8415e',1,'nmodl::symtab::syminfo']]],
-  ['read_5fion_5fvar_5546',['READ_ION_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a425c6e7a7fe3b0ed773fc6b6655fd759',1,'nmodl::ast::READ_ION_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba16fd85df1b2a4aef647b9e849e5adf82',1,'nmodl::symtab::syminfo::read_ion_var()']]],
-  ['renamed_5547',['renamed',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2aacca362a48577269b87ef58cd46e2c3a',1,'nmodl::symtab::syminfo']]],
-  ['right_5548',['right',['../group__utils.html#gga45f97a3d578ade6b9b49b1a92ec688a6a7c4f29407893c334a6cb7a87bf045c0d',1,'nmodl::stringutils']]]
+  ['param_5fassign_5548',['PARAM_ASSIGN',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a42cec2662d40b5ec92cc7d89c1f60a23',1,'nmodl::ast::PARAM_ASSIGN()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbac89e419cdec37c6436386d0ccee1096a',1,'nmodl::symtab::syminfo::param_assign()']]],
+  ['param_5fblock_5549',['PARAM_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2d9c331bacf78cc6848dd60b92ae43f5',1,'nmodl::ast']]],
+  ['paren_5fexpression_5550',['PAREN_EXPRESSION',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a2dd631f70df9b6367b4b92089219249f',1,'nmodl::ast']]],
+  ['pointer_5551',['POINTER',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5f41c79d3f86121f0f658eba49128d5',1,'nmodl::ast']]],
+  ['pointer_5fvar_5552',['POINTER_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a3a3272fa820b01f3d9c1fccea599956e',1,'nmodl::ast::POINTER_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbab42b3dbb719197d22c748fc74ac64ba4',1,'nmodl::symtab::syminfo::pointer_var()']]],
+  ['prime_5fname_5553',['prime_name',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba03fbe9540141405cb20f54b23465877a',1,'nmodl::symtab::syminfo::prime_name()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af2edbd9098535176cc4ff6b63261c917',1,'nmodl::ast::PRIME_NAME()']]],
+  ['procedure_5fblock_5554',['PROCEDURE_BLOCK',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033afaf13aa323ae484331b071705c6c319a',1,'nmodl::ast::PROCEDURE_BLOCK()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbacb2f7556254f071fb944800a31272b6b',1,'nmodl::symtab::syminfo::procedure_block()']]],
+  ['program_5555',['PROGRAM',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ac9c31422636176fa93724df8b6e3ef31',1,'nmodl::ast']]],
+  ['protect_5fstatement_5556',['PROTECT_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033abe8388e1fb6450b6ce6e30ed35cefa09',1,'nmodl::ast']]],
+  ['python_5557',['Python',['../namespacenmodl_1_1codegen.html#ae9d20aa89d0b81ed34e45cf0dc8e99caa5bd2a19c59dc05515841897bafe4bd55',1,'nmodl::codegen']]]
 ];

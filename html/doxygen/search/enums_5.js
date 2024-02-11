@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['reactionop_5383',['ReactionOp',['../group__ast__prop.html#ga132ea63177a1f70f366ea0edb09dfa14',1,'nmodl::ast']]],
-  ['replacepolicy_5384',['ReplacePolicy',['../classnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor.html#a1e49fcb9c416a45a1607f335948228c1',1,'nmodl::visitor::SympyReplaceSolutionsVisitor']]]
+  ['nmodltype_5400',['NmodlType',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4db',1,'nmodl::symtab::syminfo']]]
 ];
