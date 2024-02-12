@@ -73,7 +73,9 @@ build_wheel_osx() {
 
     echo " - Building..."
     rm -rf dist _skbuild
-    python -m build --wheel -o dist/
+    # the custom `build-dir` is a workaround for this issue:
+    # https://gitlab.kitware.com/cmake/cmake/-/issues/20107
+    python -m build --wheel -o dist/ -C build-dir=_build
 
     echo " - Repairing..."
     delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
