@@ -12,7 +12,7 @@ set -xe
 #  - python (>=3.8)
 #  - C/C++ compiler
 
-if ! [ -f setup.py ] || ! [ -f pyproject.toml ]; then
+if ! [ -f setup.py ] && ! [ -f pyproject.toml ]; then
     echo "Error: setup.py or pyproject.toml not found. Please launch $0 from the nmodl root dir"
     exit 1
 fi
