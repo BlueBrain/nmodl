@@ -2,7 +2,7 @@
 # A simple set of tests checking if a wheel is working correctly
 set -xe
 
-if [ ! -f setup.py ]; then
+if ! [ -f setup.py ] && ! [ -f pyproject.toml ]; then
     echo "Error: Please launch $0 from the root dir"
     exit 1
 fi
