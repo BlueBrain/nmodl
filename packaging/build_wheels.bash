@@ -73,7 +73,7 @@ build_wheel_osx() {
 
     echo " - Building..."
     rm -rf dist _skbuild
-    python -m build --wheel -o dist/ --config-setting='build-dir=_build'
+    python -m build --wheel -o dist/
 
     echo " - Repairing..."
     delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
