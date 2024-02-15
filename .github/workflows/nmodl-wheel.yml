@@ -44,7 +44,7 @@ jobs:
         # to supply options, put them in 'env', like:
         env:
           CIBW_SKIP: pp*
-          CIBW_ENVIRONMENT_MACOS: PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
+          CIBW_ENVIRONMENT_MACOS: PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH" MACOSX_DEPLOYMENT_TARGET='10.15'
           CIBW_CONFIG_SETTINGS_MACOS: "build-dir=_build"
 
       - uses: actions/upload-artifact@v4
