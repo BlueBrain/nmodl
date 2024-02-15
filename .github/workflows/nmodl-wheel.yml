@@ -15,16 +15,21 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
 
     steps:
-      - name: Install external dependencies
+      - name: Setup Flex and Bison
+        if: runner.os == 'Linux'
         run: |
-          if [[ "$RUNNER_OS" == "Linux" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y flex bison
-          elif [[ "$RUNNER_OS" == "Windows" ]]; then
-            choco install flex bison -y
-          elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            brew install flex bison
-          fi
+          sudo apt-get update
+          sudo apt-get install -y flex bison
+
+      - name: Setup Flex and Bison
+        if: runner.os == 'Windows'
+        run: |
+          choco install flex bison -y
+
+      - name: Setup Flex and Bison
+        if: runner.os == 'macOS'
+        run: |
+          brew install flex bison
 
       - uses: actions/checkout@v4
 
