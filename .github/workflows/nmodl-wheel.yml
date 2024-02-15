@@ -45,6 +45,7 @@ jobs:
         env:
           CIBW_SKIP: pp*
           CIBW_ENVIRONMENT_MACOS: PATH="/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
+          CIBW_CONFIG_SETTINGS_MACOS: "build-dir=_build"
 
       - uses: actions/upload-artifact@v4
         with:
