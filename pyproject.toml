@@ -47,7 +47,6 @@ verbose = true
 version = ">=3.15.0"
 
 [tool.scikit-build.cmake.define]
-LINK_AGAINST_PYTHON = "FALSE"
-NMODL_ENABLE_TESTS = "FALSE"
+NMODL_BUILD_WHEEL = "ON"
 
 [tool.setuptools_scm]
