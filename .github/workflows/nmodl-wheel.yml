@@ -42,9 +42,11 @@ jobs:
             PATH="/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
             MACOSX_DEPLOYMENT_TARGET='10.15'
           CIBW_CONFIG_SETTINGS_MACOS: "build-dir=_build"
+          CIBW_ENVIRONMENT_LINUX: >
+            PATH=/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH
           # use custom image for now
           CIBW_MANYLINUX_AARCH64_IMAGE: docker.io/jcgoran/nmodl:wheel-aarch64
-          CIBW_BEFORE_BUILD_LINUX: yum install -y bison flex
+          CIBW_BEFORE_BUILD_LINUX: bash packaging/install_dependencies.sh
 
       - uses: actions/upload-artifact@v4
         with:
