@@ -12,6 +12,8 @@ jobs:
       - checkout
       - run:
           name: Build the Linux aarch64 wheels.
+          environment:
+            CIBW_BEFORE_BUILD_LINUX: bash packaging/install_dependencies.sh
           command: |
             python3 -m pip install --user cibuildwheel==2.16.5
             python3 -m cibuildwheel --output-dir wheelhouse
