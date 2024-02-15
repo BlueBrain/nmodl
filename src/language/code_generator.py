@@ -59,7 +59,7 @@ class CodeGenerator(
     """
 
     def __new__(cls, base_dir, clang_format=None):
-        this_dir = Path(__file__).parent.resolve()
+        this_dir = Path(__file__).parent.resolve(strict=True)
         jinja_templates_dir = this_dir / "templates"
         py_files = [Path(p).relative_to(this_dir) for p in this_dir.glob("*.py")]
         yaml_files = [Path(p).relative_to(this_dir) for p in this_dir.glob("*.yaml")]
@@ -358,9 +358,9 @@ def parse_args(args=None):
 
     # destination directory to render templates
     args.base_dir = (
-        Path(args.base_dir).resolve()
+        Path(args.base_dir).resolve(strict=True)
         if args.base_dir
-        else Path(__file__).resolve().parent.parent
+        else Path(__file__).resolve(strict=True).parent.parent
     )
     return args
 
