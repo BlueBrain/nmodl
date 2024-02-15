@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
 
     steps:
       - name: Setup Flex and Bison
@@ -44,18 +44,17 @@ jobs:
         run: python -m cibuildwheel --output-dir wheelhouse
         # to supply options, put them in 'env', like:
         env:
-          # we skip PyPy (for now) and 32-bit builds
-          #CIBW_SKIP: "pp* *-win32 *-manylinux_i686 *-manylinux_x86_64 *-musllinux_i686 *-musllinux_x86_64"
-          CIBW_BUILD: cp39-manylinux_aarch64
-          CIBW_ARCHS_LINUX: auto aarch64 ppc64le s390x
+          # we skip PyPy, 32-bit builds, and musllinux builds
+          CIBW_SKIP: "pp* *-win32 *-manylinux_i686 *-musllinux_i686 *-musllinux_x86_64"
+          # MacOS-specific setup
           CIBW_ENVIRONMENT_MACOS: >
             PATH="/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
             MACOSX_DEPLOYMENT_TARGET='10.15'
           CIBW_CONFIG_SETTINGS_MACOS: "build-dir=_build"
+          # Linux-specific setup
           CIBW_ENVIRONMENT_LINUX: >
             PATH=/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH
-          # use custom image for now
-          #CIBW_MANYLINUX_AARCH64_IMAGE: docker.io/jcgoran/nmodl:wheel-aarch64
+          # TODO: replace this with a custom Docker image to speed-up builds
           CIBW_BEFORE_BUILD_LINUX: bash packaging/install_dependencies.sh
 
       - uses: actions/upload-artifact@v4
