@@ -15,6 +15,17 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-13, macos-14]
 
     steps:
+      - name: Install external dependencies
+        run: |
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y flex bison
+          elif [[ "$RUNNER_OS" == "Windows" ]]; then
+            choco install flex bison -y
+          elif [[ "$RUNNER_OS" == "macOS" ]]; then
+            brew install flex bison
+          fi
+
       - uses: actions/checkout@v4
 
       # Used to host cibuildwheel
