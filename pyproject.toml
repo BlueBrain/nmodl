@@ -33,7 +33,7 @@ optional-dependencies.docs = [
 requires = [
     "scikit-build-core",
     "setuptools-scm>=8.0",
-    "Jinja2>=2.9.3",
+    "Jinja2 @ git+https://github.com/KapJI/jinja@unc-paths",
     "PyYAML>=3.13",
 ]
 build-backend = "scikit_build_core.build"
