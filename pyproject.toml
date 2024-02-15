@@ -10,8 +10,6 @@ dynamic = ["version"]
 dependencies = [
     "find_libpython",
     "sympy>=1.3",
-    "Jinja2>=2.9.3",
-    "PyYAML>=3.13",
 ]
 scripts = {nmodl = "nmodl._binwrapper:main"}
 
@@ -34,8 +32,6 @@ optional-dependencies.docs = [
 requires = [
     "scikit-build-core",
     "setuptools-scm>=8.0",
-    "find_libpython",
-    "sympy>=1.3",
     "Jinja2>=2.9.3",
     "PyYAML>=3.13",
 ]
