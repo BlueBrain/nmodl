@@ -24,7 +24,7 @@ jobs:
       - name: Setup Flex and Bison
         if: runner.os == 'Windows'
         run: |
-          choco install flex bison -y
+          choco install winflexbison3 -y
 
       - name: Setup Flex and Bison
         if: runner.os == 'macOS'
