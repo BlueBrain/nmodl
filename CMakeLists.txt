@@ -167,7 +167,6 @@ if(NMODL_ENABLE_TESTS)
   cpp_cc_find_python_module(pytest 3.3.0 REQUIRED)
 endif()
 cpp_cc_find_python_module(sympy 1.3 REQUIRED)
-cpp_cc_find_python_module(textwrap 0.9 REQUIRED)
 cpp_cc_find_python_module(yaml 3.12 REQUIRED)
 
 # =============================================================================
