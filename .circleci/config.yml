@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Build the Linux aarch64 wheels.
           environment:
-            CIBW_SKIP: "pp*"
+            CIBW_SKIP: "pp* *-musllinux_aarch64"
             CIBW_BEFORE_BUILD_LINUX: bash packaging/install_dependencies.sh
             CIBW_ENVIRONMENT_LINUX: >
               PATH=/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH
