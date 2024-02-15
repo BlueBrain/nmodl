@@ -38,7 +38,7 @@ jobs:
         # to supply options, put them in 'env', like:
         env:
           # we skip PyPy (for now) and 32-bit builds
-          CIBW_SKIP: "pp* *-win32 *-manylinux_i686 *-manylinux_x86_64 *-musllinux_i686 *-musllinux-x86_64"
+          CIBW_SKIP: "pp* *-win32 *-manylinux_i686 *-manylinux_x86_64 *-musllinux_i686 *-musllinux_x86_64"
           CIBW_ENVIRONMENT_MACOS: >
             PATH="/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
             MACOSX_DEPLOYMENT_TARGET='10.15'
