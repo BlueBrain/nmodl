@@ -1,0 +1,25 @@
+version: 2
+
+jobs:
+  linux-aarch64-wheels:
+    working_directory: ~/linux-aarch64-wheels
+    machine:
+      image: ubuntu-2004:2022.04.1
+    # resource_class is what tells CircleCI to use an ARM worker for native arm builds
+    # https://circleci.com/product/features/resource-classes/
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - run:
+          name: Build the Linux aarch64 wheels.
+          command: |
+            python3 -m pip install --user cibuildwheel==2.16.5
+            python3 -m cibuildwheel --output-dir wheelhouse
+      - store_artifacts:
+          path: wheelhouse/
+
+workflows:
+  version: 2
+  all-tests:
+    jobs:
+      - linux-aarch64-wheels
