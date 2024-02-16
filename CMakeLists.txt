@@ -30,9 +30,6 @@ option(NMODL_BUILD_WHEEL "Flag to signal we are building a wheel" OFF)
 if(NMODL_BUILD_WHEEL)
   set(LINK_AGAINST_PYTHON OFF)
   set(NMODL_ENABLE_TESTS OFF)
-  # this is a sort of a workaround for the behavior described here:
-  # https://github.com/fmtlib/fmt/pull/3264
-  # basically fmt will now not install itself in `/lib` and similar directories
   set(FMT_INSTALL OFF)
 endif()
 
