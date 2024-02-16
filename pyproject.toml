@@ -57,5 +57,5 @@ environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/
 config-settings = {build-dir = "_build"}
 
 [tool.cibuildwheel.linux]
-before-build = "bash packaging/install_dependencies.sh"
+before-all = "bash packaging/install_dependencies.sh"
 environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
