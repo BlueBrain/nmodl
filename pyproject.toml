@@ -51,3 +51,11 @@ version = ">=3.15.0"
 NMODL_BUILD_WHEEL = "ON"
 
 [tool.setuptools_scm]
+
+[tool.cibuildwheel.macos]
+environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
+config-settings = {build-dir = "_build"}
+
+[tool.cibuildwheel.linux]
+before-build = "bash packaging/install_dependencies.sh"
+environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }

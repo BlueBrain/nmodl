@@ -47,16 +47,6 @@ jobs:
           # we skip PyPy, 32-bit builds, and musllinux builds
           CIBW_SKIP: "pp* *-win32 *-manylinux_i686 *-musllinux_i686 *-musllinux_x86_64"
           CIBW_BUILD: "cp311-win_amd64"
-          # MacOS-specific setup
-          CIBW_ENVIRONMENT_MACOS: >
-            PATH="/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH"
-            MACOSX_DEPLOYMENT_TARGET='10.15'
-          CIBW_CONFIG_SETTINGS_MACOS: "build-dir=_build"
-          # Linux-specific setup
-          CIBW_ENVIRONMENT_LINUX: >
-            PATH=/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH
-          # TODO: replace this with a custom Docker image to speed-up builds
-          CIBW_BEFORE_BUILD_LINUX: bash packaging/install_dependencies.sh
 
       - uses: actions/upload-artifact@v4
         with:
