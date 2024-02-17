@@ -2,13 +2,6 @@
 # A simple set of tests checking if a wheel is working correctly
 set -xe
 
-
-if [ -z "${VIRTUAL_ENV}" ]
-then
-    echo "ERROR: you do not appear to be in a virtual environment, please use one before running tests"
-    exit 1
-fi
-
 test_wheel () {
     # the path to the root directory
     rootdir="$1"
