@@ -53,7 +53,8 @@ NMODL_BUILD_WHEEL = "ON"
 [tool.setuptools_scm]
 
 [tool.cibuildwheel]
-test-command = "bash {package}/packaging/test_wheel.bash {package}"
+test-command = "bash {package}/packaging/test_wheel.bash {package} && pytest {package}/test/unit/pybind"
+test-extras = ["test"]
 
 [tool.cibuildwheel.macos]
 environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
@@ -62,3 +63,6 @@ config-settings = {build-dir = "_build"}
 [tool.cibuildwheel.linux]
 before-all = "bash packaging/install_dependencies.sh"
 environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
+
+[tool.pytest]
+testpaths = "test/unit/pybind"
