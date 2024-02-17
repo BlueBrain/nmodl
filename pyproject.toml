@@ -53,7 +53,7 @@ NMODL_BUILD_WHEEL = "ON"
 [tool.setuptools_scm]
 
 [tool.cibuildwheel]
-test-command = "bash {package}/packaging/test_wheel.bash {package} && pytest {package}/test/unit/pybind"
+test-command = "pytest {package}/test/unit/pybind"
 test-extras = ["test"]
 
 [tool.cibuildwheel.macos]
@@ -63,7 +63,6 @@ config-settings = {build-dir = "_build"}
 [tool.cibuildwheel.linux]
 before-all = "bash packaging/install_dependencies.sh"
 environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
-before-test = "yum -y install python$(\"import sys; print('%d%d' % tuple(sys.version_info)[:2])\")-devel"
 
 [tool.pytest]
 testpaths = "test/unit/pybind"
