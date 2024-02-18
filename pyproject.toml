@@ -67,3 +67,9 @@ environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
 
 [tool.pytest]
 testpaths = "test/unit/pybind"
+
+[tool.doctest]
+builder = "doctest"
+
+[tool.flake8]
+max-line-length = 100
