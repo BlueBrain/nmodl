@@ -68,11 +68,5 @@ config-settings = {build-dir = "_build"}
 before-all = "bash packaging/install_dependencies.sh"
 environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
 
-[tool.pytest]
+[tool.pytest.ini_options]
 testpaths = "test/unit/pybind"
-
-[tool.doctest]
-builder = "doctest"
-
-[tool.flake8]
-max-line-length = 100
