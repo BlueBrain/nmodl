@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [ubuntu-latest, macOS-13, macOS-14]
 
     steps:
       - name: Setup Flex and Bison
@@ -24,13 +24,6 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install flex bison
-
-      # for multi-arch builds
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
 
       - uses: actions/checkout@v4
 
