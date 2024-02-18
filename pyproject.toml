@@ -54,7 +54,10 @@ NMODL_BUILD_WHEEL = "ON"
 [tool.setuptools_scm]
 
 [tool.cibuildwheel]
-test-command = "pytest {package}/test/unit/pybind"
+test-command = [
+    "pytest {package}/test/unit/pybind",
+    "bash {package}/packaging/test_wheel.bash {package}",
+]
 test-extras = ["test"]
 
 [tool.cibuildwheel.macos]
