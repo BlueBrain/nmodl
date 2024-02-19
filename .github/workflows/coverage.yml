@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - live-debug*
       - release/**
@@ -41,12 +41,12 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2    
+          fetch-depth: 2
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools
-          pip3 install --user -r <(packaging/show_deps.py -b -r .)
+          pip3 install -U pip setuptools 'pip-tools>=7.4.0'
+          pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
       - name: Restore compiler cache
         uses: actions/cache@v4
         with:

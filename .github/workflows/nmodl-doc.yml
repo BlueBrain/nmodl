@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - release/**
   pull_request:
@@ -37,7 +37,7 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1
         with:
           cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
-          
+
       - name: Install apt packages
         run: |
           sudo apt-get update
@@ -58,8 +58,8 @@ jobs:
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools
-          pip3 install --user -r <(packaging/show_deps.py -r -b .)
+          pip3 install -U pip setuptools 'pip-tools>=7.4.0'
+          pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
 
       # This step will set up an SSH connection on tmate.io for live debugging.
       # To trigger it, simply add 'live-debug-docs' to your last pushed commit message.
@@ -77,7 +77,7 @@ jobs:
             docs-${{github.ref}}-
             docs-
 
-      - name: Documentation 
+      - name: Documentation
         id: documentation
         working-directory: ${{runner.workspace}}/nmodl
         run: |
@@ -93,7 +93,7 @@ jobs:
           echo "status=done" >> $GITHUB_OUTPUT
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
-          
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
