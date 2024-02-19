@@ -39,7 +39,7 @@ def _config_exe(exe_name):
 
     # set PYTHONPATH for embedded python to properly find the nmodl module
     os.environ["PYTHONPATH"] = (
-        str(NMODL_PREFIX) + ":" + os.environ.get("PYTHONPATH", "")
+        str(NMODL_PREFIX.parent) + ":" + os.environ.get("PYTHONPATH", "")
     )
 
     return os.path.join(NMODL_BIN, exe_name)
