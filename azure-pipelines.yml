@@ -148,7 +148,7 @@ stages:
       submodules: True
     - script: |
         brew install flex bison cmake python@3
-        python3 -m pip install --upgrade pip setuptools
+        python3 -m pip install --upgrade pip setuptools 'pip-compile>=7.4.0'
         python3 -m pip install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
       displayName: 'Install Dependencies'
     - script: |
