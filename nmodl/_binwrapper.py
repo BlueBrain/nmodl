@@ -8,10 +8,10 @@ import stat
 import sys
 
 if sys.version_info >= (3, 9):
-    from importlib.metadata import metadata
+    from importlib.metadata import metadata, PackageNotFoundError
     from importlib.resources import files
 else:
-    from importlib_metadata import metadata
+    from importlib_metadata import metadata, PackageNotFoundError
     from importlib_resources import files
 
 from find_libpython import find_libpython
@@ -23,7 +23,7 @@ def main():
     try:
         metadata("nmodl-nightly")
         print("INFO : Using nmodl-nightly Package (Developer Version)")
-    except Exception:
+    except PackageNotFoundError:
         pass
 
     NMODL_PREFIX = files("nmodl")
