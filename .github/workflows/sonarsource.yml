@@ -31,8 +31,8 @@ jobs:
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools
-          pip3 install --user -r <(packaging/show_deps.py -r -b .)
+          pip3 install -U pip setuptools 'pip-tools>=7.4.0'
+          pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v2
       - name: Configure project

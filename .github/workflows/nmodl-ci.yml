@@ -82,8 +82,8 @@ jobs:
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          python3 -m pip install -U pip setuptools
-          python3 -m pip install --user -r <(packaging/show_deps.py -b -r .)
+          python3 -m pip install -U pip setuptools 'pip-tools>=7.4.0'
+          python3 -m pip install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
 
       - name: Install neuron-nightly
         if: ${{matrix.config.enable_usecases == 'On'}}
@@ -190,7 +190,7 @@ jobs:
           path: ${{runner.workspace}}/nmodl/build/Testing/*/Test.xml
 
       # This step will set up an SSH connection on tmate.io for live debugging.
-      # To enable it, you have to: 
+      # To enable it, you have to:
       #   * add 'live-debug-tests' to your PR title
       #   * push something to your PR branch (note that just re-running disregards the title update)
       - name: live debug session on failure (manual steps required, check `nmodl-ci.yml`)
