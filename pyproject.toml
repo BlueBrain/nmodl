@@ -64,6 +64,11 @@ test-extras = ["test"]
 [tool.cibuildwheel.macos]
 environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
 config-settings = {build-dir = "_build"}
+test-command = [
+    "pytest {package}/test/unit/pybind",
+    "bash {package}/packaging/test_wheel.bash {package}",
+    "bash {package}/packaging/test_cli.bash {package}",
+]
 
 [tool.cibuildwheel.linux]
 before-all = "bash packaging/install_dependencies.sh"
