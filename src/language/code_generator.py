@@ -32,7 +32,6 @@ class CodeGenerator(
         "Base",
         [
             "base_dir",
-            "clang_format",
             "jinja_env",
             "jinja_templates_dir",
             "modification_date",
@@ -48,7 +47,6 @@ class CodeGenerator(
 
     Attributes:
         base_dir: output root directory where Jinja templates are rendered
-        clang_format: clang-format command line if C++ files have to be formatted, `None` otherwise
         py_files: list of Path objects to the Python files used by this program
         yaml_files: list of Path object to YAML files describing the NMODL language
         modification_date: most recent modification date of the Python and YAML files in this directory
@@ -58,7 +56,7 @@ class CodeGenerator(
         temp_dir: path to the directory where to create temporary files
     """
 
-    def __new__(cls, base_dir, clang_format=None):
+    def __new__(cls, base_dir):
         this_dir = Path(__file__).parent.resolve()
         jinja_templates_dir = this_dir / "templates"
         py_files = [Path(p).relative_to(this_dir) for p in this_dir.glob("*.py")]
@@ -66,7 +64,6 @@ class CodeGenerator(
         self = super(CodeGenerator, cls).__new__(
             cls,
             base_dir=base_dir,
-            clang_format=clang_format,
             this_dir=this_dir,
             jinja_templates_dir=jinja_templates_dir,
             jinja_env=jinja2.Environment(
@@ -277,20 +274,6 @@ class JinjaTask(
 
         return False
 
-    def format_output(self, file):
-        """Format a given file
-
-        On applies to C++ files. Use ClangFormat if enabled
-
-        Arguments:
-            file: path to the file to format. filename might be temporary
-            language: c++ or cmake
-
-        """
-        if self.language == "c++" and self.app.clang_format:
-            LOGGER.debug("Formatting C++ file %s", str(file))
-            subprocess.check_call(self.app.clang_format + ["-i", str(file)])
-
     @property
     def language(self):
         suffix = self.output.suffix
@@ -319,7 +302,6 @@ class JinjaTask(
             fd, tmp_path = tempfile.mkstemp(dir=self.app.temp_dir)
             os.write(fd, content.encode("utf-8"))
             os.close(fd)
-            self.format_output(Path(tmp_path))
             if not filecmp.cmp(str(self.output), tmp_path, shallow=False):
                 self.logger.debug("previous output differs, updating it")
                 shutil.copy2(tmp_path, self.output)
@@ -327,7 +309,6 @@ class JinjaTask(
         else:
             with self.output.open("w") as fd:
                 fd.write(content)
-            self.format_output(self.output)
             updated = True
 
         return updated
@@ -340,21 +321,11 @@ def parse_args(args=None):
         args: arguments given in CLI
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--clang-format", help="Path to clang-format executable")
-    parser.add_argument(
-        "--clang-format-opts", help="clang-format options", action="append"
-    )
     parser.add_argument("--base-dir", help="output root directory")
     parser.add_argument(
         "-v", "--verbosity", action="count", default=0, help="increase output verbosity"
     )
     args = parser.parse_args(args=args)
-
-    # construct clang-format command line to use, if provided
-    if args.clang_format:
-        args.clang_format = [args.clang_format]
-        if args.clang_format_opts:
-            args.clang_format += args.clang_format_opts
 
     # destination directory to render templates
     args.base_dir = (
@@ -383,7 +354,7 @@ def main(args=None):
     args = parse_args(args)
     configure_logger(args.verbosity)
 
-    codegen = CodeGenerator(clang_format=args.clang_format, base_dir=args.base_dir)
+    codegen = CodeGenerator(base_dir=args.base_dir)
     num_tasks = 0
     tasks_performed = []
     for task in codegen.workload():
