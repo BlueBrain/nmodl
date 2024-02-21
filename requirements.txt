@@ -6,3 +6,4 @@ sympy
 numpy
 find_libpython
 scikit-build
+importlib_resources;python_version<"3.9"
