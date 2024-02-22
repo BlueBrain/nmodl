@@ -67,29 +67,17 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-docs')
         uses: mxschmitt/action-tmate@v3
 
-      - name: Restore compiler cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ${{runner.workspace}}/ccache
-          key: docs-${{github.ref}}-${{github.sha}}
-          restore-keys: |
-            docs-${{github.ref}}-
-            docs-
-
       - name: Documentation
         id: documentation
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           echo "------- Build Documentation -------";
-          ccache -z
-          ccache -s
-          python3 setup.py build_ext --inplace docs -j 2 -G Ninja \
-            -- -DCMAKE_CXX_COMPILER_LAUNCHER=ccache;
-          ccache -s
-          cd _skbuild/linux-x86_64-3.8/setuptools/sphinx;
-          rm -rf doctest doctrees && touch .nojekyll;
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > index.html;
+          # build wheel and install it
+          pip wheel . --wheel-dir wheelhouse/ -C build-dir=_build --no-deps
+          pip install wheelhouse/*.whl
+          bash docs/generate_docs.sh
+          touch public/.nojekyll
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/index.html;
           echo "status=done" >> $GITHUB_OUTPUT
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
@@ -99,5 +87,5 @@ jobs:
         if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: ${{runner.workspace}}/nmodl/_skbuild/linux-x86_64-3.8/setuptools/sphinx # The folder the action should deploy.
+          folder: ${{runner.workspace}}/nmodl/public
           clean: false # Automatically remove deleted files from the deploy branch
