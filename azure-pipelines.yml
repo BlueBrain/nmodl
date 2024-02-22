@@ -255,6 +255,9 @@ stages:
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
   - job: 'test_linux_wheels'
+    timeoutInMinutes: 45
+    pool:
+      vmImage: 'ubuntu-20.04'
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
