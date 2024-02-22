@@ -255,6 +255,7 @@ stages:
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
   - job: 'test_linux_wheels'
+    dependsOn: 'manylinux_wheels'
     timeoutInMinutes: 45
     pool:
       vmImage: 'ubuntu-20.04'
