@@ -9,7 +9,8 @@ output_dir="$(mktemp -d)"
 
 "${script_dir}"/generate_references.sh ${nmodl} "${usecase_dir}" "${output_dir}"
 
-diff -r "${references_dir}" "${output_dir}"
+diff -U 8 -r "${references_dir}" "${output_dir}"
+
 exit_code=$?
 
 rm -r "${output_dir}"
