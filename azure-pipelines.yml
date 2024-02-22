@@ -199,7 +199,6 @@ stages:
     pool:
       vmImage: 'ubuntu-20.04'
     steps:
-    - task: UsePythonVersion@0
     - checkout: self
       submodules: True
       condition: succeeded()
