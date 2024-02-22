@@ -239,51 +239,53 @@ or your local shell as follows:</p>
 </section>
 <section id="development-conventions">
 <h2>Development Conventions<a class="headerlink" href="#development-conventions" title="Permalink to this heading"></a></h2>
-<p>If you are developing NMODL, make sure to enable both
-<code class="docutils literal notranslate"><span class="pre">NMODL_FORMATTING</span></code> and <code class="docutils literal notranslate"><span class="pre">NMODL_PRECOMMIT</span></code> CMake variables to ensure
-that your contributions follow the coding conventions of this project:</p>
-<p>.. code:: cmake</p>
-<p>cmake -DNMODL_FORMATTING:BOOL=ON -DNMODL_PRECOMMIT:BOOL=ON <path></p>
-<p>The first variable provides the following additional targets to format
-C, C++, and CMake files:</p>
-<p>::</p>
-<p>make clang-format cmake-format</p>
-<p>The second option activates Git hooks that will discard commits that do
-not comply with coding conventions of this project. These 2 CMake
-variables require additional utilities:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">ClangFormat</span> <span class="pre">7</span> <span class="pre">&lt;https://releases.llvm.org/7.0.0/tools/clang/docs/ClangFormat.html&gt;</span></code>__</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cmake-format</span> <span class="pre">&lt;https://github.com/cheshirekow/cmake_format&gt;</span></code>__</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pre-commit</span> <span class="pre">&lt;https://pre-commit.com/&gt;</span></code>__</p></li>
-</ul>
-<p>clang-format can be installed on Linux thanks to <code class="docutils literal notranslate"><span class="pre">LLVM</span> <span class="pre">apt</span> <span class="pre">page</span> <span class="pre">&lt;http://apt.llvm.org/&gt;</span></code>__. On MacOS, you can simply install llvm
-with brew: <code class="docutils literal notranslate"><span class="pre">brew</span> <span class="pre">install</span> <span class="pre">llvm</span></code>. <em>cmake-format</em> and <em>pre-commit</em>
-utilities can be installed with <em>pip</em>.</p>
-<p>Validate the Python package</p>
+<p>Formatting</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-You may run the Python test-suites if your contribution has an impact on
-the Python API:
+<span class="n">Run</span> <span class="n">the</span> <span class="n">HPC</span> <span class="n">coding</span> <span class="n">conventions</span> <span class="n">formatter</span> <span class="n">to</span> <span class="nb">format</span> <span class="nb">all</span> <span class="n">source</span> <span class="n">files</span><span class="p">:</span>
 
-1. setup a sandbox environment with either *virtualenv*, *pyenv*, or
-   *pipenv*. For instance with *virtualenv*:
-   ``python -m venv .venv &amp;&amp; source .venv/bin/activate``
-2. build the Python package with the command: ``python setup.py build``
-3. install *pytest* Python package: ``pip install pytest``
-4. execute the unit-tests: ``pytest``
+<span class="o">..</span> <span class="n">code</span><span class="p">::</span> <span class="n">bash</span>
 
-Memory Leaks and clang-tidy
+   <span class="n">cmake</span><span class="o">/</span><span class="n">hpc</span><span class="o">-</span><span class="n">coding</span><span class="o">-</span><span class="n">conventions</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="nb">format</span>
+
+<span class="n">The</span> <span class="n">HPC</span> <span class="n">coding</span> <span class="n">conventions</span> <span class="n">formatter</span> <span class="n">installs</span> <span class="nb">any</span> <span class="n">dependencies</span> <span class="n">into</span> <span class="n">a</span> <span class="n">Python</span>
+<span class="n">virtual</span> <span class="n">environment</span><span class="o">.</span>
+
+
+<span class="n">Validate</span> <span class="n">the</span> <span class="n">Python</span> <span class="n">package</span>
 </pre></div>
 </div>
-<p>If you want to test for memory leaks, do :</p>
-<p>::</p>
-<p>valgrind –leak-check=full –track-origins=yes  ./bin/nmodl_lexer</p>
-<p>Or using CTest as:</p>
-<p>::</p>
-<p>ctest -T memcheck</p>
-<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to
-have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
-<p>::</p>
-<p>cmake .. -DENABLE_CLANG_TIDY=ON</p>
+<p>You may run the Python test-suites if your contribution has an impact on
+the Python API:</p>
+<ol class="arabic simple">
+<li><p>setup a sandbox environment with either <em>virtualenv</em>, <em>pyenv</em>, or
+<em>pipenv</em>. For instance with <em>virtualenv</em>:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
+<li><p>build the Python package with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p></li>
+<li><p>install <em>pytest</em> Python package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest</span></code></p></li>
+<li><p>execute the unit-tests: <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
+</ol>
+<p>Memory Leaks and clang-tidy</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+If you want to test for memory leaks, do :
+
+::
+
+   valgrind --leak-check=full --track-origins=yes  ./bin/nmodl_lexer
+
+Or using CTest as:
+
+::
+
+   ctest -T memcheck
+
+If you want to enable ``clang-tidy`` checks with CMake, make sure to
+have ``CMake &gt;= 3.15`` and use following cmake option:
+
+::
+
+   cmake .. -DENABLE_CLANG_TIDY=ON
+</pre></div>
+</div>
 </section>
 </section>
 
