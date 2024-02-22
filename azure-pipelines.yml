@@ -253,4 +253,35 @@ stages:
         pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
+  - job: 'test Linux wheels'
+    strategy:
+      matrix:
+        ${{ if eq(variables.buildWheel, True) }}:
+          Python38:
+            python.version: '3.8'
+          Python39:
+            python.version: '3.9'
+          Python310:
+            python.version: '3.10'
+          Python311:
+            python.version: '3.11'
+          Python312:
+            python.version: '3.12'
+        ${{ if eq(variables.buildWheel, False) }}:
+          Python311:
+            python.version: '3.11'
+    - script: |
+        sudo apt-add-repository -y ppa:deadsnakes/ppa
+        sudo apt-get update
+        sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
+    - script: |
+        package_dir="${PWD}"
+        tmp_dir="$(mktemp -d)"
+        cd "${tmp_dir}"
+        python$(python.version) -m venv "${tmp_dir}/env"
+        find ${package_dir} -name "*cp$(echo $(python.version) | tr -d '.')*.whl" -exec sh -c ". ${tmp_dir}/env/bin/activate && python -m pip install '{}[test]'" \;
+        . ${tmp_dir}/env/bin/activate && bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
+        cd -
+      condition: succeeded()
+      displayName: 'Test Linux Wheel with Python $(python.version)'
     - template: ci/upload-wheels.yml
