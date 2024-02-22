@@ -194,6 +194,7 @@ stages:
       env:
         SHELL: 'bash'
       displayName: 'Build Neuron and Run Integration Tests'
+
   - job: 'manylinux_wheels'
     timeoutInMinutes: 45
     pool:
@@ -222,6 +223,7 @@ stages:
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
+
   - job: 'macos_wheels'
     timeoutInMinutes: 45
     pool:
@@ -254,7 +256,8 @@ stages:
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
-  - job: 'test_linux_wheels'
+
+  - job: 'test_manylinux_wheels'
     dependsOn: 'manylinux_wheels'
     timeoutInMinutes: 45
     pool:
@@ -284,8 +287,12 @@ stages:
           tmp_dir="$(mktemp -d)"
           cd "${tmp_dir}"
           python$(python.version) -m venv "${tmp_dir}/env"
-          find ${package_dir} -name "*cp$(echo $(python.version) | tr -d '.')*.whl" -exec sh -c ". ${tmp_dir}/env/bin/activate && python -m pip install '{}[test]'" \;
-          . ${tmp_dir}/env/bin/activate && bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
+          # activate the venv
+          . "${tmp_dir}/env/bin/activate"
+          # find manylinux wheels only
+          pattern="*cp$(echo $(python.version) | tr -d '.')-manylinux*.whl"
+          find ${package_dir} -name "${pattern}" -exec python -m pip install '{}[test]' \;
+          bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
           cd -
-        displayName: 'Test Linux Wheel with Python $(python.version)'
+        displayName: 'Test manylinux wheel with Python $(python.version)'
         condition: succeeded()
