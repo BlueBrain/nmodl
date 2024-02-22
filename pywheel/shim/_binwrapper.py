@@ -35,7 +35,7 @@ def _config_exe(exe_name):
     os.environ["NMODL_PYLIB"] = find_libpython()
 
     # add nmodl home to environment (i.e. necessary for nrnunits.lib)
-    os.environ["NMODLHOME"] = NMODL_HOME
+    os.environ["NMODLHOME"] = str(NMODL_HOME)
 
     # set PYTHONPATH for embedded python to properly find the nmodl module
     os.environ["PYTHONPATH"] = (
