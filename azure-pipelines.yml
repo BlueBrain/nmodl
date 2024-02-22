@@ -284,4 +284,4 @@ stages:
           . ${tmp_dir}/env/bin/activate && bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
           cd -
         displayName: 'Test Linux Wheel with Python $(python.version)'
-      condition: succeeded()
+        condition: succeeded()
