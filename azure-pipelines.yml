@@ -253,6 +253,7 @@ stages:
         pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
+    - template: ci/upload-wheels.yml
   - job: 'test Linux wheels'
     strategy:
       matrix:
@@ -283,4 +284,3 @@ stages:
         cd -
       condition: succeeded()
       displayName: 'Test Linux Wheel with Python $(python.version)'
-    - template: ci/upload-wheels.yml
