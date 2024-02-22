@@ -254,7 +254,7 @@ stages:
       condition: succeeded()
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
-  - job: 'test Linux wheels'
+  - job: 'test_linux_wheels'
     strategy:
       matrix:
         ${{ if eq(variables.buildWheel, True) }}:
