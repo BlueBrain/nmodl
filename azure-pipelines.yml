@@ -271,16 +271,17 @@ stages:
         ${{ if eq(variables.buildWheel, False) }}:
           Python311:
             python.version: '3.11'
-    - script: |
-        sudo apt-add-repository -y ppa:deadsnakes/ppa
-        sudo apt-get update
-        sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
-        package_dir="${PWD}"
-        tmp_dir="$(mktemp -d)"
-        cd "${tmp_dir}"
-        python$(python.version) -m venv "${tmp_dir}/env"
-        find ${package_dir} -name "*cp$(echo $(python.version) | tr -d '.')*.whl" -exec sh -c ". ${tmp_dir}/env/bin/activate && python -m pip install '{}[test]'" \;
-        . ${tmp_dir}/env/bin/activate && bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
-        cd -
+    steps:
+      - script: |
+          sudo apt-add-repository -y ppa:deadsnakes/ppa
+          sudo apt-get update
+          sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
+          package_dir="${PWD}"
+          tmp_dir="$(mktemp -d)"
+          cd "${tmp_dir}"
+          python$(python.version) -m venv "${tmp_dir}/env"
+          find ${package_dir} -name "*cp$(echo $(python.version) | tr -d '.')*.whl" -exec sh -c ". ${tmp_dir}/env/bin/activate && python -m pip install '{}[test]'" \;
+          . ${tmp_dir}/env/bin/activate && bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
+          cd -
+        displayName: 'Test Linux Wheel with Python $(python.version)'
       condition: succeeded()
-      displayName: 'Test Linux Wheel with Python $(python.version)'
