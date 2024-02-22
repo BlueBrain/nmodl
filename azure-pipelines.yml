@@ -226,10 +226,12 @@ stages:
         # dynamic `name` in `pyproject.toml`
         python3 -m pip install --user tomli tomli-w
         python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
+        export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
         docker run --rm \
           -w /root/nmodl \
           -v $PWD:/root/nmodl \
           -e NMODL_NIGHTLY_TAG=$TAG \
+          -e SETUPTOOLS_SCM_PRETEND_VERSION=SETUPTOOLS_SCM_PRETEND_VERSION \
           'bluebrain/nmodl:wheel' \
           packaging/build_wheels.bash linux $(python.version)
       condition: succeeded()
@@ -303,7 +305,7 @@ stages:
         # dynamic `name` in `pyproject.toml`
         python3 -m pip install tomli tomli-w
         python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
-        packaging/build_wheels.bash osx $(python.version)
+        SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" packaging/build_wheels.bash osx $(python.version)
       condition: succeeded()
       displayName: 'Build macos Wheel'
     - task: PublishBuildArtifacts@1

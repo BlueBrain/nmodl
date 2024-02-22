@@ -12,8 +12,8 @@ set -xe
 #  - python (>=3.8)
 #  - C/C++ compiler
 
-if ! [ -f setup.py ] && ! [ -f pyproject.toml ]; then
-    echo "Error: setup.py or pyproject.toml not found. Please launch $0 from the nmodl root dir"
+if ! [ -f pyproject.toml ]; then
+    echo "Error: pyproject.toml not found. Please launch $0 from the nmodl root dir"
     exit 1
 fi
 
@@ -47,13 +47,13 @@ build_wheel_linux() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install pip auditwheel setuptools build
+    pip install pip auditwheel
 
     echo " - Building..."
-    rm -rf dist _skbuild
+    rm -rf dist _build
     # Workaround for https://github.com/pypa/manylinux/issues/1309
     git config --global --add safe.directory "*"
-    python -m build --wheel -o dist/
+    python -m pip wheel . --wheel-dir dist/ --no-deps
 
     echo " - Repairing..."
     auditwheel repair dist/*.whl
@@ -69,13 +69,13 @@ build_wheel_osx() {
     (( $skip )) && return 0
 
     echo " - Installing build requirements"
-    pip install --upgrade delocate build
+    pip install --upgrade delocate
 
     echo " - Building..."
-    rm -rf dist _skbuild
+    rm -rf dist _build
     # the custom `build-dir` is a workaround for this issue:
     # https://gitlab.kitware.com/cmake/cmake/-/issues/20107
-    python -m build --wheel -o dist/ -C build-dir=_build
+    python -m pip wheel . --wheel-dir dist/ -C build-dir=_build --no-deps
 
     echo " - Repairing..."
     delocate-wheel -w wheelhouse -v dist/*.whl  # we started clean, there's a single wheel
