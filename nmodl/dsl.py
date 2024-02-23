@@ -20,7 +20,7 @@ def list_examples():
     """
     path = files("nmodl") / RESOURCE_DIR
     if path.exists() and path.is_dir():
-        return list(path.glob("*.mod"))
+        return [result.name for result in path.glob("*.mod")]
 
     raise FileNotFoundError("Could not find sample directory")
 
@@ -39,6 +39,6 @@ def load_example(example):
     """
     path = files("nmodl") / RESOURCE_DIR / example
     if path.exists():
-        return str(path)
+        return path.read_text()
 
     raise FileNotFoundError(f"Could not find sample mod file {example}")
