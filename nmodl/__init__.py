@@ -8,11 +8,26 @@ else:
 
 from find_libpython import find_libpython
 
-# add libpython*.so path to environment
-os.environ["NMODL_PYLIB"] = find_libpython()
+# try to add libpython*.so path to environment if not already set
+try:
+    os.environ["NMODL_PYLIB"] = os.environ.get(
+        "NMODL_PYLIB",
+        find_libpython(),
+    )
+except TypeError as exc:
+    raise RuntimeError(
+        "Unable to find the Python library on this platform; "
+        "make sure you set the NMODL_PYLIB env variable to the correct value, "
+        "or unset it to try to find the Python library automatically"
+    ) from exc
 
-# add nmodl home to environment (i.e. necessary for nrnunits.lib)
-os.environ["NMODLHOME"] = str(files("nmodl") / ".data")
+# add nmodl home to environment (i.e. necessary for nrnunits.lib) if not
+# already set
+# `files` will automatically raise a `ModuleNotFoundError`
+os.environ["NMODLHOME"] = os.environ.get(
+    "NMODLHOME",
+    str(files("nmodl") / ".data"),
+)
 
 
 try:
