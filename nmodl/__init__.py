@@ -16,9 +16,10 @@ try:
     )
 except TypeError as exc:
     raise RuntimeError(
-        "Unable to find the Python library on this platform; "
-        "make sure you set the NMODL_PYLIB env variable to the correct value, "
-        "or unset it to try to find the Python library automatically"
+        "find_libpython was unable to find the Python library on this platform; "
+        "please make sure that the Python library is installed correctly\n"
+        "You can also try to manually set the NMODL_PYLIB environmental variable "
+        "to the Python library"
     ) from exc
 
 # add nmodl home to environment (i.e. necessary for nrnunits.lib) if not
