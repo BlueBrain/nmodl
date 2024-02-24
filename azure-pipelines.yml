@@ -214,7 +214,8 @@ stages:
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
         python3 packaging/change_name.py pyproject.toml "nmodl$TAG"
-        SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
+        export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
+        CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
       condition: succeeded()
       displayName: 'Building ManyLinux Wheels'
     - task: PublishBuildArtifacts@1
