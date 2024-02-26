@@ -15,8 +15,14 @@ fi
 function sanitize() {
   for f in "${1}"/*.cpp
   do
-    sed -i "s/Created         : .*$/Created         : DATE/" "$f"
-    sed -i "s/NMODL Compiler  : .*$/NMODL Compiler  : VERSION/" "$f"
+    if [[ "$(uname)" == 'Darwin' ]]
+    then
+        sed_cmd="sed -i''"
+    else
+        sed_cmd="sed -i"
+    fi
+    ${sed_cmd} "s/Created         : .*$/Created         : DATE/" "$f"
+    ${sed_cmd} "s/NMODL Compiler  : .*$/NMODL Compiler  : VERSION/" "$f"
   done
 }
 
