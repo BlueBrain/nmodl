@@ -141,8 +141,8 @@ stages:
       displayName: 'Build Neuron and Run Integration Tests'
   - job: 'osx11'
     pool:
-      vmImage: 'macOS-11'
-    displayName: 'MacOS (11), AppleClang 12.0'
+      vmImage: 'macOS-12'
+    displayName: 'MacOS (12), AppleClang 14.0'
     steps:
     - checkout: self
       submodules: True
