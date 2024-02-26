@@ -231,7 +231,7 @@ stages:
           -w /root/nmodl \
           -v $PWD:/root/nmodl \
           -e NMODL_NIGHTLY_TAG=$TAG \
-          -e SETUPTOOLS_SCM_PRETEND_VERSION=SETUPTOOLS_SCM_PRETEND_VERSION \
+          -e SETUPTOOLS_SCM_PRETEND_VERSION=$SETUPTOOLS_SCM_PRETEND_VERSION \
           'bluebrain/nmodl:wheel' \
           packaging/build_wheels.bash linux $(python.version)
       condition: succeeded()
