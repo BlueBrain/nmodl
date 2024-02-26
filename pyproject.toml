@@ -58,7 +58,7 @@ NMODL_BUILD_WHEEL = "ON"
 skip = ["pp*", "*-win32", "*-manylinux_i686", "*-musllinux_i686", "*-musllinux_x86_64", "*-musllinux_aarch64"]
 test-extras = ["test"]
 test-command = [
-    "bash {package}/packaging/test_wheel.bash {package}",
+    "bash {package}/packaging/test_wheel.bash python3 {wheel} false",
 ]
 build = ["cp311*"]
 
