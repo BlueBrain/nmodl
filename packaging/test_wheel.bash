@@ -2,7 +2,7 @@
 # A simple set of tests checking if a wheel is working correctly
 set -xe
 
-if ! [ -f setup.py ] && ! [ -f pyproject.toml ]; then
+if ! [ -f pyproject.toml ]; then
     echo "Error: Please launch $0 from the root dir"
     exit 1
 fi
@@ -22,7 +22,7 @@ python_ver=$("$python_exe" -c "import sys; print('%d%d' % tuple(sys.version_info
 
 test_wheel () {
     # sample mod file for nrnivmodl check
-    local TEST_DIR="test_dir" 
+    local TEST_DIR="test_dir"
     mkdir -p $TEST_DIR
     cp ../nmodl/ext/example/*.mod $TEST_DIR/
     cp ../test/integration/mod/cabpump.mod ../test/integration/mod/var_init.inc $TEST_DIR/
