@@ -9,10 +9,14 @@ cpp_cc_build_time_copy(INPUT "${CMAKE_CURRENT_SOURCE_DIR}/crout/crout.hpp" OUTPU
                        "${CMAKE_BINARY_DIR}/include/crout/crout.hpp")
 
 # Eigen
-file(COPY ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen/Eigen DESTINATION ${CMAKE_BINARY_DIR}/include/)
+if(NOT NMODL_BUILD_WHEEL)
+  file(COPY ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen/Eigen DESTINATION ${CMAKE_BINARY_DIR}/include/)
+endif()
 
 # =============================================================================
 # Install solver headers and eigen from include
 # =============================================================================
 
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include)
+if(NOT NMODL_BUILD_WHEEL)
+  install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include)
+endif()
