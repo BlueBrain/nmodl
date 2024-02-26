@@ -12,7 +12,7 @@ fi
 # cli parameters
 python_exe=$1
 python_wheel=$2
-use_venv=$3 #if $3 is not "false" then use virtual environment
+use_venv=${3:-} #if $3 is not "false" then use virtual environment
 
 python_ver=$("$python_exe" -c "import sys; print('%d%d' % tuple(sys.version_info)[:2])")
 
