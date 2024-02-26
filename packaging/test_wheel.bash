@@ -2,7 +2,9 @@
 # A simple set of tests checking if a wheel is working correctly
 set -eux
 
-this_dir="$(dirname "$(realpath "$0")")"
+# taken from:
+# https://stackoverflow.com/q/3572030
+this_dir="$( cd "$(dirname "$0")" ; pwd -P )"
 
 if [ "$#" -lt 2 ]; then
     echo "Usage: $(basename "$0") python_exe python_wheel [use_virtual_env]"
