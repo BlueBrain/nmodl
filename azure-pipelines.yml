@@ -281,23 +281,9 @@ stages:
           Python311:
             python.version: '3.11'
     steps:
-      - download: current
-        patterns: '**/*.whl'
-      - script: |
-          sudo apt-add-repository -y ppa:deadsnakes/ppa
-          sudo apt-get update
-          sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
-          set -xe
-          package_dir="${PWD}"
-          tmp_dir="$(mktemp -d)"
-          cd "${tmp_dir}"
-          python$(python.version) -m venv "${tmp_dir}/env"
-          # activate the venv
-          . "${tmp_dir}/env/bin/activate"
-          # find manylinux wheels only
-          pattern="*cp$(echo $(python.version) | tr -d '.')-manylinux*.whl"
-          find ${package_dir} -name "${pattern}" -exec python -m pip install '{}[test]' \;
-          bash ${package_dir}/packaging/test_wheel.bash ${package_dir}
-          cd -
-        displayName: 'Test manylinux wheel with Python $(python.version)'
-        condition: succeeded()
+    - script: |
+        dotless_version="$(echo "$(python.version)" | tr -d '.')"
+        find . -name "$cp$(python_dotless_version)-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) wheelhouse/{} \;
+      condition: succeeded()
+      displayName: 'Test manylinux Wheel with Python $(python.version)'
+    - template: ci/upload-wheels.yml
