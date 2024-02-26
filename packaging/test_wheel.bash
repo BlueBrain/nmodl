@@ -27,8 +27,10 @@ test_wheel () {
     cp "${this_dir}/../test/integration/mod/cabpump.mod" "${this_dir}/../test/integration/mod/var_init.inc" "$TEST_DIR/"
     for mod in "${TEST_DIR}/"*.mod
     do
+        cd "${this_dir}"
         nmodl -o "${OUTPUT_DIR}" "${mod}" sympy --analytic
         $python_exe -c "import nmodl; driver = nmodl.NmodlDriver(); driver.parse_file('${mod}')"
+        cd -
     done
     $python_exe -m pytest -vvv "${this_dir}/../test/"
 }
