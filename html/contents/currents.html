@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NMODL “pointers” &mdash; NMODL 0.6 documentation</title>
+  <title>Currents &mdash; NMODL 0.6 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
 
@@ -23,8 +23,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="The NMODL Jupyter notebooks" href="../notebooks.html" />
-    <link rel="prev" title="Ions" href="ions.html" /> 
+    <link rel="next" title="Ions" href="ions.html" />
+    <link rel="prev" title="Visitors" href="visitors.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,12 +58,15 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="visitors.html">Visitors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="currents.html">Currents</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ions.html">Ions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">NMODL “pointers”</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#integer-variables">Integer Variables</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Currents</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#nmodl-keywords">NMODL Keywords</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#nonspecific-current">NONSPECIFIC_CURRENT</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ions.html">Ions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pointers.html">NMODL “pointers”</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul>
@@ -102,9 +105,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">NMODL “pointers”</li>
+      <li class="breadcrumb-item active">Currents</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/contents/pointers.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/contents/currents.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -112,29 +115,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="nmodl-pointers">
-<h1>NMODL “pointers”<a class="headerlink" href="#nmodl-pointers" title="Permalink to this heading"></a></h1>
-<p>Mechanisms can refer to values in other mechanisms, e.g. the sodium current
-<code class="docutils literal notranslate"><span class="pre">ina</span></code>. Therefore, it supports a notion of “pointer”, called <code class="docutils literal notranslate"><span class="pre">Datum</span></code>. A datum
-can store a pointer to a double, a stable pointer to a double, integers, or
-pointers to anything else.</p>
-<section id="integer-variables">
-<h2>Integer Variables<a class="headerlink" href="#integer-variables" title="Permalink to this heading"></a></h2>
-<p>One important subset of Datum are pointers to RANGE variables. Meaning they are
-pointers to parameters in other mechanisms or pointers to the parameters
-associated with each node, e.g. the voltage. Since the storage of RANGE
-variable is controlled by NEURON/CoreNEURON, these pointers have stronger
-semantics than a <code class="docutils literal notranslate"><span class="pre">double*</span></code>.</p>
-<p>These make up the majority of usecases for Datum; and are considered the
-well-mannered subset.</p>
-<p>In CoreNEURON this subset of Datums are treated differently for other Datums.
-Because CoreNEURON stores the values these Datums can point to in a single
-contiguous array of doubles, the “pointers” can be expressed as indices into
-this array.</p>
-<p>Therefore, this subset of Datums is referred to as “integer variables”.</p>
-<p>In NEURON these pointers are a <code class="docutils literal notranslate"><span class="pre">data_handle</span></code> to the value they point to.
-Before the simulation phase they are “resolved” and a cache stores a list of
-<code class="docutils literal notranslate"><span class="pre">double*</span></code> to the appropriate values.</p>
+  <section id="currents">
+<h1>Currents<a class="headerlink" href="#currents" title="Permalink to this heading"></a></h1>
+<p>Current refer to the part of the membrane currents due to mechanisms. Meaning
+the represent the rate at which charge crosses the membrane, e.g. due to ions
+passing through ion channels. In Figure 1 we show the electrical circuit for a
+couple of segments near a branch point. The effect of the capacitor (when
+present) is handled by NEURON internally. In MOD files we compute the current
+represented by the white box, labeled <code class="docutils literal notranslate"><span class="pre">I</span></code>. This total current is the sum of
+one current per mechanism. The current per mechanism in turn is the sum of
+non-specific currents and ion currents, see Figure 2.</p>
+<figure class="align-default" id="id1">
+<img alt="../_images/currents_circuit.svg" src="../_images/currents_circuit.svg" /><figcaption>
+<p><span class="caption-text">Figure 1: Wiring diagram of four segments near a branch point. The circuit for computing the total trans-membrane current. For nodes representing a segment with non-zero aread the circuit for total trans-membrane current consists of a capacitor and currents due to mechanisms (labelled <code class="docutils literal notranslate"><span class="pre">I</span></code>). The nodes with zero-area, the there’s no capacitor, but point-processes, can still introduce current at that point.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="id2">
+<img alt="../_images/currents_types.svg" src="../_images/currents_types.svg" /><figcaption>
+<p><span class="caption-text">Figure 2: A detailed view of the the current <code class="docutils literal notranslate"><span class="pre">I</span></code> due to mechanisms. The current <code class="docutils literal notranslate"><span class="pre">I</span></code> is the sum of one total current per mechanism, illustrated as boxes of different colors. For each mechanism the total current consists of nonspecific currents (<code class="docutils literal notranslate"><span class="pre">i1</span></code>) and ion currents (<code class="docutils literal notranslate"><span class="pre">ina</span></code> and <code class="docutils literal notranslate"><span class="pre">ica</span></code>), illustrated only in the light yellow box.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>There’s a total current, required by the cable equation, which is discussed
+here. The rate at which ions cross the membrane, called ion currents, can be
+computed for individual ions, separately. Please check the documentation on
+Ions.</p>
+<section id="nmodl-keywords">
+<h2>NMODL Keywords<a class="headerlink" href="#nmodl-keywords" title="Permalink to this heading"></a></h2>
+<section id="nonspecific-current">
+<h3>NONSPECIFIC_CURRENT<a class="headerlink" href="#nonspecific-current" title="Permalink to this heading"></a></h3>
+<p>A nonspecific current is how an additive current contribution is expressed that’s not accociated with any specific ion. It has the following syntax</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">NEURON</span> <span class="p">{</span>
+    <span class="n">NONSPECIFIC_CURRENT</span> <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We’ll assume the name is <code class="docutils literal notranslate"><span class="pre">i1</span></code>.</p>
+<p>Since it needs to be assigned a value in the MOD file, it needs to also be listed in the <code class="docutils literal notranslate"><span class="pre">ASSIGNED</span></code> block, e.g. as follows (units show are for a density mechanism).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ASSIGNED</span> <span class="p">{</span>
+    <span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span> <span class="p">(</span><span class="n">mA</span><span class="o">/</span><span class="n">cm2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The nonspecific current is local to the mechanism and can be stored as a
+regular range variable.</p>
+<p>The generated code must ensure the following:</p>
+<ol class="arabic simple">
+<li><p>The total current contribution is updated by <code class="docutils literal notranslate"><span class="pre">i1</span></code>.</p></li>
+<li><p>Continue with the remaining current related computations, such as the finite
+difference for computing <code class="docutils literal notranslate"><span class="pre">dI/dv</span></code>.</p></li>
+</ol>
+</section>
 </section>
 </section>
 
@@ -142,8 +172,8 @@ Before the simulation phase they are “resolved” and a cache stores a list of
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="ions.html" class="btn btn-neutral float-left" title="Ions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../notebooks.html" class="btn btn-neutral float-right" title="The NMODL Jupyter notebooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="visitors.html" class="btn btn-neutral float-left" title="Visitors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ions.html" class="btn btn-neutral float-right" title="Ions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

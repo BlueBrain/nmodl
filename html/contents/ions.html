@@ -24,7 +24,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="NMODL “pointers”" href="pointers.html" />
-    <link rel="prev" title="Visitors" href="visitors.html" /> 
+    <link rel="prev" title="Currents" href="currents.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -58,6 +58,7 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="visitors.html">Visitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="currents.html">Currents</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Ions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ndmol-keywords">NDMOL Keywords</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#keyword-write">Keyword: WRITE</a><ul>
@@ -70,6 +71,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#optimizing-storage">Optimizing Storage</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#special-case-zero-area-nodes">Special Case: zero-area nodes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="pointers.html">NMODL “pointers”</a></li>
@@ -211,13 +213,20 @@ by local variables, see Figure 2.</p>
 </div>
 </section>
 </section>
+<section id="special-case-zero-area-nodes">
+<h2>Special Case: zero-area nodes<a class="headerlink" href="#special-case-zero-area-nodes" title="Permalink to this heading"></a></h2>
+<p>Ions are not defined for nodes that represent a segment with zero area. This
+means point processes can’t use ions at nodes with surface zero-area.
+Therefore, this should be asserted in generated code. It also allows converting
+ion currents to ion current densities by dividing by the area.</p>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="visitors.html" class="btn btn-neutral float-left" title="Visitors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="currents.html" class="btn btn-neutral float-left" title="Currents" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="pointers.html" class="btn btn-neutral float-right" title="NMODL “pointers”" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
