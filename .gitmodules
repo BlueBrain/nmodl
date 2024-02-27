@@ -25,3 +25,6 @@
 [submodule "ext/backward"]
 	path = ext/backward
 	url = https://github.com/bombela/backward-cpp.git
+[submodule "test/usecases/references"]
+	path = test/usecases/references
+	url = https://github.com/BlueBrain/nmodl-references.git
