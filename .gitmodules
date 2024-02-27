@@ -22,3 +22,6 @@
 [submodule "ext/catch2"]
 	path = ext/catch2
 	url = https://github.com/catchorg/Catch2.git
+[submodule "ext/backward"]
+	path = ext/backward
+	url = https://github.com/bombela/backward-cpp.git
