@@ -51,7 +51,7 @@ fi
 
 # install nmodl
 $python_exe -m pip install -U pip
-$python_exe -m pip install "${python_wheel}" pytest
+$python_exe -m pip install "${python_wheel}[test]"
 $python_exe -m pip show nmodl || $python_exe -m pip show nmodl-nightly
 
 # run tests
