@@ -70,8 +70,8 @@ endif()
 # =============================================================================
 file(
   GLOB NMODL_PYTHON_FILES
-  RELATIVE "${NMODL_PROJECT_SOURCE_DIR}/nmodl/"
-  CONFIGURE_DEPENDS "${NMODL_PROJECT_SOURCE_DIR}/nmodl/*.py")
+  RELATIVE "${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/"
+  CONFIGURE_DEPENDS "${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/*.py")
 
 foreach(file IN LISTS NMODL_PYTHON_FILES)
   cpp_cc_build_time_copy(INPUT ${NMODL_PROJECT_SOURCE_DIR}/nmodl/${file} OUTPUT
