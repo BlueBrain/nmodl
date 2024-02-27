@@ -15,8 +15,7 @@ unset(NMODL_GOLDEN_REFERNCES)
 
 add_custom_target(generate_references)
 foreach(usecase ${NMODL_USECASE_DIRS})
-  # Non-existant dependencies are a way of unconditionally running commands
-  # in CMake.
+  # Non-existant dependencies are a way of unconditionally running commands in CMake.
   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/references/${usecase}/_does_not_exist_weiohbge)
     message(
       FATAL_ERROR
