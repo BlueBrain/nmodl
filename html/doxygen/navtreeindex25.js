@@ -1,5 +1,8 @@
 var NAVTREEINDEX25 =
 {
+"constant__folder__visitor_8cpp_source.html":[3,0,1,11,2],
+"constant__folder__visitor_8hpp.html":[3,0,1,11,3],
+"constant__folder__visitor_8hpp_source.html":[3,0,1,11,3],
 "constant__statement_8hpp.html":[3,0,0,0,0,0,0,23],
 "constant__statement_8hpp_source.html":[3,0,0,0,0,0,0,23],
 "constant__var_8hpp.html":[3,0,0,0,0,0,0,24],
@@ -180,8 +183,8 @@ var NAVTREEINDEX25 =
 "function__callpath__visitor_8hpp_source.html":[3,0,1,11,7],
 "function__table__block_8hpp.html":[3,0,0,0,0,0,0,50],
 "function__table__block_8hpp_source.html":[3,0,0,0,0,0,0,50],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_b.html":[2,3,0,1],
 "functions_c.html":[2,3,0,2],
 "functions_d.html":[2,3,0,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX25 =
 "functions_vars_o.html":[2,3,2,13],
 "functions_vars_p.html":[2,3,2,14],
 "functions_vars_r.html":[2,3,2,15],
-"functions_vars_s.html":[2,3,2,16],
-"functions_vars_t.html":[2,3,2,17],
-"functions_vars_u.html":[2,3,2,18],
-"functions_vars_v.html":[2,3,2,19]
+"functions_vars_s.html":[2,3,2,16]
 };

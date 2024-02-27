@@ -1,15 +1,16 @@
 var group__printer =
 [
     [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html", [
-      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#a3b5547049a4d8129805aa7d61a4fe105", null ],
-      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#ae1b19206dcb98bce62e0a13344fb6009", null ],
-      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#aed4d5e4cb58efb0c0de6dd9861325704", null ],
+      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#a55a047ae4a6bdc8ee7416c908e54c595", null ],
+      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#ab37ec59f7345c8dfac41f6538a28a5d2", null ],
+      [ "CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#af495d31b3b7dc47b9829f6283de9245a", null ],
       [ "~CodePrinter", "classnmodl_1_1printer_1_1_code_printer.html#a0d6960442321cbd19c3e8cead6453508", null ],
       [ "add_indent", "classnmodl_1_1printer_1_1_code_printer.html#a6cf3be260bf6c535813321ba66ee5fa1", null ],
       [ "add_line", "classnmodl_1_1printer_1_1_code_printer.html#ab520dbecace0768ad69a70eacce97958", null ],
       [ "add_multi_line", "classnmodl_1_1printer_1_1_code_printer.html#a7d45e932533914cb6f5b224b2c7853f7", null ],
       [ "add_newline", "classnmodl_1_1printer_1_1_code_printer.html#aaebee3283600de1c952d72d80ef066d2", null ],
       [ "add_text", "classnmodl_1_1printer_1_1_code_printer.html#aa2ea830dfedfe2af136b66c2bc1d239b", null ],
+      [ "blame", "classnmodl_1_1printer_1_1_code_printer.html#a08a2646348b14fe8376f1873a0d2bca9", null ],
       [ "chain_block", "classnmodl_1_1printer_1_1_code_printer.html#a072c94bdf396471dc878e9b648c941b9", null ],
       [ "decrease_indent", "classnmodl_1_1printer_1_1_code_printer.html#a7c48f525f4784ff022a844f49d987ab9", null ],
       [ "fmt_line", "classnmodl_1_1printer_1_1_code_printer.html#afa07551e3c50df27cd236c5c27f2fbed", null ],
@@ -22,6 +23,8 @@ var group__printer =
       [ "pop_block_nl", "classnmodl_1_1printer_1_1_code_printer.html#ac04e6a46c02237ca3a5f915d31eb5ec2", null ],
       [ "push_block", "classnmodl_1_1printer_1_1_code_printer.html#a95d7007c05d565985c2fbd473d147f09", null ],
       [ "push_block", "classnmodl_1_1printer_1_1_code_printer.html#a5cb3d079be7b83692f69200805ec2ad5", null ],
+      [ "blame_line", "classnmodl_1_1printer_1_1_code_printer.html#aacf5afb2f8aadcb72a5c9dfc112be713", null ],
+      [ "current_line", "classnmodl_1_1printer_1_1_code_printer.html#a7f53335982c6aad01e0f4d85f19e1f29", null ],
       [ "indent_level", "classnmodl_1_1printer_1_1_code_printer.html#a3860c9a0dea867c6780d3c82bd63255f", null ],
       [ "NUM_SPACES", "classnmodl_1_1printer_1_1_code_printer.html#a4f5b243c976be246c6fb7c9f67da7a59", null ],
       [ "ofs", "classnmodl_1_1printer_1_1_code_printer.html#a9b2f633a7caebd2e04c8cc5866241b50", null ],
