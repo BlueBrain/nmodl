@@ -77,7 +77,7 @@ foreach(file IN LISTS NMODL_PYTHON_FILES)
   cpp_cc_build_time_copy(INPUT ${NMODL_PROJECT_SOURCE_DIR}/nmodl/${file} OUTPUT
                          ${CMAKE_BINARY_DIR}/lib/nmodl/${file})
 endforeach()
-file(COPY ${NMODL_PROJECT_SOURCE_DIR}/nmodl/ext DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
+file(COPY ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/ext DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
 
 # =============================================================================
 # Install python binding components
