@@ -252,41 +252,48 @@ or your local shell as follows:</p>
 <span class="n">virtual</span> <span class="n">environment</span><span class="o">.</span>
 
 
-<span class="n">Validate</span> <span class="n">the</span> <span class="n">Python</span> <span class="n">package</span>
+<span class="n">Updating</span> <span class="n">Golden</span> <span class="n">References</span>
 </pre></div>
 </div>
-<p>You may run the Python test-suites if your contribution has an impact on
-the Python API:</p>
-<ol class="arabic simple">
-<li><p>setup a sandbox environment with either <em>virtualenv</em>, <em>pyenv</em>, or
-<em>pipenv</em>. For instance with <em>virtualenv</em>:
-<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
-<li><p>build the Python package with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p></li>
-<li><p>install <em>pytest</em> Python package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest</span></code></p></li>
-<li><p>execute the unit-tests: <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
-</ol>
-<p>Memory Leaks and clang-tidy</p>
+<p>Run</p>
+<p>.. code:: bash</p>
+<p>cmake –build <build-dir> –target generate_references</p>
+<p>to regenerate the golden references. They are saved in a submodule
+<code class="docutils literal notranslate"><span class="pre">tests/usecases/references</span></code>, which points to <code class="docutils literal notranslate"><span class="pre">BlueBrain/nmodl-references</span></code>.</p>
+<p>Create a PR for the changes to the references and update the SHA in the NMODL
+repo. It might be useful to change to SSH authentication:</p>
+<p>.. code:: bash</p>
+<p>git remote set-url origin ssh://git&#64;github.com/BlueBrain/nmodl-references</p>
+<p>(from inside <code class="docutils literal notranslate"><span class="pre">tests/usecases/references</span></code>).</p>
+<p>Remember the rules of submodules: They’re checked out on a specific commit,
+i.e. detached HEAD. If you want to modify the submodule, it’s usual best to
+checkout <code class="docutils literal notranslate"><span class="pre">main</span></code> from then on the submodule will behave much like a Git repo
+that happens to be located inside a Git repo.</p>
+<p>Validate the Python package</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-If you want to test for memory leaks, do :
+You may run the Python test-suites if your contribution has an impact on
+the Python API:
 
-::
+1. setup a sandbox environment with either *virtualenv*, *pyenv*, or
+   *pipenv*. For instance with *virtualenv*:
+   ``python -m venv .venv &amp;&amp; source .venv/bin/activate``
+2. build the Python package with the command: ``python setup.py build``
+3. install *pytest* Python package: ``pip install pytest``
+4. execute the unit-tests: ``pytest``
 
-   valgrind --leak-check=full --track-origins=yes  ./bin/nmodl_lexer
-
-Or using CTest as:
-
-::
-
-   ctest -T memcheck
-
-If you want to enable ``clang-tidy`` checks with CMake, make sure to
-have ``CMake &gt;= 3.15`` and use following cmake option:
-
-::
-
-   cmake .. -DENABLE_CLANG_TIDY=ON
+Memory Leaks and clang-tidy
 </pre></div>
 </div>
+<p>If you want to test for memory leaks, do :</p>
+<p>::</p>
+<p>valgrind –leak-check=full –track-origins=yes  ./bin/nmodl_lexer</p>
+<p>Or using CTest as:</p>
+<p>::</p>
+<p>ctest -T memcheck</p>
+<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to
+have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
+<p>::</p>
+<p>cmake .. -DENABLE_CLANG_TIDY=ON</p>
 </section>
 </section>
 
