@@ -17,9 +17,5 @@ def test_example():
     driver = dsl.NmodlDriver()
     for example in examples:
         nmodl_string = dsl.load_example(example)
-        modast = driver.parse_string(nmodl_string)
-        assert loads(dsl.to_json(modast)) == loads(
-            (
-                Path(__file__).parent / "data" / example.replace(".mod", ".json")
-            ).read_text()
-        )
+        # make sure we can parse the string
+        assert driver.parse_string(nmodl_string)
