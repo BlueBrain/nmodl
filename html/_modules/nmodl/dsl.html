@@ -107,12 +107,17 @@
            <div itemprop="articleBody">
              
   <h1>Source code for nmodl.dsl</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">osp</span>
-<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="kn">import</span> <span class="o">*</span>
+<span></span><span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">importlib.resources</span> <span class="kn">import</span> <span class="n">files</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">importlib_resources</span> <span class="kn">import</span> <span class="n">files</span>
 
 <span class="kn">from</span> <span class="nn">._nmodl</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="n">RESOURCE_DIR</span> <span class="o">=</span> <span class="s2">&quot;ext/example&quot;</span>
+
 
 <div class="viewcode-block" id="list_examples"><a class="viewcode-back" href="../../nmodl.html#nmodl.dsl.list_examples">[docs]</a><span class="k">def</span> <span class="nf">list_examples</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns a list of examples available</span>
@@ -122,10 +127,11 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        List of available examples</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">resource_exists</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">RESOURCE_DIR</span><span class="p">)</span> <span class="ow">and</span> <span class="n">resource_isdir</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">RESOURCE_DIR</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">resource_listdir</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">RESOURCE_DIR</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;Could not find sample directory&quot;</span><span class="p">)</span></div>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s2">&quot;nmodl&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">RESOURCE_DIR</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;*.mod&quot;</span><span class="p">)]</span>
+
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;Could not find sample directory&quot;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="load_example"><a class="viewcode-back" href="../../nmodl.html#nmodl.dsl.load_example">[docs]</a><span class="k">def</span> <span class="nf">load_example</span><span class="p">(</span><span class="n">example</span><span class="p">):</span>
@@ -138,13 +144,13 @@
 <span class="sd">    Args:</span>
 <span class="sd">        example: Filename of an example as provided by `list_examples()`</span>
 <span class="sd">    Returns:</span>
-<span class="sd">        List of available examples</span>
+<span class="sd">        An path to the example as a string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">resource</span> <span class="o">=</span>  <span class="n">osp</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">RESOURCE_DIR</span><span class="p">,</span> <span class="n">example</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">resource_exists</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">resource</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">resource_string</span><span class="p">(</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">resource</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;Could not find sample mod files&quot;</span><span class="p">)</span></div>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">files</span><span class="p">(</span><span class="s2">&quot;nmodl&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">RESOURCE_DIR</span> <span class="o">/</span> <span class="n">example</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">read_text</span><span class="p">()</span>
+
+    <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find sample mod file </span><span class="si">{</span><span class="n">example</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
