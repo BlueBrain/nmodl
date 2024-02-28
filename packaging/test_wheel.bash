@@ -25,12 +25,14 @@ test_wheel () {
     OUTPUT_DIR="$(mktemp -d)"
     cp "${this_dir}/../nmodl/ext/example/"*.mod "$TEST_DIR/"
     cp "${this_dir}/../test/integration/mod/cabpump.mod" "${this_dir}/../test/integration/mod/var_init.inc" "$TEST_DIR/"
+    cd "${this_dir}"
     for mod in "${TEST_DIR}/"*.mod
     do
         nmodl -o "${OUTPUT_DIR}" "${mod}" sympy --analytic
         $python_exe -c "import nmodl; driver = nmodl.NmodlDriver(); driver.parse_file('${mod}')"
     done
     $python_exe -m pytest -vvv "${this_dir}/../test/"
+    cd -
 }
 
 echo "== Testing $python_wheel using $python_exe ($python_ver) =="
