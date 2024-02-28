@@ -8,10 +8,15 @@
 #include "printer/code_printer.hpp"
 #include "utils/string_utils.hpp"
 
+#if NMODL_ENABLE_BACKWARD
+#include <backward.hpp>
+#endif
+
 namespace nmodl {
 namespace printer {
 
-CodePrinter::CodePrinter(const std::string& filename) {
+CodePrinter::CodePrinter(const std::string& filename, size_t blame_line)
+    : blame_line(blame_line) {
     if (filename.empty()) {
         throw std::runtime_error("Empty filename for CodePrinter");
     }
@@ -28,14 +33,14 @@ CodePrinter::CodePrinter(const std::string& filename) {
 }
 
 void CodePrinter::push_block() {
-    *result << '{';
+    add_text('{');
     add_newline();
     indent_level++;
 }
 
 void CodePrinter::push_block(const std::string& expression) {
     add_indent();
-    *result << expression << " {";
+    add_text(expression, " {");
     add_newline();
     indent_level++;
 }
@@ -43,15 +48,13 @@ void CodePrinter::push_block(const std::string& expression) {
 void CodePrinter::chain_block(std::string const& expression) {
     --indent_level;
     add_indent();
-    *result << "} " << expression << " {";
+    add_text("} ", expression, " {");
     add_newline();
     ++indent_level;
 }
 
 void CodePrinter::add_indent() {
-    for (std::size_t i = 0; i < indent_level * NUM_SPACES; ++i) {
-        *result << ' ';
-    }
+    add_text(std::string(indent_level * NUM_SPACES, ' '));
 }
 
 void CodePrinter::add_multi_line(const std::string& text) {
@@ -88,8 +91,9 @@ void CodePrinter::add_multi_line(const std::string& text) {
 }
 
 void CodePrinter::add_newline(std::size_t n) {
-    for (std::size_t i{}; i < n; ++i) {
-        *result << '\n';
+    for (std::size_t i = 0; i < n; ++i) {
+        add_text('\n');
+        ++current_line;
     }
 }
 
@@ -100,15 +104,31 @@ void CodePrinter::pop_block() {
 void CodePrinter::pop_block_nl(std::size_t num_newlines) {
     indent_level--;
     add_indent();
-    *result << '}';
+    add_text('}');
     add_newline(num_newlines);
 }
 
 void CodePrinter::pop_block(const std::string_view& suffix, std::size_t num_newlines) {
     pop_block_nl(0);
-    *result << suffix;
+    add_text(suffix);
     add_newline(num_newlines);
 }
+
+void CodePrinter::blame() {
+#if NMODL_ENABLE_BACKWARD
+    if (current_line == blame_line) {
+        *result << std::flush;
+
+        std::cout << "\n\n== Blame =======================================================\n";
+
+        backward::StackTrace st;
+        st.load_here(32);
+        backward::Printer p;
+        p.print(st, std::cout);
+    }
+#endif
+}
+
 
 }  // namespace printer
 }  // namespace nmodl
