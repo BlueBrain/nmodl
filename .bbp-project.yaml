@@ -5,6 +5,7 @@ tools:
       match:
       - ext/.*
       - src/language/templates/*
+      - test/usecases/*/*
   ClangTidy:
     enable: true
     option: ''

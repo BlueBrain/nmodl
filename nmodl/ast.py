@@ -40,7 +40,7 @@ def view(nmodl_ast):
     work_dir = os.path.join(tempfile.gettempdir(), getpass.getuser(), "nmodl")
 
     # first copy necessary files to temp work directory
-    copytree(path, work_dir)
+    copytree(path, work_dir, dirs_exist_ok=True)
 
     # prepare json data
     json_data = json.loads(to_json(nmodl_ast, True, True, True))
