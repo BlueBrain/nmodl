@@ -4,7 +4,7 @@
 # note that the NMODL Python wheel must be installed
 # for the script to work properly
 
-set -xe
+set -xeu
 
 # the abs dir where this script is located (so we can call it from wherever)
 script_dir="$(realpath "$(dirname "$0")")"
