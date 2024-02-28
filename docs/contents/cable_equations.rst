@@ -1,10 +1,20 @@
 Cable Equation
 ==============
 
+.. note::
+
+   NEURON has a sophisticated system for allowing users to describe the
+   geometry of neurons. Here we'll try to derive the equations in a manner that
+   hides those details whenever they're not relevant to NMODL. Please consult
+   its geometry related documentation or one of its publications, e.g. `The
+   NEURON Simulation Environment`_.
+
+.. _The NEURON Simulation Environment: https://doi.org/10.1162/neco.1997.9.6.1179
+
 In order to derive the `cable equations` we model a neuron as an electrical
 circuit. We first pick points along the neuron at which we model the voltage.
-We'll call them nodes. At every branch point we place a node. The precise
-choice is described elsewhere, see Figure 1.
+We'll call them nodes and connect the nodes to form a graph. At every branch
+point we place a node, see Figure 1.
 
 .. figure:: ../images/cable-eqn_nodes.svg
 
