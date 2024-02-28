@@ -283,7 +283,7 @@ stages:
     steps:
     - script: |
         dotless_version="$(echo "$(python.version)" | tr -d '.')"
-        find . -name "$cp$(python_dotless_version)-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) wheelhouse/{} \;
+        find $(Pipeline.Workspace) -name "$cp$(python_dotless_version)-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) {} \;
       condition: succeeded()
       displayName: 'Test manylinux Wheel with Python $(python.version)'
     - template: ci/upload-wheels.yml
