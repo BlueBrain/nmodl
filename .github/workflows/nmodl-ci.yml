@@ -51,7 +51,7 @@ jobs:
       fail-fast: true
     steps:
       - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1
+        uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: ${{ env.DESIRED_CMAKE_VERSION }}
 
