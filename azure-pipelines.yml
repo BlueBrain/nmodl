@@ -282,8 +282,9 @@ stages:
             python.version: '3.11'
     steps:
     - script: |
+        set -eux
         dotless_version="$(echo "$(python.version)" | tr -d '.')"
-        find $(Pipeline.Workspace) -name "$cp$(python_dotless_version)-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) {} \;
+        find $(Pipeline.Workspace) -name "$cp${python_dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) {} \;
       condition: succeeded()
       displayName: 'Test manylinux Wheel with Python $(python.version)'
     - template: ci/upload-wheels.yml
