@@ -286,9 +286,10 @@ stages:
       displayName: "Make manylinux wheels available"
     - script: |
         set -eux
+        sudo apt-add-repository -y ppa:deadsnakes/ppa
+        sudo apt-get update
+        sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
         dotless_version="$(echo "$(python.version)" | tr -d '.')"
-        find $(Pipeline.Workspace) -name "*cp${dotless_version}-manylinux*.whl"
-        find . -name "*cp${dotless_version}-manylinux*.whl"
         find $(Pipeline.Workspace) -name "*cp${dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) {} \;
       condition: succeeded()
       displayName: 'Test manylinux Wheel with Python $(python.version)'
