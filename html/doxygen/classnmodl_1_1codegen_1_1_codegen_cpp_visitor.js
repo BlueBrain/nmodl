@@ -50,6 +50,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "net_receive_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a5c6520580009a4608d6ea4e221ef3d29", null ],
     [ "net_send_buffer_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad4e248ac19ce527c6e64304c42364388", null ],
     [ "nmodl_version", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c0ac0823d48779ad3c84ee0bedf1e23", null ],
+    [ "node_data_struct", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9e8cf78aab17a6acf070dc49ab0581aa", null ],
     [ "nrn_cur_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a09d3b482c400b93d31010c2f33f794f4", null ],
     [ "nrn_state_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a37c30fea3191a0275918448626e043c4", null ],
     [ "nrn_thread_arguments", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aff92b4a2fed92577dbd5294d54def2e8", null ],
