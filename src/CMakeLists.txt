@@ -49,6 +49,4 @@ endif()
 # Install executable
 # =============================================================================
 install(TARGETS nmodl DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin)
-if(NOT NMODL_BUILD_WHEEL)
-  install(FILES nmodl.hpp DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include)
-endif()
+install(FILES nmodl.hpp DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include)
