@@ -23,6 +23,7 @@ then
     $(command -v python3) -m venv "${venv_name}"
     . "${venv_name}/bin/activate"
     python_exe="$(command -v python)"
+    ${python_exe} -m pip install -U pip
 else
     python_exe="$(command -v python3)"
 fi
