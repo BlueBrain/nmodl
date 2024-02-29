@@ -20,7 +20,7 @@ use_venv="${3:-}"
 if [ "${use_venv}" != "false" ]
 then
     venv_name="$(mktemp -d)"
-    $(command -v python3) -m venv "${venv_name}"
+    ${python_exe} -m venv "${venv_name}"
     . "${venv_name}/bin/activate"
     python_exe="$(command -v python)"
     ${python_exe} -m pip install -U pip
