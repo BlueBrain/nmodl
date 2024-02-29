@@ -60,7 +60,6 @@ test-extras = ["test"]
 test-command = [
     "bash {package}/packaging/test_wheel.bash python3 {wheel} false",
 ]
-build = ["cp311*"]
 
 [tool.cibuildwheel.macos]
 environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
