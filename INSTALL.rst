@@ -264,4 +264,10 @@ directory:
 
 where ``DIRECTORY`` is the directory where you wish to store the output of the
 build (if the directory does not exist, the script will attempt to create one
-for you).
+for you). You can also specify the path to the Python executable, as well as
+whether or not to use a virtual env (anything other than the string ``false`` is
+considered to be ``true``):
+
+.. code:: sh
+
+   bash docs/generate_docs.sh DIRECTORY PYTHON_EXECUTABLE false

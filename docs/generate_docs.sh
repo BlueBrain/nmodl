@@ -1,19 +1,32 @@
 #!/usr/bin/env bash
 
 # script for generating documentation for NMODL
-# note that the NMODL Python wheel must be installed
-# for the script to work properly
 
 set -xeu
 
-# in order to create the docs, we first need to build NMODL
+# in order to create the docs, we first need to build NMODL in some dir
 build_dir="${1:-"$(mktemp -d)"}"
 if ! [ -d "${build_dir}" ]
 then
     mkdir -p "${build_dir}"
 fi
-wheel_dir="$(mktemp -d)"
-pip wheel . --no-deps --wheel-dir "$(cd "${wheel_dir}"; pwd -P)" -C build-dir="$(cd "${build_dir}"; pwd -P)"
+
+# the Python executable to use (default: whatever `python3` is)
+python_exe="${2:-"$(command -v python3)"}"
+
+# should we use a separate venv?
+use_venv="${3:-}"
+
+if [ "${use_venv}" != "false" ]
+then
+    venv_name="$(mktemp -d)"
+    $(command -v python3) -m venv "${venv_name}"
+    . "${venv_name}/bin/activate"
+    python_exe="$(command -v python)"
+else
+    python_exe="$(command -v python3)"
+fi
+${python_exe} -m pip install ".[docs]" -C build-dir="$(cd "${build_dir}"; pwd -P)"
 
 # the abs dir where this script is located (so we can call it from wherever)
 script_dir="$(cd "$(dirname "$0")"; pwd -P)"
@@ -22,3 +35,8 @@ cd "${script_dir}"
 doxygen Doxyfile
 sphinx-build . "${script_dir}/../public"
 cd -
+
+if [ "${use_venv}" != "false" ]
+then
+    deactivate
+fi
