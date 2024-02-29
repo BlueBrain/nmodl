@@ -62,6 +62,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
 <ul class="current">
@@ -340,12 +341,20 @@ pade approx:         m = (-dt*m+2.0*dt*minf+2.0*m*mtau)/(dt+2.0*mtau)
 </pre></div>
 </div>
 </div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+exact solution:
+</pre></div></div>
+</div>
 <div class="nboutput nblast docutils container">
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-exact solution:      m = minf+(m-minf)*exp(dt/mtau)
+     m = minf+(m-minf)*exp(dt/mtau)
 pade approx:         m = (-dt*m+2.0*dt*minf-2.0*m*mtau)/(dt-2.0*mtau)
 </pre></div></div>
 </div>
