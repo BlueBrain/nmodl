@@ -241,60 +241,107 @@ or your local shell as follows:</p>
 </section>
 <section id="development-conventions">
 <h2>Development Conventions<a class="headerlink" href="#development-conventions" title="Permalink to this heading"></a></h2>
-<p>Formatting</p>
+<p>New Lines</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-<span class="n">Run</span> <span class="n">the</span> <span class="n">HPC</span> <span class="n">coding</span> <span class="n">conventions</span> <span class="n">formatter</span> <span class="n">to</span> <span class="nb">format</span> <span class="nb">all</span> <span class="n">source</span> <span class="n">files</span><span class="p">:</span>
+When generating/printing code it&#39;s important to use ``add_newline`` to
+start a new line of code. When printing a string containing multiple lines,
+i.e. one that contains a ``&quot;\n&quot;`` one must use ``add_multi_line``.
 
-<span class="o">..</span> <span class="n">code</span><span class="p">::</span> <span class="n">bash</span>
+It&#39;s important that NMODL knows the line number it&#39;s currently on.
 
-   <span class="n">cmake</span><span class="o">/</span><span class="n">hpc</span><span class="o">-</span><span class="n">coding</span><span class="o">-</span><span class="n">conventions</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="nb">format</span>
-
-<span class="n">The</span> <span class="n">HPC</span> <span class="n">coding</span> <span class="n">conventions</span> <span class="n">formatter</span> <span class="n">installs</span> <span class="nb">any</span> <span class="n">dependencies</span> <span class="n">into</span> <span class="n">a</span> <span class="n">Python</span>
-<span class="n">virtual</span> <span class="n">environment</span><span class="o">.</span>
-
-
-<span class="n">Updating</span> <span class="n">Golden</span> <span class="n">References</span>
+Formatting
 </pre></div>
 </div>
-<p>Run</p>
+<p>Run the HPC coding conventions formatter to format all source files:</p>
 <p>.. code:: bash</p>
-<p>cmake –build <build-dir> –target generate_references</p>
-<p>to regenerate the golden references. They are saved in a submodule
-<code class="docutils literal notranslate"><span class="pre">tests/usecases/references</span></code>, which points to <code class="docutils literal notranslate"><span class="pre">BlueBrain/nmodl-references</span></code>.</p>
-<p>Create a PR for the changes to the references and update the SHA in the NMODL
-repo. It might be useful to change to SSH authentication:</p>
-<p>.. code:: bash</p>
-<p>git remote set-url origin ssh://git&#64;github.com/BlueBrain/nmodl-references</p>
-<p>(from inside <code class="docutils literal notranslate"><span class="pre">tests/usecases/references</span></code>).</p>
-<p>Remember the rules of submodules: They’re checked out on a specific commit,
-i.e. detached HEAD. If you want to modify the submodule, it’s usual best to
-checkout <code class="docutils literal notranslate"><span class="pre">main</span></code> from then on the submodule will behave much like a Git repo
-that happens to be located inside a Git repo.</p>
-<p>Validate the Python package</p>
+<p>cmake/hpc-coding-conventions/bin/format</p>
+<p>The HPC coding conventions formatter installs any dependencies into a Python
+virtual environment.</p>
+<p>Updating Golden References</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
-You may run the Python test-suites if your contribution has an impact on
-the Python API:
+Run
 
-1. setup a sandbox environment with either *virtualenv*, *pyenv*, or
-   *pipenv*. For instance with *virtualenv*:
-   ``python -m venv .venv &amp;&amp; source .venv/bin/activate``
-2. build the Python package with the command: ``python setup.py build``
-3. install *pytest* Python package: ``pip install pytest``
-4. execute the unit-tests: ``pytest``
+.. code:: bash
 
-Memory Leaks and clang-tidy
+   cmake --build &lt;build-dir&gt; --target generate_references
+
+to regenerate the golden references. They are saved in a submodule
+``tests/usecases/references``, which points to ``BlueBrain/nmodl-references``.
+
+Create a PR for the changes to the references and update the SHA in the NMODL
+repo. It might be useful to change to SSH authentication:
+
+.. code:: bash
+
+   git remote set-url origin ssh://git@github.com/BlueBrain/nmodl-references
+
+(from inside ``tests/usecases/references``).
+
+Remember the rules of submodules: They&#39;re checked out on a specific commit,
+i.e. detached HEAD. If you want to modify the submodule, it&#39;s usual best to
+checkout ``main`` from then on the submodule will behave much like a Git repo
+that happens to be located inside a Git repo.
+
+
+Validate the Python package
 </pre></div>
 </div>
-<p>If you want to test for memory leaks, do :</p>
-<p>::</p>
-<p>valgrind –leak-check=full –track-origins=yes  ./bin/nmodl_lexer</p>
-<p>Or using CTest as:</p>
-<p>::</p>
-<p>ctest -T memcheck</p>
-<p>If you want to enable <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> checks with CMake, make sure to
-have <code class="docutils literal notranslate"><span class="pre">CMake</span> <span class="pre">&gt;=</span> <span class="pre">3.15</span></code> and use following cmake option:</p>
-<p>::</p>
-<p>cmake .. -DENABLE_CLANG_TIDY=ON</p>
+<p>You may run the Python test-suites if your contribution has an impact on
+the Python API:</p>
+<ol class="arabic simple">
+<li><p>setup a sandbox environment with either <em>virtualenv</em>, <em>pyenv</em>, or
+<em>pipenv</em>. For instance with <em>virtualenv</em>:
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">venv</span> <span class="pre">.venv</span> <span class="pre">&amp;&amp;</span> <span class="pre">source</span> <span class="pre">.venv/bin/activate</span></code></p></li>
+<li><p>build the Python package with the command: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">build</span></code></p></li>
+<li><p>install <em>pytest</em> Python package: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pytest</span></code></p></li>
+<li><p>execute the unit-tests: <code class="docutils literal notranslate"><span class="pre">pytest</span></code></p></li>
+</ol>
+<p>Memory Leaks and clang-tidy</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+If you want to test for memory leaks, do :
+
+::
+
+   valgrind --leak-check=full --track-origins=yes  ./bin/nmodl_lexer
+
+Or using CTest as:
+
+::
+
+   ctest -T memcheck
+
+If you want to enable ``clang-tidy`` checks with CMake, make sure to
+have ``CMake &gt;= 3.15`` and use following cmake option:
+
+::
+
+   cmake .. -DENABLE_CLANG_TIDY=ON
+
+Blaming NMODL
+~~~~~~~~~~~~~
+
+While developing NMODL one may want to know which line of code in NMODL
+produced a particular line of code in the generated file, e.g. when faced with
+a compiler error such as
+
+.. code-block::
+
+   hodhux.cpp:105:26: error: ‘coreneuron’ has not been declared
+     105 |         double* celsius{&amp;coreneuron::celsius};
+         |                          ^~~~~~~~~~
+
+One can find the line by doing:
+
+.. code-block::
+
+   $ nmodl hodhux.mod ... blame --line 105
+
+which will print a backtrace every time NMODL writes to line 105. While this is
+useful for finding the line responsible for printing, i.e. convert AST to C++,
+that line it doesn&#39;t immediately explain why the AST ended up that way.
+Currently, we don&#39;t have a tool for the latter.
+</pre></div>
+</div>
 </section>
 </section>
 
