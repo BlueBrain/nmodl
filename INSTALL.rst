@@ -127,8 +127,8 @@ to cmake as:
             -DBISON_EXECUTABLE=/usr/local/opt/bison/bin/bison \
             -DCMAKE_INSTALL_PREFIX=$HOME/nmodl
 
-Using Python setuptools
-~~~~~~~~~~~~~~~~~~~~~~~
+Using the Python build system
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are mainly interested in the NMODL Framework parsing and analysis
 tools and wish to use them from Python, we recommend building and
@@ -253,4 +253,15 @@ script:
    bash docs/generate_docs.sh
 
 The documentation will then be available in the ``public`` subdirectory. Note
-that the Python package must be installed beforehand using ``pip install .``.
+that the above script actually builds NMODL using the Python build system in a
+temporary directory; if you wish to make a persistent build directory (to
+reduce the build time for instance), you can do so by specifying a custom build
+directory:
+
+.. code:: sh
+
+   bash docs/generate_docs.sh DIRECTORY
+
+where ``DIRECTORY`` is the directory where you wish to store the output of the
+build (if the directory does not exist, the script will attempt to create one
+for you).
