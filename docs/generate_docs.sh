@@ -7,7 +7,11 @@
 set -xeu
 
 # in order to create the docs, we first need to build NMODL
-build_dir="$(mktemp -d)"
+build_dir="${1:-"$(mktemp -d)"}"
+if ! [ -d "${build_dir}" ]
+then
+    mkdir -p "${build_dir}"
+fi
 wheel_dir="$(mktemp -d)"
 pip wheel . --no-deps --wheel-dir "$(cd "${wheel_dir}"; pwd -P)" -C build-dir="$(cd "${build_dir}"; pwd -P)"
 
