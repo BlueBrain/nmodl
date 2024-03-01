@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 """
 Barebones utility for changing the name of the package in `pyproject.toml`.
-
-Notes
------
-Should only be used by the CI
 """
 import re
 from argparse import ArgumentParser
