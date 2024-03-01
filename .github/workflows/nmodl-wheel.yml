@@ -1,9 +1,11 @@
 name: Build wheels
 
+concurrency:
+  group: ${{ github.workflow }}#${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
-    branches:
-      - master
   pull_request:
  schedule:
     - cron: "5 0 * * *"
