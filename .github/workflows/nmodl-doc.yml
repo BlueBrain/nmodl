@@ -55,12 +55,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Python3 dependencies
-        working-directory: ${{runner.workspace}}/nmodl
-        run: |
-          pip3 install -U pip setuptools 'pip-tools>=7.4.0'
-          pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
-
       - name: Documentation
         id: documentation
         working-directory: ${{runner.workspace}}/nmodl
