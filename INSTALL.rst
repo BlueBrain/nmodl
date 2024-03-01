@@ -250,24 +250,11 @@ script:
 
 .. code:: sh
 
-   bash docs/generate_docs.sh
+   bash docs/generate_docs.sh DIRECTORY PYTHON_EXECUTABLE [use_virtual_env]
 
-The documentation will then be available in the ``public`` subdirectory. Note
-that the above script actually builds NMODL using the Python build system in a
-temporary directory; if you wish to make a persistent build directory (to
-reduce the build time for instance), you can do so by specifying a custom build
-directory:
-
-.. code:: sh
-
-   bash docs/generate_docs.sh DIRECTORY
-
-where ``DIRECTORY`` is the directory where you wish to store the output of the
-build (if the directory does not exist, the script will attempt to create one
-for you). You can also specify the path to the Python executable, as well as
-whether or not to use a virtual env (anything other than the string ``false`` is
-considered to be ``true``):
-
-.. code:: sh
-
-   bash docs/generate_docs.sh DIRECTORY PYTHON_EXECUTABLE false
+where ``DIRECTORY`` is where you want to put the output files. The HTML
+documentation will then be available in ``DIRECTORY/_docs``, and the temporary
+build will be stored in ``DIRECTORY/_build``. You can also specify that you do
+not want to use a virtual environment by optionally passing ``false`` as the
+third argument above (if not specified, the script first creates a temporary
+env).
