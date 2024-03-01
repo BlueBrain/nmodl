@@ -250,11 +250,9 @@ script:
 
 .. code:: sh
 
-   bash docs/generate_docs.sh DIRECTORY PYTHON_EXECUTABLE [use_virtual_env]
+   bash docs/generate_docs.sh DIRECTORY [PYTHON_EXECUTABLE]
 
 where ``DIRECTORY`` is where you want to put the output files. The HTML
 documentation will then be available in ``DIRECTORY/docs``, and the temporary
-build will be stored in ``DIRECTORY/build``. You can also specify that you do
-not want to use a virtual environment by optionally passing ``false`` as the
-third argument above (if not specified, the script first creates a temporary
-env).
+build will be stored in ``DIRECTORY/build``. You can also specify the path to
+the Python executable if it is not picked up automatically.
