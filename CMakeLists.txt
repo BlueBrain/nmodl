@@ -31,7 +31,6 @@ option(NMODL_BUILD_WHEEL "Flag to signal we are building a wheel" OFF)
 if(NMODL_BUILD_WHEEL)
   set(LINK_AGAINST_PYTHON OFF)
   set(NMODL_ENABLE_TESTS OFF)
-  set(FMT_INSTALL OFF)
 endif()
 
 # =============================================================================
