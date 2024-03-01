@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 """
 Barebones utility for changing the name of the package in `pyproject.toml`.
-
-Usage
------
-[SCRIPT] [PYPROJECT_FILE] [NAME]
-
-Notes
------
-Should only be used by the CI
 """
 import re
 from argparse import ArgumentParser
@@ -19,7 +11,9 @@ import tomli_w
 
 
 def main():
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        description="Script for changing the name of a project in a pyproject.toml file",
+    )
     parser.add_argument("pyproject_file", help="The path to the pyproject.toml file")
     parser.add_argument("name", help="The new name of the project")
     args = parser.parse_args()

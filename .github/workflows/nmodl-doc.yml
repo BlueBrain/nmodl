@@ -55,11 +55,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Python3 dependencies
+      - name: Documentation
+        id: documentation
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          pip3 install -U pip setuptools 'pip-tools>=7.4.0'
-          pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
+          echo "------- Build Documentation -------";
+          bash docs/generate_docs.sh public $(command -v python${PYTHON_VERSION})
+          touch public/docs/.nojekyll
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/docs/index.html
+          echo "status=done" >> $GITHUB_OUTPUT
+        env:
+          CCACHE_DIR: ${{runner.workspace}}/ccache
 
       # This step will set up an SSH connection on tmate.io for live debugging.
       # To trigger it, simply add 'live-debug-docs' to your last pushed commit message.
@@ -67,25 +73,10 @@ jobs:
         if: failure() && contains(github.event.head_commit.message, 'live-debug-docs')
         uses: mxschmitt/action-tmate@v3
 
-      - name: Documentation
-        id: documentation
-        working-directory: ${{runner.workspace}}/nmodl
-        run: |
-          echo "------- Build Documentation -------";
-          # build wheel and install it
-          pip wheel . --wheel-dir wheelhouse/ -C build-dir=_build --no-deps
-          pip install wheelhouse/*.whl
-          bash docs/generate_docs.sh
-          touch public/.nojekyll
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/index.html;
-          echo "status=done" >> $GITHUB_OUTPUT
-        env:
-          CCACHE_DIR: ${{runner.workspace}}/ccache
-
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: ${{runner.workspace}}/nmodl/public
+          folder: ${{runner.workspace}}/nmodl/public/docs
           clean: false # Automatically remove deleted files from the deploy branch
