@@ -66,9 +66,9 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           echo "------- Build Documentation -------";
-          bash docs/generate_docs.sh _build $(command -v python${PYTHON_VERSION})
-          touch public/.nojekyll
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/index.html;
+          bash docs/generate_docs.sh public $(command -v python${PYTHON_VERSION}) false
+          touch public/_docs/.nojekyll
+          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/_docs/index.html
           echo "status=done" >> $GITHUB_OUTPUT
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
@@ -84,5 +84,5 @@ jobs:
         if: steps.documentation.outputs.status == 'done' && startsWith(github.ref, 'refs/heads/master')
         with:
           branch: gh-pages # The branch the action should deploy to.
-          folder: ${{runner.workspace}}/nmodl/public
+          folder: ${{runner.workspace}}/nmodl/public/_docs
           clean: false # Automatically remove deleted files from the deploy branch
