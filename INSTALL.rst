@@ -253,8 +253,8 @@ script:
    bash docs/generate_docs.sh DIRECTORY PYTHON_EXECUTABLE [use_virtual_env]
 
 where ``DIRECTORY`` is where you want to put the output files. The HTML
-documentation will then be available in ``DIRECTORY/_docs``, and the temporary
-build will be stored in ``DIRECTORY/_build``. You can also specify that you do
+documentation will then be available in ``DIRECTORY/docs``, and the temporary
+build will be stored in ``DIRECTORY/build``. You can also specify that you do
 not want to use a virtual environment by optionally passing ``false`` as the
 third argument above (if not specified, the script first creates a temporary
 env).

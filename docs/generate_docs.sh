@@ -21,8 +21,11 @@ then
     mkdir -p "${output_dir}"
 fi
 
-echo "== Building documentation files in: ${output_dir}/_docs =="
-echo "== Temporary project build directory is: ${output_dir}/_build =="
+build_dir="build"
+docs_dir="docs"
+
+echo "== Building documentation files in: ${output_dir}/${docs_dir} =="
+echo "== Temporary project build directory is: ${output_dir}/${build_dir} =="
 
 if [ "${use_venv}" != "false" ]
 then
@@ -32,7 +35,7 @@ then
     python_exe="$(command -v python)"
     ${python_exe} -m pip install -U pip
 fi
-${python_exe} -m pip install ".[docs]" -C build-dir="${output_dir}/_build"
+${python_exe} -m pip install ".[docs]" -C build-dir="${output_dir}/${build_dir}"
 
 # the abs dir where this script is located (so we can call it from wherever)
 script_dir="$(cd "$(dirname "$0")"; pwd -P)"
@@ -40,7 +43,7 @@ script_dir="$(cd "$(dirname "$0")"; pwd -P)"
 cd "${script_dir}"
 doxygen Doxyfile
 cd -
-sphinx-build docs/ "${output_dir}/_docs"
+sphinx-build docs/ "${output_dir}/${docs_dir}"
 
 if [ "${use_venv}" != "false" ]
 then
