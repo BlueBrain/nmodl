@@ -2,20 +2,27 @@
 
 # script for generating documentation for NMODL
 
-set -xeu
+set -eu
 
-# in order to create the docs, we first need to build NMODL in some dir
-build_dir="${1:-"$(mktemp -d)"}"
-if ! [ -d "${build_dir}" ]
+if [ $# -lt 2 ]
 then
-    mkdir -p "${build_dir}"
+    echo "Usage: $(basename "$0") output_dir python_exe [use_virtual_env]"
+    exit 1
 fi
 
-# the Python executable to use (default: whatever `python3` is)
-python_exe="${2:-"$(command -v python3)"}"
-
-# should we use a separate venv?
+# the dir where we put the temporary build and the docs
+output_dir="$1"
+# path to the Python executable
+python_exe="$2"
 use_venv="${3:-}"
+
+if ! [ -d "${output_dir}" ]
+then
+    mkdir -p "${output_dir}"
+fi
+
+echo "== Building documentation files in: ${output_dir}/_docs =="
+echo "== Temporary project build directory is: ${output_dir}/_build =="
 
 if [ "${use_venv}" != "false" ]
 then
@@ -24,18 +31,16 @@ then
     . "${venv_name}/bin/activate"
     python_exe="$(command -v python)"
     ${python_exe} -m pip install -U pip
-else
-    python_exe="$(command -v python3)"
 fi
-${python_exe} -m pip install ".[docs]" -C build-dir="$(cd "${build_dir}"; pwd -P)"
+${python_exe} -m pip install ".[docs]" -C build-dir="${output_dir}/_build"
 
 # the abs dir where this script is located (so we can call it from wherever)
 script_dir="$(cd "$(dirname "$0")"; pwd -P)"
 
 cd "${script_dir}"
 doxygen Doxyfile
-sphinx-build . "${script_dir}/../public"
 cd -
+sphinx-build docs/ "${output_dir}/_docs"
 
 if [ "${use_venv}" != "false" ]
 then
