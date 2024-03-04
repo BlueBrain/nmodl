@@ -34,10 +34,14 @@ jobs:
         run: |
           brew install flex bison
 
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+          with:
+            fetch: 0
 
       # Used to host cibuildwheel
-      - uses: actions/setup-python@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.5
@@ -58,10 +62,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch: 0
 
       # Used to host cibuildwheel
-      - uses: actions/setup-python@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
 
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.5
@@ -103,6 +111,5 @@ jobs:
 
       - name: Test manylinux Wheel with Python ${{ matrix.python_version }}
         run: |
-          set -eux
           dotless_version="$(echo "${{ matrix.python_version }}" | tr -d '.')"
           find ${{ github.workspace }} -name "*cp${dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python${{ matrix.python_version }} {} \;
