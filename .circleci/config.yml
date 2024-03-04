@@ -22,9 +22,8 @@ jobs:
     parameters:
       python_version:
         type: string
-        default: "3.8"
     docker:
-      - image: circleci/python:$python_version
+      - image: cimg/python:$python_version
     steps:
       - checkout
       - run:
@@ -39,26 +38,8 @@ workflows:
     jobs:
       - build_wheels_manylinux_aarch64
       - test_wheels_manylinux_aarch64:
-          python_version: "3.8"
           requires:
             - build_wheels_manylinux_aarch64
-
-      - test_wheels_manylinux_aarch64:
-          python_version: "3.9"
-          requires:
-            - build_wheels_manylinux_aarch64
-
-      - test_wheels_manylinux_aarch64:
-          python_version: "3.10"
-          requires:
-            - build_wheels_manylinux_aarch64
-
-      - test_wheels_manylinux_aarch64:
-          python_version: "3.11"
-          requires:
-            - build_wheels_manylinux_aarch64
-
-      - test_wheels_manylinux_aarch64:
-          python_version: "3.12"
-          requires:
-            - build_wheels_manylinux_aarch64
+          matrix:
+            parameters:
+              python_version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
