@@ -38,7 +38,7 @@ class MyersDiff {
   public:
 
     struct Edit {
-        enum etype { ins, del, eql };
+        enum class etype { ins, del, eql };
         etype edit;
         const line* old_line = nullptr;
         const line* new_line = nullptr;
@@ -47,7 +47,7 @@ class MyersDiff {
             , old_line(o)
             , new_line(n){};
 
-        friend std::ostringstream& operator<<(std::ostringstream& out, Edit&);
+        friend std::ostringstream& operator<<(std::ostringstream& out, const Edit&);
     };
 
     MyersDiff(const std::string& str_a, const std::string& str_b)
@@ -84,7 +84,7 @@ class MyersDiff {
         return (i + max) % max;
     }
 
-    string_lines split_lines(const std::string& txt) const;
+    string_lines split_lines(std::string_view txt) const;
     std::vector<std::vector<int>> shortest_edit();
 };
 

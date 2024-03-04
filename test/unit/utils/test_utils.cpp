@@ -106,7 +106,7 @@ bool MyersDiff::diff() {
     auto x = static_cast<int>(a.size());
     auto y = static_cast<int>(b.size());
 
-    bool identical = true;
+    bool _identical = true;
 
     auto trace = shortest_edit();
     auto d = static_cast<int>(trace.size());
@@ -130,15 +130,15 @@ bool MyersDiff::diff() {
         }
         if (x == prev_x) {
             edits.emplace_front(Edit::etype::ins, nullptr, &b[y - 1]);
-            identical = false;
+            _identical = false;
         } else if (y == prev_y) {
             edits.emplace_front(Edit::etype::del, &a[x - 1], nullptr);
-            identical = false;
+            _identical = false;
         }
         x = prev_x;
         y = prev_y;
     }
-    return identical;
+    return _identical;
 }
 
 std::deque<MyersDiff::Edit> MyersDiff::get_edits() const {
@@ -177,7 +177,7 @@ std::vector<std::vector<int>> MyersDiff::shortest_edit() {
     return trace;
 }
 
-string_lines MyersDiff::split_lines(const std::string& txt) const {
+string_lines MyersDiff::split_lines(std::string_view txt) const {
     std::size_t pos = 0;
     std::size_t ppos = 0;
     std::size_t lineno = 1;
@@ -193,7 +193,7 @@ string_lines MyersDiff::split_lines(const std::string& txt) const {
     return lines;
 }
 
-std::ostringstream& operator<<(std::ostringstream& oss, MyersDiff::Edit& edit) {
+std::ostringstream& operator<<(std::ostringstream& oss, const MyersDiff::Edit& edit) {
     if (edit.edit == MyersDiff::Edit::etype::ins) {
         oss << fmt::format("{} {}", '+', edit.new_line->second);
     } else if (edit.edit == MyersDiff::Edit::etype::del) {
