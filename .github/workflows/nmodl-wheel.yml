@@ -104,5 +104,5 @@ jobs:
       - name: Test manylinux Wheel with Python ${{ matrix.python_version }}
         run: |
           set -eux
-          dotless_version="$(echo "${matrix.python_version}" | tr -d '.')"
+          dotless_version="$(echo "${{ matrix.python_version }}" | tr -d '.')"
           find ${{ github.workspace }} -name "*cp${dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python${{ matrix.python_version }} {} \;
