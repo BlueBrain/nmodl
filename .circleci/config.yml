@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  linux-aarch64-wheels:
+  build_wheels_manylinux_aarch64:
     working_directory: ~/linux-aarch64-wheels
     machine:
       image: default
@@ -11,15 +11,50 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build the Linux aarch64 wheels.
+          name: Build the manylinux aarch64 wheels
           command: |
             python3 -m pip install --user cibuildwheel==2.16.5
             python3 -m cibuildwheel --output-dir wheelhouse
       - store_artifacts:
           path: wheelhouse/
 
+  test_wheels_manylinux_aarch64:
+    parameters:
+      python_version:
+        type: string
+        default: "3.8"
+    docker:
+      - image: circleci/python:$python_version
+    steps:
+      - checkout
+      - run:
+          name: Test the manylinux aarch64 wheels
+          command: |
+            dotless_version="$(echo "${python_version}" | tr -d '.')"
+            find ${{ github.workspace }} -name "*cp${dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python${{ matrix.python_version }} {} \;
+
 workflows:
   version: 2
-  all-tests:
+  build:
     jobs:
-      - linux-aarch64-wheels
+      - build_wheels_manylinux_aarch64
+
+      - test_wheels_manylinux_aarch64:
+          python_version: "3.8"
+          requires: build_wheels_manylinux_aarch64
+
+      - test_wheels_manylinux_aarch64:
+          python_version: "3.9"
+          requires: build_wheels_manylinux_aarch64
+
+      - test_wheels_manylinux_aarch64:
+          python_version: "3.10"
+          requires: build_wheels_manylinux_aarch64
+
+      - test_wheels_manylinux_aarch64:
+          python_version: "3.11"
+          requires: build_wheels_manylinux_aarch64
+
+      - test_wheels_manylinux_aarch64:
+          python_version: "3.12"
+          requires: build_wheels_manylinux_aarch64
