@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <sstream>
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -90,15 +90,15 @@ SCENARIO("Perform loop unrolling of FROM construct", "[visitor][unroll]") {
         THEN("Loop body gets correctly unrolled") {
             auto result = run_loop_unroll_visitor(input_nmodl);
             if (reindent_text(output_nmodl) != reindent_text(result)) {
-              auto diff = MyersDiff(reindent_text(output_nmodl), reindent_text(result));
-              diff.do_diff();
-              std::ostringstream edits;
-              for (auto& edit : diff.get_edits()) {
-                edits << edit << "\n";
-              }
-              FAIL(edits.str());
+                auto diff = MyersDiff(reindent_text(output_nmodl), reindent_text(result));
+                if (!diff.is_identical()) {
+                    std::ostringstream edits;
+                    for (auto& edit: diff.get_edits()) {
+                        edits << edit << "\n";
+                    }
+                    FAIL(edits.str());
+                }
             }
-            //REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
         }
     }
 

@@ -37,45 +37,55 @@ class MyersDiff {
 
   public:
 
-  struct Edit {
-    enum etype {ins, del, eql};
-    etype edit;
-    const line* old_line = nullptr;
-    const line* new_line = nullptr;
-    Edit(etype e, const line* o, const line* n) : edit(e), old_line(o), new_line(n) {};
+    struct Edit {
+        enum etype { ins, del, eql };
+        etype edit;
+        const line* old_line = nullptr;
+        const line* new_line = nullptr;
+        Edit(etype e, const line* o, const line* n)
+            : edit(e)
+            , old_line(o)
+            , new_line(n){};
 
-    friend std::ostringstream& operator<<(std::ostringstream& out, Edit&);
-  };
-  
-  MyersDiff(const std::string& str_a, const std::string& str_b) {
-    a = split_lines(str_a);
-    b = split_lines(str_b);
-    max = a.size() + b.size();
-  }
-  
-  bool do_diff();
-  std::deque<Edit> get_edits();
+        friend std::ostringstream& operator<<(std::ostringstream& out, Edit&);
+    };
+
+    MyersDiff(const std::string& str_a, const std::string& str_b)
+        : a(split_lines(str_a))
+        , b(split_lines(str_b))
+        , max(a.size() + b.size()) {
+        identical = diff();
+    }
+
+    bool is_identical() const {
+        return identical;
+    }
+
+    std::deque<Edit> get_edits() const;
 
   private:
 
-  struct TraceTuple {
-    std::size_t prev_x = 0;
-    std::size_t prev_y = 0;
-    std::size_t x = 0;
-    std::size_t y = 0;
-  };
-  
-  string_lines a, b;
-  std::size_t max{};
-  std::deque<MyersDiff::Edit> edits;
+    bool diff();
 
-  inline std::size_t idx(int i) const {
-    return (i + max) % max;
-  }
+    struct TraceTuple {
+        std::size_t prev_x = 0;
+        std::size_t prev_y = 0;
+        std::size_t x = 0;
+        std::size_t y = 0;
+    };
 
-  string_lines split_lines(const std::string& txt);
-  std::vector<std::vector<int>> shortest_edit();
+    string_lines a{};
+    string_lines b{};
+    std::size_t max{};
+    bool identical{};
+    std::deque<MyersDiff::Edit> edits;
 
+    inline std::size_t idx(int i) const {
+        return (i + max) % max;
+    }
+
+    string_lines split_lines(const std::string& txt) const;
+    std::vector<std::vector<int>> shortest_edit();
 };
 
 }  // namespace test_utils
