@@ -213,7 +213,7 @@ stages:
         python3 -m pip install --upgrade pip
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
-        python3 packaging/change_name.py pyproject.toml "nmodl$TAG"
+        python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
         export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
         echo "$SETUPTOOLS_SCM_PRETEND_VERSION"
         CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
@@ -248,7 +248,7 @@ stages:
         python3 -m pip install --upgrade pip
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
-        python3 packaging/change_name.py pyproject.toml "nmodl$TAG"
+        python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
         SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
       condition: succeeded()
       displayName: 'Build macos Wheel (x86_64)'
