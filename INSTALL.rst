@@ -50,8 +50,7 @@ using:
 
 .. code:: sh
 
-   pip3 install --user pip-tools
-   pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
+   pip3 install --user -r requirements.txt
 
 Make sure to have latest flex/bison in $PATH :
 
@@ -80,8 +79,7 @@ using:
 
 .. code:: sh
 
-   pip3 install --user pip-tools
-   pip3 install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
+   pip3 install --user -r requirements.txt
 
 Build Project
 -------------

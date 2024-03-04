@@ -82,8 +82,8 @@ jobs:
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          python3 -m pip install -U pip setuptools 'pip-tools>=7.4.0'
-          python3 -m pip install --user -r <(pip-compile --all-build-deps --all-extras --no-strip-extras 2>&1)
+          python3 -m pip install -U pip setuptools
+          python3 -m pip install --user -r requirements.txt
 
       - name: Install neuron-nightly
         if: ${{matrix.config.enable_usecases == 'On'}}
