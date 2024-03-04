@@ -38,23 +38,27 @@ workflows:
   build:
     jobs:
       - build_wheels_manylinux_aarch64
-
       - test_wheels_manylinux_aarch64:
           python_version: "3.8"
-          requires: build_wheels_manylinux_aarch64
+          requires:
+            - build_wheels_manylinux_aarch64
 
       - test_wheels_manylinux_aarch64:
           python_version: "3.9"
-          requires: build_wheels_manylinux_aarch64
+          requires:
+            - build_wheels_manylinux_aarch64
 
       - test_wheels_manylinux_aarch64:
           python_version: "3.10"
-          requires: build_wheels_manylinux_aarch64
+          requires:
+            - build_wheels_manylinux_aarch64
 
       - test_wheels_manylinux_aarch64:
           python_version: "3.11"
-          requires: build_wheels_manylinux_aarch64
+          requires:
+            - build_wheels_manylinux_aarch64
 
       - test_wheels_manylinux_aarch64:
           python_version: "3.12"
-          requires: build_wheels_manylinux_aarch64
+          requires:
+            - build_wheels_manylinux_aarch64
