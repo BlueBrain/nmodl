@@ -31,10 +31,6 @@ os.environ["NMODLHOME"] = os.environ.get(
 )
 
 
-try:
-    # Try importing but catch exception in case bindings are not available
-    from ._nmodl import NmodlDriver, to_json, to_nmodl, __version__  # noqa
+from ._nmodl import NmodlDriver, to_json, to_nmodl, __version__  # noqa
 
-    __all__ = ["NmodlDriver", "to_json", "to_nmodl"]
-except ImportError:
-    print("[NMODL] [warning] :: Python bindings are not available")
+__all__ = ["NmodlDriver", "to_json", "to_nmodl"]
