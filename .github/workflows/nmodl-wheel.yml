@@ -36,8 +36,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v4
-          with:
-            fetch: 0
+        with:
+          fetch: 0
 
       # Used to host cibuildwheel
       - name: Set up Python
@@ -51,7 +51,8 @@ jobs:
           export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
           python -m cibuildwheel --output-dir wheelhouse
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-${{ matrix.os }}
           path: ./wheelhouse/*.whl
@@ -79,7 +80,8 @@ jobs:
           export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
           CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python -m cibuildwheel --output-dir wheelhouse
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
         with:
           name: cibw-wheels-manylinux
           path: ./wheelhouse/*.whl
