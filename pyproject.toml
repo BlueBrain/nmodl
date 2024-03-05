@@ -61,13 +61,13 @@ test-command = [
     "bash {package}/packaging/test_wheel.bash python3 {wheel} false",
 ]
 build = ["cp311*"]
+manylinux-x86_64-image = "docker.io/bluebrain/nmodl:wheel-py12"
 
 [tool.cibuildwheel.macos]
 environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
 config-settings = {build-dir = "_build"}
 
 [tool.cibuildwheel.linux]
-before-all = "bash packaging/install_dependencies.sh"
 environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
 # the Linux wheel is not tested in cibuildwheel due to manylinux images not having
 # libpython*.so, so this is tested manually in the CI
