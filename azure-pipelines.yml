@@ -210,8 +210,16 @@ stages:
           Python311:
             python.version: '3.11'
         ${{ if eq(variables.buildWheel, False) }}:
+          Python38:
+            python.version: '3.8'
+          Python39:
+            python.version: '3.9'
+          Python310:
+            python.version: '3.10'
           Python311:
             python.version: '3.11'
+          Python312:
+            python.version: '3.12'
     steps:
     - checkout: self
       submodules: True
