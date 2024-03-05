@@ -83,34 +83,31 @@ build_wheel_osx() {
     deactivate
 }
 
-# platform for which wheel to be build
-platform=$1
+# platform for which wheel we are building
+platform="$1"
 
-# python version for which wheel to be built; 3* (default) means all python 3 versions
-python_wheel_version=3*
-if [ "$2" ]; then
-  python_wheel_version=$2
-fi
+# python version for which wheel we are building; 3* (default) means all python 3 versions
+python_wheel_version="${2:-3*}"
 
 # MAIN
 
-case "$1" in
+case "${platform}" in
 
   linux)
-    python_wheel_version=${python_wheel_version//[-._]/}
-    for py_bin in /opt/python/cp${python_wheel_version}*/bin/python; do
+    python_wheel_version="${python_wheel_version//[-._]/}"
+    for py_bin in /opt/python/cp${python_wheel_version}-cp${python_wheel_version}/bin/python; do
         build_wheel_linux "$py_bin"
     done
     ;;
 
   osx)
-    for py_bin in /Library/Frameworks/Python.framework/Versions/${python_wheel_version}*/bin/python3; do
+    for py_bin in /Library/Frameworks/Python.framework/Versions/${python_wheel_version}/bin/python3; do
         build_wheel_osx "$py_bin"
     done
     ;;
 
   *)
-    echo "Usage: $(basename $0) <linux|osx> [version]"
+    echo "Usage: $(basename "$0") <linux|osx> [version]"
     exit 1
     ;;
 
