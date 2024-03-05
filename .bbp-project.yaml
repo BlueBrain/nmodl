@@ -1,7 +1,7 @@
 tools:
   ClangFormat:
     enable: True
-    version: ~=14.0
+    version: ~=13.0
     exclude:
       match:
       - ext/.*
