@@ -60,7 +60,7 @@ test-extras = ["test"]
 test-command = [
     "bash {package}/packaging/test_wheel.bash python3 {wheel} false",
 ]
-manylinux-x86_64-image = "docker.io/bluebrain/nmodl:wheel-py12"
+manylinux-x86_64-image = "docker.io/bluebrain/nmodl:wheel"
 
 [tool.cibuildwheel.macos]
 environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
