@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMODL LINEAR solver &mdash; NMODL 0.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="NMODL NONLINEAR solver" href="nmodl-nonlinear-solver.html" />
+    <link rel="prev" title="NMODL SympySolver - derivimplicit" href="nmodl-sympy-solver-derivimplicit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NMODL
+          </a>
+              <div class="version">
+                0.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contents/visitors.html">Visitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents/currents.html">Currents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents/ions.html">Ions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents/pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contents/cable_equations.html">Cable Equation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NMODL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">NMODL LINEAR solver</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/nmodl-linear-solver.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="NMODL-LINEAR-solver">
+<h1>NMODL LINEAR solver<a class="headerlink" href="#NMODL-LINEAR-solver" title="Permalink to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">LINEAR</span></code> blocks contain a set of simultaneous equations.</p>
+<p>These are solved by <code class="docutils literal notranslate"><span class="pre">solve_lin_system</span></code> from <a class="reference external" href="https://github.com/BlueBrain/nmodl/blob/master/nmodl/ode.py#L143">nmodl/ode.py</a>.</p>
+<p>If the system is sufficiently small (by default <img class="math" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPCEtLSBUaGlzIGZpbGUgd2FzIGdlbmVyYXRlZCBieSBkdmlzdmdtIDIuOC4xIC0tPgo8c3ZnIHZlcnNpb249JzEuMScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB4bWxuczp4bGluaz0naHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluaycgd2lkdGg9JzM3LjgxODQyOHB0JyBoZWlnaHQ9JzExLjQyNzQxcHQnIHZpZXdCb3g9JzU2LjQxMzI2NyA1Ni4yMjI0OTggMzcuODE4NDI4IDExLjQyNzQxJz4KPGRlZnM+CjxwYXRoIGlkPSdnMi01MScgZD0nTTIuNTY2Mzc2LTUuMDA3MjIzQzIuMzI5MjY1LTQuOTkzMjc1IDIuMjczNDc0LTQuOTc5MzI4IDIuMjczNDc0LTQuODUzNzk4QzIuMjczNDc0LTQuNzE0MzIxIDIuMzQzMjEzLTQuNzE0MzIxIDIuNTk0MjcxLTQuNzE0MzIxSDMuMjM1ODY2QzQuNDIxNDItNC43MTQzMjEgNC45NTE0MzItMy43Mzc5ODMgNC45NTE0MzItMi4zOTkwMDRDNC45NTE0MzItLjU3MTg1NiA0LjAwMjk4OS0uMDgzNjg2IDMuMzE5NTUyLS4wODM2ODZDMi42NTAwNjItLjA4MzY4NiAxLjUwNjM1MS0uNDA0NDgzIDEuMTAxODY4LTEuMzI1MDMxQzEuNTQ4MTk0LTEuMjU1MjkzIDEuOTUyNjc3LTEuNTA2MzUxIDEuOTUyNjc3LTIuMDA4NDY4QzEuOTUyNjc3LTIuNDEyOTUxIDEuNjU5Nzc2LTIuNjkxOTA1IDEuMjY5MjQtMi42OTE5MDVDLjkzNDQ5Ni0yLjY5MTkwNSAuNTcxODU2LTIuNDk2NjM4IC41NzE4NTYtMS45NjY2MjVDLjU3MTg1Ni0uNzI1MjggMS44MTMyIC4yOTI5MDIgMy4zNjEzOTUgLjI5MjkwMkM1LjAyMTE3MSAuMjkyOTAyIDYuMjQ4NTY4LS45NzYzMzkgNi4yNDg1NjgtMi4zODUwNTZDNi4yNDg1NjgtMy42NjgyNDQgNS4yMTY0MzgtNC42NzI0NzggMy44Nzc0Ni00LjkwOTU4OUM1LjA5MDkwOS01LjI1ODI4MSA1Ljg3MTk4LTYuMjc2NDYzIDUuODcxOTgtNy4zNjQzODRDNS44NzE5OC04LjQ2NjI1MiA0LjcyODI2OS05LjI3NTIxOCAzLjM3NTM0Mi05LjI3NTIxOEMxLjk4MDU3My05LjI3NTIxOCAuOTQ4NDQzLTguNDI0NDA4IC45NDg0NDMtNy40MDYyMjdDLjk0ODQ0My02Ljg0ODMxOSAxLjM4MDgyMi02LjczNjczNyAxLjU5MDAzNy02LjczNjczN0MxLjg4MjkzOS02LjczNjczNyAyLjIxNzY4NC02Ljk0NTk1MyAyLjIxNzY4NC03LjM2NDM4NEMyLjIxNzY4NC03LjgxMDcxIDEuODgyOTM5LTguMDA1OTc4IDEuNTc2MDktOC4wMDU5NzhDMS40OTI0MDMtOC4wMDU5NzggMS40NjQ1MDgtOC4wMDU5NzggMS40MjI2NjUtNy45OTIwM0MxLjk1MjY3Ny04Ljk0MDQ3MyAzLjI2Mzc2MS04Ljk0MDQ3MyAzLjMzMzQ5OS04Ljk0MDQ3M0MzLjc5Mzc3My04Ljk0MDQ3MyA0LjcwMDM3NC04LjczMTI1OCA0LjcwMDM3NC03LjM2NDM4NEM0LjcwMDM3NC03LjA5OTM3NyA0LjY1ODUzMS02LjMxODMwNiA0LjI1NDA0Ny01LjcxODU1NUMzLjgzNTYxNi01LjEwNDg1NyAzLjM2MTM5NS01LjA2MzAxNCAyLjk4NDgwNy01LjA0OTA2NkwyLjU2NjM3Ni01LjAwNzIyM1onLz4KPHBhdGggaWQ9J2cwLTIwJyBkPSdNOS40MTQ2OTUtOC4yODQ5MzJDOS41NjgxMi04LjM1NDY3IDkuNjc5NzAxLTguNDI0NDA4IDkuNjc5NzAxLTguNTkxNzgxQzkuNjc5NzAxLTguNzQ1MjA1IDkuNTY4MTItOC44NzA3MzUgOS40MDA3NDctOC44NzA3MzVDOS4zMzEwMDktOC44NzA3MzUgOS4yMDU0NzktOC44MTQ5NDQgOS4xNDk2ODktOC43ODcwNDlMMS40MzY2MTMtNS4xNDY3QzEuMTk5NTAyLTUuMDM1MTE4IDEuMTU3NjU5LTQuOTM3NDg0IDEuMTU3NjU5LTQuODI1OTAzQzEuMTU3NjU5LTQuNzAwMzc0IDEuMjQxMzQ1LTQuNjAyNzQgMS40MzY2MTMtNC41MTkwNTRMOS4xNDk2ODktLjg5MjY1M0M5LjMzMTAwOS0uNzk1MDE5IDkuMzU4OTA0LS43OTUwMTkgOS40MDA3NDctLjc5NTAxOUM5LjU1NDE3Mi0uNzk1MDE5IDkuNjc5NzAxLS45MjA1NDggOS42Nzk3MDEtMS4wNzM5NzNDOS42Nzk3MDEtMS4xOTk1MDIgOS42MjM5MS0xLjI4MzE4OCA5LjM4NjgtMS4zOTQ3N0wyLjA5MjE1NC00LjgyNTkwM0w5LjQxNDY5NS04LjI4NDkzMlpNOS4xOTE1MzIgMS45MTA4MzRDOS40Mjg2NDMgMS45MTA4MzQgOS42Nzk3MDEgMS45MTA4MzQgOS42Nzk3MDEgMS42MzE4OFM5LjM4NjggMS4zNTI5MjcgOS4xNzc1ODQgMS4zNTI5MjdIMS42NTk3NzZDMS40NTA1NiAxLjM1MjkyNyAxLjE1NzY1OSAxLjM1MjkyNyAxLjE1NzY1OSAxLjYzMTg4UzEuNDA4NzE3IDEuOTEwODM0IDEuNjQ1ODI4IDEuOTEwODM0SDkuMTkxNTMyWicvPgo8cGF0aCBpZD0nZzEtNzgnIGQ9J00xMC4zMjEyOTUtOC4wNjE3NjhDMTAuNDc0NzItOC42NjE1MTkgMTAuNjk3ODgzLTkuMDc5OTUgMTEuNzU3OTA4LTkuMTIxNzkzQzExLjc5OTc1MS05LjEyMTc5MyAxMS45NjcxMjMtOS4xMzU3NDEgMTEuOTY3MTIzLTkuMzcyODUyQzExLjk2NzEyMy05LjUyNjI3NiAxMS44NDE1OTQtOS41MjYyNzYgMTEuNzg1ODAzLTkuNTI2Mjc2QzExLjUwNjg0OS05LjUyNjI3NiAxMC43OTU1MTctOS40OTgzODEgMTAuNTE2NTYzLTkuNDk4MzgxSDkuODQ3MDczQzkuNjUxODA2LTkuNDk4MzgxIDkuNDAwNzQ3LTkuNTI2Mjc2IDkuMjA1NDc5LTkuNTI2Mjc2QzkuMTIxNzkzLTkuNTI2Mjc2IDguOTU0NDIxLTkuNTI2Mjc2IDguOTU0NDIxLTkuMjYxMjdDOC45NTQ0MjEtOS4xMjE3OTMgOS4wNjYwMDItOS4xMjE3OTMgOS4xNjM2MzYtOS4xMjE3OTNDMTAuMDAwNDk4LTkuMDkzODk4IDEwLjA1NjI4OS04Ljc3MzEwMSAxMC4wNTYyODktOC41MjIwNDJDMTAuMDU2Mjg5LTguMzk2NTEzIDEwLjA0MjM0MS04LjM1NDY3IDEwLjAwMDQ5OC04LjE1OTQwMkw4LjQyNDQwOC0xLjg2ODk5MUw1LjQzOTYwMS05LjI4OTE2NkM1LjM0MTk2OC05LjUxMjMyOSA1LjMyODAyLTkuNTI2Mjc2IDUuMDIxMTcxLTkuNTI2Mjc2SDMuMzE5NTUyQzMuMDQwNTk4LTkuNTI2Mjc2IDIuOTE1MDY4LTkuNTI2Mjc2IDIuOTE1MDY4LTkuMjYxMjdDMi45MTUwNjgtOS4xMjE3OTMgMy4wMTI3MDItOS4xMjE3OTMgMy4yNzc3MDktOS4xMjE3OTNDMy4zNDc0NDctOS4xMjE3OTMgNC4xNzAzNjEtOS4xMjE3OTMgNC4xNzAzNjEtOC45OTYyNjRDNC4xNzAzNjEtOC45NjgzNjkgNC4xNDI0NjYtOC44NTY3ODcgNC4xMjg1MTgtOC44MTQ5NDRMMi4yNzM0NzQtMS40MjI2NjVDMi4xMDYxMDItLjczOTIyOCAxLjc3MTM1Ny0uNDQ2MzI2IC44NTA4MDktLjQwNDQ4M0MuNzgxMDcxLS40MDQ0ODMgLjY0MTU5NC0uMzkwNTM1IC42NDE1OTQtLjEzOTQ3N0MuNjQxNTk0IDAgLjc4MTA3MSAwIC44MjI5MTQgMEMxLjEwMTg2OCAwIDEuODEzMi0uMDI3ODk1IDIuMDkyMTU0LS4wMjc4OTVIMi43NjE2NDRDMi45NTY5MTItLjAyNzg5NSAzLjE5NDAyMiAwIDMuMzg5MjkgMEMzLjQ4NjkyNCAwIDMuNjQwMzQ5IDAgMy42NDAzNDktLjI2NTAwNkMzLjY0MDM0OS0uMzkwNTM1IDMuNTAwODcyLS40MDQ0ODMgMy40NDUwODEtLjQwNDQ4M0MyLjk4NDgwNy0uNDE4NDMxIDIuNTM4NDgxLS41MDIxMTcgMi41Mzg0ODEtMS4wMDQyMzRDMi41Mzg0ODEtMS4xMTU4MTYgMi41NjYzNzYtMS4yNDEzNDUgMi41OTQyNzEtMS4zNTI5MjdMNC40NzcyMS04LjgxNDk0NEM0LjU2MDg5Ny04LjY3NTQ2NyA0LjU2MDg5Ny04LjY0NzU3MiA0LjYxNjY4Ny04LjUyMjA0Mkw3LjkzNjIzOS0uMjUxMDU5QzguMDA1OTc4LS4wODM2ODYgOC4wMzM4NzMgMCA4LjE1OTQwMiAwQzguMjk4ODc5IDAgOC4zMTI4MjctLjA0MTg0MyA4LjM2ODYxOC0uMjc4OTU0TDEwLjMyMTI5NS04LjA2MTc2OFonLz4KPC9kZWZzPgo8ZyBpZD0ncGFnZTEnPgo8dXNlIHg9JzU2LjQxMzI2NycgeT0nNjUuNzUzNDI1JyB4bGluazpocmVmPScjZzEtNzgnLz4KPHVzZSB4PSc3Mi42ODA2MzQnIHk9JzY1Ljc1MzQyNScgeGxpbms6aHJlZj0nI2cwLTIwJy8+Cjx1c2UgeD0nODcuNDAzMjA2JyB5PSc2NS43NTM0MjUnIHhsaW5rOmhyZWY9JyNnMi01MScvPgo8L2c+Cjwvc3ZnPg==" alt="N\leq3"/>), then Gaussian elimination is used to directly construct the solution at compile time using SymPy to do the symbolic Gaussian elimination. Optionally Common Subexpression Elimination (CSE) can also be performed.</p>
+<p>For larger matrices it may not be numerically safe to solve them at compile time by Gaussian elimination, so instead the matrix equation is constructed and then solved at run time by LU factorization with partial pivoting (for more, see Crout solver in <code class="docutils literal notranslate"><span class="pre">src/solver/crout</span></code> and <code class="docutils literal notranslate"><span class="pre">test/unit/crout</span></code>).</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="nmodl-sympy-solver-derivimplicit.html" class="btn btn-neutral float-left" title="NMODL SympySolver - derivimplicit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="nmodl-nonlinear-solver.html" class="btn btn-neutral float-right" title="NMODL NONLINEAR solver" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, BlueBrain HPC team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
