@@ -194,7 +194,72 @@ stages:
       env:
         SHELL: 'bash'
       displayName: 'Build Neuron and Run Integration Tests'
+
   - job: 'manylinux_wheels'
+    timeoutInMinutes: 45
+    pool:
+      vmImage: 'ubuntu-20.04'
+    steps:
+    - task: UsePythonVersion@0
+    - checkout: self
+      submodules: True
+      condition: succeeded()
+    - script: |
+        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
+          export TAG="-nightly"
+        else
+          export TAG=""
+        fi
+        python3 -m pip install --upgrade pip
+        python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
+        # change the name accordingly
+        python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
+        export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
+        CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
+      condition: succeeded()
+      displayName: 'Building ManyLinux Wheels'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
+      condition: succeeded()
+      displayName: 'Publish wheel as build artifact'
+    - template: ci/upload-wheels.yml
+
+  - job: 'macos_wheels_x86_64'
+    timeoutInMinutes: 45
+    pool:
+      vmImage: 'macOS-12'
+    steps:
+    - checkout: self
+      submodules: True
+      condition: succeeded()
+    - script: |
+        brew install flex bison cmake ninja
+      condition: succeeded()
+      displayName: 'Install Dependencies'
+    - task: UsePythonVersion@0
+    - script: |
+        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
+          export NMODL_NIGHTLY_TAG="-nightly"
+        else
+          export NMODL_NIGHTLY_TAG=""
+        fi
+        python3 -m pip install --upgrade pip
+        python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
+        # change the name accordingly
+        python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
+        SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
+      condition: succeeded()
+      displayName: 'Build macos Wheel (x86_64)'
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
+      condition: succeeded()
+      displayName: 'Publish wheel as build artifact'
+    - template: ci/upload-wheels.yml
+
+  - job: 'test_manylinux_wheels'
+    dependsOn: 'manylinux_wheels'
     timeoutInMinutes: 45
     pool:
       vmImage: 'ubuntu-20.04'
@@ -209,112 +274,21 @@ stages:
             python.version: '3.10'
           Python311:
             python.version: '3.11'
+          Python312:
+            python.version: '3.12'
         ${{ if eq(variables.buildWheel, False) }}:
           Python311:
             python.version: '3.11'
     steps:
-    - checkout: self
-      submodules: True
-      condition: succeeded()
+    - download: current
+      patterns: 'drop/*.whl'
+      displayName: "Make manylinux wheels available"
     - script: |
-        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export TAG="-nightly"
-        else
-          export TAG=""
-        fi
-        # the following 2 lines are a workaround for PEP 621 not allowing a
-        # dynamic `name` in `pyproject.toml`
-        python3 -m pip install --user tomli tomli-w
-        python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
-        export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
-        docker run --rm \
-          -w /root/nmodl \
-          -v $PWD:/root/nmodl \
-          -e NMODL_NIGHTLY_TAG=$TAG \
-          -e SETUPTOOLS_SCM_PRETEND_VERSION=$SETUPTOOLS_SCM_PRETEND_VERSION \
-          'bluebrain/nmodl:wheel' \
-          packaging/build_wheels.bash linux $(python.version)
-      condition: succeeded()
-      displayName: 'Building ManyLinux Wheel'
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
-      condition: succeeded()
-      displayName: 'Publish wheel as build artifact'
-    - script: |
+        set -eux
         sudo apt-add-repository -y ppa:deadsnakes/ppa
         sudo apt-get update
         sudo apt-get install -y python$(python.version) python$(python.version)-dev python$(python.version)-venv
-        packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
+        dotless_version="$(echo "$(python.version)" | tr -d '.')"
+        find $(Pipeline.Workspace) -name "*cp${dotless_version}-manylinux*.whl" -exec bash packaging/test_wheel.bash python$(python.version) {} \;
       condition: succeeded()
-      displayName: 'Test ManyLinux Wheel with Python $(python.version)'
-    - template: ci/upload-wheels.yml
-  - job: 'macos_wheels'
-    timeoutInMinutes: 45
-    pool:
-      vmImage: 'macOS-11'
-    strategy:
-      matrix:
-        ${{ if eq(variables.buildWheel, True) }}:
-          Python38:
-            python.version: '3.8'
-            python.org.version: '3.8.10'
-            python.installer.name: 'macosx10.9.pkg'
-          Python39:
-            python.version: '3.9'
-            python.org.version: '3.9.13'
-            python.installer.name: 'macosx10.9.pkg'
-          Python310:
-            python.version: '3.10'
-            python.org.version: '3.10.5'
-            python.installer.name: 'macos11.pkg'
-          Python311:
-            python.version: '3.11'
-            python.org.version: '3.11.1'
-            python.installer.name: 'macos11.pkg'
-        ${{ if eq(variables.buildWheel, False) }}:
-          Python311:
-            python.version: '3.11'
-            python.org.version: '3.11.1'
-            python.installer.name: 'macos11.pkg'
-    steps:
-    - checkout: self
-      submodules: True
-      condition: succeeded()
-    - script: |
-        brew install flex bison cmake ninja
-        export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH;
-      condition: succeeded()
-      displayName: 'Install Dependencies'
-    - script: |
-        installer=python-$(python.org.version)-$(python.installer.name)
-        url=https://www.python.org/ftp/python/$(python.org.version)/$installer
-        curl $url -o $installer
-        sudo installer -pkg $installer -target /
-      condition: succeeded()
-      displayName: 'Install Python from python.org'
-    - script: |
-        export PATH=/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH
-        export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
-        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export NMODL_NIGHTLY_TAG="-nightly"
-        else
-          export NMODL_NIGHTLY_TAG=""
-        fi
-        # the following 2 lines are a workaround for PEP 621 not allowing a
-        # dynamic `name` in `pyproject.toml`
-        python3 -m pip install tomli tomli-w
-        python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
-        SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" packaging/build_wheels.bash osx $(python.version)
-      condition: succeeded()
-      displayName: 'Build macos Wheel'
-    - task: PublishBuildArtifacts@1
-      inputs:
-        pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
-      condition: succeeded()
-      displayName: 'Publish wheel as build artifact'
-    - script: |
-        packaging/test_wheel.bash python$(python.version) wheelhouse/*.whl
-      condition: succeeded()
-      displayName: 'Test macos Wheel with Python $(python.version)'
-    - template: ci/upload-wheels.yml
+      displayName: 'Test manylinux Wheel with Python $(python.version)'

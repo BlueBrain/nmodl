@@ -56,3 +56,21 @@ NMODL_BUILD_WHEEL = "ON"
 
 [tool.pytest.ini_options]
 testpaths = "test/unit/pybind"
+
+[tool.cibuildwheel]
+skip = ["pp*", "*-win32", "*-manylinux_i686", "*-musllinux_i686", "*-musllinux_x86_64", "*-musllinux_aarch64"]
+test-extras = ["test"]
+test-command = [
+    "bash {package}/packaging/test_wheel.bash python3 {wheel} false",
+]
+manylinux-x86_64-image = "docker.io/bluebrain/nmodl:wheel"
+
+[tool.cibuildwheel.macos]
+environment = { PATH = "/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin:/usr/local/opt/flex/bin:/usr/local/opt/bison/bin:$PATH", MACOSX_DEPLOYMENT_TARGET = "10.15" }
+config-settings = {build-dir = "_build"}
+
+[tool.cibuildwheel.linux]
+environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
+# the Linux wheel is not tested in cibuildwheel due to manylinux images not having
+# libpython*.so, so this is tested manually in the CI
+test-command = "true"
