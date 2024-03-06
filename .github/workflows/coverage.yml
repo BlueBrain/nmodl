@@ -6,7 +6,7 @@ concurrency:
 
 on:
   push:
-    branches: 
+    branches:
       - master
       - live-debug*
       - release/**
@@ -41,7 +41,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2    
+          fetch-depth: 2
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
