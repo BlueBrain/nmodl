@@ -1,13 +1,14 @@
 tools:
   ClangFormat:
     enable: True
+    version: ~=13.0
     exclude:
       match:
       - ext/.*
       - src/language/templates/*
       - test/usecases/*/*
   ClangTidy:
-    enable: true
+    enable: True
     option: ''
     exclude:
       match:
