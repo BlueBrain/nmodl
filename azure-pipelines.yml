@@ -199,6 +199,9 @@ stages:
     timeoutInMinutes: 45
     pool:
       vmImage: 'ubuntu-20.04'
+    variables:
+      ${{ if eq(variables.buildWheel, False) }}:
+        CIBW_BUILD: 'cp311*'
     steps:
     - task: UsePythonVersion@0
     - checkout: self
@@ -229,6 +232,9 @@ stages:
     timeoutInMinutes: 45
     pool:
       vmImage: 'macOS-12'
+    variables:
+      ${{ if eq(variables.buildWheel, False) }}:
+        CIBW_BUILD: 'cp311*'
     steps:
     - checkout: self
       submodules: True
