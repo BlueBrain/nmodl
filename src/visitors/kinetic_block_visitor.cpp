@@ -149,16 +149,23 @@ void KineticBlockVisitor::visit_compartment(ast::Compartment& node) {
     std::string expression = to_nmodl(expr);
     logger->debug("KineticBlockVisitor :: COMPARTMENT expr: {}", expression);
     for (const auto& name_ptr: node.get_names()) {
-        const auto& var_name = name_ptr->get_node_name();
-        const auto it = state_var_index.find(var_name);
-        if (it != state_var_index.cend()) {
-            int var_index = it->second;
-            compartment_factors[var_index] = expression;
-            logger->debug(
-                "KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
-                expression,
-                var_name,
-                var_index);
+        if (node.get_name() == nullptr) {
+            // COMPARTMENT volume { species }
+            const auto& var_name = name_ptr->get_node_name();
+            std::cout << "var_name = " << var_name << "\n";
+            const auto it = state_var_index.find(var_name);
+            if (it != state_var_index.cend()) {
+                int var_index = it->second;
+                compartment_factors[var_index] = expression;
+                logger->debug(
+                    "KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
+                    expression,
+                    var_name,
+                    var_index);
+            }
+        } else {
+            // COMPARTMENT i, volume_expr { species_array }
+            throw std::runtime_error("Not implemented.");
         }
     }
     // add COMPARTMENT state to list of statements to remove
