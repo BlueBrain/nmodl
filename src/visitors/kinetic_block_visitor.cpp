@@ -141,28 +141,40 @@ void KineticBlockVisitor::visit_conserve(ast::Conserve& node) {
     logger->debug("KineticBlockVisitor :: --> {}", to_nmodl(node));
 }
 
+void KineticBlockVisitor::set_compartment_factor(int var_index, const std::string& factor) {
+    if (compartment_factors[var_index] != "") {
+        throw std::runtime_error("Setting compartment volume twice.");
+    }
+
+    compartment_factors[var_index] = factor;
+    logger->debug("KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
+                  factor,
+                  state_var[var_index],
+                  var_index);
+}
+
+void KineticBlockVisitor::compute_compartment_factor(ast::Compartment& node,
+                                                     const ast::Name& name) {
+    // COMPARTMENT volume { species }
+    const auto& var_name = name.get_node_name();
+    const auto it = state_var_index.find(var_name);
+    if (it != state_var_index.cend()) {
+        int var_index = it->second;
+        auto expr = node.get_expression();
+        std::string expression = to_nmodl(expr);
+
+        set_compartment_factor(var_index, expression);
+    }
+}
+
 void KineticBlockVisitor::visit_compartment(ast::Compartment& node) {
     // COMPARTMENT block has an expression, and a list of state vars it applies to.
     // For each state var, the rhs of the differential eq should be divided by the expression.
     // Here we store the expressions in the compartment_factors vector
-    auto expr = node.get_expression();
-    std::string expression = to_nmodl(expr);
-    logger->debug("KineticBlockVisitor :: COMPARTMENT expr: {}", expression);
+    logger->debug("KineticBlockVisitor :: COMPARTMENT expr: {}", to_nmodl(node.get_expression()));
     for (const auto& name_ptr: node.get_names()) {
         if (node.get_name() == nullptr) {
-            // COMPARTMENT volume { species }
-            const auto& var_name = name_ptr->get_node_name();
-            std::cout << "var_name = " << var_name << "\n";
-            const auto it = state_var_index.find(var_name);
-            if (it != state_var_index.cend()) {
-                int var_index = it->second;
-                compartment_factors[var_index] = expression;
-                logger->debug(
-                    "KineticBlockVisitor :: COMPARTMENT factor {} for state var {} (index {})",
-                    expression,
-                    var_name,
-                    var_index);
-            }
+            compute_compartment_factor(node, *name_ptr);
         } else {
             // COMPARTMENT i, volume_expr { species_array }
             throw std::runtime_error("Not implemented.");

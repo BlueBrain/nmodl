@@ -52,6 +52,9 @@ class KineticBlockVisitor: public AstVisitor {
     /// update CONSERVE statement with reaction var term
     void process_conserve_reac_var(const std::string& varname, int count = 1);
 
+    void set_compartment_factor(int var_index, const std::string& factor);
+    void compute_compartment_factor(ast::Compartment& node, const ast::Name& name);
+
     /// stochiometric matrices nu_L, nu_R
     /// forwards/backwards fluxes k_f, k_b
     /// (see kinetic_schemes.ipynb notebook for details)
