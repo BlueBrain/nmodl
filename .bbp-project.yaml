@@ -19,3 +19,9 @@ tools:
       match:
       - ext/.*
       - src/language/templates/*
+  Black:
+    enable: True
+    version: ~=24.2.0
+    include:
+      match:
+      - .*\.py$
