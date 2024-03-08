@@ -196,7 +196,7 @@ stages:
       displayName: 'Build Neuron and Run Integration Tests'
 
   - job: 'manylinux_wheels'
-    timeoutInMinutes: 45
+    timeoutInMinutes: 90
     pool:
       vmImage: 'ubuntu-20.04'
     steps:
