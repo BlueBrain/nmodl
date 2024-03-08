@@ -8,10 +8,13 @@
 #include "kinetic_block_visitor.hpp"
 
 #include "ast/all.hpp"
+#include "index_remover.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
 #include "visitor_utils.hpp"
+
+#include <regex>
 
 
 namespace nmodl {
@@ -155,7 +158,6 @@ void KineticBlockVisitor::set_compartment_factor(int var_index, const std::strin
 
 void KineticBlockVisitor::compute_compartment_factor(ast::Compartment& node,
                                                      const ast::Name& name) {
-    // COMPARTMENT volume { species }
     const auto& var_name = name.get_node_name();
     const auto it = state_var_index.find(var_name);
     if (it != state_var_index.cend()) {
@@ -164,6 +166,36 @@ void KineticBlockVisitor::compute_compartment_factor(ast::Compartment& node,
         std::string expression = to_nmodl(expr);
 
         set_compartment_factor(var_index, expression);
+    } else {
+        logger->debug(
+            "KineticBlockVisitor :: COMPARTMENT specified volume for non-state variable {}",
+            var_name);
+    }
+}
+
+void KineticBlockVisitor::compute_indexed_compartment_factor(ast::Compartment& node,
+                                                             const ast::Name& name) {
+    auto array_var_name = name.get_node_name();
+    auto index_name = node.get_name()->get_node_name();
+
+    auto pattern = fmt::format("^{}\\[([0-9]*)\\]$", array_var_name);
+    std::cout << "pattern = " << pattern << std::endl;
+    std::regex re(pattern);
+    std::smatch m;
+
+    for (size_t var_index = 0; var_index < state_var.size(); ++var_index) {
+        auto matches = std::regex_match(state_var[var_index], m, re);
+
+        if (matches) {
+            int index_value = std::stoi(m[1]);
+            std::cout << "index_value = " << index_value << std::endl;
+            auto volume_expr = node.get_expression();
+            auto expr = std::shared_ptr<ast::Expression>(node.get_expression()->clone());
+            IndexRemover(index_name, index_value).visit_expression(*expr);
+
+            std::string expression = to_nmodl(*expr);
+            set_compartment_factor(var_index, expression);
+        }
     }
 }
 
@@ -176,8 +208,7 @@ void KineticBlockVisitor::visit_compartment(ast::Compartment& node) {
         if (node.get_name() == nullptr) {
             compute_compartment_factor(node, *name_ptr);
         } else {
-            // COMPARTMENT i, volume_expr { species_array }
-            throw std::runtime_error("Not implemented.");
+            compute_indexed_compartment_factor(node, *name_ptr);
         }
     }
     // add COMPARTMENT state to list of statements to remove
