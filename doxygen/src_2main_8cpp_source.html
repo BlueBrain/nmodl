@@ -346,7 +346,7 @@ $(document).ready(function(){initNavTree('src_2main_8cpp_source.html',''); initR
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        fmt::format(<span class="stringliteral">&quot;Write AST to JSON file ({})&quot;</span>, json_ast))-&gt;ignore_case();</div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    passes_opt-&gt;add_flag(<span class="stringliteral">&quot;--nmodl-ast&quot;</span>,</div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        nmodl_ast,</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        fmt::format(<span class="stringliteral">&quot;Write AST to NMODL file ({})&quot;</span>, nmodl_ast))-&gt;ignore_case();</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        fmt::format(<span class="stringliteral">&quot;Write the intermediate AST after each pass as a NMODL file to the scratch directory ({})&quot;</span>, nmodl_ast))-&gt;ignore_case();</div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    passes_opt-&gt;add_flag(<span class="stringliteral">&quot;--json-perf&quot;</span>,</div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        json_perfstat,</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        fmt::format(<span class="stringliteral">&quot;Write performance statistics to JSON file ({})&quot;</span>, json_perfstat))-&gt;ignore_case();</div>
