@@ -107,8 +107,10 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_index_remove
 <p>ca[i] &lt;-&gt; ca[i+1]</p>
 <p>has type <code>Name</code> in the AST. This needs to be replaced with <code>Integer</code> for optimizations like constant folding. This pass look at name and binary expressions under index variables. </p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00031">31</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
-</div><div class="dynheader">
+<p class="definition">Definition at line <a class="el" href="index__remover_8hpp_source.html#l00028">28</a> of file <a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a>.</p>
+</div>
+<p><code>#include &lt;<a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for nmodl::visitor::IndexRemover:</div>
 <div class="dyncontent">
  <div class="center">
@@ -123,9 +125,9 @@ Inheritance diagram for nmodl::visitor::IndexRemover:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1db3c998a8b3ed05175dc807cef05d8a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#a1db3c998a8b3ed05175dc807cef05d8a">IndexRemover</a> (std::string <a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#a18d9f08548dacec1ad83e0882be95a94">index</a>, int <a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#a2476ea703ce84b841cff7b1815c23842">value</a>)</td></tr>
 <tr class="separator:a1db3c998a8b3ed05175dc807cef05d8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a794b33be5156e1cc273a531c5ae82ecc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#a794b33be5156e1cc273a531c5ae82ecc">replace_for_name</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;node) const</td></tr>
-<tr class="memdesc:a794b33be5156e1cc273a531c5ae82ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">if expression we are visiting is <code>Name</code> then return new <code>Integer</code> node  <a href="classnmodl_1_1visitor_1_1_index_remover.html#a794b33be5156e1cc273a531c5ae82ecc">More...</a><br /></td></tr>
-<tr class="separator:a794b33be5156e1cc273a531c5ae82ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5101e0569bf535dbccbfb81c7301ba03"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#a5101e0569bf535dbccbfb81c7301ba03">replace_for_name</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;node) const</td></tr>
+<tr class="memdesc:a5101e0569bf535dbccbfb81c7301ba03"><td class="mdescLeft">&#160;</td><td class="mdescRight">if expression we are visiting is <code>Name</code> then return new <code>Integer</code> node  <a href="classnmodl_1_1visitor_1_1_index_remover.html#a5101e0569bf535dbccbfb81c7301ba03">More...</a><br /></td></tr>
+<tr class="separator:a5101e0569bf535dbccbfb81c7301ba03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4ebbae4d94ca7f6a8970c03129e40e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_index_remover.html#af4ebbae4d94ca7f6a8970c03129e40e0">visit_binary_expression</a> (<a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html">ast::BinaryExpression</a> &amp;node) override</td></tr>
 <tr class="memdesc:af4ebbae4d94ca7f6a8970c03129e40e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html" title="Represents binary expression in the NMODL.">ast::BinaryExpression</a>  <a href="classnmodl_1_1visitor_1_1_index_remover.html#af4ebbae4d94ca7f6a8970c03129e40e0">More...</a><br /></td></tr>
 <tr class="separator:af4ebbae4d94ca7f6a8970c03129e40e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -521,9 +523,6 @@ Private Attributes</h2></td></tr>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">nmodl::visitor::IndexRemover::IndexRemover </td>
@@ -543,45 +542,32 @@ Private Attributes</h2></td></tr>
           <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00043">43</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8cpp_source.html#l00009">9</a> of file <a class="el" href="index__remover_8cpp_source.html">index_remover.cpp</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a794b33be5156e1cc273a531c5ae82ecc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a794b33be5156e1cc273a531c5ae82ecc">&#9670;&nbsp;</a></span>replace_for_name()</h2>
+<a id="a5101e0569bf535dbccbfb81c7301ba03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5101e0569bf535dbccbfb81c7301ba03">&#9670;&nbsp;</a></span>replace_for_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a>&gt; nmodl::visitor::IndexRemover::replace_for_name </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; nmodl::visitor::IndexRemover::replace_for_name </td>
           <td>(</td>
           <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;&#160;</td>
           <td class="paramname"><em>node</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
 <p>if expression we are visiting is <code>Name</code> then return new <code>Integer</code> node </p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00048">48</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8cpp_source.html#l00014">14</a> of file <a class="el" href="index__remover_8cpp_source.html">index_remover.cpp</a>.</p>
 
 </div>
 </div>
@@ -604,7 +590,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -614,7 +600,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a810cd11fb1f4c27f176f0c48301bf20f">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00059">59</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8cpp_source.html#l00025">25</a> of file <a class="el" href="index__remover_8cpp_source.html">index_remover.cpp</a>.</p>
 
 </div>
 </div>
@@ -637,7 +623,7 @@ Private Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -647,7 +633,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_visitor.html#a802befc3323ef833d8a77bdf648ccfa4">nmodl::visitor::Visitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00071">71</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8cpp_source.html#l00037">37</a> of file <a class="el" href="index__remover_8cpp_source.html">index_remover.cpp</a>.</p>
 
 </div>
 </div>
@@ -674,7 +660,7 @@ Private Attributes</h2></td></tr>
 
 <p>index variable name </p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00034">34</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8hpp_source.html#l00031">31</a> of file <a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a>.</p>
 
 </div>
 </div>
@@ -700,7 +686,7 @@ Private Attributes</h2></td></tr>
 
 <p>true if we are visiting index variable </p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00040">40</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8hpp_source.html#l00037">37</a> of file <a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a>.</p>
 
 </div>
 </div>
@@ -726,12 +712,13 @@ Private Attributes</h2></td></tr>
 
 <p>integer value of index variable </p>
 
-<p class="definition">Definition at line <a class="el" href="loop__unroll__visitor_8cpp_source.html#l00037">37</a> of file <a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="index__remover_8hpp_source.html#l00034">34</a> of file <a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a>.</p>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/runner/work/nmodl/nmodl/src/visitors/<a class="el" href="loop__unroll__visitor_8cpp_source.html">loop_unroll_visitor.cpp</a></li>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>/home/runner/work/nmodl/nmodl/src/visitors/<a class="el" href="index__remover_8hpp_source.html">index_remover.hpp</a></li>
+<li>/home/runner/work/nmodl/nmodl/src/visitors/<a class="el" href="index__remover_8cpp_source.html">index_remover.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -12,6 +12,10 @@ var dir_5da0f2f50dc0c79639fb8a44dc3280da =
     [ "global_var_visitor.hpp", "global__var__visitor_8hpp.html", null ],
     [ "implicit_argument_visitor.cpp", "implicit__argument__visitor_8cpp.html", null ],
     [ "implicit_argument_visitor.hpp", "implicit__argument__visitor_8hpp.html", null ],
+    [ "index_remover.cpp", "index__remover_8cpp.html", null ],
+    [ "index_remover.hpp", "index__remover_8hpp.html", [
+      [ "IndexRemover", "classnmodl_1_1visitor_1_1_index_remover.html", "classnmodl_1_1visitor_1_1_index_remover" ]
+    ] ],
     [ "indexedname_visitor.cpp", "indexedname__visitor_8cpp.html", null ],
     [ "indexedname_visitor.hpp", "indexedname__visitor_8hpp.html", null ],
     [ "inline_visitor.cpp", "inline__visitor_8cpp.html", null ],
