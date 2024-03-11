@@ -1,5 +1,6 @@
 var NAVTREEINDEX30 =
 {
+"newton_8cpp.html#a9bff158456de7b1bf3c4a50ef96294ac":[3,0,2,0,4,0,2],
 "newton_8cpp_source.html":[3,0,2,0,4,0],
 "newton_8hpp.html":[3,0,1,7,1,0],
 "newton_8hpp.html#ga0b8788299c392976f3159910e0af2e9c":[3,0,1,7,1,0,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX30 =
 "src_2codegen_2codegen__utils_8cpp.html":[3,0,1,1,17],
 "src_2codegen_2codegen__utils_8cpp.html#a03553f15cecb4c252743c32bd6629513":[3,0,1,1,17,1],
 "src_2codegen_2codegen__utils_8cpp.html#a0c53d38eff00d585dd8199d5aaa2ac77":[3,0,1,1,17,0],
-"src_2codegen_2codegen__utils_8cpp_source.html":[3,0,1,1,17],
-"src_2lexer_2modtoken_8cpp.html":[3,0,1,3,6]
+"src_2codegen_2codegen__utils_8cpp_source.html":[3,0,1,1,17]
 };
