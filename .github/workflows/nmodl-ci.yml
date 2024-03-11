@@ -58,6 +58,8 @@ jobs:
       - name: Install homebrew packages
         if: startsWith(matrix.config.os, 'macOS')
         run: |
+          brew install python@3.12 || true
+          brew link --overwrite python@3.12
           brew install ccache coreutils bison boost flex ninja
           echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
           # Taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
