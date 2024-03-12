@@ -2,9 +2,12 @@ var classnmodl_1_1visitor_1_1_kinetic_block_visitor =
 [
     [ "RateEqs", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs" ],
     [ "KineticBlockVisitor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a2a8227b9359723390be386d527df096c", null ],
+    [ "compute_compartment_factor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a10d443ad6dda796b31f4deb158853efe", null ],
+    [ "compute_indexed_compartment_factor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ac9a82941a169d640978a9840996df7ea", null ],
     [ "get_conserve_statement_count", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ac2271bace199052c6fcac74909903833", null ],
     [ "process_conserve_reac_var", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ac5d5210f6bdfcc465b16060a4617666b", null ],
     [ "process_reac_var", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ae7a3356a1f16710b5363d78766d87b1c", null ],
+    [ "set_compartment_factor", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ad9b5efa934ca19637a161ca42967e2d5", null ],
     [ "visit_compartment", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#ab825ed2335a20c35a99b32e977145de9", null ],
     [ "visit_conserve", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a99e2c16a428c7c5afbafa1b9ebb0ae12", null ],
     [ "visit_kinetic_block", "classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a073dc4d56c76b47e38e0b263c62d733c", null ],
