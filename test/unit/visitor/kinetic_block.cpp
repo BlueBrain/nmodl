@@ -39,12 +39,6 @@ std::vector<std::string> run_kinetic_block_visitor(const std::string& text) {
     // construct symbol table from AST
     SymtabVisitor().visit_program(*ast);
 
-    // unroll loops and fold constants
-    ConstantFolderVisitor().visit_program(*ast);
-    LoopUnrollVisitor().visit_program(*ast);
-    ConstantFolderVisitor().visit_program(*ast);
-    SymtabVisitor().visit_program(*ast);
-
     // run KineticBlock visitor on AST
     KineticBlockVisitor().visit_program(*ast);
 
