@@ -179,7 +179,6 @@ void KineticBlockVisitor::compute_indexed_compartment_factor(ast::Compartment& n
     auto index_name = node.get_name()->get_node_name();
 
     auto pattern = fmt::format("^{}\\[([0-9]*)\\]$", array_var_name);
-    std::cout << "pattern = " << pattern << std::endl;
     std::regex re(pattern);
     std::smatch m;
 
@@ -188,7 +187,6 @@ void KineticBlockVisitor::compute_indexed_compartment_factor(ast::Compartment& n
 
         if (matches) {
             int index_value = std::stoi(m[1]);
-            std::cout << "index_value = " << index_value << std::endl;
             auto volume_expr = node.get_expression();
             auto expr = std::shared_ptr<ast::Expression>(node.get_expression()->clone());
             IndexRemover(index_name, index_value).visit_expression(*expr);
