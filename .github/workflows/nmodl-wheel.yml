@@ -14,7 +14,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macOS-14]
+        os: [macOS-13]
 
     steps:
       - name: Setup Flex and Bison
@@ -44,6 +44,8 @@ jobs:
         run: |
           export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
           python -m cibuildwheel --output-dir wheelhouse
+        env:
+          CIBW_ARCHS: 'universal2'
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
