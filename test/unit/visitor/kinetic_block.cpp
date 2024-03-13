@@ -42,6 +42,10 @@ std::vector<std::string> run_kinetic_block_visitor(const std::string& text) {
     // run KineticBlock visitor on AST
     KineticBlockVisitor().visit_program(*ast);
 
+    // Since KineticBlockVisitor internally performs const-folding and
+    // loop unrolling, we run CheckParentVisitor.
+    CheckParentVisitor().check_ast(*ast);
+
     // run lookup visitor to extract DERIVATIVE block(s) from AST
     const auto& blocks = collect_nodes(*ast, {AstNodeType::DERIVATIVE_BLOCK});
     results.reserve(blocks.size());
