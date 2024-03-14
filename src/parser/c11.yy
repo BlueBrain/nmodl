@@ -49,7 +49,7 @@
 %define api.namespace {nmodl::parser}
 
 /** set the parser's class identifier */
-%define parser_class_name {CParser}
+%define api.parser.class {CParser}
 
 /** keep track of the current position within the input */
 %locations
