@@ -1238,12 +1238,23 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->add_newline(2);
     printer->add_line("/** nrn_jacob function */");
 
-    printer->fmt_line(
+    printer->fmt_push_block(
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
-        "_nt, Memb_list* _ml_arg, int _type){{}}",
+        "_nt, Memb_list* _ml_arg, int _type)",
         method_name(naming::NRN_JACOB_METHOD));
 
+    printer->add_multi_line(
+        "_nrn_mechanism_cache_range _lmr{_sorted_token, *_nt, *_ml_arg, _type};");
 
+    printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
+    printer->fmt_line("auto node_data = make_node_data_{}(*_nt, *_ml_arg);", info.mod_suffix);
+    printer->add_multi_line(R"CODE(
+    auto nodecount = _ml_arg->nodecount;
+    for (int id = 0; id < nodecount; id++) {
+        int node_id = node_data.nodeindices[id];
+        node_data.node_diagonal[node_id] += inst.g_unused[id];
+    })CODE");
+    printer->pop_block();
 }
 
 
@@ -1582,9 +1593,9 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
 
 
     printer->add_line("node_data.node_rhs[node_id] -= rhs;");
-
     // TODO probably a good idea to call `g` something else
-    printer->add_line("node_data.node_diagonal[id] += g;");
+    printer->add_line("inst.g_unused[id] = g;");
+
 
     printer->pop_block();
 
