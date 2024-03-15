@@ -1248,12 +1248,23 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
 
     printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
     printer->fmt_line("auto node_data = make_node_data_{}(*_nt, *_ml_arg);", info.mod_suffix);
-    printer->add_multi_line(R"CODE(
-    auto nodecount = _ml_arg->nodecount;
-    for (int id = 0; id < nodecount; id++) {
-        int node_id = node_data.nodeindices[id];
-        node_data.node_diagonal[node_id] += inst.g_unused[id];
-    })CODE");
+    printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
+    printer->push_block("for (int id = 0; id < nodecount; id++)");
+
+    const auto codegen_float_variables_size = codegen_float_variables.size();
+    for (int i = 0; i < codegen_float_variables_size; ++i) {
+        const auto& variable = codegen_float_variables[i];
+        if (std::string(variable->get_name()) ==
+                std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
+            std::string(variable->get_name()) ==
+                std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
+            printer->fmt_line("int node_id = node_data.nodeindices[id];");
+            printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
+                              variable->get_name());
+        }
+    }
+
+    printer->pop_block();
     printer->pop_block();
 }
 
