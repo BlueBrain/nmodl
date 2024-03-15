@@ -1241,7 +1241,7 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->fmt_push_block(
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
         "_nt, Memb_list* _ml_arg, int _type)",
-        method_name(naming::NRN_JACOB_METHOD));
+        method_name(naming::NRN_JACOB_METHOD));  // begin function
 
     printer->add_multi_line(
         "_nrn_mechanism_cache_range _lmr{_sorted_token, *_nt, *_ml_arg, _type};");
@@ -1249,23 +1249,22 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
     printer->fmt_line("auto node_data = make_node_data_{}(*_nt, *_ml_arg);", info.mod_suffix);
     printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
-    printer->push_block("for (int id = 0; id < nodecount; id++)");
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
     const auto codegen_float_variables_size = codegen_float_variables.size();
-    for (int i = 0; i < codegen_float_variables_size; ++i) {
-        const auto& variable = codegen_float_variables[i];
-        if (std::string(variable->get_name()) ==
+    for (const auto& variable: codegen_float_variables) {
+        if (variable->get_name() ==
                 std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
-            std::string(variable->get_name()) ==
-                std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
-            printer->fmt_line("int node_id = node_data.nodeindices[id];");
+            variable->get_name() == std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
+            printer->add_line("int node_id = node_data.nodeindices[id];");
+            printer->add_line("// set conductances properly");
             printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
                               variable->get_name());
         }
     }
 
-    printer->pop_block();
-    printer->pop_block();
+    printer->pop_block();  // end for
+    printer->pop_block();  // end function
 }
 
 
@@ -1604,8 +1603,14 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
 
 
     printer->add_line("node_data.node_rhs[node_id] -= rhs;");
-    // TODO probably a good idea to call `g` something else
-    printer->add_line("inst.g_unused[id] = g;");
+
+    for (const auto& variable: codegen_float_variables) {
+        if (variable->get_name() ==
+                std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
+            variable->get_name() == std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
+            printer->fmt_line("inst.{}[id] = g;", variable->get_name());
+        }
+    }
 
 
     printer->pop_block();
