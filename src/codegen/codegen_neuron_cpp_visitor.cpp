@@ -1251,7 +1251,6 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
-    const auto codegen_float_variables_size = codegen_float_variables.size();
     for (const auto& variable: codegen_float_variables) {
         if (variable->get_name() ==
                 std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
