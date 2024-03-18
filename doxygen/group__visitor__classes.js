@@ -1,7 +1,5 @@
 var group__visitor__classes =
 [
-    [ "nmodl", "namespacenmodl.html", null ],
-    [ "visitor", "namespacenmodl_1_1visitor.html", null ],
     [ "AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html", [
       [ "AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#ae828f5954507fd77f9a7211948aad4da", null ],
       [ "visit_solve_block", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html#a0402101b0b1ed4ce4b34fab1cef8e505", null ]
@@ -286,19 +284,19 @@ var group__visitor__classes =
     ] ],
     [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", [
       [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a4f9e6ba1c7d7e94a689ad6f72d205fa4", null ],
-      [ "check", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a59bf1db427b5229d53adc6a18c15b2a0", null ],
-      [ "visit_destructor_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa1a426b1539112feb8160914733013ab", null ],
-      [ "visit_function_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0c3a7f34c86536de970e29b23d14092e", null ],
-      [ "visit_function_call", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a9252860f652c9cc9972c7a7d958dede4", null ],
-      [ "visit_function_table_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a5fed0adbb5579bb30113f0eb56139b35", null ],
-      [ "visit_independent_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa00f48a7ee8cb274e0483746c60fd169", null ],
-      [ "visit_mutex_lock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a94aeed10aff540ab0e93aea494023c4e", null ],
-      [ "visit_mutex_unlock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a514e0383369183f0cf17bb3227703941", null ],
-      [ "visit_name", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a77cc595b0e13a200ee1bed88bd8b1985", null ],
-      [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3e7dc3e1ddd25ecc1ec131ad5958de93", null ],
-      [ "visit_program", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a745fd423a5d9daf1bc8ae33dac136526", null ],
-      [ "visit_protect_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#abccc76a4e2c96cf0423de556db989dcd", null ],
-      [ "visit_table_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a973d5616f15e4048df98c1802269e9d3", null ],
+      [ "check", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aec84ac57e254ff7ed238a2dbab09c10e", null ],
+      [ "visit_destructor_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0a6a2a8e27ae270c46a5c89ba56cf826", null ],
+      [ "visit_function_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa4df068913f9c0287419b7dc6b603345", null ],
+      [ "visit_function_call", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aa3f1902aa212d4f4df41d8c0c9ae1915", null ],
+      [ "visit_function_table_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a96ad014439ae9d9470a11fbe990fac0d", null ],
+      [ "visit_independent_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a29986b898dda0131a2fc58ce084ac515", null ],
+      [ "visit_mutex_lock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a63a07eb9d08b77e15b16113a8b2af548", null ],
+      [ "visit_mutex_unlock", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a8091f8bb4c73de616a5123fa3e4e15e6", null ],
+      [ "visit_name", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a98972cc83e9ac2b8410a0dc3365396b6", null ],
+      [ "visit_procedure_block", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a60253290c335c3b8398b87bdb0f7e057", null ],
+      [ "visit_program", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a0145f04c3527c1c1d065f8f89360006e", null ],
+      [ "visit_protect_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a95ddaa30e2f56d529e3b1b354e8c22ff", null ],
+      [ "visit_table_statement", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a690b27a0c48dcdf732606684995701ea", null ],
       [ "accel_backend", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a11831b74b8026d3622691117cd4aa653", null ],
       [ "check_fail", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a3bf4750e17d33e3a0b3168abbeca1b06", null ],
       [ "in_function", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a91b8ab1a73ce4cc96f4076c8d6b165ca", null ],
@@ -1329,7 +1327,6 @@ var group__visitor__classes =
       [ "visit_wrapped_expression", "classnmodl_1_1visitor_1_1_const_visitor.html#a4db75b11c17eb4e53a4492bd3625dcba", null ],
       [ "visit_write_ion_var", "classnmodl_1_1visitor_1_1_const_visitor.html#ac886e47b2384ff0f4786a67c0ca54586", null ]
     ] ],
-    [ "SemanticAnalysisVisitor", "class_semantic_analysis_visitor.html", null ],
     [ "CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html", [
       [ "CheckParentVisitor", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#aaf4fab8d778eac2c0410c7dbc6bb3d6d", null ],
       [ "check_ast", "classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#ac8ab23f5630ef8d07c7323df4236fdf9", null ],

@@ -97,8 +97,7 @@ var NAVTREEINDEX1 =
 "checkparent__visitor_8cpp_source.html":[3,0,0,0,0,1,2],
 "checkparent__visitor_8hpp.html":[3,0,0,0,0,1,3],
 "checkparent__visitor_8hpp_source.html":[3,0,0,0,0,1,3],
-"class_ast_lookup_visitor.html":[0,8,0,37],
-"class_semantic_analysis_visitor.html":[0,8,0,35],
+"class_ast_lookup_visitor.html":[0,8,0,34],
 "classes.html":[2,1],
 "classnmodl_1_1_codegen_transform_visitor.html":[0,1,1,7],
 "classnmodl_1_1_codegen_transform_visitor.html#ac09b61af6cd6080b9798c1c8f805d3e8":[0,1,1,7,1],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "classnmodl_1_1ast_1_1_assigned_definition.html#a8619a9e9c27607934a99bab1df4fd062":[0,0,1,3,20],
 "classnmodl_1_1ast_1_1_assigned_definition.html#a86cca1b014582af3ac85bb2d55f3107a":[0,0,1,3,4],
 "classnmodl_1_1ast_1_1_assigned_definition.html#a88b67a185afd13c015de00a64d098754":[0,0,1,3,43],
-"classnmodl_1_1ast_1_1_assigned_definition.html#a8f3648096e7affcc57b89db1486b2939":[0,0,1,3,44]
+"classnmodl_1_1ast_1_1_assigned_definition.html#a8f3648096e7affcc57b89db1486b2939":[0,0,1,3,44],
+"classnmodl_1_1ast_1_1_assigned_definition.html#a9037d582b9bbcde2153d18892c2e0678":[0,0,1,3,21]
 };

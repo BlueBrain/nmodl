@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['semanticanalysisvisitor_2870',['SemanticAnalysisVisitor',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html',1,'nmodl::visitor::SemanticAnalysisVisitor'],['../class_semantic_analysis_visitor.html',1,'SemanticAnalysisVisitor']]],
+  ['semanticanalysisvisitor_2870',['SemanticAnalysisVisitor',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html',1,'nmodl::visitor']]],
   ['shadowusestatement_2871',['ShadowUseStatement',['../structnmodl_1_1codegen_1_1_shadow_use_statement.html',1,'nmodl::codegen']]],
   ['singletonrandomstring_2872',['SingletonRandomString',['../classnmodl_1_1utils_1_1_singleton_random_string.html',1,'nmodl::utils']]],
   ['solutionexpression_2873',['SolutionExpression',['../classnmodl_1_1ast_1_1_solution_expression.html',1,'nmodl::ast']]],

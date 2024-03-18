@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classnmodl_1_1ast_1_1_define.html#aba721973eec18af3b8970a8469447178":[0,0,1,23,2],
 "classnmodl_1_1ast_1_1_define.html#abdbe868504b6337bcef4aaf3b7217a56":[0,0,1,23,14],
 "classnmodl_1_1ast_1_1_define.html#ac2b64f69d4587dd589e422f296660352":[0,0,1,23,3],
 "classnmodl_1_1ast_1_1_define.html#ac661291b51346180e59d86b14b44d7bd":[0,0,1,23,15],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "classnmodl_1_1ast_1_1_eigen_linear_solver_block.html#ae918209d5e581be4c3993320b0423b98":[0,0,1,31,20],
 "classnmodl_1_1ast_1_1_eigen_linear_solver_block.html#aeb2ec7041098ff1ea6ed5294f81df5de":[0,0,1,31,40],
 "classnmodl_1_1ast_1_1_eigen_linear_solver_block.html#af6811ea9be8abd06649104322561ae68":[0,0,1,31,10],
-"classnmodl_1_1ast_1_1_eigen_linear_solver_block.html#afc68471bc3644972fc18454af4628d9d":[0,0,1,31,31]
+"classnmodl_1_1ast_1_1_eigen_linear_solver_block.html#afc68471bc3644972fc18454af4628d9d":[0,0,1,31,31],
+"classnmodl_1_1ast_1_1_eigen_newton_solver_block.html":[0,0,1,32]
 };

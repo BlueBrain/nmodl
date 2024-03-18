@@ -206,7 +206,6 @@ var hierarchy =
       [ "nmodl::pybind_wrappers::SolveNonLinearSystemExecutor", "structnmodl_1_1pybind__wrappers_1_1_solve_non_linear_system_executor.html", null ]
     ] ],
     [ "nmodl::visitor::KineticBlockVisitor::RateEqs", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html", null ],
-    [ "SemanticAnalysisVisitor", "class_semantic_analysis_visitor.html", null ],
     [ "nmodl::codegen::ShadowUseStatement", "structnmodl_1_1codegen_1_1_shadow_use_statement.html", null ],
     [ "nmodl::utils::SingletonRandomString< SIZE >", "classnmodl_1_1utils_1_1_singleton_random_string.html", null ],
     [ "nmodl::visitor::SympyReplaceSolutionsVisitor::StatementDispenser", "structnmodl_1_1visitor_1_1_sympy_replace_solutions_visitor_1_1_statement_dispenser.html", null ],

@@ -2,7 +2,7 @@ var searchData=
 [
   ['unaryexpression_2897',['UnaryExpression',['../classnmodl_1_1ast_1_1_unary_expression.html',1,'nmodl::ast']]],
   ['unaryoperator_2898',['UnaryOperator',['../classnmodl_1_1ast_1_1_unary_operator.html',1,'nmodl::ast']]],
-  ['unit_2899',['Unit',['../classnmodl_1_1units_1_1_unit.html',1,'nmodl::units::Unit'],['../classnmodl_1_1ast_1_1_unit.html',1,'nmodl::ast::Unit']]],
+  ['unit_2899',['Unit',['../classnmodl_1_1ast_1_1_unit.html',1,'nmodl::ast::Unit'],['../classnmodl_1_1units_1_1_unit.html',1,'nmodl::units::Unit']]],
   ['unitblock_2900',['UnitBlock',['../classnmodl_1_1ast_1_1_unit_block.html',1,'nmodl::ast']]],
   ['unitdef_2901',['UnitDef',['../classnmodl_1_1ast_1_1_unit_def.html',1,'nmodl::ast']]],
   ['unitdriver_2902',['UnitDriver',['../classnmodl_1_1parser_1_1_unit_driver.html',1,'nmodl::parser']]],
