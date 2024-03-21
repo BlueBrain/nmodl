@@ -27,9 +27,40 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     NmodlLexer scanner(*this, &in);
     NmodlParser parser(scanner, *this);
 
+    std::ostringstream oss_parser, oss_scanner;
+
+    oss_scanner << "scanner trace:" << std::endl;
+    oss_parser << "parser trace:" << std::endl;
+
+    auto originalBuffer = std::cerr.rdbuf();
+    // redirect std::cerr to the scanner stream because flex hardcodes debug
+    // logging to it
+    std::cerr.rdbuf(oss_scanner.rdbuf());
+
     scanner.set_debug(trace_scanner);
     parser.set_debug_level(trace_parser);
-    parser.parse();
+    parser.set_debug_stream(oss_parser);
+
+    // the parser throws a very general `throw` so we catch the stack trace
+    // here
+    try {
+        parser.parse();
+    } catch (...) {
+        logger->trace(oss_scanner.str());
+        logger->trace(oss_parser.str());
+        auto err_description =
+            "Error in parsing the file! Run with verbosity set to `trace` to get "
+            "the full output.";
+        logger->error(err_description);
+        throw std::runtime_error(err_description);
+    }
+
+    // Restore the original stream buffer of std::cerr
+    std::cerr.rdbuf(originalBuffer);
+
+    logger->trace(oss_scanner.str());
+    logger->trace(oss_parser.str());
+
     return astRoot;
 }
 

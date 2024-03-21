@@ -66,10 +66,10 @@ class NmodlDriver {
     std::unordered_map<std::string, int> defined_var;
 
     /// enable debug output in the flex scanner
-    bool trace_scanner = false;
+    bool trace_scanner = true;
 
     /// enable debug output in the bison parser
-    bool trace_parser = false;
+    bool trace_parser = true;
 
     /// print messages from lexer/parser
     bool verbose = false;
