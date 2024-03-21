@@ -307,6 +307,7 @@ int main(int argc, const char* argv[]) {
     };
 
     for (const auto& file: mod_files) {
+        logger->set_pattern("[%n] [%^%l%$] :: %v");
         logger->info("Processing {}", file.string());
 
         const auto modfile = file.stem().string();

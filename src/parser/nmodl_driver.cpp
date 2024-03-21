@@ -52,6 +52,7 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_file(const fs::path& filename,
             throw std::runtime_error(oss.str());
         }
     }
+    logger->set_pattern("[%n] [%^%l%$] [" + filename.string() + "] :: %v");
 
     auto current_stream_name = stream_name;
     stream_name = filename.string();
