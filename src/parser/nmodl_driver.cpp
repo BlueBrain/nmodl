@@ -18,48 +18,39 @@ namespace fs = std::filesystem;
 namespace nmodl {
 namespace parser {
 
+
+NmodlDriver::NmodlDriver() {
+    if (trace_scanner) {
+        std::cerr.rdbuf(scanner_stream.rdbuf());
+    }
+}
+
 NmodlDriver::NmodlDriver(bool strace, bool ptrace)
     : trace_scanner(strace)
-    , trace_parser(ptrace) {}
+    , trace_parser(ptrace) {
+    new (this) NmodlDriver;
+}
+
+NmodlDriver::~NmodlDriver() {
+    std::cerr.rdbuf(error_original_stream);
+}
 
 /// parse nmodl file provided as istream
 std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     NmodlLexer scanner(*this, &in);
     NmodlParser parser(scanner, *this);
 
-    std::ostringstream oss_parser, oss_scanner;
-
-    oss_scanner << "scanner trace:" << std::endl;
-    oss_parser << "parser trace:" << std::endl;
-
-    auto originalBuffer = std::cerr.rdbuf();
-    // redirect std::cerr to the scanner stream because flex hardcodes debug
-    // logging to it
-    std::cerr.rdbuf(oss_scanner.rdbuf());
+    scanner_stream << "scanner trace:" << std::endl;
+    parser_stream << "parser trace:" << std::endl;
 
     scanner.set_debug(trace_scanner);
     parser.set_debug_level(trace_parser);
-    parser.set_debug_stream(oss_parser);
+    parser.set_debug_stream(parser_stream);
 
-    // the parser throws a very general `throw` so we catch the stack trace
-    // here
-    try {
-        parser.parse();
-    } catch (...) {
-        logger->trace(oss_scanner.str());
-        logger->trace(oss_parser.str());
-        auto err_description =
-            "Error in parsing the file! Run with verbosity set to `trace` to get "
-            "the full output.";
-        logger->error(err_description);
-        throw std::runtime_error(err_description);
-    }
+    parser.parse();
 
-    // Restore the original stream buffer of std::cerr
-    std::cerr.rdbuf(originalBuffer);
-
-    logger->trace(oss_scanner.str());
-    logger->trace(oss_parser.str());
+    logger->trace(scanner_stream.str());
+    logger->trace(parser_stream.str());
 
     return astRoot;
 }
@@ -184,6 +175,9 @@ void NmodlDriver::parse_error(const NmodlLexer& scanner,
     oss << scanner.get_curr_line() << '\n';
     oss << std::string(location.begin.column - 1, '-');
     oss << "^\n";
+    // output the logs if running with `trace` verbosity
+    logger->trace(scanner_stream.str());
+    logger->trace(parser_stream.str());
     throw std::runtime_error(oss.str());
 }
 

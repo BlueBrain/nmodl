@@ -84,12 +84,20 @@ class NmodlDriver {
     /// \a nullptr is pushed as location for the top NMODL file
     std::unordered_map<std::string, const location*> open_files;
 
+    std::streambuf* error_original_stream = std::cerr.rdbuf();
+
+    std::ostringstream parser_stream;
+
+    std::ostringstream scanner_stream;
+
   public:
     /// file or input stream name (used by scanner for position), see todo
     std::string stream_name;
 
-    NmodlDriver() = default;
+    NmodlDriver();
     NmodlDriver(bool strace, bool ptrace);
+
+    ~NmodlDriver();
 
     /// add macro definition and it's value (DEFINE keyword of nmodl)
     void add_defined_var(const std::string& name, int value);
@@ -139,15 +147,15 @@ class NmodlDriver {
      * Emit a parsing error
      * \throw std::runtime_error
      */
-    static void parse_error(const location& location, const std::string& message);
+    void parse_error(const location& location, const std::string& message);
 
     /**
      * Emit a parsing error. Takes additionally a Lexer instance to print code context
      * \throw std::runtime_error
      */
-    static void parse_error(const NmodlLexer& scanner,
-                            const location& location,
-                            const std::string& message);
+    void parse_error(const NmodlLexer& scanner,
+                     const location& location,
+                     const std::string& message);
 
     /**
      * Ensure \a file argument given to the INCLUDE directive is valid:
@@ -156,8 +164,7 @@ class NmodlDriver {
      *
      * \return unquoted string
      */
-    static std::string check_include_argument(const location& location,
-                                              const std::string& filename);
+    std::string check_include_argument(const location& location, const std::string& filename);
 };
 
 /** \} */  // end of parser
