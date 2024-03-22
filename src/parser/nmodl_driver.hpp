@@ -66,7 +66,7 @@ class NmodlDriver {
     std::unordered_map<std::string, int> defined_var;
 
     /// enable debug output in the flex scanner
-    bool trace_scanner = true;
+    bool trace_scanner = false;
 
     /// enable debug output in the bison parser
     bool trace_parser = true;
@@ -84,20 +84,15 @@ class NmodlDriver {
     /// \a nullptr is pushed as location for the top NMODL file
     std::unordered_map<std::string, const location*> open_files;
 
-    std::streambuf* error_original_stream = std::cerr.rdbuf();
-
+    /// The stream where Bison will dump its logs
     std::ostringstream parser_stream;
-
-    std::ostringstream scanner_stream;
 
   public:
     /// file or input stream name (used by scanner for position), see todo
     std::string stream_name;
 
-    NmodlDriver();
+    NmodlDriver() = default;
     NmodlDriver(bool strace, bool ptrace);
-
-    ~NmodlDriver();
 
     /// add macro definition and it's value (DEFINE keyword of nmodl)
     void add_defined_var(const std::string& name, int value);

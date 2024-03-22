@@ -18,29 +18,15 @@ namespace fs = std::filesystem;
 namespace nmodl {
 namespace parser {
 
-
-NmodlDriver::NmodlDriver() {
-    if (trace_scanner) {
-        std::cerr.rdbuf(scanner_stream.rdbuf());
-    }
-}
-
 NmodlDriver::NmodlDriver(bool strace, bool ptrace)
     : trace_scanner(strace)
-    , trace_parser(ptrace) {
-    new (this) NmodlDriver;
-}
-
-NmodlDriver::~NmodlDriver() {
-    std::cerr.rdbuf(error_original_stream);
-}
+    , trace_parser(ptrace) {}
 
 /// parse nmodl file provided as istream
 std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
     NmodlLexer scanner(*this, &in);
     NmodlParser parser(scanner, *this);
 
-    scanner_stream << "scanner trace:" << std::endl;
     parser_stream << "parser trace:" << std::endl;
 
     scanner.set_debug(trace_scanner);
@@ -49,7 +35,6 @@ std::shared_ptr<ast::Program> NmodlDriver::parse_stream(std::istream& in) {
 
     parser.parse();
 
-    logger->trace(scanner_stream.str());
     logger->trace(parser_stream.str());
 
     return astRoot;
@@ -176,7 +161,6 @@ void NmodlDriver::parse_error(const NmodlLexer& scanner,
     oss << std::string(location.begin.column - 1, '-');
     oss << "^\n";
     // output the logs if running with `trace` verbosity
-    logger->trace(scanner_stream.str());
     logger->trace(parser_stream.str());
     throw std::runtime_error(oss.str());
 }
