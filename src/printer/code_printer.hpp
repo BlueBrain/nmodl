@@ -17,7 +17,7 @@
 #include <fmt/format.h>
 
 #include <fstream>
-#include <iostream>
+#include <iosfwd>
 #include <memory>
 #include <sstream>
 #include <string_view>
@@ -50,19 +50,14 @@ class CodePrinter {
     const size_t NUM_SPACES = 4;
 
   public:
-    CodePrinter(size_t blame_line = 0)
-        : result(std::make_unique<std::ostream>(std::cout.rdbuf()))
-        , blame_line(blame_line) {}
+    CodePrinter(size_t blame_line = 0);
 
-    CodePrinter(std::ostream& stream, size_t blame_line = 0)
-        : result(std::make_unique<std::ostream>(stream.rdbuf()))
-        , blame_line(blame_line) {}
+    CodePrinter(std::ostream& stream, size_t blame_line = 0);
 
     CodePrinter(const std::string& filename, size_t blame_line = 0);
 
-    ~CodePrinter() {
-        ofs.close();
-    }
+
+    ~CodePrinter();
 
     /// print whitespaces for indentation
     void add_indent();

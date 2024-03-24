@@ -19,7 +19,7 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>
-#include <iostream>
+#include <iosfwd>
 #include <regex>
 #include <sstream>
 #include <string>

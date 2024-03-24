@@ -13,7 +13,7 @@
  */
 
 #include <fstream>
-#include <iostream>
+#include <iosfwd>
 #include <memory>
 #include <sstream>
 
@@ -43,15 +43,11 @@ class NMODLPrinter {
     size_t indent_level = 0;
 
   public:
-    NMODLPrinter()
-        : result(new std::ostream(std::cout.rdbuf())) {}
-    NMODLPrinter(std::ostream& stream)
-        : result(new std::ostream(stream.rdbuf())) {}
+    NMODLPrinter();
+    NMODLPrinter(std::ostream& stream);
     NMODLPrinter(const std::string& filename);
 
-    ~NMODLPrinter() {
-        ofs.close();
-    }
+    ~NMODLPrinter();
 
     /// print whitespaces for indentation
     void add_indent();

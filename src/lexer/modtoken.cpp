@@ -6,10 +6,22 @@
  */
 
 #include "lexer/modtoken.hpp"
+#include <iostream>
 
 namespace nmodl {
 
 using LocationType = nmodl::parser::location;
+
+ModToken::ModToken()
+    : pos(nullptr, 0){};
+ModToken::ModToken(bool ext)
+    : pos(nullptr, 0)
+    , external(ext) {}
+
+ModToken::ModToken(std::string name, int token, LocationType& pos)
+    : name(std::move(name))
+    , token(token)
+    , pos(pos) {}
 
 std::string ModToken::position() const {
     std::stringstream ss;

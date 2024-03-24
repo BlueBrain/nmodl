@@ -7,9 +7,15 @@
 
 #include "printer/nmodl_printer.hpp"
 #include "utils/string_utils.hpp"
+#include <iostream>
 
 namespace nmodl {
 namespace printer {
+
+NMODLPrinter::NMODLPrinter()
+    : result(new std::ostream(std::cout.rdbuf())) {}
+NMODLPrinter::NMODLPrinter(std::ostream& stream)
+    : result(new std::ostream(stream.rdbuf())) {}
 
 NMODLPrinter::NMODLPrinter(const std::string& filename) {
     if (filename.empty()) {
@@ -25,6 +31,9 @@ NMODLPrinter::NMODLPrinter(const std::string& filename) {
 
     sbuf = ofs.rdbuf();
     result = std::make_shared<std::ostream>(sbuf);
+}
+NMODLPrinter::~NMODLPrinter() {
+    ofs.close();
 }
 
 void NMODLPrinter::push_level() {

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <iostream>
+#include <iosfwd>
 
 
 namespace nmodl {

@@ -8,7 +8,7 @@
 #pragma once
 
 #include <iomanip>
-#include <iostream>
+#include <iosfwd>
 #include <sstream>
 #include <string>
 
@@ -67,17 +67,11 @@ class ModToken {
     /// \name Ctor & dtor
     /// \{
 
-    ModToken()
-        : pos(nullptr, 0){};
+    ModToken();
 
-    explicit ModToken(bool ext)
-        : pos(nullptr, 0)
-        , external(ext) {}
+    explicit ModToken(bool ext);
 
-    ModToken(std::string name, int token, LocationType& pos)
-        : name(std::move(name))
-        , token(token)
-        , pos(pos) {}
+    ModToken(std::string name, int token, LocationType& pos);
 
     /// \}
 

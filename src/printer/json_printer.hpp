@@ -15,7 +15,7 @@
 #include <nlohmann/json.hpp>
 
 #include <fstream>
-#include <iostream>
+#include <iosfwd>
 #include <stack>
 
 namespace nmodl {
@@ -70,17 +70,11 @@ class JSONPrinter {
   public:
     explicit JSONPrinter(const std::string& filename);
 
-    /// By default dump output to std::cout
-    JSONPrinter()
-        : result(new std::ostream(std::cout.rdbuf())) {}
+    JSONPrinter();
 
-    // Dump output to stringstream
-    explicit JSONPrinter(std::ostream& os)
-        : result(new std::ostream(os.rdbuf())) {}
+    explicit JSONPrinter(std::ostream& os);
 
-    ~JSONPrinter() {
-        flush();
-    }
+    ~JSONPrinter();
 
     void push_block(const std::string& value, const std::string& key = "name");
     void add_node(std::string value, const std::string& key = "name");

@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <iostream>
+
 #include "printer/code_printer.hpp"
 #include "utils/string_utils.hpp"
 
@@ -14,6 +16,13 @@
 
 namespace nmodl {
 namespace printer {
+CodePrinter::CodePrinter(size_t blame_line)
+    : result(std::make_unique<std::ostream>(std::cout.rdbuf()))
+    , blame_line(blame_line) {}
+
+CodePrinter::CodePrinter(std::ostream& stream, size_t blame_line)
+    : result(std::make_unique<std::ostream>(stream.rdbuf()))
+    , blame_line(blame_line) {}
 
 CodePrinter::CodePrinter(const std::string& filename, size_t blame_line)
     : blame_line(blame_line) {
@@ -30,6 +39,10 @@ CodePrinter::CodePrinter(const std::string& filename, size_t blame_line)
 
     sbuf = ofs.rdbuf();
     result = std::make_unique<std::ostream>(sbuf);
+}
+
+CodePrinter::~CodePrinter() {
+    ofs.close();
 }
 
 void CodePrinter::push_block() {

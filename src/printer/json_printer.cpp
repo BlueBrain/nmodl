@@ -7,10 +7,17 @@
 
 #include "printer/json_printer.hpp"
 #include "utils/logger.hpp"
+#include <iostream>
 
 
 namespace nmodl {
 namespace printer {
+/// By default dump output to std::cout
+JSONPrinter::JSONPrinter()
+    : result(new std::ostream(std::cout.rdbuf())) {}
+// Dump output to stringstream
+JSONPrinter::JSONPrinter(std::ostream& os)
+    : result(new std::ostream(os.rdbuf())) {}
 
 /// Dump output to provided file
 JSONPrinter::JSONPrinter(const std::string& filename) {
@@ -27,6 +34,10 @@ JSONPrinter::JSONPrinter(const std::string& filename) {
 
     sbuf = ofs.rdbuf();
     result = std::make_shared<std::ostream>(sbuf);
+}
+
+JSONPrinter::~JSONPrinter() {
+    flush();
 }
 
 /// Add node to json (typically basic type)
