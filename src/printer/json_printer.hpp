@@ -14,9 +14,8 @@
 
 #include <nlohmann/json.hpp>
 
-#include <fstream>
-#include <iosfwd>
 #include <stack>
+#include <fstream>
 
 namespace nmodl {
 namespace printer {

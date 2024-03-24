@@ -14,6 +14,7 @@
 
 #include <map>
 #include <set>
+#include <sstream>
 #include <stack>
 
 #include "printer/decl.hpp"

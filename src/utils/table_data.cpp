@@ -8,6 +8,7 @@
 #include <cassert>
 #include <iostream>
 #include <numeric>
+#include <sstream>
 
 #include "utils/string_utils.hpp"
 #include "utils/table_data.hpp"

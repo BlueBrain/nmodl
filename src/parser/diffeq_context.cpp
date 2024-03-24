@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <sstream>
 
 #include "lexer/diffeq_lexer.hpp"
 #include "utils/string_utils.hpp"

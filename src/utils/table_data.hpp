@@ -12,7 +12,8 @@
  * \brief Implement generic table data structure
  */
 
-#include <sstream>
+#include <iosfwd>
+#include <string>
 #include <vector>
 
 #include "utils/string_utils.hpp"

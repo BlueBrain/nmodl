@@ -12,7 +12,7 @@
  * \brief Implement class for performance statistics
  */
 
-#include <sstream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 

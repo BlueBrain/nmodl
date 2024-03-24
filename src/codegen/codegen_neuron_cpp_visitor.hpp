@@ -18,8 +18,8 @@
 #include <algorithm>
 #include <cmath>
 #include <ctime>
+#include <iosfwd>
 #include <numeric>
-#include <ostream>
 #include <string>
 #include <string_view>
 #include <utility>

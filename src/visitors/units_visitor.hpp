@@ -12,7 +12,7 @@
  * \brief \copybrief nmodl::visitor::UnitsVisitor
  */
 
-#include <sstream>
+#include <iosfwd>
 #include <string>
 #include <vector>
 

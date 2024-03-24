@@ -526,6 +526,11 @@ void SymbolTable::print(std::ostream& ss, int level) const {
         }
     }
 }
+std::string SymbolTable::to_string() const {
+    std::ostringstream s;
+    print(s, 0);
+    return s.str();
+}
 
 }  // namespace symtab
 }  // namespace nmodl

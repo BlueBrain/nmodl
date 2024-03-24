@@ -15,6 +15,7 @@
  * \brief Implement classes for representing symbol table at block and file scope
  */
 
+#include <iosfwd>
 #include <map>
 #include <memory>
 #include <vector>
@@ -161,11 +162,7 @@ class SymbolTable {
     /// \}
 
     /// convert symbol table to string
-    std::string to_string() const {
-        std::ostringstream s;
-        print(s, 0);
-        return s.str();
-    }
+    std::string to_string() const;
 
     const std::string& name() const noexcept {
         return symtab_name;

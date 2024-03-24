@@ -27,6 +27,7 @@
 /** to include parser's header file, one has to include ast definitions */
  %code requires
  {
+    #include <sstream>
     #include "ast/all.hpp"
  }
 

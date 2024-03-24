@@ -10,6 +10,7 @@
 
 %code requires
 {
+    #include <sstream>
     #include "parser/nmodl/location.hh"
     #include "parser/unit_driver.hpp"
     #include "units/units.hpp"

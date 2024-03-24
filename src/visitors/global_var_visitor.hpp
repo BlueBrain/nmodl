@@ -12,7 +12,7 @@
  * \brief \copybrief nmodl::visitor::GlobalToRangeVisitor
  */
 
-#include <sstream>
+#include <iosfwd>
 #include <string>
 #include <utility>
 #include <vector>

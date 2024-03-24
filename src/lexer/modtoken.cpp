@@ -7,6 +7,7 @@
 
 #include "lexer/modtoken.hpp"
 #include <iostream>
+#include <sstream>
 
 namespace nmodl {
 

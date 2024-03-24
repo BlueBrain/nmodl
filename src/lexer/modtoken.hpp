@@ -9,7 +9,6 @@
 
 #include <iomanip>
 #include <iosfwd>
-#include <sstream>
 #include <string>
 
 #include "parser/nmodl/location.hh"
