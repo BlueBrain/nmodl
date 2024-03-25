@@ -6,6 +6,7 @@
  */
 
 #include <catch2/catch_test_macros.hpp>
+#include <sstream>
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -88,7 +89,16 @@ SCENARIO("Perform loop unrolling of FROM construct", "[visitor][unroll]") {
         )";
         THEN("Loop body gets correctly unrolled") {
             auto result = run_loop_unroll_visitor(input_nmodl);
-            REQUIRE(reindent_text(output_nmodl) == reindent_text(result));
+            if (reindent_text(output_nmodl) != reindent_text(result)) {
+                auto diff = MyersDiff(reindent_text(output_nmodl), reindent_text(result));
+                if (!diff.is_identical()) {
+                    std::ostringstream edits;
+                    for (auto& edit: diff.get_edits()) {
+                        edits << edit << "\n";
+                    }
+                    FAIL(edits.str());
+                }
+            }
         }
     }
 
