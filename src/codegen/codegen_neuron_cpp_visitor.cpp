@@ -842,7 +842,7 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
                       std::to_string(int_variables_size()),
                       ";");
     printer->add_line("static constexpr auto number_of_floating_point_variables = ",
-                      std::to_string(float_variables_size()),
+                      std::to_string(codegen_float_variables.size()),
                       ";");
     printer->add_newline();
     printer->add_multi_line(R"CODE(
