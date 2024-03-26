@@ -116,7 +116,13 @@ target_link_libraries(testunitparser PRIVATE lexer test_util config)
 # Use catch_discover instead of add_test for granular test result reporting.
 # =============================================================================
 set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
-set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
+# workaround for when the user installs all Python dependencies in a virtual env
+execute_process(
+  COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_path('purelib'))"
+  OUTPUT_VARIABLE PYTHON_PURELIB_PATH
+  OUTPUT_STRIP_TRAILING_WHITESPACE)
+set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:${PYTHON_PURELIB_PATH}:$ENV{PYTHONPATH}")
+
 if(NOT LINK_AGAINST_PYTHON)
   list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
 endif()
