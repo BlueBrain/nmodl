@@ -8,8 +8,8 @@
 #include "kinetic_block_visitor.hpp"
 
 #include "ast/all.hpp"
-#include "index_remover.hpp"
 #include "constant_folder_visitor.hpp"
+#include "index_remover.hpp"
 #include "loop_unroll_visitor.hpp"
 #include "symtab/symbol.hpp"
 #include "utils/logger.hpp"
