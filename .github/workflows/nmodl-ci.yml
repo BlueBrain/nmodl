@@ -35,11 +35,28 @@ jobs:
               os: macos-12
           - config:
               os: macos-13
+          # TODO: might be interesting to add the thread sanitizer too
+          - config:
+              os: ubuntu-22.04
+              # Hyphens here will be replaced with commas before the value is
+              # passed to NMODL_SANITIZERS
+              sanitizer: address-leak
           - config:
               os: ubuntu-22.04
               enable_usecases: On
+          - config:
+              flag_warnings: ON
+              os: ubuntu-22.04
+              sanitizer: undefined
       fail-fast: true
     steps:
+      - name: Fix kernel mmap rnd bits
+        # Asan in llvm 14 provided in ubuntu 22.04 is incompatible with
+        # high-entropy ASLR in much newer kernels that GitHub runners are
+        # using leading to random crashes: https://reviews.llvm.org/D148280
+        run: sudo sysctl vm.mmap_rnd_bits=28
+        if: matrix.config.os == 'ubuntu-22.04'
+
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
