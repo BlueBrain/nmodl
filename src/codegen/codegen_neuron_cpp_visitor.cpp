@@ -1251,15 +1251,12 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
-    for (const auto& variable: codegen_float_variables) {
-        if (variable->get_name() ==
-                std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
-            variable->get_name() == std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
-            printer->add_line("int node_id = node_data.nodeindices[id];");
-            printer->add_line("// set conductances properly");
-            printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
-                              variable->get_name());
-        }
+    if (breakpoint_exist()) {
+        printer->add_line("// set conductances properly");
+        printer->add_line("int node_id = node_data.nodeindices[id];");
+        printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
+                          info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                         : naming::CONDUCTANCE_VARIABLE);
     }
 
     printer->pop_block();  // end for
@@ -1603,15 +1600,12 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
 
     printer->add_line("node_data.node_rhs[node_id] -= rhs;");
 
-    for (const auto& variable: codegen_float_variables) {
-        if (variable->get_name() ==
-                std::string(nmodl::codegen::naming::CONDUCTANCE_UNUSED_VARIABLE) ||
-            variable->get_name() == std::string(nmodl::codegen::naming::CONDUCTANCE_VARIABLE)) {
-            printer->fmt_line("inst.{}[id] = g;", variable->get_name());
-        }
+    if (breakpoint_exist()) {
+        printer->add_line("// remember the conductances so we can set them later");
+        printer->fmt_line("inst.{}[id] = g;",
+                          info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                         : naming::CONDUCTANCE_VARIABLE);
     }
-
-
     printer->pop_block();
 
     // if (nrn_cur_reduction_loop_required()) {
