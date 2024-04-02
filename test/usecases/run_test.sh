@@ -15,11 +15,20 @@ pushd "${usecase_dir}"
 # NRN + nocmodl
 rm -r "${output_dir}" tmp || true
 nrnivmodl
-"$(uname -m)/special" -nogui simulate.py
+python simulate.py nocmodl.txt
 
 # NRN + NMODL
 rm -r "${output_dir}" tmp || true
 nrnivmodl -nmodl "${nmodl}"
-"$(uname -m)/special" -nogui simulate.py
+python simulate.py nmodl.txt
+
+# if files are generated, compare them, then remove them
+
+if [[ -f 'nmodl.txt' ]] && [[ -f 'nocmodl.txt' ]]
+then
+    # diff will report a non-zero exit code if they differ
+    diff nocmodl.txt nmodl.txt
+    rm -fr nocmodl.txt nmodl.txt
+fi
 
 popd

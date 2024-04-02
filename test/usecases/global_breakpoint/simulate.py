@@ -1,6 +1,8 @@
-import numpy as np
+import sys
 
-from neuron import h, gui
+import numpy as np
+from neuron import gui
+from neuron import h
 from neuron.units import ms
 
 nseg = 1
@@ -24,4 +26,8 @@ x_exact[0] = 42
 abs_err = np.abs(x - x_exact)
 
 assert np.all(abs_err < 1e-12), f"{abs_err=}"
+
+if len(sys.argv) > 1:
+    np.savetxt(f"{sys.argv[1]}", np.transpose([t, x]))
+
 print("leonhard: success")

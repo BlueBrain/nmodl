@@ -1,6 +1,8 @@
-import numpy as np
+import sys
 
-from neuron import h, gui
+import numpy as np
+from neuron import gui
+from neuron import h
 from neuron.units import ms
 
 nseg = 1
@@ -26,4 +28,9 @@ v_exact = erev + (v0 - erev) * np.exp(-rate * t)
 rel_err = np.abs(v - v_exact) / np.max(np.abs(v_exact))
 
 assert np.all(rel_err < 1e-1), f"rel_err = {rel_err}"
+
+
+if len(sys.argv) > 1:
+    np.savetxt(f"{sys.argv[1]}", np.transpose([t, v]))
+
 print("leonhard: success")
