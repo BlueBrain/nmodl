@@ -478,6 +478,162 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock& node) {
     kinetic_blocks.push_back(&node);
 }
 
+class LocalRateNames {
+    const std::string kf_stem = "kf";
+    const std::string kb_stem = "kb";
+    const std::string source_stem = "source";
+
+    std::shared_ptr<ast::Name> generate_local_name(const std::string& stem) {
+        auto name = std::make_shared<ast::Name>(
+            std::make_shared<ast::String>(fmt::format("{}{}_", stem, n_equations)));
+        local_names.push_back(name);
+
+        return name;
+    }
+
+  public:
+    std::shared_ptr<ast::Name> generate_forward_rate_name() {
+        auto kf = generate_local_name(kf_stem);
+        ++n_equations;
+
+        return kf;
+    }
+
+    std::pair<std::shared_ptr<ast::Name>, std::shared_ptr<ast::Name>> generate_rate_names() {
+        auto kf = generate_local_name(kf_stem);
+        auto kb = generate_local_name(kb_stem);
+        ++n_equations;
+
+        return {kf, kb};
+    }
+
+    std::shared_ptr<ast::Name> generate_source_name() {
+        auto source = generate_local_name(source_stem);
+        ++n_equations;
+
+        return source;
+    }
+
+    ast::LocalVarVector get_local_variables() {
+        ast::LocalVarVector locals;
+        for (const auto& name: local_names) {
+            locals.push_back(std::make_shared<ast::LocalVar>(name));
+        }
+        return locals;
+    }
+
+  private:
+    size_t n_equations = 0;
+    std::vector<std::shared_ptr<ast::Name>> local_names;
+};
+
+class LocalizeKineticRatesVisitor: public AstVisitor {
+  public:
+    LocalRateNames local_names;
+
+  private:
+    std::shared_ptr<ast::ExpressionStatement> localize_expression(
+        const std::shared_ptr<ast::Name>& name,
+        const std::shared_ptr<ast::Expression>& expression) {
+        auto local = std::make_shared<ast::BinaryExpression>(name,
+                                                             ast::BinaryOperator(ast::BOP_ASSIGN),
+                                                             expression);
+        return std::make_shared<ast::ExpressionStatement>(local);
+    }
+
+    template <class Node>
+    std::shared_ptr<Node> clone(const Node& node) {
+        return std::shared_ptr<Node>(node.clone());
+    }
+
+  public:
+
+    void visit_kinetic_block(ast::KineticBlock& node) {
+        // process the statement block first.
+        node.visit_children(*this);
+
+        // We now know the names of the created LOCAL variables. If a LOCAL
+        // block exists, append to that, otherwise create a new one.
+        auto locals = local_names.get_local_variables();
+
+        auto stmt_block = node.get_statement_block();
+        const auto& stmts = stmt_block->get_statements();
+
+        auto it = std::find_if(stmts.cbegin(), stmts.cend(), [](const auto& stmt) {
+            return stmt->is_local_list_statement();
+        });
+
+        if (it != stmts.cend()) {
+            auto local_block = std::dynamic_pointer_cast<ast::LocalListStatement>(*it);
+            for (const auto& local: locals) {
+                local_block->emplace_back_local_var(local);
+            }
+        } else {
+            auto local_stmt = std::make_shared<ast::LocalListStatement>(locals);
+            stmt_block->insert_statement(stmts.cbegin(), local_stmt);
+        }
+    }
+
+
+    void visit_statement_block(ast::StatementBlock& node) {
+        // process any nested statement blocks first:
+        node.visit_children(*this);
+
+        // process all reaction equations:
+        const auto& statements = node.get_statements();
+        for (auto iter = statements.begin(); iter != statements.end(); ++iter) {
+            if ((*iter)->is_reaction_statement()) {
+                auto reaction_equation = std::dynamic_pointer_cast<ast::ReactionStatement>(*iter);
+                auto op = reaction_equation->get_op();
+
+                ast::StatementVector localized_statements;
+
+                auto local_expr1 = reaction_equation->get_expression1();
+                auto local_expr2 = reaction_equation->get_expression2();
+
+                std::shared_ptr<ast::Name> expr1_name = nullptr;
+                std::shared_ptr<ast::Name> expr2_name = nullptr;
+
+                if (op.get_value() == ast::LTLT) {
+                    expr1_name = local_names.generate_source_name();
+                } else if (op.get_value() == ast::LTMINUSGT) {
+                    std::tie(expr1_name, expr2_name) = local_names.generate_rate_names();
+                } else if (op.get_value() == ast::MINUSGT) {
+                    expr1_name = local_names.generate_forward_rate_name();
+                }
+
+                if (local_expr1) {
+                    auto assignment = localize_expression(clone(*expr1_name),
+                                                          reaction_equation->get_expression1());
+                    localized_statements.push_back(assignment);
+                    local_expr1 = clone(*expr1_name);
+                }
+
+                if (local_expr2) {
+                    auto assignment = localize_expression(clone(*expr2_name),
+                                                          reaction_equation->get_expression2());
+                    localized_statements.push_back(assignment);
+                    local_expr2 = clone(*expr2_name);
+                }
+
+                auto local_reaction =
+                    std::make_shared<ast::ReactionStatement>(reaction_equation->get_reaction1(),
+                                                             reaction_equation->get_op(),
+                                                             reaction_equation->get_reaction2(),
+                                                             local_expr1,
+                                                             local_expr2);
+                localized_statements.push_back(local_reaction);
+
+                iter = node.erase_statement(iter);
+                for (const auto& stmt: localized_statements) {
+                    iter = node.insert_statement(iter, stmt);
+                }
+            }
+        }
+    }
+};
+
+
 void KineticBlockVisitor::unroll_kinetic_blocks(ast::Program& node) {
     const auto& kineticBlockNodes = collect_nodes(node, {ast::AstNodeType::KINETIC_BLOCK});
 
@@ -508,6 +664,9 @@ void KineticBlockVisitor::unroll_kinetic_blocks(ast::Program& node) {
     for (const auto& ii: kineticBlockNodes) {
         ii->accept(const_folder);
     }
+
+    auto visitor = LocalizeKineticRatesVisitor{};
+    node.accept(visitor);
 }
 
 void KineticBlockVisitor::visit_program(ast::Program& node) {
