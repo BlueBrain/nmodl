@@ -479,19 +479,42 @@ void KineticBlockVisitor::visit_kinetic_block(ast::KineticBlock& node) {
 }
 
 class LocalRateNames {
-    const std::string kf_stem = "kf";
-    const std::string kb_stem = "kb";
-    const std::string source_stem = "source";
+    static constexpr auto kf_stem = "kf";
+    static constexpr auto kb_stem = "kb";
+    static constexpr auto source_stem = "source";
 
     std::shared_ptr<ast::Name> generate_local_name(const std::string& stem) {
-        auto name = std::make_shared<ast::Name>(
-            std::make_shared<ast::String>(fmt::format("{}{}_", stem, n_equations)));
-        local_names.push_back(name);
+        std::string unmangled_name = fmt::format("{}{}_", stem, n_equations);
+        std::string mangled_name = unmangled_name;
+
+        size_t mangle_attempt = 0;
+        while (symtab->lookup_in_scope(mangled_name) ||
+               std::find(local_names.begin(), local_names.end(), mangled_name) !=
+                   local_names.end()) {
+            mangled_name = fmt::format("{}{:04d}", unmangled_name, mangle_attempt++);
+
+            if (mangle_attempt >= 10000) {
+                throw std::runtime_error("Failed to find unique local name.");
+            }
+        }
+
+        auto name = std::make_shared<ast::Name>(std::make_shared<ast::String>(mangled_name));
+        local_names.push_back(mangled_name);
 
         return name;
     }
 
   public:
+    LocalRateNames() = default;
+    LocalRateNames(const LocalRateNames&) = default;
+    LocalRateNames(LocalRateNames&&) = default;
+
+    LocalRateNames(symtab::SymbolTable const* symtab)
+        : symtab(symtab) {}
+
+    LocalRateNames& operator=(const LocalRateNames&) = default;
+    LocalRateNames& operator=(LocalRateNames&&) = default;
+
     std::shared_ptr<ast::Name> generate_forward_rate_name() {
         auto kf = generate_local_name(kf_stem);
         ++n_equations;
@@ -514,17 +537,14 @@ class LocalRateNames {
         return source;
     }
 
-    ast::LocalVarVector get_local_variables() {
-        ast::LocalVarVector locals;
-        for (const auto& name: local_names) {
-            locals.push_back(std::make_shared<ast::LocalVar>(name));
-        }
-        return locals;
+    std::vector<std::string> get_local_variable_names() {
+        return local_names;
     }
 
   private:
     size_t n_equations = 0;
-    std::vector<std::shared_ptr<ast::Name>> local_names;
+    std::vector<std::string> local_names;
+    symtab::SymbolTable const* symtab = nullptr;
 };
 
 class LocalizeKineticRatesVisitor: public AstVisitor {
@@ -547,30 +567,19 @@ class LocalizeKineticRatesVisitor: public AstVisitor {
     }
 
   public:
-
     void visit_kinetic_block(ast::KineticBlock& node) {
+        auto stmt_block = node.get_statement_block();
+        local_names = LocalRateNames(stmt_block->get_symbol_table());
+
         // process the statement block first.
         node.visit_children(*this);
 
         // We now know the names of the created LOCAL variables. If a LOCAL
         // block exists, append to that, otherwise create a new one.
-        auto locals = local_names.get_local_variables();
+        auto locals = local_names.get_local_variable_names();
 
-        auto stmt_block = node.get_statement_block();
-        const auto& stmts = stmt_block->get_statements();
-
-        auto it = std::find_if(stmts.cbegin(), stmts.cend(), [](const auto& stmt) {
-            return stmt->is_local_list_statement();
-        });
-
-        if (it != stmts.cend()) {
-            auto local_block = std::dynamic_pointer_cast<ast::LocalListStatement>(*it);
-            for (const auto& local: locals) {
-                local_block->emplace_back_local_var(local);
-            }
-        } else {
-            auto local_stmt = std::make_shared<ast::LocalListStatement>(locals);
-            stmt_block->insert_statement(stmts.cbegin(), local_stmt);
+        for (const auto& local: locals) {
+            add_local_variable(*stmt_block, local);
         }
     }
 
@@ -626,8 +635,11 @@ class LocalizeKineticRatesVisitor: public AstVisitor {
 
                 iter = node.erase_statement(iter);
                 for (const auto& stmt: localized_statements) {
-                    iter = node.insert_statement(iter, stmt);
+                    // `iter` points to the element after the one
+                    // we've inserted.
+                    iter = ++node.insert_statement(iter, stmt);
                 }
+                --iter;
             }
         }
     }
