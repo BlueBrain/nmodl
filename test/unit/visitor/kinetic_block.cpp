@@ -475,6 +475,32 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
             REQUIRE(result[0] == reindent_text(output_nmodl_text));
         }
     }
+    GIVEN("KINETIC block with one reaction statement & clashing local") {
+        std::string input_nmodl_text = R"(
+            ASSIGNED {
+                kf0_
+            }
+            STATE {
+                x y
+            }
+            KINETIC states {
+                LOCAL kf0_0000, kb0_0000
+                ~ x <-> y (kf0_, b)
+            })";
+        std::string output_nmodl_text = R"(
+            DERIVATIVE states {
+                LOCAL kf0_0000, kb0_0000, kf0_0001, kb0_
+                kf0_0001 = kf0_
+                kb0_ = b
+                x' = (-1*(kf0_0001*x-kb0_*y))
+                y' = (1*(kf0_0001*x-kb0_*y))
+            })";
+        THEN("Convert to equivalent DERIVATIVE block") {
+            auto result = run_kinetic_block_visitor(input_nmodl_text);
+            CAPTURE(input_nmodl_text);
+            REQUIRE(result[0] == reindent_text(output_nmodl_text));
+        }
+    }
     GIVEN("KINETIC block with one reaction statement & 2 COMPARTMENT statements") {
         std::string input_nmodl_text = R"(
             STATE {
