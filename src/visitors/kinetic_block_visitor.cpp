@@ -488,9 +488,7 @@ class LocalRateNames {
         std::string mangled_name = unmangled_name;
 
         size_t mangle_attempt = 0;
-        while (symtab->lookup_in_scope(mangled_name) ||
-               std::find(local_names.begin(), local_names.end(), mangled_name) !=
-                   local_names.end()) {
+        while (symtab->lookup_in_scope(mangled_name)) {
             mangled_name = fmt::format("{}{:04d}", unmangled_name, mangle_attempt++);
 
             if (mangle_attempt >= 10000) {
