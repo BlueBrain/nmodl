@@ -292,8 +292,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = r
                 kf0_ = r
+                kb0_ = r
                 c1 = kf0_*x-kb0_*c
                 x' = (-1*(kf0_*x-kb0_*c))
             })";
@@ -314,8 +314,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 x' = (-1*(kf0_*x-kb0_*y))
                 y' = (1*(kf0_*x-kb0_*y))
             })";
@@ -337,8 +337,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 CONSERVE y = 0-x
                 x' = (-1*(kf0_*x-kb0_*y))
                 y' = (1*(kf0_*x-kb0_*y))
@@ -364,10 +364,10 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
-                kb0_ = b
                 kf0_ = a
-                kb1_ = d
+                kb0_ = b
                 kf1_ = c
+                kb1_ = d
                 CONSERVE x[2] = 1-y-x[0]-x[1]
                 x'[0] = (-1*(kf0_*x[0]-kb0_*x[1]))
                 x'[1] = (1*(kf0_*x[0]-kb0_*x[1]))
@@ -397,10 +397,10 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
-                kb0_ = b
                 kf0_ = a
-                kb1_ = d
+                kb0_ = b
                 kf1_ = c
+                kb1_ = d
                 CONSERVE y = 1-x[0]-x[1]-x[2]
                 x'[0] = (-1*(kf0_*x[0]-kb0_*x[1]))
                 x'[1] = (1*(kf0_*x[0]-kb0_*x[1]))
@@ -427,8 +427,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 x' = ((-1*(kf0_*x-kb0_*y)))/(c-d)
                 y' = ((1*(kf0_*x-kb0_*y)))/(c-d)
             })";
@@ -455,12 +455,12 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
             DERIVATIVE ihkin {
                 LOCAL kf0_, kb0_, kf1_, kb1_, kf2_, kb2_
                 evaluate_fct(v, cai)
-                kb0_ = beta
                 kf0_ = alpha
-                kb1_ = k2
+                kb0_ = beta
                 kf1_ = k1ca
-                kb2_ = k4
+                kb1_ = k2
                 kf2_ = k3p
+                kb2_ = k4
                 CONSERVE p1 = 1-p0
                 CONSERVE o2 = 1-c1-o1
                 c1' = (-1*(kf0_*c1-kb0_*o1))
@@ -514,8 +514,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 x' = ((-1*(kf0_*x-kb0_*y)))/(cx)
                 y' = ((1*(kf0_*x-kb0_*y)))/(cy)
             })";
@@ -537,10 +537,10 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
-                kb0_ = b
                 kf0_ = a
-                kb1_ = d
+                kb0_ = b
                 kf1_ = c
+                kb1_ = d
                 w' = (-1*(kf1_*w-kb1_*z))
                 x' = (-1*(kf0_*x-kb0_*y))
                 y' = (1*(kf0_*x-kb0_*y))
@@ -564,10 +564,10 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
-                kb0_ = b
                 kf0_ = a
-                kb1_ = d
+                kb0_ = b
                 kf1_ = c
+                kb1_ = d
                 x' = (-1*(kf0_*x-kb0_*y))
                 y' = (1*(kf0_*x-kb0_*y))+(-1*(kf1_*y-kb1_*z))
                 z' = (1*(kf1_*y-kb1_*z))
@@ -594,11 +594,11 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
                 c0 = 0
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 c1 = kf0_*x+kb0_*y
-                kb1_ = d
                 kf1_ = c
+                kb1_ = d
                 c2 = kf1_*y-2*kb1_*z
                 x' = (-1*(kf0_*x-kb0_*y))
                 y' = (1*(kf0_*x-kb0_*y))+(-1*(kf1_*y-kb1_*z))
@@ -621,8 +621,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 x' = (-2*(kf0_*x*x-kb0_*y))
                 y' = (1*(kf0_*x*x-kb0_*y))
             })";
@@ -643,8 +643,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b
                 kf0_ = a
+                kb0_ = b
                 x' = (-2*(kf0_*x*x-kb0_*y))
                 y' = (1*(kf0_*x*x-kb0_*y))
             })";
@@ -666,8 +666,8 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_
-                kb0_ = b(v)
                 kf0_ = a(v)
+                kb0_ = b(v)
                 mc' = (-1*(kf0_*mc-kb0_*m))
                 m' = (1*(kf0_*mc-kb0_*m))
             })";
@@ -690,10 +690,10 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
         std::string output_nmodl_text = R"(
             DERIVATIVE states {
                 LOCAL kf0_, kb0_, kf1_, kb1_
-                kb0_ = k2
                 kf0_ = k1
-                kb1_ = k4
+                kb0_ = k2
                 kf1_ = k3
+                kb1_ = k4
                 A' = (-2*(kf0_*A*A*B-kb0_*C))+(1*(kf1_*C*D-kb1_*A*B*B))
                 B' = (-1*(kf0_*A*A*B-kb0_*C))+(2*(kf1_*C*D-kb1_*A*B*B))
                 C' = (1*(kf0_*A*A*B-kb0_*C))+(-1*(kf1_*C*D-kb1_*A*B*B))
@@ -730,14 +730,14 @@ SCENARIO("Convert KINETIC to DERIVATIVE using KineticBlock visitor", "[kinetic][
                 LOCAL kf0_, kb0_, kf1_, kb1_, kf2_, kb2_, kf3_, kb3_, source4_, kf5_
                 source4_ = a
                 {
-                    kb0_ = c[0]
                     kf0_ = b[0]
-                    kb1_ = c[1]
+                    kb0_ = c[0]
                     kf1_ = b[1]
-                    kb2_ = c[2]
+                    kb1_ = c[1]
                     kf2_ = b[2]
-                    kb3_ = c[3]
+                    kb2_ = c[2]
                     kf3_ = b[3]
+                    kb3_ = c[3]
                 }
                 kf5_ = d
                 x'[0] = (source4_)+(-1*(kf0_*x[0]-kb0_*x[1]))
