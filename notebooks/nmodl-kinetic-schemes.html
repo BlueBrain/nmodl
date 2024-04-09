@@ -330,8 +330,11 @@ m
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE kin {
-    h&#39; = (-1*(a*h-b*m))
-    m&#39; = (1*(a*h-b*m))
+    LOCAL kf0_, kb0_
+    kf0_ = a
+    kb0_ = b
+    h&#39; = (-1*(kf0_*h-kb0_*m))
+    m&#39; = (1*(kf0_*h-kb0_*m))
 }
 </pre></div></div>
 </div>
@@ -361,7 +364,9 @@ DERIVATIVE kin {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE kin {
-    x&#39; = (-1*(a*x))
+    LOCAL kf0_
+    kf0_ = a
+    x&#39; = (-1*(kf0_*x))
 }
 </pre></div></div>
 </div>
@@ -391,7 +396,9 @@ DERIVATIVE kin {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE kin {
-    x&#39; = (a)
+    LOCAL source0_
+    source0_ = a
+    x&#39; = (source0_)
 }
 </pre></div></div>
 </div>
@@ -422,7 +429,10 @@ DERIVATIVE kin {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE kin {
-    x&#39; = (a)+(-1*(b*x))
+    LOCAL source0_, kf1_
+    source0_ = a
+    kf1_ = b
+    x&#39; = (source0_)+(-1*(kf1_*x))
 }
 </pre></div></div>
 </div>
@@ -456,12 +466,16 @@ DERIVATIVE kin {
 <div class="output_area docutils container">
 <div class="highlight"><pre>
 DERIVATIVE kin {
-    f = a*x-b*y
-    g = c*z
+    LOCAL kf0_, kb0_, kf1_
+    kf0_ = a
+    kb0_ = b
+    f = kf0_*x-kb0_*y
+    kf1_ = c
+    g = kf1_*z
     h = 0
-    x&#39; = (-1*(a*x-b*y))
-    y&#39; = (1*(a*x-b*y))
-    z&#39; = (-1*(c*z))
+    x&#39; = (-1*(kf0_*x-kb0_*y))
+    y&#39; = (1*(kf0_*x-kb0_*y))
+    z&#39; = (-1*(kf1_*z))
 }
 </pre></div></div>
 </div>
