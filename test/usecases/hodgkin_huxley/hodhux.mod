@@ -22,8 +22,6 @@ UNITS {
  
 NEURON {
         SUFFIX hodhux
-        USEION na READ ena WRITE ina
-        USEION k READ ek WRITE ik
         NONSPECIFIC_CURRENT il
         RANGE gnabar, gkbar, gl, el
         RANGE minf, hinf, ninf, mexp, hexp, nexp
@@ -34,9 +32,7 @@ PARAMETER {
         celsius = 6.3 (degC)
         dt (ms)
         gnabar = .12 (mho/cm2)
-        ena = 50 (mV)
         gkbar = .036 (mho/cm2)
-        ek = -77.5 (mV)
         gl = .0003 (mho/cm2)
         el = -54.3 (mV)
 }
@@ -46,16 +42,12 @@ STATE {
 }
  
 ASSIGNED {
-        ina (mA/cm2)
-        ik (mA/cm2)
         il (mA/cm2)
         minf hinf ninf mexp hexp nexp
 }
  
 BREAKPOINT {
         SOLVE states
-        ina = gnabar*m*m*m*h*(v - ena)
-        ik = gkbar*n*n*n*n*(v - ek)      
         il = gl*(v - el)
 }
  
