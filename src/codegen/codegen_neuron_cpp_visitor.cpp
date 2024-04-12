@@ -1376,6 +1376,13 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                                   ion.name,
                                   ion.variable_index(ion_var_name));
             }
+            // assign derivatives of the current as well
+            else if (ion.is_current_derivative(ion_var_name)) {
+                printer->fmt_line("_ppvar[{}] = _nrn_mechanism_get_param_handle({}_prop, {});",
+                                  i,
+                                  ion.name,
+                                  ion.variable_index(ion_var_name));
+            }
             //}
         }
     }
