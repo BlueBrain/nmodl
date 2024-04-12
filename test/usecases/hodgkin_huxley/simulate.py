@@ -29,4 +29,3 @@ plt.plot(t, v)
 plt.ylabel("Voltage [mV]")
 plt.xlabel("Time [ms]")
 plt.savefig("spiking_neuron.png", dpi=300)
-
