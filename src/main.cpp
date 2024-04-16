@@ -290,7 +290,7 @@ int main(int argc, const char* argv[]) {
     fs::create_directories(output_dir);
     fs::create_directories(scratch_dir);
 
-    if (sympy_opt->parsed()) {
+    if (app.got_subcommand(sympy_opt)) {
         nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
             .api()
             ->initialize_interpreter();
@@ -580,7 +580,7 @@ int main(int argc, const char* argv[]) {
         }
     }
 
-    if (sympy_opt->parsed()) {
+    if (app.got_subcommand(sympy_opt)) {
         nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api()->finalize_interpreter();
     }
 }
