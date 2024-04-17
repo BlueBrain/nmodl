@@ -13,6 +13,9 @@
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x)  STRINGIFY(x)
+
 namespace fs = std::filesystem;
 
 namespace nmodl {
@@ -45,6 +48,23 @@ void EmbeddedPythonLoader::load_libraries() {
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlopen");
     }
+
+    // This code is imported from PyBind11 because this is primarly in details for internal usage
+    // License of PyBind11 is BSD-style
+    {
+        const char* compiled_ver = TOSTRING(PY_MAJOR_VERSION) "." TOSTRING(PY_MINOR_VERSION);
+        const char* (*fun)(void) = (const char* (*) (void) ) dlsym(pylib_handle, "Py_GetVersion");
+        const char* runtime_ver = fun();
+        std::size_t len = std::strlen(compiled_ver);
+        if (std::strncmp(runtime_ver, compiled_ver, len) != 0 ||
+            (runtime_ver[len] >= '0' && runtime_ver[len] <= '9')) {
+            logger->critical("nmodl has been compiled with python {} and is run with python {}",
+                             compiled_ver,
+                             runtime_ver);
+            throw std::runtime_error("Python version mismatch between compile-time and runtime.");
+        }
+    }
+
     if (std::getenv("NMODLHOME") == nullptr) {
         logger->critical("NMODLHOME environment variable must be set to load embedded python");
         throw std::runtime_error("NMODLHOME not set");
