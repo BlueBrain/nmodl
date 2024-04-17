@@ -52,15 +52,20 @@ void EmbeddedPythonLoader::load_libraries() {
     // This code is imported from PyBind11 because this is primarly in details for internal usage
     // License of PyBind11 is BSD-style
     {
-        const char* compiled_ver = TOSTRING(PY_MAJOR_VERSION) "." TOSTRING(PY_MINOR_VERSION);
+        std::string compiled_ver = fmt::format("{}.{}", PY_MAJOR_VERSION, PY_MINOR_VERSION);
         const char* (*fun)(void) = (const char* (*) (void) ) dlsym(pylib_handle, "Py_GetVersion");
+        if (fun == nullptr) {
+            logger->critical("Unable to find the function `Py_GetVersion`");
+            throw std::runtime_error("Unable to find the function `Py_GetVersion`");
+        }
         const char* runtime_ver = fun();
-        std::size_t len = std::strlen(compiled_ver);
-        if (std::strncmp(runtime_ver, compiled_ver, len) != 0 ||
+        std::size_t len = compiled_ver.size();
+        if (std::strncmp(runtime_ver, compiled_ver.c_str(), len) != 0 ||
             (runtime_ver[len] >= '0' && runtime_ver[len] <= '9')) {
-            logger->critical("nmodl has been compiled with python {} and is run with python {}",
-                             compiled_ver,
-                             runtime_ver);
+            logger->critical(
+                "nmodl has been compiled with python {} and is being run with python {}",
+                compiled_ver,
+                runtime_ver);
             throw std::runtime_error("Python version mismatch between compile-time and runtime.");
         }
     }
