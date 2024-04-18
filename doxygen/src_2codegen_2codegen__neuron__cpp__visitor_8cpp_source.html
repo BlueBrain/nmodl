@@ -1125,8 +1125,8 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__neuron__cpp__vi
 <div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;    printer-&gt;add_newline();</div>
 <div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160; </div>
 <div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;    printer-&gt;fmt_line(<span class="stringliteral">&quot;hoc_register_prop_size(mech_type, {}, {});&quot;</span>,</div>
-<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;                      codegen_float_variables_size,</div>
-<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;                      codegen_int_variables_size);</div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;                      float_variables_size(),</div>
+<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;                      int_variables_size());</div>
 <div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160; </div>
 <div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; codegen_int_variables_size; ++i) {</div>
 <div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span>&amp; int_var = codegen_int_variables[i];</div>
@@ -1754,7 +1754,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__neuron__cpp__vi
 <div class="line"><a name="l01658"></a><span class="lineno"> 1658</span>&#160;                      <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">std::to_string</a>(int_variables_size()),</div>
 <div class="line"><a name="l01659"></a><span class="lineno"> 1659</span>&#160;                      <span class="stringliteral">&quot;;&quot;</span>);</div>
 <div class="line"><a name="l01660"></a><span class="lineno"> 1660</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;static constexpr auto number_of_floating_point_variables = &quot;</span>,</div>
-<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;                      <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">std::to_string</a>(float_variables_size()),</div>
+<div class="line"><a name="l01661"></a><span class="lineno"> 1661</span>&#160;                      <a class="code" href="namespacenmodl_1_1symtab_1_1syminfo.html#a9615978047cc9d7b43df2f549f2baffe">std::to_string</a>(codegen_float_variables.size()),</div>
 <div class="line"><a name="l01662"></a><span class="lineno"> 1662</span>&#160;                      <span class="stringliteral">&quot;;&quot;</span>);</div>
 <div class="line"><a name="l01663"></a><span class="lineno"> 1663</span>&#160;    printer-&gt;add_newline();</div>
 <div class="line"><a name="l01664"></a><span class="lineno"> 1664</span>&#160;    printer-&gt;add_multi_line(R<span class="stringliteral">&quot;CODE(</span></div>
