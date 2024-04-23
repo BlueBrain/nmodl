@@ -24,7 +24,11 @@ test_wheel () {
     TEST_DIR="$(mktemp -d)"
     OUTPUT_DIR="$(mktemp -d)"
     cp "${this_dir}/../python/nmodl/ext/example/"*.mod "$TEST_DIR/"
-    cp "${this_dir}/../test/integration/mod/cabpump.mod" "${this_dir}/../test/integration/mod/var_init.inc" "$TEST_DIR/"
+    cp "${this_dir}/../test/integration/mod/cabpump.mod" \
+       "${this_dir}/../test/integration/mod/var_init.inc" \
+       "${this_dir}/../test/integration/mod/glia_sparse.mod" \
+       "$TEST_DIR/"
+
     for mod in "${TEST_DIR}/"*.mod
     do
         nmodl -o "${OUTPUT_DIR}" "${mod}" sympy --analytic
