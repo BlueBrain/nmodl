@@ -30,11 +30,11 @@ BREAKPOINT {
 }
 
 FUNCTION alfa(v(mV)) {
-    alfa = Q10*Aalfa*exp(v/Valfa)
+    alfa = Aalfa*exp(v/Valfa)
 }
 
 FUNCTION beta(v(mV)) {
-    beta = Q10*Abeta*exp(-v/Vbeta)
+    beta = Abeta*exp(-v/Vbeta)
 }
 
 KINETIC kstates {
