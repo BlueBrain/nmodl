@@ -1,9 +1,4 @@
 : Example of MOD file using sparse solver
-: Note that this file with path `test/integration/mod/glia_sparse.mod`
-:      is used in NEURON for integration testing. If you change path
-:      or remove it then you need to also change `test_wheels.sh` in
-:      NEURON.
-
 
 NEURON {
     SUFFIX glia
