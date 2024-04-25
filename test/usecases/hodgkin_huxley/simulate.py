@@ -1,8 +1,6 @@
 import numpy as np
 
-import matplotlib.pyplot as plt
-
-from neuron import h, gui
+from neuron import gui, h
 from neuron.units import ms
 
 nseg = 1
@@ -24,8 +22,3 @@ h.run()
 
 v = np.array(v_hoc.as_numpy())
 t = np.array(t_hoc.as_numpy())
-
-plt.plot(t, v)
-plt.ylabel("Voltage [mV]")
-plt.xlabel("Time [ms]")
-plt.savefig("spiking_neuron.png", dpi=300)
