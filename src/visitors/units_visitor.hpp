@@ -12,9 +12,7 @@
  * \brief \copybrief nmodl::visitor::UnitsVisitor
  */
 
-#include <sstream>
 #include <string>
-#include <vector>
 
 #include "parser/unit_driver.hpp"
 #include "visitors/ast_visitor.hpp"
