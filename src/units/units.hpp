@@ -15,16 +15,6 @@
  * \brief Classes for storing different units specification
  */
 
-#include <array>
-#include <cmath>
-#include <iomanip>
-#include <regex>
-#include <iosfwd>
-#include <string>
-#include <unordered_map>
-#include <utility>
-#include <vector>
-
 
 namespace nmodl {
 /// encapsulates unit database and tables implementation

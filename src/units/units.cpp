@@ -5,13 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <array>
 #include <cassert>
-#include <ostream>
-#include <regex>
 #include <sstream>
-#include <string>
-#include <vector>
 
 #include "units.hpp"
 #include <fmt/format.h>
