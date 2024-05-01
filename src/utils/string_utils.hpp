@@ -17,8 +17,6 @@
 
 #include <algorithm>
 #include <cctype>
-#include <cmath>
-#include <functional>
 #include <sstream>
 #include <vector>
 
