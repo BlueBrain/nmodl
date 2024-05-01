@@ -16,8 +16,6 @@
  */
 
 #include <map>
-#include <memory>
-#include <vector>
 
 #include "symtab/symbol.hpp"
 

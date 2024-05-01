@@ -14,8 +14,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <memory>
-#include <sstream>
 
 namespace nmodl {
 namespace printer {

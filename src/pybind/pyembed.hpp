@@ -9,8 +9,6 @@
 
 
 #include <set>
-#include <string>
-#include <vector>
 
 namespace nmodl {
 namespace pybind_wrappers {

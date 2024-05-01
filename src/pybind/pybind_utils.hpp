@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <memory>
 #include <pybind11/iostream.h>
 
 

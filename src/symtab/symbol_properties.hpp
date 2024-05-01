@@ -12,8 +12,6 @@
  * \brief Implement various classes to represent various Symbol properties
  */
 
-#include <iosfwd>
-
 #include "utils/string_utils.hpp"
 
 

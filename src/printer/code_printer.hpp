@@ -18,8 +18,6 @@
 
 #include <fstream>
 #include <iostream>
-#include <memory>
-#include <sstream>
 
 namespace nmodl {
 /// implementation of various printers
