@@ -16,11 +16,6 @@
  * \brief Visitors extending base visitors for Python interface
  */
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
-#include "ast/ast.hpp"
-#include "visitors/visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 
 using namespace nmodl;

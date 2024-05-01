@@ -19,7 +19,6 @@
 #include <set>
 
 #include "symtab/symbol_table.hpp"
-#include "visitors/ast_visitor.hpp"
 #include "visitors/json_visitor.hpp"
 
 namespace nmodl {

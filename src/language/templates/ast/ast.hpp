@@ -19,14 +19,10 @@
  * \brief Auto generated AST classes declaration
  */
 
-#include <vector>
 #include <unordered_set>
 
-#include "ast/ast_decl.hpp"
 #include "ast/ast_common.hpp"
-#include "lexer/modtoken.hpp"
 #include "utils/common_utils.hpp"
-#include "visitors/visitor.hpp"
 
 namespace nmodl::ast {
 
