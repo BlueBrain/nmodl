@@ -13,13 +13,8 @@
  */
 
 #include <fmt/format.h>
-#include <string>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
 
 #include "ast/ast.hpp"
-#include "symtab/symbol_table.hpp"
 
 
 namespace nmodl {

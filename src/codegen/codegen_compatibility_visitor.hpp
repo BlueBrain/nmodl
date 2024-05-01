@@ -12,13 +12,10 @@
  * \brief \copybrief nmodl::codegen::CodegenCompatibilityVisitor
  */
 
-#include <map>
 #include <set>
 
 #include "ast/ast.hpp"
 #include "codegen_naming.hpp"
-#include "lexer/modtoken.hpp"
-#include "symtab/symbol_table.hpp"
 #include "utils/logger.hpp"
 #include "visitors/ast_visitor.hpp"
 

@@ -12,10 +12,7 @@
  * \brief \copybrief nmodl::codegen::CodegenHelperVisitor
  */
 
-#include <string>
-
 #include "codegen/codegen_info.hpp"
-#include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
