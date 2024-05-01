@@ -19,7 +19,6 @@
  * \brief Auto generated AST classes declaration
  */
 
-#include <string>
 #include <vector>
 #include <unordered_set>
 

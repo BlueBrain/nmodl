@@ -5,9 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <string>
-#include <unordered_map>
-#include <vector>
 
 #include "codegen/codegen_naming.hpp"
 #include "symtab/symbol_properties.hpp"

@@ -17,7 +17,7 @@
 
 #include <algorithm>
 #include <cctype>
-#include <sstream>
+#include <sstream> // includes std::string
 #include <vector>
 
 namespace nmodl {

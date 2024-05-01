@@ -15,7 +15,6 @@
  * \brief Implementation of AST base class and it's properties
  */
 
-#include <memory>
 #include <string>
 
 #include "ast/ast_decl.hpp"

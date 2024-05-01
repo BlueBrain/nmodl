@@ -12,7 +12,7 @@
  * \brief Implement various classes to represent various Symbol properties
  */
 
-#include <sstream>
+#include <iosfwd>
 
 #include "utils/string_utils.hpp"
 

@@ -12,7 +12,6 @@
  * \brief Implement class to represent a symbol in Symbol Table
  */
 
-#include <map>
 #include <memory>
 
 #include "ast/ast_decl.hpp"
