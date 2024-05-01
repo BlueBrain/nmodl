@@ -11,10 +11,6 @@
 
 #include "visitors/symtab_visitor.hpp"
 
-#include <pybind11/iostream.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 #include "ast/all.hpp"
 #include "pybind/pybind_utils.hpp"
 #include "symtab/symbol.hpp"

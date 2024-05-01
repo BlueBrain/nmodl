@@ -12,9 +12,6 @@
 #include "pybind/pyast.hpp"
 #include "pybind/docstrings.hpp"
 
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
 /**
  * \file
  * \brief All AST classes for Python bindings

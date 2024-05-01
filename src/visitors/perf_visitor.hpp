@@ -15,6 +15,7 @@
 #include <map>
 #include <set>
 #include <stack>
+#include <sstream>
 
 #include "printer/decl.hpp"
 #include "symtab/decl.hpp"

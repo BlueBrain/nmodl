@@ -4,9 +4,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-
-#include <memory>
-
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include "utils/logger.hpp"
 
 /**

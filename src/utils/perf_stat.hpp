@@ -12,7 +12,6 @@
  * \brief Implement class for performance statistics
  */
 
-#include <sstream>
 #include <string>
 #include <vector>
 

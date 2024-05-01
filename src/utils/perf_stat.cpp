@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <iostream>
-
+#include <sstream>
 #include <vector>
 
 #include "utils/perf_stat.hpp"
