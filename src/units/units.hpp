@@ -17,11 +17,9 @@
 
 #include <array>
 #include <cmath>
-#include <fstream>
 #include <iomanip>
-#include <iostream>
 #include <regex>
-#include <sstream>
+#include <iosfwd>
 #include <string>
 #include <unordered_map>
 #include <utility>
