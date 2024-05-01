@@ -100,10 +100,7 @@ class CDriver {
     }
 
     bool has_token(const std::string& token) const noexcept {
-        if (std::find(tokens.begin(), tokens.end(), token) != tokens.end()) {
-            return true;
-        }
-        return false;
+        return std::find(tokens.begin(), tokens.end(), token) != tokens.end();
     }
 };
 

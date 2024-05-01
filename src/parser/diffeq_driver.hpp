@@ -9,8 +9,6 @@
 
 #include <string>
 
-#include "parser/diffeq_context.hpp"
-
 
 namespace nmodl {
 namespace parser {
