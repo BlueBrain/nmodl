@@ -9,6 +9,8 @@
 #include <dlfcn.h>
 #include <filesystem>
 
+#include <pybind11/embed.h>
+
 #include "config/config.h"
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"

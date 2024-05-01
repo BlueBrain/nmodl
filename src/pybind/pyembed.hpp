@@ -7,7 +7,6 @@
 
 #pragma once
 
-#include <pybind11/embed.h>
 
 #include <set>
 #include <stdexcept>

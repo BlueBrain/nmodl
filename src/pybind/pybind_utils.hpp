@@ -9,8 +9,6 @@
 
 #include <memory>
 #include <pybind11/iostream.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
 
 
 namespace pybind11 {
