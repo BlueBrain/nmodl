@@ -6,11 +6,9 @@
  */
 
 #include "codegen/codegen_naming.hpp"
-#include "pybind/pyembed.hpp"
+#include "pybind/pyembed.hpp" // includes std::string and std::vector
 
 #include <pybind11/embed.h>
-
-#include <vector>
 
 namespace py = pybind11;
 using namespace py::literals;
