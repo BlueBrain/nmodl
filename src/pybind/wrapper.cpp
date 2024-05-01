@@ -9,9 +9,7 @@
 #include "pybind/pyembed.hpp"
 
 #include <pybind11/embed.h>
-#include <pybind11/stl.h>
 
-#include <set>
 #include <vector>
 
 namespace py = pybind11;
