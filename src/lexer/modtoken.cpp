@@ -5,6 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <sstream>
 #include "lexer/modtoken.hpp"
 
 namespace nmodl {

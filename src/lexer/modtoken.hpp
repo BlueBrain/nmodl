@@ -8,8 +8,7 @@
 #pragma once
 
 #include <iomanip>
-#include <iostream>
-#include <sstream>
+#include <iosfwd>
 #include <string>
 
 #include "parser/nmodl/location.hh"

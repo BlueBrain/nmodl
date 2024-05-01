@@ -5,9 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <cstring>
-#include <iostream>
-
 #include "ast/ast.hpp"
 #include "lexer/modtoken.hpp"
 #include "lexer/nmodl_utils.hpp"
