@@ -13,8 +13,6 @@
  */
 
 #include <regex>
-#include <string>
-#include <unordered_map>
 
 #include "visitors/ast_visitor.hpp"
 

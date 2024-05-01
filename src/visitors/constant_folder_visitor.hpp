@@ -16,8 +16,6 @@
  * \brief \copybrief nmodl::visitor::ConstantFolderVisitor
  */
 
-#include <stack>
-#include <string>
 
 #include "visitors/ast_visitor.hpp"
 

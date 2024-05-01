@@ -12,8 +12,6 @@
  * \brief \copybrief nmodl::visitor::LoopUnrollVisitor
  */
 
-#include <string>
-
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {

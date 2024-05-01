@@ -12,9 +12,6 @@
  * \brief \copybrief nmodl::visitor::VerbatimVisitor
  */
 
-#include <vector>
-
-#include "ast/ast.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {

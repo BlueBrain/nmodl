@@ -14,7 +14,6 @@
 
 #include <map>
 #include <set>
-#include <vector>
 
 #include "visitors/ast_visitor.hpp"
 

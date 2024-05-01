@@ -13,7 +13,6 @@
  */
 
 #include <stack>
-#include <string>
 
 #include "symtab/symbol_table.hpp"
 #include "visitors/ast_visitor.hpp"

@@ -13,13 +13,7 @@
  */
 
 #include <pybind11/embed.h>
-#include <pybind11/stl.h>
-#include <unordered_map>
-#include <unordered_set>
-#include <vector>
 
-#include "ast/ast.hpp"
-#include "symtab/symbol.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 

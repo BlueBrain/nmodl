@@ -12,11 +12,8 @@
  * \brief \copybrief nmodl::visitor::KineticBlockVisitor
  */
 
-#include <memory>
 #include <string>
-#include <unordered_map>
 #include <unordered_set>
-#include <vector>
 
 #include "visitors/ast_visitor.hpp"
 

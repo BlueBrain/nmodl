@@ -12,8 +12,6 @@
  * \brief \copybrief nmodl::visitor::LocalizeVisitor
  */
 
-#include <map>
-
 #include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 

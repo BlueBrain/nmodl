@@ -12,13 +12,11 @@
  * \brief Utility functions for visitors implementation
  */
 
-#include <map>
 #include <set>
-#include <string>
 #include <unordered_set>
 
-#include <ast/ast_decl.hpp>
-#include <utils/common_utils.hpp>
+#include "ast/ast_decl.hpp"
+#include "utils/common_utils.hpp"
 
 namespace nmodl {
 namespace visitor {

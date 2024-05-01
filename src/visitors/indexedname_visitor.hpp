@@ -12,11 +12,7 @@
  * \brief \copybrief nmodl::visitor::IndexedNameVisitor
  */
 
-#include <string>
-#include <unordered_set>
-
 #include "ast/diff_eq_expression.hpp"
-#include "ast/indexed_name.hpp"
 #include "ast/program.hpp"
 #include "visitors/ast_visitor.hpp"
 

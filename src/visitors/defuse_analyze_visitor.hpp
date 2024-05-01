@@ -12,8 +12,6 @@
  * \brief \copybrief nmodl::visitor::DefUseAnalyzeVisitor
  */
 
-#include <map>
-#include <stack>
 
 #include "printer/json_printer.hpp"
 #include "symtab/decl.hpp"

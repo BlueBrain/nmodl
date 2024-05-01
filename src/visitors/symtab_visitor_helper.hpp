@@ -7,12 +7,9 @@
 
 #pragma once
 
-#include <utility>
-
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "lexer/token_mapping.hpp"
-#include "visitors/symtab_visitor.hpp"
 
 
 namespace nmodl {

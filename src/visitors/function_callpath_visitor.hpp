@@ -13,7 +13,6 @@
  */
 
 #include "ast/all.hpp"
-#include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 
 namespace nmodl {
