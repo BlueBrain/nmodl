@@ -12,8 +12,6 @@
  * \brief Implement generic table data structure
  */
 
-#include <vector>
-
 #include "utils/string_utils.hpp"
 
 

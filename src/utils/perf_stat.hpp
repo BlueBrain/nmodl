@@ -12,8 +12,6 @@
  * \brief Implement class for performance statistics
  */
 
-#include <string>
-#include <vector>
 
 namespace nmodl {
 namespace utils {

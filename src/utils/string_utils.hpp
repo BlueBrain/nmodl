@@ -15,10 +15,7 @@
  * stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
  */
 
-#include <algorithm>
-#include <cctype>
 #include <sstream> // includes std::string
-#include <vector>
 
 namespace nmodl {
 /// string utility functions
