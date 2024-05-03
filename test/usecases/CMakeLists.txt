@@ -6,8 +6,7 @@ set(NMODL_USECASE_DIRS
     parameter
     func_proc
     func_proc_pnt
-    nonspecific_current
-    cabpump)
+    nonspecific_current)
 
 file(GLOB NMODL_GOLDEN_REFERENCES "${CMAKE_CURRENT_SOURCE_DIR}/references/*")
 if(NMODL_GOLDEN_REFERENCES STREQUAL "")
