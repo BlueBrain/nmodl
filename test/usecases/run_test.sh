@@ -12,18 +12,14 @@ usecase_dir="$2"
 
 pushd "${usecase_dir}"
 
-for file in ./simulate*.py
-do
+# NRN + nocmodl
+rm -r "${output_dir}" tmp || true
+nrnivmodl
+"$(uname -m)/special" -nogui simulate.py
 
-    # NRN + nocmodl
-    rm -r "${output_dir}" tmp || true
-    nrnivmodl
-    "$(uname -m)/special" -nogui "${file}"
-
-    # NRN + NMODL
-    rm -r "${output_dir}" tmp || true
-    nrnivmodl -nmodl "${nmodl}"
-    "$(uname -m)/special" -nogui "${file}"
-done
+# NRN + NMODL
+rm -r "${output_dir}" tmp || true
+nrnivmodl -nmodl "${nmodl}"
+"$(uname -m)/special" -nogui simulate.py
 
 popd
