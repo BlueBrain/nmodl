@@ -30,6 +30,7 @@ def compare(conductance: float, /):
 
     assert np.all(rel_err < 1e-1), f"rel_err = {rel_err}"
 
+
 compare(0.005)
 compare(0.5)
 
