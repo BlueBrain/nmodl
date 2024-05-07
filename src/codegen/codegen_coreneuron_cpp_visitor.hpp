@@ -359,14 +359,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print nmodl function or procedure (common code)
-     * \param node the AST node representing the function or procedure in NMODL
-     * \param name the name of the function or procedure
-     */
-    void print_function_or_procedure(const ast::Block& node, const std::string& name) override;
-
-
-    /**
      * Common helper function to help printing function or procedure blocks
      * \param node the AST node representing the function or procedure in NMODL
      */

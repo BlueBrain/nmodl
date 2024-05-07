@@ -204,27 +204,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 }
 
 
-void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
-                                                          const std::string& name) {
-    printer->add_newline(2);
-    print_function_declaration(node, name);
-    printer->add_text(" ");
-    printer->push_block();
-
-    // function requires return variable declaration
-    if (node.is_function_block()) {
-        auto type = default_float_data_type();
-        printer->fmt_line("{} ret_{} = 0.0;", type, name);
-    } else {
-        printer->fmt_line("int ret_{} = 0;", name);
-    }
-
-    print_statement_block(*node.get_statement_block(), false, false);
-    printer->fmt_line("return ret_{};", name);
-    printer->pop_block();
-}
-
-
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
     auto name = node.get_node_name();
 
