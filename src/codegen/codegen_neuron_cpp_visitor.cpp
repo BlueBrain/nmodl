@@ -1850,7 +1850,7 @@ void CodegenNeuronCppVisitor::print_net_receive() {
     rename_net_receive_arguments(*node, *node);
 
     printer->add_line("_nrn_mechanism_cache_instance _ml_obj{_pnt->prop};");
-    printer->add_line("auto * _nt = (NrnThread*) _pnt->_vnt;");
+    printer->add_line("auto * _nt = static_cast<NrnThread*>(_pnt->_vnt);");
     printer->add_line("auto * _ml = &_ml_obj;");
 
     printer->fmt_line("auto inst = make_instance_{}(_ml_obj);", info.mod_suffix);
