@@ -151,7 +151,12 @@ bool CodegenCppVisitor::defined_method(const std::string& name) const {
 }
 
 int CodegenCppVisitor::float_variables_size() const {
-    return codegen_float_variables.size();
+    int n_floats = 0;
+    for (const auto& var: codegen_float_variables) {
+        n_floats += var->get_length();
+    }
+
+    return n_floats;
 }
 
 
@@ -977,6 +982,7 @@ std::vector<CodegenCppVisitor::SymbolType> CodegenCppVisitor::get_float_variable
     if (net_receive_exist()) {
         variables.push_back(make_symbol(naming::T_SAVE_VARIABLE));
     }
+
     return variables;
 }
 

@@ -507,7 +507,7 @@ std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbo
 std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                        const std::string& name,
                                                        bool use_instance) const {
-    auto position = position_of_int_var(name);
+    // auto position = position_of_int_var(name);
     if (symbol.is_index) {
         if (use_instance) {
             throw std::runtime_error("Not implemented. [wiejo]");
@@ -785,7 +785,8 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     }
 
 
-    for (const auto& f: info.function_tables) {
+    // for (const auto& f: info.function_tables) {
+    if (!info.function_tables.empty()) {
         throw std::runtime_error("Not implemented, global function tables.");
     }
 
@@ -1028,12 +1029,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline();
 
     printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
-                      codegen_float_variables_size,
-                      codegen_int_variables_size);
+                      float_variables_size(),
+                      int_variables_size());
 
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         const auto& int_var = codegen_int_variables[i];
-        const auto& name = int_var.symbol->get_name();
         if (i != info.semantics[i].index) {
             throw std::runtime_error("Broken logic.");
         }
@@ -1149,13 +1149,13 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
 }
 
 void CodegenNeuronCppVisitor::print_node_data_structure(bool print_initializers) {
-    auto const value_initialize = print_initializers ? "{}" : "";
     printer->add_newline(2);
     printer->fmt_push_block("struct {} ", node_data_struct());
 
     // Pointers to node variables
     printer->add_line("int const * nodeindices;");
     printer->add_line("double const * node_voltages;");
+    printer->add_line("double * node_diagonal;");
     printer->add_line("double * node_rhs;");
     printer->add_line("int nodecount;");
 
@@ -1171,6 +1171,7 @@ void CodegenNeuronCppVisitor::print_make_node_data() const {
     std::vector<std::string> make_node_data_args;
     make_node_data_args.push_back("_ml_arg.nodeindices");
     make_node_data_args.push_back("_nt.node_voltage_storage()");
+    make_node_data_args.push_back("_nt.node_d_storage()");
     make_node_data_args.push_back("_nt.node_rhs_storage()");
     make_node_data_args.push_back("_ml_arg.nodecount");
 
@@ -1236,10 +1237,29 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->add_newline(2);
     printer->add_line("/** nrn_jacob function */");
 
-    printer->fmt_line(
+    printer->fmt_push_block(
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
-        "_nt, Memb_list* _ml_arg, int _type) {{}}",
-        method_name(naming::NRN_JACOB_METHOD));
+        "_nt, Memb_list* _ml_arg, int _type)",
+        method_name(naming::NRN_JACOB_METHOD));  // begin function
+
+    printer->add_multi_line(
+        "_nrn_mechanism_cache_range _lmr{_sorted_token, *_nt, *_ml_arg, _type};");
+
+    printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
+    printer->fmt_line("auto node_data = make_node_data_{}(*_nt, *_ml_arg);", info.mod_suffix);
+    printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
+
+    if (breakpoint_exist()) {
+        printer->add_line("// set conductances properly");
+        printer->add_line("int node_id = node_data.nodeindices[id];");
+        printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
+                          info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                         : naming::CONDUCTANCE_VARIABLE);
+    }
+
+    printer->pop_block();  // end for
+    printer->pop_block();  // end function
 }
 
 
@@ -1427,7 +1447,6 @@ void CodegenNeuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
     const auto& args = nrn_current_parameters();
     const auto& block = node.get_statement_block();
     printer->add_newline(2);
-    // print_device_method_annotation();
     printer->fmt_push_block("inline double nrn_current_{}({})",
                             info.mod_suffix,
                             get_parameter_str(args));
@@ -1579,7 +1598,12 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
 
     printer->add_line("node_data.node_rhs[node_id] -= rhs;");
 
-
+    if (breakpoint_exist()) {
+        printer->add_line("// remember the conductances so we can set them later");
+        printer->fmt_line("inst.{}[id] = g;",
+                          info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
+                                         : naming::CONDUCTANCE_VARIABLE);
+    }
     printer->pop_block();
 
     // if (nrn_cur_reduction_loop_required()) {
@@ -1633,7 +1657,7 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
                       std::to_string(int_variables_size()),
                       ";");
     printer->add_line("static constexpr auto number_of_floating_point_variables = ",
-                      std::to_string(float_variables_size()),
+                      std::to_string(codegen_float_variables.size()),
                       ";");
     printer->add_newline();
     printer->add_multi_line(R"CODE(

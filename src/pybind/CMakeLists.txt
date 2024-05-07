@@ -76,7 +76,9 @@ file(
 foreach(file IN LISTS NMODL_PYTHON_FILES)
   cpp_cc_build_time_copy(INPUT ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/${file} OUTPUT
                          ${CMAKE_BINARY_DIR}/lib/nmodl/${file})
+  list(APPEND nmodl_python_binary_dir_files "${CMAKE_BINARY_DIR}/lib/nmodl/${file}")
 endforeach()
+add_custom_target(nmodl_copy_python_files ALL DEPENDS ${nmodl_python_binary_dir_files})
 file(COPY ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/ext DESTINATION ${CMAKE_BINARY_DIR}/lib/nmodl/)
 
 # =============================================================================
@@ -87,7 +89,7 @@ file(COPY ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/ext DESTINATION ${CMAKE_BINAR
 # things are installed twice with the wheel and in weird places. Let's just
 # move the .so libs
 # ~~~
-if(NOT LINK_AGAINST_PYTHON)
+if(NOT LINK_AGAINST_PYTHON AND NOT NMODL_AS_SUBPROJECT)
   install(TARGETS pywrapper DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}lib)
   if(NMODL_ENABLE_PYTHON_BINDINGS)
     install(TARGETS _nmodl DESTINATION nmodl/)
