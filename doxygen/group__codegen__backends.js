@@ -87,7 +87,6 @@ var group__codegen__backends =
       [ "print_deriv_advance_flag_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0dfee548a568667a78d0ab729131d6c2", null ],
       [ "print_derivimplicit_kernel", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a93aa5868249076c8b0766369cbbba993", null ],
       [ "print_device_atomic_capture_annotation", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adfa5eae64e455cccd9932e083fc17026", null ],
-      [ "print_device_method_annotation", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a88faa4c78d1652d9eecea6a9583d4f77", null ],
       [ "print_device_stream_wait", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ae188dfb96e7d00229f619b3a82188391", null ],
       [ "print_dt_update_to_device", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adcb3937d2bb619a2f22c8808f77be963", null ],
       [ "print_eigen_linear_solver", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8e088ff367970d2e1bab67ff21f3c4ba", null ],
