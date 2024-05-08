@@ -8,8 +8,7 @@ set(NMODL_USECASE_DIRS
     nonspecific_current
     net_receive
     point_process
-    parameter
-  )
+    parameter)
 
 file(GLOB NMODL_GOLDEN_REFERENCES "${CMAKE_CURRENT_SOURCE_DIR}/references/*")
 if(NMODL_GOLDEN_REFERENCES STREQUAL "")
