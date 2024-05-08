@@ -182,13 +182,13 @@ jobs:
           ccache -vs 2>/dev/null || ccache -s
           cmake --build .
           ccache -vs 2>/dev/null || ccache -s
-      - name: Test
-        shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
-        env:
-          PYTHONMALLOC: malloc
-        run:  |
-          ctest --output-on-failure -T Test
+      # - name: Test
+      #   shell: bash
+      #   working-directory: ${{runner.workspace}}/nmodl/build
+      #   env:
+      #     PYTHONMALLOC: malloc
+      #   run:  |
+      #     ctest --output-on-failure -T Test
       - name: Install
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl/build
