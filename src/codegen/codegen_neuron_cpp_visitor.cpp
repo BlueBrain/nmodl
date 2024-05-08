@@ -1251,7 +1251,7 @@ int node_id = node_data.nodeindices[id];
 auto* _ppvar = _ml_arg->pdata[id];
 auto v = node_data.node_voltages[node_id];
 )CODE");
-    printer->fmt_line("inst.{}[node_id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
+    printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
 
     print_initial_block(info.initial_node);
     printer->pop_block();
