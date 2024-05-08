@@ -206,7 +206,7 @@ jobs:
 
           for d in */
           do
-              if [[ "$d" == "references" ]]
+              if [[ "$d" == "references/" ]]
               then
                 continue
               fi
