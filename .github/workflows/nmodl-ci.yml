@@ -196,7 +196,7 @@ jobs:
           cmake --build . --target install
 
       - name: Update references
-        if: ${{matrix.config.update_references == "On" }}
+        if: matrix.config.update_references == 'On'
         shell: bash
 
         working-directory: ${{runner.workspace}}/nmodl/test/usecases
