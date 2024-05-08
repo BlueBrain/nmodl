@@ -215,7 +215,7 @@ jobs:
           done
 
           cd $OUTPUT_DIR
-          tar ../references.tar *
+          tar cf ../references.tar *
 
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
