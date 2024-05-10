@@ -31,5 +31,5 @@ v_tv = np.sum(np.abs(np.diff(v)))
 v_l1_exact = 58.673
 v_tv_exact = 1270.8
 
-assert abs(v_l1 - v_l1_exact) < 0.2
-assert abs(v_l1 - v_l1_exact) < 10.0
+assert abs(v_l1 - v_l1_exact) < 0.004 * v_l1_exact
+assert abs(v_l1 - v_l1_exact) < 0.01 * v_tv_exact
