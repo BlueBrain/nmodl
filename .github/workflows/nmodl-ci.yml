@@ -253,6 +253,11 @@ jobs:
           name: references
           path: ${{runner.workspace}}/references.tar
 
+      - name: Check out nmodl-references
+        uses: actions/checkout@v4
+        with:
+          repository: BlueBrain/nmodl-references
+
       - name: debug output
         run: |
           ls
