@@ -258,7 +258,19 @@ jobs:
         with:
           repository: BlueBrain/nmodl-references
 
-      - name: debug output
+      - name: Update references
         run: |
-          ls
+          for d in */
+          do
+            rm -rf "$d"
+          done
+
+          tar xf ${REFERENCES_ARCHIVE}
+
+          git add .
+          git commit -m "References for 'nmodl@${GITHUB_SHA}'."
+          git status
+
+        env:
+          REFERENCES_ARCHIVE: ${{ runner.workspace }}/references.tar
 
