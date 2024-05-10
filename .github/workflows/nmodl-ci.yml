@@ -241,3 +241,18 @@ jobs:
         if: failure() && contains(github.event.pull_request.title, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
+
+
+  commit-references:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: references
+          path: ${{runner.workspace}}/references.tar
+
+      - name: debug output
+        run: |
+          ls
+
