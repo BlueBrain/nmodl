@@ -228,7 +228,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
             return var.get()->get_node_name() == "v";
         });
         if (result == parameters.end()) {
-            printer->fmt_line("auto v = inst.{}[id];", naming::VOLTAGE_UNUSED_VARIABLE);
+            printer->add_line("auto v = _nt->node_voltage_storage()[id];");
         }
     }
 
@@ -1251,7 +1251,6 @@ int node_id = node_data.nodeindices[id];
 auto* _ppvar = _ml_arg->pdata[id];
 auto v = node_data.node_voltages[node_id];
 )CODE");
-    printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
 
     print_initial_block(info.initial_node);
     printer->pop_block();
