@@ -22,3 +22,12 @@ h.run()
 
 v = np.array(v_hoc.as_numpy())
 t = np.array(t_hoc.as_numpy())
+
+v_l1 = np.sum(np.abs(v)) / v.size
+v_tv = np.sum(np.abs(np.diff(v)))
+
+v_l1_exact=58.673
+v_tv_exact=1270.8
+
+assert abs(v_l1 - v_l1_exact) < 0.2
+assert abs(v_l1 - v_l1_exact) < 10.0
