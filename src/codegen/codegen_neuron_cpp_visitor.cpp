@@ -228,7 +228,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
             return var.get()->get_node_name() == "v";
         });
         if (result == parameters.end()) {
-            printer->add_line("auto v = _nt->node_voltage_storage()[id];");
+            printer->add_line("auto v = _nt ? _nt->node_voltage_storage()[id] : 0;");
         }
     }
 
