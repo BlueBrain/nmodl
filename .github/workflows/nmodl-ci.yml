@@ -265,15 +265,12 @@ jobs:
             rm -rf "$d"
           done
 
-          ls ../
-          ls ${{ runner.workspace }}
+          tar xf ${{ runner.workspace }}/references.tar
 
-          tar xf ${REFERENCES_ARCHIVE}
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
 
           git add .
           git commit -m "References for 'nmodl@${GITHUB_SHA}'."
           git status
-
-        env:
-          REFERENCES_ARCHIVE: ${{ runner.workspace }}/references.tar
 
