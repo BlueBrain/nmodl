@@ -270,6 +270,8 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
 
+          echo "$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/nmodl-\1/")"
+
           git add .
           git commit -m "References for 'nmodl@${GITHUB_SHA}'."
           git status
