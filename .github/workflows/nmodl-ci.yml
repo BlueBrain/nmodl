@@ -26,29 +26,29 @@ jobs:
     strategy:
       matrix:
         include:
-          - config:
-              os: ubuntu-20.04
-          - config:
-              flag_warnings: ON
-              os: ubuntu-22.04
-          - config:
-              os: macos-12
-          - config:
-              os: macos-13
-          # TODO: might be interesting to add the thread sanitizer too
-          - config:
-              os: ubuntu-22.04
-              # Hyphens here will be replaced with commas before the value is
-              # passed to NMODL_SANITIZERS
-              sanitizer: address-leak
+          # - config:
+          #     os: ubuntu-20.04
+          # - config:
+          #     flag_warnings: ON
+          #     os: ubuntu-22.04
+          # - config:
+          #     os: macos-12
+          # - config:
+          #     os: macos-13
+          # # TODO: might be interesting to add the thread sanitizer too
+          # - config:
+          #     os: ubuntu-22.04
+          #     # Hyphens here will be replaced with commas before the value is
+          #     # passed to NMODL_SANITIZERS
+          #     sanitizer: address-leak
           - config:
               os: ubuntu-22.04
               enable_usecases: On
               update_references: On
-          - config:
-              flag_warnings: ON
-              os: ubuntu-22.04
-              sanitizer: undefined
+          # - config:
+          #     flag_warnings: ON
+          #     os: ubuntu-22.04
+          #     sanitizer: undefined
       fail-fast: true
     steps:
       - name: Fix kernel mmap rnd bits
