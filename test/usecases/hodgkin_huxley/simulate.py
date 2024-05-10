@@ -26,6 +26,8 @@ t = np.array(t_hoc.as_numpy())
 v_l1 = np.sum(np.abs(v)) / v.size
 v_tv = np.sum(np.abs(np.diff(v)))
 
+# (Nearly) exact values of the L1 and TV (semi-)norms, computed with
+# `dt = 0.0002, 0.00005`.
 v_l1_exact=58.673
 v_tv_exact=1270.8
 
