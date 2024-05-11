@@ -2298,6 +2298,8 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
     printer->add_newline(2);
     printer->add_line("/** initialize channel */");
 
+    is_printing_initial_block = true;
+
     print_global_function_common_code(BlockType::Initial);
     if (info.derivimplicit_used()) {
         printer->add_newline();
@@ -2318,6 +2320,8 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
         printer->pop_block();
         // clang-format on
     }
+
+    printer->fmt_line("bool solver_warning_printed = false;");
 
     // update global variable as those might be updated via python/hoc API
     // NOTE: CoreNEURON has enough information to do this on its own, which
@@ -2367,6 +2371,8 @@ void CodegenCoreneuronCppVisitor::print_nrn_init(bool skip_init_check) {
     if (skip_init_check) {
         printer->pop_block();
     }
+
+    is_printing_initial_block = false;
 }
 
 void CodegenCoreneuronCppVisitor::print_before_after_block(const ast::Block* node,
@@ -3518,8 +3524,18 @@ void CodegenCoreneuronCppVisitor::visit_eigen_newton_solver_block(
     printer->add_line("newton_functor.initialize();");
     printer->add_line(
         "int newton_iterations = nmodl::newton::newton_solver(nmodl_eigen_xm, newton_functor);");
+
+    if (is_printing_initial_block) {
+        printer->add_multi_line(R"CODE(
+            if (newton_iterations < 0 && !solver_warning_printed) {
+                std::cerr << "WARNING: Newton solver did not converge in INITIAL block!" << std::endl;
+                solver_warning_printed = true;
+            }
+        )CODE");
+    } else {
     printer->add_line(
         "if (newton_iterations < 0) assert(false && \"Newton solver did not converge!\");");
+    }
 
     // assign newton solver results in matrix X to state vars
     print_statement_block(*node.get_update_states_block(), false, false);

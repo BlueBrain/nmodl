@@ -254,6 +254,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     /*                                    Member variables                                  */
     /****************************************************************************************/
 
+    // if INITIAL block is being printed
+    bool is_printing_initial_block = false;
+
     /**
      * Code printer object for target (C++)
      */
