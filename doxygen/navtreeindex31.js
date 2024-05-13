@@ -1,6 +1,5 @@
 var NAVTREEINDEX31 =
 {
-"semantic__analysis__visitor_8cpp_source.html":[3,0,1,11,36],
 "semantic__analysis__visitor_8hpp.html":[3,0,1,11,37],
 "semantic__analysis__visitor_8hpp_source.html":[3,0,1,11,37],
 "solution__expression_8hpp.html":[3,0,0,0,0,0,101],
@@ -19,10 +18,9 @@ var NAVTREEINDEX31 =
 "src_2codegen_2codegen__compatibility__visitor_8cpp.html":[3,0,1,1,2],
 "src_2codegen_2codegen__compatibility__visitor_8cpp_source.html":[3,0,1,1,2],
 "src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html":[3,0,1,1,4],
-"src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a1faf2e296586215399717f9d519de218":[3,0,1,1,4,1],
-"src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[3,0,1,1,4,3],
+"src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a7fe9cbd601e67e2d2726026c0008b16f":[3,0,1,1,4,2],
 "src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a82b56c421789e1584b7eadf3079d0d05":[3,0,1,1,4,0],
-"src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[3,0,1,1,4,2],
+"src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[3,0,1,1,4,1],
 "src_2codegen_2codegen__coreneuron__cpp__visitor_8cpp_source.html":[3,0,1,1,4],
 "src_2codegen_2codegen__neuron__cpp__visitor_8cpp.html":[3,0,1,1,13],
 "src_2codegen_2codegen__neuron__cpp__visitor_8cpp.html#a983af1c34064b33f42068e2767c2287e":[3,0,1,1,13,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX31 =
 "structnmodl_1_1parser_1_1diffeq_1_1_term.html#ae1facd3a8983e0dad81ea7003bde7b03":[2,0,0,3,0,1,5],
 "structnmodl_1_1parser_1_1diffeq_1_1_term.html#af6ed229692db9a83f4183aac3d830ee4":[2,0,0,3,0,1,9],
 "structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html":[2,0,0,5,0],
-"structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html#a0175ad81b279d9ec2a1b76566dc9305f":[2,0,0,5,0,1]
+"structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html#a0175ad81b279d9ec2a1b76566dc9305f":[2,0,0,5,0,1],
+"structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html#a2d48b894cc5777108ea9f7a1ea64a43f":[2,0,0,5,0,2],
+"structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html#a4168207a190f4a3f1b550c5872636a2c":[2,0,0,5,0,0]
 };

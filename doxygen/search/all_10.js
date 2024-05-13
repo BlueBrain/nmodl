@@ -4,7 +4,7 @@ var searchData=
   ['random_5fsemantic_1806',['RANDOM_SEMANTIC',['../namespacenmodl_1_1codegen_1_1naming.html#ac11291570be0eb853ba0e233c4b63839',1,'nmodl::codegen::naming']]],
   ['random_5fstring_5fexists_1807',['random_string_exists',['../classnmodl_1_1utils_1_1_singleton_random_string.html#ac3e00de497e1b0a24c7db603b6c3dcd2',1,'nmodl::utils::SingletonRandomString']]],
   ['random_5fstrings_1808',['random_strings',['../classnmodl_1_1utils_1_1_singleton_random_string.html#a424fe2374fe1b396075fb389e3c156ce',1,'nmodl::utils::SingletonRandomString']]],
-  ['random_5fvar_1809',['random_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba697324bc2a726114814b9ae77caa789a',1,'nmodl::symtab::syminfo::random_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5da0be2deed1a70402c02d66954e27f0',1,'nmodl::ast::RANDOM_VAR()']]],
+  ['random_5fvar_1809',['RANDOM_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a5da0be2deed1a70402c02d66954e27f0',1,'nmodl::ast::RANDOM_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba697324bc2a726114814b9ae77caa789a',1,'nmodl::symtab::syminfo::random_var()']]],
   ['random_5fvar_2ehpp_1810',['random_var.hpp',['../random__var_8hpp.html',1,'']]],
   ['random_5fvar_5flist_1811',['RANDOM_VAR_LIST',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa9c1d875626f5cda48e92ed0f55baa9f',1,'nmodl::ast']]],
   ['random_5fvar_5flist_2ehpp_1812',['random_var_list.hpp',['../random__var__list_8hpp.html',1,'']]],

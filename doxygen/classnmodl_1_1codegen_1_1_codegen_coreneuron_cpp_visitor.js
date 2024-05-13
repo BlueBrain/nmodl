@@ -1,7 +1,6 @@
 var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
 [
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#acfddae56ef5e91b7394b6f4c91748698", null ],
-    [ "check_if_var_is_array", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a293512e33ee9a6a4585664e73e5897ed", null ],
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4b69fec63ad84264583bae07a53630f9", null ],
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a81fb1fed8f020a023737954eb5334bad", null ],
     [ "conc_write_statement", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a542c802c8bea31d9a7702831eb385633", null ],
@@ -48,7 +47,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "print_first_pointer_var_index_getter", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a6498ebb631852d55d7585ef179b3008e", null ],
     [ "print_first_random_var_index_getter", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adb86cf547ffd36097cb5aafc4add79e8", null ],
     [ "print_function", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ae47b27b3bfb2d9fa200b02f449c126e7", null ],
-    [ "print_function_declaration", "group__codegen__backends.html#gaebe64f7d52f5cb96d8c73c1619bddabf", null ],
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab0d109b9d28587ba6cce93783a348d86", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5be32556e7bb7fd48b1bdb71d75fe5bb", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4dd6948c9064a446dc45cf6f4d463975", null ],
@@ -122,8 +120,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "print_send_event_move", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ae2e96333bb9b3ab2d694c93bcf8a8ab6", null ],
     [ "print_setup_range_variable", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#abe7b5a4015101375080492cc8e691d1d", null ],
     [ "print_standard_includes", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4c165609255c0fe51ba8af7684890d1e", null ],
-    [ "print_table_check_function", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ae8e22bda2a1cd6093087143eb7ac1953", null ],
-    [ "print_table_replacement_function", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a97f84ddeb2d9220d871138f0bc99fa18", null ],
     [ "print_thread_getters", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a0eb6eb4f68afb0711caa99a0f9ee85d4", null ],
     [ "print_thread_memory_callbacks", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#acf87cda48d91ff766adba418a86946a0", null ],
     [ "print_top_verbatim_blocks", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab44b2f7085319835ec99afa02f751bd4", null ],

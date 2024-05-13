@@ -28,7 +28,6 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "print_data_structures", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aeb0635e7e6e488519882d930401b5c2b", null ],
     [ "print_fast_imem_calculation", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#abce8ff7e8bd0754c8d61066779b4e72f", null ],
     [ "print_function", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8633f24f67f430477ff3bf4a0c6b36cb", null ],
-    [ "print_function_declaration", "group__codegen__backends.html#gabd283274182774ed39c08a0714842d43", null ],
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ad635ed74eba5b2c3e0aee2e29ca1167a", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#af6a5224b66dde062241120381b3cb8df", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a7f941bd8151d12ef887be3670dec264e", null ],

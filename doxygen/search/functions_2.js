@@ -10,7 +10,7 @@ var searchData=
   ['check_3351',['check',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#aec84ac57e254ff7ed238a2dbab09c10e',1,'nmodl::visitor::SemanticAnalysisVisitor']]],
   ['check_5fast_3352',['check_ast',['../classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#ac8ab23f5630ef8d07c7323df4236fdf9',1,'nmodl::visitor::test::CheckParentVisitor']]],
   ['check_5fexpr_5fstatements_5fin_5fsame_5fblock_3353',['check_expr_statements_in_same_block',['../classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#aabe0ae9b304c21669dfafffe0e518a55',1,'nmodl::visitor::SympySolverVisitor']]],
-  ['check_5fif_5fvar_5fis_5farray_3354',['check_if_var_is_array',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a293512e33ee9a6a4585664e73e5897ed',1,'nmodl::codegen::CodegenCoreneuronCppVisitor']]],
+  ['check_5fif_5fvar_5fis_5farray_3354',['check_if_var_is_array',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a48dcfcf9da8eabf3e2fd787c510f1ed5',1,'nmodl::codegen::CodegenCppVisitor']]],
   ['check_5finclude_5fargument_3355',['check_include_argument',['../classnmodl_1_1parser_1_1_nmodl_driver.html#aae8c132458d65ad91e0f8861b08957e0',1,'nmodl::parser::NmodlDriver']]],
   ['check_5fparent_3356',['check_parent',['../classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#ab62126c1b84078508e57f5d495d822a0',1,'nmodl::visitor::test::CheckParentVisitor']]],
   ['check_5ftoken_5ftype_3357',['check_token_type',['../tokens_8cpp.html#aa07b7e25d45e4de1920dedf7bc0fc6f9',1,'check_token_type(const std::string &amp;name, TokenType type):&#160;tokens.cpp'],['../lexer_8cpp.html#aa07b7e25d45e4de1920dedf7bc0fc6f9',1,'check_token_type(const std::string &amp;name, TokenType type):&#160;lexer.cpp']]],
