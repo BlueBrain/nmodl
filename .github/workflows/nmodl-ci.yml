@@ -288,6 +288,3 @@ jobs:
           git commit -m "References for '${nmodl_desc}'."
           git push 2>/dev/null || git push --set-upstream origin ${branch}
 
-        env:
-          PR_NUMBER
-
