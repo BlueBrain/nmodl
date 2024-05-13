@@ -270,7 +270,7 @@ jobs:
 
           if [[ ${{ github.event_name }} == "pull_request" ]]
           then
-            nmodl_desc=https://github.com/BlueBrain/nmodl/pulls/${pr_number}
+            nmodl_desc=https://github.com/BlueBrain/nmodl/pull/${pr_number}
           else
             nmodl_desc="nmodl@${GITHUB_SHA}"
           fi
