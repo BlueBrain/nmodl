@@ -276,5 +276,5 @@ jobs:
 
           git add .
           git commit -m "References for 'nmodl@${GITHUB_SHA}'."
-          git push 2>/dev/null || git push -set-upstream origin ${branch}
+          git push 2>/dev/null || git push --set-upstream origin ${branch}
 
