@@ -358,9 +358,8 @@ void SympySolverVisitor::solve_non_linear_system(
     auto exception_message = solver->exception_message;
     pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_nsls_executor(solver);
     if (!exception_message.empty()) {
-        logger->warn("SympySolverVisitor :: solve_non_lin_system python exception: " +
+      throw std::runtime_error("SympySolverVisitor :: solve_non_lin_system python exception: " +
                      exception_message);
-        return;
     }
     logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
     construct_eigen_solver_block(pre_solve_statements, solutions, false);
