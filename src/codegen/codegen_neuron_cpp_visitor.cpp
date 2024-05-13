@@ -48,6 +48,11 @@ std::string CodegenNeuronCppVisitor::backend_name() const {
 }
 
 
+std::string CodegenNeuronCppVisitor::table_thread_function_name() const {
+    return "_check_table_thread";
+}
+
+
 /****************************************************************************************/
 /*                     Common helper routines accross codegen functions                 */
 /****************************************************************************************/
@@ -147,6 +152,39 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
 }
 
 
+void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
+    if (info.table_count == 0) {
+        return;
+    }
+
+    // print declarations of `check_*` functions
+    for (const auto& function: info.functions_with_table) {
+        auto name = function->get_node_name();
+        auto internal_params = internal_method_parameters();
+        printer->fmt_line("void check_{}({});",
+                          method_name(name),
+                          get_parameter_str(internal_params));
+    }
+
+    // definition of `_check_table_thread` function
+    // signature must be same as the `nrn_thread_table_check_t` type
+    printer->fmt_line(
+        "static void {}(Memb_list* _ml, size_t id, Datum* _ppvar, Datum* _thread, "
+        "NrnThread* _nt, int _type, _nrn_model_sorted_token const& _sorted_token)",
+        table_thread_function_name());
+    printer->push_block();
+    printer->add_line("_nrn_mechanism_cache_range _lmr{_sorted_token, *_nt, *_ml, _type};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
+
+    for (const auto& function: info.functions_with_table) {
+        auto method_name_str = function->get_node_name();
+        printer->fmt_line("check_{}{}(&_lmr, inst, id, _ppvar, _thread, _nt);",
+                          method_name_str,
+                          info.rsuffix);
+    }
+    printer->pop_block();
+}
+
 void CodegenNeuronCppVisitor::print_setdata_functions() {
     printer->add_line("/* Neuron setdata functions */");
     printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
@@ -202,6 +240,7 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 
     print_point_process_function_definitions();
     print_setdata_functions();
+    print_check_table_function_prototypes();
 
     /// TODO: Add mechanism function and procedures declarations
 }
@@ -240,9 +279,11 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
 
 void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& node) {
     auto name = node.get_node_name();
-
     if (info.function_uses_table(name)) {
-        throw std::runtime_error("Function tables not implemented.");
+        auto new_name = "f_" + name;
+        print_function_or_procedure(node, new_name);
+        print_table_check_function(node);
+        print_table_replacement_function(node);
     } else {
         print_function_or_procedure(node, name);
     }
@@ -341,7 +382,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     }
     printer->fmt_line("auto inst = make_instance_{}(_ml_real);", info.mod_suffix);
     if (info.function_uses_table(block_name)) {
-        printer->fmt_line("_check_{}({})", block_name, internal_method_arguments());
+        printer->fmt_line("check_{}({});", method_name(block_name), internal_method_arguments());
     }
     const auto get_func_call_str = [&]() {
         const auto params = function_or_procedure_block->get_parameters();
@@ -763,7 +804,30 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     }
 
     if (info.table_count > 0) {
-        throw std::runtime_error("Not implemented, global table count.");
+        // basically the same code as coreNEURON uses
+        printer->fmt_line("double usetable{};", print_initializers ? "{1}" : "");
+        codegen_global_variables.push_back(make_symbol(naming::USE_TABLE_VARIABLE));
+
+        for (const auto& block: info.functions_with_table) {
+            const auto& name = block->get_node_name();
+            printer->fmt_line("{} tmin_{}{};", float_type, name, value_initialize);
+            printer->fmt_line("{} mfac_{}{};", float_type, name, value_initialize);
+            codegen_global_variables.push_back(make_symbol("tmin_" + name));
+            codegen_global_variables.push_back(make_symbol("mfac_" + name));
+        }
+
+        for (const auto& variable: info.table_statement_variables) {
+            auto const name = "t_" + variable->get_name();
+            auto const num_values = variable->get_num_values();
+            if (variable->is_array()) {
+                int array_len = variable->get_length();
+                printer->fmt_line(
+                    "{} {}[{}][{}]{};", float_type, name, array_len, num_values, value_initialize);
+            } else {
+                printer->fmt_line("{} {}[{}]{};", float_type, name, num_values, value_initialize);
+            }
+            codegen_global_variables.push_back(make_symbol(name));
+        }
     }
 
     for (const auto& var: info.state_vars) {
@@ -980,6 +1044,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     /// type related information
     printer->add_newline();
     printer->fmt_line("mech_type = nrn_get_mechtype({}[1]);", get_channel_info_var_name());
+
+    // register the table-checking function
+    if (info.table_count > 0) {
+        printer->fmt_line("_nrn_thread_table_reg(mech_type, {});", table_thread_function_name());
+    }
 
     /// Call _nrn_mechanism_register_data_fields() with the correct arguments
     /// Geenerated code follows the style underneath
@@ -1721,6 +1790,10 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
         printer->add_line("Prop* hoc_getdata_range(int type);");
     }
     /// TODO: More prints here?
+    // for registration of tables
+    if (info.table_count > 0) {
+        printer->add_line("void _nrn_thread_table_reg(int, nrn_thread_table_check_t);");
+    }
 }
 
 
