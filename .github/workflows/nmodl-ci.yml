@@ -44,6 +44,7 @@ jobs:
           - config:
               os: ubuntu-22.04
               enable_usecases: On
+              update_references: On
           - config:
               flag_warnings: ON
               os: ubuntu-22.04
@@ -193,6 +194,28 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl/build
         run:  |
           cmake --build . --target install
+
+      - name: Update references
+        if: ${{matrix.config.update_references == On }}
+        shell: bash
+
+        working-directory: ${{runner.workspace}}/nmodl/test/usecases
+        run : |
+          export PATH="${INSTALL_DIR}/bin:${PATH}"
+          export PYTHONPATH="${INSTALL_DIR}/lib:${PYTHONPATH}"
+
+          for d in cnexp_scalar func_proc
+          do
+              ./generate_references.sh nmodl "$d" "$OUTPUT_DIR/$d"
+          done
+
+          ls $OUTPUT_DIR
+
+        env:
+          INSTALL_DIR: ${{ runner.workspace }}/install
+          OUTPUT_DIR: ${{ runner.workspace }}/references
+
+
 
       - uses: actions/upload-artifact@v4
         with:
