@@ -287,7 +287,7 @@ jobs:
           git add .
           if git diff --cached --quiet
           then
-            git commit -m --allow-empty "References for '${nmodl_desc}'."
+            git commit --allow-empty -m "References for '${nmodl_desc}'."
             git push 2>/dev/null || git push --set-upstream origin ${branch}
           fi
 
