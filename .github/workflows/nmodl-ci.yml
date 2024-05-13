@@ -257,23 +257,24 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: BlueBrain/nmodl-references
+          token:  ${{ secrets.NMODL_REFERENCES_ACCESS_TOKEN }}
 
       - name: Update references
         run: |
-          for d in */
-          do
-            rm -rf "$d"
-          done
-
-          tar xf ${{ runner.workspace }}/references.tar
-
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
 
           branch="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/nmodl-\1/")"
 
-          git checkout -b ${branch}
+          git checkout ${branch} 2>/dev/null || git checkout -b ${branch}
+
+          for d in */
+          do
+            rm -rf "$d"
+          done
+          tar xf ${{ runner.workspace }}/references.tar
+
           git add .
           git commit -m "References for 'nmodl@${GITHUB_SHA}'."
-          git status
+          git push 2>/dev/null || git push -set-upstream origin ${branch}
 
