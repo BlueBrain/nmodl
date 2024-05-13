@@ -308,9 +308,8 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     // destroy solver
     pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_sls_executor(solver);
     if (!exception_message.empty()) {
-        logger->warn("SympySolverVisitor :: solve_lin_system python exception: " +
+        throw std::runtime_error("SympySolverVisitor :: solve_lin_system python exception: " +
                      exception_message);
-        return;
     }
     // find out where to insert solutions in statement block
     if (small_system) {
@@ -358,8 +357,8 @@ void SympySolverVisitor::solve_non_linear_system(
     auto exception_message = solver->exception_message;
     pywrap::EmbeddedPythonLoader::get_instance().api()->destroy_nsls_executor(solver);
     if (!exception_message.empty()) {
-      throw std::runtime_error("SympySolverVisitor :: solve_non_lin_system python exception: " +
-                     exception_message);
+        throw std::runtime_error("SympySolverVisitor :: solve_non_lin_system python exception: " +
+                                 exception_message);
     }
     logger->debug("SympySolverVisitor :: Constructing eigen newton solve block");
     construct_eigen_solver_block(pre_solve_statements, solutions, false);
@@ -389,15 +388,13 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();
 
     if (!lhs->is_var_name()) {
-        logger->warn("SympySolverVisitor :: LHS of differential equation is not a VariableName");
-        return;
+        throw std::runtime_error("SympySolverVisitor :: LHS of differential equation is not a VariableName");
     }
     auto lhs_name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
     if ((lhs_name->is_indexed_name() &&
          !std::dynamic_pointer_cast<ast::IndexedName>(lhs_name)->get_name()->is_prime_name()) ||
         (!lhs_name->is_indexed_name() && !lhs_name->is_prime_name())) {
-        logger->warn("SympySolverVisitor :: LHS of differential equation is not a PrimeName");
-        return;
+        throw std::runtime_error("SympySolverVisitor :: LHS of differential equation is not a PrimeName");
     }
 
     check_expr_statements_in_same_block();
@@ -453,14 +450,13 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
 
     auto exception_message = diffeq_solver->exception_message;
     if (!exception_message.empty()) {
-        logger->warn("SympySolverVisitor :: python exception: " + exception_message);
-        return;
+        throw std::runtime_error("SympySolverVisitor :: python exception: " + exception_message);
     }
 
     if (!solution.empty()) {
         replace_diffeq_expression(node, solution);
     } else {
-        logger->warn("SympySolverVisitor :: solution to differential equation not possible");
+        throw std::runtime_error("SympySolverVisitor :: solution to differential equation not possible");
     }
 }
 
