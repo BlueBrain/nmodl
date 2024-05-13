@@ -1176,26 +1176,6 @@ void CodegenCppVisitor::visit_program(const Program& node) {
 }
 
 
-void CodegenCppVisitor::print_function_or_procedure(const Block& node, const std::string& name) {
-    printer->add_newline(2);
-    print_function_declaration(node, name);
-    printer->add_text(" ");
-    printer->push_block();
-
-    // function requires return variable declaration
-    if (node.is_function_block()) {
-        auto type = default_float_data_type();
-        printer->fmt_line("{} ret_{} = 0.0;", type, name);
-    } else {
-        printer->fmt_line("int ret_{} = 0;", name);
-    }
-
-    print_statement_block(*node.get_statement_block(), false, false);
-    printer->fmt_line("return ret_{};", name);
-    printer->pop_block();
-}
-
-
 void CodegenCppVisitor::print_table_replacement_function(const ast::Block& node) {
     auto name = node.get_node_name();
     auto statement = get_table_statement(node);
