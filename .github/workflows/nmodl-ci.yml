@@ -264,7 +264,16 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
 
-          branch="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/nmodl-\1/")"
+          # If not a PR, then `pr_number` is the branch name.
+          pr_number="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/\1/")"
+          branch="nmodl-${pr_number}"
+
+          if [[ ${{ github.event_name }} == "pull_request" ]]
+          then
+            nmodl_desc=https://github.com/BlueBrain/nmodl/pulls/${pr_number}
+          else
+            nmodl_desc="nmodl@${GITHUB_SHA}"
+          fi
 
           git fetch
           git checkout ${branch} 2>/dev/null || git checkout -b ${branch}
@@ -276,6 +285,9 @@ jobs:
           tar xf ${{ runner.workspace }}/references.tar
 
           git add .
-          git commit -m "References for 'nmodl@${GITHUB_SHA}'."
+          git commit -m "References for '${nmodl_desc}'."
           git push 2>/dev/null || git push --set-upstream origin ${branch}
+
+        env:
+          PR_NUMBER
 
