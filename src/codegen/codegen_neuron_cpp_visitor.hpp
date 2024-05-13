@@ -94,6 +94,11 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     virtual std::string backend_name() const override;
 
+    /**
+     * Name of the threaded table checking function
+     */
+    std::string table_thread_function_name() const;
+
 
     /****************************************************************************************/
     /*                     Common helper routines accross codegen functions                 */
@@ -185,6 +190,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print function and procedures prototype declaration
      */
     void print_function_prototypes() override;
+
+
+    /**
+     * Print all `check_*` function declarations
+     */
+    void print_check_table_function_prototypes();
 
 
     /**
