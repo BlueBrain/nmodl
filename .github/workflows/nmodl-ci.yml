@@ -265,14 +265,14 @@ jobs:
           git config user.email "<>"
 
           # If not a PR, then `pr_number` is the branch name.
-          pr_number="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/\1/")"
-          branch="nmodl-${pr_number}"
-
           if [[ ${{ github.event_name }} == "pull_request" ]]
-          then
+            pr_number="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/\1/")"
+
             nmodl_desc=https://github.com/BlueBrain/nmodl/pull/${pr_number}
+            branch="nmodl-${pr_number}"
           else
             nmodl_desc="nmodl@${GITHUB_SHA}"
+            branch="main"
           fi
 
           git fetch
