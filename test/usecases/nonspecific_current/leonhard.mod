@@ -17,5 +17,9 @@ PARAMETER {
 }
 
 BREAKPOINT {
+        func()
         il = c * (v - 1.5)
+}
+
+PROCEDURE func() {
 }
