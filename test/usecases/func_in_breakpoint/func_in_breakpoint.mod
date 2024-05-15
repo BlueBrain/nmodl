@@ -1,5 +1,10 @@
 NEURON {
     SUFFIX func_in_breakpoint
+    NONSPECIFIC_CURRENT il
+}
+
+ASSIGNED {
+        il (mA/cm2)
 }
 
 PARAMETER {
