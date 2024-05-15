@@ -34,7 +34,7 @@ STATE {
     nu
     xi
     omicron
-    pi
+    : pi
     chi
     psi
     omega
