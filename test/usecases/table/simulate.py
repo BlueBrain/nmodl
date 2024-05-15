@@ -8,7 +8,7 @@ s.insert("tbl")
 
 h.k_tbl = -0.1
 h.d_tbl = -40
-s(0.5).tbl.gmax = .001
+s(0.5).tbl.gmax = 0.001
 
 vvec = h.Vector().record(s(0.5)._ref_v)
 tvec = h.Vector().record(h._ref_t)
