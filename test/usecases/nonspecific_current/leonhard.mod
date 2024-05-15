@@ -17,17 +17,5 @@ PARAMETER {
 }
 
 BREAKPOINT {
-        func()
-        func_with_v(v)
-        func_with_other(c)
         il = c * (v - 1.5)
-}
-
-PROCEDURE func() {
-}
-
-PROCEDURE func_with_v(v) {
-}
-
-PROCEDURE func_with_other(q) {
 }
