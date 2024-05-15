@@ -1561,7 +1561,6 @@ void CodegenNeuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
     printer->fmt_push_block("inline double nrn_current_{}({})",
                             info.mod_suffix,
                             get_parameter_str(args));
-
     printer->add_line("double current = 0.0;");
     print_statement_block(*block, false, false);
     for (auto& current: info.currents) {
