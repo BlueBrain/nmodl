@@ -7,6 +7,7 @@ NEURON {
 STATE {
     is
     be
+    count
     as
     def
     del

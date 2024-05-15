@@ -32,7 +32,6 @@ if not ((major >= 1) and (minor >= 2)):
 forbidden_var = [
     # Python keywords
     "is",
-    "be",
     "as",
     "count",
     "def",
@@ -45,7 +44,6 @@ forbidden_var = [
     "pass",
     "raise",
     "yield",
-
     # SymPy functions
     "beta",
     "gamma",
