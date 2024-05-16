@@ -9,15 +9,10 @@ STATE {
     be
     count
     as
-    def
     del
     elif
-    finally
-    import
     in
     pass
-    raise
-    yield
 
     alpha
     beta
@@ -46,12 +41,9 @@ BREAKPOINT {
 
 KINETIC state {
     ~ is <-> be (1, 1)
-    ~ as <-> count (1, 1)
-    ~ def <-> del (1, 1)
-    ~ elif <-> finally (1, 1)
-    ~ import <-> in (1, 1)
+    ~ count <-> as (1, 1)
+    ~ elif <-> in (1, 1)
     ~ lambda <-> pass (1, 1)
-    ~ raise <-> yield (1, 1)
     ~ alpha <-> beta (1, 1)
     ~ gamma <-> delta (1, 1)
     ~ epsilon <-> zeta (1, 1)

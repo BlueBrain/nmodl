@@ -30,20 +30,15 @@ if not ((major >= 1) and (minor >= 2)):
 # because sympy will try to use its own internal one; or error out for invalid variables.
 # Rename it before and after to a unique name.
 forbidden_var = [
-    # Python keywords
+    # Selected Python keywords
     "is",
     "as",
     "count",
-    "def",
     "del",
     "elif",
-    "finally",
-    "import",
     "in",
     "lambda",
     "pass",
-    "raise",
-    "yield",
     # SymPy functions
     "beta",
     "gamma",
