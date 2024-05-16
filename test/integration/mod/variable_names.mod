@@ -59,7 +59,6 @@ KINETIC state {
     ~ iota <-> kappa (1, 1)
     ~ lambda <-> mu (1, 1)
     ~ nu <-> xi (1, 1)
-    ~ omicron <-> pi (1, 1)
-    ~ chi <-> psi (1, 1)
-    ~ omega <-> alpha (1, 1)
+    ~ omicron <-> chi (1, 1)
+    ~ psi <-> omega (1, 1)
 }
