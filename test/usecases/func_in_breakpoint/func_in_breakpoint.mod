@@ -4,7 +4,7 @@ NEURON {
 }
 
 ASSIGNED {
-        il (mA/cm2)
+    il
 }
 
 PARAMETER {
