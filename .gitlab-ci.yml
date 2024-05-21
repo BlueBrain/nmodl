@@ -85,6 +85,10 @@ spack_setup:
     PARSE_GITHUB_PR_DESCRIPTIONS: "true"
     # Ignore CVF ang BLUECONFIGS branches since those don't have a spack package
     SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
+    # I dunno why setting them above in `variables` doesn't work,
+    # so let's try here
+    SPACK_BRANCH: 'nmodl-pytest'
+    SPACK_DEPLOYMENT_SUFFIX: 'pulls/2441'
 
 build:intel:
   extends:
