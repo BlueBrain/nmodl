@@ -166,7 +166,7 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="comment">   * \return pointer to the clone/copy of the current node</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="comment">   */</span></div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;  <span class="comment">// NOLINTBEGIN(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ad09e04b51212350470394c499b31af92">   73</a></span>&#160;   <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html">WrappedExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ad09e04b51212350470394c499b31af92">clone</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ad09e04b51212350470394c499b31af92">   73</a></span>&#160;  <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html">WrappedExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ad09e04b51212350470394c499b31af92">clone</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ae0a42cf0b7fc6f4471d633efdd5600cb">WrappedExpression</a>(*<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  }</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  <span class="comment">// NOLINTEND(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">   * \sa Ast::get_node_type_name</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5129f2c9865ea53b78c0bd7749b8f35">   91</a></span>&#160;   <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5129f2c9865ea53b78c0bd7749b8f35">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5129f2c9865ea53b78c0bd7749b8f35">   91</a></span>&#160;  <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5129f2c9865ea53b78c0bd7749b8f35">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53">AstNodeType::WRAPPED_EXPRESSION</a>;</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  }</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment"></span> </div>
@@ -199,7 +199,7 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="comment">   * \sa Ast::get_node_name</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#a3bd7b61fb7fb0a74b832f6f4da9718e6">  106</a></span>&#160;   std::string <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#a3bd7b61fb7fb0a74b832f6f4da9718e6">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#a3bd7b61fb7fb0a74b832f6f4da9718e6">  106</a></span>&#160;  std::string <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#a3bd7b61fb7fb0a74b832f6f4da9718e6">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;WrappedExpression&quot;</span>;</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;  }</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
@@ -207,14 +207,14 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5309b003eb24a4e393736f54644ce58">  114</a></span>&#160;   std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5309b003eb24a4e393736f54644ce58">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5309b003eb24a4e393736f54644ce58">  114</a></span>&#160;  std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5309b003eb24a4e393736f54644ce58">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;WrappedExpression&gt;(shared_from_this());</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;  }</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0">  121</a></span>&#160;   std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0">  121</a></span>&#160;  std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;const WrappedExpression&gt;(shared_from_this());</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;  }</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment"></span> </div>
@@ -272,7 +272,7 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ae3f374b6682602191434f42799218166">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ae3f374b6682602191434f42799218166">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
@@ -284,7 +284,7 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ae3f374b6682602191434f42799218166">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#ae3f374b6682602191434f42799218166">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="comment">   * \brief accept (or visit) the current AST node using provided visitor</span></div>
@@ -297,12 +297,12 @@ $(document).ready(function(){initNavTree('wrapped__expression_8hpp_source.html',
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">   * \sa Ast::accept for example.</span></div>
 <div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#accc34d2c541aa1970063345e01c80843">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#accc34d2c541aa1970063345e01c80843">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="comment">   * \copydoc accept(visitor::Visitor&amp;)</span></div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#accc34d2c541aa1970063345e01c80843">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_wrapped_expression.html#accc34d2c541aa1970063345e01c80843">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="comment">  /// \}</span></div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>

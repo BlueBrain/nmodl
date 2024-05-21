@@ -168,7 +168,7 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="comment">   * \return pointer to the clone/copy of the current node</span></div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="comment">   */</span></div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <span class="comment">// NOLINTBEGIN(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a20da31950fece73084439f315a3d8a1d">   75</a></span>&#160;   <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html">UnitBlock</a>* <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a20da31950fece73084439f315a3d8a1d">clone</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a20da31950fece73084439f315a3d8a1d">   75</a></span>&#160;  <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html">UnitBlock</a>* <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a20da31950fece73084439f315a3d8a1d">clone</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ae592f4772c3157f30ee46bc9418fcb0b">UnitBlock</a>(*<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;  }</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;  <span class="comment">// NOLINTEND(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
@@ -186,7 +186,7 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">   * \sa Ast::get_node_type_name</span></div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#aba48429858c2f795306df960e209715d">   93</a></span>&#160;   <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#aba48429858c2f795306df960e209715d">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#aba48429858c2f795306df960e209715d">   93</a></span>&#160;  <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#aba48429858c2f795306df960e209715d">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa54d6f2049cfa2512325e15bc0eec7b9">AstNodeType::UNIT_BLOCK</a>;</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;  }</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment"></span> </div>
@@ -201,7 +201,7 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">   * \sa Ast::get_node_name</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a25207f8fcb81273ca5ff6ce3daba05f1">  108</a></span>&#160;   std::string <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a25207f8fcb81273ca5ff6ce3daba05f1">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00108"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a25207f8fcb81273ca5ff6ce3daba05f1">  108</a></span>&#160;  std::string <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a25207f8fcb81273ca5ff6ce3daba05f1">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;UnitBlock&quot;</span>;</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  }</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment"></span> </div>
@@ -216,21 +216,21 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment">     *</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">     * \sa Ast::get_nmodl_name</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">     */</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a28c087db8ef171c32051e8f219b4d0e1">  123</a></span>&#160;     std::string <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a28c087db8ef171c32051e8f219b4d0e1">get_nmodl_name</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a28c087db8ef171c32051e8f219b4d0e1">  123</a></span>&#160;    std::string <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a28c087db8ef171c32051e8f219b4d0e1">get_nmodl_name</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;      <span class="keywordflow">return</span> <span class="stringliteral">&quot;UNITS &quot;</span>;</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    }</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#ad6591e615aa9b2f3ca9fa1af31003bbe">  130</a></span>&#160;   std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ad6591e615aa9b2f3ca9fa1af31003bbe">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#ad6591e615aa9b2f3ca9fa1af31003bbe">  130</a></span>&#160;  std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ad6591e615aa9b2f3ca9fa1af31003bbe">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;UnitBlock&gt;(shared_from_this());</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;  }</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a6ff450de4181bb1e5e0578ec9a5799d5">  137</a></span>&#160;   std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a6ff450de4181bb1e5e0578ec9a5799d5">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00137"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_unit_block.html#a6ff450de4181bb1e5e0578ec9a5799d5">  137</a></span>&#160;  std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a6ff450de4181bb1e5e0578ec9a5799d5">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;const UnitBlock&gt;(shared_from_this());</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;  }</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"></span> </div>
@@ -314,7 +314,7 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ac4766cd49390207c549b82d821f8a933">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ac4766cd49390207c549b82d821f8a933">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
@@ -326,7 +326,7 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ac4766cd49390207c549b82d821f8a933">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#ac4766cd49390207c549b82d821f8a933">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">   * \brief accept (or visit) the current AST node using provided visitor</span></div>
@@ -339,12 +339,12 @@ $(document).ready(function(){initNavTree('unit__block_8hpp_source.html',''); ini
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="comment">   * \sa Ast::accept for example.</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a9afd2c1b13a3c1142f3489339822bd32">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a9afd2c1b13a3c1142f3489339822bd32">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="comment">   * \copydoc accept(visitor::Visitor&amp;)</span></div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a9afd2c1b13a3c1142f3489339822bd32">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_unit_block.html#a9afd2c1b13a3c1142f3489339822bd32">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">  /// \}</span></div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>

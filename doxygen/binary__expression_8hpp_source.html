@@ -184,7 +184,7 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">   * \return pointer to the clone/copy of the current node</span></div>
 <div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">   */</span></div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;  <span class="comment">// NOLINTBEGIN(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">   91</a></span>&#160;   <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">clone</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">   91</a></span>&#160;  <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html">BinaryExpression</a>* <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a3001436f70cf6e93be9251d08e5efbac">clone</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#abd7336147b7afdba3c1625eaf9dbc55c">BinaryExpression</a>(*<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  }</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;  <span class="comment">// NOLINTEND(clang-analyzer-cplusplus.NewDeleteLeaks)</span></div>
@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="comment">   * \sa Ast::get_node_type_name</span></div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">  109</a></span>&#160;   <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">  109</a></span>&#160;  <a class="code" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">AstNodeType</a> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a6436eb794c2b04e823daea56714dfb69">get_node_type</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a75832c2ddfe13f917645df6b7dba0336">AstNodeType::BINARY_EXPRESSION</a>;</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;  }</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment"></span> </div>
@@ -217,7 +217,7 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment">   * \sa Ast::get_node_name</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">  124</a></span>&#160;   std::string <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">  124</a></span>&#160;  std::string <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#af6004a7f6f6bfd8facb75a11a8371311">get_node_type_name</a>() const noexcept<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordflow">return</span> <span class="stringliteral">&quot;BinaryExpression&quot;</span>;</div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;  }</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
@@ -225,14 +225,14 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">  132</a></span>&#160;   std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00132"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">  132</a></span>&#160;  std::shared_ptr&lt;Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">get_shared_ptr</a>()<span class="keyword"> override </span>{</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;BinaryExpression&gt;(shared_from_this());</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;  }</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment">   * \brief Get std::shared_ptr from `this` pointer of the current ast node</span></div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">  139</a></span>&#160;   std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">  139</a></span>&#160;  std::shared_ptr&lt;const Ast&gt; <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#a44fdc9712899953cb9174fb35ac2ec4e">get_shared_ptr</a>()<span class="keyword"> const override </span>{</div>
 <div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keywordflow">return</span> std::static_pointer_cast&lt;const BinaryExpression&gt;(shared_from_this());</div>
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;  }</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment"></span> </div>
@@ -330,7 +330,7 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="comment">   * \brief visit children i.e. member variables of current node using provided visitor</span></div>
@@ -342,7 +342,7 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="comment">   * \sa Ast::visit_children for example.</span></div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#aaaf929bc6951281614a1aa541e0f596d">visit_children</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="comment">   * \brief accept (or visit) the current AST node using provided visitor</span></div>
@@ -355,12 +355,12 @@ $(document).ready(function(){initNavTree('binary__expression_8hpp_source.html','
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="comment">   *</span></div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;<span class="comment">   * \sa Ast::accept for example.</span></div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_visitor.html">visitor::Visitor</a>&amp; v) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">  /**</span></div>
 <div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="comment">   * \copydoc accept(visitor::Visitor&amp;)</span></div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="comment">   */</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;   <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1ast_1_1_binary_expression.html#ad4a9dbe1a21f65812c6df0f39fe9d2e6">accept</a>(<a class="code" href="classnmodl_1_1visitor_1_1_const_visitor.html">visitor::ConstVisitor</a>&amp; v) <span class="keyword">const override</span>;<span class="comment"></span></div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="comment">  /// \}</span></div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;  <span class="keyword">private</span>:<span class="comment"></span></div>
