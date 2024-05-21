@@ -277,7 +277,7 @@ stages:
         # change the name accordingly
         python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
         CIBW_BUILD="cp38* cp312*" SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
-      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
       displayName: 'Build macos Wheel (x86_64) (min and max Python versions only)'
     - task: PublishBuildArtifacts@1
       inputs:
