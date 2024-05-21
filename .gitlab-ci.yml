@@ -24,7 +24,7 @@ variables:
     value: master
   SPACK_DEPLOYMENT_SUFFIX:
     description: Extra path component used when finding deployed software. Set to something like `pulls/1497` use software built for https://github.com/BlueBrain/spack/pull/1497. You probably want to set SPACK_BRANCH to the branch used in the relevant PR if you set this.
-    value: ''
+    value: 'pulls/2441'
 
 trigger cvf:
   # Stop the globally-defined CVF_BRANCH above from being set in the child pipeline
