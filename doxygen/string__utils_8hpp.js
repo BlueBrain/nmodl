@@ -6,6 +6,7 @@ var string__utils_8hpp =
       [ "center", "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667", null ]
     ] ],
     [ "align_text", "string__utils_8hpp.html#ga287cad41afb0bf66e8767af03a681894", null ],
+    [ "ends_with", "string__utils_8hpp.html#ga471a8e5bc38d473327cd002177cdeb2d", null ],
     [ "escape_quotes", "string__utils_8hpp.html#gaf540c93e2be6257255681bea72895aa4", null ],
     [ "ltrim", "string__utils_8hpp.html#ga09e2cad122ecf35cb2d5fbfc4b1daa2e", null ],
     [ "remove_character", "string__utils_8hpp.html#ga536e9fa8a76c71e6ee211e35020c89ce", null ],

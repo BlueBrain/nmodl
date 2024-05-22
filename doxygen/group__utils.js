@@ -68,6 +68,7 @@ var group__utils =
       [ "WithoutNumbers", "group__utils.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5", null ]
     ] ],
     [ "align_text", "group__utils.html#ga287cad41afb0bf66e8767af03a681894", null ],
+    [ "ends_with", "group__utils.html#ga471a8e5bc38d473327cd002177cdeb2d", null ],
     [ "escape_quotes", "group__utils.html#gaf540c93e2be6257255681bea72895aa4", null ],
     [ "generate_random_string", "group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56", null ],
     [ "is_last", "group__utils.html#ga08a8b444018d46999224618bb102b3e5", null ],

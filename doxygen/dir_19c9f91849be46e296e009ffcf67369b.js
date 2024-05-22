@@ -5,6 +5,7 @@ var dir_19c9f91849be46e296e009ffcf67369b =
       [ "NmodlTestCase", "structnmodl_1_1test__utils_1_1_nmodl_test_case.html", "structnmodl_1_1test__utils_1_1_nmodl_test_case" ],
       [ "DiffEqTestCase", "structnmodl_1_1test__utils_1_1_diff_eq_test_case.html", "structnmodl_1_1test__utils_1_1_diff_eq_test_case" ]
     ] ],
+    [ "string_utils.cpp", "test_2unit_2utils_2string__utils_8cpp.html", "test_2unit_2utils_2string__utils_8cpp" ],
     [ "test_utils.cpp", "test__utils_8cpp.html", "test__utils_8cpp" ],
     [ "test_utils.hpp", "test__utils_8hpp.html", "test__utils_8hpp" ]
 ];

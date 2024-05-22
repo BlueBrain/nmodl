@@ -157,6 +157,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gab27701783c8231e8a759a2ce717dfc8b"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#gab27701783c8231e8a759a2ce717dfc8b">nmodl::stringutils::split_string</a> (const std::string &amp;text, char delimiter)</td></tr>
 <tr class="memdesc:gab27701783c8231e8a759a2ce717dfc8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Split a text in a list of words, using a given delimiter character.  <a href="group__utils.html#gab27701783c8231e8a759a2ce717dfc8b">More...</a><br /></td></tr>
 <tr class="separator:gab27701783c8231e8a759a2ce717dfc8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga471a8e5bc38d473327cd002177cdeb2d"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#ga471a8e5bc38d473327cd002177cdeb2d">nmodl::stringutils::ends_with</a> (const std::string &amp;haystack, const std::string &amp;needle)</td></tr>
+<tr class="memdesc:ga471a8e5bc38d473327cd002177cdeb2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if <code>haystack</code> ends with <code>needle</code>.  <a href="group__utils.html#ga471a8e5bc38d473327cd002177cdeb2d">More...</a><br /></td></tr>
+<tr class="separator:ga471a8e5bc38d473327cd002177cdeb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga287cad41afb0bf66e8767af03a681894"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#ga287cad41afb0bf66e8767af03a681894">nmodl::stringutils::align_text</a> (const std::string &amp;text, int width, <a class="el" href="group__utils.html#ga45f97a3d578ade6b9b49b1a92ec688a6">text_alignment</a> type)</td></tr>
 <tr class="memdesc:ga287cad41afb0bf66e8767af03a681894"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aligns a text within a field of width <em>width</em>.  <a href="group__utils.html#ga287cad41afb0bf66e8767af03a681894">More...</a><br /></td></tr>
 <tr class="separator:ga287cad41afb0bf66e8767af03a681894"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -282,7 +285,48 @@ Variables</h2></td></tr>
 <p>count excess room to pad</p>
 <p>if odd #, add one more space</p>
 
-<p class="definition">Definition at line <a class="el" href="string__utils_8hpp_source.html#l00137">137</a> of file <a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string__utils_8hpp_source.html#l00158">158</a> of file <a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ga471a8e5bc38d473327cd002177cdeb2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga471a8e5bc38d473327cd002177cdeb2d">&#9670;&nbsp;</a></span>ends_with()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool nmodl::stringutils::ends_with </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>haystack</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>needle</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if <code>haystack</code> ends with <code>needle</code>. </p>
+<p>Every string ends with the empty string. </p>
+
+<p class="definition">Definition at line <a class="el" href="string__utils_8hpp_source.html#l00135">135</a> of file <a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>.</p>
 
 </div>
 </div>
@@ -585,7 +629,7 @@ template&lt;typename Iter , typename Cont &gt; </div>
 <p>Convert double value to string without trailing zeros. </p>
 <p>When we use std::to_string with double value 1 then it gets printed as <code>1.000000</code>. This is not convenient for testing and testing/validation. To avoid this issue, we use to_string for integer values and stringstream for the rest. </p>
 
-<p class="definition">Definition at line <a class="el" href="string__utils_8cpp_source.html#l00018">18</a> of file <a class="el" href="string__utils_8cpp_source.html">string_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2utils_2string__utils_8cpp_source.html#l00018">18</a> of file <a class="el" href="src_2utils_2string__utils_8cpp_source.html">string_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -622,7 +666,7 @@ template&lt;typename Iter , typename Cont &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a copy of string converted to lowercase </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="string__utils_8hpp_source.html#l00168">168</a> of file <a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="string__utils_8hpp_source.html#l00189">189</a> of file <a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>.</p>
 
 </div>
 </div>
