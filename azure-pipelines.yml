@@ -212,9 +212,12 @@ stages:
         else
           echo "##vso[task.setvariable variable=TAG;]"
         fi
+        echo "Wheel tag: ${TAG}"
       displayName: "Set wheel tag"
 
-    - bash: echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+    - script: |
+        echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+        echo "Build identifiers: ${CIBW_BUILD}"
       condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
       displayName: "Set build identifiers"
 
@@ -254,9 +257,12 @@ stages:
         else
           echo "##vso[task.setvariable variable=TAG;]"
         fi
+        echo "Wheel tag: ${TAG}"
       displayName: "Set wheel tag"
 
-    - bash: echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+    - script: |
+        echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+        echo "Build identifiers: ${CIBW_BUILD}"
       condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
       displayName: "Set build identifiers"
 
