@@ -201,37 +201,32 @@ stages:
       vmImage: 'ubuntu-20.04'
     steps:
     - task: UsePythonVersion@0
+
     - checkout: self
       submodules: True
       condition: succeeded()
+
     - script: |
         if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export TAG="-nightly"
+          echo "##vso[task.setvariable variable=TAG;]-nightly"
         else
-          export TAG=""
+          echo "##vso[task.setvariable variable=TAG;]"
         fi
+      displayName: "Set wheel tag"
+
+    - bash: echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+      displayName: "Set build identifiers"
+
+    - script: |
         python3 -m pip install --upgrade pip
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
         python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
         export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
-        CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
+        CIBW_BUILD="${CIBW_BUILD}" CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
       displayName: 'Building ManyLinux Wheels'
-    - script: |
-        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export TAG="-nightly"
-        else
-          export TAG=""
-        fi
-        python3 -m pip install --upgrade pip
-        python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
-        # change the name accordingly
-        python3 packaging/change_name.py pyproject.toml "NMODL${TAG}"
-        export SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)"
-        CIBW_BUILD="cp38* cp312*" CIBW_ENVIRONMENT_PASS_LINUX='SETUPTOOLS_SCM_PRETEND_VERSION' python3 -m cibuildwheel --output-dir wheelhouse
-      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-      displayName: 'Building ManyLinux Wheels (min a and max Python versions only)'
 
     - task: PublishBuildArtifacts@1
       inputs:
@@ -252,33 +247,30 @@ stages:
         brew install flex bison cmake ninja
       condition: succeeded()
       displayName: 'Install Dependencies'
-    - task: UsePythonVersion@0
+
     - script: |
         if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export NMODL_NIGHTLY_TAG="-nightly"
+          echo "##vso[task.setvariable variable=TAG;]-nightly"
         else
-          export NMODL_NIGHTLY_TAG=""
+          echo "##vso[task.setvariable variable=TAG;]"
         fi
+      displayName: "Set wheel tag"
+
+    - bash: echo "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+      displayName: "Set build identifiers"
+
+    - task: UsePythonVersion@0
+
+    - script: |
         python3 -m pip install --upgrade pip
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
         python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
-        SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
+        CIBW_BUILD="${CIBW_BUILD}" SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
       displayName: 'Build macos Wheel (x86_64)'
-    - script: |
-        if [[ "$(RELEASEWHEELBUILD)" != "True" ]]; then
-          export NMODL_NIGHTLY_TAG="-nightly"
-        else
-          export NMODL_NIGHTLY_TAG=""
-        fi
-        python3 -m pip install --upgrade pip
-        python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
-        # change the name accordingly
-        python3 packaging/change_name.py pyproject.toml "NMODL${NMODL_NIGHTLY_TAG}"
-        CIBW_BUILD="cp38* cp312*" SETUPTOOLS_SCM_PRETEND_VERSION="$(git describe --tags | cut -d '-' -f 1,2 | tr - .)" python3 -m cibuildwheel --output-dir wheelhouse
-      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
-      displayName: 'Build macos Wheel (x86_64) (min and max Python versions only)'
+
     - task: PublishBuildArtifacts@1
       inputs:
         pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
