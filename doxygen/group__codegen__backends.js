@@ -46,6 +46,8 @@ var group__codegen__backends =
       [ "unhandled_ast_types_func", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4", null ]
     ] ],
     [ "CodegenCoreneuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html", [
+      [ "add_variable_point_process", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aec6d530200c05de3dbe762b8f20f6646", null ],
+      [ "add_variable_tqitem", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ad1c95ccd279e2585cc6ef6c114b6bc8e", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#acfddae56ef5e91b7394b6f4c91748698", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4b69fec63ad84264583bae07a53630f9", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a81fb1fed8f020a023737954eb5334bad", null ],
@@ -189,6 +191,8 @@ var group__codegen__backends =
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4b69fec63ad84264583bae07a53630f9", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a81fb1fed8f020a023737954eb5334bad", null ],
       [ "add_escape_quote", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aeeacd28215827d6b0cd23cf59e5fc0c2", null ],
+      [ "add_variable_point_process", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a264f87fb7bb6d8954640417ba8b26643", null ],
+      [ "add_variable_tqitem", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a355831ff4f413b3804e637b55b5cab2c", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a30af017ff0f7101ed71d9b43e56031ca", null ],
       [ "breakpoint_current", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994", null ],
       [ "breakpoint_exist", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a578f6c60b4ca495b24e5b7ae2db448cc", null ],
@@ -352,6 +356,8 @@ var group__codegen__backends =
       [ "program_symtab", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a380ec35a9c68ed3384489d17a385551a", null ]
     ] ],
     [ "CodegenNeuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html", [
+      [ "add_variable_point_process", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ace966e9c828bcdc9053886ba274883d6", null ],
+      [ "add_variable_tqitem", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab88a7d20486baa43e3e217b6deacead7", null ],
       [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a89c5a0f046f8752579636a3db97d669a", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a4b69fec63ad84264583bae07a53630f9", null ],
       [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a81fb1fed8f020a023737954eb5334bad", null ],

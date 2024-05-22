@@ -1,5 +1,7 @@
 var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
 [
+    [ "add_variable_point_process", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ace966e9c828bcdc9053886ba274883d6", null ],
+    [ "add_variable_tqitem", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab88a7d20486baa43e3e217b6deacead7", null ],
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a89c5a0f046f8752579636a3db97d669a", null ],
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a4b69fec63ad84264583bae07a53630f9", null ],
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a81fb1fed8f020a023737954eb5334bad", null ],
