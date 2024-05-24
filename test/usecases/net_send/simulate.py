@@ -3,6 +3,12 @@ import numpy as np
 from neuron import h, gui
 from neuron.units import ms
 
+# In the INITIAL block an event is sent to itself using `net_send`. Once for
+# POINT_PROCESS (toggle.mod) and once for ARTIFICIAL_CELL (art_toggle.mod).
+#
+# When the event is received the variable `y` is "toggled" to 1. This happens
+# at different times for `toggle` and `art_toggle`.
+
 
 def simulate():
     nseg = 1

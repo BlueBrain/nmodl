@@ -1,5 +1,3 @@
-: An artificial cell using `net_send`.
-
 NEURON {
   ARTIFICIAL_CELL art_toggle
   RANGE y
