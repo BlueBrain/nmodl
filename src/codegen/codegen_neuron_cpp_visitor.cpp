@@ -1709,7 +1709,6 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
     printer->add_line("node_data.node_rhs[node_id] -= rhs;");
 
     if (breakpoint_exist()) {
-        printer->add_line("// remember the conductances so we can set them later");
         printer->fmt_line("inst.{}[id] = g;",
                           info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
                                          : naming::CONDUCTANCE_VARIABLE);
