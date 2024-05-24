@@ -26,6 +26,6 @@ BREAKPOINT {
 }
 
 PROCEDURE sigmoid1(v) {
-    TABLE sig DEPEND k, d FROM -100 TO 100 WITH 100
+    TABLE sig DEPEND k, d FROM -127 TO 128 WITH 155
     sig = 1/(1 + exp(k*(v - d)))
 }
