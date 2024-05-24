@@ -249,9 +249,10 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
 
 
 void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node,
-                                                          const std::string& name) {
+                                                          const std::string& name,
+                                                          bool hidden) {
     printer->add_newline(2);
-    print_function_declaration(node, name);
+    print_function_declaration(node, name, hidden);
     printer->add_text(" ");
     printer->push_block();
 
@@ -283,7 +284,7 @@ void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& 
     auto name = node.get_node_name();
     if (info.function_uses_table(name)) {
         auto new_name = "f_" + name;
-        print_function_or_procedure(node, new_name);
+        print_function_or_procedure(node, new_name, true);
         print_table_check_function(node);
         print_table_replacement_function(node);
     } else {

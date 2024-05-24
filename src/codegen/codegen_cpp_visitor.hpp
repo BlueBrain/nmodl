@@ -790,7 +790,9 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param node the AST node representing the function or procedure in NMODL
      * \param name the name of the function or procedure
      */
-    virtual void print_function_or_procedure(const ast::Block& node, const std::string& name) = 0;
+    virtual void print_function_or_procedure(const ast::Block& node,
+                                             const std::string& name,
+                                             bool hidden = false) = 0;
 
 
     /**
@@ -1389,7 +1391,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param name A user defined name for the function
      */
     template <typename T>
-    void print_function_declaration(const T& node, const std::string& name);
+    void print_function_declaration(const T& node, const std::string& name, bool hidden = false);
 };
 
 /* Templated functions need to be defined in header file */
@@ -1414,7 +1416,9 @@ void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
  * different in case of table statement.
  */
 template <typename T>
-void CodegenCppVisitor::print_function_declaration(const T& node, const std::string& name) {
+void CodegenCppVisitor::print_function_declaration(const T& node,
+                                                   const std::string& name,
+                                                   bool hidden) {
     enable_variable_name_lookup = false;
     auto type = default_float_data_type();
 
@@ -1432,7 +1436,8 @@ void CodegenCppVisitor::print_function_declaration(const T& node, const std::str
     }
 
     printer->add_indent();
-    printer->fmt_text("inline {} {}({})",
+    printer->fmt_text("{}inline {} {}({})",
+                      hidden ? "static " : "",
                       return_type,
                       method_name(name),
                       get_parameter_str(internal_params));
