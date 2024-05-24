@@ -161,7 +161,7 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     for (const auto& function: info.functions_with_table) {
         auto name = function->get_node_name();
         auto internal_params = internal_method_parameters();
-        printer->fmt_line("static void {}{}({});",
+        printer->fmt_line("void {}{}({});",
                           table_function_prefix(),
                           method_name(name),
                           get_parameter_str(internal_params));

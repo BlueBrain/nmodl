@@ -1305,7 +1305,7 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
     auto float_type = default_float_data_type();
 
     printer->add_newline(2);
-    printer->fmt_push_block("static void {}{}({})",
+    printer->fmt_push_block("void {}{}({})",
                             table_function_prefix(),
                             method_name(name),
                             get_parameter_str(internal_params));
