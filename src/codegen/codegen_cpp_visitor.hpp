@@ -1033,6 +1033,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual std::string get_variable_name(const std::string& name,
                                           bool use_instance = true) const = 0;
 
+    /**
+     * Prefix used for the function that performs the lazy update
+     */
+    std::string table_function_prefix() const;
+
 
     /**
      * Return ion variable name and corresponding ion read variable name.

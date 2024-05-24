@@ -161,7 +161,8 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     for (const auto& function: info.functions_with_table) {
         auto name = function->get_node_name();
         auto internal_params = internal_method_parameters();
-        printer->fmt_line("void check_{}({});",
+        printer->fmt_line("static void {}{}({});",
+                          table_function_prefix(),
                           method_name(name),
                           get_parameter_str(internal_params));
     }
@@ -178,7 +179,8 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
 
     for (const auto& function: info.functions_with_table) {
         auto method_name_str = function->get_node_name();
-        printer->fmt_line("check_{}{}(&_lmr, inst, id, _ppvar, _thread, _nt);",
+        printer->fmt_line("{}{}{}(&_lmr, inst, id, _ppvar, _thread, _nt);",
+                          table_function_prefix(),
                           method_name_str,
                           info.rsuffix);
     }
@@ -382,7 +384,10 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
     }
     printer->fmt_line("auto inst = make_instance_{}(_ml_real);", info.mod_suffix);
     if (info.function_uses_table(block_name)) {
-        printer->fmt_line("check_{}({});", method_name(block_name), internal_method_arguments());
+        printer->fmt_line("{}{}({});",
+                          table_function_prefix(),
+                          method_name(block_name),
+                          internal_method_arguments());
     }
     const auto get_func_call_str = [&]() {
         const auto params = function_or_procedure_block->get_parameters();
