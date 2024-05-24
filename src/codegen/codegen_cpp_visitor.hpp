@@ -789,6 +789,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Print nmodl function or procedure (common code)
      * \param node the AST node representing the function or procedure in NMODL
      * \param name the name of the function or procedure
+     * \param hidden whether the function should be declared `static`
      */
     virtual void print_function_or_procedure(const ast::Block& node,
                                              const std::string& name,

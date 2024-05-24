@@ -198,12 +198,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_check_table_function_prototypes();
 
 
-    /**
-     * Print nmodl function or procedure (common code)
-     * \param node the AST node representing the function or procedure in NMODL
-     * \param name the name of the function or procedure
-     * \param whether the function should be declared `static`
-     */
     void print_function_or_procedure(const ast::Block& node,
                                      const std::string& name,
                                      bool hidden = false) override;

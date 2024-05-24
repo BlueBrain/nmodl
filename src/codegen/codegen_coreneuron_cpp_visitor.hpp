@@ -358,11 +358,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void print_check_table_thread_function();
 
 
-    /**
-     * Print nmodl function or procedure (common code)
-     * \param node the AST node representing the function or procedure in NMODL
-     * \param name the name of the function or procedure
-     */
     void print_function_or_procedure(const ast::Block& node,
                                      const std::string& name,
                                      bool hidden = false) override;
