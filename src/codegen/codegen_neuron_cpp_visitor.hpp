@@ -92,7 +92,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Name of the code generation backend
      */
-    virtual std::string backend_name() const override;
+    std::string backend_name() const override;
 
     /**
      * Name of the threaded table checking function
@@ -129,7 +129,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print atomic update pragma for reduction statements
      */
-    virtual void print_atomic_reduction_pragma() override;
+    void print_atomic_reduction_pragma() override;
 
 
     /**
@@ -217,7 +217,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print NMODL procedure in target backend code
      * \param node
      */
-    virtual void print_procedure(const ast::ProcedureBlock& node) override;
+    void print_procedure(const ast::ProcedureBlock& node) override;
 
 
     /**
@@ -238,6 +238,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                             Code-specific helper routines                            */
     /****************************************************************************************/
 
+    void add_variable_tqitem(std::vector<IndexVariableInfo>& variables) override;
+    void add_variable_point_process(std::vector<IndexVariableInfo>& variables) override;
 
     /**
      * Arguments for functions that are defined and used internally.
@@ -456,8 +458,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print common code for global functions like nrn_init, nrn_cur and nrn_state
      * \param type The target backend code block type
      */
-    virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "") override;
+    void print_global_function_common_code(BlockType type,
+                                           const std::string& function_name = "") override;
 
 
     /**
@@ -554,7 +556,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print fast membrane current calculation code
      */
-    virtual void print_fast_imem_calculation() override;
+    void print_fast_imem_calculation() override;
 
 
     /**
@@ -648,7 +650,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print all compute functions for every backend
      *
      */
-    virtual void print_compute_functions() override;
+    void print_compute_functions() override;
 
 
     /**
@@ -663,7 +665,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
-    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
+    void visit_watch_statement(const ast::WatchStatement& node) override;
 
 
 

@@ -432,6 +432,19 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
 /*                           Code-specific helper routines                              */
 /****************************************************************************************/
 
+void CodegenNeuronCppVisitor::add_variable_tqitem(std::vector<IndexVariableInfo>& variables) {
+    if (info.net_send_used) {
+        variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), false, false, true);
+        variables.back().is_constant = true;
+        info.tqitem_index = static_cast<int>(variables.size() - 1);
+    }
+}
+
+void CodegenNeuronCppVisitor::add_variable_point_process(
+    std::vector<IndexVariableInfo>& variables) {
+    variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), false, false, true);
+    variables.back().is_constant = true;
+}
 
 std::string CodegenNeuronCppVisitor::internal_method_arguments() {
     return "_ml, inst, id, _ppvar, _thread, _nt";
@@ -1410,9 +1423,12 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                 continue;
             }
             const auto& var_name = var->get_name();
+            auto var_pos = position_of_float_var(var_name);
+            double var_value = var->get_value() == nullptr ? 0.0 : *var->get_value();
+
             printer->fmt_line("_ml->template fpfield<{}>(_iml) = {}; /* {} */",
-                              position_of_float_var(var_name),
-                              *var->get_value(),
+                              var_pos,
+                              var_value,
                               var_name);
         }
     }
