@@ -1346,7 +1346,6 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
     if (breakpoint_exist()) {
-        printer->add_line("// set conductances properly");
         printer->add_line("int node_id = node_data.nodeindices[id];");
         printer->fmt_line("node_data.node_diagonal[node_id] += inst.{}[id];",
                           info.vectorize ? naming::CONDUCTANCE_UNUSED_VARIABLE
