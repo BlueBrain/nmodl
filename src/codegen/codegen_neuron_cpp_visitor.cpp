@@ -1130,6 +1130,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_line(");");
     printer->add_newline();
 
+
     printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
                       float_variables_size(),
                       int_variables_size());
@@ -1142,6 +1143,10 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");",
                           i,
                           info.semantics[i].name);
+    }
+
+    if (info.artificial_cell) {
+        printer->fmt_line("add_nrn_artcell(mech_type, {});", info.tqitem_index);
     }
 
     printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
@@ -1334,10 +1339,13 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     print_global_function_common_code(BlockType::Initial);
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");
-    printer->add_line("int node_id = node_data.nodeindices[id];");
+
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
-    printer->add_line("auto v = node_data.node_voltages[node_id];");
-    printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
+    if (!info.artificial_cell) {
+        printer->add_line("int node_id = node_data.nodeindices[id];");
+        printer->add_line("auto v = node_data.node_voltages[node_id];");
+        printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
+    }
 
     print_initial_block(info.initial_node);
     printer->pop_block();
@@ -1347,7 +1355,6 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
 void CodegenNeuronCppVisitor::print_nrn_jacob() {
     printer->add_newline(2);
-    printer->add_line("/** nrn_jacob function */");
 
     printer->fmt_push_block(
         "static void {}(_nrn_model_sorted_token const& _sorted_token, NrnThread* "
