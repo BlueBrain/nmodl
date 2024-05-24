@@ -92,7 +92,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Name of the code generation backend
      */
-    virtual std::string backend_name() const override;
+    std::string backend_name() const override;
 
 
     /****************************************************************************************/
@@ -124,7 +124,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print atomic update pragma for reduction statements
      */
-    virtual void print_atomic_reduction_pragma() override;
+    void print_atomic_reduction_pragma() override;
 
 
     /**
@@ -157,6 +157,15 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_net_event_call(const ast::FunctionCall& node) override;
 
+    /**
+     * Print `net_receive` call-back.
+     */
+    void print_net_receive();
+
+    /**
+     * Print code to register the call-back for the NET_RECEIVE block.
+     */
+    void print_net_receive_registration();
 
     /**
      * Print POINT_PROCESS related functions
@@ -197,7 +206,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print NMODL procedure in target backend code
      * \param node
      */
-    virtual void print_procedure(const ast::ProcedureBlock& node) override;
+    void print_procedure(const ast::ProcedureBlock& node) override;
 
 
     /**
@@ -218,6 +227,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                             Code-specific helper routines                            */
     /****************************************************************************************/
 
+    void add_variable_tqitem(std::vector<IndexVariableInfo>& variables) override;
+    void add_variable_point_process(std::vector<IndexVariableInfo>& variables) override;
 
     /**
      * Arguments for functions that are defined and used internally.
@@ -436,8 +447,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print common code for global functions like nrn_init, nrn_cur and nrn_state
      * \param type The target backend code block type
      */
-    virtual void print_global_function_common_code(BlockType type,
-                                                   const std::string& function_name = "") override;
+    void print_global_function_common_code(BlockType type,
+                                           const std::string& function_name = "") override;
 
 
     /**
@@ -534,7 +545,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print fast membrane current calculation code
      */
-    virtual void print_fast_imem_calculation() override;
+    void print_fast_imem_calculation() override;
 
 
     /**
@@ -628,7 +639,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Print all compute functions for every backend
      *
      */
-    virtual void print_compute_functions() override;
+    void print_compute_functions() override;
 
 
     /**
@@ -643,17 +654,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
 
-    virtual void visit_watch_statement(const ast::WatchStatement& node) override;
+    void visit_watch_statement(const ast::WatchStatement& node) override;
 
 
-    /**
-     * Print prototype declarations of functions or procedures
-     * \tparam T   The AST node type of the node (must be of nmodl::ast::Ast or subclass)
-     * \param node The AST node representing the function or procedure block
-     * \param name A user defined name for the function
-     */
-    template <typename T>
-    void print_function_declaration(const T& node, const std::string& name);
 
 
   public:
@@ -679,40 +682,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_node_data_structure(bool print_initializers);
 };
 
-
-/**
- * \details If there is an argument with name (say alpha) same as range variable (say alpha),
- * we want to avoid it being printed as instance->alpha. And hence we disable variable
- * name lookup during prototype declaration. Note that the name of procedure can be
- * different in case of table statement.
- */
-template <typename T>
-void CodegenNeuronCppVisitor::print_function_declaration(const T& node, const std::string& name) {
-    enable_variable_name_lookup = false;
-    auto type = default_float_data_type();
-
-    // internal and user provided arguments
-    auto internal_params = internal_method_parameters();
-    const auto& params = node.get_parameters();
-    for (const auto& param: params) {
-        internal_params.emplace_back("", type, "", param.get()->get_node_name());
-    }
-
-    // procedures have "int" return type by default
-    const char* return_type = "int";
-    if (node.is_function_block()) {
-        return_type = default_float_data_type();
-    }
-
-    /// TODO: Edit for NEURON
-    printer->add_indent();
-    printer->fmt_text("inline {} {}({})",
-                      return_type,
-                      method_name(name),
-                      get_parameter_str(internal_params));
-
-    enable_variable_name_lookup = true;
-}
 
 /** \} */  // end of codegen_backends
 

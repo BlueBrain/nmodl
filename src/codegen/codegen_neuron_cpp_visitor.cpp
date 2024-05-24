@@ -15,9 +15,11 @@
 
 #include "ast/all.hpp"
 #include "codegen/codegen_utils.hpp"
+#include "codegen_naming.hpp"
 #include "config/config.h"
 #include "utils/string_utils.hpp"
 #include "visitors/rename_visitor.hpp"
+#include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 namespace nmodl {
@@ -26,6 +28,7 @@ namespace codegen {
 using namespace ast;
 
 using visitor::RenameVisitor;
+using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
 
@@ -219,6 +222,16 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(const ast::Block& node
         printer->fmt_line("int ret_{} = 0;", name);
     }
 
+    if (node.is_procedure_block() || node.is_function_block()) {
+        const auto& parameters = node.get_parameters();
+        auto result = std::find_if(parameters.begin(), parameters.end(), [](auto var) {
+            return var.get()->get_node_name() == "v";
+        });
+        if (result == parameters.end()) {
+            printer->fmt_line("auto v = inst.{}[id];", naming::VOLTAGE_UNUSED_VARIABLE);
+        }
+    }
+
     print_statement_block(*node.get_statement_block(), false, false);
     printer->fmt_line("return ret_{};", name);
     printer->pop_block();
@@ -373,6 +386,19 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
 /*                           Code-specific helper routines                              */
 /****************************************************************************************/
 
+void CodegenNeuronCppVisitor::add_variable_tqitem(std::vector<IndexVariableInfo>& variables) {
+    if (info.net_send_used) {
+        variables.emplace_back(make_symbol(naming::TQITEM_VARIABLE), false, false, true);
+        variables.back().is_constant = true;
+        info.tqitem_index = static_cast<int>(variables.size() - 1);
+    }
+}
+
+void CodegenNeuronCppVisitor::add_variable_point_process(
+    std::vector<IndexVariableInfo>& variables) {
+    variables.emplace_back(make_symbol(naming::POINT_PROCESS_VARIABLE), false, false, true);
+    variables.back().is_constant = true;
+}
 
 std::string CodegenNeuronCppVisitor::internal_method_arguments() {
     return "_ml, inst, id, _ppvar, _thread, _nt";
@@ -507,7 +533,7 @@ std::string CodegenNeuronCppVisitor::float_variable_name(const SymbolType& symbo
 std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& symbol,
                                                        const std::string& name,
                                                        bool use_instance) const {
-    // auto position = position_of_int_var(name);
+    auto position = position_of_int_var(name);
     if (symbol.is_index) {
         if (use_instance) {
             throw std::runtime_error("Not implemented. [wiejo]");
@@ -518,11 +544,9 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     }
     if (symbol.is_integer) {
         if (use_instance) {
-            throw std::runtime_error("Not implemented. [cnuoe]");
-            // return fmt::format("inst->{}[{}*pnodecount+id]", name, position);
+            return fmt::format("inst.{}[id]", name);
         }
-        throw std::runtime_error("Not implemented. [u32ow]");
-        // return fmt::format("indexes[{}*pnodecount+id]", position);
+        return fmt::format("_ppvar[{}]", position);
     }
     if (use_instance) {
         return fmt::format("(*inst.{}[id])", name);
@@ -583,9 +607,7 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
         return std::string("_nt->_") + naming::NTHREAD_DT_VARIABLE;
     }
 
-    // t in net_receive method is an argument to function and hence it should
-    // be used instead of nt->_t which is current time of thread
-    if (varname == naming::NTHREAD_T_VARIABLE && !printing_net_receive) {
+    if (varname == naming::NTHREAD_T_VARIABLE) {
         return std::string("_nt->_") + naming::NTHREAD_T_VARIABLE;
     }
 
@@ -1009,7 +1031,12 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
             throw std::runtime_error("Broken logic.");
         }
 
-        auto type = (name == naming::POINT_PROCESS_VARIABLE) ? "Point_process*" : "double*";
+        auto type = "double*";
+        if (name == naming::POINT_PROCESS_VARIABLE) {
+            type = "Point_process*";
+        } else if (name == naming::TQITEM_VARIABLE) {
+            type = "void*";
+        }
         mech_register_args.push_back(
             fmt::format("_nrn_mechanism_field<{}>{{\"{}\", \"{}\"}} /* {} */",
                         type,
@@ -1033,7 +1060,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                       int_variables_size());
 
     for (int i = 0; i < codegen_int_variables_size; ++i) {
-        const auto& int_var = codegen_int_variables[i];
         if (i != info.semantics[i].index) {
             throw std::runtime_error("Broken logic.");
         }
@@ -1046,6 +1072,10 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
     if (!info.point_process) {
         printer->add_line("hoc_register_npy_direct(mech_type, npy_direct_func_proc);");
+    }
+    if (info.net_receive_node) {
+        printer->fmt_line("pnt_receive[mech_type] = nrn_net_receive_{};", info.mod_suffix);
+        printer->fmt_line("pnt_receive_size[mech_type] = {};", info.num_net_receive_parameters);
     }
     printer->pop_block();
 }
@@ -1218,6 +1248,8 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
     printer->fmt_line("auto node_data = make_node_data_{}(*_nt, *_ml_arg);", info.mod_suffix);
 
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
+    printer->add_line("auto* const _ml = &_lmr;");
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
 }
 
 
@@ -1227,6 +1259,13 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     print_global_function_common_code(BlockType::Initial);
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");
+    printer->add_multi_line(R"CODE(
+int node_id = node_data.nodeindices[id];
+auto* _ppvar = _ml_arg->pdata[id];
+auto v = node_data.node_voltages[node_id];
+)CODE");
+    printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
+
     print_initial_block(info.initial_node);
     printer->pop_block();
 
@@ -1313,9 +1352,12 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                 continue;
             }
             const auto& var_name = var->get_name();
+            auto var_pos = position_of_float_var(var_name);
+            double var_value = var->get_value() == nullptr ? 0.0 : *var->get_value();
+
             printer->fmt_line("_ml->template fpfield<{}>(_iml) = {}; /* {} */",
-                              position_of_float_var(var_name),
-                              *var->get_value(),
+                              var_pos,
+                              var_value,
                               var_name);
         }
     }
@@ -1357,6 +1399,13 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                                   ion.name,
                                   ion.variable_index(ion_var_name));
             }
+            // assign derivatives of the current as well
+            else if (ion.is_current_derivative(ion_var_name)) {
+                printer->fmt_line("_ppvar[{}] = _nrn_mechanism_get_param_handle({}_prop, {});",
+                                  i,
+                                  ion.name,
+                                  ion.variable_index(ion_var_name));
+            }
             //}
         }
     }
@@ -1382,6 +1431,11 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     print_global_function_common_code(BlockType::State);
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");
+    printer->add_multi_line(R"CODE(
+int node_id = node_data.nodeindices[id];
+auto* _ppvar = _ml_arg->pdata[id];
+auto v = node_data.node_voltages[node_id];
+)CODE");
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -1424,7 +1478,7 @@ std::string CodegenNeuronCppVisitor::nrn_current_arguments() {
     if (ion_variable_struct_required()) {
         throw std::runtime_error("Not implemented.");
     }
-    return "id, inst, node_data, v";
+    return "_ml, _nt, _ppvar, _thread, id, inst, node_data, v";
 }
 
 
@@ -1434,6 +1488,10 @@ CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::nrn_current_parame
     }
 
     ParamVector params;
+    params.emplace_back("", "_nrn_mechanism_cache_range*", "", "_ml");
+    params.emplace_back("", "NrnThread*", "", "_nt");
+    params.emplace_back("", "Datum*", "", "_ppvar");
+    params.emplace_back("", "Datum*", "", "_thread");
     params.emplace_back("", "size_t", "", "id");
     params.emplace_back("", fmt::format("{}&", instance_struct()), "", "inst");
     params.emplace_back("", fmt::format("{}&", node_data_struct()), "", "node_data");
@@ -1539,7 +1597,7 @@ void CodegenNeuronCppVisitor::print_nrn_cur_non_conductance_kernel() {
 void CodegenNeuronCppVisitor::print_nrn_cur_kernel(const BreakpointBlock& node) {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("double v = node_data.node_voltages[node_id];");
-
+    printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     const auto& read_statements = ion_read_statements(BlockType::Equation);
     for (auto& statement: read_statements) {
         printer->add_line(statement);
@@ -1739,6 +1797,7 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     print_nrn_cur();
     print_nrn_state();
     print_nrn_jacob();
+    print_net_receive();
 }
 
 
@@ -1763,7 +1822,23 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
 }
 
 void CodegenNeuronCppVisitor::print_net_send_call(const ast::FunctionCall& node) {
-    throw std::runtime_error("Not implemented.");
+    auto const& arguments = node.get_arguments();
+
+    if (printing_net_receive || printing_net_init) {
+        throw std::runtime_error("Not implemented. [jfiwoei]");
+    }
+
+    std::string weight_pointer = "nullptr";
+    const auto& point_process = get_variable_name("point_process", /* use_instance */ false);
+    const auto& tqitem = get_variable_name("tqitem", /* use_instance */ false);
+
+    printer->fmt_text("net_send(/* tqitem */ &{}, {}, {}.get<Point_process*>(), {} + ",
+                      tqitem,
+                      weight_pointer,
+                      point_process,
+                      get_variable_name("t"));
+    print_vector_elements(arguments, ", ");
+    printer->add_text(')');
 }
 
 void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node) {
@@ -1772,6 +1847,70 @@ void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node)
 
 void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& node) {
     throw std::runtime_error("Not implemented.");
+}
+
+/**
+ * Rename arguments to NET_RECEIVE block with corresponding pointer variable
+ *
+ * \code{.mod}
+ *      NET_RECEIVE (weight, R){
+ *            x = R
+ *      }
+ * \endcode
+ *
+ * then generated code should be:
+ *
+ * \code{.cpp}
+ *      x[id] = _args[1];
+ * \endcode
+ *
+ * So, the `R` in AST needs to be renamed with `_args[1]`.
+ */
+static void rename_net_receive_arguments(const ast::NetReceiveBlock& net_receive_node,
+                                         const ast::Node& node) {
+    const auto& parameters = net_receive_node.get_parameters();
+
+    auto n_parameters = parameters.size();
+    for (size_t i = 0; i < n_parameters; ++i) {
+        const auto& name = parameters[i]->get_node_name();
+        auto var_used = VarUsageVisitor().variable_used(node, name);
+        if (var_used) {
+            RenameVisitor vr(name, fmt::format("_args[{}]", i));
+            node.get_statement_block()->visit_children(vr);
+        }
+    }
+}
+
+void CodegenNeuronCppVisitor::print_net_receive() {
+    auto node = info.net_receive_node;
+    if (!node) {
+        return;
+    }
+
+    ParamVector args;
+    args.emplace_back("", "Point_process*", "", "_pnt");
+    args.emplace_back("", "double*", "", "_args");
+    args.emplace_back("", "double", "", "_lflag");
+
+    printer->fmt_push_block("static void nrn_net_receive_{}({})",
+                            info.mod_suffix,
+                            get_parameter_str(args));
+
+    rename_net_receive_arguments(*node, *node);
+
+    printer->add_line("_nrn_mechanism_cache_instance _ml_obj{_pnt->prop};");
+    printer->add_line("auto * _nt = static_cast<NrnThread*>(_pnt->_vnt);");
+    printer->add_line("auto * _ml = &_ml_obj;");
+
+    printer->fmt_line("auto inst = make_instance_{}(_ml_obj);", info.mod_suffix);
+
+    printer->add_line("size_t id = 0;");
+    printer->add_line("double t = _nt->_t;");
+
+    print_statement_block(*node->get_statement_block(), false, false);
+
+    printer->add_newline();
+    printer->pop_block();
 }
 
 

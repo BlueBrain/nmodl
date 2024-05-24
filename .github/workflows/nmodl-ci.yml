@@ -44,6 +44,7 @@ jobs:
           - config:
               os: ubuntu-22.04
               enable_usecases: On
+              update_references: On
           - config:
               flag_warnings: ON
               os: ubuntu-22.04
@@ -194,6 +195,39 @@ jobs:
         run:  |
           cmake --build . --target install
 
+      - name: Update references
+        if: matrix.config.update_references == 'On'
+        shell: bash
+
+        working-directory: ${{runner.workspace}}/nmodl/test/usecases
+        run : |
+          export PATH="${INSTALL_DIR}/bin:${PATH}"
+          export PYTHONPATH="${INSTALL_DIR}/lib:${PYTHONPATH}"
+
+          for d in */
+          do
+              if [[ "$d" == "references/" ]]
+              then
+                continue
+              fi
+
+              ./generate_references.sh nmodl "$d" "$OUTPUT_DIR/$d"
+          done
+
+          cd $OUTPUT_DIR
+          tar cf ../references.tar *
+
+        env:
+          INSTALL_DIR: ${{ runner.workspace }}/install
+          OUTPUT_DIR: ${{ runner.workspace }}/references
+
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.config.update_references == 'On'
+        with:
+          name: references
+          path: ${{runner.workspace}}/references.tar
+
       - uses: actions/upload-artifact@v4
         with:
           name: ctest-results-${{hashfiles('matrix.json')}}
@@ -207,3 +241,51 @@ jobs:
         if: failure() && contains(github.event.pull_request.title, 'live-debug-tests')
         uses: mxschmitt/action-tmate@v3
         timeout-minutes: 60
+
+
+  commit-references:
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: references
+          path: ${{runner.workspace}}/
+
+      - name: Check out nmodl-references
+        uses: actions/checkout@v4
+        with:
+          repository: BlueBrain/nmodl-references
+          token:  ${{ secrets.NMODL_REFERENCES_ACCESS_TOKEN }}
+
+      - name: Update references
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+          # If not a PR, then `pr_number` is the branch name.
+          if [[ ${{ github.event_name }} == "pull_request" ]]
+          then
+            pr_number="$(echo ${GITHUB_REF_NAME} | sed "s/^\([0-9]*\)\/merge/\1/")"
+
+            nmodl_desc=https://github.com/BlueBrain/nmodl/pull/${pr_number}
+            branch="nmodl-${pr_number}"
+          else
+            nmodl_desc="nmodl@${GITHUB_SHA}"
+            branch="main"
+          fi
+
+          git fetch
+          git checkout ${branch} 2>/dev/null || git checkout -b ${branch}
+
+          for d in */
+          do
+            rm -rf "$d"
+          done
+          tar xf ${{ runner.workspace }}/references.tar
+
+          git add .
+          git commit --allow-empty -m "References for '${nmodl_desc}'."
+          git push 2>/dev/null || git push --set-upstream origin ${branch}
+
