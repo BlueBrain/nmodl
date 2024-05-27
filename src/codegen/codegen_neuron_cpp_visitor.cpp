@@ -304,7 +304,7 @@ void CodegenNeuronCppVisitor::print_function(const ast::FunctionBlock& node) {
     // name of return variable
     std::string return_var;
     if (info.function_uses_table(name)) {
-        throw std::runtime_error("Function tables not implemented.");
+        return_var = "ret_f_" + name;
     } else {
         return_var = "ret_" + name;
     }
