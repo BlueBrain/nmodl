@@ -1,8 +1,8 @@
 NEURON {
     SUFFIX tbl
     NONSPECIFIC_CURRENT i
-    RANGE e, g, gmax
-    GLOBAL k, d
+    RANGE e, g, gmax, v1, v2
+    GLOBAL k, d, c1, c2
 }
 
 PARAMETER {
@@ -10,6 +10,8 @@ PARAMETER {
     gmax = 0
     k = .1
     d = -50
+    c1 = 1
+    c2 = 2
 }
 
 ASSIGNED {
@@ -17,6 +19,8 @@ ASSIGNED {
     i
     v
     sig
+    v1
+    v2
 }
 
 BREAKPOINT {
@@ -28,4 +32,15 @@ BREAKPOINT {
 PROCEDURE sigmoid1(v) {
     TABLE sig DEPEND k, d FROM -127 TO 128 WITH 155
     sig = 1/(1 + exp(k*(v - d)))
+}
+
+FUNCTION example_function(arg) {
+    TABLE DEPEND c1, c2 FROM -3 TO 5 WITH 500
+    example_function = c1 * arg * arg + c2
+}
+
+PROCEDURE example_procedure(arg) {
+    TABLE v1, v2 DEPEND c1, c2 FROM -4 TO 6 WITH 300
+    v1 = sin(c1 * arg) + 2
+    v2 = cos(c2 * arg) + 2
 }
