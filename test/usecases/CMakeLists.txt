@@ -12,7 +12,8 @@ set(NMODL_USECASE_DIRS
     point_process
     parameter
     func_in_breakpoint
-    table)
+    table
+    recursion)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
