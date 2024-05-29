@@ -16,7 +16,7 @@ def check_table(y_no_table, y_table, rtol1=1e-2, rtol2=1e-8):
     # hence the assert below
     assert not np.allclose(
         y_no_table, y_table, rtol=rtol2
-    ), f"{y_no_table} != {y_table}"
+    ), f"Broken test logic: {y_no_table} == {y_table}"
 
 
 def test_function():
@@ -61,10 +61,7 @@ def test_procedure():
 
     proc = section(0.5).tbl.example_procedure
 
-    def modified_args(arg):
-        """
-        Pass arg to the procedure and return new values
-        """
+    def call_proc_return_values(arg):
         proc(arg)
         return section(0.5).tbl.v1, section(0.5).tbl.v2
 
@@ -73,18 +70,18 @@ def test_procedure():
 
     h.usetable_tbl = 0
 
-    v1_no_table, v2_no_table = np.transpose(np.array([modified_args(i) for i in x]))
+    v1_no_table, v2_no_table = np.transpose([call_proc_return_values(i) for i in x])
 
     h.usetable_tbl = 1
-    v1_table, v2_table = np.transpose(np.array([modified_args(i) for i in x]))
+    v1_table, v2_table = np.transpose([call_proc_return_values(i) for i in x])
 
     check_table(v1_table, v1_no_table, rtol1=1e-3)
     check_table(v2_table, v2_no_table, rtol1=1e-3)
 
     # verify that the table just "clips" the values outside of the range
-    v1, v2 = modified_args(x[0] - 10)
+    v1, v2 = call_proc_return_values(x[0] - 10)
     assert v1 == v1_table[0] and v2 == v2_table[0]
-    v1, v2 = modified_args(x[-1] + 10)
+    v1, v2 = call_proc_return_values(x[-1] + 10)
     assert v1 == v1_table[-1] and v2 == v2_table[-1]
 
     # change params and verify
@@ -96,12 +93,12 @@ def test_procedure():
 
     h.usetable_tbl = 0
     v1_params_no_table, v2_params_no_table = np.transpose(
-        np.array([modified_args(i) for i in x])
+        [call_proc_return_values(i) for i in x]
     )
 
     h.usetable_tbl = 1
     v1_params_table, v2_params_table = np.transpose(
-        np.array([modified_args(i) for i in x])
+        [call_proc_return_values(i) for i in x]
     )
 
     check_table(v1_params_table, v1_params_no_table, rtol1=1e-3)
