@@ -167,12 +167,17 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
                           get_parameter_str(internal_params));
     }
 
+    ParamVector args = {{"", "Memb_list*", "", "_ml"},
+                        {"", "size_t", "", "id"},
+                        {"", "Datum*", "", "_ppvar"},
+                        {"", "Datum*", "", "_thread"},
+                        {"", "NrnThread*", "", "_nt"},
+                        {"", "int", "", "_type"},
+                        {"", "const _nrn_model_sorted_token&", "", "_sorted_token"}};
+
     // definition of `_check_table_thread` function
     // signature must be same as the `nrn_thread_table_check_t` type
-    printer->fmt_line(
-        "static void {}(Memb_list* _ml, size_t id, Datum* _ppvar, Datum* _thread, "
-        "NrnThread* _nt, int _type, _nrn_model_sorted_token const& _sorted_token)",
-        table_thread_function_name());
+    printer->fmt_line("static void {}({})", table_thread_function_name(), get_parameter_str(args));
     printer->push_block();
     printer->add_line("_nrn_mechanism_cache_range _lmr{_sorted_token, *_nt, *_ml, _type};");
     printer->fmt_line("auto inst = make_instance_{}(_lmr);", info.mod_suffix);
