@@ -46,12 +46,12 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
             const auto& table_vars =
                 std::dynamic_pointer_cast<const ast::TableStatement>(table_node)->get_table_vars();
             for (const auto& table_var: table_vars) {
-                const auto& result = procedure_vars.insert(table_var->get_node_name());
-                if (!result.second) {
+                const auto& [var_name, inserted] = procedure_vars.insert(table_var->get_node_name());
+                if (!inserted) {
                     logger->critical(
                         fmt::format("SemanticAnalysisVisitor :: TABLE statement variable {} used "
                                     "in multiple tables",
-                                    *result.first));
+                                    *var_name));
                     check_fail = true;
                 }
             }

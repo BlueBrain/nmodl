@@ -77,6 +77,8 @@ SCENARIO("TABLE stmt", "[visitor][semantic_analysis]") {
             }
         )";
         THEN("fail") {
+            // This is asserted because `nocmodl` generated code fails to
+            // compile in these cases, not because it must not work.
             REQUIRE(run_semantic_analysis_visitor(nmodl_text));
         }
     }
