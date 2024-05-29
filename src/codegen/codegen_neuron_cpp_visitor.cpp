@@ -960,6 +960,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     for (const auto& ion: info.ions) {
         printer->fmt_line("ion_reg(\"{}\", {});", ion.name, "-10000.");
+    }
+    if (!info.ions.empty()) {
         printer->add_newline();
     }
 
@@ -970,6 +972,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     for (const auto& ion: info.ions) {
         printer->fmt_line("_{0}_sym = hoc_lookup(\"{0}_ion\");", ion.name);
+    }
+    if (!info.ions.empty()) {
         printer->add_newline();
     }
 
