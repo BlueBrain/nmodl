@@ -200,7 +200,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void print_function_or_procedure(const ast::Block& node,
                                      const std::string& name,
-                                     bool hidden = false) override;
+                                     const std::unordered_set<CppObjectSpecifier>& specifiers = {
+                                         CppObjectSpecifier::Inline}) override;
 
 
     /**

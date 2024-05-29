@@ -103,6 +103,22 @@ enum class MemberType {
 };
 
 
+/// various specifiers (mostly for function codegen)
+enum class CppObjectSpecifier {
+    Inline,
+    Static,
+    Virtual,
+    Explicit,
+    Friend,
+    Constexpr,
+    Extern,
+    ExternC,
+    ThreadLocal,
+    Const,
+    Volatile
+};
+
+
 /**
  * \class IndexVariableInfo
  * \brief Helper to represent information about index/int variables
@@ -791,9 +807,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param name the name of the function or procedure
      * \param hidden whether the function should be declared `static`
      */
-    virtual void print_function_or_procedure(const ast::Block& node,
-                                             const std::string& name,
-                                             bool hidden = false) = 0;
+    virtual void print_function_or_procedure(
+        const ast::Block& node,
+        const std::string& name,
+        const std::unordered_set<CppObjectSpecifier>& specifiers) = 0;
 
 
     /**
@@ -1288,6 +1305,19 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual void print_codegen_routines() = 0;
 
+    std::unordered_map<CppObjectSpecifier, std::string> object_specifier_map = {
+        {CppObjectSpecifier::Inline, "inline"},
+        {CppObjectSpecifier::Static, "static"},
+        {CppObjectSpecifier::Constexpr, "constexpr"},
+        {CppObjectSpecifier::Volatile, "volatile"},
+        {CppObjectSpecifier::Virtual, "virtual"},
+        {CppObjectSpecifier::Explicit, "explicit"},
+        {CppObjectSpecifier::Friend, "friend"},
+        {CppObjectSpecifier::Extern, "extern"},
+        {CppObjectSpecifier::ExternC, "extern \"C\""},
+        {CppObjectSpecifier::ThreadLocal, "thread_local"},
+        {CppObjectSpecifier::Const, "const"}};
+
 
     /**
      * Print the nmodl constants used in backend code
@@ -1385,6 +1415,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
 
     const ast::TableStatement* get_table_statement(const ast::Block&);
 
+    std::string get_object_specifiers(const std::unordered_set<CppObjectSpecifier>&);
+
     /**
      * Print prototype declarations of functions or procedures
      * \tparam T   The AST node type of the node (must be of nmodl::ast::Ast or subclass)
@@ -1392,7 +1424,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param name A user defined name for the function
      */
     template <typename T>
-    void print_function_declaration(const T& node, const std::string& name, bool hidden = false);
+    void print_function_declaration(const T& node,
+                                    const std::string& name,
+                                    const std::unordered_set<CppObjectSpecifier>& = {
+                                        CppObjectSpecifier::Inline});
 };
 
 /* Templated functions need to be defined in header file */
@@ -1417,9 +1452,10 @@ void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
  * different in case of table statement.
  */
 template <typename T>
-void CodegenCppVisitor::print_function_declaration(const T& node,
-                                                   const std::string& name,
-                                                   bool hidden) {
+void CodegenCppVisitor::print_function_declaration(
+    const T& node,
+    const std::string& name,
+    const std::unordered_set<CppObjectSpecifier>& specifiers) {
     enable_variable_name_lookup = false;
     auto type = default_float_data_type();
 
@@ -1437,8 +1473,8 @@ void CodegenCppVisitor::print_function_declaration(const T& node,
     }
 
     printer->add_indent();
-    printer->fmt_text("{}inline {} {}({})",
-                      hidden ? "static " : "",
+    printer->fmt_text("{} {} {}({})",
+                      get_object_specifiers(specifiers),
                       return_type,
                       method_name(name),
                       get_parameter_str(internal_params));

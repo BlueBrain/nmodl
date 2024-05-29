@@ -1371,6 +1371,18 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
     printer->pop_block();
 }
 
+std::string CodegenCppVisitor::get_object_specifiers(
+    const std::unordered_set<CppObjectSpecifier>& specifiers) {
+    std::string result;
+    for (const auto& specifier: specifiers) {
+        if (!result.empty()) {
+            result += " ";
+        }
+        result += object_specifier_map[specifier];
+    }
+    return result;
+}
+
 const ast::TableStatement* CodegenCppVisitor::get_table_statement(const ast::Block& node) {
     const auto& table_statements = collect_nodes(node, {AstNodeType::TABLE_STATEMENT});
 

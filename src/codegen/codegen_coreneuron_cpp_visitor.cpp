@@ -425,11 +425,12 @@ void CodegenCoreneuronCppVisitor::print_check_table_thread_function() {
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_or_procedure(const ast::Block& node,
-                                                              const std::string& name,
-                                                              bool hidden) {
+void CodegenCoreneuronCppVisitor::print_function_or_procedure(
+    const ast::Block& node,
+    const std::string& name,
+    const std::unordered_set<CppObjectSpecifier>& specifiers) {
     printer->add_newline(2);
-    print_function_declaration(node, name, hidden);
+    print_function_declaration(node, name, specifiers);
     printer->add_text(" ");
     printer->push_block();
 
