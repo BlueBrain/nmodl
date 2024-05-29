@@ -37,6 +37,26 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
     }
     /// -->
 
+    // check that we do not have any duplicate TABLE statement variables in PROCEDUREs
+    const auto& procedure_nodes = collect_nodes(node, {ast::AstNodeType::PROCEDURE_BLOCK});
+    std::unordered_set<std::string> procedure_vars{};
+    for (const auto& proc_node: procedure_nodes) {
+        const auto& table_nodes = collect_nodes(*proc_node, {ast::AstNodeType::TABLE_STATEMENT});
+        for (const auto& table_node: table_nodes) {
+            const auto& table_vars =
+                std::dynamic_pointer_cast<const ast::TableStatement>(table_node)->get_table_vars();
+            for (const auto& table_var: table_vars) {
+                const auto& result = procedure_vars.insert(table_var->get_node_name());
+                if (!result.second) {
+                    logger->critical(
+                        fmt::format("SemanticAnalysisVisitor :: TABLE statement variable {} used "
+                                    "in multiple tables",
+                                    *result.first));
+                    check_fail = true;
+                }
+            }
+        }
+    }
     /// <-- This code is for check 4
     using namespace symtab::syminfo;
     const auto& with_prop = NmodlType::read_ion_var | NmodlType::write_ion_var;
