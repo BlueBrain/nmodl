@@ -1363,8 +1363,6 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
     if (!codegen_thread_variables.empty()) {
         printer->fmt_line("double * _thread_globals = _thread[{}].get<double*>();",
                           info.thread_var_thread_id);
-    } else {
-        printer->fmt_line("double * _thread_globals = nullptr;", info.thread_var_thread_id);
     }
 }
 
@@ -1594,7 +1592,8 @@ std::string CodegenNeuronCppVisitor::nrn_current_arguments() {
     if (ion_variable_struct_required()) {
         throw std::runtime_error("Not implemented.");
     }
-    return "_ml, _nt, _ppvar, _thread, _thread_globals, id, inst, node_data, v";
+    std::string thread_globals = info.thread_callback_register ? " _thread_globals," : "";
+    return "_ml, _nt, _ppvar, _thread," + thread_globals + " id, inst, node_data, v";
 }
 
 
@@ -1608,7 +1607,10 @@ CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::nrn_current_parame
     params.emplace_back("", "NrnThread*", "", "_nt");
     params.emplace_back("", "Datum*", "", "_ppvar");
     params.emplace_back("", "Datum*", "", "_thread");
-    params.emplace_back("", "double*", "", "_thread_globals");
+
+    if (info.thread_callback_register) {
+        params.emplace_back("", "double*", "", "_thread_globals");
+    }
     params.emplace_back("", "size_t", "", "id");
     params.emplace_back("", fmt::format("{}&", instance_struct()), "", "inst");
     params.emplace_back("", fmt::format("{}&", node_data_struct()), "", "node_data");
@@ -1801,7 +1803,9 @@ void CodegenNeuronCppVisitor::print_headers_include() {
     print_standard_includes();
     print_neuron_includes();
 
-    printer->add_line("extern void _nrn_thread_reg(int, int, void(*)(Datum*));");
+    if (info.thread_callback_register) {
+        printer->add_line("extern void _nrn_thread_reg(int, int, void(*)(Datum*));");
+    }
 }
 
 
