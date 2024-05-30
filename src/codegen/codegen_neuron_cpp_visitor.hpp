@@ -706,6 +706,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *                           be included in the struct declaration.
      */
     void print_node_data_structure(bool print_initializers);
+
+    void print_thread_variables_structure(bool print_initializers);
 };
 
 

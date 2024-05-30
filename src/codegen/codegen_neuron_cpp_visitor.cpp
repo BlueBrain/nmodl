@@ -559,17 +559,18 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
 std::string CodegenNeuronCppVisitor::thread_variable_name(const ThreadVariableInfo& var_info,
                                                           bool use_instance) const {
     auto i_var = var_info.offset;
+    auto var_name = var_info.symbol->get_name();
     std::string simd_width = "1";
 
     // std::string inst_id = fmt::format("(id % {})", simd_width);
-    std::string inst_id = "0";
+    // std::string inst_id = "0";
 
     if (use_instance) {
-        std::string offset = fmt::format("{} + {}*{}", i_var, inst_id, simd_width);
+        std::string offset = "0";
         if (var_info.symbol->is_array()) {
-            return fmt::format("(_thread_globals + {})", offset);
+            return fmt::format("(_thread_vars.{}_ptr())", var_name);
         } else {
-            return fmt::format("_thread_globals[{}]", offset);
+            return fmt::format("_thread_vars.{}(0)", var_name);
         }
     } else {
         return fmt::format("{}.thread_data[{}]", global_struct_instance(), i_var);
@@ -1322,6 +1323,34 @@ void CodegenNeuronCppVisitor::print_make_node_data() const {
     printer->pop_block();
 }
 
+void CodegenNeuronCppVisitor::print_thread_variables_structure(bool print_initializers) {
+    if (codegen_thread_variables.empty()) {
+        return;
+    }
+
+    printer->add_newline(2);
+    printer->fmt_push_block("struct {} ", thread_variables_struct());
+    printer->add_line("double * thread_data;");
+    printer->add_newline();
+
+    for (const auto& var_info: codegen_thread_variables) {
+        printer->fmt_push_block("double * {}_ptr(size_t i)", var_info.symbol->get_name());
+        printer->fmt_line("return thread_data + {} + i;", var_info.offset);
+        printer->pop_block();
+
+        printer->fmt_push_block("double & {}(size_t i)", var_info.symbol->get_name());
+        printer->fmt_line("return thread_data[{} + i];", var_info.offset);
+        printer->pop_block();
+    }
+    printer->add_newline();
+
+    printer->push_block(fmt::format("{}(double * const thread_data)", thread_variables_struct()));
+    printer->fmt_line("this->thread_data = thread_data;");
+    printer->pop_block();
+
+    printer->pop_block(";");
+}
+
 
 void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
     // read ion statements
@@ -1361,7 +1390,8 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
     printer->add_line("auto* const _ml = &_lmr;");
     printer->add_line("auto* _thread = _ml_arg->_thread;");
     if (!codegen_thread_variables.empty()) {
-        printer->fmt_line("double * _thread_globals = _thread[{}].get<double*>();",
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
                           info.thread_var_thread_id);
     }
 }
@@ -1592,7 +1622,7 @@ std::string CodegenNeuronCppVisitor::nrn_current_arguments() {
     if (ion_variable_struct_required()) {
         throw std::runtime_error("Not implemented.");
     }
-    std::string thread_globals = info.thread_callback_register ? " _thread_globals," : "";
+    std::string thread_globals = info.thread_callback_register ? " _thread_vars," : "";
     return "_ml, _nt, _ppvar, _thread," + thread_globals + " id, inst, node_data, v";
 }
 
@@ -1609,7 +1639,8 @@ CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::nrn_current_parame
     params.emplace_back("", "Datum*", "", "_thread");
 
     if (info.thread_callback_register) {
-        params.emplace_back("", "double*", "", "_thread_globals");
+        auto type_name = fmt::format("{}&", thread_variables_struct());
+        params.emplace_back("", type_name, "", "_thread_vars");
     }
     params.emplace_back("", "size_t", "", "id");
     params.emplace_back("", fmt::format("{}&", instance_struct()), "", "inst");
@@ -1881,6 +1912,7 @@ void CodegenNeuronCppVisitor::print_data_structures(bool print_initializers) {
     print_mechanism_global_var_structure(print_initializers);
     print_mechanism_range_var_structure(print_initializers);
     print_node_data_structure(print_initializers);
+    print_thread_variables_structure(print_initializers);
     print_make_instance();
     print_make_node_data();
 }
