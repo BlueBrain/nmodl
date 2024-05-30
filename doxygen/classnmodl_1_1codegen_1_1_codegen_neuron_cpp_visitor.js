@@ -24,7 +24,6 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "position_of_float_var", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#afdd6466ebac569ec670c3b6f4ca11d3e", null ],
     [ "position_of_int_var", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8c348f1869653cec3dcc39b1866bab97", null ],
     [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a910f9f22e6fbdae4eefae177eb8910f9", null ],
-    [ "print_backend_info", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3529a162774aca01dbc18b604acfe00c", null ],
     [ "print_codegen_routines", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a9f9d3aebd2dc5bbc05e0cb7e9a707c7f", null ],
     [ "print_compute_functions", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a94f4993226aa53f6095ad4a44fe47420", null ],
     [ "print_data_structures", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aeb0635e7e6e488519882d930401b5c2b", null ],

@@ -1,7 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"structnmodl_1_1codegen_1_1_shadow_use_statement.html#a0d2fc5fe78ace3ee451b380fdc7257e7":[0,1,1,1,1],
-"structnmodl_1_1codegen_1_1_shadow_use_statement.html#abaf923aecaed924ee6c7147b43b11f87":[0,1,1,1,2],
 "structnmodl_1_1details_1_1_method_info.html":[2,0,0,2,0],
 "structnmodl_1_1details_1_1_method_info.html#a0925cd21f643be5ea904c04da6437c00":[2,0,0,2,0,3],
 "structnmodl_1_1details_1_1_method_info.html#a65ea347bb9516277eb58cbe35b040d0a":[2,0,0,2,0,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX32 =
 "symbol__properties_8hpp.html#afde535fb45789f24916fd1cbafbb2aa2aa27a6549ade38cc036f7b8c58a840510":[3,0,1,8,4,6,0],
 "symbol__properties_8hpp.html#afde535fb45789f24916fd1cbafbb2aa2af1f713c9e000f5d3f280adbd124df4f5":[3,0,1,8,4,6,1],
 "symbol__properties_8hpp.html#aff22d645565e406f065432295d3f8d3c":[3,0,1,8,4,17],
-"symbol__properties_8hpp_source.html":[3,0,1,8,4]
+"symbol__properties_8hpp_source.html":[3,0,1,8,4],
+"symbol__table_8hpp.html":[3,0,1,8,6],
+"symbol__table_8hpp_source.html":[3,0,1,8,6]
 };
