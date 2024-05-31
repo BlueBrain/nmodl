@@ -92,7 +92,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
     /**
-     * GLOBAL variables in THREADSAFE MOD files that are not read-only areg
+     * GLOBAL variables in THREADSAFE MOD files that are not read-only are
      * converted to thread variables. This is the list of all such variables.
      */
     std::vector<ThreadVariableInfo> codegen_thread_variables;
