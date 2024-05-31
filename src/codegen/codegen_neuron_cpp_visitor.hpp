@@ -403,6 +403,13 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
                                      bool use_instance = true) const override;
 
 
+    /**
+     * Determine the C++ string to print for thread variables.
+     *
+     * \param var_info Identifies the thread variable, typically an instance of
+     *                 `codegen_thread_variables`.
+     * \param use_instance Should the variable be accessed via instance or data array
+     */
     std::string thread_variable_name(const ThreadVariableInfo& var_info,
                                      bool use_instance = true) const;
 
@@ -412,7 +419,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      * \param name         Variable name that is being printed
      * \param use_instance Should the variable be accessed via instance or data array
-     * \return             The C++ string representing the access to the variable in the neuron
+     * \return             The C++ string representing the variable.
      * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
@@ -460,6 +467,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_mechanism_register() override;
 
+    /**
+     * Print thread variable (de-)initialization functions.
+     */
     void print_thread_memory_callbacks();
 
 
@@ -701,6 +711,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_node_data_structure(bool print_initializers);
 
+    /**
+     * Print the data structure used to access thread variables.
+     */
     void print_thread_variables_structure(bool print_initializers);
 };
 

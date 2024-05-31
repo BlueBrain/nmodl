@@ -628,7 +628,7 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
         return int_variable_name(*i, varname, use_instance);
     }
 
-    // global variable
+    // thread variable
     auto t = std::find_if(codegen_thread_variables.begin(),
                           codegen_thread_variables.end(),
                           thread_comparator);
@@ -793,7 +793,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     }
 
     if (!info.thread_variables.empty()) {
-        // TODO deduplicate
         printer->fmt_line("int thread_data_in_use{};", value_initialize);
         printer->fmt_line("{} thread_data[{}] /* TODO init thread_data */;",
                           float_type,
