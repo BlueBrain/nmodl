@@ -235,8 +235,7 @@ add_subdirectory(src)
 # =============================================================================
 # Install unit database to share
 # =============================================================================
-configure_file(share/nrnunits.lib
-               ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib COPYONLY)
+configure_file(share/nrnunits.lib ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib COPYONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib
         DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nmodl)
 
@@ -248,12 +247,10 @@ install(
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in
-  "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfig.cmake"
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Config.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfig.cmake"
   INSTALL_DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}lib/cmake/nmodl)
-write_basic_package_version_file(
-  "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfigVersion.cmake"
-  COMPATIBILITY AnyNewerVersion)
+write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/nmodlConfigVersion.cmake"
+                                 COMPATIBILITY AnyNewerVersion)
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfig.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfigVersion.cmake"
@@ -262,8 +259,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/nmodlConfig.cmake"
 # to print compiler flags in the build status
 if(CMAKE_BUILD_TYPE)
   string(TOUPPER ${CMAKE_BUILD_TYPE} BUILD_TYPE_UPPER)
-  set(COMPILER_FLAGS
-      "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${BUILD_TYPE_UPPER}}")
+  set(COMPILER_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${BUILD_TYPE_UPPER}}")
 else()
   set(COMPILER_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
