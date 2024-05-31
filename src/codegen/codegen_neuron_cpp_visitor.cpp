@@ -560,13 +560,8 @@ std::string CodegenNeuronCppVisitor::thread_variable_name(const ThreadVariableIn
                                                           bool use_instance) const {
     auto i_var = var_info.offset;
     auto var_name = var_info.symbol->get_name();
-    std::string simd_width = "1";
-
-    // std::string inst_id = fmt::format("(id % {})", simd_width);
-    // std::string inst_id = "0";
 
     if (use_instance) {
-        std::string offset = "0";
         if (var_info.symbol->is_array()) {
             return fmt::format("(_thread_vars.{}_ptr(id))", var_name);
         } else {
