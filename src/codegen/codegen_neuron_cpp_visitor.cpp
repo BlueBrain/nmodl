@@ -568,12 +568,16 @@ std::string CodegenNeuronCppVisitor::thread_variable_name(const ThreadVariableIn
     if (use_instance) {
         std::string offset = "0";
         if (var_info.symbol->is_array()) {
-            return fmt::format("(_thread_vars.{}_ptr())", var_name);
+            return fmt::format("(_thread_vars.{}_ptr(id))", var_name);
         } else {
-            return fmt::format("_thread_vars.{}(0)", var_name);
+            return fmt::format("_thread_vars.{}(id)", var_name);
         }
     } else {
-        return fmt::format("{}.thread_data[{}]", global_struct_instance(), i_var);
+        if (var_info.symbol->is_array()) {
+            return fmt::format("({}.thread_data + {})", global_struct_instance(), i_var);
+        } else {
+            return fmt::format("{}.thread_data[{}]", global_struct_instance(), i_var);
+        }
     }
 }
 
@@ -1163,13 +1167,11 @@ void CodegenNeuronCppVisitor::print_thread_memory_callbacks() {
     auto thread_data_index = info.thread_var_thread_id;
     printer->push_block("static void thread_mem_init(Datum* _thread) ");
     printer->push_block(fmt::format("if({})", inuse));
-    printer->add_line("std::cout << \"thread_mem_init :: true \" << std::endl;");
     printer->fmt_line("_thread[{}] = {{neuron::container::do_not_search, new double[{}]{{}}}};",
                       thread_data_index,
                       info.thread_var_data_size);
     printer->pop_block();
     printer->push_block("else");
-    printer->add_line("std::cout << \"thread_mem_init :: false \" << std::endl;");
     printer->fmt_line("_thread[{}] = {{neuron::container::do_not_search, {}}};",
                       thread_data_index,
                       static_thread_data);
@@ -1180,11 +1182,9 @@ void CodegenNeuronCppVisitor::print_thread_memory_callbacks() {
     printer->push_block("static void thread_mem_cleanup(Datum* _thread) ");
     printer->fmt_line("double * _thread_data_ptr = _thread[{}].get<double*>();", thread_data_index);
     printer->push_block(fmt::format("if(_thread_data_ptr == {})", static_thread_data));
-    printer->add_line("std::cout << \"thread_mem_cleanup :: true\" << std::endl;");
     printer->fmt_line("{} = 0;", inuse);
     printer->pop_block();
     printer->push_block("else");
-    printer->add_line("std::cout << \"thread_mem_cleanup :: false \" << std::endl;");
     printer->add_line("delete[] _thread_data_ptr;");
     printer->pop_block();
     printer->pop_block();
@@ -1333,13 +1333,16 @@ void CodegenNeuronCppVisitor::print_thread_variables_structure(bool print_initia
     printer->add_line("double * thread_data;");
     printer->add_newline();
 
+    std::string simd_width = "1";
+
+
     for (const auto& var_info: codegen_thread_variables) {
-        printer->fmt_push_block("double * {}_ptr(size_t i)", var_info.symbol->get_name());
-        printer->fmt_line("return thread_data + {} + i;", var_info.offset);
+        printer->fmt_push_block("double * {}_ptr(size_t id)", var_info.symbol->get_name());
+        printer->fmt_line("return thread_data + {} + (id % {});", var_info.offset, simd_width);
         printer->pop_block();
 
-        printer->fmt_push_block("double & {}(size_t i)", var_info.symbol->get_name());
-        printer->fmt_line("return thread_data[{} + i];", var_info.offset);
+        printer->fmt_push_block("double & {}(size_t id)", var_info.symbol->get_name());
+        printer->fmt_line("return thread_data[{} + (id % {})];", var_info.offset, simd_width);
         printer->pop_block();
     }
     printer->add_newline();
