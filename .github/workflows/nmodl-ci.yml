@@ -206,12 +206,7 @@ jobs:
 
           for d in */
           do
-              if [[ "$d" == "references/" ]]
-              then
-                continue
-              fi
-
-              ./generate_references.sh nmodl "$d" "$OUTPUT_DIR/$d"
+              ./generate_references.py nmodl "$d" "$OUTPUT_DIR/$d"
           done
 
           cd $OUTPUT_DIR
