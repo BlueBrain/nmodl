@@ -6,10 +6,10 @@ from neuron.units import ms
 nseg = 1
 
 s = h.Section()
-s.insert("leonhard")
+s.insert("cnexp_array")
 s.nseg = nseg
 
-x_hoc = h.Vector().record(s(0.5)._ref_x_leonhard)
+x_hoc = h.Vector().record(s(0.5)._ref_x_cnexp_array)
 t_hoc = h.Vector().record(h._ref_t)
 
 h.stdinit()
