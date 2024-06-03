@@ -696,7 +696,7 @@ void CodegenCoreneuronCppVisitor::add_variable_point_process(
 
 std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
     const auto& args = internal_method_parameters();
-    return get_parameter_str(args);
+    return get_arg_str(args);
 }
 
 
@@ -727,6 +727,7 @@ const std::string CodegenCoreneuronCppVisitor::external_method_arguments() noexc
 
 const std::string CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
     ParamVector args = {{"", "int", "", "id"},
+                        {"", "int", "", "pnodecount"},
                         {"", "double*", "", "data"},
                         {"", "Datum*", "", "indexes"},
                         {"", "ThreadDatum*", "", "thread"},
