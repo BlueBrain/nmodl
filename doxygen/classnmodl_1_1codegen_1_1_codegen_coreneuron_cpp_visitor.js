@@ -48,7 +48,7 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "print_first_pointer_var_index_getter", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a6498ebb631852d55d7585ef179b3008e", null ],
     [ "print_first_random_var_index_getter", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#adb86cf547ffd36097cb5aafc4add79e8", null ],
     [ "print_function", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ae47b27b3bfb2d9fa200b02f449c126e7", null ],
-    [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab0d109b9d28587ba6cce93783a348d86", null ],
+    [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab530015ada1f6f6299b526a32e277a0c", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5be32556e7bb7fd48b1bdb71d75fe5bb", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4dd6948c9064a446dc45cf6f4d463975", null ],
     [ "print_function_tables", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9a8ec34d0a51fbf43a5318f67fc5d278", null ],

@@ -130,14 +130,14 @@ Functions</h2></td></tr>
 <tr class="memitem:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">nmodl::codegen::CodegenCppVisitor::print_vector_elements</a> (const std::vector&lt; T &gt; &amp;elements, const std::string &amp;separator, const std::string &amp;prefix=&quot;&quot;)</td></tr>
 <tr class="memdesc:ga743bcd56c5822a14381fd87fe586ed6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the items in a vector as a list.  <a href="group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c">More...</a><br /></td></tr>
 <tr class="separator:ga743bcd56c5822a14381fd87fe586ed6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:gac82b533ad70154d8636a533e82c3bb18"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">nmodl::codegen::CodegenCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name)</td></tr>
-<tr class="memdesc:gac82b533ad70154d8636a533e82c3bb18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18">More...</a><br /></td></tr>
-<tr class="separator:gac82b533ad70154d8636a533e82c3bb18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gabf8cfdf6adba4da78b0d92b81d9ff160"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:gabf8cfdf6adba4da78b0d92b81d9ff160"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__backends.html#gabf8cfdf6adba4da78b0d92b81d9ff160">nmodl::codegen::CodegenCppVisitor::print_function_declaration</a> (const T &amp;node, const std::string &amp;name, const std::unordered_set&lt; <a class="el" href="group__codegen__details.html#ga8e2cdb825b828ca3fab27731ac2a83c2">CppObjectSpecifier</a> &gt; &amp;={ <a class="el" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a0125cf5f3ca38b312ca5d3b511c45a13">CppObjectSpecifier::Inline</a>})</td></tr>
+<tr class="memdesc:gabf8cfdf6adba4da78b0d92b81d9ff160"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print prototype declarations of functions or procedures.  <a href="group__codegen__backends.html#gabf8cfdf6adba4da78b0d92b81d9ff160">More...</a><br /></td></tr>
+<tr class="separator:gabf8cfdf6adba4da78b0d92b81d9ff160"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="gac82b533ad70154d8636a533e82c3bb18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#gac82b533ad70154d8636a533e82c3bb18">&#9670;&nbsp;</a></span>print_function_declaration()</h2>
+<a id="gabf8cfdf6adba4da78b0d92b81d9ff160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gabf8cfdf6adba4da78b0d92b81d9ff160">&#9670;&nbsp;</a></span>print_function_declaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -154,7 +154,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>name</em>&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_set&lt; <a class="el" href="group__codegen__details.html#ga8e2cdb825b828ca3fab27731ac2a83c2">CppObjectSpecifier</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>specifiers</em> = <code>{&#160;<a class="el" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a0125cf5f3ca38b312ca5d3b511c45a13">CppObjectSpecifier::Inline</a>}</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -180,7 +186,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <p>If there is an argument with name (say alpha) same as range variable (say alpha), we want to avoid it being printed as instance-&gt;alpha. And hence we disable variable name lookup during prototype declaration. Note that the name of procedure can be different in case of table statement. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01416">1416</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01459">1459</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -243,7 +249,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01396">1396</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01439">1439</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>

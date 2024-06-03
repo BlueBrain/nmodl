@@ -203,6 +203,19 @@ var group__codegen__details =
       [ "BeforeAfter", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba6a8abec098e536813680364230f5a26b", null ],
       [ "BlockTypeEnd", "group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbae317e08b58d518ba2ecdc4ad07d6b108", null ]
     ] ],
+    [ "CppObjectSpecifier", "group__codegen__details.html#ga8e2cdb825b828ca3fab27731ac2a83c2", [
+      [ "Inline", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a0125cf5f3ca38b312ca5d3b511c45a13", null ],
+      [ "Static", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a84a8921b25f505d0d2077aeb5db4bc16", null ],
+      [ "Virtual", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a615e6f9baca5553d44683a098d342b70", null ],
+      [ "Explicit", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a9d71760e2dd451db2df354d0fd29cd7f", null ],
+      [ "Friend", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a930a91848917f92cf7e2f8d744fa4177", null ],
+      [ "Constexpr", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a0a5c6fb6c25c8100625a4f76bde030a1", null ],
+      [ "Extern", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a498ab78ee0b25ce33c83714c1a453831", null ],
+      [ "ExternC", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a89452a900072d23be0922628da2a27fe", null ],
+      [ "ThreadLocal", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2af0317e4ceb9bd3f1bf2999ebb32dcf99", null ],
+      [ "Const", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a79ceee9f8e3c1f0cc74223e05d2448bf", null ],
+      [ "Volatile", "group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a3e3af98b6b48c7e593d8d18863e3333b", null ]
+    ] ],
     [ "MemberType", "group__codegen__details.html#gab185b9278fbfff591fbe3da84ba22d0b", [
       [ "index", "group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba6a992d5529f459a44fee58c733255e86", null ],
       [ "range", "group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba37b19816109a32106d109e83bbb3c97d", null ],
