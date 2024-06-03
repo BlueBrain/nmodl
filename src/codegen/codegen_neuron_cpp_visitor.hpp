@@ -87,6 +87,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     using CodegenCppVisitor::CodegenCppVisitor;
 
   protected:
+    using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
     /****************************************************************************************/
     /*                                    Member variables                                  */
     /****************************************************************************************/

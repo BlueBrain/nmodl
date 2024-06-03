@@ -39,8 +39,6 @@ using visitor::RenameVisitor;
 using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
 
-using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
-
 using symtab::syminfo::NmodlType;
 
 extern const std::regex regex_special_chars;

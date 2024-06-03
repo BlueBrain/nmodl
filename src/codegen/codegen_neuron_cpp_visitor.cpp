@@ -31,7 +31,6 @@ using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
-using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
 /****************************************************************************************/
