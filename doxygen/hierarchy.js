@@ -221,6 +221,7 @@ var hierarchy =
     [ "nmodl::utils::TableData", "structnmodl_1_1utils_1_1_table_data.html", null ],
     [ "nmodl::test_utils::TempFile", "structnmodl_1_1test__utils_1_1_temp_file.html", null ],
     [ "nmodl::parser::diffeq::Term", "structnmodl_1_1parser_1_1diffeq_1_1_term.html", null ],
+    [ "nmodl::codegen::ThreadVariableInfo", "structnmodl_1_1codegen_1_1_thread_variable_info.html", null ],
     [ "nmodl::units::Unit", "classnmodl_1_1units_1_1_unit.html", null ],
     [ "nmodl::parser::UnitDriver", "classnmodl_1_1parser_1_1_unit_driver.html", null ],
     [ "UnitFlexLexer", null, [

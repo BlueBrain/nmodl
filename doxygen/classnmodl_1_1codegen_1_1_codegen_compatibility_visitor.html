@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1codegen_1_1_codegen_comp
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-types">Private Types</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -127,9 +128,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af8f4da257ecc161c61cabda2eee0cc3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Search the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> for nodes that are incompatible with NMODL <code>C++</code> code generator.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af8f4da257ecc161c61cabda2eee0cc3e">More...</a><br /></td></tr>
 <tr class="separator:af8f4da257ecc161c61cabda2eee0cc3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Ctor &amp; dtor</div></td></tr>
-<tr class="memitem:ad8ab18c3c2e7c9822ec33a63900ec13e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e">CodegenCompatibilityVisitor</a> ()=default</td></tr>
-<tr class="memdesc:ad8ab18c3c2e7c9822ec33a63900ec13e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html" title="Visitor for printing compatibility issues of the mod file">CodegenCompatibilityVisitor</a> constructor.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e">More...</a><br /></td></tr>
-<tr class="separator:ad8ab18c3c2e7c9822ec33a63900ec13e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c839ed2784dd9a9a61fbd655961b504"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a0c839ed2784dd9a9a61fbd655961b504">CodegenCompatibilityVisitor</a> (const std::string &amp;<a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a1e6c5c615af24c99638ea5e497663109">simulator</a>=&quot;coreneuron&quot;)</td></tr>
+<tr class="memdesc:a0c839ed2784dd9a9a61fbd655961b504"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html" title="Visitor for printing compatibility issues of the mod file">CodegenCompatibilityVisitor</a> constructor.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a0c839ed2784dd9a9a61fbd655961b504">More...</a><br /></td></tr>
+<tr class="separator:a0c839ed2784dd9a9a61fbd655961b504"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classnmodl_1_1visitor_1_1_ast_visitor')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html">nmodl::visitor::AstVisitor</a></td></tr>
 <tr class="memitem:ae28e2ee7c66f6f0af3dc58417fba97ee inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_ast_visitor.html#ae28e2ee7c66f6f0af3dc58417fba97ee">visit_node</a> (<a class="el" href="classnmodl_1_1ast_1_1_node.html">ast::Node</a> &amp;node) override</td></tr>
 <tr class="memdesc:ae28e2ee7c66f6f0af3dc58417fba97ee inherit pub_methods_classnmodl_1_1visitor_1_1_ast_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_node.html" title="Base class for all AST node.">ast::Node</a>  <a href="classnmodl_1_1visitor_1_1_ast_visitor.html#ae28e2ee7c66f6f0af3dc58417fba97ee">More...</a><br /></td></tr>
@@ -529,6 +530,11 @@ Private Member Functions</h2></td></tr>
 <tr class="memdesc:a651743cfea039bb30d5468c0ab209134"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> and checks if the functions "bbcore_read" and "bbcore_write" are defined in any of the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> VERBATIM blocks.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a651743cfea039bb30d5468c0ab209134">More...</a><br /></td></tr>
 <tr class="separator:a651743cfea039bb30d5468c0ab209134"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a1e6c5c615af24c99638ea5e497663109"><td class="memItemLeft" align="right" valign="top">const std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a1e6c5c615af24c99638ea5e497663109">simulator</a> = &quot;coreneuron&quot;</td></tr>
+<tr class="separator:a1e6c5c615af24c99638ea5e497663109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
 <tr class="memitem:a320efdb261998e4ce6e10003010a39a4"><td class="memItemLeft" align="right" valign="top">static const std::map&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600">FunctionPointer</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4">unhandled_ast_types_func</a></td></tr>
@@ -566,8 +572,8 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad8ab18c3c2e7c9822ec33a63900ec13e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad8ab18c3c2e7c9822ec33a63900ec13e">&#9670;&nbsp;</a></span>CodegenCompatibilityVisitor()</h2>
+<a id="a0c839ed2784dd9a9a61fbd655961b504"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c839ed2784dd9a9a61fbd655961b504">&#9670;&nbsp;</a></span>CodegenCompatibilityVisitor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -578,18 +584,22 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">nmodl::codegen::CodegenCompatibilityVisitor::CodegenCompatibilityVisitor </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>simulator</em> = <code>&quot;coreneuron&quot;</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Default <a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html" title="Visitor for printing compatibility issues of the mod file">CodegenCompatibilityVisitor</a> constructor. </p>
+<p>The argument <code>simulator</code> must be <code>"neuron"</code> for NEURON, everything else refers to CoreNEURON. The compatibility will be checked as if generating code for the specified simulator. </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00071">71</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -620,7 +630,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>bool if there are unhandled nodes or not</dd></dl>
 <p>Checks all the <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type.">ast::AstNodeType</a> that are not handled in NMODL code generation backend for CoreNEURON and prints related messages. If there is some kind of incompatibility return false. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00132">132</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00140">140</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -717,7 +727,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00086">86</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00094">94</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -803,7 +813,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00070">70</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00078">78</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -859,7 +869,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00097">97</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00104">104</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -915,7 +925,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00122">122</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00129">129</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -948,6 +958,30 @@ template&lt;typename T &gt; </div>
 <p>Set of handled solvers by the NMODL <code>C++</code> code generator. </p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00054">54</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a1e6c5c615af24c99638ea5e497663109"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6c5c615af24c99638ea5e497663109">&#9670;&nbsp;</a></span>simulator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::string nmodl::codegen::CodegenCompatibilityVisitor::simulator = &quot;coreneuron&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="codegen__compatibility__visitor_8hpp_source.html#l00060">60</a> of file <a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen_compatibility_visitor.hpp</a>.</p>
 
 </div>
 </div>

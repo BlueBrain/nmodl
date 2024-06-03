@@ -11,5 +11,6 @@ var namespacenmodl_1_1codegen =
     [ "IndexSemantics", "structnmodl_1_1codegen_1_1_index_semantics.html", "structnmodl_1_1codegen_1_1_index_semantics" ],
     [ "IndexVariableInfo", "structnmodl_1_1codegen_1_1_index_variable_info.html", "structnmodl_1_1codegen_1_1_index_variable_info" ],
     [ "Ion", "structnmodl_1_1codegen_1_1_ion.html", "structnmodl_1_1codegen_1_1_ion" ],
-    [ "ShadowUseStatement", "structnmodl_1_1codegen_1_1_shadow_use_statement.html", "structnmodl_1_1codegen_1_1_shadow_use_statement" ]
+    [ "ShadowUseStatement", "structnmodl_1_1codegen_1_1_shadow_use_statement.html", "structnmodl_1_1codegen_1_1_shadow_use_statement" ],
+    [ "ThreadVariableInfo", "structnmodl_1_1codegen_1_1_thread_variable_info.html", "structnmodl_1_1codegen_1_1_thread_variable_info" ]
 ];

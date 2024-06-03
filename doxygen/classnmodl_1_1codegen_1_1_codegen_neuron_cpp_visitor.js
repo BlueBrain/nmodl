@@ -75,11 +75,15 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "print_sdlists_init", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a9b04c504442be8eaffd17f52376b265a", null ],
     [ "print_setdata_functions", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a89c15974d73972df388dc1133fdfa406", null ],
     [ "print_standard_includes", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a75551174c0c66124b0096de40ca20cbf", null ],
+    [ "print_thread_memory_callbacks", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3c5c869470655815c71464f45fc82560", null ],
+    [ "print_thread_variables_structure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2e35d75bdda2d2d46e097fc217e4ce9d", null ],
     [ "print_v_unused", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aaea5e3201bfb4a18f919f8e60db23d49", null ],
     [ "process_verbatim_text", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a13af4fa40fc5b97bfcf91d199fe6a8e2", null ],
     [ "py_function_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#acaac1c205538693499bc4a62f7d3ab17", null ],
     [ "py_function_signature", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aa29d902812736665c4efb78abee0814a", null ],
     [ "register_mechanism_arguments", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c", null ],
     [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a77ac6349ba709a4ef7ecd6a4c34b9e0c", null ],
-    [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ]
+    [ "thread_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a73657c5681f2d69ee6d1220a6c864097", null ],
+    [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ],
+    [ "codegen_thread_variables", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2142740635a801ade67d99228fd71ce2", null ]
 ];

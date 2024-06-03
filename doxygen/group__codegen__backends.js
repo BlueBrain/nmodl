@@ -34,7 +34,7 @@ var group__codegen__backends =
     ] ],
     [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html", [
       [ "FunctionPointer", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600", null ],
-      [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad8ab18c3c2e7c9822ec33a63900ec13e", null ],
+      [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a0c839ed2784dd9a9a61fbd655961b504", null ],
       [ "find_unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af8f4da257ecc161c61cabda2eee0cc3e", null ],
       [ "return_error_global_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd", null ],
       [ "return_error_if_no_bbcore_read_write", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a651743cfea039bb30d5468c0ab209134", null ],
@@ -43,6 +43,7 @@ var group__codegen__backends =
       [ "return_error_with_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ac266dfa07ed7177cfb4460bd752f8bd0", null ],
       [ "return_error_without_name", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5baabaf8b2f0266a4ba5c1591b27a933", null ],
       [ "handled_solvers", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ab91d26dcf9a01cf7ca02cd70d8fc7e9a", null ],
+      [ "simulator", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a1e6c5c615af24c99638ea5e497663109", null ],
       [ "unhandled_ast_types_func", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a320efdb261998e4ce6e10003010a39a4", null ]
     ] ],
     [ "CodegenCoreneuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html", [
@@ -306,6 +307,7 @@ var group__codegen__backends =
       [ "setup", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae333398890c61148ec60cb52c3d28c10", null ],
       [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8b8b75dcd53ae8e3a641f18cb00bee1d", null ],
       [ "statement_to_skip", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71", null ],
+      [ "thread_variables_struct", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1c3e5aa67b1f486463340b8102b95e81", null ],
       [ "update_if_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aba3a9521ace5f09f4d2263e4401b33ee", null ],
       [ "update_index_semantics", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0d8d4e346e244c764911c0c64c2ac1c", null ],
       [ "visit_binary_expression", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae02024096ab4490b8a6215b3e59e6de0", null ],
@@ -353,6 +355,11 @@ var group__codegen__backends =
       [ "printing_net_receive", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af55b2f46300b89a8458f17ab405eaa29", null ],
       [ "printing_top_verbatim_blocks", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a314e2615fb2851cf695a7b3adacef3e8", null ],
       [ "program_symtab", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a380ec35a9c68ed3384489d17a385551a", null ]
+    ] ],
+    [ "ThreadVariableInfo", "structnmodl_1_1codegen_1_1_thread_variable_info.html", [
+      [ "index", "structnmodl_1_1codegen_1_1_thread_variable_info.html#a8ce398a72c92660c4efa389e030883bd", null ],
+      [ "offset", "structnmodl_1_1codegen_1_1_thread_variable_info.html#add9948f75fc1de0e0bb570d04ab2d1df", null ],
+      [ "symbol", "structnmodl_1_1codegen_1_1_thread_variable_info.html#abc9630b4d163325befc9933855e05d22", null ]
     ] ],
     [ "CodegenNeuronCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html", [
       [ "add_variable_point_process", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ace966e9c828bcdc9053886ba274883d6", null ],
@@ -430,13 +437,17 @@ var group__codegen__backends =
       [ "print_sdlists_init", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a9b04c504442be8eaffd17f52376b265a", null ],
       [ "print_setdata_functions", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a89c15974d73972df388dc1133fdfa406", null ],
       [ "print_standard_includes", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a75551174c0c66124b0096de40ca20cbf", null ],
+      [ "print_thread_memory_callbacks", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3c5c869470655815c71464f45fc82560", null ],
+      [ "print_thread_variables_structure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2e35d75bdda2d2d46e097fc217e4ce9d", null ],
       [ "print_v_unused", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aaea5e3201bfb4a18f919f8e60db23d49", null ],
       [ "process_verbatim_text", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a13af4fa40fc5b97bfcf91d199fe6a8e2", null ],
       [ "py_function_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#acaac1c205538693499bc4a62f7d3ab17", null ],
       [ "py_function_signature", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aa29d902812736665c4efb78abee0814a", null ],
       [ "register_mechanism_arguments", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c", null ],
       [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a77ac6349ba709a4ef7ecd6a4c34b9e0c", null ],
-      [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ]
+      [ "thread_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a73657c5681f2d69ee6d1220a6c864097", null ],
+      [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ],
+      [ "codegen_thread_variables", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2142740635a801ade67d99228fd71ce2", null ]
     ] ],
     [ "print_function_declaration", "group__codegen__backends.html#gac82b533ad70154d8636a533e82c3bb18", null ],
     [ "print_vector_elements", "group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c", null ]

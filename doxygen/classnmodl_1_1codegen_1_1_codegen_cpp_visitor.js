@@ -121,6 +121,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "setup", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae333398890c61148ec60cb52c3d28c10", null ],
     [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8b8b75dcd53ae8e3a641f18cb00bee1d", null ],
     [ "statement_to_skip", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71", null ],
+    [ "thread_variables_struct", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1c3e5aa67b1f486463340b8102b95e81", null ],
     [ "update_if_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aba3a9521ace5f09f4d2263e4401b33ee", null ],
     [ "update_index_semantics", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0d8d4e346e244c764911c0c64c2ac1c", null ],
     [ "visit_binary_expression", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae02024096ab4490b8a6215b3e59e6de0", null ],
