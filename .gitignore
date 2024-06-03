@@ -55,3 +55,4 @@ venv.bak/
 test/usecases/*/x86_64
 test/usecases/*/amd64
 test/usecases/*/arm64
+test/usecases/*/*.cpp
