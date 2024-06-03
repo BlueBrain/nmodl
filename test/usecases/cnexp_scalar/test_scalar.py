@@ -24,4 +24,3 @@ x_exact = 42.0 * np.exp(-t)
 rel_err = np.abs(x - x_exact) / x_exact
 
 assert np.all(rel_err < 1e-12)
-print("leonhard: success")
