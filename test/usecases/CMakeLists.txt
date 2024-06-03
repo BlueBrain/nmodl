@@ -2,7 +2,7 @@ set(NMODL_USECASE_DIRS
     cnexp
     function
     procedure
-    global_breakpoint
+    global
     hodgkin_huxley
     nonspecific_current
     neuron_variables
