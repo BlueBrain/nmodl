@@ -65,15 +65,15 @@ def test_procedure():
         proc(arg)
         return section(0.5).tbl.v1, section(0.5).tbl.v2
 
-    def check_table(c1, c2, modified_args):
-        h.c1_tbl = c1
-        h.c2_tbl = c2
+    def check_table(procedure, **kwargs):
+        for key, value in kwargs.items():
+            setattr(h, f"{key}_tbl", value)
 
         h.usetable_tbl = 0
-        values_no_table = np.array([modified_args(i) for i in x])
+        values_no_table = np.array([procedure(i) for i in x])
 
         h.usetable_tbl = 1
-        values_table = np.array([modified_args(i) for i in x])
+        values_table = np.array([procedure(i) for i in x])
 
         assert np.allclose(
             values_no_table,
@@ -87,8 +87,8 @@ def test_procedure():
             rtol=1e-8,
         ), f"Broken test logic: {values_no_table} == {values_table}"
 
-    check_table(1, 2, call_proc_return_values)
-    check_table(0.1, 0.3, call_proc_return_values)
+    check_table(call_proc_return_values, c1=1, c2=2)
+    check_table(call_proc_return_values, c1=0.1, c2=0.3)
 
 
 def simulate():
