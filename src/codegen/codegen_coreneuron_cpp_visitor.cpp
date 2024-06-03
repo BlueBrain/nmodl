@@ -697,8 +697,7 @@ void CodegenCoreneuronCppVisitor::add_variable_point_process(
 }
 
 std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
-    const auto& args = internal_method_parameters();
-    return get_arg_str(args);
+    return get_arg_str(internal_method_parameters());
 }
 
 
