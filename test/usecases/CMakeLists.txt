@@ -13,7 +13,8 @@ set(NMODL_USECASE_DIRS
     point_process
     parameter
     suffix
-    table)
+    table
+    useion)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
