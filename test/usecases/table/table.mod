@@ -34,12 +34,12 @@ PROCEDURE sigmoid1(v) {
     sig = 1/(1 + exp(k*(v - d)))
 }
 
-FUNCTION example_function(arg) {
+FUNCTION quadratic(arg) {
     TABLE DEPEND c1, c2 FROM -3 TO 5 WITH 500
-    example_function = c1 * arg * arg + c2
+    quadratic = c1 * arg * arg + c2
 }
 
-PROCEDURE example_procedure(arg) {
+PROCEDURE sinusoidal(arg) {
     TABLE v1, v2 DEPEND c1, c2 FROM -4 TO 6 WITH 300
     v1 = sin(c1 * arg) + 2
     v2 = cos(c2 * arg) + 2

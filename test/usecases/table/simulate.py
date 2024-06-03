@@ -24,7 +24,7 @@ def test_function():
 
     x = np.linspace(-3, 5, 500)
 
-    func = section(0.5).tbl.example_function
+    func = section(0.5).tbl.quadratic
 
     h.c1_tbl = 1
     h.c2_tbl = 2
@@ -59,7 +59,7 @@ def test_procedure():
 
     x = np.linspace(-4, 6, 300)
 
-    proc = section(0.5).tbl.example_procedure
+    proc = section(0.5).tbl.sinusoidal
 
     def call_proc_return_values(arg):
         proc(arg)
