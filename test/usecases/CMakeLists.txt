@@ -11,7 +11,6 @@ set(NMODL_USECASE_DIRS
     net_send
     point_process
     parameter
-    func_in_breakpoint
     suffix
     table
     recursion)
