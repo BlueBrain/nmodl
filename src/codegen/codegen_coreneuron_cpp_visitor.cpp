@@ -721,7 +721,7 @@ CodegenCoreneuronCppVisitor::ParamVector CodegenCoreneuronCppVisitor::internal_m
 
 
 const std::string CodegenCoreneuronCppVisitor::external_method_arguments() noexcept {
-    return "id, pnodecount, data, indexes, thread, nt, ml, v";
+    return get_arg_str(external_method_parameters());
 }
 
 
