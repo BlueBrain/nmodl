@@ -10,7 +10,7 @@ def setup_sim():
     return section
 
 
-def check_table(y_no_table, y_table, rtol1=1e-2, rtol2=1e-8):
+def check_solution(y_no_table, y_table, rtol1=1e-2, rtol2=1e-8):
     assert np.allclose(y_no_table, y_table, rtol=rtol1), f"{y_no_table} != {y_table}"
     # if the table is not used, we should get identical results, but we don't,
     # hence the assert below
@@ -35,7 +35,7 @@ def test_function():
     h.usetable_tbl = 1
     y_table = np.array([func(i) for i in x])
 
-    check_table(y_table, y_no_table, rtol1=1e-4)
+    check_solution(y_table, y_no_table, rtol1=1e-4)
 
     # verify that the table just "clips" the values outside of the range
     assert func(x[0] - 10) == y_table[0]
@@ -51,7 +51,7 @@ def test_function():
     h.usetable_tbl = 1
     y_params_table = np.array([func(i) for i in x])
 
-    check_table(y_params_table, y_params_no_table, rtol1=1e-4)
+    check_solution(y_params_table, y_params_no_table, rtol1=1e-4)
 
 
 def test_procedure():
@@ -65,44 +65,30 @@ def test_procedure():
         proc(arg)
         return section(0.5).tbl.v1, section(0.5).tbl.v2
 
-    h.c1_tbl = 1
-    h.c2_tbl = 2
+    def check_table(c1, c2, modified_args):
+        h.c1_tbl = c1
+        h.c2_tbl = c2
 
-    h.usetable_tbl = 0
+        h.usetable_tbl = 0
+        values_no_table = np.array([modified_args(i) for i in x])
 
-    v1_no_table, v2_no_table = np.transpose([call_proc_return_values(i) for i in x])
+        h.usetable_tbl = 1
+        values_table = np.array([modified_args(i) for i in x])
 
-    h.usetable_tbl = 1
-    v1_table, v2_table = np.transpose([call_proc_return_values(i) for i in x])
+        assert np.allclose(
+            values_no_table,
+            values_table,
+            rtol=1e-3,
+        ), f"{values_no_table} != {values_table}"
 
-    check_table(v1_table, v1_no_table, rtol1=1e-3)
-    check_table(v2_table, v2_no_table, rtol1=1e-3)
+        assert not np.allclose(
+            values_no_table,
+            values_table,
+            rtol=1e-8,
+        ), f"Broken test logic: {values_no_table} == {values_table}"
 
-    # verify that the table just "clips" the values outside of the range
-    v1, v2 = call_proc_return_values(x[0] - 10)
-    assert v1 == v1_table[0] and v2 == v2_table[0]
-    v1, v2 = call_proc_return_values(x[-1] + 10)
-    assert v1 == v1_table[-1] and v2 == v2_table[-1]
-
-    # change params and verify
-    # N.B. since this controls the frequency of the oscillations (as our
-    # procedure is a trig function), a higher value of the frequency degrades
-    # the accuracy of the interpolation
-    h.c1_tbl = 0.1
-    h.c2_tbl = 0.3
-
-    h.usetable_tbl = 0
-    v1_params_no_table, v2_params_no_table = np.transpose(
-        [call_proc_return_values(i) for i in x]
-    )
-
-    h.usetable_tbl = 1
-    v1_params_table, v2_params_table = np.transpose(
-        [call_proc_return_values(i) for i in x]
-    )
-
-    check_table(v1_params_table, v1_params_no_table, rtol1=1e-3)
-    check_table(v2_params_table, v2_params_no_table, rtol1=1e-3)
+    check_table(1, 2, call_proc_return_values)
+    check_table(0.1, 0.3, call_proc_return_values)
 
 
 def simulate():
@@ -128,6 +114,8 @@ def simulate():
 
     v_table = np.array(vvec.as_numpy())
 
+    check_solution(v_table, v_exact, rtol1=1e-2)
+
     # run without a table, and changing params
     h.usetable_tbl = 0
     h.k_tbl = -0.05
@@ -143,12 +131,7 @@ def simulate():
 
     v_params_table = np.array(vvec.as_numpy())
 
-    return t, v_exact, v_table, v_params, v_params_table
-
-
-def check_solution(v, v_table, rtol=1e-2):
-    # the table should be accurate to 1%
-    assert np.allclose(v, v_table, rtol=rtol), f"{v} != {v_table}, delta: {v - v_table}"
+    check_solution(v_params, v_params_table, rtol1=1e-2)
 
 
 def plot_solution(t, y_exact, y):
@@ -162,6 +145,4 @@ def plot_solution(t, y_exact, y):
 if __name__ == "__main__":
     test_function()
     test_procedure()
-    t, v_exact, v_table, v_params, v_params_table = simulate()
-    check_solution(v_exact, v_table)
-    check_solution(v_params, v_params_table)
+    simulate()
