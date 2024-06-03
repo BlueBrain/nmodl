@@ -443,7 +443,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * calling convention. This method generates the string representing the function parameters for
      * these externally called functions.
      * \param table
-     * \return      A string representing the parameters of the function
+     * \return      A ParamVector representing the parameters of the function
      */
     const ParamVector external_method_parameters(bool table = false) noexcept override;
 
