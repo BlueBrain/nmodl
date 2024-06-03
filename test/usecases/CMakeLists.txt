@@ -6,6 +6,8 @@ set(NMODL_USECASE_DIRS
     hodgkin_huxley
     nonspecific_current
     neuron_variables
+    net_event
+    net_move
     net_receive
     net_send
     point_process
