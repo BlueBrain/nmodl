@@ -25,4 +25,3 @@ x_exact[0] = 0.0
 abs_err = np.abs(x - x_exact)
 
 assert np.all(abs_err < 1e-12), abs_err
-print("ionic: success")
