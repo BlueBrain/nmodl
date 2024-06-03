@@ -31,6 +31,7 @@ using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
+using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
 
 
 /****************************************************************************************/
@@ -479,7 +480,7 @@ const std::string CodegenNeuronCppVisitor::external_method_arguments() noexcept 
 
 
 /// TODO: Edit for NEURON
-const std::string CodegenNeuronCppVisitor::external_method_parameters(bool table) noexcept {
+const ParamVector CodegenNeuronCppVisitor::external_method_parameters(bool table) noexcept {
     return {};
 }
 

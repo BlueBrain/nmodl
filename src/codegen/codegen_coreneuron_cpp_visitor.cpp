@@ -39,6 +39,8 @@ using visitor::RenameVisitor;
 using visitor::SymtabVisitor;
 using visitor::VarUsageVisitor;
 
+using ParamVector = std::vector<std::tuple<std::string, std::string, std::string, std::string>>;
+
 using symtab::syminfo::NmodlType;
 
 extern const std::regex regex_special_chars;
@@ -408,7 +410,7 @@ void CodegenCoreneuronCppVisitor::print_check_table_thread_function() {
 
     printer->add_newline(2);
     auto name = method_name("check_table_thread");
-    auto parameters = external_method_parameters(true);
+    auto parameters = get_parameter_str(external_method_parameters(true));
 
     printer->fmt_push_block("static void {} ({})", name, parameters);
     printer->add_line("setup_instance(nt, ml);");
@@ -725,7 +727,7 @@ const std::string CodegenCoreneuronCppVisitor::external_method_arguments() noexc
 }
 
 
-const std::string CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
+const ParamVector CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
     ParamVector args = {{"", "int", "", "id"},
                         {"", "int", "", "pnodecount"},
                         {"", "double*", "", "data"},
@@ -738,7 +740,7 @@ const std::string CodegenCoreneuronCppVisitor::external_method_parameters(bool t
     } else {
         args.emplace_back("", "double", "", "v");
     }
-    return get_parameter_str(args);
+    return args;
 }
 
 
@@ -781,7 +783,7 @@ std::string CodegenCoreneuronCppVisitor::replace_if_verbatim_variable(std::strin
         }
     }
     if (name == naming::THREAD_ARGS_PROTO) {
-        name = external_method_parameters();
+        name = get_parameter_str(external_method_parameters());
     }
     return name;
 }
@@ -2787,7 +2789,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive() {
  */
 void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block) {
     auto ext_args = external_method_arguments();
-    auto ext_params = external_method_parameters();
+    auto ext_params = get_parameter_str(external_method_parameters());
     auto suffix = info.mod_suffix;
     auto list_num = info.derivimplicit_list_num;
     auto block_name = block.get_node_name();
@@ -2798,7 +2800,7 @@ void CodegenCoreneuronCppVisitor::print_derivimplicit_kernel(const Block& block)
 
     printer->push_block("namespace");
             printer->fmt_push_block("struct _newton_{}_{}", block_name, info.mod_suffix);
-            printer->fmt_push_block("int operator()({}) const", external_method_parameters());
+            printer->fmt_push_block("int operator()({}) const", get_parameter_str(external_method_parameters()));
     auto const instance = fmt::format("auto* const inst = static_cast<{0}*>(ml->instance);",
                                       instance_struct());
     auto const slist1 = fmt::format("auto const& slist{} = {};",

@@ -289,7 +289,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    const std::string external_method_parameters(bool table = false) noexcept override;
+    const ParamVector external_method_parameters(bool table = false) noexcept override;
 
 
     /**

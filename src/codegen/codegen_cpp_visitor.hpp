@@ -908,7 +908,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    virtual const std::string external_method_parameters(bool table = false) noexcept = 0;
+    virtual const ParamVector external_method_parameters(bool table = false) noexcept = 0;
 
 
     /**
