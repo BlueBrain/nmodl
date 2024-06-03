@@ -14,7 +14,7 @@ add_custom_target(
 
 add_library(solver INTERFACE)
 target_include_directories(solver INTERFACE $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
-                                         $<INSTALL_INTERFACE:include>)
+                                            $<INSTALL_INTERFACE:include>)
 add_dependencies(solver nmodl_copy_solver_files)
 
 # Eigen
