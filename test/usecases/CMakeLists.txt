@@ -1,8 +1,8 @@
 set(NMODL_USECASE_DIRS
     cnexp_scalar
     cnexp_array
-    func_proc
-    func_proc_pnt
+    function
+    procedure
     global_breakpoint
     hodgkin_huxley
     nonspecific_current
