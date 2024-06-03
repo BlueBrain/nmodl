@@ -695,10 +695,8 @@ void CodegenCoreneuronCppVisitor::add_variable_point_process(
 }
 
 std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
-    if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
-    }
-    return "id, pnodecount, inst, data, indexes, thread, nt, v";
+    const auto& args = internal_method_parameters();
+    return get_parameter_str(args);
 }
 
 
@@ -706,34 +704,40 @@ std::string CodegenCoreneuronCppVisitor::internal_method_arguments() {
  * @todo: figure out how to correctly handle qualifiers
  */
 CodegenCoreneuronCppVisitor::ParamVector CodegenCoreneuronCppVisitor::internal_method_parameters() {
-    ParamVector params;
-    params.emplace_back("", "int", "", "id");
-    params.emplace_back("", "int", "", "pnodecount");
-    params.emplace_back("", fmt::format("{}*", instance_struct()), "", "inst");
+    ParamVector params = {{"", "int", "", "id"},
+                          {"", "int", "", "pnodecount"},
+                          {"", fmt::format("{}*", instance_struct()), "", "inst"}};
     if (ion_variable_struct_required()) {
         params.emplace_back("", "IonCurVar&", "", "ionvar");
     }
-    params.emplace_back("", "double*", "", "data");
-    params.emplace_back("const ", "Datum*", "", "indexes");
-    params.emplace_back("", "ThreadDatum*", "", "thread");
-    params.emplace_back("", "NrnThread*", "", "nt");
-    params.emplace_back("", "double", "", "v");
+    ParamVector other_params = {{"", "double*", "", "data"},
+                                {"const ", "Datum*", "", "indexes"},
+                                {"", "ThreadDatum*", "", "thread"},
+                                {"", "NrnThread*", "", "nt"},
+                                {"", "double", "", "v"}};
+    params.insert(params.end(), other_params.begin(), other_params.end());
     return params;
 }
 
 
-const char* CodegenCoreneuronCppVisitor::external_method_arguments() noexcept {
+const std::string CodegenCoreneuronCppVisitor::external_method_arguments() noexcept {
     return "id, pnodecount, data, indexes, thread, nt, ml, v";
 }
 
 
-const char* CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
+const std::string CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
+    ParamVector args = {{"", "int", "", "id"},
+                        {"", "double*", "", "data"},
+                        {"", "Datum*", "", "indexes"},
+                        {"", "ThreadDatum*", "", "thread"},
+                        {"", "NrnThread*", "", "nt"},
+                        {"", "Memb_list*", "", "ml"}};
     if (table) {
-        return "int id, int pnodecount, double* data, Datum* indexes, "
-               "ThreadDatum* thread, NrnThread* nt, Memb_list* ml, int tml_id";
+        args.emplace_back("", "int", "", "tml_id");
+    } else {
+        args.emplace_back("", "double", "", "v");
     }
-    return "int id, int pnodecount, double* data, Datum* indexes, "
-           "ThreadDatum* thread, NrnThread* nt, Memb_list* ml, double v";
+    return get_parameter_str(args);
 }
 
 
@@ -750,10 +754,7 @@ std::string CodegenCoreneuronCppVisitor::nrn_thread_arguments() const {
  * same mod file itself
  */
 std::string CodegenCoreneuronCppVisitor::nrn_thread_internal_arguments() {
-    if (ion_variable_struct_required()) {
-        return "id, pnodecount, inst, ionvar, data, indexes, thread, nt, v";
-    }
-    return "id, pnodecount, inst, data, indexes, thread, nt, v";
+    return get_arg_str(internal_method_parameters());
 }
 
 

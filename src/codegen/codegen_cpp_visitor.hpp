@@ -507,6 +507,8 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     static std::string get_parameter_str(const ParamVector& params);
 
+    static std::string get_arg_str(const ParamVector& params);
+
 
     /**
      * Check if function or procedure node has parameter with given name
@@ -894,7 +896,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    virtual const char* external_method_arguments() noexcept = 0;
+    virtual const std::string external_method_arguments() noexcept = 0;
 
 
     /**
@@ -906,7 +908,7 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    virtual const char* external_method_parameters(bool table = false) noexcept = 0;
+    virtual const std::string external_method_parameters(bool table = false) noexcept = 0;
 
 
     /**

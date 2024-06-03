@@ -433,7 +433,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Arguments for external functions called from generated code
      * \return A string representing the arguments passed to an external function
      */
-    const char* external_method_arguments() noexcept override;
+    const std::string external_method_arguments() noexcept override;
 
 
     /**
@@ -445,7 +445,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param table
      * \return      A string representing the parameters of the function
      */
-    const char* external_method_parameters(bool table = false) noexcept override;
+    const std::string external_method_parameters(bool table = false) noexcept override;
 
 
     /**
