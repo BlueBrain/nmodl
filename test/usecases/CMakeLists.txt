@@ -1,6 +1,5 @@
 set(NMODL_USECASE_DIRS
-    cnexp_scalar
-    cnexp_array
+    cnexp
     function
     procedure
     global_breakpoint
