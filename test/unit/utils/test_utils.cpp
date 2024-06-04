@@ -11,8 +11,6 @@
 
 #include <cassert>
 
-namespace fs = std::filesystem;
-
 namespace nmodl {
 namespace test_utils {
 
