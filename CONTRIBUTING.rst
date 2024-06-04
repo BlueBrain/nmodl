@@ -8,13 +8,13 @@ would like you to follow: - `Question or Problem? <#question>`__ -
 `Submission Guidelines <#submit>`__ - `Development
 Conventions <#devconv>`__
 
- Got a Question?
+Got a Question?
 ----------------
 
 Please do not hesitate to raise an issue on `github project
 page <https://github.com/BlueBrain/nmodl>`__.
 
- Found a Bug?
+Found a Bug?
 -------------
 
 If you find a bug in the source code, you can help us by `submitting an
@@ -22,7 +22,7 @@ issue <#submit-issue>`__ to our `GitHub
 Repository <https://github.com/BlueBrain/nmodl>`__. Even better, you can
 `submit a Pull Request <#submit-pr>`__ with a fix.
 
- Missing a Feature?
+Missing a Feature?
 -------------------
 
 You can *request* a new feature by `submitting an
@@ -40,10 +40,10 @@ Please consider what kind of change it is:
 -  **Small Features** can be crafted and directly `submitted as a Pull
    Request <#submit-pr>`__.
 
- Submission Guidelines
+Submission Guidelines
 ----------------------
 
- Submitting an Issue
+Submitting an Issue
 ~~~~~~~~~~~~~~~~~~~~
 
 Before you submit an issue, please search the issue tracker, maybe an
@@ -55,7 +55,7 @@ bug we need to reproduce and confirm it. In order to reproduce bugs we
 will need as much information as possible, and preferably a sample MOD
 file or Python example.
 
- Submitting a Pull Request (PR)
+Submitting a Pull Request (PR)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you wish to contribute to the code base, please consider the
@@ -149,7 +149,7 @@ pull the changes from the main (upstream) repository:
 
       git pull --ff upstream master
 
- Development Conventions
+Development Conventions
 ------------------------
 
 New Lines
@@ -172,33 +172,6 @@ Run the HPC coding conventions formatter to format all source files:
 
 The HPC coding conventions formatter installs any dependencies into a Python
 virtual environment.
-
-
-Updating Golden References
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Run
-
-.. code:: bash
-
-   cmake --build <build-dir> --target generate_references
-
-to regenerate the golden references. They are saved in a submodule
-``tests/usecases/references``, which points to ``BlueBrain/nmodl-references``.
-
-Create a PR for the changes to the references and update the SHA in the NMODL
-repo. It might be useful to change to SSH authentication:
-
-.. code:: bash
-
-   git remote set-url origin ssh://git@github.com/BlueBrain/nmodl-references
-
-(from inside ``tests/usecases/references``).
-
-Remember the rules of submodules: They're checked out on a specific commit,
-i.e. detached HEAD. If you want to modify the submodule, it's usual best to
-checkout ``main`` from then on the submodule will behave much like a Git repo
-that happens to be located inside a Git repo.
 
 
 Validate the Python package
