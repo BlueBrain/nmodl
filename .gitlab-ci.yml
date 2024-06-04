@@ -18,7 +18,7 @@ variables:
     value: main
   NEURON_BRANCH:
     description: Branch of neuron to build BlueBrain models against in the simulation stack pipeline (NEURON_COMMIT and NEURON_TAG also possible)
-    value: master
+    value: cornu/fenv_access
   LIBSONATA_REPORT_BRANCH:
     description: Branch of libsonata-report to build BlueBrain models against in the simulation stack pipeline (LIBSONATA_REPORT_COMMIT and LIBSONATA_REPORT_TAG also possible)
     value: master
