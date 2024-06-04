@@ -461,7 +461,7 @@ std::string CodegenNeuronCppVisitor::internal_method_arguments() {
 }
 
 
-CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
     ParamVector params = {{"", "_nrn_mechanism_cache_range*", "", "_ml"},
                           {"", fmt::format("{}&", instance_struct()), "", "inst"},
                           {"", "size_t", "", "id"},
@@ -479,7 +479,8 @@ const std::string CodegenNeuronCppVisitor::external_method_arguments() noexcept 
 
 
 /// TODO: Edit for NEURON
-const ParamVector CodegenNeuronCppVisitor::external_method_parameters(bool table) noexcept {
+const CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::external_method_parameters(
+    bool table) noexcept {
     return {};
 }
 

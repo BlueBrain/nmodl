@@ -724,7 +724,8 @@ const std::string CodegenCoreneuronCppVisitor::external_method_arguments() noexc
 }
 
 
-const ParamVector CodegenCoreneuronCppVisitor::external_method_parameters(bool table) noexcept {
+const CodegenCppVisitor::ParamVector CodegenCoreneuronCppVisitor::external_method_parameters(
+    bool table) noexcept {
     ParamVector args = {{"", "int", "", "id"},
                         {"", "int", "", "pnodecount"},
                         {"", "double*", "", "data"},
