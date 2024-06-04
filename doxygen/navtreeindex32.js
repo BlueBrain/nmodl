@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"structnmodl_1_1codegen_1_1_conductance.html#a423dd7cd8b302e448024a19859d68193":[0,1,1,3,1],
 "structnmodl_1_1codegen_1_1_conductance.html#a9f303311f3cd92633f9f2230a88c784a":[0,1,1,3,0],
 "structnmodl_1_1codegen_1_1_index_semantics.html":[0,1,1,5],
 "structnmodl_1_1codegen_1_1_index_semantics.html#a0803c134bfb137b0dcdc214bb1d1d307":[0,1,1,5,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba3e077c5b82b2fc5254c4e87d790223b5":[3,0,1,8,4,3,30],
 "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba44c78a36bc57458ac1d85ce630bc3618":[3,0,1,8,4,3,20],
 "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba49f13c39f16d983d769979df388840d8":[3,0,1,8,4,3,28],
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972":[3,0,1,8,4,3,27],
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba5acff433836cb69cf224b7d926ff7707":[3,0,1,8,4,3,25]
+"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba52febc4c547f3ced7a564f2dc1e14972":[3,0,1,8,4,3,27]
 };

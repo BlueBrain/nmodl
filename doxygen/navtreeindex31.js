@@ -1,5 +1,6 @@
 var NAVTREEINDEX31 =
 {
+"pyembed_8hpp.html#af6e056b4a596934da9912ec1803d1085":[3,0,1,6,2,10],
 "pyembed_8hpp_source.html":[3,0,1,6,2],
 "pynmodl_8cpp.html":[3,0,1,6,3],
 "pynmodl_8cpp.html#a19c0402d9b25c7483a970d6b85b06e4d":[3,0,1,6,3,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX31 =
 "structnmodl_1_1codegen_1_1_codegen_info.html#afbc429aec58b9dbf16f0db7fc2d1869a":[0,1,1,6,71],
 "structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810":[0,1,1,6,43],
 "structnmodl_1_1codegen_1_1_codegen_info.html#afda3a06d247507a8e4a90d9e14486320":[0,1,1,6,82],
-"structnmodl_1_1codegen_1_1_conductance.html":[0,1,1,3],
-"structnmodl_1_1codegen_1_1_conductance.html#a423dd7cd8b302e448024a19859d68193":[0,1,1,3,1]
+"structnmodl_1_1codegen_1_1_conductance.html":[0,1,1,3]
 };
