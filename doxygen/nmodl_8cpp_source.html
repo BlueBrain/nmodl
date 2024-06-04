@@ -137,19 +137,18 @@ $(document).ready(function(){initNavTree('nmodl_8cpp_source.html',''); initResiz
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
 <div class="line"><a name="l00043"></a><span class="lineno"><a class="line" href="nmodl_8cpp.html#a927c8be5420c01205daafbac07788161">   43</a></span>&#160;<a class="code" href="nmodl_8cpp.html#a927c8be5420c01205daafbac07788161">SCENARIO</a>(<span class="stringliteral">&quot;Convert AST back to NMODL form&quot;</span>, <span class="stringliteral">&quot;[visitor][nmodl]&quot;</span>) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    TempFile unit(<span class="stringliteral">&quot;Unit.inc&quot;</span>, <a class="code" href="namespacenmodl_1_1test__utils.html#ab598732ca197ae873a7b247fe2ea1a47">nmodl_valid_constructs</a>.at(<span class="stringliteral">&quot;unit_statement_1&quot;</span>).input);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; construct: <a class="code" href="namespacenmodl_1_1test__utils.html#ab598732ca197ae873a7b247fe2ea1a47">nmodl_valid_constructs</a>) {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">auto</span> test_case = construct.second;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">const</span> std::string&amp; input_nmodl_text = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(test_case.input);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">const</span> std::string&amp; output_nmodl_text = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(test_case.output);</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        GIVEN(test_case.name) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            THEN(<span class="stringliteral">&quot;Visitor successfully returns : &quot;</span> + input_nmodl_text) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                <span class="keyword">auto</span> result = <a class="code" href="nmodl_8cpp.html#a2c0549e3d4e6c197becbbc1a7eacbebc">run_nmodl_visitor</a>(input_nmodl_text);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                REQUIRE(result == output_nmodl_text);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; construct: <a class="code" href="namespacenmodl_1_1test__utils.html#ab598732ca197ae873a7b247fe2ea1a47">nmodl_valid_constructs</a>) {</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">auto</span> test_case = construct.second;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">const</span> std::string&amp; input_nmodl_text = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(test_case.input);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">const</span> std::string&amp; output_nmodl_text = <a class="code" href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">reindent_text</a>(test_case.output);</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        GIVEN(test_case.name) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;            THEN(<span class="stringliteral">&quot;Visitor successfully returns : &quot;</span> + input_nmodl_text) {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                <span class="keyword">auto</span> result = <a class="code" href="nmodl_8cpp.html#a2c0549e3d4e6c197becbbc1a7eacbebc">run_nmodl_visitor</a>(input_nmodl_text);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                REQUIRE(result == output_nmodl_text);</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            }</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="atest__utils_8hpp_html"><div class="ttname"><a href="test__utils_8hpp.html">test_utils.hpp</a></div></div>
@@ -160,7 +159,7 @@ $(document).ready(function(){initNavTree('nmodl_8cpp_source.html',''); initResiz
 <div class="ttc" id="aprogram_8hpp_html"><div class="ttname"><a href="program_8hpp.html">program.hpp</a></div><div class="ttdoc">Auto generated AST classes declaration.</div></div>
 <div class="ttc" id="aunits_2parser_8cpp_html_adb772fffa624f2b39f88e66cafd5b05a"><div class="ttname"><a href="units_2parser_8cpp.html#adb772fffa624f2b39f88e66cafd5b05a">driver</a></div><div class="ttdeci">nmodl::parser::UnitDriver driver</div><div class="ttdef"><b>Definition:</b> <a href="units_2parser_8cpp_source.html#l00028">parser.cpp:28</a></div></div>
 <div class="ttc" id="agroup__units_html_ga53666d277469c1f00a3b0fd26a094178"><div class="ttname"><a href="group__units.html#ga53666d277469c1f00a3b0fd26a094178">nmodl::parser::UnitDriver::parse_string</a></div><div class="ttdeci">bool parse_string(const std::string &amp;input)</div><div class="ttdoc">parser Units provided as string (used for testing)</div><div class="ttdef"><b>Definition:</b> <a href="unit__driver_8cpp_source.html#l00040">unit_driver.cpp:40</a></div></div>
-<div class="ttc" id="anamespacenmodl_1_1test__utils_html_af64fc17c60e5c8a5b8114147591aec3d"><div class="ttname"><a href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">nmodl::test_utils::reindent_text</a></div><div class="ttdeci">std::string reindent_text(const std::string &amp;text)</div><div class="ttdoc">Reindent nmodl text for text-to-text comparison.</div><div class="ttdef"><b>Definition:</b> <a href="test__utils_8cpp_source.html#l00057">test_utils.cpp:57</a></div></div>
+<div class="ttc" id="anamespacenmodl_1_1test__utils_html_af64fc17c60e5c8a5b8114147591aec3d"><div class="ttname"><a href="namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d">nmodl::test_utils::reindent_text</a></div><div class="ttdeci">std::string reindent_text(const std::string &amp;text)</div><div class="ttdoc">Reindent nmodl text for text-to-text comparison.</div><div class="ttdef"><b>Definition:</b> <a href="test__utils_8cpp_source.html#l00053">test_utils.cpp:53</a></div></div>
 <div class="ttc" id="acheckparent__visitor_8hpp_html"><div class="ttname"><a href="checkparent__visitor_8hpp.html">checkparent_visitor.hpp</a></div><div class="ttdoc">Visitor for checking parents of ast nodes</div></div>
 <div class="ttc" id="anmodl__driver_8hpp_html"><div class="ttname"><a href="nmodl__driver_8hpp.html">nmodl_driver.hpp</a></div></div>
 <div class="ttc" id="anmodl__constructs_8hpp_html"><div class="ttname"><a href="nmodl__constructs_8hpp.html">nmodl_constructs.hpp</a></div></div>
