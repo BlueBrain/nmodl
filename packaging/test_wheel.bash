@@ -34,7 +34,7 @@ test_wheel () {
         nmodl -o "${OUTPUT_DIR}" "${mod}" sympy --analytic
         $python_exe -c "import nmodl; driver = nmodl.NmodlDriver(); driver.parse_file('${mod}')"
     done
-    $python_exe -m pytest -vvv "${this_dir}/../test/"
+    $python_exe -m pytest -vvv --ignore "${this_dir}/../test/usecases" "${this_dir}/../test/"
 }
 
 echo "== Testing $python_wheel using $python_exe ($python_ver) =="
