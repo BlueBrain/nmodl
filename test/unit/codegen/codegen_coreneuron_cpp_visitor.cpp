@@ -883,7 +883,8 @@ SCENARIO("Check that codegen generate event functions well", "[codegen][net_even
         nrb->_cnt++;
     })";
             REQUIRE_THAT(generated, ContainsSubstring(net_receive_expected_code));
-            std::string net_buf_receive_expected_code = R"(void net_buf_receive_temp(NrnThread* nt) {
+            std::string net_buf_receive_expected_code =
+                R"(void net_buf_receive_temp(NrnThread* nt) {
         Memb_list* ml = get_memb_list(nt);
         if (!ml) {
             return;

@@ -1147,7 +1147,7 @@ void CodegenCppVisitor::setup(const Program& node) {
     info = v.analyze(node);
     info.mod_file = mod_filename;
 
-    if(info.mod_suffix == "") {
+    if (info.mod_suffix == "") {
         info.mod_suffix = std::filesystem::path(mod_filename).stem();
     }
     info.rsuffix = info.point_process ? "" : "_" + info.mod_suffix;
