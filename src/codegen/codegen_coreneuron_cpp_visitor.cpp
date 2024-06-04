@@ -2751,10 +2751,10 @@ void CodegenCoreneuronCppVisitor::print_net_receive() {
     printing_net_receive = true;
     if (!info.artificial_cell) {
         const auto& name = method_name("net_receive");
-        ParamVector params;
-        params.emplace_back("", "Point_process*", "", "pnt");
-        params.emplace_back("", "int", "", "weight_index");
-        params.emplace_back("", "double", "", "flag");
+        ParamVector params = {
+            {"", "Point_process*", "", "pnt"},
+            {"", "int", "", "weight_index"},
+            {"", "double", "", "flag"}};
         printer->add_newline(2);
         printer->fmt_push_block("static void {}({})", name, get_parameter_str(params));
         printer->add_line("NrnThread* nt = nrn_threads + pnt->_tid;");
