@@ -9,13 +9,13 @@ would like you to follow: - `Question or Problem? <#question>`__ -
 Conventions <#devconv>`__
 
 Got a Question?
-----------------
+---------------
 
 Please do not hesitate to raise an issue on `github project
 page <https://github.com/BlueBrain/nmodl>`__.
 
 Found a Bug?
--------------
+------------
 
 If you find a bug in the source code, you can help us by `submitting an
 issue <#submit-issue>`__ to our `GitHub
@@ -23,7 +23,7 @@ Repository <https://github.com/BlueBrain/nmodl>`__. Even better, you can
 `submit a Pull Request <#submit-pr>`__ with a fix.
 
 Missing a Feature?
--------------------
+------------------
 
 You can *request* a new feature by `submitting an
 issue <#submit-issue>`__ to our GitHub Repository. If you would like to
@@ -41,10 +41,10 @@ Please consider what kind of change it is:
    Request <#submit-pr>`__.
 
 Submission Guidelines
-----------------------
+---------------------
 
 Submitting an Issue
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Before you submit an issue, please search the issue tracker, maybe an
 issue for your problem already exists and the discussion might inform
@@ -56,7 +56,7 @@ will need as much information as possible, and preferably a sample MOD
 file or Python example.
 
 Submitting a Pull Request (PR)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When you wish to contribute to the code base, please consider the
 following guidelines:
@@ -150,7 +150,7 @@ pull the changes from the main (upstream) repository:
       git pull --ff upstream master
 
 Development Conventions
-------------------------
+-----------------------
 
 New Lines
 ~~~~~~~~~
