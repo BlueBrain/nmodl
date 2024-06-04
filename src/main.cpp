@@ -25,6 +25,7 @@
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/default_suffix_visitor.hpp"
 #include "visitors/function_callpath_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -324,6 +325,8 @@ int main(int argc, const char* argv[]) {
 
         /// just visit the ast
         AstVisitor().visit_program(*ast);
+
+        DefaultSuffixVisitor(file.string()).visit_program(*ast);
 
         /// construct symbol table
         {
