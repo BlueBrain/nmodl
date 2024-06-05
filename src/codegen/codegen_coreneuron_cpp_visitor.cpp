@@ -1364,7 +1364,6 @@ void CodegenCoreneuronCppVisitor::print_mechanism_register() {
     printer->pop_block();
 
     printer->add_newline();
-    printer->add_line("_nrn_layout_reg(mech_type, 0);");  // 0 for SoA
 
     // register mechanism
     const auto mech_arguments = register_mechanism_arguments();
