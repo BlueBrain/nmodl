@@ -256,8 +256,3 @@ pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
 
 }  // namespace pybind_wrappers
 }  // namespace nmodl
-
-
-// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-__attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api =
-    nmodl::pybind_wrappers::nmodl_init_pybind_wrapper_api();

@@ -28,9 +28,9 @@ bool EmbeddedPythonLoader::have_wrappers() {
     wrappers = wrapper_api;
     return true;
 #else
-    auto* static_wrappers = static_cast<pybind_wrap_api*>(dlsym(RTLD_DEFAULT, "nmodl_wrapper_api"));
-    if (static_wrappers != nullptr) {
-        wrappers = *static_wrappers;
+    auto* init = static_cast<pybind_wrap_api (*)()>(dlsym(RTLD_DEFAULT, "nmodl_init_wrapper_api"));
+    if(init != nullptr) {
+        wrappers = init();
     }
 
     return static_wrappers != nullptr;
@@ -96,15 +96,18 @@ void EmbeddedPythonLoader::load_libraries() {
 }
 
 void EmbeddedPythonLoader::populate_symbols() {
-    auto static_wrappers = static_cast<pybind_wrap_api*>(
-        dlsym(pybind_wrapper_handle, "nmodl_pybind_wrap_api"));
-    if (!static_wrappers) {
+#if defined(NMODL_STATIC_PYWRAPPER)
+    auto* init = &nmodl::pybind_wrappers::nmodl_init_pybind_wrapper_api;
+#else
+    auto* init = static_cast<pybind_wrap_api (*)()>(dlsym(pybind_wrapper_handle, "nmodl_init_wrapper_api"));
+#endif
+    if (!init) {
         const auto errstr = dlerror();
         logger->critical("Tried but failed to load pybind wrapper symbols");
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlsym");
     }
-    wrappers = *static_wrappers;
+    wrappers = init();
 }
 
 void EmbeddedPythonLoader::unload() {
