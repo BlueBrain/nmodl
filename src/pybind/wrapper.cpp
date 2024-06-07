@@ -196,38 +196,6 @@ void AnalyticDiffExecutor::operator()() {
     std::tie(solution, exception_message) = call_analytic_diff(expressions, used_names_in_block);
 }
 
-SolveLinearSystemExecutor* create_sls_executor_func() {
-    return new SolveLinearSystemExecutor();
-}
-
-SolveNonLinearSystemExecutor* create_nsls_executor_func() {
-    return new SolveNonLinearSystemExecutor();
-}
-
-DiffeqSolverExecutor* create_des_executor_func() {
-    return new DiffeqSolverExecutor();
-}
-
-AnalyticDiffExecutor* create_ads_executor_func() {
-    return new AnalyticDiffExecutor();
-}
-
-void destroy_sls_executor_func(SolveLinearSystemExecutor* exec) {
-    delete exec;
-}
-
-void destroy_nsls_executor_func(SolveNonLinearSystemExecutor* exec) {
-    delete exec;
-}
-
-void destroy_des_executor_func(DiffeqSolverExecutor* exec) {
-    delete exec;
-}
-
-void destroy_ads_executor_func(AnalyticDiffExecutor* exec) {
-    delete exec;
-}
-
 void initialize_interpreter_func() {
     pybind11::initialize_interpreter(true);
 }

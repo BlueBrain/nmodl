@@ -98,15 +98,6 @@ struct AnalyticDiffExecutor: public PythonExecutor {
 };
 
 
-SolveLinearSystemExecutor* create_sls_executor_func();
-SolveNonLinearSystemExecutor* create_nsls_executor_func();
-DiffeqSolverExecutor* create_des_executor_func();
-AnalyticDiffExecutor* create_ads_executor_func();
-void destroy_sls_executor_func(SolveLinearSystemExecutor* exec);
-void destroy_nsls_executor_func(SolveNonLinearSystemExecutor* exec);
-void destroy_des_executor_func(DiffeqSolverExecutor* exec);
-void destroy_ads_executor_func(AnalyticDiffExecutor* exec);
-
 void initialize_interpreter_func();
 void finalize_interpreter_func();
 
