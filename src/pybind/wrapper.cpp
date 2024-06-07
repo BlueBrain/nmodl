@@ -17,6 +17,8 @@
 #include <vector>
 
 #include "ode_py.hpp"
+#include <dlfcn.h>
+#include <fmt/format.h>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -181,6 +183,7 @@ except Exception as e:
     return {std::move(solution), std::move(exception_message)};
 }
 
+
 void initialize_interpreter_func() {
     pybind11::initialize_interpreter(true);
 }
@@ -191,7 +194,7 @@ void finalize_interpreter_func() {
 
 // Prevent mangling for easier `dlsym`.
 extern "C" {
-pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
+__attribute__((visibility("default"))) pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
     return {&nmodl::pybind_wrappers::initialize_interpreter_func,
             &nmodl::pybind_wrappers::finalize_interpreter_func,
             &call_solve_nonlinear_system,

@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <pybind11/embed.h>
-
 #include "wrapper.hpp"
 
 namespace nmodl {
