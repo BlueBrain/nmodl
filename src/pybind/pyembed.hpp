@@ -161,7 +161,7 @@ class EmbeddedPythonLoader {
     }
 
   private:
-    pybind_wrap_api* wrappers = nullptr;
+    pybind_wrap_api wrappers;
 
     void* pylib_handle = nullptr;
     void* pybind_wrapper_handle = nullptr;
@@ -180,7 +180,9 @@ class EmbeddedPythonLoader {
 };
 
 
-pybind_wrap_api init_pybind_wrap_api() noexcept;
+extern "C" {
+pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept;
+}
 
 }  // namespace pybind_wrappers
 }  // namespace nmodl

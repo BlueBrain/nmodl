@@ -236,7 +236,9 @@ void finalize_interpreter_func() {
     pybind11::finalize_interpreter();
 }
 
-pybind_wrap_api init_pybind_wrap_api() noexcept {
+// Prevent mangling for easier `dlsym`.
+extern "C" {
+pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
     return {
         &nmodl::pybind_wrappers::initialize_interpreter_func,
         &nmodl::pybind_wrappers::finalize_interpreter_func,
@@ -250,6 +252,7 @@ pybind_wrap_api init_pybind_wrap_api() noexcept {
         &nmodl::pybind_wrappers::destroy_ads_executor_func,
     };
 }
+}
 
 }  // namespace pybind_wrappers
 }  // namespace nmodl
@@ -257,4 +260,4 @@ pybind_wrap_api init_pybind_wrap_api() noexcept {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 __attribute__((visibility("default"))) nmodl::pybind_wrappers::pybind_wrap_api nmodl_wrapper_api =
-    nmodl::pybind_wrappers::init_pybind_wrap_api();
+    nmodl::pybind_wrappers::nmodl_init_pybind_wrapper_api();
