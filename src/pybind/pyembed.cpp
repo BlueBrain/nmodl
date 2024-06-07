@@ -28,8 +28,8 @@ bool EmbeddedPythonLoader::have_wrappers() {
     wrappers = wrapper_api;
     return true;
 #else
-    auto* init = static_cast<pybind_wrap_api (*)()>(dlsym(RTLD_DEFAULT, "nmodl_init_wrapper_api"));
-    if(init != nullptr) {
+    auto* init = (pybind_wrap_api(*)())(dlsym(RTLD_DEFAULT, "nmodl_init_wrapper_api"));
+    if (init != nullptr) {
         wrappers = init();
     }
 
@@ -99,7 +99,7 @@ void EmbeddedPythonLoader::populate_symbols() {
 #if defined(NMODL_STATIC_PYWRAPPER)
     auto* init = &nmodl::pybind_wrappers::nmodl_init_pybind_wrapper_api;
 #else
-    auto* init = static_cast<pybind_wrap_api (*)()>(dlsym(pybind_wrapper_handle, "nmodl_init_wrapper_api"));
+    auto* init = (pybind_wrap_api(*)()) dlsym(pybind_wrapper_handle, "nmodl_init_wrapper_api");
 #endif
     if (!init) {
         const auto errstr = dlerror();
