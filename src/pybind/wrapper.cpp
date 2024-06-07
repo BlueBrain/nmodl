@@ -22,7 +22,14 @@ using namespace py::literals;
 namespace nmodl {
 namespace pybind_wrappers {
 
-void SolveLinearSystemExecutor::operator()() {
+std::tuple<std::vector<std::string>, std::vector<std::string>, std::string>
+call_solve_linear_system(const std::vector<std::string>& eq_system,
+                         const std::vector<std::string>& state_vars,
+                         const std::set<std::string>& vars,
+                         bool small_system,
+                         bool elimination,
+                         const std::string& tmp_unique_prefix,
+                         const std::set<std::string>& function_calls) {
     const auto locals = py::dict("eq_strings"_a = eq_system,
                                  "state_vars"_a = state_vars,
                                  "vars"_a = vars,
@@ -49,15 +56,26 @@ except Exception as e:
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     // returns a vector of solutions, i.e. new statements to add to block:
-    solutions = locals["solutions"].cast<std::vector<std::string>>();
+    auto solutions = locals["solutions"].cast<std::vector<std::string>>();
     // and a vector of new local variables that need to be declared in the block:
-    new_local_vars = locals["new_local_vars"].cast<std::vector<std::string>>();
+    auto new_local_vars = locals["new_local_vars"].cast<std::vector<std::string>>();
     // may also return a python exception message:
-    exception_message = locals["exception_message"].cast<std::string>();
+    auto exception_message = locals["exception_message"].cast<std::string>();
+
+    return {std::move(solutions), std::move(new_local_vars), std::move(exception_message)};
+}
+
+void SolveLinearSystemExecutor::operator()() {
+    std::tie(solutions, new_local_vars, exception_message) = call_solve_linear_system(
+        eq_system, state_vars, vars, small_system, elimination, tmp_unique_prefix, function_calls);
 }
 
 
-void SolveNonLinearSystemExecutor::operator()() {
+std::tuple<std::vector<std::string>, std::string> call_solve_nonlinear_system(
+    const std::vector<std::string>& eq_system,
+    const std::vector<std::string>& state_vars,
+    const std::set<std::string>& vars,
+    const std::set<std::string>& function_calls) {
     const auto locals = py::dict("equation_strings"_a = eq_system,
                                  "state_vars"_a = state_vars,
                                  "vars"_a = vars,
@@ -78,12 +96,24 @@ except Exception as e:
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     // returns a vector of solutions, i.e. new statements to add to block:
-    solutions = locals["solutions"].cast<std::vector<std::string>>();
+    auto solutions = locals["solutions"].cast<std::vector<std::string>>();
     // may also return a python exception message:
-    exception_message = locals["exception_message"].cast<std::string>();
+    auto exception_message = locals["exception_message"].cast<std::string>();
+
+    return {std::move(solutions), std::move(exception_message)};
 }
 
-void DiffeqSolverExecutor::operator()() {
+void SolveNonLinearSystemExecutor::operator()() {
+    std::tie(solutions, exception_message) =
+        call_solve_nonlinear_system(eq_system, state_vars, vars, function_calls);
+}
+
+std::tuple<std::string, std::string> call_diffeq_solver(const std::string& node_as_nmodl,
+                                                        const std::string& dt_var,
+                                                        const std::set<std::string>& vars,
+                                                        bool use_pade_approx,
+                                                        const std::set<std::string>& function_calls,
+                                                        const std::string& method) {
     const auto locals = py::dict("equation_string"_a = node_as_nmodl,
                                  "dt_var"_a = dt_var,
                                  "vars"_a = vars,
@@ -123,13 +153,22 @@ except Exception as e:
         py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     } else {
         // nothing to do, but the caller should know.
-        return;
+        return {};
     }
-    solution = locals["solution"].cast<std::string>();
-    exception_message = locals["exception_message"].cast<std::string>();
+    auto solution = locals["solution"].cast<std::string>();
+    auto exception_message = locals["exception_message"].cast<std::string>();
+
+    return {std::move(solution), std::move(exception_message)};
 }
 
-void AnalyticDiffExecutor::operator()() {
+void DiffeqSolverExecutor::operator()() {
+    std::tie(solution, exception_message) =
+        call_diffeq_solver(node_as_nmodl, dt_var, vars, use_pade_approx, function_calls, method);
+}
+
+std::tuple<std::string, std::string> call_analytic_diff(
+    const std::vector<std::string>& expressions,
+    const std::set<std::string>& used_names_in_block) {
     auto locals = py::dict("expressions"_a = expressions, "vars"_a = used_names_in_block);
     std::string script = R"(
 exception_message = ""
@@ -147,8 +186,14 @@ except Exception as e:
 )";
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
-    solution = locals["solution"].cast<std::string>();
-    exception_message = locals["exception_message"].cast<std::string>();
+    std::string solution = locals["solution"].cast<std::string>();
+    std::string exception_message = locals["exception_message"].cast<std::string>();
+
+    return {std::move(solution), std::move(exception_message)};
+}
+
+void AnalyticDiffExecutor::operator()() {
+    std::tie(solution, exception_message) = call_analytic_diff(expressions, used_names_in_block);
 }
 
 SolveLinearSystemExecutor* create_sls_executor_func() {
