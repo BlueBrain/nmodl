@@ -239,18 +239,12 @@ void finalize_interpreter_func() {
 // Prevent mangling for easier `dlsym`.
 extern "C" {
 pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
-    return {
-        &nmodl::pybind_wrappers::initialize_interpreter_func,
-        &nmodl::pybind_wrappers::finalize_interpreter_func,
-        &nmodl::pybind_wrappers::create_sls_executor_func,
-        &nmodl::pybind_wrappers::create_nsls_executor_func,
-        &nmodl::pybind_wrappers::create_des_executor_func,
-        &nmodl::pybind_wrappers::create_ads_executor_func,
-        &nmodl::pybind_wrappers::destroy_sls_executor_func,
-        &nmodl::pybind_wrappers::destroy_nsls_executor_func,
-        &nmodl::pybind_wrappers::destroy_des_executor_func,
-        &nmodl::pybind_wrappers::destroy_ads_executor_func,
-    };
+    return {&nmodl::pybind_wrappers::initialize_interpreter_func,
+            &nmodl::pybind_wrappers::finalize_interpreter_func,
+            &call_solve_nonlinear_system,
+            &call_solve_linear_system,
+            &call_diffeq_solver,
+            &call_analytic_diff};
 }
 }
 

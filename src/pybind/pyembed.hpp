@@ -110,17 +110,40 @@ void destroy_ads_executor_func(AnalyticDiffExecutor* exec);
 void initialize_interpreter_func();
 void finalize_interpreter_func();
 
+
+std::tuple<std::vector<std::string>, std::vector<std::string>, std::string>
+call_solve_linear_system(const std::vector<std::string>& eq_system,
+                         const std::vector<std::string>& state_vars,
+                         const std::set<std::string>& vars,
+                         bool small_system,
+                         bool elimination,
+                         const std::string& tmp_unique_prefix,
+                         const std::set<std::string>& function_calls);
+
+std::tuple<std::vector<std::string>, std::string> call_solve_nonlinear_system(
+    const std::vector<std::string>& eq_system,
+    const std::vector<std::string>& state_vars,
+    const std::set<std::string>& vars,
+    const std::set<std::string>& function_calls);
+
+std::tuple<std::string, std::string> call_diffeq_solver(const std::string& node_as_nmodl,
+                                                        const std::string& dt_var,
+                                                        const std::set<std::string>& vars,
+                                                        bool use_pade_approx,
+                                                        const std::set<std::string>& function_calls,
+                                                        const std::string& method);
+
+std::tuple<std::string, std::string> call_analytic_diff(
+    const std::vector<std::string>& expressions,
+    const std::set<std::string>& used_names_in_block);
+
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;
     decltype(&finalize_interpreter_func) finalize_interpreter;
-    decltype(&create_sls_executor_func) create_sls_executor;
-    decltype(&create_nsls_executor_func) create_nsls_executor;
-    decltype(&create_des_executor_func) create_des_executor;
-    decltype(&create_ads_executor_func) create_ads_executor;
-    decltype(&destroy_sls_executor_func) destroy_sls_executor;
-    decltype(&destroy_nsls_executor_func) destroy_nsls_executor;
-    decltype(&destroy_des_executor_func) destroy_des_executor;
-    decltype(&destroy_ads_executor_func) destroy_ads_executor;
+    decltype(&call_solve_nonlinear_system) solve_nonlinear_system;
+    decltype(&call_solve_linear_system) solve_linear_system;
+    decltype(&call_diffeq_solver) diffeq_solver;
+    decltype(&call_analytic_diff) analytic_diff;
 };
 
 
