@@ -185,11 +185,6 @@ void destroy_ads_executor_func(AnalyticDiffExecutor* exec) {
 
 void initialize_interpreter_func() {
     pybind11::initialize_interpreter(true);
-    const auto python_path_cstr = std::getenv("PYTHONPATH");
-    if (python_path_cstr) {
-        pybind11::module::import("sys").attr("path").cast<pybind11::list>().insert(
-            0, python_path_cstr);
-    }
 }
 
 void finalize_interpreter_func() {
