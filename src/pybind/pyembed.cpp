@@ -49,16 +49,17 @@ void EmbeddedPythonLoader::load_libraries() {
         throw std::runtime_error("Failed to dlopen");
     }
 
-    // This code is imported from PyBind11 because this is primarly in details for internal usage
+    // This code is imported and slightly modified from PyBind11 because this
+    // is primarly in details for internal usage
     // License of PyBind11 is BSD-style
     {
         std::string compiled_ver = fmt::format("{}.{}", PY_MAJOR_VERSION, PY_MINOR_VERSION);
-        const char* (*fun)(void) = (const char* (*) (void) ) dlsym(pylib_handle, "Py_GetVersion");
-        if (fun == nullptr) {
+        auto pPy_GetVersion = (const char* (*) (void) ) dlsym(pylib_handle, "Py_GetVersion");
+        if (pPy_GetVersion == nullptr) {
             logger->critical("Unable to find the function `Py_GetVersion`");
             throw std::runtime_error("Unable to find the function `Py_GetVersion`");
         }
-        const char* runtime_ver = fun();
+        const char* runtime_ver = pPy_GetVersion();
         std::size_t len = compiled_ver.size();
         if (std::strncmp(runtime_ver, compiled_ver.c_str(), len) != 0 ||
             (runtime_ver[len] >= '0' && runtime_ver[len] <= '9')) {
