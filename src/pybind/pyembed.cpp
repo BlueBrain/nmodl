@@ -119,8 +119,8 @@ void EmbeddedPythonLoader::unload() {
     }
 }
 
-const pybind_wrap_api* EmbeddedPythonLoader::api() {
-    return &wrappers;
+const pybind_wrap_api& EmbeddedPythonLoader::api() {
+    return wrappers;
 }
 
 

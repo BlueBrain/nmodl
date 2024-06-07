@@ -88,7 +88,7 @@ class EmbeddedPythonLoader {
      * Get access to the container struct for the pointers to the functions in the wrapper library.
      * @return a pybind_wrap_api pointer
      */
-    const pybind_wrap_api* api();
+    const pybind_wrap_api& api();
 
     ~EmbeddedPythonLoader() {
         unload();

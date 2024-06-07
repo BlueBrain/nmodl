@@ -288,7 +288,7 @@ void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre
     init_state_vars_vector();
     // call sympy linear solver
     bool small_system = (eq_system.size() <= SMALL_LINEAR_SYSTEM_MAX_STATES);
-    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api()->solve_linear_system;
+    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api().solve_linear_system;
     // this is necessary after we destroy the solver
     const auto tmp_unique_prefix = suffix_random_string(vars, "tmp");
 
@@ -336,7 +336,7 @@ void SympySolverVisitor::solve_non_linear_system(
     // construct ordered vector of state vars used in non-linear system
     init_state_vars_vector();
 
-    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api()->solve_nonlinear_system;
+    auto solver = pywrap::EmbeddedPythonLoader::get_instance().api().solve_nonlinear_system;
     auto [solutions, exception_message] = solver(eq_system, state_vars, vars, function_calls);
 
     if (!exception_message.empty()) {
@@ -386,7 +386,7 @@ void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     check_expr_statements_in_same_block();
 
     const auto node_as_nmodl = to_nmodl_for_sympy(node);
-    auto diffeq_solver = pywrap::EmbeddedPythonLoader::get_instance().api()->diffeq_solver;
+    auto diffeq_solver = pywrap::EmbeddedPythonLoader::get_instance().api().diffeq_solver;
 
     auto dt_var = codegen::naming::NTHREAD_DT_VARIABLE;
     auto [solution, exception_message] = (*diffeq_solver)(
