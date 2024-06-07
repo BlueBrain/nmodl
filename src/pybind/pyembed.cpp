@@ -115,9 +115,11 @@ void EmbeddedPythonLoader::populate_symbols() {
 void EmbeddedPythonLoader::unload() {
     if (pybind_wrapper_handle) {
         dlclose(pybind_wrapper_handle);
+        pybind_wrapper_handle = nullptr;
     }
     if (pylib_handle) {
         dlclose(pylib_handle);
+        pylib_handle = nullptr;
     }
 }
 
