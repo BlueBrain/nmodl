@@ -65,11 +65,6 @@ except Exception as e:
     return {std::move(solutions), std::move(new_local_vars), std::move(exception_message)};
 }
 
-void SolveLinearSystemExecutor::operator()() {
-    std::tie(solutions, new_local_vars, exception_message) = call_solve_linear_system(
-        eq_system, state_vars, vars, small_system, elimination, tmp_unique_prefix, function_calls);
-}
-
 
 std::tuple<std::vector<std::string>, std::string> call_solve_nonlinear_system(
     const std::vector<std::string>& eq_system,
@@ -103,10 +98,6 @@ except Exception as e:
     return {std::move(solutions), std::move(exception_message)};
 }
 
-void SolveNonLinearSystemExecutor::operator()() {
-    std::tie(solutions, exception_message) =
-        call_solve_nonlinear_system(eq_system, state_vars, vars, function_calls);
-}
 
 std::tuple<std::string, std::string> call_diffeq_solver(const std::string& node_as_nmodl,
                                                         const std::string& dt_var,
@@ -161,10 +152,6 @@ except Exception as e:
     return {std::move(solution), std::move(exception_message)};
 }
 
-void DiffeqSolverExecutor::operator()() {
-    std::tie(solution, exception_message) =
-        call_diffeq_solver(node_as_nmodl, dt_var, vars, use_pade_approx, function_calls, method);
-}
 
 std::tuple<std::string, std::string> call_analytic_diff(
     const std::vector<std::string>& expressions,
@@ -190,10 +177,6 @@ except Exception as e:
     std::string exception_message = locals["exception_message"].cast<std::string>();
 
     return {std::move(solution), std::move(exception_message)};
-}
-
-void AnalyticDiffExecutor::operator()() {
-    std::tie(solution, exception_message) = call_analytic_diff(expressions, used_names_in_block);
 }
 
 void initialize_interpreter_func() {
