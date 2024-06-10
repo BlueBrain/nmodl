@@ -1368,17 +1368,19 @@ void CodegenCoreneuronCppVisitor::print_mechanism_register() {
 
     // register mechanism
     const auto mech_arguments = register_mechanism_arguments();
+    const auto thread_safe = info.vectorize;
     const auto number_of_thread_objects = num_thread_objects();
     if (info.point_process) {
-        printer->fmt_line("point_register_mech({}, {}, {}, {});",
+        printer->fmt_line("point_register_mech({}, {}, {}, {}, {});",
                           mech_arguments,
                           info.constructor_node ? method_name(naming::NRN_CONSTRUCTOR_METHOD)
                                                 : "nullptr",
                           info.destructor_node ? method_name(naming::NRN_DESTRUCTOR_METHOD)
                                                : "nullptr",
+                          thread_safe,
                           number_of_thread_objects);
     } else {
-        printer->fmt_line("register_mech({}, {});", mech_arguments, number_of_thread_objects);
+        printer->fmt_line("register_mech({}, {}, {});", mech_arguments, thread_safe, number_of_thread_objects);
         if (info.constructor_node) {
             printer->fmt_line("register_constructor({});",
                               method_name(naming::NRN_CONSTRUCTOR_METHOD));

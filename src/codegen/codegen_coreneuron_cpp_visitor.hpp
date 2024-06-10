@@ -90,12 +90,12 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Determine the number of threads to allocate
      */
     int num_thread_objects() const noexcept {
-        return info.vectorize ? (info.thread_data_index + 1) : 0;
+        return info.thread_data_index;
     }
 
 
     /****************************************************************************************/
-    /*                     Common helper routines accross codegen functions                 */
+    /*                     Common helper routines across codegen functions                 */
     /****************************************************************************************/
 
 

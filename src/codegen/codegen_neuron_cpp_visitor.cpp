@@ -1131,13 +1131,14 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                           method_name(naming::NRN_JACOB_METHOD),
                           nrn_state_required() ? method_name(naming::NRN_STATE_METHOD) : "nullptr")
             : "nullptr, nullptr, nullptr";
-    const auto register_mech_args = fmt::format("{}, {}, {}, {}, {}, {}",
+    const auto register_mech_args = fmt::format("{}, {}, {}, {}, {}, {}, {}",
                                                 get_channel_info_var_name(),
                                                 method_name(naming::NRN_ALLOC_METHOD),
                                                 compute_functions_parameters,
                                                 method_name(naming::NRN_INIT_METHOD),
                                                 naming::NRN_POINTERINDEX,
-                                                1 + info.thread_data_index);
+                                                1,
+                                                info.thread_data_index);
     if (info.point_process) {
         printer->fmt_line(
             "_pointtype = point_register_mech({}, _hoc_create_pnt, _hoc_destroy_pnt, "
