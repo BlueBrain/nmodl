@@ -129,8 +129,10 @@
     <span class="n">known_functions</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;sympy.printing.c&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">known_functions_C99</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">known_functions</span> <span class="o">=</span> <span class="n">import_module</span><span class="p">(</span><span class="s2">&quot;sympy.printing.ccode&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">known_functions_C99</span>
-<span class="n">known_functions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Abs&quot;</span><span class="p">)</span>
-<span class="n">known_functions</span><span class="p">[</span><span class="s2">&quot;abs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fabs&quot;</span>
+
+<span class="k">if</span> <span class="s2">&quot;Abs&quot;</span> <span class="ow">in</span> <span class="n">known_functions</span><span class="p">:</span>
+    <span class="n">known_functions</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;Abs&quot;</span><span class="p">)</span>
+    <span class="n">known_functions</span><span class="p">[</span><span class="s2">&quot;abs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;fabs&quot;</span>
 
 
 <span class="k">if</span> <span class="ow">not</span> <span class="p">((</span><span class="n">major</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">minor</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">)):</span>
