@@ -325,9 +325,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interweave F and J equations so that they are printed in code</span>
 <span class="sd">    rowwise from the equation J x = F. For example:</span>
 
-<span class="sd">    F = [F_0,</span>
-<span class="sd">         F_1,</span>
-<span class="sd">         F_2]</span>
+<span class="sd">    F = [F_0, F_1, F_2]</span>
 
 <span class="sd">    (Jmat is not the actual J in the argument, it is here to the sake of</span>
 <span class="sd">    clarity)</span>
@@ -335,29 +333,10 @@
 <span class="sd">            J_1, J_4, J_7</span>
 <span class="sd">            J_2, J_5, J_8]</span>
 <span class="sd">    (J is the actual input with the following ordering)</span>
-<span class="sd">    J = [J_0,</span>
-<span class="sd">         J_3,</span>
-<span class="sd">         J_6,</span>
-<span class="sd">         J_1,</span>
-<span class="sd">         J_4,</span>
-<span class="sd">         J_7,</span>
-<span class="sd">         J_2,</span>
-<span class="sd">         J_5,</span>
-<span class="sd">         J_8]</span>
+<span class="sd">    J = [J_0, J_3, J_6, J_1, J_4, J_7, J_2, J_5, J_8]</span>
 
 <span class="sd">    What we want is:</span>
-<span class="sd">    code = [F_0,</span>
-<span class="sd">            J_0,</span>
-<span class="sd">            J_3,</span>
-<span class="sd">            J_6,</span>
-<span class="sd">            F_1,</span>
-<span class="sd">            J_1,</span>
-<span class="sd">            J_4,</span>
-<span class="sd">            J_7,</span>
-<span class="sd">            F_2,</span>
-<span class="sd">            J_2,</span>
-<span class="sd">            J_5,</span>
-<span class="sd">            J_8]</span>
+<span class="sd">    code = [F_0, J_0, J_3, J_6, F_1, J_1, J_4, J_7, F_2, J_2, J_5, J_8]</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        F: F vector</span>
