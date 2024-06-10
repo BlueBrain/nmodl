@@ -62,7 +62,6 @@ jobs:
           echo "------- Build Documentation -------";
           bash docs/generate_docs.sh public $(command -v python${PYTHON_VERSION})
           touch public/docs/.nojekyll
-          echo "<meta http-equiv=\"refresh\" content=\"0; url=./html/index.html\" />" > public/docs/index.html
           echo "status=done" >> $GITHUB_OUTPUT
         env:
           CCACHE_DIR: ${{runner.workspace}}/ccache
