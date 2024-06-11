@@ -185,11 +185,8 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     for (const auto& function: info.functions_with_table) {
         auto method_name_str = function->get_node_name();
         auto method_args_str = get_arg_str(internal_method_parameters());
-        printer->fmt_line("{}{}{}({});",
-                          table_function_prefix(),
-                          method_name_str,
-                          info.rsuffix,
-                          method_args_str);
+        printer->fmt_line(
+            "{}{}{}({});", table_function_prefix(), method_name_str, info.rsuffix, method_args_str);
     }
     printer->pop_block();
 }
