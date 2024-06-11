@@ -1001,7 +1001,6 @@ std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& s
     auto name = symbol->get_name();
     auto dimension = symbol->get_length();
     auto position = position_of_float_var(name);
-    // clang-format off
     if (symbol->is_array()) {
         if (use_instance) {
             return fmt::format("(inst->{}+id*{})", name, dimension);
@@ -1012,7 +1011,6 @@ std::string CodegenCoreneuronCppVisitor::float_variable_name(const SymbolType& s
         return fmt::format("inst->{}[id]", name);
     }
     return fmt::format("data[{}*pnodecount + id]", position);
-    // clang-format on
 }
 
 
