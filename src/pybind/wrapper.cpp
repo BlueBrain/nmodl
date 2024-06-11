@@ -17,8 +17,6 @@
 #include <vector>
 
 #include "ode_py.hpp"
-#include <dlfcn.h>
-#include <fmt/format.h>
 
 namespace py = pybind11;
 using namespace py::literals;
@@ -177,8 +175,9 @@ except Exception as e:
 )";
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
-    std::string solution = locals["solution"].cast<std::string>();
-    std::string exception_message = locals["exception_message"].cast<std::string>();
+
+    auto solution = locals["solution"].cast<std::string>();
+    auto exception_message = locals["exception_message"].cast<std::string>();
 
     return {std::move(solution), std::move(exception_message)};
 }
