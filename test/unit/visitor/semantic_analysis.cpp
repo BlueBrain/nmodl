@@ -275,3 +275,30 @@ SCENARIO("RANDOM Construct", "[visitor][semantic_analysis]") {
         }
     }
 }
+
+SCENARIO("RANGE and FUNCTION/PROCEDURE block", "[visitor][semantic_analysis]") {
+    GIVEN("A mod file with same RANGE var name and a FUNCTION name") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE f
+            }
+            FUNCTION f(arg) {
+            }
+        )";
+        THEN("Semantic analysis should fail") {
+            REQUIRE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+    GIVEN("A mod file with same RANGE var name and a PROCEDURE name") {
+        std::string nmodl_text = R"(
+            NEURON {
+                RANGE f
+            }
+            PROCEDURE f(arg) {
+            }
+        )";
+        THEN("Semantic analysis should fail") {
+            REQUIRE(run_semantic_analysis_visitor(nmodl_text));
+        }
+    }
+}
