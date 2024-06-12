@@ -17,6 +17,7 @@
 #include "ast/string.hpp"
 #include "ast/suffix.hpp"
 #include "ast/table_statement.hpp"
+#include "ast/range_var.hpp"
 #include "symtab/symbol_properties.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -24,19 +25,8 @@
 namespace nmodl {
 namespace visitor {
 
-bool SemanticAnalysisVisitor::check(const ast::Program& node) {
-    check_fail = false;
-    program_symtab = node.get_symbol_table();
 
-    /// <-- This code is for check 2
-    const auto& suffix_node = collect_nodes(node, {ast::AstNodeType::SUFFIX});
-    if (!suffix_node.empty()) {
-        const auto& suffix = std::dynamic_pointer_cast<const ast::Suffix>(suffix_node[0]);
-        const auto& type = suffix->get_type()->get_node_name();
-        is_point_process = (type == "POINT_PROCESS" || type == "ARTIFICIAL_CELL");
-    }
-    /// -->
-
+bool SemanticAnalysisVisitor::check_table_vars(const ast::Program& node) {
     // check that we do not have any duplicate TABLE statement variables in PROCEDUREs
     const auto& procedure_nodes = collect_nodes(node, {ast::AstNodeType::PROCEDURE_BLOCK});
     std::unordered_set<std::string> procedure_vars{};
@@ -58,6 +48,66 @@ bool SemanticAnalysisVisitor::check(const ast::Program& node) {
             }
         }
     }
+
+    return check_fail;
+}
+
+static const std::vector<std::string> intersection(std::unordered_set<std::string>& set1, std::unordered_set<std::string>& set2) {
+    if (set1.size() > set2.size()) {
+        return intersection(set2, set1);
+    }
+
+    std::vector<std::string> found;
+    for (const auto& element : set1) {
+        if (set2.find(element) != set2.end()) {
+            found.push_back(element);
+        }
+    }
+    return found; 
+}
+
+bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
+    // check that there are no RANGE variables which have the same name as a FUNCTION or PROCEDURE
+    const auto& range_nodes = collect_nodes(node, {ast::AstNodeType::RANGE_VAR});
+    const auto& function_nodes = collect_nodes(node, {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
+    std::unordered_set<std::string> range_vars{};
+    for (const auto& range_node: range_nodes) {
+            range_vars.insert(std::dynamic_pointer_cast<const ast::RangeVar>(range_node)->get_node_name());
+    }
+    std::unordered_set<std::string> func_vars{};
+    for (const auto& function_node: function_nodes) {
+        if (function_node->is_function_block()){
+            func_vars.insert(std::dynamic_pointer_cast<const ast::FunctionBlock>(function_node)->get_node_name());
+        }
+        else {
+            func_vars.insert(std::dynamic_pointer_cast<const ast::ProcedureBlock>(function_node)->get_node_name());
+        }
+    }
+    const auto result = intersection(range_vars, func_vars);
+    for (const auto& item: result) {
+            logger->critical(
+                fmt::format("SemanticAnalysisVisitor :: identifier {} used in both as a RANGE variable and a FUNCTION/PROCEDURE name",
+                            item)
+                );
+    }
+    return !result.empty();
+}
+
+bool SemanticAnalysisVisitor::check(const ast::Program& node) {
+    check_fail = false;
+    program_symtab = node.get_symbol_table();
+
+    /// <-- This code is for check 2
+    const auto& suffix_node = collect_nodes(node, {ast::AstNodeType::SUFFIX});
+    if (!suffix_node.empty()) {
+        const auto& suffix = std::dynamic_pointer_cast<const ast::Suffix>(suffix_node[0]);
+        const auto& type = suffix->get_type()->get_node_name();
+        is_point_process = (type == "POINT_PROCESS" || type == "ARTIFICIAL_CELL");
+    }
+    /// -->
+
+    check_fail = check_fail || check_table_vars(node) || check_name_conflict(node);
+
     /// <-- This code is for check 4
     using namespace symtab::syminfo;
     const auto& with_prop = NmodlType::read_ion_var | NmodlType::write_ion_var;
