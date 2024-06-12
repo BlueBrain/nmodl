@@ -1,5 +1,10 @@
 var NAVTREEINDEX33 =
 {
+"sympy__conductance__visitor_8hpp_source.html":[3,0,1,11,43],
+"sympy__replace__solutions__visitor_8cpp.html":[3,0,1,11,44],
+"sympy__replace__solutions__visitor_8cpp_source.html":[3,0,1,11,44],
+"sympy__replace__solutions__visitor_8hpp.html":[3,0,1,11,45],
+"sympy__replace__solutions__visitor_8hpp_source.html":[3,0,1,11,45],
 "sympy__solver_8cpp.html":[3,0,2,0,10,24],
 "sympy__solver_8cpp.html#a13432bbd1f365457048e8ecff5a395d5":[3,0,2,0,10,24,10],
 "sympy__solver_8cpp.html#a2cb1c89431e2ab2d00ac67382f3fa49b":[3,0,2,0,10,24,9],
@@ -244,10 +249,5 @@ var NAVTREEINDEX33 =
 "visitor__utils_8hpp.html#a7325073601188222dceeccce9327f90c":[3,0,1,11,58,9],
 "visitor__utils_8hpp.html#a7ceabe160b2e9cce30f64b4d8722b74c":[3,0,1,11,58,3],
 "visitor__utils_8hpp.html#a7fe096bb1d995226f2875d6cbc2ece0e":[3,0,1,11,58,19],
-"visitor__utils_8hpp.html#a915d3d903063dc349ce6906282e02b82":[3,0,1,11,58,4],
-"visitor__utils_8hpp.html#a925eb3f91f1d028a3eb84aeee2b893df":[3,0,1,11,58,1],
-"visitor__utils_8hpp.html#a93218c244f2658370e096935410f2c42":[3,0,1,11,58,7],
-"visitor__utils_8hpp.html#a9b51e3f836995236060e8eb8596dd486":[3,0,1,11,58,14],
-"visitor__utils_8hpp.html#aaaeeb47344f97f2ba49f4d17c19b1a58":[3,0,1,11,58,11],
-"visitor__utils_8hpp.html#aab8fd730b218414affb4b93f13ea59bd":[3,0,1,11,58,0]
+"visitor__utils_8hpp.html#a915d3d903063dc349ce6906282e02b82":[3,0,1,11,58,4]
 };
