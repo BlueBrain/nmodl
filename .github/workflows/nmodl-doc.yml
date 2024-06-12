@@ -78,4 +78,3 @@ jobs:
         with:
           branch: gh-pages # The branch the action should deploy to.
           folder: ${{runner.workspace}}/nmodl/public/docs
-          clean: false # Automatically remove deleted files from the deploy branch
