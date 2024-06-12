@@ -97,7 +97,8 @@ $(document).ready(function(){initNavTree('wrapper_8cpp.html',''); initResizable(
 <div class="title">wrapper.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen/codegen_naming.hpp</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="wrapper_8hpp_source.html">wrapper.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen/codegen_naming.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="pyembed_8hpp_source.html">pybind/pyembed.hpp</a>&quot;</code><br />
 <code>#include &lt;pybind11/embed.h&gt;</code><br />
 <code>#include &lt;pybind11/stl.h&gt;</code><br />
@@ -117,28 +118,20 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af6e056b4a596934da9912ec1803d1085"><td class="memItemLeft" align="right" valign="top">SolveLinearSystemExecutor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#af6e056b4a596934da9912ec1803d1085">nmodl::pybind_wrappers::create_sls_executor_func</a> ()</td></tr>
-<tr class="separator:af6e056b4a596934da9912ec1803d1085"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58ed1be3796a8469036f83f870e71f1d"><td class="memItemLeft" align="right" valign="top">SolveNonLinearSystemExecutor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a58ed1be3796a8469036f83f870e71f1d">nmodl::pybind_wrappers::create_nsls_executor_func</a> ()</td></tr>
-<tr class="separator:a58ed1be3796a8469036f83f870e71f1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d3a0df669e6bf6a4215f754e6dda06d"><td class="memItemLeft" align="right" valign="top">DiffeqSolverExecutor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a7d3a0df669e6bf6a4215f754e6dda06d">nmodl::pybind_wrappers::create_des_executor_func</a> ()</td></tr>
-<tr class="separator:a7d3a0df669e6bf6a4215f754e6dda06d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abceefdf9a4264975ee96e35ff67ae490"><td class="memItemLeft" align="right" valign="top">AnalyticDiffExecutor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#abceefdf9a4264975ee96e35ff67ae490">nmodl::pybind_wrappers::create_ads_executor_func</a> ()</td></tr>
-<tr class="separator:abceefdf9a4264975ee96e35ff67ae490"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0f744a1f99eff5cbcc9b64fb24a9eadf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a0f744a1f99eff5cbcc9b64fb24a9eadf">nmodl::pybind_wrappers::destroy_sls_executor_func</a> (SolveLinearSystemExecutor *exec)</td></tr>
-<tr class="separator:a0f744a1f99eff5cbcc9b64fb24a9eadf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4ea0abb309107f5892d21659bfe6688"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#ac4ea0abb309107f5892d21659bfe6688">nmodl::pybind_wrappers::destroy_nsls_executor_func</a> (SolveNonLinearSystemExecutor *exec)</td></tr>
-<tr class="separator:ac4ea0abb309107f5892d21659bfe6688"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d97dc63262b2932d9dc3e65fff9ca7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a7d97dc63262b2932d9dc3e65fff9ca7f">nmodl::pybind_wrappers::destroy_des_executor_func</a> (DiffeqSolverExecutor *exec)</td></tr>
-<tr class="separator:a7d97dc63262b2932d9dc3e65fff9ca7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a684294e1f9c29758c2d331e8128c45b4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a684294e1f9c29758c2d331e8128c45b4">nmodl::pybind_wrappers::destroy_ads_executor_func</a> (AnalyticDiffExecutor *exec)</td></tr>
-<tr class="separator:a684294e1f9c29758c2d331e8128c45b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa87d2101e70d9656c7a472691e5f9814"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::vector&lt; std::string &gt;, std::vector&lt; std::string &gt;, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#aa87d2101e70d9656c7a472691e5f9814">nmodl::pybind_wrappers::call_solve_linear_system</a> (const std::vector&lt; std::string &gt; &amp;eq_system, const std::vector&lt; std::string &gt; &amp;state_vars, const std::set&lt; std::string &gt; &amp;vars, bool small_system, bool elimination, const std::string &amp;tmp_unique_prefix, const std::set&lt; std::string &gt; &amp;function_calls)</td></tr>
+<tr class="separator:aa87d2101e70d9656c7a472691e5f9814"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04632caa6edc875ac46fa77208a729e6"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::vector&lt; std::string &gt;, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a04632caa6edc875ac46fa77208a729e6">nmodl::pybind_wrappers::call_solve_nonlinear_system</a> (const std::vector&lt; std::string &gt; &amp;eq_system, const std::vector&lt; std::string &gt; &amp;state_vars, const std::set&lt; std::string &gt; &amp;vars, const std::set&lt; std::string &gt; &amp;function_calls)</td></tr>
+<tr class="separator:a04632caa6edc875ac46fa77208a729e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a2f979314520723f3c9cbbcbea7002b"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a8a2f979314520723f3c9cbbcbea7002b">nmodl::pybind_wrappers::call_diffeq_solver</a> (const std::string &amp;node_as_nmodl, const std::string &amp;dt_var, const std::set&lt; std::string &gt; &amp;vars, bool use_pade_approx, const std::set&lt; std::string &gt; &amp;function_calls, const std::string &amp;method)</td></tr>
+<tr class="separator:a8a2f979314520723f3c9cbbcbea7002b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d308338965a84736fa0216a58822079"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a4d308338965a84736fa0216a58822079">nmodl::pybind_wrappers::call_analytic_diff</a> (const std::vector&lt; std::string &gt; &amp;expressions, const std::set&lt; std::string &gt; &amp;used_names_in_block)</td></tr>
+<tr class="separator:a4d308338965a84736fa0216a58822079"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27c3c1c878a8460a679efb3356ac29f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a27c3c1c878a8460a679efb3356ac29f7">nmodl::pybind_wrappers::initialize_interpreter_func</a> ()</td></tr>
 <tr class="separator:a27c3c1c878a8460a679efb3356ac29f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48d905174e33fd0f0f6e85735fed432f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a48d905174e33fd0f0f6e85735fed432f">nmodl::pybind_wrappers::finalize_interpreter_func</a> ()</td></tr>
 <tr class="separator:a48d905174e33fd0f0f6e85735fed432f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe2d9f4785eaea27bd73ca43cb7fe0fa"><td class="memItemLeft" align="right" valign="top">pybind_wrap_api&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#abe2d9f4785eaea27bd73ca43cb7fe0fa">nmodl::pybind_wrappers::init_pybind_wrap_api</a> () noexcept</td></tr>
-<tr class="separator:abe2d9f4785eaea27bd73ca43cb7fe0fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b3552823cba9c030431c25062b811bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a7b3552823cba9c030431c25062b811bd">nmodl::pybind_wrappers::__attribute__</a> ((visibility(&quot;default&quot;))) pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept</td></tr>
+<tr class="separator:a7b3552823cba9c030431c25062b811bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

@@ -92,16 +92,19 @@ $(document).ready(function(){initNavTree('pyembed_8cpp.html',''); initResizable(
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">pyembed.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;cstdlib&gt;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="pyembed_8hpp_source.html">pybind/pyembed.hpp</a>&quot;</code><br />
+<code>#include &lt;cstdlib&gt;</code><br />
 <code>#include &lt;dlfcn.h&gt;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
+<code>#include &lt;pybind11/embed.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="config_8h_source.html">config/config.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="pyembed_8hpp_source.html">pybind/pyembed.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="logger_8hpp_source.html">utils/logger.hpp</a>&quot;</code><br />
 </div>
 <p><a href="pyembed_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -120,6 +123,16 @@ Macros</h2></td></tr>
 <tr class="separator:a6df1d22fb5f09eccc23b9f399670cfd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9063e80f8777300c93afde6e6f4c9cea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="pyembed_8cpp.html#a9063e80f8777300c93afde6e6f4c9cea">TOSTRING</a>(x)&#160;&#160;&#160;<a class="el" href="pyembed_8cpp.html#a6df1d22fb5f09eccc23b9f399670cfd7">STRINGIFY</a>(x)</td></tr>
 <tr class="separator:a9063e80f8777300c93afde6e6f4c9cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a0f11fc9041193f4515afa19f33ab5df2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a0f11fc9041193f4515afa19f33ab5df2">nmodl::pybind_wrappers::nmodl_init_pybind_wrapper_api_fpointer</a> = decltype(&amp;nmodl_init_pybind_wrapper_api)</td></tr>
+<tr class="separator:a0f11fc9041193f4515afa19f33ab5df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a9677aab117939d005ba08f5658e996c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a9677aab117939d005ba08f5658e996c3">nmodl::pybind_wrappers::assert_compatible_python_versions</a> ()</td></tr>
+<tr class="separator:a9677aab117939d005ba08f5658e996c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a6df1d22fb5f09eccc23b9f399670cfd7"></a>
@@ -138,7 +151,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="pyembed_8cpp_source.html#l00016">16</a> of file <a class="el" href="pyembed_8cpp_source.html">pyembed.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pyembed_8cpp_source.html#l00018">18</a> of file <a class="el" href="pyembed_8cpp_source.html">pyembed.cpp</a>.</p>
 
 </div>
 </div>
@@ -158,7 +171,7 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="pyembed_8cpp_source.html#l00017">17</a> of file <a class="el" href="pyembed_8cpp_source.html">pyembed.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pyembed_8cpp_source.html#l00019">19</a> of file <a class="el" href="pyembed_8cpp_source.html">pyembed.cpp</a>.</p>
 
 </div>
 </div>

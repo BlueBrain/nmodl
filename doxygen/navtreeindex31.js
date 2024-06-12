@@ -1,13 +1,5 @@
 var NAVTREEINDEX31 =
 {
-"pyembed_8hpp.html#af6e056b4a596934da9912ec1803d1085":[3,0,1,6,2,10],
-"pyembed_8hpp_source.html":[3,0,1,6,2],
-"pynmodl_8cpp.html":[3,0,1,6,3],
-"pynmodl_8cpp.html#a19c0402d9b25c7483a970d6b85b06e4d":[3,0,1,6,3,7],
-"pynmodl_8cpp.html#a2753fa1d1b13adaaeb083213a35088d6":[3,0,1,6,3,9],
-"pynmodl_8cpp.html#a46f02f8c26b1512c2b8332461300cd1a":[3,0,1,6,3,3],
-"pynmodl_8cpp.html#a71f7b885c891bc4bbcd3270a505e3115":[3,0,1,6,3,2],
-"pynmodl_8cpp.html#a83b764ffb44fde756821da87f5a07765":[3,0,1,6,3,10],
 "pynmodl_8cpp.html#a962f776726e762e943b1b741bcbad1ae":[3,0,1,6,3,1],
 "pynmodl_8cpp.html#aa458e3599e621ccf452566de89f07419":[3,0,1,6,3,6],
 "pynmodl_8cpp.html#aca486bce53ef7a704e34846b13d6f7b5":[3,0,1,6,3,4],
@@ -249,5 +241,13 @@ var NAVTREEINDEX31 =
 "structnmodl_1_1codegen_1_1_codegen_info.html#afbc429aec58b9dbf16f0db7fc2d1869a":[0,1,1,6,71],
 "structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810":[0,1,1,6,43],
 "structnmodl_1_1codegen_1_1_codegen_info.html#afda3a06d247507a8e4a90d9e14486320":[0,1,1,6,82],
-"structnmodl_1_1codegen_1_1_conductance.html":[0,1,1,3]
+"structnmodl_1_1codegen_1_1_conductance.html":[0,1,1,3],
+"structnmodl_1_1codegen_1_1_conductance.html#a423dd7cd8b302e448024a19859d68193":[0,1,1,3,1],
+"structnmodl_1_1codegen_1_1_conductance.html#a9f303311f3cd92633f9f2230a88c784a":[0,1,1,3,0],
+"structnmodl_1_1codegen_1_1_index_semantics.html":[0,1,1,5],
+"structnmodl_1_1codegen_1_1_index_semantics.html#a0803c134bfb137b0dcdc214bb1d1d307":[0,1,1,5,4],
+"structnmodl_1_1codegen_1_1_index_semantics.html#a337725ef7c6e690746bc6b2bff6698c8":[0,1,1,5,0],
+"structnmodl_1_1codegen_1_1_index_semantics.html#a3de5378a1498770d97a4e46cb14a0b70":[0,1,1,5,3],
+"structnmodl_1_1codegen_1_1_index_semantics.html#a73b88ea4d5e6d959709a4450dcd51de2":[0,1,1,5,1],
+"structnmodl_1_1codegen_1_1_index_semantics.html#a8d58612d9cab61a17ea026de0cb045e7":[0,1,1,5,2]
 };

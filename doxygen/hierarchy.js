@@ -205,12 +205,6 @@ var hierarchy =
     [ "nmodl::utils::PerfStat", "structnmodl_1_1utils_1_1_perf_stat.html", null ],
     [ "nmodl::units::Prefix", "classnmodl_1_1units_1_1_prefix.html", null ],
     [ "nmodl::pybind_wrappers::pybind_wrap_api", "structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html", null ],
-    [ "nmodl::pybind_wrappers::PythonExecutor", "structnmodl_1_1pybind__wrappers_1_1_python_executor.html", [
-      [ "nmodl::pybind_wrappers::AnalyticDiffExecutor", "structnmodl_1_1pybind__wrappers_1_1_analytic_diff_executor.html", null ],
-      [ "nmodl::pybind_wrappers::DiffeqSolverExecutor", "structnmodl_1_1pybind__wrappers_1_1_diffeq_solver_executor.html", null ],
-      [ "nmodl::pybind_wrappers::SolveLinearSystemExecutor", "structnmodl_1_1pybind__wrappers_1_1_solve_linear_system_executor.html", null ],
-      [ "nmodl::pybind_wrappers::SolveNonLinearSystemExecutor", "structnmodl_1_1pybind__wrappers_1_1_solve_non_linear_system_executor.html", null ]
-    ] ],
     [ "nmodl::visitor::KineticBlockVisitor::RateEqs", "structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html", null ],
     [ "nmodl::codegen::ShadowUseStatement", "structnmodl_1_1codegen_1_1_shadow_use_statement.html", null ],
     [ "nmodl::utils::SingletonRandomString< SIZE >", "classnmodl_1_1utils_1_1_singleton_random_string.html", null ],
