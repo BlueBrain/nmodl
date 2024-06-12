@@ -90,7 +90,7 @@ bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
     const auto result = intersection(range_vars, func_vars);
     for (const auto& item: result) {
         logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: identifier {} used in both as a RANGE variable "
+            fmt::format("SemanticAnalysisVisitor :: identifier {} used both as a RANGE variable "
                         "and a FUNCTION/PROCEDURE name",
                         item));
     }
