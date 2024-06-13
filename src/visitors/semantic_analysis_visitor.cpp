@@ -52,16 +52,16 @@ bool SemanticAnalysisVisitor::check_table_vars(const ast::Program& node) {
     return check_fail;
 }
 
-static const std::vector<std::string> intersection(std::unordered_set<std::string>& set1,
-                                                   std::unordered_set<std::string>& set2) {
+static const std::unordered_set<std::string> intersection(std::unordered_set<std::string>& set1,
+                                                          std::unordered_set<std::string>& set2) {
     if (set1.size() > set2.size()) {
         return intersection(set2, set1);
     }
 
-    std::vector<std::string> found;
+    std::unordered_set<std::string> found;
     for (const auto& element: set1) {
         if (set2.find(element) != set2.end()) {
-            found.push_back(element);
+            found.insert(element);
         }
     }
     return found;
@@ -70,13 +70,14 @@ static const std::vector<std::string> intersection(std::unordered_set<std::strin
 bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
     // check that there are no RANGE variables which have the same name as a FUNCTION or PROCEDURE
     const auto& range_nodes = collect_nodes(node, {ast::AstNodeType::RANGE_VAR});
-    const auto& function_nodes =
-        collect_nodes(node, {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
     std::unordered_set<std::string> range_vars{};
     for (const auto& range_node: range_nodes) {
         range_vars.insert(
             std::dynamic_pointer_cast<const ast::RangeVar>(range_node)->get_node_name());
     }
+
+    const auto& function_nodes =
+        collect_nodes(node, {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
     std::unordered_set<std::string> func_vars{};
     for (const auto& function_node: function_nodes) {
         if (function_node->is_function_block()) {
@@ -87,6 +88,7 @@ bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
                                  ->get_node_name());
         }
     }
+
     const auto result = intersection(range_vars, func_vars);
     for (const auto& item: result) {
         logger->critical(
