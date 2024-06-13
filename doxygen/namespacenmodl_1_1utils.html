@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('namespacenmodl_1_1utils.html',''); ini
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
@@ -114,8 +115,6 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1utils_1_1_perf_stat.html">PerfStat</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper class to collect performance statistics.  <a href="structnmodl_1_1utils_1_1_perf_stat.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1utils_1_1_short_blame.html">ShortBlame</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1utils_1_1_singleton_random_string.html">SingletonRandomString</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Singleton class for random strings.  <a href="classnmodl_1_1utils_1_1_singleton_random_string.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -123,8 +122,19 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to construct and pretty-print tabular data.  <a href="structnmodl_1_1utils_1_1_table_data.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ab334f24b38ac11c243f56e4ea2243682"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#ab334f24b38ac11c243f56e4ea2243682">ShortBlame</a> = <a class="el" href="classnmodl_1_1utils_1_1_no_blame.html">NoBlame</a></td></tr>
+<tr class="separator:ab334f24b38ac11c243f56e4ea2243682"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20ddba1c720d41d878e7806b7f57992e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#a20ddba1c720d41d878e7806b7f57992e">DetailedBlame</a> = <a class="el" href="classnmodl_1_1utils_1_1_no_blame.html">NoBlame</a></td></tr>
+<tr class="separator:a20ddba1c720d41d878e7806b7f57992e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ab558f385c3df0ec63f0fe25baa1d6b9d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9d">BlameLevel</a> { <a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da30bb747c98bccdd11b3f89e644c4d0ad">BlameLevel::Short</a>, 
+<a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651">BlameLevel::Detailed</a>
+ }</td></tr>
+<tr class="separator:ab558f385c3df0ec63f0fe25baa1d6b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gabf78118141123c84917fbafa57c97b5b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">UseNumbersInString</a> : bool { <a class="el" href="group__utils.html#ggabf78118141123c84917fbafa57c97b5ba6d494c0b7b8c95f1ca055e1afd307200">WithNumbers</a> = true, 
 <a class="el" href="group__utils.html#ggabf78118141123c84917fbafa57c97b5ba48e615461371f586c42c6251440932f5">WithoutNumbers</a> = false
  }</td></tr>
@@ -133,8 +143,8 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a38b2bec0d3e9954727fd511b5414a49f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classnmodl_1_1utils_1_1_blame.html">Blame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#a38b2bec0d3e9954727fd511b5414a49f">make_blame</a> (size_t blame_line)</td></tr>
-<tr class="separator:a38b2bec0d3e9954727fd511b5414a49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa91ee02696f73a2ad0f82dbdebe198c7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classnmodl_1_1utils_1_1_blame.html">Blame</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">make_blame</a> (size_t blame_line, <a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9d">BlameLevel</a> blame_level)</td></tr>
+<tr class="separator:aa91ee02696f73a2ad0f82dbdebe198c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9413d5b6162f1e722b6d6b59c3cc5f56"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">generate_random_string</a> (int len, <a class="el" href="group__utils.html#gabf78118141123c84917fbafa57c97b5b">UseNumbersInString</a> use_numbers)</td></tr>
 <tr class="memdesc:ga9413d5b6162f1e722b6d6b59c3cc5f56"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate random std::string of length len based on a uniform distribution.  <a href="group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56">More...</a><br /></td></tr>
 <tr class="separator:ga9413d5b6162f1e722b6d6b59c3cc5f56"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,9 +161,71 @@ Variables</h2></td></tr>
 <tr class="memdesc:ga8d5ced6d74954f098720a06f96d69899"><td class="mdescLeft">&#160;</td><td class="mdescRight">The character conventionally used by the operating system to separate search path components.  <a href="group__utils.html#ga8d5ced6d74954f098720a06f96d69899">More...</a><br /></td></tr>
 <tr class="separator:ga8d5ced6d74954f098720a06f96d69899"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a id="a20ddba1c720d41d878e7806b7f57992e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20ddba1c720d41d878e7806b7f57992e">&#9670;&nbsp;</a></span>DetailedBlame</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacenmodl_1_1utils.html#a20ddba1c720d41d878e7806b7f57992e">nmodl::utils::DetailedBlame</a> = typedef <a class="el" href="classnmodl_1_1utils_1_1_no_blame.html">NoBlame</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="blame_8cpp_source.html#l00125">125</a> of file <a class="el" href="blame_8cpp_source.html">blame.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab334f24b38ac11c243f56e4ea2243682"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab334f24b38ac11c243f56e4ea2243682">&#9670;&nbsp;</a></span>ShortBlame</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacenmodl_1_1utils.html#ab334f24b38ac11c243f56e4ea2243682">nmodl::utils::ShortBlame</a> = typedef <a class="el" href="classnmodl_1_1utils_1_1_no_blame.html">NoBlame</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="blame_8cpp_source.html#l00124">124</a> of file <a class="el" href="blame_8cpp_source.html">blame.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ab558f385c3df0ec63f0fe25baa1d6b9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab558f385c3df0ec63f0fe25baa1d6b9d">&#9670;&nbsp;</a></span>BlameLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9d">nmodl::utils::BlameLevel</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab558f385c3df0ec63f0fe25baa1d6b9da30bb747c98bccdd11b3f89e644c4d0ad"></a>Short&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651"></a>Detailed&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="blame_8hpp_source.html#l00028">28</a> of file <a class="el" href="blame_8hpp_source.html">blame.hpp</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a38b2bec0d3e9954727fd511b5414a49f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a38b2bec0d3e9954727fd511b5414a49f">&#9670;&nbsp;</a></span>make_blame()</h2>
+<a id="aa91ee02696f73a2ad0f82dbdebe198c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa91ee02696f73a2ad0f82dbdebe198c7">&#9670;&nbsp;</a></span>make_blame()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,13 +234,23 @@ Variables</h2></td></tr>
           <td class="memname">std::unique_ptr&lt; <a class="el" href="classnmodl_1_1utils_1_1_blame.html">Blame</a> &gt; nmodl::utils::make_blame </td>
           <td>(</td>
           <td class="paramtype">size_t&#160;</td>
-          <td class="paramname"><em>blame_line</em></td><td>)</td>
+          <td class="paramname"><em>blame_line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9d">BlameLevel</a>&#160;</td>
+          <td class="paramname"><em>blame_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="blame_8cpp_source.html#l00102">102</a> of file <a class="el" href="blame_8cpp_source.html">blame.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="blame_8cpp_source.html#l00128">128</a> of file <a class="el" href="blame_8cpp_source.html">blame.cpp</a>.</p>
 
 </div>
 </div>

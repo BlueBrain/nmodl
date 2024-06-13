@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('blame_8cpp.html',''); initResizable();
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">blame.cpp File Reference</div>  </div>
@@ -102,14 +103,14 @@ $(document).ready(function(){initNavTree('blame_8cpp.html',''); initResizable();
 <code>#include &quot;<a class="el" href="string__utils_8hpp_source.html">string_utils.hpp</a>&quot;</code><br />
 <code>#include &lt;filesystem&gt;</code><br />
 <code>#include &lt;fmt/format.h&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
 </div>
 <p><a href="blame_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1utils_1_1_no_blame.html">nmodl::utils::NoBlame</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1utils_1_1_short_blame.html">nmodl::utils::ShortBlame</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -121,10 +122,17 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespacenmodl_1_1utils"><td class="mdescLeft">&#160;</td><td class="mdescRight">file/string manipulation functions <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ab334f24b38ac11c243f56e4ea2243682"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#ab334f24b38ac11c243f56e4ea2243682">nmodl::utils::ShortBlame</a> = NoBlame</td></tr>
+<tr class="separator:ab334f24b38ac11c243f56e4ea2243682"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20ddba1c720d41d878e7806b7f57992e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#a20ddba1c720d41d878e7806b7f57992e">nmodl::utils::DetailedBlame</a> = NoBlame</td></tr>
+<tr class="separator:a20ddba1c720d41d878e7806b7f57992e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a38b2bec0d3e9954727fd511b5414a49f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Blame &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#a38b2bec0d3e9954727fd511b5414a49f">nmodl::utils::make_blame</a> (size_t blame_line)</td></tr>
-<tr class="separator:a38b2bec0d3e9954727fd511b5414a49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa91ee02696f73a2ad0f82dbdebe198c7"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; Blame &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">nmodl::utils::make_blame</a> (size_t blame_line, BlameLevel blame_level)</td></tr>
+<tr class="separator:aa91ee02696f73a2ad0f82dbdebe198c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

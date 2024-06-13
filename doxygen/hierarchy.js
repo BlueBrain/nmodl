@@ -2,9 +2,7 @@ var hierarchy =
 [
     [ "AstLookupVisitor", "class_ast_lookup_visitor.html", null ],
     [ "nmodl::utils::Blame", "classnmodl_1_1utils_1_1_blame.html", [
-      [ "nmodl::utils::NoBlame", "classnmodl_1_1utils_1_1_no_blame.html", [
-        [ "nmodl::utils::ShortBlame", "classnmodl_1_1utils_1_1_short_blame.html", null ]
-      ] ]
+      [ "nmodl::utils::NoBlame", "classnmodl_1_1utils_1_1_no_blame.html", null ]
     ] ],
     [ "nmodl::parser::CDriver", "classnmodl_1_1parser_1_1_c_driver.html", null ],
     [ "CFlexLexer", null, [
