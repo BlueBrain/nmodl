@@ -52,20 +52,6 @@ bool SemanticAnalysisVisitor::check_table_vars(const ast::Program& node) {
     return check_fail;
 }
 
-static const std::unordered_set<std::string> intersection(std::unordered_set<std::string>& set1,
-                                                          std::unordered_set<std::string>& set2) {
-    if (set1.size() > set2.size()) {
-        return intersection(set2, set1);
-    }
-
-    std::unordered_set<std::string> found;
-    for (const auto& element: set1) {
-        if (set2.find(element) != set2.end()) {
-            found.insert(element);
-        }
-    }
-    return found;
-}
 
 bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
     // check that there are no RANGE variables which have the same name as a FUNCTION or PROCEDURE
@@ -89,13 +75,12 @@ bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
         }
     }
 
-    const auto result = intersection(range_vars, func_vars);
-    for (const auto& item: result) {
-        logger->critical(
-            fmt::format("SemanticAnalysisVisitor :: identifier {} used both as a RANGE variable "
-                        "and a FUNCTION/PROCEDURE name",
-                        item));
-    }
+    std::vector<std::string> result;
+    std::set_intersection(func_vars.begin(),
+                          func_vars.end(),
+                          range_vars.begin(),
+                          range_vars.end(),
+                          std::back_inserter(result));
     return !result.empty();
 }
 
