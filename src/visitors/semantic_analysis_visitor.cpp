@@ -58,21 +58,14 @@ bool SemanticAnalysisVisitor::check_name_conflict(const ast::Program& node) {
     const auto& range_nodes = collect_nodes(node, {ast::AstNodeType::RANGE_VAR});
     std::unordered_set<std::string> range_vars{};
     for (const auto& range_node: range_nodes) {
-        range_vars.insert(
-            std::dynamic_pointer_cast<const ast::RangeVar>(range_node)->get_node_name());
+        range_vars.insert(range_node->get_node_name());
     }
 
     const auto& function_nodes =
         collect_nodes(node, {ast::AstNodeType::FUNCTION_BLOCK, ast::AstNodeType::PROCEDURE_BLOCK});
     std::unordered_set<std::string> func_vars{};
     for (const auto& function_node: function_nodes) {
-        if (function_node->is_function_block()) {
-            func_vars.insert(std::dynamic_pointer_cast<const ast::FunctionBlock>(function_node)
-                                 ->get_node_name());
-        } else {
-            func_vars.insert(std::dynamic_pointer_cast<const ast::ProcedureBlock>(function_node)
-                                 ->get_node_name());
-        }
+        func_vars.insert(function_node->get_node_name());
     }
 
     std::vector<std::string> result;

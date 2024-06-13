@@ -283,6 +283,7 @@ SCENARIO("RANGE and FUNCTION/PROCEDURE block", "[visitor][semantic_analysis]") {
                 RANGE f
             }
             FUNCTION f(arg) {
+                f = 1
             }
         )";
         THEN("Semantic analysis should fail") {
