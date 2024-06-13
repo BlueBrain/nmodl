@@ -12,6 +12,7 @@ importlib-resources;python_version<'3.9'
 pytest<=8.1.1
 pytest-cov
 numpy
+scipy
 # dependencies for docs
 jupyter-client
 jupyter
