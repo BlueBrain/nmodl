@@ -160,6 +160,14 @@ this allows us to compute the copy of the thread-variable using modulo
 arithmetic; on a GPU one could either assign a copy to each variable; or use
 scratch pad memory (e.g. ``__shared__`` memory when using CUDA).
 
+Quirks
+~~~~~~
+
+Collection of slightly surprising behaviour:
+
+  * Thread variables effectively can't be use in NET_RECEIVE blocks, because
+    the code ``nocmodl`` produces will cause a SEGFAULT.
+
 
 What Does CoreNEURON support?
 =============================
