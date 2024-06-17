@@ -1380,7 +1380,10 @@ void CodegenCoreneuronCppVisitor::print_mechanism_register() {
                           thread_safe,
                           number_of_thread_objects);
     } else {
-        printer->fmt_line("register_mech({}, {}, {});", mech_arguments, thread_safe, number_of_thread_objects);
+        printer->fmt_line("register_mech({}, {}, {});",
+                          mech_arguments,
+                          thread_safe,
+                          number_of_thread_objects);
         if (info.constructor_node) {
             printer->fmt_line("register_constructor({});",
                               method_name(naming::NRN_CONSTRUCTOR_METHOD));
