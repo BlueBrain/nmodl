@@ -24,7 +24,8 @@ def test_cacur():
 
 
 def check_solution(t, v):
-    # solution is a straight line until t = 1 (ms), afterwards is constant (1000 - 65)
+    # solution is an affine function until t = 1 (ms), afterwards is a constant
+    # (1000 - 65)
     solution = 1000 * t - 65
     solution[t > 1] = 1000 - 65
     assert np.allclose(solution, v)
