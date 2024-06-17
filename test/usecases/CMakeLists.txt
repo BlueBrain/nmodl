@@ -15,7 +15,8 @@ set(NMODL_USECASE_DIRS
     parameter
     suffix
     table
-    useion)
+    useion
+    implicit_argument)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
