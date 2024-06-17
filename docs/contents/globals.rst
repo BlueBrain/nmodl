@@ -91,6 +91,7 @@ copy per instance of the mechanism. For example in Python one could write:
 .. code-block::
 
    minf, mtau = rates(v[i])
+   dm[i] =  (minf-m[i])/mtau
 
 Therefore, if the author doesn't need to record the value of ``minf`` and
 ``mtau``, then using RANGE variables might be considered wasting memory. Under
