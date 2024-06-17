@@ -55,6 +55,7 @@ var group__parser =
       [ "defined_var", "classnmodl_1_1parser_1_1_nmodl_driver.html#ab3d4a7872a8a00ed0da66004d05fe9a6", null ],
       [ "library", "classnmodl_1_1parser_1_1_nmodl_driver.html#a1d10f7ff97b79400f0b61fa7dafc4747", null ],
       [ "open_files", "classnmodl_1_1parser_1_1_nmodl_driver.html#a96a27b69229fd2ccc3cfdcb685661047", null ],
+      [ "parser_stream", "classnmodl_1_1parser_1_1_nmodl_driver.html#ad02800bb0ba73ee27021247fabeb87fb", null ],
       [ "stream_name", "classnmodl_1_1parser_1_1_nmodl_driver.html#a7c406ff970602f45dfc50aedac954490", null ],
       [ "trace_parser", "classnmodl_1_1parser_1_1_nmodl_driver.html#ac427c6525aec493c63c6cc3df546d73a", null ],
       [ "trace_scanner", "classnmodl_1_1parser_1_1_nmodl_driver.html#a21536d49a7875b3773388212b5863d89", null ],
