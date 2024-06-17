@@ -16,7 +16,7 @@ dependencies = [
 scripts = {nmodl = "nmodl._binwrapper:main"}
 requires-python = ">=3.8"
 
-optional-dependencies.test = ["pytest>=3.3.0", "pytest-cov", "numpy", "scipy"]
+optional-dependencies.test = ["pytest>=3.3.0", "pytest-cov", "numpy<2", "scipy"]
 optional-dependencies.docs = [
         "jupyter-client",
         "jupyter",
