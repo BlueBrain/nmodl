@@ -27,7 +27,7 @@ GLOBAL variables behave in one of three different ways:
       variable, e.g. one per thread. We call these *thread-variables*. This MOD
       file is considered thread-safe.
 
-    * **Not THREAD_SAFE:** if the MOD file is not stated to be ``THREAD_SAFE``,
+    * **Not THREAD_SAFE:** if the MOD file is not stated to be ``THREADSAFE``,
       then the assumption is that the global variables must behave like a
       single instance would. As a result, these MOD files are not thread-safe.
 
@@ -58,7 +58,7 @@ allowed to have two global variables with the same name. Therefore, read-only
 top-locals aren't possible.
 
 Note that ``nocmodl`` promotes all top-local variables to thread-variables, even
-if the MOD file isn't marked with THREAD_SAFE. Hence, top-local variables are
+if the MOD file isn't marked with ``THREADSAFE``. Hence, top-local variables are
 always thread-variables.
 
 Thread Variables
@@ -91,7 +91,7 @@ instance of the mechanism.
 
 Instead, before multi-threading existed, the solution was to use a GLOBAL. When
 multi-core processors arrived, these MOD files were suddenly not thread-safe.
-The solution was to introduce a keyword ``THREAD_SAFE`` and create one copy of
+The solution was to introduce a keyword ``THREADSAFE`` and create one copy of
 the global per thread.
 
 
@@ -125,7 +125,7 @@ Implementation Details for NEURON
 NMODL distinguishes between top-local variables and GLOBAL variables at the
 level of the AST. Then for code-generation we introduce the concept of
 "thread-variables". All top-locals are considered thread-variables. GLOBAL
-variables that are **read-write** and THREAD_SAFE can be converted to thread
+variables that are **read-write** and THREADSAFE can be converted to thread
 variables.
 
 Since thread-variables are permitted to have multiple copies per thread, we can
