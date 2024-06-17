@@ -85,14 +85,19 @@ return values from a PROCEDURE:
   }
 
 What we see is that for every instance we compute the value ``minf`` and
-``mtau``, before we use them in ``states``. The values are not required to be
-visible to HOC/Python. Hence, one does not technically need one copy per
-instance of the mechanism.
+``mtau``, before we use them in ``states``. Technically there's no need for one
+copy per instance of the mechanism. For example in Python one could write:
 
-Instead, before multi-threading existed, the solution was to use a GLOBAL. When
-multi-core processors arrived, these MOD files were suddenly not thread-safe.
-The solution was to introduce a keyword ``THREADSAFE`` and create one copy of
-the global per thread.
+.. code-block::
+
+   minf, mtau = rates(v[i])
+
+Therefore, if the author doesn't need to record the value of ``minf`` and
+``mtau``, then using RANGE variables might be considered wasting memory. Under
+these circumstances, and before multi-threading existed, the solution was to use
+a GLOBAL. When multi-core processors arrived, these MOD files were suddenly not
+thread-safe. The solution was to introduce a keyword ``THREADSAFE`` and create
+one copy of the global per thread.
 
 
 Initial Values
