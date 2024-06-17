@@ -12,6 +12,11 @@ add_custom_target(
   nmodl_copy_solver_files ALL DEPENDS "${CMAKE_BINARY_DIR}/include/newton/newton.hpp"
                                       "${CMAKE_BINARY_DIR}/include/crout/crout.hpp")
 
+add_library(solver INTERFACE)
+target_include_directories(solver INTERFACE $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+                                            $<INSTALL_INTERFACE:include>)
+add_dependencies(solver nmodl_copy_solver_files)
+
 # Eigen
 file(COPY ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen/Eigen DESTINATION ${CMAKE_BINARY_DIR}/include/)
 
