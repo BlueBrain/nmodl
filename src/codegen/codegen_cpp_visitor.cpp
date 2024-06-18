@@ -1359,11 +1359,6 @@ void CodegenCppVisitor::setup(const Program& node) {
     }
     info.rsuffix = info.point_process ? "" : "_" + info.mod_suffix;
 
-    if (!info.vectorize) {
-        logger->warn(
-            "CodegenCoreneuronCppVisitor : MOD file uses non-thread safe constructs of NMODL");
-    }
-
     codegen_float_variables = get_float_variables();
     codegen_int_variables = get_int_variables();
 
