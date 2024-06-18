@@ -485,6 +485,17 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("localize"));
         }
 
+        {
+            // whether we need to call sympy for solving linear or nonlinear blocks
+            const auto needs_sympy_solver =
+                !collect_nodes(*ast,
+                               {ast::AstNodeType::LINEAR_BLOCK, ast::AstNodeType::NON_LINEAR_BLOCK})
+                     .empty();
+            if (needs_sympy_solver) {
+                sympy_analytic = true;
+            }
+        }
+
         if (sympy_conductance || sympy_analytic || sparse_solver_exists(*ast)) {
             nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
                 .api()
