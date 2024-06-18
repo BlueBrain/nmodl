@@ -284,8 +284,6 @@ void SympySolverVisitor::construct_eigen_solver_block(
 
 
 void SympySolverVisitor::solve_linear_system(const std::vector<std::string>& pre_solve_statements) {
-    // construct ordered vector of state vars used in linear system
-    init_state_vars_vector();
     // call sympy linear solver
     bool small_system = (eq_system.size() <= SMALL_LINEAR_SYSTEM_MAX_STATES);
     auto solver = pywrap::EmbeddedPythonLoader::get_instance().api().solve_linear_system;
@@ -566,6 +564,18 @@ void SympySolverVisitor::visit_linear_block(ast::LinearBlock& node) {
     node.visit_children(*this);
 
     if (eq_system_is_valid && !eq_system.empty()) {
+        // construct ordered vector of state vars used in linear system
+        init_state_vars_vector();
+
+        // in case we have a SOLVEFOR in the block, we need to set `state_vars` to those instead
+        const auto& solvefor_vars = node.get_solvefor();
+        if (!solvefor_vars.empty()) {
+            state_vars.clear();
+            for (const auto& solvefor_var: solvefor_vars) {
+                state_vars.push_back(solvefor_var->get_node_name());
+            }
+        }
+
         solve_linear_system();
     }
 }
