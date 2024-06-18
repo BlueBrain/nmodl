@@ -3,7 +3,7 @@ from neuron import gui, h
 from neuron.units import ms
 
 
-def test_cacur():
+def simulate():
     nseg = 1
 
     s = h.Section()
@@ -24,10 +24,7 @@ def test_cacur():
 
 
 def check_solution(t, v):
-    # solution is an affine function until t = 1 (ms), afterwards is a constant
-    # (1000 - 65)
-    solution = 1000 * t - 65
-    solution[t > 1] = 1000 - 65
+    solution = 1000 * np.minimum(t, 1) - 65
     assert np.allclose(solution, v)
 
 
@@ -40,5 +37,5 @@ def plot_solution(t, y):
 
 
 if __name__ == "__main__":
-    t, v = test_cacur()
+    t, v = simulate()
     check_solution(t, v)
