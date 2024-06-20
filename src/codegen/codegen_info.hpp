@@ -68,6 +68,48 @@ struct Ion {
     explicit Ion(std::string name)
         : name(std::move(name)) {}
 
+    bool is_read(const std::string& name) const {
+        return std::find(reads.cbegin(), reads.cend(), name) != reads.cend() ||
+               std::find(implicit_reads.cbegin(), implicit_reads.cend(), name) !=
+                   implicit_reads.cend();
+    }
+
+    bool is_conc_read() const {
+        return is_interior_conc_read() || is_exterior_conc_read();
+    }
+
+    bool is_interior_conc_read() const {
+        return is_read(fmt::format("{}i", name));
+    }
+
+    bool is_exterior_conc_read() const {
+        return is_read(fmt::format("{}o", name));
+    }
+
+    bool is_written(const std::string& name) const {
+        return std::find(writes.cbegin(), writes.cend(), name) != writes.cend();
+    }
+
+    bool is_conc_written() const {
+        return is_interior_conc_written() || is_exterior_conc_written();
+    }
+
+    bool is_interior_conc_written() const {
+        return is_written(fmt::format("{}i", name));
+    }
+
+    bool is_exterior_conc_written() const {
+        return is_written(fmt::format("{}o", name));
+    }
+
+    bool is_rev_read() const {
+        return is_read(fmt::format("e{}", name));
+    }
+
+    bool is_rev_written() const {
+        return is_written(fmt::format("e{}", name));
+    }
+
     /**
      * Check if variable name is a ionic current
      *
@@ -100,10 +142,10 @@ struct Ion {
     /**
      * Check if variable name is reveral potential
      *
-     * This is equivalent of IONEREV flag in mod2c.
+     * Matches `ena` and `na_erev`.
      */
     bool is_rev_potential(const std::string& text) const {
-        return text == ("e" + name);
+        return text == ("e" + name) || text == (name + "_erev");
     }
 
     /// check if it is either internal or external concentration
@@ -119,12 +161,19 @@ struct Ion {
         return is_ionic_conc(text) || is_ionic_current(text) || is_rev_potential(text);
     }
 
+    /// Is the variable name `text` the style of this ion?
+    ///
+    /// Example: For sodium this is true for `"style_na"`.
+    bool is_style(const std::string& text) const {
+        return text == fmt::format("style_{}", name);
+    }
+
     bool is_current_derivative(const std::string& text) const {
         return text == ("di" + name + "dv");
     }
 
     /// for a given ion, return different variable names/properties
-    /// like internal/external concentration, reversial potential,
+    /// like internal/external concentration, reversal potential,
     /// ionic current etc.
     static std::vector<std::string> get_possible_variables(const std::string& ion_name) {
         return {"i" + ion_name, ion_name + "i", ion_name + "o", "e" + ion_name};

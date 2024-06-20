@@ -146,6 +146,15 @@ static inline bool ends_with(const std::string& haystack, const std::string& nee
     return std::equal(haystack_begin, haystack.end(), needle.begin(), needle.end());
 };
 
+/**
+ * Check if `haystack` starts with `needle`.
+ *
+ * Every string ends with the empty string.
+ */
+static inline bool starts_with(const std::string& haystack, const std::string& needle) {
+    return haystack.rfind(needle, 0) == 0;
+}
+
 
 ///
 /**

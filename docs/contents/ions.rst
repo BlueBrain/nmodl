@@ -92,8 +92,8 @@ Optimizing Storage
 ~~~~~~~~~~~~~~~~~~
 
 Since the common pattern is to only access the values of a particular instance,
-the local copy isn't needed. I might facilitate SIMD, but it could be replaces
-by local variables, see Figure 2.
+the local copy isn't needed. It might facilitate SIMD, but it could be replaced
+by local variables to save memory, see Figure 2.
 
 .. figure:: ../images/ion_storage-opt.svg
 
@@ -105,6 +105,47 @@ This optimization is implemented in NMODL. It can be activated on the CLI via
 .. code:: sh
 
    nmodl ... codegen --opt-ionvar-copy
+
+
+Concentrations
+--------------
+
+Concentrations adjacent to the inside and outside of the membrane are computed.
+MOD files can change the value by setting ``nai`` or ``nao``. It's considered
+an error if two MOD files write the same concentration, which result in a
+warning.
+
+The reversal potential ``ena`` is a function of the two concentrations.
+Therefore, when writing to either concentration, we must specify if ``ena``
+needs to be recomputed.
+
+Writing Concentrations
+~~~~~~~~~~~~~~~~~~~~~~
+When writing concentrations we must notify NEURON of two things: a) the fact
+that this mechanism writes some concentration; b) that this instance of the
+mechanism does so.
+
+The former happens when registering the mechanism and controls the position of
+the mechanism relative to others, i.e. mechanisms that write the concentration
+must appear before mechanisms that only read the concentration, that way they
+get to see the updated values. We must call ``nrn_writes_conc`` to inform
+NEURON that this mechanisms write some concentration.
+
+The latter notification happens as part of ``nrn_alloc``, i.e. when allocating
+the ``Prop``, by calling ``nrn_check_conc_write``. This checks that there's no
+conflict and modifies the "style" of the ion. We pass ``0`` for exterior and
+``1`` for interior.
+
+Ion Styles
+~~~~~~~~~~
+The style is a 12-bit wide bitfield and stored in the ``dparam`` array of the
+``Prop`` as an ``int``.  It's stored at location ``0`` (variable name:
+``iontype_index_dparam``) in the ``dparam`` array.
+
+From MOD files we need to notify NEURON if we're reading/writing concentration
+or reversal potential. This is done by calling ``nrn_promote(., conc, rev)``.
+The magic value for ``rev`` and ``conc`` is ``1`` for reading and ``3`` for
+writing.
 
 
 Special Case: zero-area nodes
