@@ -564,11 +564,26 @@ void CodegenNeuronCppVisitor::print_namespace_stop() {
     printer->pop_block();
 }
 
+void CodegenNeuronCppVisitor::append_conc_write_statements(
+    std::vector<ShadowUseStatement>& statements,
+    const Ion& ion,
+    const std::string& /* concentration */) {
+    auto ion_name = ion.name;
+    int dparam_index = get_int_variable_index(fmt::format("style_{}", ion_name));
 
-std::string CodegenNeuronCppVisitor::conc_write_statement(const std::string& ion_name,
-                                                          const std::string& concentration,
-                                                          int index) {
-    return "";
+
+    auto style_name = fmt::format("_style_{}", ion_name);
+    auto style_stmt = fmt::format("int {} = *(_ppvar[{}].get<int*>())", style_name, dparam_index);
+    statements.push_back(ShadowUseStatement{style_stmt, "", ""});
+
+
+    auto wrote_conc_stmt = fmt::format("nrn_wrote_conc(_{}_sym, {}, {}, {}, {})",
+                                       ion_name,
+                                       get_variable_name("ion_" + ion_name + "_erev"),
+                                       get_variable_name(ion_name + "i"),
+                                       get_variable_name("ion_" + ion_name + "o"),
+                                       style_name);
+    statements.push_back(ShadowUseStatement{wrote_conc_stmt, "", ""});
 }
 
 /****************************************************************************************/
@@ -1319,8 +1334,8 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
         if (name == naming::POINT_PROCESS_VARIABLE) {
             continue;
         } else if (var.is_index || var.is_integer) {
-            auto qualifier = var.is_constant ? "const " : "";
-            printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
+            // auto qualifier = var.is_constant ? "const " : "";
+            // printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();

@@ -124,7 +124,7 @@ struct Ion {
     }
 
     /// for a given ion, return different variable names/properties
-    /// like internal/external concentration, reversial potential,
+    /// like internal/external concentration, reversal potential,
     /// ionic current etc.
     static std::vector<std::string> get_possible_variables(const std::string& ion_name) {
         return {"i" + ion_name, ion_name + "i", ion_name + "o", "e" + ion_name};
