@@ -1,8 +1,7 @@
 NEURON {
-	SUFFIX cacur
+	SUFFIX example
 }
 
-BREAKPOINT {
-    at_time(t)
+FUNCTION f(x) {
+     f = at_time(x)
 }
-
