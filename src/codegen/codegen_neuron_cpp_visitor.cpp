@@ -20,6 +20,7 @@
 #include "codegen_naming.hpp"
 #include "config/config.h"
 #include "utils/string_utils.hpp"
+#include "solver/solver.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -752,12 +753,11 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
     printer->add_multi_line(R"CODE(
         #include <Eigen/Dense>
         #include <Eigen/LU>
-        #include <crout/crout.hpp>
         #include <math.h>
-        #include <newton/newton.hpp>
         #include <stdio.h>
         #include <stdlib.h>
     )CODE");
+    printer->add_multi_line(nmodl::solvers::newton_hpp);
     if (!info.vectorize) {
         printer->add_line("#include <vector>");
     }
