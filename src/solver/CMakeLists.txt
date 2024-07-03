@@ -13,12 +13,3 @@ set_property(
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/solver.hpp.inc ${CMAKE_CURRENT_BINARY_DIR}/solver.hpp)
 
 add_custom_target(nmodl_copy_solver_files ALL DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/solver.hpp")
-
-# Eigen
-file(COPY ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen/Eigen DESTINATION ${CMAKE_BINARY_DIR}/include/)
-
-# =============================================================================
-# Install solver headers and eigen from include
-# =============================================================================
-
-install(DIRECTORY ${CMAKE_BINARY_DIR}/include/ DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}include)
