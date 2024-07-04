@@ -207,15 +207,7 @@ set(MEMORYCHECK_COMMAND_OPTIONS
                                  --show-possibly-lost=no")
 # do not enable tests if nmodl is used as submodule
 if(NOT NMODL_AS_SUBPROJECT AND NMODL_ENABLE_TESTS)
-  # CMake 3.25: use block to just set BUILD_TESTING to off
-  # Eigen requires BUILD_TESTING to be disabled to avoid polluting the global CMake
-  # namespace with generic targets (and to speed up compilation)
-  # block(SCOPE_FOR_VARIABLES)
-    set(OLD_BUILD_TESTING "${BUILD_TESTING}")
-    set(BUILD_TESTING OFF)
-    cpp_cc_git_submodule(eigen BUILD PACKAGE Eigen3 REQUIRED)
-    set(BUILD_TESTING "${OLD_BUILD_TESTING}")
-  # endblock()
+  cpp_cc_git_submodule(eigen)
   cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
   if(NMODL_3RDPARTY_USE_CATCH2)
     # If we're using the submodule then make sure the Catch.cmake helper can be found. In newer

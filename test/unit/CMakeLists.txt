@@ -133,10 +133,13 @@ target_link_libraries(testlexer PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testparser PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testprinter PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testsymtab PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain Eigen3::Eigen)
-target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain Eigen3::Eigen)
+target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitlexer PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitparser PRIVATE Catch2::Catch2WithMain)
+
+target_include_directories(testnewton ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
+target_include_directories(testcrout ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
 
 foreach(
   test_name
