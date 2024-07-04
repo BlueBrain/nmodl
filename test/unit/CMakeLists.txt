@@ -11,6 +11,7 @@ include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/test)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
 include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/utils)
+include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
 
 # =============================================================================
 # Common input data library
@@ -137,9 +138,6 @@ target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitlexer PRIVATE Catch2::Catch2WithMain)
 target_link_libraries(testunitparser PRIVATE Catch2::Catch2WithMain)
-
-target_include_directories(testnewton ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
-target_include_directories(testcrout ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
 
 foreach(
   test_name
