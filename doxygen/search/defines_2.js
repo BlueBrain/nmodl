@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['eigen_5fdefault_5fdense_5findex_5ftype_5709',['EIGEN_DEFAULT_DENSE_INDEX_TYPE',['../nmodl_8hpp.html#a23fafe2bd4e27ecadab4deb95691bcf4',1,'nmodl.hpp']]],
-  ['eigen_5fdont_5fparallelize_5710',['EIGEN_DONT_PARALLELIZE',['../nmodl_8hpp.html#a78868c5bb48a430b0cf4247122dbc73b',1,'nmodl.hpp']]]
+  ['kinf_5705',['KINF',['../modl_8h.html#aa9461dc2be3a692011544d7b6017b0f2',1,'modl.h']]]
 ];

@@ -12,6 +12,5 @@ var dir_68267d1309a1af8e8297ef4c3efbcdba =
     [ "units", "dir_f4739f0eb21cb15a404f3cea1464656d.html", "dir_f4739f0eb21cb15a404f3cea1464656d" ],
     [ "utils", "dir_313caf1132e152dd9b58bea13a4052ca.html", "dir_313caf1132e152dd9b58bea13a4052ca" ],
     [ "visitors", "dir_5da0f2f50dc0c79639fb8a44dc3280da.html", "dir_5da0f2f50dc0c79639fb8a44dc3280da" ],
-    [ "main.cpp", "src_2main_8cpp.html", "src_2main_8cpp" ],
-    [ "nmodl.hpp", "nmodl_8hpp.html", "nmodl_8hpp" ]
+    [ "main.cpp", "src_2main_8cpp.html", "src_2main_8cpp" ]
 ];
