@@ -1616,14 +1616,14 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     if (info.diam_used || info.area_used) {
         for (size_t i = 0; i < codegen_int_variables.size(); ++i) {
             auto var_info = codegen_int_variables[i];
-            if (var_info.symbol->get_name() == "diam") {
+            if (var_info.symbol->get_name() == naming::DIAM_VARIABLE) {
                 printer->add_line("Symbol * morphology_sym = hoc_lookup(\"morphology\");");
                 printer->fmt_line("Prop * morphology_prop = need_memb(morphology_sym);");
 
                 printer->fmt_line(
                     "_ppvar[{}] = _nrn_mechanism_get_param_handle(morphology_prop, 0);", i);
             }
-            if (var_info.symbol->get_name() == "area") {
+            if (var_info.symbol->get_name() == naming::AREA_VARIABLE) {
                 printer->fmt_line("_ppvar[{}] = _nrn_mechanism_get_area_handle(nrn_alloc_node_);",
                                   i);
             }
