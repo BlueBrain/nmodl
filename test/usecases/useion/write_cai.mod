@@ -1,5 +1,5 @@
 NEURON {
-    SUFFIX style_ion
+    SUFFIX write_cai
     USEION ca WRITE cai
 }
 
