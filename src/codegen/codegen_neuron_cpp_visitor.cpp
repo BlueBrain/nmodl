@@ -1343,8 +1343,8 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
         if (name == naming::POINT_PROCESS_VARIABLE) {
             continue;
         } else if (var.is_index || var.is_integer) {
-            // auto qualifier = var.is_constant ? "const " : "";
-            // printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
+            auto qualifier = var.is_constant ? "const " : "";
+            printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
