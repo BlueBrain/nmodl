@@ -49,8 +49,8 @@ std::string nmodl::PathHelper::nmodl_home = maybe_from_env("NMODL_HOME");
 
 std::string nmodl::PathHelper::get_path(const std::string& what, bool add_library_suffix) {
     std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
-    if (!get_home().empty()) {
-        search_paths.emplace(search_paths.begin(), get_home());
+    if (!nmodl_home.empty()) {
+        search_paths.emplace(search_paths.begin(), nmodl_home);
     }
 
     // check paths in order and return if found

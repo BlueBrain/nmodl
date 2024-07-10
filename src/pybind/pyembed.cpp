@@ -81,10 +81,6 @@ void EmbeddedPythonLoader::load_libraries() {
 
     assert_compatible_python_versions();
 
-    if (PathHelper::get_home().empty()) {
-        logger->critical("NMODLHOME environment variable must be set to load embedded python");
-        throw std::runtime_error("NMODLHOME not set");
-    }
     auto pybind_wraplib_env = PathHelper::get_wrapper_path();
     pybind_wrapper_handle = dlopen(pybind_wraplib_env.c_str(), dlopen_opts);
     if (!pybind_wrapper_handle) {

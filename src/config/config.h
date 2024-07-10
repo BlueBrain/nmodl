@@ -64,13 +64,6 @@ class PathHelper {
     static void setup(const std::string& executable);
 
     /**
-     * Return the NMODL base installation directory
-     */
-    static std::string get_home() {
-        return nmodl_home;
-    }
-
-    /**
      * Return path of units database file
      */
     static std::string get_units_path() {
