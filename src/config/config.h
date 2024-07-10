@@ -54,7 +54,7 @@ class PathHelper {
     /**
      * Search for a given relative file path
      */
-    static std::string get_path(const std::string& what, bool add_library_suffix=false);
+    static std::string get_path(const std::string& what, bool add_library_suffix = false);
 
   public:
     /**
