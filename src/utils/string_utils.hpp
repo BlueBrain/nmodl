@@ -130,10 +130,10 @@ enum class text_alignment { left, right, center };
 /**
  * Check if `haystack` ends with `needle`.
  *
- * Every string ends with the empty string.
+ * The empty string is a suffix of every string.
  */
 static inline bool ends_with(const std::string& haystack, const std::string& needle) {
-    if (needle.size() == 0) {
+    if (needle.empty()) {
         return true;
     }
 
@@ -149,7 +149,7 @@ static inline bool ends_with(const std::string& haystack, const std::string& nee
 /**
  * Check if `haystack` starts with `needle`.
  *
- * Every string ends with the empty string.
+ * The empty string is a prefix of every string.
  */
 static inline bool starts_with(const std::string& haystack, const std::string& needle) {
     return haystack.rfind(needle, 0) == 0;
