@@ -243,6 +243,9 @@ configure_file(share/nrnunits.lib ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnuni
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/share/nmodl/nrnunits.lib
         DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}share/nmodl)
 
+set(nmodl_BINARY ${NMODL_INSTALL_DIR_SUFFIX}bin/nmodl${CMAKE_EXECUTABLE_SUFFIX})
+add_executable(nmodl::nmodl ALIAS nmodl)
+
 install(
   EXPORT nmodlTargets
   FILE nmodlTargets.cmake
