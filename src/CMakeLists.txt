@@ -24,7 +24,6 @@ include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
 # Add executables
 # =============================================================================
 add_executable(nmodl main.cpp)
-set_target_properties(nmodl PROPERTIES PUBLIC_HEADER nmodl.hpp)
 target_link_libraries(
   nmodl
   CLI11::CLI11
