@@ -49,7 +49,7 @@ class PathHelper {
     const static std::string SHARED_LIBRARY_SUFFIX;
 
     /// base directory of the NMODL installation
-    static std::string nmodl_home;
+    const static std::string NMODL_HOME;
 
     /**
      * Search for a given relative file path
@@ -57,12 +57,6 @@ class PathHelper {
     static std::string get_path(const std::string& what, bool add_library_suffix = false);
 
   public:
-    /**
-     * Set the NMODL base installation directory from the executable if not defined in the
-     * environment
-     */
-    static void setup(const std::string& executable);
-
     /**
      * Return path of units database file
      */

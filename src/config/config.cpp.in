@@ -12,6 +12,14 @@
 #include <fstream>
 #include <sstream>
 
+#if defined(_WIN32)
+#include <stdio.h>
+#elif defined(__APPLE__)
+#include <limits.h>
+#include <mach-o/dyld.h>
+#else
+#endif
+
 namespace fs = std::filesystem;
 
 /// Git version of the project
@@ -40,17 +48,44 @@ std::string maybe_from_env(const std::string& varname) {
     if (value != nullptr) {
         return value;
     }
-    return "";
+
+#if defined(_WIN32)
+    std::vector<wchar_t> buffer;
+    DWORD copied = 0;
+    do {
+        buffer.resize(buffer.size() + MAX_PATH);
+        copied = GetModuleFileName(0, &buffer.at(0), buffer.size());
+    } while (copied >= buffer.size());
+    buffer.resize(copied);
+    fs::path executable(std::wstring(buffer.begin(), buffer.end()));
+#elif defined(__APPLE__)
+    char buffer[PATH_MAX + 1];
+    uint32_t bufsize = PATH_MAX + 1;
+    if( _NSGetExecutablePath(buf, &bufsize) != 0) {
+        return "";
+    }
+    auto executable = fs::read_symlink(buffer);
+#else
+    auto executable = fs::read_symlink("/proc/self/exe");
+#endif
+
+    auto executable_dir = fs::weakly_canonical(executable).parent_path();
+    if (executable_dir.filename() == "bin") {
+        return executable_dir.parent_path();
+    } else {
+        // On Windows, we may find ourselves in the top-level directory without a bin/
+        return executable_dir;
+    }
 }
 
 }
 
-std::string nmodl::PathHelper::nmodl_home = maybe_from_env("NMODL_HOME");
+const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODL_HOME");
 
 std::string nmodl::PathHelper::get_path(const std::string& what, bool add_library_suffix) {
     std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
-    if (!nmodl_home.empty()) {
-        search_paths.emplace(search_paths.begin(), nmodl_home);
+    if (!NMODL_HOME.empty()) {
+        search_paths.emplace(search_paths.begin(), NMODL_HOME);
     }
 
     // check paths in order and return if found
@@ -71,17 +106,4 @@ std::string nmodl::PathHelper::get_path(const std::string& what, bool add_librar
     }
     err_msg << "Please try setting the NMODLHOME environment variable\n";
     throw std::runtime_error(err_msg.str());
-}
-
-void nmodl::PathHelper::setup(const std::string& executable) {
-    // We give precedence to NMODLHOME - don't override if the home is already defined
-    if (nmodl_home.empty()) {
-        auto executable_dir = fs::canonical(fs::path(executable)).parent_path();
-        if (executable_dir.filename() == "bin") {
-            nmodl_home = executable_dir.parent_path();
-        } else {
-            // On Windows, we may find ourselves in the top-level directory without a bin/
-            nmodl_home = executable_dir;
-        }
-    }
 }

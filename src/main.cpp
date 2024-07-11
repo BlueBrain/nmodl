@@ -62,8 +62,6 @@ using nmodl::parser::NmodlDriver;
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 int main(int argc, const char* argv[]) {
-    PathHelper::setup(argv[0]);
-
     CLI::App app{fmt::format("NMODL : Source-to-Source Code Generation Framework [{}]",
                              Version::to_string())};
 
