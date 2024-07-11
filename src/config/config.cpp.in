@@ -64,7 +64,7 @@ std::string maybe_from_env(const std::string& varname) {
     if( _NSGetExecutablePath(buffer, &bufsize) != 0) {
         return "";
     }
-    auto executable = fs::read_symlink(buffer);
+    auto executable = fs::path(buffer);
 #else
     auto executable = fs::read_symlink("/proc/self/exe");
 #endif
