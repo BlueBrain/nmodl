@@ -579,9 +579,9 @@ void CodegenNeuronCppVisitor::append_conc_write_statements(
 
     auto wrote_conc_stmt = fmt::format("nrn_wrote_conc(_{}_sym, {}, {}, {}, {})",
                                        ion_name,
-                                       get_variable_name("ion_" + ion_name + "_erev"),
-                                       get_variable_name("ion_" + ion_name + "i"),
-                                       get_variable_name("ion_" + ion_name + "o"),
+                                       get_variable_name(ion.rev_potential_pointer_name()),
+                                       get_variable_name(ion.intra_conc_pointer_name()),
+                                       get_variable_name(ion.extra_conc_pointer_name()),
                                        style_name);
     statements.push_back(ShadowUseStatement{wrote_conc_stmt, "", ""});
 }
