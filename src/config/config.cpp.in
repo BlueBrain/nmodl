@@ -61,7 +61,7 @@ std::string maybe_from_env(const std::string& varname) {
 #elif defined(__APPLE__)
     char buffer[PATH_MAX + 1];
     uint32_t bufsize = PATH_MAX + 1;
-    if( _NSGetExecutablePath(buf, &bufsize) != 0) {
+    if( _NSGetExecutablePath(buffer, &bufsize) != 0) {
         return "";
     }
     auto executable = fs::read_symlink(buffer);
