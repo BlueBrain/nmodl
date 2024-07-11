@@ -71,6 +71,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#optimizing-storage">Optimizing Storage</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#concentrations">Concentrations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#writing-concentrations">Writing Concentrations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ion-styles">Ion Styles</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#special-case-zero-area-nodes">Special Case: zero-area nodes</a></li>
 </ul>
 </li>
@@ -202,8 +207,8 @@ Hodgkin-Huxley mechanism. This figure shows the NEURON memory layout.</span><a c
 <section id="optimizing-storage">
 <h3>Optimizing Storage<a class="headerlink" href="#optimizing-storage" title="Permalink to this heading"></a></h3>
 <p>Since the common pattern is to only access the values of a particular instance,
-the local copy isn’t needed. I might facilitate SIMD, but it could be replaces
-by local variables, see Figure 2.</p>
+the local copy isn’t needed. It might facilitate SIMD, but it could be replaced
+by local variables to save memory, see Figure 2.</p>
 <figure class="align-default" id="id2">
 <img alt="../_images/ion_storage-opt.svg" src="../_images/ion_storage-opt.svg" /><figcaption>
 <p><span class="caption-text">Figure 2: Optimized ion storage layout.</span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
@@ -213,6 +218,52 @@ by local variables, see Figure 2.</p>
 <div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>nmodl<span class="w"> </span>...<span class="w"> </span>codegen<span class="w"> </span>--opt-ionvar-copy
 </pre></div>
 </div>
+</section>
+</section>
+<section id="concentrations">
+<h2>Concentrations<a class="headerlink" href="#concentrations" title="Permalink to this heading"></a></h2>
+<p>Concentrations adjacent to the inside and outside of the membrane are computed.
+MOD files can change the value by setting <code class="docutils literal notranslate"><span class="pre">nai</span></code> or <code class="docutils literal notranslate"><span class="pre">nao</span></code>. It’s considered
+an error if two MOD files write the same concentration, which result in a
+warning.</p>
+<p>The reversal potential <code class="docutils literal notranslate"><span class="pre">ena</span></code> is a function of the two concentrations.
+Therefore, when writing to either concentration, we must allow <code class="docutils literal notranslate"><span class="pre">ena</span></code> to be
+recomputed.</p>
+<section id="writing-concentrations">
+<h3>Writing Concentrations<a class="headerlink" href="#writing-concentrations" title="Permalink to this heading"></a></h3>
+<p>When writing concentrations we must notify NEURON of three things: a) the fact
+that this mechanism writes some concentration; b) that this instance of the
+mechanism does so; c) that we’ve written the concentration.</p>
+<p>The first notification happens when registering the mechanism and controls the
+position of the mechanism relative to others, i.e. mechanisms that write the
+concentration must appear in the <code class="docutils literal notranslate"><span class="pre">Memb_list</span></code> before mechanisms that only read
+the concentration, that way all mechanisms get to see the updated values. We
+must call <code class="docutils literal notranslate"><span class="pre">nrn_writes_conc</span></code> to inform NEURON that this mechanisms intends to
+write to some concentration.</p>
+<p>The second notification happens as part of <code class="docutils literal notranslate"><span class="pre">nrn_alloc</span></code>, i.e. when allocating
+the <code class="docutils literal notranslate"><span class="pre">Prop</span></code>, by calling <code class="docutils literal notranslate"><span class="pre">nrn_check_conc_write</span></code>. This enables NEURON to check
+that there’s no conflict and modifies the style of the ion. We pass <code class="docutils literal notranslate"><span class="pre">0</span></code> for
+exterior and <code class="docutils literal notranslate"><span class="pre">1</span></code> for interior.</p>
+<p>The third notification happens in the INITIAL block after setting the
+concentrations. We use <code class="docutils literal notranslate"><span class="pre">nrn_wrote_conc</span></code>. This enables NEURON to conditionally
+trigger recomputing the reversal potential via the Nernst equation (depending
+on the ion style).</p>
+</section>
+<section id="ion-styles">
+<h3>Ion Styles<a class="headerlink" href="#ion-styles" title="Permalink to this heading"></a></h3>
+<p>The <em>style</em> of an ion is a 12-bit wide bitfield it stores information whether
+MOD files write to the concentrations or reversal potential, if the reversal
+potential should be recomputed after every timestep, etc. The style is part of
+the ion mechanism.</p>
+<p>It’s stored in the <code class="docutils literal notranslate"><span class="pre">dparam</span></code> array of the ion <code class="docutils literal notranslate"><span class="pre">Prop</span></code> as an <code class="docutils literal notranslate"><span class="pre">int</span></code> at
+location <code class="docutils literal notranslate"><span class="pre">0</span></code> (variable name in NEURON: <code class="docutils literal notranslate"><span class="pre">iontype_index_dparam</span></code>). A mechanism
+using the style of an ion stores a <code class="docutils literal notranslate"><span class="pre">generic_data_handle</span></code> in it’s <code class="docutils literal notranslate"><span class="pre">dparam</span></code>
+array (not necessarily at location <code class="docutils literal notranslate"><span class="pre">0</span></code>) that points to the relevant <code class="docutils literal notranslate"><span class="pre">style</span></code>
+in the ion <code class="docutils literal notranslate"><span class="pre">Prop</span></code>.</p>
+<p>From MOD files we need to notify NEURON if we’re reading/writing a concentration
+or reversal potential. This is done by calling <code class="docutils literal notranslate"><span class="pre">nrn_promote(.,</span> <span class="pre">conc,</span> <span class="pre">rev)</span></code>.
+The magic value for <code class="docutils literal notranslate"><span class="pre">rev</span></code> and <code class="docutils literal notranslate"><span class="pre">conc</span></code> is <code class="docutils literal notranslate"><span class="pre">3</span></code> when writing, <code class="docutils literal notranslate"><span class="pre">1</span></code> when only
+reading and <code class="docutils literal notranslate"><span class="pre">0</span></code> if we do neither.</p>
 </section>
 </section>
 <section id="special-case-zero-area-nodes">
