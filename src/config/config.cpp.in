@@ -13,7 +13,7 @@
 #include <sstream>
 
 #if defined(_WIN32)
-#include <stdio.h>
+#include <windows.h>
 #elif defined(__APPLE__)
 #include <limits.h>
 #include <mach-o/dyld.h>
@@ -50,7 +50,7 @@ std::string maybe_from_env(const std::string& varname) {
     }
 
 #if defined(_WIN32)
-    std::vector<wchar_t> buffer;
+    std::vector<char> buffer;
     DWORD copied = 0;
     do {
         buffer.resize(buffer.size() + MAX_PATH);
