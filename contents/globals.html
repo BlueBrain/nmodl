@@ -72,6 +72,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#quirks">Quirks</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#constant-variables">CONSTANT variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Quirks</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#what-does-coreneuron-support">What Does CoreNEURON support?</a></li>
 </ul>
 </li>
@@ -130,6 +134,7 @@
 <div><ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">GLOBAL</span></code> visible from HOC/Python.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">LOCAL</span></code> at file scope, called top-locals.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CONSTANT</span></code> not visible from HOC/Python.</p></li>
 </ul>
 </div></blockquote>
 <section id="id1">
@@ -280,6 +285,18 @@ scratch pad memory (e.g. <code class="docutils literal notranslate"><span class=
 the code <code class="docutils literal notranslate"><span class="pre">nocmodl</span></code> produces will cause a SEGFAULT.</p></li>
 </ul>
 </div></blockquote>
+</section>
+</section>
+<section id="constant-variables">
+<h2>CONSTANT variables<a class="headerlink" href="#constant-variables" title="Permalink to this heading"></a></h2>
+<p>These are comparatively simple. In NOCMODL they’re implemented as non-const
+static doubles. They’re not accessible from HOC/Python (which makes them
+simple).</p>
+<section id="id2">
+<h3>Quirks<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<p>In certain versions of NOCMODL around <cite>9.0</cite> and before (and NMODL) it’s
+possible to change the value of CONSTANT variables. The MOD file will still be
+considered “thread-safe” (even if it might not be).</p>
 </section>
 </section>
 <section id="what-does-coreneuron-support">
