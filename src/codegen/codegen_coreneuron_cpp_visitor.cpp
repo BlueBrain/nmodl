@@ -737,7 +737,7 @@ void CodegenCoreneuronCppVisitor::append_conc_write_statements(
 
 void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
     printer->add_newline(2);
-    printer->push_block("static inline int first_pointer_var_index()");
+    printer->push_block("static int first_pointer_var_index()");
     printer->fmt_line("return {};", info.first_pointer_var_index);
     printer->pop_block();
 }
@@ -745,7 +745,7 @@ void CodegenCoreneuronCppVisitor::print_first_pointer_var_index_getter() {
 
 void CodegenCoreneuronCppVisitor::print_first_random_var_index_getter() {
     printer->add_newline(2);
-    printer->push_block("static inline int first_random_var_index()");
+    printer->push_block("static int first_random_var_index()");
     printer->fmt_line("return {};", info.first_random_var_index);
     printer->pop_block();
 }
@@ -753,12 +753,12 @@ void CodegenCoreneuronCppVisitor::print_first_random_var_index_getter() {
 
 void CodegenCoreneuronCppVisitor::print_num_variable_getter() {
     printer->add_newline(2);
-    printer->push_block("static inline int float_variables_size()");
+    printer->push_block("static int float_variables_size()");
     printer->fmt_line("return {};", float_variables_size());
     printer->pop_block();
 
     printer->add_newline(2);
-    printer->push_block("static inline int int_variables_size()");
+    printer->push_block("static int int_variables_size()");
     printer->fmt_line("return {};", int_variables_size());
     printer->pop_block();
 }
@@ -769,7 +769,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_arg_size_getter() {
         return;
     }
     printer->add_newline(2);
-    printer->push_block("static inline int num_net_receive_args()");
+    printer->push_block("static int num_net_receive_args()");
     printer->fmt_line("return {};", info.num_net_receive_parameters);
     printer->pop_block();
 }
@@ -777,7 +777,7 @@ void CodegenCoreneuronCppVisitor::print_net_receive_arg_size_getter() {
 
 void CodegenCoreneuronCppVisitor::print_mech_type_getter() {
     printer->add_newline(2);
-    printer->push_block("static inline int get_mech_type()");
+    printer->push_block("static int get_mech_type()");
     // false => get it from the host-only global struct, not the instance structure
     printer->fmt_line("return {};", get_variable_name("mech_type", false));
     printer->pop_block();
@@ -786,7 +786,7 @@ void CodegenCoreneuronCppVisitor::print_mech_type_getter() {
 
 void CodegenCoreneuronCppVisitor::print_memb_list_getter() {
     printer->add_newline(2);
-    printer->push_block("static inline Memb_list* get_memb_list(NrnThread* nt)");
+    printer->push_block("static Memb_list* get_memb_list(NrnThread* nt)");
     printer->push_block("if (!nt->_ml_list)");
     printer->add_line("return nullptr;");
     printer->pop_block();
@@ -827,17 +827,17 @@ void CodegenCoreneuronCppVisitor::print_thread_getters() {
         printer->add_line("/** thread specific helper routines for derivimplicit */");
 
         printer->add_newline(1);
-        printer->fmt_push_block("static inline int* deriv{}_advance(ThreadDatum* thread)", list);
+        printer->fmt_push_block("static int* deriv{}_advance(ThreadDatum* thread)", list);
         printer->fmt_line("return &(thread[{}].i);", tid);
         printer->pop_block();
         printer->add_newline();
 
-        printer->fmt_push_block("static inline int dith{}()", list);
+        printer->fmt_push_block("static int dith{}()", list);
         printer->fmt_line("return {};", tid+1);
         printer->pop_block();
         printer->add_newline();
 
-        printer->fmt_push_block("static inline void** newtonspace{}(ThreadDatum* thread)", list);
+        printer->fmt_push_block("static void** newtonspace{}(ThreadDatum* thread)", list);
         printer->fmt_line("return &(thread[{}]._pvoid);", tid+2);
         printer->pop_block();
     }
@@ -845,7 +845,7 @@ void CodegenCoreneuronCppVisitor::print_thread_getters() {
     if (info.vectorize && !info.thread_variables.empty()) {
         printer->add_newline(2);
         printer->add_line("/** tid for thread variables */");
-        printer->push_block("static inline int thread_var_tid()");
+        printer->push_block("static int thread_var_tid()");
         printer->fmt_line("return {};", info.thread_var_thread_id);
         printer->pop_block();
     }
@@ -853,7 +853,7 @@ void CodegenCoreneuronCppVisitor::print_thread_getters() {
     if (info.vectorize && !info.top_local_variables.empty()) {
         printer->add_newline(2);
         printer->add_line("/** tid for top local tread variables */");
-        printer->push_block("static inline int top_local_var_tid()");
+        printer->push_block("static int top_local_var_tid()");
         printer->fmt_line("return {};", info.top_local_thread_id);
         printer->pop_block();
     }
