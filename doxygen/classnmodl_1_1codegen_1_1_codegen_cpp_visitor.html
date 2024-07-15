@@ -799,9 +799,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:ac87b0baf7ca05124b07a2cb0c405a165"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac87b0baf7ca05124b07a2cb0c405a165">get_variable_name</a> (const std::string &amp;name, bool use_instance=true) const =0</td></tr>
 <tr class="memdesc:ac87b0baf7ca05124b07a2cb0c405a165"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine variable name in the structure of mechanism properties.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac87b0baf7ca05124b07a2cb0c405a165">More...</a><br /></td></tr>
 <tr class="separator:ac87b0baf7ca05124b07a2cb0c405a165"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab516d94c30f043b502152544cde2d563"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ab516d94c30f043b502152544cde2d563">table_function_prefix</a> () const</td></tr>
-<tr class="memdesc:ab516d94c30f043b502152544cde2d563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prefix used for the function that performs the lazy update.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ab516d94c30f043b502152544cde2d563">More...</a><br /></td></tr>
-<tr class="separator:ab516d94c30f043b502152544cde2d563"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93358fcb6712a4ac8c1565529821b340"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a93358fcb6712a4ac8c1565529821b340">table_update_function_name</a> (const std::string &amp;block_name) const</td></tr>
+<tr class="memdesc:a93358fcb6712a4ac8c1565529821b340"><td class="mdescLeft">&#160;</td><td class="mdescRight">The name of the function that updates the table value if the parameters changed.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a93358fcb6712a4ac8c1565529821b340">More...</a><br /></td></tr>
+<tr class="separator:a93358fcb6712a4ac8c1565529821b340"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae058bdc14f4813c5e0a9ad9ff364c0d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae058bdc14f4813c5e0a9ad9ff364c0d4">get_int_variable_index</a> (const std::string &amp;var_name)</td></tr>
 <tr class="separator:ae058bdc14f4813c5e0a9ad9ff364c0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc26a2583e8b283deae9944939788f79"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afc26a2583e8b283deae9944939788f79">print_backend_info</a> ()</td></tr>
@@ -1522,7 +1522,7 @@ Protected Attributes</h2></td></tr>
 <p>Check if the given name exist in the symbol. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>return</code> a tuple &lt;true, array_length&gt; if variable is an array otherwise &lt;false, 0&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01633">1633</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01632">1632</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2114,7 +2114,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01608">1608</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01607">1607</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2172,7 +2172,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01620">1620</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l01619">1619</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5394,8 +5394,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="ab516d94c30f043b502152544cde2d563"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab516d94c30f043b502152544cde2d563">&#9670;&nbsp;</a></span>table_function_prefix()</h2>
+<a id="a93358fcb6712a4ac8c1565529821b340"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93358fcb6712a4ac8c1565529821b340">&#9670;&nbsp;</a></span>table_update_function_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -5404,9 +5404,10 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenCppVisitor::table_function_prefix </td>
+          <td class="memname">std::string nmodl::codegen::CodegenCppVisitor::table_update_function_name </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>block_name</em></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -5417,7 +5418,13 @@ template&lt;typename T &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Prefix used for the function that performs the lazy update. </p>
+<p>The name of the function that updates the table value if the parameters changed. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block_name</td><td>The name of the block that contains the TABLE. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 <p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l00075">75</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
@@ -6820,7 +6827,7 @@ template&lt;typename T &gt; </div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2af0317e4ceb9bd3f1bf2999ebb32dcf99">CppObjectSpecifier::ThreadLocal</a>, <span class="stringliteral">&quot;thread_local&quot;</span>},</div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a79ceee9f8e3c1f0cc74223e05d2448bf">CppObjectSpecifier::Const</a>, <span class="stringliteral">&quot;const&quot;</span>}}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01359">1359</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01361">1361</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>

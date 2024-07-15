@@ -36,5 +36,6 @@ var structnmodl_1_1codegen_1_1_ion =
     [ "name", "structnmodl_1_1codegen_1_1_ion.html#a1ef3560064c6ec5b850f6e9f2b345190", null ],
     [ "need_style", "structnmodl_1_1codegen_1_1_ion.html#a5fef7a697395c4ccf380fed9a7fff241", null ],
     [ "reads", "structnmodl_1_1codegen_1_1_ion.html#ad3b1eb176f8e00671fb36cc625ad0f49", null ],
+    [ "valence", "structnmodl_1_1codegen_1_1_ion.html#ab464eca5bf873be2df1ea2aaea2f0533", null ],
     [ "writes", "structnmodl_1_1codegen_1_1_ion.html#ae116633adc4f16ce78feae5b4d2f8a12", null ]
 ];
