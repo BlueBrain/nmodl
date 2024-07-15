@@ -15,7 +15,7 @@
  * \brief Implementation of Newton method for solving system of non-linear equations
  */
 
-#include <crout/crout.hpp>
+#include "../crout/crout.hpp"
 
 #include <Eigen/Dense>
 #include <Eigen/LU>

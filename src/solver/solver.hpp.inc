@@ -8,12 +8,11 @@
 // However, because we want to be able to test the headers separately we can't
 // move them here.
 
-namespace nmodl::solvers {
+namespace nmodl::solver {
 const std::string crout_hpp = R"jiowi(
 @NMODL_CROUT_HPP@
 )jiowi";
 const std::string newton_hpp = R"jiowi(
-@NMODL_CROUT_HPP@
 @NMODL_NEWTON_HPP@
 )jiowi";
 

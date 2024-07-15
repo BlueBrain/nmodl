@@ -21,7 +21,6 @@
 #include "config/config.h"
 #include "lexer/token_mapping.hpp"
 #include "parser/c11_driver.hpp"
-#include "solver/solver.hpp"
 #include "utils/logger.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
@@ -1005,7 +1004,7 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
         #include <coreneuron/utils/randoms/nrnran123.h>
     )CODE");
     if (info.eigen_newton_solver_exist) {
-        printer->add_multi_line(nmodl::solvers::newton_hpp);
+        printer->add_line("#include \"solver/newton/newton.hpp\"");
     }
     if (info.eigen_linear_solver_exist) {
         if (std::accumulate(info.state_vars.begin(),
@@ -1014,7 +1013,7 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
                             [](int l, const SymbolType& variable) {
                                 return l += variable->get_length();
                             }) > 4) {
-            printer->add_multi_line(nmodl::solvers::crout_hpp);
+            printer->add_line("#include \"solver/crout/crout.hpp\"");
         } else {
             printer->add_line("#include <Eigen/Dense>");
             printer->add_line("#include <Eigen/LU>");

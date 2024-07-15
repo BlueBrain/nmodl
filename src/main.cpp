@@ -5,11 +5,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <fstream>
+#include <filesystem>
 #include <string>
 #include <vector>
 
 #include <CLI/CLI.hpp>
-#include <filesystem>
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
@@ -20,6 +21,7 @@
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
+#include "solver/solver.hpp"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
@@ -59,6 +61,40 @@ using namespace nmodl;
 using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
+
+std::pair<fs::path, fs::path> get_solver_paths(const fs::path& directory) {
+    return {
+        directory / "solver" / "crout" / "crout.hpp",
+        directory / "solver" / "newton" / "newton.hpp"
+    };
+}
+
+bool check_solvers(const std::string& directory) {
+    auto [crout_path, newton_path] = get_solver_paths(directory);
+
+    return fs::exists(crout_path) && fs::exists(newton_path);
+}
+
+void dump_solvers(const std::string& directory) {
+    fs::path output(directory);
+
+    auto [crout_path, newton_path] = get_solver_paths(directory);
+
+    fs::create_directories(crout_path.parent_path());
+    fs::create_directories(newton_path.parent_path());
+
+    {
+        std::fstream fcrout(crout_path);
+        fcrout << nmodl::solver::crout_hpp;
+        logger->info("Generated {}", crout_path.string());
+    }
+
+    {
+        std::fstream fnewton(newton_path);
+        fnewton << nmodl::solver::newton_hpp;
+        logger->info("Generated {}", newton_path.string());
+    }
+}
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 int main(int argc, const char* argv[]) {
@@ -135,6 +171,9 @@ int main(int argc, const char* argv[]) {
     /// true if ion variable copies should be avoided
     bool optimize_ionvar_copies_codegen(false);
 
+    /// true if we should not generate the solver headers
+    bool skip_dump_solvers(false);
+
     /// directory where code will be generated
     std::string output_dir(".");
 
@@ -171,6 +210,15 @@ int main(int argc, const char* argv[]) {
         ->capture_default_str()
         ->ignore_case()
         ->check(CLI::IsMember({"trace", "debug", "info", "warning", "error", "critical", "off"}));
+
+    app.add_option_function<std::string>(
+        "--dump-solvers",
+        [](const std::string& directory) {
+            dump_solvers(directory);
+            exit(0);
+        },
+        "Create solver headers in directory and exit");
+    app.add_flag("--no-dump-solvers", skip_dump_solvers, "Skip generating solvers if not present");
 
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
@@ -301,6 +349,17 @@ int main(int argc, const char* argv[]) {
             logger->info("AST to NMODL transformation written to {}", filepath);
         }
     };
+
+    if (skip_dump_solvers) {
+        if (! check_solvers(output_dir)) {
+            logger->error("Solvers not found in output directory.  Please use --dump-solvers first");
+        }
+    } else {
+        // Unconditionally update the solver files to ensure that they are compatible with
+        // the current NMODL version.
+        dump_solvers(output_dir);
+    }
+
 
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file.string());

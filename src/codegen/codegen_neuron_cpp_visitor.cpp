@@ -20,7 +20,6 @@
 #include "codegen/codegen_utils.hpp"
 #include "codegen_naming.hpp"
 #include "config/config.h"
-#include "solver/solver.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/var_usage_visitor.hpp"
@@ -754,7 +753,7 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
         #include <vector>
     )CODE");
     if (info.eigen_newton_solver_exist) {
-        printer->add_multi_line(nmodl::solvers::newton_hpp);
+        printer->add_line("#include \"solver/newton/newton.hpp\"");
     }
 }
 
