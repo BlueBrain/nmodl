@@ -864,10 +864,10 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__neuron__cpp__vi
 <div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="stringliteral">        #include &lt;math.h&gt;</span></div>
 <div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;<span class="stringliteral">        #include &lt;stdio.h&gt;</span></div>
 <div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;<span class="stringliteral">        #include &lt;stdlib.h&gt;</span></div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="stringliteral">    )CODE&quot;);</span></div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="stringliteral">    printer-&gt;add_multi_line(nmodl::solvers::newton_hpp);</span></div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="stringliteral">    </span><span class="keywordflow">if</span> (!info.vectorize) {</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        printer-&gt;add_line(<span class="stringliteral">&quot;#include &lt;vector&gt;&quot;</span>);</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;<span class="stringliteral">        #include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;<span class="stringliteral">    )CODE&quot;);</span></div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="stringliteral">    </span><span class="keywordflow">if</span> (info.eigen_newton_solver_exist) {</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        printer-&gt;add_multi_line(nmodl::solvers::newton_hpp);</div>
 <div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;    }</div>
 <div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;}</div>
 <div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160; </div>
