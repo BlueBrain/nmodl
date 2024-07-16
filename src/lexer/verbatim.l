@@ -13,15 +13,12 @@
     #include "parser/verbatim_driver.hpp"
     #include "parser/verbatim_parser.hpp"
 
-    /** Disables inclusion of unistd.h, which is not available under Visual
-     * C++ on Win32. The C++ scanner uses STL streams instead. */
-    #define YY_NO_UNISTD_H
-
     /**
      * The scanner state will include a field called yyextra
      * that can be used for user-defined state
      */
     #define YY_EXTRA_TYPE nmodl::parser::VerbatimDriver*
+
 
     /**
      * We need to parse strings as well as files, we redefine YY_INPUT
@@ -45,14 +42,15 @@
 
 %}
 
-%option never-interactive
-
 /**
  * need to provide this option to flex otherwise complain:
  * "error: 'yymore_used_but_not_detected' was not declared in
  * this scope
  */
 %option yymore
+
+%option nounistd
+%option never-interactive
 
 /** lexer header file */
 %option header-file="verbatim_lexer.hpp"
