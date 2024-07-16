@@ -192,10 +192,7 @@ std::shared_ptr<Symbol> ModelSymbolTable::lookup(const std::string& name) {
 }
 
 
-/**
- *  Emit warning message for shadowing definition or throw an exception
- *  if variable is being redefined in the same block.
- */
+//  show symbol table related message for debugging purposes
 void ModelSymbolTable::emit_message(const std::shared_ptr<Symbol>& first,
                                     const std::shared_ptr<Symbol>& second,
                                     bool redefinition) {
@@ -217,7 +214,7 @@ void ModelSymbolTable::emit_message(const std::shared_ptr<Symbol>& first,
     std::string msg = "SYMTAB :: " + name + " [" + type + "] in ";
     msg += current_symtab->name() + " shadows <" + properties;
     msg += "> definition in " + second->get_scope();
-    logger->warn(msg);
+    logger->debug(msg);
 }
 
 
