@@ -1,4 +1,5 @@
 #include <string>
+#include <vector>
 
 // This file is generated from `crout/crout.hpp` and `newton/newton.hpp`.
 //
@@ -9,11 +10,18 @@
 // move them here.
 
 namespace nmodl::solver {
-const std::string crout_hpp = R"jiowi(
-@NMODL_CROUT_HPP@
-)jiowi";
-const std::string newton_hpp = R"jiowi(
-@NMODL_NEWTON_HPP@
-)jiowi";
+const std::vector<std::string> get_names() {
+    return {"crout", "newton"};
+}
+
+const std::string get_hpp(const std::string& solver) {
+    if (solver == "crout") {
+        return R"jiowi(@NMODL_CROUT_HPP@)jiowi";
+    } else if (solver == "newton") {
+        return R"jiowi(@NMODL_NEWTON_HPP@)jiowi";
+    } else {
+        throw std::runtime_error("unknown solver '" + solver + "'");
+    }
+};
 
 }

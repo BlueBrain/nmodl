@@ -62,37 +62,32 @@ using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
-std::pair<fs::path, fs::path> get_solver_paths(const fs::path& directory) {
-    return {
-        directory / "solver" / "crout" / "crout.hpp",
-        directory / "solver" / "newton" / "newton.hpp"
-    };
+fs::path get_solver_path(const fs::path& directory, const std::string& solver) {
+    auto path = directory / "solver" / solver/ solver;
+    path += ".hpp";
+    return path;
 }
 
 bool check_solvers(const std::string& directory) {
-    auto [crout_path, newton_path] = get_solver_paths(directory);
-
-    return fs::exists(crout_path) && fs::exists(newton_path);
+    for (const auto& solver: nmodl::solver::get_names()) {
+        const auto& path = get_solver_path(directory, solver);
+        if (!fs::exists(path)) {
+            return false;
+        }
+    }
+    return true;
 }
 
-void dump_solvers(const std::string& directory) {
+void dump_solvers(const std::string& directory, const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
     fs::path output(directory);
 
-    auto [crout_path, newton_path] = get_solver_paths(directory);
+    for (const auto& solver: solvers) {
+        const auto& path = get_solver_path(directory, solver);
+        fs::create_directories(path.parent_path());
 
-    fs::create_directories(crout_path.parent_path());
-    fs::create_directories(newton_path.parent_path());
-
-    {
-        std::fstream fcrout(crout_path);
-        fcrout << nmodl::solver::crout_hpp;
-        logger->info("Generated {}", crout_path.string());
-    }
-
-    {
-        std::fstream fnewton(newton_path);
-        fnewton << nmodl::solver::newton_hpp;
-        logger->info("Generated {}", newton_path.string());
+        std::ofstream fout(path);
+        fout << nmodl::solver::get_hpp(solver);
+        logger->info("Generated {}", path.string());
     }
 }
 
@@ -211,15 +206,6 @@ int main(int argc, const char* argv[]) {
         ->ignore_case()
         ->check(CLI::IsMember({"trace", "debug", "info", "warning", "error", "critical", "off"}));
 
-    app.add_option_function<std::string>(
-        "--dump-solvers",
-        [](const std::string& directory) {
-            dump_solvers(directory);
-            exit(0);
-        },
-        "Create solver headers in directory and exit");
-    app.add_flag("--no-dump-solvers", skip_dump_solvers, "Skip generating solvers if not present");
-
     app.add_option("file", mod_files, "One or more MOD files to process")
         ->ignore_case()
         ->required()
@@ -228,6 +214,18 @@ int main(int argc, const char* argv[]) {
     app.add_option("-o,--output", output_dir, "Directory for backend code output")
         ->capture_default_str()
         ->ignore_case();
+
+    app.add_option_function<std::vector<std::string>>(
+        "--dump-solvers",
+        [&](const std::vector<std::string>& solvers) {
+            dump_solvers(output_dir, solvers);
+            exit(0);
+        },
+        "Create solver headers in directory and exit")
+        ->expected(1, 2)
+        ->check(CLI::IsMember(nmodl::solver::get_names()));
+
+    app.add_flag("--no-dump-solvers", skip_dump_solvers, "Skip generating solvers if not present");
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output")
         ->capture_default_str()
         ->ignore_case();
