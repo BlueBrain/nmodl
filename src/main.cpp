@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -78,7 +78,8 @@ bool check_solvers(const std::string& directory) {
     return true;
 }
 
-void dump_solvers(const std::string& directory, const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
+void dump_solvers(const std::string& directory,
+                  const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
     fs::path output(directory);
 
     for (const auto& solver: solvers) {
@@ -216,12 +217,12 @@ int main(int argc, const char* argv[]) {
         ->ignore_case();
 
     app.add_option_function<std::vector<std::string>>(
-        "--dump-solvers",
-        [&](const std::vector<std::string>& solvers) {
-            dump_solvers(output_dir, solvers);
-            exit(0);
-        },
-        "Create solver headers in directory and exit")
+           "--dump-solvers",
+           [&](const std::vector<std::string>& solvers) {
+               dump_solvers(output_dir, solvers);
+               exit(0);
+           },
+           "Create solver headers in directory and exit")
         ->expected(1, 2)
         ->check(CLI::IsMember(nmodl::solver::get_names()));
 
@@ -349,8 +350,9 @@ int main(int argc, const char* argv[]) {
     };
 
     if (skip_dump_solvers) {
-        if (! check_solvers(output_dir)) {
-            logger->error("Solvers not found in output directory.  Please use --dump-solvers first");
+        if (!check_solvers(output_dir)) {
+            logger->error(
+                "Solvers not found in output directory.  Please use --dump-solvers first");
         }
     } else {
         // Unconditionally update the solver files to ensure that they are compatible with
