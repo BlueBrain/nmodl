@@ -10,12 +10,6 @@ set(CODE_GENERATOR_JINJA_FILES
     ${PROJECT_SOURCE_DIR}/src/language/templates/ast/ast_decl.hpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/ast/node.hpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/ast/node_class.template
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyast.cpp
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyast.hpp
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pynode.cpp
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pysymtab.cpp
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyvisitor.cpp
-    ${PROJECT_SOURCE_DIR}/src/language/templates/pybind/pyvisitor.hpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/visitors/ast_visitor.cpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/visitors/ast_visitor.hpp
     ${PROJECT_SOURCE_DIR}/src/language/templates/visitors/checkparent_visitor.cpp
@@ -174,16 +168,6 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/write_ion_var.hpp
 )
 
-set(PYBIND_GENERATED_SOURCES
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pynode_0.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pynode_1.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pysymtab.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.cpp
-    ${PROJECT_BINARY_DIR}/src/pybind/pyvisitor.hpp
-)
-
 set(VISITORS_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.cpp
     ${PROJECT_BINARY_DIR}/src/visitors/ast_visitor.hpp
@@ -202,7 +186,6 @@ set(VISITORS_GENERATED_SOURCES
 
 set(NMODL_GENERATED_SOURCES
     ${AST_GENERATED_SOURCES}
-    ${PYBIND_GENERATED_SOURCES}
     ${VISITORS_GENERATED_SOURCES}
 )
 # cmake-format: on

@@ -753,7 +753,7 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
         #include <vector>
     )CODE");
     if (info.eigen_newton_solver_exist) {
-        printer->add_line("#include \"solver/newton/newton.hpp\"");
+        printer->add_line("#include \"solver/newton.hpp\"");
     }
 }
 

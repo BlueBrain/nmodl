@@ -1004,7 +1004,7 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
         #include <coreneuron/utils/randoms/nrnran123.h>
     )CODE");
     if (info.eigen_newton_solver_exist) {
-        printer->add_line("#include \"solver/newton/newton.hpp\"");
+        printer->add_line("#include \"solver/newton.hpp\"");
     }
     if (info.eigen_linear_solver_exist) {
         if (std::accumulate(info.state_vars.begin(),
@@ -1013,7 +1013,7 @@ void CodegenCoreneuronCppVisitor::print_coreneuron_includes() {
                             [](int l, const SymbolType& variable) {
                                 return l += variable->get_length();
                             }) > 4) {
-            printer->add_line("#include \"solver/crout/crout.hpp\"");
+            printer->add_line("#include \"solver/crout.hpp\"");
         } else {
             printer->add_line("#include <Eigen/Dense>");
             printer->add_line("#include <Eigen/LU>");

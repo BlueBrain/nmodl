@@ -63,7 +63,7 @@ using namespace visitor;
 using nmodl::parser::NmodlDriver;
 
 fs::path get_solver_path(const fs::path& directory, const std::string& solver) {
-    auto path = directory / "solver" / solver/ solver;
+    auto path = directory / "solver" / solver;
     path += ".hpp";
     return path;
 }
