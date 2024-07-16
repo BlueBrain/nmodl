@@ -215,10 +215,10 @@ void ModelSymbolTable::emit_message(const std::shared_ptr<Symbol>& first,
         throw std::runtime_error(msg);
     }
     logger->debug("SYMTAB :: {} [{}] in {} shadows <{}> definition in {}",
-                 name,
-                 type,
-                 current_symtab->name(),
-                 properties);
+                  name,
+                  type,
+                  current_symtab->name(),
+                  properties);
 }
 
 
