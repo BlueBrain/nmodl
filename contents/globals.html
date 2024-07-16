@@ -72,6 +72,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#quirks">Quirks</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#parameter-variables">PARAMETER variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#default-values">Default Values</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#constant-variables">CONSTANT variables</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id2">Quirks</a></li>
 </ul>
@@ -285,6 +289,26 @@ scratch pad memory (e.g. <code class="docutils literal notranslate"><span class=
 the code <code class="docutils literal notranslate"><span class="pre">nocmodl</span></code> produces will cause a SEGFAULT.</p></li>
 </ul>
 </div></blockquote>
+</section>
+</section>
+<section id="parameter-variables">
+<h2>PARAMETER variables<a class="headerlink" href="#parameter-variables" title="Permalink to this heading"></a></h2>
+<p>These can be either RANGE or not RANGE. They can be both read and write. If
+they’re written to, they’re converted to thread-variables. Therefore, the rest
+of this section will only describe read-only PARAMETERs.</p>
+<p>Additionally, parameters optionally have: a) a default value, b) units and c) a
+valid range.</p>
+<section id="default-values">
+<h3>Default Values<a class="headerlink" href="#default-values" title="Permalink to this heading"></a></h3>
+<p>This section only applies to read-only PARAMETERs.</p>
+<p>The behaviour differs for RANGE variables and non-RANGE variables. For RANGE
+variables, default values need to be registered with NEURON for all PARAMETERs
+that are RANGE variables. The function is called <code class="docutils literal notranslate"><span class="pre">hoc_register_parm_default</span></code>.</p>
+<p>Note, that NOCMODL uses it in the <code class="docutils literal notranslate"><span class="pre">nrn_alloc</span></code> in the generated <cite>.cpp</cite> files
+and also in <code class="docutils literal notranslate"><span class="pre">ndatclas.cpp</span></code>. Therefore, it seems registering the values isn’t
+optional.</p>
+<p>Non-RANGE variables are semantically equivalent to <code class="docutils literal notranslate"><span class="pre">static</span> <span class="pre">double</span></code>. They’re
+simply assigned their value in the definition of the global variable.</p>
 </section>
 </section>
 <section id="constant-variables">
