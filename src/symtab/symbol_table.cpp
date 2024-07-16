@@ -206,15 +206,19 @@ void ModelSymbolTable::emit_message(const std::shared_ptr<Symbol>& first,
     }
 
     if (redefinition) {
-        std::string msg = "Re-declaration of " + name + " [" + type + "]";
-        msg += "<" + properties + "> in " + current_symtab->name();
-        msg += " with one in " + second->get_scope();
+        auto msg = fmt::format("Re-declaration of {} [{}] <{}> in {} with one in {}",
+                               name,
+                               type,
+                               properties,
+                               current_symtab->name(),
+                               second->get_scope());
         throw std::runtime_error(msg);
     }
-    std::string msg = "SYMTAB :: " + name + " [" + type + "] in ";
-    msg += current_symtab->name() + " shadows <" + properties;
-    msg += "> definition in " + second->get_scope();
-    logger->debug(msg);
+    logger->debug("SYMTAB :: {} [{}] in {} shadows <{}> definition in {}",
+                 name,
+                 type,
+                 current_symtab->name(),
+                 properties);
 }
 
 
