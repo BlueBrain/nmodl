@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "crout/crout.hpp"
+#include "crout.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
