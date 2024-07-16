@@ -72,6 +72,9 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
             // we have converged: return iteration count
             return iter;
         }
+        Eigen::Matrix<double, N, 1> X_solve;
+
+#if defined(CORENEURON_ENABLE_GPU)
         // In Eigen the default storage order is ColMajor.
         // Crout's implementation requires matrices stored in RowMajor order (C-style arrays).
         // Therefore, the transposeInPlace is critical such that the data() method to give the rows
@@ -83,8 +86,10 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
         // Check if J is singular
         if (nmodl::crout::Crout<double>(N, J.data(), pivot.data(), rowmax.data()) < 0)
             return -1;
-        Eigen::Matrix<double, N, 1> X_solve;
         nmodl::crout::solveCrout<double>(N, J.data(), F.data(), X_solve.data(), pivot.data());
+#else
+        X_solve = J.partialPivLu().solve(F);
+#endif
         X -= X_solve;
     }
     // If we fail to converge after max_iter iterations, return -1
