@@ -228,7 +228,7 @@ $(document).ready(function(){initNavTree('inline__visitor_8cpp_source.html','');
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment"></span> </div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment">    /// do nothing if we can&#39;t inline given procedure/function</span></div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment"></span>    <span class="keywordflow">if</span> (!can_inline_block(*callee.<a class="code" href="group__ast__class.html#ga684e856f3a95a7ec25941fdf5ebf53e3">get_statement_block</a>())) {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;warn(<span class="stringliteral">&quot;Can not inline function call to {}&quot;</span>, function_name);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;debug(<span class="stringliteral">&quot;Can not inline function call to {}&quot;</span>, function_name);</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
 <div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment"></span> </div>
