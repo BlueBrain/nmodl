@@ -13,8 +13,8 @@
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
 #include "parser/c11_driver.hpp"
+#include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
-
 
 namespace nmodl {
 namespace codegen {
@@ -748,14 +748,19 @@ CodegenInfo CodegenHelperVisitor::analyze(const ast::Program& node) {
 
 void CodegenHelperVisitor::visit_linear_block(const ast::LinearBlock& /* node */) {
     info.vectorize = false;
+    logger->warn("CodegenHelperVisitor : MOD file uses non-thread safe construct of NMODL: LINEAR");
 }
 
 void CodegenHelperVisitor::visit_non_linear_block(const ast::NonLinearBlock& /* node */) {
     info.vectorize = false;
+    logger->warn(
+        "CodegenHelperVisitor : MOD file uses non-thread safe construct of NMODL: NONLINEAR");
 }
 
 void CodegenHelperVisitor::visit_discrete_block(const ast::DiscreteBlock& /* node */) {
     info.vectorize = false;
+    logger->warn(
+        "CodegenHelperVisitor : MOD file uses non-thread safe construct of NMODL: DISCRETE");
 }
 
 void CodegenHelperVisitor::visit_update_dt(const ast::UpdateDt& node) {
