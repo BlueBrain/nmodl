@@ -7,6 +7,7 @@
 
 #pragma once
 
+#undef NMODL_WRAPPER_EXPORT
 #include "wrapper.hpp"
 
 namespace nmodl {

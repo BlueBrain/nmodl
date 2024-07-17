@@ -26,7 +26,7 @@
  * it's value and location.
  */
 
-using namespace nmodl;
+namespace nmodl {
 
 using parser::NmodlDriver;
 using parser::NmodlLexer;
@@ -133,3 +133,5 @@ int main(int argc, const char* argv[]) {
 
     return 0;
 }
+
+} // namespace nmodl
