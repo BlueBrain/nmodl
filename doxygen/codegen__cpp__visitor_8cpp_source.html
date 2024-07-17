@@ -1449,7 +1449,7 @@ $(document).ready(function(){initNavTree('codegen__cpp__visitor_8cpp_source.html
 <div class="line"><a name="l01353"></a><span class="lineno"> 1353</span>&#160;    info.<a class="code" href="structnmodl_1_1codegen_1_1_codegen_info.html#a713fd3d8497c602e733e755ffaffacac">mod_file</a> = mod_filename;</div>
 <div class="line"><a name="l01354"></a><span class="lineno"> 1354</span>&#160; </div>
 <div class="line"><a name="l01355"></a><span class="lineno"> 1355</span>&#160;    <span class="keywordflow">if</span> (info.mod_suffix == <span class="stringliteral">&quot;&quot;</span>) {</div>
-<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;        info.mod_suffix = std::filesystem::path(mod_filename).stem();</div>
+<div class="line"><a name="l01356"></a><span class="lineno"> 1356</span>&#160;        info.mod_suffix = std::filesystem::path(mod_filename).stem().string();</div>
 <div class="line"><a name="l01357"></a><span class="lineno"> 1357</span>&#160;    }</div>
 <div class="line"><a name="l01358"></a><span class="lineno"> 1358</span>&#160;    info.rsuffix = info.point_process ? <span class="stringliteral">&quot;&quot;</span> : <span class="stringliteral">&quot;_&quot;</span> + info.mod_suffix;</div>
 <div class="line"><a name="l01359"></a><span class="lineno"> 1359</span>&#160; </div>
