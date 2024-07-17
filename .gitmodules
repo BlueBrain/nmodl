@@ -24,4 +24,7 @@
 	url = https://github.com/catchorg/Catch2.git
 [submodule "ext/backward"]
 	path = ext/backward
-	url = https://github.com/bombela/backward-cpp.git
+	url = https://github.com/bombela/backward-cpp.gitS
+[submodule "ext/dlfcn-win32"]
+	path = ext/dlfcn-win32
+	url = https://github.com/dlfcn-win32/dlfcn-win32

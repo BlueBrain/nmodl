@@ -14,6 +14,9 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     set_source_files_properties("${pybind_file}" PROPERTIES COMPILE_OPTIONS
                                                             "${pybind_file_compile_options}")
   endforeach()
+elseif(MSVC)
+  # Required for large pynode_*.cpp object files
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif()
 
 # build nmodl python module under lib/nmodl
@@ -24,10 +27,14 @@ set_property(
   DIRECTORY
   APPEND
   PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../python/nmodl/ode.py)
+if(WIN32)
+  # MSVC can't handle long string literals
+  string(REGEX REPLACE "\n\n" "\n)jiowi\" R\"jiowi(\n" NMODL_ODE_PY "${NMODL_ODE_PY}")
+endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ode_py.hpp.inc ${CMAKE_CURRENT_BINARY_DIR}/ode_py.hpp
                @ONLY)
 
-add_library(pyembed pyembed.cpp)
+add_library(pyembed STATIC pyembed.cpp)
 set_property(TARGET pyembed PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(pyembed PRIVATE util)
 target_link_libraries(pyembed PRIVATE fmt::fmt)
@@ -51,9 +58,11 @@ target_include_directories(pywrapper PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 # pybind11::embed adds PYTHON_LIBRARIES to target_link_libraries. To avoid link to
 # libpython, we can use `module` interface library from pybind11.
 # ~~~
+target_link_libraries(pyembed PRIVATE ${CMAKE_DL_LIBS})
 if(NOT LINK_AGAINST_PYTHON)
   target_link_libraries(pywrapper PRIVATE pybind11::module)
 else()
+  target_link_libraries(pyembed PRIVATE ${PYTHON_LIBRARIES} pywrapper)
   target_link_libraries(pywrapper PRIVATE pybind11::embed)
 endif()
 

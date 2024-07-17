@@ -10,9 +10,10 @@
 #include <CLI/CLI.hpp>
 
 #include "config/config.h"
-#include "lexer/c11_lexer.hpp"
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
+
+#include "lexer/c11_lexer.hpp"
 
 /**
  * \file

@@ -16,6 +16,14 @@
 
     #include "parser/c11_driver.hpp"
     #include "parser/nmodl/location.hh"
+
+    /** Some Windows header has the nasty habit of defining CONST as a macro,
+      * this will interfere with one of our enum values later on. */
+    #ifdef CONST
+    #undef CONST
+    #undef DOUBLE
+    #undef VOID
+    #endif
 }
 
 /** use C++ parser interface of bison */
