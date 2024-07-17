@@ -208,7 +208,7 @@ void UnitTable::calc_denominator_dims(const std::shared_ptr<Unit>& unit,
             changed_denominator_name = false;
             for (const auto& it: prefixes) {
                 auto res =
-                    std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin());
+                    std::mismatch(it.first.begin(), it.first.end(), denominator_name.begin(), denominator_name.end());
                 if (res.first == it.first.end()) {
                     changed_denominator_name = true;
                     denominator_prefix_factor *= it.second;
