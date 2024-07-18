@@ -192,7 +192,7 @@ jobs:
         env:
           PYTHONMALLOC: malloc
         run:  |
-          ctest --output-on-failure -T Test
+          ctest --output-on-failure -T Test --test-dir=build
       - name: Install
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
