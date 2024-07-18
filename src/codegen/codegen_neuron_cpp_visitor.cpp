@@ -2160,7 +2160,8 @@ void CodegenNeuronCppVisitor::print_net_send_call(const ast::FunctionCall& node)
     }
     const auto& tqitem = get_variable_name("tqitem", /* use_instance */ false);
 
-    printer->fmt_text("net_send(/* tqitem */ &{}, {}, {}, {} + ",
+    printer->fmt_text("{}(/* tqitem */ &{}, {}, {}, {} + ",
+                      info.artificial_cell ? "artcell_net_send" : "net_send",
                       tqitem,
                       weight_pointer,
                       point_process,
