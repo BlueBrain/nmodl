@@ -190,6 +190,26 @@ int get_index_from_name(const std::vector<T>& variables, const std::string& name
     return static_cast<int>(it - variables.cbegin());
 }
 
+inline int get_length(const std::shared_ptr<symtab::Symbol>& sym) {
+    return sym->get_length();
+}
+
+inline int get_length(const IndexVariableInfo& var) {
+    return var.symbol->get_length();
+}
+
+template <class T>
+int get_prefixsum_from_name(const std::vector<T>& variables, const std::string& name) {
+    int index = 0;
+    for (const auto& var: variables) {
+        if (get_name(var) == name) {
+            return index;
+        }
+        index += get_length(var);
+    }
+    throw std::logic_error(name + " variable not found");
+}
+
 /** \} */  // end of codegen_details
 
 
