@@ -310,6 +310,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     std::string process_verbatim_text(std::string const& text) override;
 
+    std::vector<std::string> print_verbatim_setup(const std::string& verbatim);
+    void print_verbatim_cleanup(const std::vector<std::string>& macros_defined);
+
 
     /**
      * Arguments for register_mech or point_register_mech function
@@ -698,11 +701,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
 
-
+    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
-
-
-
 
   public:
     /****************************************************************************************/

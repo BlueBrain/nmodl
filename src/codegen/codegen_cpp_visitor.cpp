@@ -8,11 +8,13 @@
 
 #include <filesystem>
 
+#include "codegen/codegen_coreneuron_cpp_visitor.hpp"
 #include "config/config.h"
 
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
+#include "utils/string_utils.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -963,20 +965,6 @@ void CodegenCppVisitor::visit_statement_block(const StatementBlock& node) {
 
 void CodegenCppVisitor::visit_function_call(const FunctionCall& node) {
     print_function_call(node);
-}
-
-
-void CodegenCppVisitor::visit_verbatim(const Verbatim& node) {
-    const auto& text = node.get_statement()->eval();
-    const auto& result = process_verbatim_text(text);
-
-    const auto& statements = stringutils::split_string(result, '\n');
-    for (const auto& statement: statements) {
-        const auto& trimed_stmt = stringutils::trim_newline(statement);
-        if (trimed_stmt.find_first_not_of(' ') != std::string::npos) {
-            printer->add_line(trimed_stmt);
-        }
-    }
 }
 
 
