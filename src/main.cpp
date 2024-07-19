@@ -453,10 +453,8 @@ int main(int argc, const char* argv[]) {
 
         /// Parsing units fron "nrnunits.lib" and mod files
         {
-            logger->info("Parsing Units from '{}'", units_dir);
-            auto visitor = UnitsVisitor(units_dir);
-            logger->info("VISITING");
-            visitor.visit_program(*ast);
+            logger->info("Parsing Units");
+            UnitsVisitor(units_dir).visit_program(*ast);
         }
 
         /// once we start modifying (especially removing) older constructs
