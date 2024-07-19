@@ -169,6 +169,27 @@ struct ShadowUseStatement {
     std::string rhs;
 };
 
+inline std::string get_name(const std::shared_ptr<symtab::Symbol>& sym) {
+    return sym->get_name();
+}
+
+inline std::string get_name(const IndexVariableInfo& var) {
+    return var.symbol->get_name();
+}
+
+template <class T>
+int get_index_from_name(const std::vector<T>& variables, const std::string& name) {
+    auto it = std::find_if(variables.cbegin(), variables.cend(), [&name](const auto& var) {
+        return get_name(var) == name;
+    });
+
+    if (it == variables.cend()) {
+        throw std::runtime_error(fmt::format("Unknown variable: {}", name));
+    }
+
+    return static_cast<int>(it - variables.cbegin());
+}
+
 /** \} */  // end of codegen_details
 
 
