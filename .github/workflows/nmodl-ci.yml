@@ -26,15 +26,14 @@ jobs:
       - name: Install Dependencies
         run: |
           choco install winflexbison3
+          
+      - uses: actions/checkout@v4
 
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
         run: |
           python3 -m pip install -U pip setuptools
           python3 -m pip install --user -r requirements.txt
-
-
-      - uses: actions/checkout@v4
 
       - name: Configure
         run: |
