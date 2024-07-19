@@ -27,6 +27,8 @@ jobs:
         run: |
           choco install winflexbison
 
+      - uses: actions/checkout@v4
+
       - name: Configure
         run: |
           cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
