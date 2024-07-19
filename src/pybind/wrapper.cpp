@@ -5,7 +5,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#define NMODL_WRAPPER_EXPORT 1
 #include "wrapper.hpp"
 
 #include "codegen/codegen_naming.hpp"
@@ -14,7 +13,6 @@
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
-#include <iostream>
 #include <set>
 #include <vector>
 
@@ -80,30 +78,22 @@ std::tuple<std::vector<std::string>, std::string> call_solve_nonlinear_system(
                                  "vars"_a = vars,
                                  "function_calls"_a = function_calls);
     std::string script = R"(
-exception_message = ""
-try:
-    solutions = solve_non_lin_system(equation_strings,
+solutions = solve_non_lin_system(equation_strings,
                                      state_vars,
                                      vars,
                                      function_calls)
-except Exception as e:
-    # if we fail, fail silently and return empty string
-    solutions = [""]
-    new_local_vars = [""]
-    exception_message = str(e)
 )";
 
     try {
         py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     } catch (py::error_already_set &e) {
-        std::cerr << e.what() << std::endl;
+        return {{}, e.what()};
     }
-    // returns a vector of solutions, i.e. new statements to add to block:
-    auto solutions = locals["solutions"].cast<std::vector<std::string>>();
-    // may also return a python exception message:
-    auto exception_message = locals["exception_message"].cast<std::string>();
 
-    return {std::move(solutions), std::move(exception_message)};
+    // extract the vector of solutions, i.e. new statements to add to block:
+    auto solutions = locals["solutions"].cast<std::vector<std::string>>();
+
+    return {std::move(solutions), ""};
 }
 
 
