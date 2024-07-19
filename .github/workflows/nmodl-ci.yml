@@ -20,33 +20,6 @@ env:
   DESIRED_CMAKE_VERSION: 3.15.0
 
 jobs:
-  ci-win:
-    runs-on: windows-latest
-    steps:
-      - name: Install Dependencies
-        run: |
-          choco install winflexbison3
-          
-      - uses: actions/checkout@v4
-
-      - name: Install Python3 dependencies
-        working-directory: ${{runner.workspace}}/nmodl
-        run: |
-          python3 -m pip install -U pip setuptools
-          python3 -m pip install --user -r requirements.txt
-
-      - name: Configure
-        run: |
-          cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
-
-      - name: Build
-        run: |
-          cmake --build build
-
-      - name: Test
-        run: |
-          ctest --test-dir test
-
   ci:
     runs-on: ${{matrix.config.os}}
     name: ${{toJson(matrix.config)}}
@@ -63,6 +36,8 @@ jobs:
               os: macos-12
           - config:
               os: macos-13
+          - config:
+              os: windows-latest
           # TODO: might be interesting to add the thread sanitizer too
           - config:
               os: ubuntu-22.04
@@ -110,6 +85,11 @@ jobs:
           echo CMAKE_BUILD_PARALLEL_LEVEL=2 >> $GITHUB_ENV
         shell: bash
 
+      - name: Install choco packages
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          choco install winflexbison3
+
       - name: Set up Python3
         uses: actions/setup-python@v5
         with:
@@ -136,7 +116,13 @@ jobs:
         if: ${{matrix.config.sanitizer}}
         run: echo "::add-matcher::.github/problem-matchers/${{matrix.config.sanitizer}}.json"
 
-      - name: Configure
+      - name: Configure Windows
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
+
+      - name: Configure Linux/MacOS
+        if: !startsWith(matrix.config.os, 'windows')
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
