@@ -86,7 +86,7 @@ solutions = solve_non_lin_system(equation_strings,
 
     try {
         py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
-    } catch (py::error_already_set &e) {
+    } catch (py::error_already_set& e) {
         return {std::vector<std::string>{}, std::string(e.what())};
     }
 

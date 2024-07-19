@@ -16,7 +16,6 @@ foreach(modfile ${modfiles})
   else()
     set(TEST_PYTHON_PATH "${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
   endif()
-  set_tests_properties(${modfile_name}
-                       PROPERTIES ENVIRONMENT "PYTHONPATH=${TEST_PYTHON_PATH}")
+  set_tests_properties(${modfile_name} PROPERTIES ENVIRONMENT "PYTHONPATH=${TEST_PYTHON_PATH}")
   cpp_cc_configure_sanitizers(TEST ${modfile_name})
 endforeach()

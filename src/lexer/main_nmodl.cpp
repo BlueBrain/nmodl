@@ -106,12 +106,12 @@ void tokenize(const std::string& mod_text) {
     }
 }
 
-} // namespace nmodl
+}  // namespace nmodl
 
 
 int main(int argc, const char* argv[]) {
-    CLI::App app{
-        fmt::format("NMODL-Lexer : Standalone Lexer for NMODL Code({})", nmodl::Version::to_string())};
+    CLI::App app{fmt::format("NMODL-Lexer : Standalone Lexer for NMODL Code({})",
+                             nmodl::Version::to_string())};
 
     std::vector<std::string> mod_files;
     std::vector<std::string> mod_texts;
