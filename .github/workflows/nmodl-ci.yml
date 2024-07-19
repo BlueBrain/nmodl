@@ -20,6 +20,25 @@ env:
   DESIRED_CMAKE_VERSION: 3.15.0
 
 jobs:
+  ci-win:
+    runs-on: windows-latest
+    steps:
+      - name: Install Dependencies
+        run: |
+          choco install winflexbison
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
+
+      - name: Build
+        run: |
+          cmake --build build
+
+      - name: Test
+        run: |
+          ctest --test-dir test
+
   ci:
     runs-on: ${{matrix.config.os}}
     name: ${{toJson(matrix.config)}}
