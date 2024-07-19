@@ -14,6 +14,7 @@
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
+#include <iostream>
 #include <set>
 #include <vector>
 
@@ -92,7 +93,11 @@ except Exception as e:
     exception_message = str(e)
 )";
 
-    py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
+    try {
+        py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
+    } catch (py::error_already_set &e) {
+        std::cerr << e.what() << std::endl;
+    }
     // returns a vector of solutions, i.e. new statements to add to block:
     auto solutions = locals["solutions"].cast<std::vector<std::string>>();
     // may also return a python exception message:

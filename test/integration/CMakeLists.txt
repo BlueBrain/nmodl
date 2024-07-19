@@ -11,7 +11,12 @@ file(GLOB modfiles CONFIGURE_DEPENDS "${NMODL_PROJECT_SOURCE_DIR}/test/integrati
 foreach(modfile ${modfiles})
   get_filename_component(modfile_name "${modfile}" NAME)
   add_test(NAME ${modfile_name} COMMAND ${CMAKE_BINARY_DIR}/bin/nmodl ${modfile})
+  if(WIN32)
+    set(TEST_PYTHON_PATH "${PROJECT_BINARY_DIR}/lib;$ENV{PYTHONPATH}")
+  else()
+    set(TEST_PYTHON_PATH "${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
+  endif()
   set_tests_properties(${modfile_name}
-                       PROPERTIES ENVIRONMENT PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH})
+                       PROPERTIES ENVIRONMENT "PYTHONPATH=${TEST_PYTHON_PATH}")
   cpp_cc_configure_sanitizers(TEST ${modfile_name})
 endforeach()
