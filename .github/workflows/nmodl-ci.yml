@@ -185,7 +185,13 @@ jobs:
             ${{hashfiles('matrix.json')}}-
           save-always: true
 
-      - name: Build
+      - name: Build Windows
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          cmake --build build
+  
+      - name: Build Linux/MacOS
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
         env:
