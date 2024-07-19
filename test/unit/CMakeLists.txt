@@ -150,8 +150,8 @@ foreach(
   testvisitor
   testprinter
   testsymtab
-  # testnewton
-  # testcrout
+  testnewton
+  testcrout
   testunitlexer
   testunitparser)
 
@@ -182,13 +182,11 @@ endif()
 # pybind11 tests
 # =============================================================================
 add_test(NAME Ode COMMAND ${PYTHON_EXECUTABLE} -m pytest ${NMODL_PROJECT_SOURCE_DIR}/test/unit/ode)
-set_tests_properties(Ode PROPERTIES ENVIRONMENT
-                                    "PYTHONPATH=${TEST_PYTHON_PATH}")
+set_tests_properties(Ode PROPERTIES ENVIRONMENT "PYTHONPATH=${TEST_PYTHON_PATH}")
 
 if(NMODL_ENABLE_PYTHON_BINDINGS)
   add_test(NAME Pybind COMMAND ${PYTHON_EXECUTABLE} -m pytest
                                ${NMODL_PROJECT_SOURCE_DIR}/test/unit/pybind)
-  set_tests_properties(Pybind PROPERTIES ENVIRONMENT
-                                         "PYTHONPATH=${TEST_PYTHON_PATH}")
+  set_tests_properties(Pybind PROPERTIES ENVIRONMENT "PYTHONPATH=${TEST_PYTHON_PATH}")
   cpp_cc_configure_sanitizers(TEST Pybind PRELOAD)
 endif()

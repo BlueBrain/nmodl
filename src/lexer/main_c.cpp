@@ -12,7 +12,8 @@
 #include "parser/c11_driver.hpp"
 #include "utils/logger.hpp"
 
-// CLI11 includes Windows specific headers with macros that will interfere with the lexer, include it last.
+// CLI11 includes Windows specific headers with macros that will interfere with the lexer, include
+// it last.
 #include <CLI/CLI.hpp>
 
 /**
