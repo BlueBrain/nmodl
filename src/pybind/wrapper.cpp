@@ -87,7 +87,8 @@ solutions = solve_non_lin_system(equation_strings,
     try {
         py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     } catch (py::error_already_set &e) {
-        return {{}, std::string{e.what()}};
+        std::string message = e.what();
+        return {{}, std::move(message)};
     }
 
     // extract the vector of solutions, i.e. new statements to add to block:
