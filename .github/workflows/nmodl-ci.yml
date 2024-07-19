@@ -119,7 +119,7 @@ jobs:
       - name: Configure Windows
         if: startsWith(matrix.config.os, 'windows')
         run: |
-          cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
+          cmake -S . -B build -DFLEX_INCLUDE_PATH="C:/ProgramData/chocolatey/lib/winflexbison3/tools" -DBUILD_SHARED_LIBS=OFF
 
       - name: Configure Linux/MacOS
         if: !startsWith(matrix.config.os, 'windows')
