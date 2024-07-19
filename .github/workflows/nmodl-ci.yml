@@ -30,6 +30,7 @@ jobs:
               os: ubuntu-20.04
           - config:
               flag_warnings: ON
+              glibc_asserts: ON
               os: ubuntu-22.04
           - config:
               os: macos-12
@@ -113,7 +114,6 @@ jobs:
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
-          mkdir build && pushd build
           cmake_args=(-G Ninja
                       -DPYTHON_EXECUTABLE=$(which python3) \
                       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR)
@@ -134,11 +134,15 @@ jobs:
             CXX=$(command -v clang++-14)
           else
             CXX=${CXX:-g++}
+            if [[ -n "${{matrix.config.glibc_asserts}}" ]]; then
+              cmake_args+=(-DCMAKE_BUILD_TYPE=Debug \
+                           -DCMAKE_CXX_FLAGS=-D_GLIBCXX_DEBUG)
+            fi
           fi
           cmake_args+=(-DCMAKE_CXX_COMPILER=${CXX} \
                        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
           cmake_args+=(-DNMODL_ENABLE_BACKWARD=On)
-          cmake .. "${cmake_args[@]}"
+          cmake -B build -S . "${cmake_args[@]}"
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
@@ -164,7 +168,7 @@ jobs:
 
       - name: Build
         shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
+        working-directory: ${{runner.workspace}}/nmodl
         env:
           CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
@@ -180,7 +184,7 @@ jobs:
           ccache -z
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
-          cmake --build .
+          cmake --build build
           ccache -vs 2>/dev/null || ccache -s
       - name: Test
         shell: bash
@@ -191,9 +195,9 @@ jobs:
           ctest --output-on-failure -T Test
       - name: Install
         shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
+        working-directory: ${{runner.workspace}}/nmodl
         run:  |
-          cmake --build . --target install
+          cmake --install build
 
       - name: Update references
         if: matrix.config.update_references == 'On'
