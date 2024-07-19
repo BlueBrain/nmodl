@@ -124,7 +124,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                     Common helper routines accross codegen functions                 */
     /****************************************************************************************/
 
-
     /**
      * Determine the position in the data array for a given float variable
      * \param name The name of a float variable

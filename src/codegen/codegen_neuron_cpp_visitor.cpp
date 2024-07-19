@@ -597,6 +597,9 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
                                                        const std::string& name,
                                                        bool use_instance) const {
     auto position = position_of_int_var(name);
+    if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
+        return fmt::format("(nrnran123_State*) _ppvar[{}].get<void*>()", position);
+    }
     if (symbol.is_index) {
         if (use_instance) {
             throw std::runtime_error("Not implemented. [wiejo]");
