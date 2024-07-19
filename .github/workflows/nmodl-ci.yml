@@ -90,6 +90,10 @@ jobs:
         run: |
           choco install winflexbison3
 
+      - name: Configure VS Toolchain (Windows)
+        if: startsWith(matrix.config.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Set up Python3
         uses: actions/setup-python@v5
         with:
