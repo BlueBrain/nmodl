@@ -164,6 +164,7 @@ jobs:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
       - name: Dump config dictionary
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         run: |
           cat << EOF > matrix.json
           ${{toJSON(matrix.config)}}
