@@ -125,7 +125,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        Eigen::Matrix&lt;double, 1, 1&gt; X{22.2536};</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        Eigen::Matrix&lt;double, 1, 1&gt; F;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;1, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        THEN(<span class="stringliteral">&quot;find the solution&quot;</span>) {</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            CAPTURE(iter_newton);</div>
@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        Eigen::Matrix&lt;double, 1, 1&gt; X{-0.21421};</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        Eigen::Matrix&lt;double, 1, 1&gt; F;</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;1, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        THEN(<span class="stringliteral">&quot;find the solution&quot;</span>) {</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            CAPTURE(iter_newton);</div>
@@ -168,7 +168,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        Eigen::Matrix&lt;double, 2, 1&gt; X{0.2, 0.4};</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        Eigen::Matrix&lt;double, 2, 1&gt; F;</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;2, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;            CAPTURE(iter_newton);</div>
@@ -199,7 +199,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        Eigen::Matrix&lt;double, 3, 1&gt; X{0.21231, 0.4435, -0.11537};</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        Eigen::Matrix&lt;double, 3, 1&gt; F;</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;3, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            CAPTURE(iter_newton);</div>
@@ -227,7 +227,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        Eigen::Matrix&lt;double, 4, 1&gt; X{0.21231, 0.4435, -0.11537, -0.8124312};</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        Eigen::Matrix&lt;double, 4, 1&gt; F;</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;4, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            CAPTURE(iter_newton);</div>
@@ -253,7 +253,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        X &lt;&lt; 8.234, -245.46, 123.123, 0.8343, 5.555;</div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        Eigen::Matrix&lt;double, 5, 1&gt; F;</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;5, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            CAPTURE(iter_newton);</div>
@@ -286,7 +286,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        X &lt;&lt; 8.234, -5.46, 1.123, 0.8343, 5.555, 18.234, -2.46, 0.123, 10.8343, -4.685;</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        Eigen::Matrix&lt;double, 10, 1&gt; F;</div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">newton::newton_numerical_diff_solver</a>(X, fn);</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_numerical_diff_solver&lt;10, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        fn(X, F);</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            CAPTURE(iter_newton);</div>
@@ -507,7 +507,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        Eigen::Matrix&lt;double, 5, 1&gt; F;</div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;        Eigen::Matrix&lt;double, 5, 5&gt; J;</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">newton::newton_solver</a>(X, fn);</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_solver&lt;5, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        fn(X, F, J);</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            CAPTURE(iter_newton);</div>
@@ -643,7 +643,7 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        Eigen::Matrix&lt;double, 10, 1&gt; F;</div>
 <div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        Eigen::Matrix&lt;double, 10, 10&gt; J;</div>
 <div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        functor fn;</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="keywordtype">int</span> iter_newton = <a class="code" href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">newton::newton_solver</a>(X, fn);</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="keywordtype">int</span> iter_newton = newton::newton_solver&lt;10, functor&gt;(X, fn);</div>
 <div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        fn(X, F, J);</div>
 <div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        THEN(<span class="stringliteral">&quot;find a solution&quot;</span>) {</div>
 <div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            CAPTURE(iter_newton);</div>
@@ -660,7 +660,6 @@ $(document).ready(function(){initNavTree('newton_8cpp_source.html',''); initResi
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates code generation backend implementations</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="anewton_8cpp_html_a17e17aa2090ed54837c948d288773881"><div class="ttname"><a href="newton_8cpp.html#a17e17aa2090ed54837c948d288773881">SCENARIO</a></div><div class="ttdeci">SCENARIO(&quot;Non-linear system to solve with Newton Numerical Diff Solver&quot;, &quot;[numerical][solver]&quot;)</div><div class="ttdef"><b>Definition:</b> <a href="newton_8cpp_source.html#l00020">newton.cpp:20</a></div></div>
 <div class="ttc" id="anewton_8cpp_html_a9bff158456de7b1bf3c4a50ef96294ac"><div class="ttname"><a href="newton_8cpp.html#a9bff158456de7b1bf3c4a50ef96294ac">max_error_norm</a></div><div class="ttdeci">constexpr double max_error_norm</div><div class="ttdef"><b>Definition:</b> <a href="newton_8cpp_source.html#l00017">newton.cpp:17</a></div></div>
-<div class="ttc" id="agroup__solver_html_ga71c2b3d219b9f05ab3faea6ed1e71fef"><div class="ttname"><a href="group__solver.html#ga71c2b3d219b9f05ab3faea6ed1e71fef">nmodl::newton::newton_numerical_diff_solver</a></div><div class="ttdeci">EIGEN_DEVICE_FUNC int newton_numerical_diff_solver(Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, FUNC functor, double eps=EPS, int max_iter=MAX_ITER)</div><div class="ttdoc">Newton method without user-provided Jacobian.</div><div class="ttdef"><b>Definition:</b> <a href="newton_8hpp_source.html#l00115">newton.hpp:115</a></div></div>
 <div class="ttc" id="agroup__solver_html_ga553e5133f871206a1ad6ab4fc10bde45"><div class="ttname"><a href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">nmodl::newton::newton_solver</a></div><div class="ttdeci">EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, FUNC functor, double eps=EPS, int max_iter=MAX_ITER)</div><div class="ttdoc">Newton method with user-provided Jacobian.</div><div class="ttdef"><b>Definition:</b> <a href="newton_8hpp_source.html#l00056">newton.hpp:56</a></div></div>
 <!-- HTML footer for doxygen 1.8.15-->
 <!-- start footer part -->

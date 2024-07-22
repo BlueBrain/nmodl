@@ -29,5 +29,11 @@ var codegen__cpp__visitor_8hpp =
       [ "range", "codegen__cpp__visitor_8hpp.html#ggab185b9278fbfff591fbe3da84ba22d0ba37b19816109a32106d109e83bbb3c97d", null ],
       [ "global", "codegen__cpp__visitor_8hpp.html#ggab185b9278fbfff591fbe3da84ba22d0ba9c70933aff6b2a6d08c687a6cbb6b765", null ],
       [ "thread", "codegen__cpp__visitor_8hpp.html#ggab185b9278fbfff591fbe3da84ba22d0badc127f5d2483352fd20eaddb38feb6d2", null ]
-    ] ]
+    ] ],
+    [ "get_index_from_name", "codegen__cpp__visitor_8hpp.html#ga26c6760d6a41a6c64a8b4a7b431562f0", null ],
+    [ "get_length", "codegen__cpp__visitor_8hpp.html#ga7c0e8fc9aadefdc80e51e6d3fc2a748d", null ],
+    [ "get_length", "codegen__cpp__visitor_8hpp.html#ga207530f6d3d65c81d38a9d754d43f8b7", null ],
+    [ "get_name", "codegen__cpp__visitor_8hpp.html#ga207b386a660ce6cbdd3878e0c55926a0", null ],
+    [ "get_name", "codegen__cpp__visitor_8hpp.html#ga352ff88d761a8223947290e7ad7e7b07", null ],
+    [ "get_prefixsum_from_name", "codegen__cpp__visitor_8hpp.html#ga9a9a3fed3ccfd3e8db280b27163aacbb", null ]
 ];

@@ -88,16 +88,16 @@ var NAVTREEINDEX =
 "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a2c54e8e496361323ec70f9cadca3858d",
 "classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a412126f3cd2b3b20951cba92ca17e7b3",
 "classnmodl_1_1visitor_1_1_visitor.html#a810cd11fb1f4c27f176f0c48301bf20f",
-"codegen__naming_8hpp.html#a19fc3dd0e36be8186ea6e0a4bd6c6660",
-"external_8hpp_source.html",
-"group__ast__class.html#ga6d8c02bfb7a35cf3ac7858e61f24bf00",
-"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a527342100cc944bc5df6f18ad3a62a4a",
-"group__solver.html#ga73227f2ab37d3b7c9036f3fe7532da73",
-"misc_8cpp_source.html",
-"pyembed_8cpp.html#a9677aab117939d005ba08f5658e996c3",
-"structnmodl_1_1codegen_1_1_codegen_info.html#af49fe1ab8d7c35c937585ce7ac7992df",
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbac8de66f1a4787fe20ffdde46def4be3a",
-"verbatim__visitor_8cpp.html"
+"codegen__naming_8hpp.html#a0045fd6f49fae28de5171e28a2502084",
+"expression_8hpp_source.html",
+"group__ast__class.html#ga6a8e5076ce68736223774b02972fdfa8",
+"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4d34f53389ed7f28ca91fc31ea360a66",
+"group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba9c70933aff6b2a6d08c687a6cbb6b765",
+"loop__unroll_8cpp.html#a5c7c718342628b4fbefceb778478db8a",
+"program_8hpp.html",
+"structnmodl_1_1codegen_1_1_codegen_info.html#ad173d2b9f305f30ca7c87f71ff2b28eb",
+"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba9b0129aafa77fbe64fd8092a39d79079",
+"verbatim_8cpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

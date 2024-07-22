@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['json_1178',['json',['../namespacenmodl_1_1printer.html#a830e29d2781fc2c3b7152b4e1e2a04eb',1,'nmodl::printer::json()'],['../json_8cpp.html#ab701e3ac61a85b337ec5c1abaad6742d',1,'json():&#160;json.cpp']]],
-  ['json_2ecpp_1179',['json.cpp',['../json_8cpp.html',1,'']]],
-  ['json_5fprinter_2ecpp_1180',['json_printer.cpp',['../json__printer_8cpp.html',1,'']]],
-  ['json_5fprinter_2ehpp_1181',['json_printer.hpp',['../json__printer_8hpp.html',1,'']]],
-  ['json_5fvisitor_2ecpp_1182',['json_visitor.cpp',['../json__visitor_8cpp.html',1,'']]],
-  ['json_5fvisitor_2ehpp_1183',['json_visitor.hpp',['../json__visitor_8hpp.html',1,'']]],
-  ['jsonprinter_1184',['JSONPrinter',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html',1,'nmodl::printer::JSONPrinter'],['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#a5df63543ae8dd21b3458cc15e8e34ccd',1,'nmodl::printer::JSONPrinter::JSONPrinter(const std::string &amp;filename)'],['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#afb5cfbbcfad4b6a78c219e743ee7261c',1,'nmodl::printer::JSONPrinter::JSONPrinter()'],['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#ae6651a64ed3ec719c121370b4c8d7e56',1,'nmodl::printer::JSONPrinter::JSONPrinter(std::ostream &amp;os)']]],
-  ['jsonvisitor_1185',['JSONVisitor',['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html',1,'nmodl::visitor::JSONVisitor'],['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a702a5cb5d7b7181a01e59367af89a437',1,'nmodl::visitor::JSONVisitor::JSONVisitor()'],['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a9c5f2c424edbc4b5d82e250d30b6707a',1,'nmodl::visitor::JSONVisitor::JSONVisitor(std::string filename)'],['../classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#ace1410eb245187a0233b1b504930ede8',1,'nmodl::visitor::JSONVisitor::JSONVisitor(std::ostream &amp;ss)']]]
+  ['k_5fb_1187',['k_b',['../structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html#a37784e80a83ac79bbe1afc8934aaa099',1,'nmodl::visitor::KineticBlockVisitor::RateEqs']]],
+  ['k_5ff_1188',['k_f',['../structnmodl_1_1visitor_1_1_kinetic_block_visitor_1_1_rate_eqs.html#addb0baf3354fda34a4ba34b5263b4624',1,'nmodl::visitor::KineticBlockVisitor::RateEqs']]],
+  ['kb_5fstem_1189',['kb_stem',['../classnmodl_1_1visitor_1_1_local_rate_names.html#ab6bf1511eb36388e77bb55c3866317e5',1,'nmodl::visitor::LocalRateNames']]],
+  ['keys_1190',['keys',['../structnmodl_1_1utils_1_1_perf_stat.html#ae253575915ad0a83b66d3fc740b15bc2',1,'nmodl::utils::PerfStat']]],
+  ['keyword_5ftype_1191',['keyword_type',['../namespacenmodl_1_1details.html#ac7dd6707d4aedf9e72c6ea049adc6d79',1,'nmodl::details']]],
+  ['keywords_1192',['keywords',['../namespacenmodl_1_1details.html#a19154f9c7b5074c9177b1da18950f29d',1,'nmodl::details']]],
+  ['kf_5fstem_1193',['kf_stem',['../classnmodl_1_1visitor_1_1_local_rate_names.html#a7cb0cdd2e203711146457ca55f87b45c',1,'nmodl::visitor::LocalRateNames']]],
+  ['kinetic_5fblock_1194',['kinetic_block',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dba806afad5f66c1de108516de837610832',1,'nmodl::symtab::syminfo::kinetic_block()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa5e16f03b03b7646a6957397f874a5d4',1,'nmodl::ast::KINETIC_BLOCK()']]],
+  ['kinetic_5fblock_2ecpp_1195',['kinetic_block.cpp',['../kinetic__block_8cpp.html',1,'']]],
+  ['kinetic_5fblock_2ehpp_1196',['kinetic_block.hpp',['../kinetic__block_8hpp.html',1,'']]],
+  ['kinetic_5fblock_5fvisitor_2ecpp_1197',['kinetic_block_visitor.cpp',['../kinetic__block__visitor_8cpp.html',1,'']]],
+  ['kinetic_5fblock_5fvisitor_2ehpp_1198',['kinetic_block_visitor.hpp',['../kinetic__block__visitor_8hpp.html',1,'']]],
+  ['kinetic_5fblocks_1199',['kinetic_blocks',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a551c497d949835b6fccc59280c8eab42',1,'nmodl::visitor::KineticBlockVisitor']]],
+  ['kineticblock_1200',['KineticBlock',['../classnmodl_1_1ast_1_1_kinetic_block.html',1,'nmodl::ast::KineticBlock'],['../classnmodl_1_1ast_1_1_kinetic_block.html#a088fdab45de03a81445505411ccab6a4',1,'nmodl::ast::KineticBlock::KineticBlock(Name *name, const NameVector &amp;solvefor, StatementBlock *statement_block)'],['../classnmodl_1_1ast_1_1_kinetic_block.html#a9af42909b0e560a909b5a7d16554aae0',1,'nmodl::ast::KineticBlock::KineticBlock(std::shared_ptr&lt; Name &gt; name, const NameVector &amp;solvefor, std::shared_ptr&lt; StatementBlock &gt; statement_block)'],['../classnmodl_1_1ast_1_1_kinetic_block.html#a975762f6c37f5647b0b1ce6cf295b257',1,'nmodl::ast::KineticBlock::KineticBlock(const KineticBlock &amp;obj)']]],
+  ['kineticblockvector_1201',['KineticBlockVector',['../group__ast__vec__type.html#ga56f19955b2a868f6a6952f8aee68b397',1,'nmodl::ast']]],
+  ['kineticblockvisitor_1202',['KineticBlockVisitor',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html',1,'nmodl::visitor::KineticBlockVisitor'],['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a2a8227b9359723390be386d527df096c',1,'nmodl::visitor::KineticBlockVisitor::KineticBlockVisitor()']]],
+  ['kinf_1203',['KINF',['../modl_8h.html#aa9461dc2be3a692011544d7b6017b0f2',1,'modl.h']]]
 ];
