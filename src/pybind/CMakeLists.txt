@@ -25,8 +25,8 @@ set_property(
   APPEND
   PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../python/nmodl/ode.py)
 if(WIN32)
-  # MSVC can't handle long string literals, even if the documentation claims so
-  # See https://developercommunity.visualstudio.com/t/c-string-literal-max-length-much-shorter-than-docu/758957
+  # MSVC can't handle long string literals, even if the documentation claims so See
+  # https://developercommunity.visualstudio.com/t/c-string-literal-max-length-much-shorter-than-docu/758957
   string(REGEX REPLACE "\n\n" "\n)jiowi\" R\"jiowi(\n" NMODL_ODE_PY "${NMODL_ODE_PY}")
 endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ode_py.hpp.inc ${CMAKE_CURRENT_BINARY_DIR}/ode_py.hpp

@@ -13,7 +13,6 @@
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
-#include <iostream>
 #include <set>
 #include <vector>
 
@@ -92,11 +91,7 @@ except Exception as e:
     exception_message = str(e)
 )";
 
-    try {
-        py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
-    } catch (py::error_already_set &e) {
-        std::cerr << e.what() << std::endl;
-    }
+    py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
     // returns a vector of solutions, i.e. new statements to add to block:
     auto solutions = locals["solutions"].cast<std::vector<std::string>>();
     // may also return a python exception message:
@@ -198,7 +193,7 @@ void finalize_interpreter_func() {
 
 // Prevent mangling for easier `dlsym`.
 extern "C" {
-NMODL_EXPORT pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
+__attribute__((visibility("default"))) pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
     return {&nmodl::pybind_wrappers::initialize_interpreter_func,
             &nmodl::pybind_wrappers::finalize_interpreter_func,
             &call_solve_nonlinear_system,
