@@ -25,3 +25,6 @@
 [submodule "ext/backward"]
 	path = ext/backward
 	url = https://github.com/bombela/backward-cpp.git
+[submodule "ext/dlfcn-win32"]
+	path = ext/dlfcn-win32
+	url = https://github.com/dlfcn-win32/dlfcn-win32
