@@ -68,18 +68,8 @@ fs::path get_solver_path(const fs::path& directory, const std::string& solver) {
     return path;
 }
 
-bool check_solvers(const std::string& directory) {
-    for (const auto& solver: nmodl::solver::get_names()) {
-        const auto& path = get_solver_path(directory, solver);
-        if (!fs::exists(path)) {
-            return false;
-        }
-    }
-    return true;
-}
-
-void dump_solvers(const std::string& directory,
-                  const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
+void write_shared_headers(const std::string& directory,
+                          const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
     fs::path output(directory);
 
     for (const auto& solver: solvers) {
@@ -167,9 +157,6 @@ int main(int argc, const char* argv[]) {
     /// true if ion variable copies should be avoided
     bool optimize_ionvar_copies_codegen(false);
 
-    /// true if we should not generate the solver headers
-    bool skip_dump_solvers(false);
-
     /// directory where code will be generated
     std::string output_dir(".");
 
@@ -217,16 +204,15 @@ int main(int argc, const char* argv[]) {
         ->ignore_case();
 
     app.add_option_function<std::vector<std::string>>(
-           "--dump-solvers",
+           "--write-shared-headers",
            [&](const std::vector<std::string>& solvers) {
-               dump_solvers(output_dir, solvers);
+               write_shared_headers(output_dir, solvers);
                exit(0);
            },
            "Create solver headers in directory and exit")
         ->expected(1, 2)
         ->check(CLI::IsMember(nmodl::solver::get_names()));
 
-    app.add_flag("--no-dump-solvers", skip_dump_solvers, "Skip generating solvers if not present");
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output")
         ->capture_default_str()
         ->ignore_case();
@@ -348,18 +334,6 @@ int main(int argc, const char* argv[]) {
             logger->info("AST to NMODL transformation written to {}", filepath);
         }
     };
-
-    if (skip_dump_solvers) {
-        if (!check_solvers(output_dir)) {
-            logger->error(
-                "Solvers not found in output directory.  Please use --dump-solvers first");
-        }
-    } else {
-        // Unconditionally update the solver files to ensure that they are compatible with
-        // the current NMODL version.
-        dump_solvers(output_dir);
-    }
-
 
     for (const auto& file: mod_files) {
         logger->info("Processing {}", file.string());
