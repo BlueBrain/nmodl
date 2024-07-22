@@ -30,11 +30,14 @@ jobs:
               os: ubuntu-20.04
           - config:
               flag_warnings: ON
+              glibc_asserts: ON
               os: ubuntu-22.04
           - config:
               os: macos-12
           - config:
               os: macos-13
+          - config:
+              os: windows-latest
           # TODO: might be interesting to add the thread sanitizer too
           - config:
               os: ubuntu-22.04
@@ -82,6 +85,15 @@ jobs:
           echo CMAKE_BUILD_PARALLEL_LEVEL=2 >> $GITHUB_ENV
         shell: bash
 
+      - name: Install choco packages
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          choco install winflexbison3
+
+      - name: Configure VS Toolchain (Windows)
+        if: startsWith(matrix.config.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
+
       - name: Set up Python3
         uses: actions/setup-python@v5
         with:
@@ -108,12 +120,17 @@ jobs:
         if: ${{matrix.config.sanitizer}}
         run: echo "::add-matcher::.github/problem-matchers/${{matrix.config.sanitizer}}.json"
 
-      - name: Configure
+      - name: Configure Windows
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          cmake -S . -B build -DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools -DBUILD_SHARED_LIBS=OFF
+
+      - name: Configure Linux/MacOS
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
         run:  |
           echo "------- Configure -------"
-          mkdir build && pushd build
           cmake_args=(-G Ninja
                       -DPYTHON_EXECUTABLE=$(which python3) \
                       -DCMAKE_INSTALL_PREFIX=$INSTALL_DIR)
@@ -134,15 +151,20 @@ jobs:
             CXX=$(command -v clang++-14)
           else
             CXX=${CXX:-g++}
+            if [[ -n "${{matrix.config.glibc_asserts}}" ]]; then
+              cmake_args+=(-DCMAKE_BUILD_TYPE=Debug \
+                           -DCMAKE_CXX_FLAGS=-D_GLIBCXX_DEBUG)
+            fi
           fi
           cmake_args+=(-DCMAKE_CXX_COMPILER=${CXX} \
                        -DCMAKE_CXX_COMPILER_LAUNCHER=ccache)
           cmake_args+=(-DNMODL_ENABLE_BACKWARD=On)
-          cmake .. "${cmake_args[@]}"
+          cmake -B build -S . "${cmake_args[@]}"
         env:
           INSTALL_DIR: ${{ runner.workspace }}/install
 
       - name: Dump config dictionary
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         run: |
           cat << EOF > matrix.json
           ${{toJSON(matrix.config)}}
@@ -152,6 +174,7 @@ jobs:
           echo -----
 
       - name: Restore compiler cache
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         uses: actions/cache@v4
         with:
           path: |
@@ -162,9 +185,15 @@ jobs:
             ${{hashfiles('matrix.json')}}-
           save-always: true
 
-      - name: Build
+      - name: Build Windows
+        if: startsWith(matrix.config.os, 'windows')
+        run: |
+          cmake --build build
+  
+      - name: Build Linux/MacOS
+        if: ${{ !startsWith(matrix.config.os, 'windows') }}
         shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
+        working-directory: ${{runner.workspace}}/nmodl
         env:
           CCACHE_BASEDIR: ${{runner.workspace}}/nmodl
           CCACHE_DIR: ${{runner.workspace}}/ccache
@@ -180,7 +209,7 @@ jobs:
           ccache -z
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
-          cmake --build .
+          cmake --build build
           ccache -vs 2>/dev/null || ccache -s
       - name: Test
         shell: bash
@@ -191,9 +220,9 @@ jobs:
           ctest --output-on-failure -T Test
       - name: Install
         shell: bash
-        working-directory: ${{runner.workspace}}/nmodl/build
+        working-directory: ${{runner.workspace}}/nmodl
         run:  |
-          cmake --build . --target install
+          cmake --install build
 
       - name: Update references
         if: matrix.config.update_references == 'On'

@@ -72,8 +72,8 @@ bool CodegenCppVisitor::has_parameter_of_name(const T& node, const std::string& 
 }
 
 
-std::string CodegenCppVisitor::table_function_prefix() const {
-    return "lazy_update_";
+std::string CodegenCppVisitor::table_update_function_name(const std::string& block_name) const {
+    return "update_table_" + method_name(block_name);
 }
 
 
@@ -404,17 +404,7 @@ std::pair<std::string, std::string> CodegenCppVisitor::write_ion_variable_name(
 
 
 int CodegenCppVisitor::get_int_variable_index(const std::string& var_name) {
-    auto it = std::find_if(codegen_int_variables.cbegin(),
-                           codegen_int_variables.cend(),
-                           [&var_name](const auto& int_var) {
-                               return int_var.symbol->get_name() == var_name;
-                           });
-
-    if (it == codegen_int_variables.cend()) {
-        throw std::runtime_error(fmt::format("Unknown int variable: {}", var_name));
-    }
-
-    return static_cast<int>(it - codegen_int_variables.cbegin());
+    return get_index_from_name(codegen_int_variables, var_name);
 }
 
 
@@ -473,9 +463,7 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
         }
         return {name, false};
     };
-    std::string function_name;
-    bool is_random_function;
-    std::tie(function_name, is_random_function) = get_renamed_random_function(name);
+    auto [function_name, is_random_function] = get_renamed_random_function(name);
 
     if (defined_method(name)) {
         function_name = method_name(name);
@@ -1353,7 +1341,7 @@ void CodegenCppVisitor::setup(const Program& node) {
     info.mod_file = mod_filename;
 
     if (info.mod_suffix == "") {
-        info.mod_suffix = std::filesystem::path(mod_filename).stem();
+        info.mod_suffix = std::filesystem::path(mod_filename).stem().string();
     }
     info.rsuffix = info.point_process ? "" : "_" + info.mod_suffix;
 
@@ -1524,9 +1512,8 @@ void CodegenCppVisitor::print_table_check_function(const Block& node) {
     auto float_type = default_float_data_type();
 
     printer->add_newline(2);
-    printer->fmt_push_block("void {}{}({})",
-                            table_function_prefix(),
-                            method_name(name),
+    printer->fmt_push_block("void {}({})",
+                            table_update_function_name(name),
                             get_parameter_str(internal_params));
     {
         printer->fmt_push_block("if ({} == 0)", use_table_var);

@@ -11,6 +11,7 @@
 #include <chrono>
 #include <cmath>
 #include <ctime>
+#include <optional>
 #include <regex>
 #include <stdexcept>
 
@@ -60,30 +61,13 @@ std::string CodegenNeuronCppVisitor::table_thread_function_name() const {
 /*                     Common helper routines accross codegen functions                 */
 /****************************************************************************************/
 
-
 int CodegenNeuronCppVisitor::position_of_float_var(const std::string& name) const {
-    const auto has_name = [&name](const SymbolType& symbol) { return symbol->get_name() == name; };
-    const auto var_iter =
-        std::find_if(codegen_float_variables.begin(), codegen_float_variables.end(), has_name);
-    if (var_iter != codegen_float_variables.end()) {
-        return var_iter - codegen_float_variables.begin();
-    } else {
-        throw std::logic_error(name + " variable not found");
-    }
+    return get_index_from_name(codegen_float_variables, name);
 }
 
 
 int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const {
-    const auto has_name = [&name](const IndexVariableInfo& index_var_symbol) {
-        return index_var_symbol.symbol->get_name() == name;
-    };
-    const auto var_iter =
-        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), has_name);
-    if (var_iter != codegen_int_variables.end()) {
-        return var_iter - codegen_int_variables.begin();
-    } else {
-        throw std::logic_error(name + " variable not found");
-    }
+    return get_index_from_name(codegen_int_variables, name);
 }
 
 
@@ -164,9 +148,8 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     for (const auto& function: info.functions_with_table) {
         auto name = function->get_node_name();
         auto internal_params = internal_method_parameters();
-        printer->fmt_line("void {}{}({});",
-                          table_function_prefix(),
-                          method_name(name),
+        printer->fmt_line("void {}({});",
+                          table_update_function_name(name),
                           get_parameter_str(internal_params));
     }
 
@@ -192,10 +175,9 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     }
 
     for (const auto& function: info.functions_with_table) {
-        auto method_name_str = function->get_node_name();
-        auto method_args_str = get_arg_str(internal_method_parameters());
-        printer->fmt_line(
-            "{}{}{}({});", table_function_prefix(), method_name_str, info.rsuffix, method_args_str);
+        auto method_name = function->get_node_name();
+        auto method_args = get_arg_str(internal_method_parameters());
+        printer->fmt_line("{}({});", table_update_function_name(method_name), method_args);
     }
     printer->pop_block();
 }
@@ -403,9 +385,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
                           info.thread_var_thread_id);
     }
     if (info.function_uses_table(block_name)) {
-        printer->fmt_line("{}{}({});",
-                          table_function_prefix(),
-                          method_name(block_name),
+        printer->fmt_line("{}({});",
+                          table_update_function_name(block_name),
                           internal_method_arguments());
     }
     const auto get_func_call_str = [&]() {
@@ -770,10 +751,10 @@ void CodegenNeuronCppVisitor::print_standard_includes() {
         #include <math.h>
         #include <stdio.h>
         #include <stdlib.h>
+        #include <vector>
     )CODE");
-    printer->add_multi_line(nmodl::solvers::newton_hpp);
-    if (!info.vectorize) {
-        printer->add_line("#include <vector>");
+    if (info.eigen_newton_solver_exist) {
+        printer->add_multi_line(nmodl::solvers::newton_hpp);
     }
 }
 
@@ -831,15 +812,8 @@ void CodegenNeuronCppVisitor::print_sdlists_init([[maybe_unused]] bool print_ini
 }
 
 CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::functor_params() {
-    auto params = ParamVector{};
-    params.push_back({"", "NrnThread*", "", "nt"});
-    params.push_back({"", fmt::format("{}&", instance_struct()), "", "inst"});
-    params.push_back({"", "int", "", "id"});
+    auto params = internal_method_parameters();
     params.push_back({"", "double", "", "v"});
-    params.push_back({"", "Datum*", "", "_thread"});
-    if (!codegen_thread_variables.empty()) {
-        params.push_back({"", fmt::format("{}&", thread_variables_struct()), "", "_thread_vars"});
-    }
 
     return params;
 }
@@ -980,6 +954,17 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         codegen_global_variables.push_back(var);
     }
 
+    for (const auto& var: info.constant_variables) {
+        auto const name = var->get_name();
+        auto* const value_ptr = var->get_value().get();
+        double const value{value_ptr ? *value_ptr : 0};
+        printer->fmt_line("{} {}{};",
+                          float_type,
+                          name,
+                          print_initializers ? fmt::format("{{{:g}}}", value) : std::string{});
+        codegen_global_variables.push_back(var);
+    }
+
 
     // for (const auto& f: info.function_tables) {
     if (!info.function_tables.empty()) {
@@ -995,29 +980,40 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
 
     print_global_var_struct_assertions();
     print_global_var_struct_decl();
+
+    print_global_param_default_values();
 }
 
-/// TODO: Same as CoreNEURON?
+void CodegenNeuronCppVisitor::print_global_param_default_values() {
+    printer->push_block("static std::vector<double> _parameter_defaults =");
+
+    std::vector<std::string> defaults;
+    for (const auto& p: info.range_parameter_vars) {
+        double value = p->get_value() == nullptr ? 0.0 : *p->get_value();
+        defaults.push_back(fmt::format("{:g} /* {} */", value, p->get_name()));
+    }
+
+    printer->add_multi_line(fmt::format("{}", fmt::join(defaults, ",\n")));
+    printer->pop_block(";");
+}
+
 void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
-    /// TODO: Write HocParmLimits and other HOC global variables (delta_t)
-    // Probably needs more changes
-    auto variable_printer =
-        [&](const std::vector<SymbolType>& variables, bool if_array, bool if_vector) {
-            for (const auto& variable: variables) {
-                if (variable->is_array() == if_array) {
-                    // false => do not use the instance struct, which is not
-                    // defined in the global declaration that we are printing
-                    auto name = get_variable_name(variable->get_name(), false);
-                    auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
+    auto variable_printer = [&](const std::vector<SymbolType>& variables, bool if_array) {
+        for (const auto& variable: variables) {
+            if (variable->is_array() == if_array) {
+                // false => do not use the instance struct, which is not
+                // defined in the global declaration that we are printing
+                auto name = get_variable_name(variable->get_name(), false);
+                auto ename = add_escape_quote(variable->get_name() + "_" + info.mod_suffix);
+                if (if_array) {
                     auto length = variable->get_length();
-                    if (if_vector) {
-                        printer->fmt_line("{{{}, {}, {}}},", ename, name, length);
-                    } else {
-                        printer->fmt_line("{{{}, &{}}},", ename, name);
-                    }
+                    printer->fmt_line("{{{}, {}, {}}},", ename, name, length);
+                } else {
+                    printer->fmt_line("{{{}, &{}}},", ename, name);
                 }
             }
-        };
+        }
+    };
 
     auto globals = info.global_variables;
     auto thread_vars = info.thread_variables;
@@ -1030,8 +1026,8 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("/** connect global (scalar) variables to hoc -- */");
     printer->add_line("static DoubScal hoc_scalar_double[] = {");
     printer->increase_indent();
-    variable_printer(globals, false, false);
-    variable_printer(thread_vars, false, false);
+    variable_printer(globals, false);
+    variable_printer(thread_vars, false);
     printer->add_line("{nullptr, nullptr}");
     printer->decrease_indent();
     printer->add_line("};");
@@ -1040,8 +1036,8 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("/** connect global (array) variables to hoc -- */");
     printer->add_line("static DoubVec hoc_vector_double[] = {");
     printer->increase_indent();
-    variable_printer(globals, true, true);
-    variable_printer(thread_vars, true, true);
+    variable_printer(globals, true);
+    variable_printer(thread_vars, true);
     printer->add_line("{nullptr, nullptr, 0}");
     printer->decrease_indent();
     printer->add_line("};");
@@ -1127,7 +1123,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline();
 
     for (const auto& ion: info.ions) {
-        printer->fmt_line("ion_reg(\"{}\", {});", ion.name, "-10000.");
+        double valence = ion.valence.value_or(-10000.0);
+        printer->fmt_line("ion_reg(\"{}\", {});", ion.name, valence);
     }
     if (!info.ions.empty()) {
         printer->add_newline();
@@ -1166,6 +1163,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     /// type related information
     printer->add_newline();
     printer->fmt_line("mech_type = nrn_get_mechtype({}[1]);", get_channel_info_var_name());
+
+    printer->add_line("hoc_register_parm_default(mech_type, &_parameter_defaults);");
 
     // register the table-checking function
     if (info.table_count > 0) {
@@ -1343,8 +1342,7 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
         if (name == naming::POINT_PROCESS_VARIABLE) {
             continue;
         } else if (var.is_index || var.is_integer) {
-            auto qualifier = var.is_constant ? "const " : "";
-            printer->fmt_line("{}{}* const* {}{};", qualifier, int_type, name, value_initialize);
+            // In NEURON we don't create caches for `int*`. Hence, do nothing.
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
@@ -1615,7 +1613,8 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
                       codegen_float_variables.size());
     if (float_variables_size()) {
         printer->add_line("/*initialize range parameters*/");
-        for (const auto& var: info.range_parameter_vars) {
+        for (size_t i_param = 0; i_param < info.range_parameter_vars.size(); ++i_param) {
+            const auto var = info.range_parameter_vars[i_param];
             if (var->is_array()) {
                 continue;
             }
@@ -1625,7 +1624,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
 
             printer->fmt_line("_lmc.template fpfield<{}>(_iml) = {}; /* {} */",
                               var_pos,
-                              var_value,
+                              fmt::format("_parameter_defaults[{}]", i_param),
                               var_name);
         }
     }
@@ -2140,7 +2139,8 @@ void CodegenNeuronCppVisitor::print_net_send_call(const ast::FunctionCall& node)
     }
     const auto& tqitem = get_variable_name("tqitem", /* use_instance */ false);
 
-    printer->fmt_text("net_send(/* tqitem */ &{}, {}, {}, {} + ",
+    printer->fmt_text("{}(/* tqitem */ &{}, {}, {}, {} + ",
+                      info.artificial_cell ? "artcell_net_send" : "net_send",
                       tqitem,
                       weight_pointer,
                       point_process,
@@ -2153,7 +2153,10 @@ void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node)
     const auto& point_process = get_variable_name("point_process", /* use_instance */ false);
     const auto& tqitem = get_variable_name("tqitem", /* use_instance */ false);
 
-    printer->fmt_text("net_move(/* tqitem */ &{}, {}, ", tqitem, point_process);
+    printer->fmt_text("{}(/* tqitem */ &{}, {}, ",
+                      info.artificial_cell ? "artcell_net_move" : "net_move",
+                      tqitem,
+                      point_process);
 
     print_vector_elements(node.get_arguments(), ", ");
     printer->add_text(')');

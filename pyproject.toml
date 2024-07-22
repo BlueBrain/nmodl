@@ -74,3 +74,6 @@ environment = { PATH = "/nmodlwheel/flex/bin:/nmodlwheel/bison/bin:$PATH" }
 # the Linux wheel is not tested in cibuildwheel due to manylinux images not having
 # libpython*.so, so this is tested manually in the CI
 test-command = "true"
+
+[tool.cibuildwheel.windows]
+environment = { SKBUILD_CMAKE_ARGS = "-DNMODL_BUILD_WHEEL=ON;-DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools" }

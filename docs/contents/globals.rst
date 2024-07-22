@@ -5,6 +5,7 @@ The following global variables exist:
 
   * ``GLOBAL`` visible from HOC/Python.
   * ``LOCAL`` at file scope, called top-locals.
+  * ``CONSTANT`` not visible from HOC/Python.
 
 GLOBAL variables
 ================
@@ -173,6 +174,46 @@ Collection of slightly surprising behaviour:
 
   * Thread variables effectively can't be use in NET_RECEIVE blocks, because
     the code ``nocmodl`` produces will cause a SEGFAULT.
+
+
+PARAMETER variables
+===================
+
+These can be either RANGE or not RANGE. They can be both read and write. If
+they're written to, they're converted to thread-variables. Therefore, the rest
+of this section will only describe read-only PARAMETERs.
+
+Additionally, parameters optionally have: a) a default value, b) units and c) a
+valid range.
+
+Default Values
+~~~~~~~~~~~~~~
+This section only applies to read-only PARAMETERs.
+
+The behaviour differs for RANGE variables and non-RANGE variables. For RANGE
+variables, default values need to be registered with NEURON for all PARAMETERs
+that are RANGE variables. The function is called ``hoc_register_parm_default``.
+
+Note, that NOCMODL uses it in the ``nrn_alloc`` in the generated `.cpp` files
+and also in ``ndatclas.cpp``. Therefore, it seems registering the values isn't
+optional.
+
+Non-RANGE variables are semantically equivalent to ``static double``. They're
+simply assigned their value in the definition of the global variable.
+
+CONSTANT variables
+==================
+
+These are comparatively simple. In NOCMODL they're implemented as non-const
+static doubles. They're not accessible from HOC/Python (which makes them
+simple).
+
+Quirks
+~~~~~~
+
+In certain versions of NOCMODL around `9.0` and before (and NMODL) it's
+possible to change the value of CONSTANT variables. The MOD file will still be
+considered "thread-safe" (even if it might not be).
 
 
 What Does CoreNEURON support?
