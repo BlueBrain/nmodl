@@ -298,29 +298,31 @@ stages:
       displayName: 'Install Dependencies'
 
     - pwsh: |
-        if (Compare-Object $env:RELEASEWHEELBUILD "True") {
+        if (Compare-Object $RELEASEWHEELBUILD "True") {
+          Write-Output "Using nightly identifier"
           Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
         } else {
           Write-Output "##vso[task.setvariable variable=TAG;]"
         }
-        Write-Output "Wheel tag: $env:TAG"
+        Write-Output "Wheel tag: $TAG"
       displayName: "Set wheel tag"
 
     - pwsh: |
         Write-Output "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
-        Write-Output "Build identifiers: $env:CIBW_BUILD"
+        Write-Output "Build identifiers: $CIBW_BUILD"
       condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
       displayName: "Set build identifiers"
 
     - task: UsePythonVersion@0
 
     - pwsh: |
-        python3 -m pip install --upgrade pip
-        python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
+        Write-Output "Aye have $env:TAG oar $TAG"
+        python -m pip install --upgrade pip
+        python -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
-        python3 packaging/change_name.py pyproject.toml "NMODL$env:TAG"
+        python packaging/change_name.py pyproject.toml "NMODL$env:TAG"
         $env:SETUPTOOLS_SCM_PRETEND_VERSION=((git describe --tags) -split "-"|Select-Object -First 2) -join "."
-        python3 -m cibuildwheel --output-dir wheelhouse
+        python -m cibuildwheel --output-dir wheelhouse
       condition: succeeded()
       displayName: 'Build Windows Wheel (x86_64)'
 
