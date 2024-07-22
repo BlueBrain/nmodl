@@ -298,7 +298,7 @@ stages:
       displayName: 'Install Dependencies'
 
     - pwsh: |
-        if (Compare-Object $RELEASEWHEELBUILD "True") {
+        if (Compare-Object $env:RELEASEWHEELBUILD "True") {
           Write-Output "Using nightly identifier"
           Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
         } else {
