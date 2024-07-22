@@ -292,12 +292,12 @@ stages:
     - checkout: self
       submodules: True
       condition: succeeded()
-    - script: |
+    - pwsh: |
         choco install winflexbison3
       condition: succeeded()
       displayName: 'Install Dependencies'
 
-    - script: |
+    - pwsh: |
         if (Compare-Object $env:RELEASEWHEELBUILD "True") {
           Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
         } else {
@@ -306,7 +306,7 @@ stages:
         Write-Output "Wheel tag: $env:TAG"
       displayName: "Set wheel tag"
 
-    - script: |
+    - pwsh: |
         Write-Output "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
         Write-Output "Build identifiers: $env:CIBW_BUILD"
       condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
@@ -314,7 +314,7 @@ stages:
 
     - task: UsePythonVersion@0
 
-    - script: |
+    - pwsh: |
         python3 -m pip install --upgrade pip
         python3 -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly
