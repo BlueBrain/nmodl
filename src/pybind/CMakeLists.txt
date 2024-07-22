@@ -14,9 +14,6 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
     set_source_files_properties("${pybind_file}" PROPERTIES COMPILE_OPTIONS
                                                             "${pybind_file_compile_options}")
   endforeach()
-elseif(MSVC)
-  # Required for large pynode_*.cpp object files
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif()
 
 # build nmodl python module under lib/nmodl
@@ -28,7 +25,8 @@ set_property(
   APPEND
   PROPERTY CMAKE_CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/../../python/nmodl/ode.py)
 if(WIN32)
-  # MSVC can't handle long string literals
+  # MSVC can't handle long string literals, even if the documentation claims so
+  # See https://developercommunity.visualstudio.com/t/c-string-literal-max-length-much-shorter-than-docu/758957
   string(REGEX REPLACE "\n\n" "\n)jiowi\" R\"jiowi(\n" NMODL_ODE_PY "${NMODL_ODE_PY}")
 endif()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ode_py.hpp.inc ${CMAKE_CURRENT_BINARY_DIR}/ode_py.hpp
@@ -80,6 +78,10 @@ if(NMODL_ENABLE_PYTHON_BINDINGS)
   target_link_libraries(_nmodl PRIVATE printer symtab visitor pyembed)
   set_target_properties(_nmodl PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG
                                           ${CMAKE_BINARY_DIR}/lib/nmodl)
+
+  if(MSVC)
+    target_compile_options(_nmodl PRIVATE /bigobj)
+  endif()
 
   # in case of wheel, python module shouldn't link to wrapper library
   if(LINK_AGAINST_PYTHON)
