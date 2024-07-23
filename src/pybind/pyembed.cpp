@@ -82,8 +82,7 @@ void EmbeddedPythonLoader::load_libraries() {
     assert_compatible_python_versions();
 
     auto pybind_wraplib_env = PathHelper::get_wrapper_path();
-    std::string env_str = pybind_wraplib_env.string();
-    pybind_wrapper_handle = dlopen(env_str.c_str(), dlopen_opts);
+    pybind_wrapper_handle = dlopen(pybind_wraplib_env.c_str(), dlopen_opts);
     if (!pybind_wrapper_handle) {
         const auto errstr = dlerror();
         logger->critical("Tried but failed to load {}", pybind_wraplib_env);
