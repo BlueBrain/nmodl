@@ -45,6 +45,9 @@ class PathHelper {
     /// pre-defined paths to search for files
     const static std::vector<std::string> BASE_SEARCH_PATHS;
 
+    /// prefix to use when looking for libraries
+    const static std::string SHARED_LIBRARY_PREFIX;
+
     /// suffix to use when looking for libraries
     const static std::string SHARED_LIBRARY_SUFFIX;
 
@@ -54,7 +57,7 @@ class PathHelper {
     /**
      * Search for a given relative file path
      */
-    static std::string get_path(const std::string& what, bool add_library_suffix = false);
+    static std::string get_path(const std::string& what, bool is_library = false);
 
   public:
     /**
