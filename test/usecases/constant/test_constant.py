@@ -10,6 +10,8 @@ s.insert("constant_mod")
 expected = 2.3
 assert s(0.5).constant_mod.foo() == expected
 
-h.stdinit()
+# CONSTANTs are not read-only:
+expected = 42.0
+s(0.5).constant_mod.set_a(42.0)
 
 assert s(0.5).constant_mod.foo() == expected
