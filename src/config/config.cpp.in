@@ -39,6 +39,7 @@ const std::string nmodl::Version::NMODL_VERSION = "@PROJECT_VERSION@";
 const std::vector<std::string> nmodl::PathHelper::BASE_SEARCH_PATHS =
     {"@CMAKE_INSTALL_PREFIX@", "@NMODL_PROJECT_BINARY_DIR@"};
 
+const std::string nmodl::PathHelper::SHARED_LIBRARY_PREFIX = "@CMAKE_SHARED_LIBRARY_PREFIX@";
 const std::string nmodl::PathHelper::SHARED_LIBRARY_SUFFIX = "@CMAKE_SHARED_LIBRARY_SUFFIX@";
 
 namespace {
@@ -71,10 +72,10 @@ std::string maybe_from_env(const std::string& varname) {
 
     auto executable_dir = fs::weakly_canonical(executable).parent_path();
     if (executable_dir.filename() == "bin") {
-        return executable_dir.parent_path();
+        return executable_dir.parent_path().string();
     } else {
         // On Windows, we may find ourselves in the top-level directory without a bin/
-        return executable_dir;
+        return executable_dir.string();
     }
 }
 
@@ -82,7 +83,7 @@ std::string maybe_from_env(const std::string& varname) {
 
 const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODL_HOME");
 
-std::string nmodl::PathHelper::get_path(const std::string& what, bool add_library_suffix) {
+std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library) {
     std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
     if (!NMODL_HOME.empty()) {
         search_paths.emplace(search_paths.begin(), NMODL_HOME);
@@ -90,9 +91,11 @@ std::string nmodl::PathHelper::get_path(const std::string& what, bool add_librar
 
     // check paths in order and return if found
     for (const auto& path: search_paths) {
-        auto full_path = fs::path(path) / fs::path(what);
-        if (add_library_suffix) {
-            full_path += SHARED_LIBRARY_SUFFIX;
+        auto full_path = fs::path(path);
+        if (is_library) {
+            full_path /= SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;
+        } else {
+            full_path /= what;
         }
         std::ifstream f(full_path);
         if (f.good()) {
