@@ -93,7 +93,7 @@ std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library
 
     std::string filename = what;
     if (is_library) {
-        filename = SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;j
+        filename = SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;
     }
 
     // check paths in order and return if found
