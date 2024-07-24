@@ -35,6 +35,7 @@ else:
         "NMODLHOME",
         str(files("nmodl") / ".data"),
     )
+    print("Setting HOME to: ", os.environ["NMODLHOME"])
 
 import builtins
 
