@@ -24,8 +24,10 @@ if ($venv) {
 
    pip uninstall -y nmodl nmodl-nightly
    pip install "${wheel}[test]"
-   pip show nmodl-nightly
 }
+
+pip show -f nmodl
+pip show -f nmodl-nightly
 
 Get-ChildItem -Path $TEST_DIR/input -Filter "*.mod" | ForEach-Object {
    $path = $_ -replace "\\","/"
