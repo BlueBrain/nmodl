@@ -30,12 +30,14 @@ if ($venv) {
 Get-ChildItem -Path $TEST_DIR/input -Filter "*.mod" | ForEach-Object {
    $path = $_ -replace "\\","/"
    Write-Output "nmodl -o $TEST_DIR/output $path sympy --analytic"
-   nmodl --verbose=trace -o $TEST_DIR/output $path sympy --analytic
+   nmodl -o $TEST_DIR/output $path sympy --analytic
    if (! $?) {
+      Write-Output "Failed NMODL run"
       Exit 1
    }
    python -c "import nmodl; driver = nmodl.NmodlDriver(); driver.parse_file('$path')"
    if (! $?) {
+      Write-Output "Failed NMODL Python module parsing"
       Exit 1
    }
 }
