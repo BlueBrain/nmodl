@@ -5,11 +5,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include <filesystem>
+#include <fstream>
 #include <string>
 #include <vector>
 
 #include <CLI/CLI.hpp>
-#include <filesystem>
 
 #include "ast/program.hpp"
 #include "codegen/codegen_acc_visitor.hpp"
@@ -20,6 +21,7 @@
 #include "config/config.h"
 #include "parser/nmodl_driver.hpp"
 #include "pybind/pyembed.hpp"
+#include "solver/solver.hpp"
 #include "utils/common_utils.hpp"
 #include "utils/logger.hpp"
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
@@ -59,6 +61,26 @@ using namespace nmodl;
 using namespace codegen;
 using namespace visitor;
 using nmodl::parser::NmodlDriver;
+
+fs::path get_solver_path(const fs::path& directory, const std::string& solver) {
+    auto path = directory / "solver" / solver;
+    path += ".hpp";
+    return path;
+}
+
+void write_shared_headers(const std::string& directory,
+                          const std::vector<std::string>& solvers = nmodl::solver::get_names()) {
+    fs::path output(directory);
+
+    for (const auto& solver: solvers) {
+        const auto& path = get_solver_path(directory, solver);
+        fs::create_directories(path.parent_path());
+
+        std::ofstream fout(path);
+        fout << nmodl::solver::get_hpp(solver);
+        logger->info("Generated {}", path.string());
+    }
+}
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 int main(int argc, const char* argv[]) {
@@ -180,6 +202,17 @@ int main(int argc, const char* argv[]) {
     app.add_option("-o,--output", output_dir, "Directory for backend code output")
         ->capture_default_str()
         ->ignore_case();
+
+    app.add_option_function<std::vector<std::string>>(
+           "--write-shared-headers",
+           [&](const std::vector<std::string>& solvers) {
+               write_shared_headers(output_dir, solvers);
+               exit(0);
+           },
+           "Create solver headers in directory and exit")
+        ->expected(1, 2)
+        ->check(CLI::IsMember(nmodl::solver::get_names()));
+
     app.add_option("--scratch", scratch_dir, "Directory for intermediate code output")
         ->capture_default_str()
         ->ignore_case();
