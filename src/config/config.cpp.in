@@ -81,7 +81,7 @@ std::string maybe_from_env(const std::string& varname) {
 
 }
 
-const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODL_HOME");
+const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODLHOME");
 
 std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library) {
     std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
