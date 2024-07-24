@@ -84,6 +84,13 @@ project(
   NMODL
   VERSION ${NMODL_GIT_LAST_TAG}
   LANGUAGES CXX)
+  
+# =============================================================================
+# Adjust install prefix for wheel
+# =============================================================================
+if(NOT LINK_AGAINST_PYTHON AND NOT NMODL_AS_SUBPROJECT)
+set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
+endif()
 
 # =============================================================================
 # HPC Coding Conventions
@@ -131,9 +138,10 @@ endif()
 cpp_cc_git_submodule(json BUILD PACKAGE nlohmann_json REQUIRED)
 cpp_cc_git_submodule(pybind11 BUILD PACKAGE pybind11 REQUIRED)
 if(WIN32)
-  cpp_cc_git_submodule(dlfcn-win32 BUILD)
+  cpp_cc_git_submodule(dlfcn-win32 BUILD EXCLUDE_FROM_ALL)
   add_library(dlfcn-win32::dl ALIAS dl)
   set(CMAKE_DL_LIBS dlfcn-win32::dl)
+  install(TARGETS dl DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin)
 endif()
 # Tell spdlog not to use its bundled fmt, it should either use the fmt submodule or a truly external
 # installation for consistency. This line should be harmless if we use an external spdlog.
@@ -165,13 +173,6 @@ add_custom_target(
   &&
   clean_ipynb
   "${CMAKE_SOURCE_DIR}/docs/notebooks/*.ipynb")
-
-# =============================================================================
-# Adjust install prefix for wheel
-# =============================================================================
-if(NOT LINK_AGAINST_PYTHON AND NOT NMODL_AS_SUBPROJECT)
-  set(NMODL_INSTALL_DIR_SUFFIX "nmodl/.data/")
-endif()
 
 # =============================================================================
 # Find required python packages

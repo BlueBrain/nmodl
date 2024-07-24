@@ -86,6 +86,8 @@ const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODL_HOME");
 std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library) {
     std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
     if (!NMODL_HOME.empty()) {
+        search_paths.emplace(search_paths.begin(), (fs::path(NMODL_HOME) / "bin").string());
+        search_paths.emplace(search_paths.begin(), (fs::path(NMODL_HOME) / "lib").string());
         search_paths.emplace(search_paths.begin(), NMODL_HOME);
     }
 
@@ -99,7 +101,7 @@ std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library
         }
         std::ifstream f(full_path);
         if (f.good()) {
-            return full_path;
+            return full_path.string();
         }
     }
     std::ostringstream err_msg;

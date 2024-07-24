@@ -299,24 +299,22 @@ stages:
 
     - pwsh: |
         if (Compare-Object $env:RELEASEWHEELBUILD "True") {
-          Write-Output "Using nightly identifier"
-          Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
-        } else {
           Write-Output "##vso[task.setvariable variable=TAG;]"
+        } else {
+          Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
         }
-        Write-Output "Wheel tag: $TAG"
       displayName: "Set wheel tag"
 
     - pwsh: |
         Write-Output "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
-        Write-Output "Build identifiers: $CIBW_BUILD"
       condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
       displayName: "Set build identifiers"
 
     - task: UsePythonVersion@0
 
     - pwsh: |
-        Write-Output "Aye have $env:TAG oar $TAG"
+        Write-Output "Using TAG '$env:TAG'"
+        Write-Output "Using CIBW_BUILD '$env:CIBW_BUILD'"
         python -m pip install --upgrade pip
         python -m pip install cibuildwheel==2.16.5 tomli tomli-w
         # change the name accordingly

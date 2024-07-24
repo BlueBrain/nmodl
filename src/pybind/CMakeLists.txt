@@ -114,7 +114,13 @@ file(COPY ${NMODL_PROJECT_SOURCE_DIR}/python/nmodl/ext DESTINATION ${CMAKE_BINAR
 # move the .so libs
 # ~~~
 if(NOT LINK_AGAINST_PYTHON AND NOT NMODL_AS_SUBPROJECT)
-  install(TARGETS pywrapper DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}lib)
+  if(MSVC)
+    # DLLs are required both by the executable and the library - prefer
+    # installation next to the former.
+    install(TARGETS pywrapper DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}bin)
+  else()
+    install(TARGETS pywrapper DESTINATION ${NMODL_INSTALL_DIR_SUFFIX}lib)
+  endif()
   if(NMODL_ENABLE_PYTHON_BINDINGS)
     install(TARGETS _nmodl DESTINATION nmodl/)
   endif()

@@ -64,11 +64,16 @@ void assert_compatible_python_versions() {
 }
 
 void EmbeddedPythonLoader::load_libraries() {
+#ifdef _WIN32
+    // Windows does not require a full search path
+    const char* pylib_env = "python3.dll";
+#else
     const auto pylib_env = std::getenv("NMODL_PYLIB");
     if (!pylib_env) {
         logger->critical("NMODL_PYLIB environment variable must be set to load embedded python");
         throw std::runtime_error("NMODL_PYLIB not set");
     }
+#endif
     const auto dlopen_opts = RTLD_NOW | RTLD_GLOBAL;
     dlerror();  // reset old error conditions
     pylib_handle = dlopen(pylib_env, dlopen_opts);

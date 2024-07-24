@@ -71,7 +71,7 @@ class PathHelper {
      * Return path of the python wrapper library
      */
     static std::string get_wrapper_path() {
-        return get_path("lib/libpywrapper", true);
+        return get_path("pywrapper", true);
     };
 };
 
