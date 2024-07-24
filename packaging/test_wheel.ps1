@@ -30,7 +30,7 @@ if ($venv) {
 Get-ChildItem -Path $TEST_DIR/input -Filter "*.mod" | ForEach-Object {
    $path = $_ -replace "\\","/"
    Write-Output "nmodl -o $TEST_DIR/output $path sympy --analytic"
-   nmodl -o $TEST_DIR/output $path sympy --analytic
+   nmodl --verbose=trace -o $TEST_DIR/output $path sympy --analytic
    if (! $?) {
       Exit 1
    }
