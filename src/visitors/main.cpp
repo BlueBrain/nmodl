@@ -95,7 +95,7 @@ int main(int argc, const char* argv[]) {
          "SympyConductanceVisitor"},
         {std::make_shared<SympySolverVisitor>(), "sympy-solve", "SympySolverVisitor"},
         {std::make_shared<NeuronSolveVisitor>(), "neuron-solve", "NeuronSolveVisitor"},
-        {std::make_shared<UnitsVisitor>(NrnUnitsLib::get_path()), "units", "UnitsVisitor"},
+        {std::make_shared<UnitsVisitor>(PathHelper::get_units_path()), "units", "UnitsVisitor"},
     };
 
     const std::vector<ConstVisitorInfo> const_visitors = {

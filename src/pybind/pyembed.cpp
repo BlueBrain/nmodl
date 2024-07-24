@@ -64,11 +64,16 @@ void assert_compatible_python_versions() {
 }
 
 void EmbeddedPythonLoader::load_libraries() {
+#ifdef _WIN32
+    // Windows does not require a full search path
+    const char* pylib_env = "python3.dll";
+#else
     const auto pylib_env = std::getenv("NMODL_PYLIB");
     if (!pylib_env) {
         logger->critical("NMODL_PYLIB environment variable must be set to load embedded python");
         throw std::runtime_error("NMODL_PYLIB not set");
     }
+#endif
     const auto dlopen_opts = RTLD_NOW | RTLD_GLOBAL;
     dlerror();  // reset old error conditions
     pylib_handle = dlopen(pylib_env, dlopen_opts);
@@ -81,22 +86,11 @@ void EmbeddedPythonLoader::load_libraries() {
 
     assert_compatible_python_versions();
 
-    if (std::getenv("NMODLHOME") == nullptr) {
-        logger->critical("NMODLHOME environment variable must be set to load embedded python");
-        throw std::runtime_error("NMODLHOME not set");
-    }
-    auto pybind_wraplib_env = fs::path(std::getenv("NMODLHOME")) / "lib" / "libpywrapper";
-    pybind_wraplib_env.concat(CMakeInfo::SHARED_LIBRARY_SUFFIX);
-    if (!fs::exists(pybind_wraplib_env)) {
-        logger->critical("NMODLHOME doesn't contain libpywrapper{} library",
-                         CMakeInfo::SHARED_LIBRARY_SUFFIX);
-        throw std::runtime_error("NMODLHOME doesn't have lib/libpywrapper library");
-    }
-    std::string env_str = pybind_wraplib_env.string();
-    pybind_wrapper_handle = dlopen(env_str.c_str(), dlopen_opts);
+    auto pybind_wraplib_env = PathHelper::get_wrapper_path();
+    pybind_wrapper_handle = dlopen(pybind_wraplib_env.c_str(), dlopen_opts);
     if (!pybind_wrapper_handle) {
         const auto errstr = dlerror();
-        logger->critical("Tried but failed to load {}", pybind_wraplib_env.string());
+        logger->critical("Tried but failed to load {}", pybind_wraplib_env);
         logger->critical(errstr);
         throw std::runtime_error("Failed to dlopen");
     }

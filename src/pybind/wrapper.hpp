@@ -54,13 +54,13 @@ struct pybind_wrap_api {
 };
 
 #ifdef _WIN32
-#define NMODL_EXPORT
+#define NMODL_EXPORT __declspec(dllexport)
 #else
 #define NMODL_EXPORT __attribute__((visibility("default")))
 #endif
 
 extern "C" {
-pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept;
+NMODL_EXPORT pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept;
 }
 
 

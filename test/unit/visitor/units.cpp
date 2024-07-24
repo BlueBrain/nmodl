@@ -36,7 +36,7 @@ std::tuple<std::shared_ptr<ast::Program>, std::shared_ptr<units::UnitTable>> run
     const auto& ast = driver.get_ast();
 
     // Parse nrnunits.lib file and the UNITS block of the mod file
-    const std::string units_lib_path(NrnUnitsLib::get_path());
+    const std::string units_lib_path(PathHelper::get_units_path());
     UnitsVisitor units_visitor = UnitsVisitor(units_lib_path);
 
     units_visitor.visit_program(*ast);

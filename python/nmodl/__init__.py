@@ -22,14 +22,20 @@ except TypeError as exc:
         "to the Python library"
     ) from exc
 
-# add nmodl home to environment (i.e. necessary for nrnunits.lib) if not
-# already set
-# `files` will automatically raise a `ModuleNotFoundError`
-os.environ["NMODLHOME"] = os.environ.get(
-    "NMODLHOME",
-    str(files("nmodl") / ".data"),
-)
-
+if os.name == "nt":
+    # On Windows, DLLs get installed alongside with the binary.  But _nmodl also links
+    # against them, so instruct Python where to look for the DLLs
+    bindir = files("nmodl") / ".data" / "bin"
+    os.add_dll_directory(bindir)
+else:
+    # add nmodl home to environment (i.e. necessary for nrnunits.lib) if not
+    # already set
+    # `files` will automatically raise a `ModuleNotFoundError`
+    os.environ["NMODLHOME"] = os.environ.get(
+        "NMODLHOME",
+        str(files("nmodl") / ".data"),
+    )
+    print("Setting HOME to: ", os.environ["NMODLHOME"])
 
 import builtins
 
