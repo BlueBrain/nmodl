@@ -298,11 +298,10 @@ stages:
       displayName: 'Install Dependencies'
 
     - pwsh: |
-        Write-Output $env:RELEASEWHEELBUILD
-        if (Compare-Object $env:RELEASEWHEELBUILD "True") {
-          Write-Output "##vso[task.setvariable variable=TAG;]"
-        } else {
+        if (Compare-Object $env:RELEASEWHEELBUILD "False") {
           Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
+        } else {
+          Write-Output "##vso[task.setvariable variable=TAG;]"
         }
       displayName: "Set wheel tag"
 

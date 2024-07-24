@@ -27,6 +27,14 @@ if os.name == "nt":
     # against them, so instruct Python where to look for the DLLs
     bindir = files("nmodl") / ".data" / "bin"
     os.add_dll_directory(bindir)
+else:
+    # add nmodl home to environment (i.e. necessary for nrnunits.lib) if not
+    # already set
+    # `files` will automatically raise a `ModuleNotFoundError`
+    os.environ["NMODLHOME"] = os.environ.get(
+        "NMODLHOME",
+        str(files("nmodl") / ".data"),
+    )
 
 import builtins
 
