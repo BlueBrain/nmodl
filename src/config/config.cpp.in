@@ -7,13 +7,26 @@
 
 #include "config/config.h"
 
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+
+#if defined(_WIN32)
+#include <windows.h>
+#elif defined(__APPLE__)
+#include <limits.h>
+#include <mach-o/dyld.h>
+#else
+#endif
+
+namespace fs = std::filesystem;
+
 /// Git version of the project
 const std::string nmodl::Version::GIT_REVISION = "@NMODL_GIT_REVISION@";
 
 /// NMODL version
 const std::string nmodl::Version::NMODL_VERSION = "@PROJECT_VERSION@";
-
-const std::string nmodl::CMakeInfo::SHARED_LIBRARY_SUFFIX = "@CMAKE_SHARED_LIBRARY_SUFFIX@";
 
 /**
  * \brief Path of nrnutils.lib file
@@ -23,5 +36,77 @@ const std::string nmodl::CMakeInfo::SHARED_LIBRARY_SUFFIX = "@CMAKE_SHARED_LIBRA
  * from CMAKE_INSTALL_PREFIX. Note that this use of NMODL_PROJECT_BINARY_DIR
  * will cause ccache misses when the build prefix is changed.
  */
-std::vector<std::string> nmodl::NrnUnitsLib::NRNUNITSLIB_PATH =
-    {"@CMAKE_INSTALL_PREFIX@/share/nmodl/nrnunits.lib", "@NMODL_PROJECT_BINARY_DIR@/share/nmodl/nrnunits.lib"};
+const std::vector<std::string> nmodl::PathHelper::BASE_SEARCH_PATHS =
+    {"@CMAKE_INSTALL_PREFIX@", "@NMODL_PROJECT_BINARY_DIR@"};
+
+const std::string nmodl::PathHelper::SHARED_LIBRARY_PREFIX = "@CMAKE_SHARED_LIBRARY_PREFIX@";
+const std::string nmodl::PathHelper::SHARED_LIBRARY_SUFFIX = "@CMAKE_SHARED_LIBRARY_SUFFIX@";
+
+namespace {
+
+std::string maybe_from_env(const std::string& varname) {
+    const auto value = std::getenv(varname.c_str());
+    if (value != nullptr) {
+        return value;
+    }
+
+#if defined(_WIN32)
+    std::vector<char> buffer;
+    DWORD copied = 0;
+    do {
+        buffer.resize(buffer.size() + MAX_PATH);
+        copied = GetModuleFileName(0, &buffer.at(0), buffer.size());
+    } while (copied >= buffer.size());
+    buffer.resize(copied);
+    fs::path executable(std::wstring(buffer.begin(), buffer.end()));
+#elif defined(__APPLE__)
+    char buffer[PATH_MAX + 1];
+    uint32_t bufsize = PATH_MAX + 1;
+    if( _NSGetExecutablePath(buffer, &bufsize) != 0) {
+        return "";
+    }
+    auto executable = fs::path(buffer);
+#else
+    auto executable = fs::read_symlink("/proc/self/exe");
+#endif
+
+    auto executable_dir = fs::weakly_canonical(executable).parent_path();
+    if (executable_dir.filename() == "bin") {
+        return executable_dir.parent_path().string();
+    } else {
+        // On Windows, we may find ourselves in the top-level directory without a bin/
+        return executable_dir.string();
+    }
+}
+
+}
+
+const std::string nmodl::PathHelper::NMODL_HOME = maybe_from_env("NMODL_HOME");
+
+std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library) {
+    std::vector<std::string> search_paths = BASE_SEARCH_PATHS;
+    if (!NMODL_HOME.empty()) {
+        search_paths.emplace(search_paths.begin(), NMODL_HOME);
+    }
+
+    // check paths in order and return if found
+    for (const auto& path: search_paths) {
+        auto full_path = fs::path(path);
+        if (is_library) {
+            full_path /= SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;
+        } else {
+            full_path /= what;
+        }
+        std::ifstream f(full_path);
+        if (f.good()) {
+            return full_path;
+        }
+    }
+    std::ostringstream err_msg;
+    err_msg << "Could not find '" << what << "' in any of:\n";
+    for (const auto& path: search_paths) {
+        err_msg << "\t" << path << "\n";
+    }
+    err_msg << "Please try setting the NMODLHOME environment variable\n";
+    throw std::runtime_error(err_msg.str());
+}

@@ -33,7 +33,7 @@ bool is_valid_construct(const std::string& construct) {
 
 std::string parse_string(const std::string& unit_definition) {
     nmodl::parser::UnitDriver correctness_driver;
-    correctness_driver.parse_file(nmodl::NrnUnitsLib::get_path());
+    correctness_driver.parse_file(nmodl::PathHelper::get_units_path());
     correctness_driver.parse_string(unit_definition);
     std::stringstream ss;
     correctness_driver.table->print_units_sorted(ss);
