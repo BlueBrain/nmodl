@@ -91,21 +91,21 @@ std::string nmodl::PathHelper::get_path(const std::string& what, bool is_library
         search_paths.emplace(search_paths.begin(), NMODL_HOME);
     }
 
+    std::string filename = what;
+    if (is_library) {
+        filename = SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;j
+    }
+
     // check paths in order and return if found
     for (const auto& path: search_paths) {
-        auto full_path = fs::path(path);
-        if (is_library) {
-            full_path /= SHARED_LIBRARY_PREFIX + what + SHARED_LIBRARY_SUFFIX;
-        } else {
-            full_path /= what;
-        }
+        auto full_path = fs::path(path) / filename;
         std::ifstream f(full_path);
         if (f.good()) {
             return full_path.string();
         }
     }
     std::ostringstream err_msg;
-    err_msg << "Could not find '" << what << "' in any of:\n";
+    err_msg << "Could not find '" << filename << "' in any of:\n";
     for (const auto& path: search_paths) {
         err_msg << "\t" << path << "\n";
     }
