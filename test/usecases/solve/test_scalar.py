@@ -1,11 +1,9 @@
-from typing import Optional
-
 import numpy as np
 from neuron import h, gui
 from neuron.units import ms
 
 
-def simulate(method: str, rtol: float, dt: Optional[float] = None):
+def simulate(method, rtol, dt=None):
     nseg = 1
 
     s = h.Section()
