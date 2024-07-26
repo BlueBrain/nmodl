@@ -581,119 +581,122 @@ $(document).ready(function(){initNavTree('src_2main_8cpp_source.html',''); initR
 <div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;localize&quot;</span>));</div>
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        }</div>
 <div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160; </div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordflow">if</span> (sympy_conductance || sympy_analytic || <a class="code" href="namespacenmodl.html#a21160c42746b7846b552e45572d8e083">sparse_solver_exists</a>(*ast)) {</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            <a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#a72c20e05c3a78de3bce97a120865f5b1">nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance</a>()</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;                .<a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#aab6dba703861d5a5865881634e39bac3">api</a>()</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;                .<a class="code" href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#a3b13262ec2ee16bc5f5a9670d08a124b">initialize_interpreter</a>();</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            <span class="keywordflow">if</span> (sympy_conductance) {</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running sympy conductance visitor&quot;</span>);</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                SympyConductanceVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;                <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;sympy_conductance&quot;</span>));</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;            }</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;            <span class="keywordflow">if</span> (sympy_analytic || <a class="code" href="namespacenmodl.html#a21160c42746b7846b552e45572d8e083">sparse_solver_exists</a>(*ast)) {</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                <span class="keywordflow">if</span> (!sympy_analytic) {</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                    <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;                        <span class="stringliteral">&quot;Automatically enable sympy_analytic because it exists solver of type &quot;</span></div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                        <span class="stringliteral">&quot;sparse&quot;</span>);</div>
-<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                }</div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running sympy solve visitor&quot;</span>);</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                SympySolverVisitor(sympy_pade, sympy_cse).visit_program(*ast);</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;sympy_solve&quot;</span>));</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            }</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            <a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#a72c20e05c3a78de3bce97a120865f5b1">nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance</a>()</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                .<a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#aab6dba703861d5a5865881634e39bac3">api</a>()</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;                .<a class="code" href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#ae4fa610967440c727d94214a40430d4b">finalize_interpreter</a>();</div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        }</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        {</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running cnexp visitor&quot;</span>);</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;            NeuronSolveVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;cnexp&quot;</span>));</div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        }</div>
-<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160; </div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        {</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;            SolveBlockVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;solveblock&quot;</span>));</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        }</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160; </div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        <span class="keywordflow">if</span> (json_perfstat) {</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;            std::string file{scratch_dir};</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            file.append(<span class="stringliteral">&quot;/&quot;</span>);</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;            file.append(modfile);</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            file.append(<span class="stringliteral">&quot;.perf.json&quot;</span>);</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;            <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Writing performance statistics to {}&quot;</span>, file);</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;            PerfVisitor(file).visit_program(*ast);</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;        }</div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160; </div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        <span class="comment">// Add implicit arguments (like celsius, nt) to NEURON functions (like</span></div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        <span class="comment">// nrn_ghk, at_time) whose signatures we have to massage.</span></div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        ImplicitArgumentVisitor{}.visit_program(*ast);</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;        <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;        {</div>
-<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;            <span class="comment">// make sure to run perf visitor because code generator</span></div>
-<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;            <span class="comment">// looks for read/write counts const/non-const declaration</span></div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;            PerfVisitor().visit_program(*ast);</div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        }</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;        {</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;            <a class="code" href="classnmodl_1_1_codegen_transform_visitor.html">CodegenTransformVisitor</a>{}.<a class="code" href="classnmodl_1_1visitor_1_1_ast_visitor.html#ac1533785a04b7c56a4430a6fd85b7b30">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;TransformVisitor&quot;</span>));</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;        }</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160; </div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;        {</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;            FunctionCallpathVisitor{}.visit_program(*ast);</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;FunctionCallpathVisitor&quot;</span>));</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;        }</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
-<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;        {</div>
-<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;            <span class="keyword">auto</span> blame_level = detailed_blame ? <a class="code" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651">utils::BlameLevel::Detailed</a></div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;                                              : <a class="code" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da30bb747c98bccdd11b3f89e644c4d0ad">utils::BlameLevel::Short</a>;</div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;            <span class="keywordflow">if</span> (coreneuron_code &amp;&amp; oacc_backend) {</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running OpenACC backend code generator for CoreNEURON&quot;</span>);</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html">CodegenAccVisitor</a> visitor(modfile,</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;                                          output_dir,</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                                          data_type,</div>
-<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;                                          optimize_ionvar_copies_codegen,</div>
-<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                                          <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
-<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;            }</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (coreneuron_code &amp;&amp; !neuron_code &amp;&amp; cpp_backend) {</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running C++ backend code generator for CoreNEURON&quot;</span>);</div>
-<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html">CodegenCoreneuronCppVisitor</a> visitor(modfile,</div>
-<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;                                                    output_dir,</div>
-<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;                                                    data_type,</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;                                                    optimize_ionvar_copies_codegen,</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;                                                    <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;            }</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160; </div>
-<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (neuron_code &amp;&amp; cpp_backend) {</div>
-<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running C++ backend code generator for NEURON&quot;</span>);</div>
-<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html">CodegenNeuronCppVisitor</a> visitor(modfile,</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                                                output_dir,</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;                                                data_type,</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                                                optimize_ionvar_copies_codegen,</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                                                <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
-<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;            }</div>
-<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160; </div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;                    <span class="stringliteral">&quot;Non valid code generation configuration. Code generation with NMODL is &quot;</span></div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;                    <span class="stringliteral">&quot;supported for NEURON with C++ backend or CoreNEURON with C++/OpenACC &quot;</span></div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;                    <span class="stringliteral">&quot;backends&quot;</span>);</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;            }</div>
-<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        }</div>
-<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;    }</div>
-<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;}</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keyword">const</span> <span class="keywordtype">bool</span> sympy_derivimplicit = neuron_code &amp;&amp; <a class="code" href="namespacenmodl.html#ae3bf5cf6089006e2ba8b8f93b9077703">solver_exists</a>(*ast, <span class="stringliteral">&quot;derivimplicit&quot;</span>);</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160; </div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        <span class="keywordflow">if</span> (sympy_conductance || sympy_analytic || <a class="code" href="namespacenmodl.html#ae3bf5cf6089006e2ba8b8f93b9077703">solver_exists</a>(*ast, <span class="stringliteral">&quot;sparse&quot;</span>) ||</div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            sympy_derivimplicit) {</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            <a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#a72c20e05c3a78de3bce97a120865f5b1">nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance</a>()</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                .<a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#aab6dba703861d5a5865881634e39bac3">api</a>()</div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                .<a class="code" href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#a3b13262ec2ee16bc5f5a9670d08a124b">initialize_interpreter</a>();</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            <span class="keywordflow">if</span> (sympy_conductance) {</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running sympy conductance visitor&quot;</span>);</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                SympyConductanceVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;sympy_conductance&quot;</span>));</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;            }</div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            <span class="keywordflow">if</span> (sympy_analytic || <a class="code" href="namespacenmodl.html#ae3bf5cf6089006e2ba8b8f93b9077703">solver_exists</a>(*ast, <span class="stringliteral">&quot;sparse&quot;</span>) || sympy_derivimplicit) {</div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;                <span class="keywordflow">if</span> (!sympy_analytic) {</div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;                    <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;                        <span class="stringliteral">&quot;Automatically enable sympy_analytic because it exists solver of type &quot;</span></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;                        <span class="stringliteral">&quot;sparse&quot;</span>);</div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;                }</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running sympy solve visitor&quot;</span>);</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;                SympySolverVisitor(sympy_pade, sympy_cse).visit_program(*ast);</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;                <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;                ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;sympy_solve&quot;</span>));</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            }</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;            <a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#a72c20e05c3a78de3bce97a120865f5b1">nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance</a>()</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;                .<a class="code" href="classnmodl_1_1pybind__wrappers_1_1_embedded_python_loader.html#aab6dba703861d5a5865881634e39bac3">api</a>()</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;                .<a class="code" href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#ae4fa610967440c727d94214a40430d4b">finalize_interpreter</a>();</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        }</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        {</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;            <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running cnexp visitor&quot;</span>);</div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            NeuronSolveVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;cnexp&quot;</span>));</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        }</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160; </div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        {</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            SolveBlockVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;solveblock&quot;</span>));</div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;        }</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160; </div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;        <span class="keywordflow">if</span> (json_perfstat) {</div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            std::string file{scratch_dir};</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;            file.append(<span class="stringliteral">&quot;/&quot;</span>);</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;            file.append(modfile);</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;            file.append(<span class="stringliteral">&quot;.perf.json&quot;</span>);</div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;            <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Writing performance statistics to {}&quot;</span>, file);</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;            PerfVisitor(file).visit_program(*ast);</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;        }</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;        <span class="comment">// Add implicit arguments (like celsius, nt) to NEURON functions (like</span></div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        <span class="comment">// nrn_ghk, at_time) whose signatures we have to massage.</span></div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;        ImplicitArgumentVisitor{}.visit_program(*ast);</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160;        <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160; </div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;        {</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;            <span class="comment">// make sure to run perf visitor because code generator</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;            <span class="comment">// looks for read/write counts const/non-const declaration</span></div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;            PerfVisitor().visit_program(*ast);</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        }</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        {</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;            <a class="code" href="classnmodl_1_1_codegen_transform_visitor.html">CodegenTransformVisitor</a>{}.<a class="code" href="classnmodl_1_1visitor_1_1_ast_visitor.html#ac1533785a04b7c56a4430a6fd85b7b30">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;TransformVisitor&quot;</span>));</div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        }</div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160; </div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        {</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;            FunctionCallpathVisitor{}.visit_program(*ast);</div>
+<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160;            ast_to_nmodl(*ast, filepath(<span class="stringliteral">&quot;FunctionCallpathVisitor&quot;</span>));</div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;            <a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html">SymtabVisitor</a>(update_symtab).<a class="code" href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;        }</div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        {</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            <span class="keyword">auto</span> blame_level = detailed_blame ? <a class="code" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651">utils::BlameLevel::Detailed</a></div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;                                              : <a class="code" href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da30bb747c98bccdd11b3f89e644c4d0ad">utils::BlameLevel::Short</a>;</div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;            <span class="keywordflow">if</span> (coreneuron_code &amp;&amp; oacc_backend) {</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running OpenACC backend code generator for CoreNEURON&quot;</span>);</div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html">CodegenAccVisitor</a> visitor(modfile,</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                                          output_dir,</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                                          data_type,</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                                          optimize_ionvar_copies_codegen,</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                                          <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;            }</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (coreneuron_code &amp;&amp; !neuron_code &amp;&amp; cpp_backend) {</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running C++ backend code generator for CoreNEURON&quot;</span>);</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html">CodegenCoreneuronCppVisitor</a> visitor(modfile,</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;                                                    output_dir,</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                                                    data_type,</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;                                                    optimize_ionvar_copies_codegen,</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;                                                    <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;            }</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160; </div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (neuron_code &amp;&amp; cpp_backend) {</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;                <a class="code" href="namespacenmodl.html#a6f087e40d0134fa62ba1dbc48dc2462b">logger</a>-&gt;info(<span class="stringliteral">&quot;Running C++ backend code generator for NEURON&quot;</span>);</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                <a class="code" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html">CodegenNeuronCppVisitor</a> visitor(modfile,</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                                                output_dir,</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                                                data_type,</div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                                                optimize_ionvar_copies_codegen,</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                                                <a class="code" href="namespacenmodl_1_1utils.html#aa91ee02696f73a2ad0f82dbdebe198c7">utils::make_blame</a>(blame_line, blame_level));</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;                visitor.<a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">visit_program</a>(*ast);</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;            }</div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160; </div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;            <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;                    <span class="stringliteral">&quot;Non valid code generation configuration. Code generation with NMODL is &quot;</span></div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;                    <span class="stringliteral">&quot;supported for NEURON with C++ backend or CoreNEURON with C++/OpenACC &quot;</span></div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;                    <span class="stringliteral">&quot;backends&quot;</span>);</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            }</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;        }</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;    }</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_program_html_a9aee18cebe6217fb41c1fc3bc4584dc1"><div class="ttname"><a href="classnmodl_1_1ast_1_1_program.html#a9aee18cebe6217fb41c1fc3bc4584dc1">nmodl::ast::Program::get_model_symbol_table</a></div><div class="ttdeci">symtab::ModelSymbolTable * get_model_symbol_table()</div><div class="ttdoc">Return global symbol table for the mod file.</div><div class="ttdef"><b>Definition:</b> <a href="program_8hpp_source.html#l00159">program.hpp:159</a></div></div>
@@ -721,6 +724,7 @@ $(document).ready(function(){initNavTree('src_2main_8cpp_source.html',''); initR
 <div class="ttc" id="aclassnmodl_1_1visitor_1_1_symtab_visitor_html_a185382b93a9521f55d68f2d334b43429"><div class="ttname"><a href="classnmodl_1_1visitor_1_1_symtab_visitor.html#a185382b93a9521f55d68f2d334b43429">nmodl::visitor::SymtabVisitor::visit_program</a></div><div class="ttdeci">void visit_program(ast::Program &amp;node) override</div><div class="ttdoc">visit node of type ast::Program</div><div class="ttdef"><b>Definition:</b> <a href="symtab__visitor_8cpp_source.html#l00215">symtab_visitor.cpp:215</a></div></div>
 <div class="ttc" id="astructnmodl_1_1pybind__wrappers_1_1pybind__wrap__api_html_a3b13262ec2ee16bc5f5a9670d08a124b"><div class="ttname"><a href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#a3b13262ec2ee16bc5f5a9670d08a124b">nmodl::pybind_wrappers::pybind_wrap_api::initialize_interpreter</a></div><div class="ttdeci">decltype(&amp;initialize_interpreter_func) initialize_interpreter</div><div class="ttdef"><b>Definition:</b> <a href="wrapper_8hpp_source.html#l00048">wrapper.hpp:48</a></div></div>
 <div class="ttc" id="akinetic__block__visitor_8hpp_html"><div class="ttname"><a href="kinetic__block__visitor_8hpp.html">kinetic_block_visitor.hpp</a></div><div class="ttdoc">Visitor for kinetic block statements</div></div>
+<div class="ttc" id="anamespacenmodl_html_ae3bf5cf6089006e2ba8b8f93b9077703"><div class="ttname"><a href="namespacenmodl.html#ae3bf5cf6089006e2ba8b8f93b9077703">nmodl::solver_exists</a></div><div class="ttdeci">bool solver_exists(const ast::Ast &amp;node, const std::string &amp;name)</div><div class="ttdoc">Whether or not a solver of type name exists in the AST.</div><div class="ttdef"><b>Definition:</b> <a href="visitor__utils_8cpp_source.html#l00218">visitor_utils.cpp:218</a></div></div>
 <div class="ttc" id="asteadystate__visitor_8hpp_html"><div class="ttname"><a href="steadystate__visitor_8hpp.html">steadystate_visitor.hpp</a></div><div class="ttdoc">Visitor for STEADYSTATE solve statements</div></div>
 <div class="ttc" id="astructnmodl_1_1pybind__wrappers_1_1pybind__wrap__api_html_ae4fa610967440c727d94214a40430d4b"><div class="ttname"><a href="structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html#ae4fa610967440c727d94214a40430d4b">nmodl::pybind_wrappers::pybind_wrap_api::finalize_interpreter</a></div><div class="ttdeci">decltype(&amp;finalize_interpreter_func) finalize_interpreter</div><div class="ttdef"><b>Definition:</b> <a href="wrapper_8hpp_source.html#l00049">wrapper.hpp:49</a></div></div>
 <div class="ttc" id="asympy__conductance__visitor_8hpp_html"><div class="ttname"><a href="sympy__conductance__visitor_8hpp.html">sympy_conductance_visitor.hpp</a></div><div class="ttdoc">Visitor for generating CONDUCTANCE statements for ions</div></div>
@@ -749,7 +753,6 @@ $(document).ready(function(){initNavTree('src_2main_8cpp_source.html',''); initR
 <div class="ttc" id="aconfig_8h_html"><div class="ttname"><a href="config_8h.html">config.h</a></div><div class="ttdoc">Version information and units file path.</div></div>
 <div class="ttc" id="aclassnmodl_1_1codegen_1_1_codegen_cpp_visitor_html_a491e418920668f8fce331c65e8b48a02"><div class="ttname"><a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a491e418920668f8fce331c65e8b48a02">nmodl::codegen::CodegenCppVisitor::visit_program</a></div><div class="ttdeci">void visit_program(const ast::Program &amp;program) override</div><div class="ttdoc">Main and only member function to call after creating an instance of this class.</div><div class="ttdef"><b>Definition:</b> <a href="codegen__cpp__visitor_8cpp_source.html#l01385">codegen_cpp_visitor.cpp:1385</a></div></div>
 <div class="ttc" id="aclassnmodl_1_1ast_1_1_program_html"><div class="ttname"><a href="classnmodl_1_1ast_1_1_program.html">nmodl::ast::Program</a></div><div class="ttdoc">Represents top level AST node for whole NMODL input.</div><div class="ttdef"><b>Definition:</b> <a href="program_8hpp_source.html#l00039">program.hpp:39</a></div></div>
-<div class="ttc" id="anamespacenmodl_html_a21160c42746b7846b552e45572d8e083"><div class="ttname"><a href="namespacenmodl.html#a21160c42746b7846b552e45572d8e083">nmodl::sparse_solver_exists</a></div><div class="ttdeci">bool sparse_solver_exists(const ast::Ast &amp;node)</div><div class="ttdef"><b>Definition:</b> <a href="visitor__utils_8cpp_source.html#l00218">visitor_utils.cpp:218</a></div></div>
 <div class="ttc" id="asymtab__visitor_8hpp_html"><div class="ttname"><a href="symtab__visitor_8hpp.html">symtab_visitor.hpp</a></div><div class="ttdoc">THIS FILE IS GENERATED AT BUILD TIME AND SHALL NOT BE EDITED.</div></div>
 <div class="ttc" id="anamespacenmodl_1_1utils_html_ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651"><div class="ttname"><a href="namespacenmodl_1_1utils.html#ab558f385c3df0ec63f0fe25baa1d6b9da4042fcadbe61a3300451157e2c9fe651">nmodl::utils::BlameLevel::Detailed</a></div><div class="ttdeci">@ Detailed</div></div>
 <div class="ttc" id="asrc_2main_8cpp_html_ac0f2228420376f4db7e1274f2b41667c"><div class="ttname"><a href="src_2main_8cpp.html#ac0f2228420376f4db7e1274f2b41667c">main</a></div><div class="ttdeci">int main(int argc, const char *argv[])</div><div class="ttdef"><b>Definition:</b> <a href="src_2main_8cpp_source.html#l00064">main.cpp:64</a></div></div>
