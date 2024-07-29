@@ -491,10 +491,65 @@ std::string CodegenNeuronCppVisitor::nrn_thread_internal_arguments() {
     return {};
 }
 
+std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
+    const std::string& verbatim) {
+    // Note, the logic for reducing the number of macros printed, is aims to
+    // improve legibility of the generated code by reducing number of lines of
+    // code. It would be correct to print all macros, because that's essentially
+    // what NOCMODL does. Therefore, the logic isn't sharp.
 
-/// TODO: Write for NEURON
+    std::vector<std::string> macros_defined;
+    auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
+                                                          const std::string& macro_value) {
+        if (verbatim.find(macro_name) != std::string::npos) {
+            printer->fmt_line("#define {} {}", macro_name, macro_value);
+            macros_defined.push_back(macro_name);
+        }
+    };
+
+    printer->add_line("// Setup for VERBATIM");
+    for (const auto& var: codegen_float_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var: codegen_int_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    if (verbatim.find("_nt") != std::string::npos) {
+        print_macro("_nt", "nt");
+    }
+
+    return macros_defined;
+}
+
+void CodegenNeuronCppVisitor::print_verbatim_cleanup(
+    const std::vector<std::string>& macros_defined) {
+    for (const auto& macro: macros_defined) {
+        printer->fmt_line("#undef {}", macro);
+    }
+    printer->add_line("// End of cleanup for VERBATIM");
+}
+
+
 std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
-    return {};
+    return text;
+}
+
+
+void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
+    const auto& verbatim_code = node.get_statement()->eval();
+
+    auto macros_defined = print_verbatim_setup(verbatim_code);
+    printer->add_line("// Begin VERBATIM");
+    const auto& lines = stringutils::split_string(verbatim_code, '\n');
+    for (const auto& line: lines) {
+        printer->add_line(line);
+    }
+    printer->add_line("// End VERBATIM");
+    print_verbatim_cleanup(macros_defined);
 }
 
 
@@ -597,6 +652,9 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
                                                        const std::string& name,
                                                        bool use_instance) const {
     auto position = position_of_int_var(name);
+    if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
+        return fmt::format("(nrnran123_State*) _ppvar[{}].get<void*>()", position);
+    }
     if (symbol.is_index) {
         if (use_instance) {
             throw std::runtime_error("Not implemented. [wiejo]");

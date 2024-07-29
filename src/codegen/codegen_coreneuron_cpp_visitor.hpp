@@ -122,7 +122,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string process_verbatim_token(const std::string& token);
 
-
     /**
      * Check if variable is qualified as constant
      * \param name The name of variable
@@ -1017,6 +1016,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
+    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
 
     ParamVector functor_params() override;

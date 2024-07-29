@@ -1013,7 +1013,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     virtual std::string process_verbatim_text(std::string const& text) = 0;
 
-
     /**
      * Arguments for register_mech or point_register_mech function
      */
@@ -1452,7 +1451,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_unary_operator(const ast::UnaryOperator& node) override;
     void visit_unit(const ast::Unit& node) override;
     void visit_var_name(const ast::VarName& node) override;
-    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
     void visit_protect_statement(const ast::ProtectStatement& node) override;
