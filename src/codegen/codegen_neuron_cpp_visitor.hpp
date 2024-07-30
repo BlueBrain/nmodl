@@ -320,6 +320,17 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
         const ast::FunctionTableBlock& /* node */) override;
 
 
+    /** Print compatibility macros required for VERBATIM blocks.
+     *
+     *  Returns the names of all macros introduced.
+     */
+    std::vector<std::string> print_verbatim_setup(const std::string& verbatim);
+
+    /** Print `#undef`s to erase all compatibility macros.
+     */
+    void print_verbatim_cleanup(const std::vector<std::string>& macros_defined);
+
+
     /**
      * Arguments for register_mech or point_register_mech function
      */
@@ -424,7 +435,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine variable name in the structure of mechanism properties
+     * Determine the C++ string to replace variable names with.
+     *
+     * Given a variable name such as `ion_cai` or `v`, return the C++ code
+     * required to get the value.
      *
      * \param name         Variable name that is being printed
      * \param use_instance Should the variable be accessed via instance or data array
@@ -432,6 +446,18 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
+
+    /**
+     * Determine the C++ string to replace pointer names with.
+     *
+     * Given a variable name such as `_p_ptr` or `_p_rng`, return the C++ code
+     * required to get a pointer to `ptr` (or `rng`).
+     *
+     * \param name         Variable name that is being printed
+     * \return             The C++ string representing the variable.
+     * thread structure
+     */
+    std::string get_pointer_name(const std::string& name) const;
 
 
     /****************************************************************************************/
