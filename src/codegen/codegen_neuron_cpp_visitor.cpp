@@ -2404,6 +2404,7 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 
 
 void CodegenNeuronCppVisitor::print_compute_functions() {
+    print_top_verbatim_blocks();
     print_hoc_py_wrapper_function_definitions();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
