@@ -631,9 +631,77 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
     return {params, {}};
 }
 
+std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
+    const std::string& verbatim) {
+    // Note, the logic for reducing the number of macros printed, is aims to
+    // improve legibility of the generated code by reducing number of lines of
+    // code. It would be correct to print all macros, because that's essentially
+    // what NOCMODL does. Therefore, the logic isn't sharp.
+
+    std::vector<std::string> macros_defined;
+    auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
+                                                          const std::string& macro_value) {
+        if (verbatim.find(macro_name) != std::string::npos) {
+            printer->fmt_line("#define {} {}", macro_name, macro_value);
+            macros_defined.push_back(macro_name);
+        }
+    };
+
+    printer->add_line("// Setup for VERBATIM");
+    for (const auto& var: codegen_float_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var: codegen_int_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+        if (verbatim.find("_p_" + name) != std::string::npos) {
+            print_macro("_p_" + name, get_pointer_name(name));
+        }
+    }
+
+    for (const auto& func: info.functions) {
+        auto name = get_name(func);
+        print_macro(name, "::neuron::" + method_name(name));
+    }
+
+    for (const auto& proc: info.procedures) {
+        auto name = get_name(proc);
+        print_macro(name, "::neuron::" + method_name(name));
+    }
+
+    if (verbatim.find("_nt") != std::string::npos) {
+        print_macro("_nt", "nt");
+    }
+
+    if (verbatim.find("_tqitem") != std::string::npos) {
+        print_macro("_tqitem", "tqitem");
+    }
+
+    return macros_defined;
+}
+
+void CodegenNeuronCppVisitor::print_verbatim_cleanup(
+    const std::vector<std::string>& macros_defined) {
+    for (const auto& macro: macros_defined) {
+        printer->fmt_line("#undef {}", macro);
+    }
+    printer->add_line("// End of cleanup for VERBATIM");
+}
+
 
 void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
-    // Not implemented yet.
+    const auto& verbatim_code = node.get_statement()->eval();
+
+    auto macros_defined = print_verbatim_setup(verbatim_code);
+    printer->add_line("// Begin VERBATIM");
+    const auto& lines = stringutils::split_string(verbatim_code, '\n');
+    for (const auto& line: lines) {
+        printer->add_line(line);
+    }
+    printer->add_line("// End VERBATIM");
+    print_verbatim_cleanup(macros_defined);
 }
 
 
@@ -790,6 +858,25 @@ std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symb
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
+}
+
+
+std::string CodegenNeuronCppVisitor::get_pointer_name(const std::string& name) const {
+    auto name_comparator = [&name](const auto& sym) { return name == get_name(sym); };
+
+    auto var =
+        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), name_comparator);
+
+    if (var == codegen_int_variables.end()) {
+        throw std::runtime_error("Only integer variables have a 'pointer name'.");
+    }
+    auto position = position_of_int_var(name);
+
+    if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
+        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
+    }
+
+    throw std::runtime_error(fmt::format("Unsupported variable: {}. [loicw]", name));
 }
 
 
