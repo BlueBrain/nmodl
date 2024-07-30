@@ -1449,6 +1449,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     void print_nmodl_constants();
 
+    /**
+     * Print top level (global scope) verbatim blocks
+     */
+    void print_top_verbatim_blocks();
+
 
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
