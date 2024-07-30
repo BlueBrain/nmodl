@@ -671,6 +671,10 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         print_macro(name, "::neuron::" + method_name(name));
     }
 
+    if (verbatim.find("t") != std::string::npos) {
+        print_macro("t", "nt->_t");
+    }
+
     if (verbatim.find("_nt") != std::string::npos) {
         print_macro("_nt", "nt");
     }
@@ -871,12 +875,7 @@ std::string CodegenNeuronCppVisitor::get_pointer_name(const std::string& name) c
         throw std::runtime_error("Only integer variables have a 'pointer name'.");
     }
     auto position = position_of_int_var(name);
-
-    if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
-        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
-    }
-
-    throw std::runtime_error(fmt::format("Unsupported variable: {}. [loicw]", name));
+    return fmt::format("_ppvar[{}].literal_value<void*>()", position);
 }
 
 
