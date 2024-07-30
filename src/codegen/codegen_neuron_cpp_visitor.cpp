@@ -2546,6 +2546,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines_regular() {
     print_point_process_function_definitions();
     print_setdata_functions();
     print_check_table_entrypoint();
+    print_top_verbatim_blocks();
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
