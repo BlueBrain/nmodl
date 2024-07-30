@@ -89,15 +89,15 @@ var NAVTREEINDEX =
 "classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a412126f3cd2b3b20951cba92ca17e7b3",
 "classnmodl_1_1visitor_1_1_visitor.html#a810cd11fb1f4c27f176f0c48301bf20f",
 "codegen__naming_8hpp.html#a0045fd6f49fae28de5171e28a2502084",
-"expression_8hpp_source.html",
+"expression_8hpp.html",
 "group__ast__class.html#ga6a8e5076ce68736223774b02972fdfa8",
-"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4d34f53389ed7f28ca91fc31ea360a66",
-"group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba9c70933aff6b2a6d08c687a6cbb6b765",
-"loop__unroll_8cpp.html#a5c7c718342628b4fbefceb778478db8a",
-"program_8hpp.html",
-"structnmodl_1_1codegen_1_1_codegen_info.html#ad173d2b9f305f30ca7c87f71ff2b28eb",
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba9b0129aafa77fbe64fd8092a39d79079",
-"verbatim_8cpp_source.html"
+"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4c6870a02b7d0786e06c676349ec2872",
+"group__codegen__details.html#ggab185b9278fbfff591fbe3da84ba22d0ba37b19816109a32106d109e83bbb3c97d",
+"loop__unroll_8cpp.html",
+"procedure__block_8hpp.html",
+"structnmodl_1_1codegen_1_1_codegen_info.html#acb01dca9a103a533a8ee574728d352f0",
+"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba7b0b4b63b7695c9d325544455f858b7c",
+"verbatim_8cpp.html#a5bb21e656fd24d011abbb8b5f038ca90"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -462,6 +462,7 @@ var group__codegen__backends =
       [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ],
       [ "codegen_thread_variables", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2142740635a801ade67d99228fd71ce2", null ]
     ] ],
+    [ "get_name", "group__codegen__backends.html#ga9dc150643b36d2a9087f4ab7c94325c7", null ],
     [ "print_function_declaration", "group__codegen__backends.html#gabf8cfdf6adba4da78b0d92b81d9ff160", null ],
     [ "print_vector_elements", "group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c", null ]
 ];
