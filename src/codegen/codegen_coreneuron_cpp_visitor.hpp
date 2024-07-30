@@ -501,16 +501,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void print_memb_list_getter();
 
 
-    /**
-     * Prints the start of the \c coreneuron namespace
-     */
-    void print_namespace_start() override;
-
-
-    /**
-     * Prints the end of the \c coreneuron namespace
-     */
-    void print_namespace_stop() override;
+    virtual std::string namespace_name() override;
 
 
     /**
