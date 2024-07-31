@@ -599,7 +599,7 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     auto position = position_of_int_var(name);
 
     if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
-        return fmt::format("(nrnran123_State*)_ppvar[{}].literal_value<void*>()", position);
+        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
     }
 
     if (symbol.is_index) {
@@ -1586,7 +1586,7 @@ void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(_prop);");
 
     for (const auto& rv: info.random_variables) {
-        printer->fmt_line("nrnran123_deletestream({});", get_variable_name(get_name(rv), false));
+        printer->fmt_line("nrnran123_deletestream((nrnran123_State*) {});", get_variable_name(get_name(rv), false));
     }
 
     printer->pop_block();
