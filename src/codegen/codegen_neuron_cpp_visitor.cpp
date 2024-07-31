@@ -1586,7 +1586,8 @@ void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(_prop);");
 
     for (const auto& rv: info.random_variables) {
-        printer->fmt_line("nrnran123_deletestream((nrnran123_State*) {});", get_variable_name(get_name(rv), false));
+        printer->fmt_line("nrnran123_deletestream((nrnran123_State*) {});",
+                          get_variable_name(get_name(rv), false));
     }
 
     printer->pop_block();
