@@ -16,10 +16,12 @@
 #include <stdexcept>
 
 #include "ast/all.hpp"
+#include "ast/procedure_block.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "codegen_naming.hpp"
 #include "config/config.h"
+#include "parser/c11_driver.hpp"
 #include "solver/solver.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -563,6 +565,19 @@ const CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::external_method_pa
 }
 
 
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internalthreadargs_parameters() {
+    return internal_method_parameters();
+}
+
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::threadargs_parameters() {
+    return {{"", "Memb_list*", "", "_ml"},
+            {"", "size_t", "", "_iml"},
+            {"", "Datum*", "", "_ppvar"},
+            {"", "Datum*", "", "_thread"},
+            {"", "double*", "", "_globals"},
+            {"", "NrnThread*", "", "_nt"}};
+}
+
 /// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
     return {};
@@ -586,10 +601,11 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
 
 std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
     const std::string& verbatim) {
-    // Note, the logic for reducing the number of macros printed, is aims to
+    // Note, the logic for reducing the number of macros printed, aims to
     // improve legibility of the generated code by reducing number of lines of
-    // code. It would be correct to print all macros, because that's essentially
-    // what NOCMODL does. Therefore, the logic isn't sharp.
+    // code. It would be correct to print all macros, because that's
+    // essentially what NOCMODL does. Therefore, the logic isn't sharp (and
+    // doesn't have to be).
 
     std::vector<std::string> macros_defined;
     auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
@@ -616,25 +632,28 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
 
     for (const auto& func: info.functions) {
         auto name = get_name(func);
-        print_macro(name, "::neuron::" + method_name(name));
+        print_macro(name, method_name(name));
     }
 
     for (const auto& proc: info.procedures) {
         auto name = get_name(proc);
-        print_macro(name, "::neuron::" + method_name(name));
+        print_macro(name, method_name(name));
     }
 
-    if (verbatim.find("t") != std::string::npos) {
-        print_macro("t", "nt->_t");
-    }
+    print_macro("t", "nt->_t");
+    print_macro("_nt", "nt");
+    print_macro("_tqitem", "tqitem");
 
-    if (verbatim.find("_nt") != std::string::npos) {
-        print_macro("_nt", "nt");
-    }
+    auto print_args_macro = [this, print_macro](const std::string& macro_basename,
+                                                const ParamVector& params) {
+        print_macro("_" + macro_basename + "_", get_arg_str(params));
+        print_macro("_" + macro_basename + "comma_", get_arg_str(params) + ",");
+        print_macro("_" + macro_basename + "proto_", get_parameter_str(params));
+        print_macro("_" + macro_basename + "protocomma_", get_parameter_str(params) + ",");
+    };
 
-    if (verbatim.find("_tqitem") != std::string::npos) {
-        print_macro("_tqitem", "tqitem");
-    }
+    print_args_macro("internalthreadargs", internalthreadargs_parameters());
+    print_args_macro("threadargs", threadargs_parameters());
 
     return macros_defined;
 }
@@ -647,13 +666,42 @@ void CodegenNeuronCppVisitor::print_verbatim_cleanup(
     printer->add_line("// End of cleanup for VERBATIM");
 }
 
+std::string CodegenNeuronCppVisitor::process_verbatim_text(const std::string& verbatim) {
+    parser::CDriver driver;
+    driver.scan_string(verbatim);
+    auto tokens = driver.all_tokens();
+    std::string result;
+    for (size_t i = 0; i < tokens.size(); i++) {
+        auto token = tokens[i];
+
+        // check if we have function call in the verbatim block where
+        // function is defined in the same mod file
+        if (program_symtab->is_method_defined(token) && tokens[i + 1] == "(") {
+            result += token + "(";
+            if (tokens[i + 2] == "_threadargs_") {
+                result += "_internalthreadargs_";
+            } else if (tokens[i + 2] == "_threadargscomma_") {
+                result += "_internalthreadargscomma_";
+            } else {
+                result += tokens[i + 2];
+            }
+
+            i += 2;
+        } else {
+            result += token;
+        }
+    }
+    return result;
+}
+
 
 void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
     const auto& verbatim_code = node.get_statement()->eval();
+    auto massaged_verbatim = process_verbatim_text(verbatim_code);
 
-    auto macros_defined = print_verbatim_setup(verbatim_code);
+    auto macros_defined = print_verbatim_setup(massaged_verbatim);
     printer->add_line("// Begin VERBATIM");
-    const auto& lines = stringutils::split_string(verbatim_code, '\n');
+    const auto& lines = stringutils::split_string(massaged_verbatim, '\n');
     for (const auto& line: lines) {
         printer->add_line(line);
     }

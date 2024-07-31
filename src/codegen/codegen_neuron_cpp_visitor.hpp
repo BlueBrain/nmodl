@@ -24,6 +24,8 @@
 #include <string_view>
 #include <utility>
 
+#include "ast/function_block.hpp"
+#include "ast/procedure_block.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -305,6 +307,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     const ParamVector external_method_parameters(bool table = false) noexcept override;
 
 
+    /** The parameters for the four macros `_internalthreadargs*_`. */
+    ParamVector internalthreadargs_parameters();
+
+
+    /** The parameters for the four macros `_threadargs*_`. */
+    ParamVector threadargs_parameters();
+
+
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
@@ -320,11 +330,17 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
         const ast::FunctionTableBlock& /* node */) override;
 
 
+    void print_verbatim_overload(const std::string& return_type, const ast::Ast& node);
+    void print_procedure_verbatim_overload(const ast::ProcedureBlock& procedure);
+    void print_function_verbatim_overload(const ast::FunctionBlock& function);
+
+
     /** Print compatibility macros required for VERBATIM blocks.
      *
      *  Returns the names of all macros introduced.
      */
     std::vector<std::string> print_verbatim_setup(const std::string& verbatim);
+
 
     /** Print `#undef`s to erase all compatibility macros.
      */
@@ -737,6 +753,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
 
+    std::string process_verbatim_text(const std::string& verbatim);
     void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
