@@ -599,7 +599,7 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     auto position = position_of_int_var(name);
 
     if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
-        return fmt::format("_ppvar[{}].literal_value<nrnran123_State*>()", position);
+        return fmt::format("(nrnran123_State*)_ppvar[{}].literal_value<void*>()", position);
     }
 
     if (symbol.is_index) {
