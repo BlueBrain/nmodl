@@ -192,13 +192,16 @@ void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
                 procedure_nodes.begin(),
                 procedure_nodes.end(),
                 [&solve_node](const auto& procedure_node) {
+                    const auto& method =
+                        std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)->get_method();
+                    if (!method) {
+                        return false;
+                    }
                     return procedure_node->get_node_name() ==
                                std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)
                                    ->get_block_name()
                                    ->get_node_name() &&
-                           std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)
-                                   ->get_method()
-                                   ->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
+                           method->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
                 });
         });
 
