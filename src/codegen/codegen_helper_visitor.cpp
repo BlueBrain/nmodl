@@ -15,6 +15,7 @@
 #include "parser/c11_driver.hpp"
 #include "visitors/visitor_utils.hpp"
 
+#include "utils/logger.hpp"
 
 namespace nmodl {
 namespace codegen {
@@ -152,6 +153,63 @@ void CodegenHelperVisitor::find_ion_variables(const ast::Program& node) {
     }
 }
 
+/**
+ * Find whether or not we need to emit CVODE-related code for NEURON
+ *  Notes: we generate CVODE-related code if and only if:
+ *  - there is exactly ONE block being SOLVEd
+ *  - the block is one of the following types:
+ *      - DERIVATIVE
+ *      - KINETIC
+ *      - PROCEDURE being solved with the `after_cvode`, `cvode_t`, or `cvode_t_v` methods
+ */
+void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
+    // find the breakpoint block
+    const auto& breakpoint_nodes = collect_nodes(node, {AstNodeType::BREAKPOINT_BLOCK});
+
+    // do nothing if there are no BREAKPOINT nodes
+    if (breakpoint_nodes.empty()) {
+        return;
+    }
+
+    // all (global) kinetic/derivative nodes
+    const auto& kinetic_or_derivative_nodes =
+        collect_nodes(node, {AstNodeType::KINETIC_BLOCK, AstNodeType::DERIVATIVE_BLOCK});
+
+    // all (global) procedure nodes
+    const auto& procedure_nodes = collect_nodes(node, {AstNodeType::PROCEDURE_BLOCK});
+
+    // there can only be one BREAKPOINT block in the entire program
+    const auto& breakpoint_node = std::dynamic_pointer_cast<const ast::BreakpointBlock>(
+        breakpoint_nodes[0]);
+
+    // find all SOLVE blocks in that BREAKPOINT block
+    const auto& solve_nodes = collect_nodes(*breakpoint_node, {AstNodeType::SOLVE_BLOCK});
+
+    // check whether any of the SOLVE blocks are solving any PROCEDURE with `after_cvode` method
+    const auto using_after_cvode = std::any_of(
+        solve_nodes.begin(), solve_nodes.end(), [&procedure_nodes](const auto& solve_node) {
+            return std::any_of(
+                procedure_nodes.begin(),
+                procedure_nodes.end(),
+                [&solve_node](const auto& procedure_node) {
+                    return procedure_node->get_node_name() ==
+                               std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)
+                                   ->get_block_name()
+                                   ->get_node_name() &&
+                           std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)
+                                   ->get_method()
+                                   ->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
+                });
+        });
+
+    // only case when we emit CVODE code is if we have exactly one block, and
+    // that block is either a KINETIC/DERIVATIVE with any method, or a
+    // PROCEDURE with `after_cvode` method
+    if (solve_nodes.size() == 1 && (kinetic_or_derivative_nodes.size() || using_after_cvode)) {
+        logger->debug("Emitting code for CVODE");
+        info.emit_cvode = true;
+    }
+}
 
 /**
  * Find non-range variables i.e. ones that are not belong to per instance allocation
@@ -738,6 +796,7 @@ void CodegenHelperVisitor::visit_program(const ast::Program& node) {
     find_non_range_variables();
     find_table_variables();
     find_neuron_global_variables();
+    check_cvode_codegen(node);
 }
 
 
