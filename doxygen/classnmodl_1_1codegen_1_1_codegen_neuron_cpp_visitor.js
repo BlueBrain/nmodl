@@ -51,8 +51,6 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "print_mechanism_range_var_structure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a1d7cd0325d3658024daba8fe2d2cb804", null ],
     [ "print_mechanism_register", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#abd73fe57cf5edd770a7e775f130fc723", null ],
     [ "print_mechanism_variables_macros", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab501ff577dc0c959112378c70a9bb125", null ],
-    [ "print_namespace_begin", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab72208bf9821d213a933f4b3f5579d20", null ],
-    [ "print_namespace_end", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a6abde0bb8aa4c6bd11cd15303295e9f9", null ],
     [ "print_namespace_start", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a9749309d724cd1f4a47989c9d76c92c3", null ],
     [ "print_namespace_stop", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aa40457fee0fa38359bb1ef9487efd00e", null ],
     [ "print_net_event_call", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#adf3ecfb21886bca7be8a882e2166a919", null ],

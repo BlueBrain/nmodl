@@ -95,8 +95,6 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "print_mechanism_info", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae0e48a2461354feaaa2a3077da1d02f6", null ],
     [ "print_mechanism_range_var_structure", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aee824eb01f6cf6f9187af509245ffc3a", null ],
     [ "print_mechanism_register", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a022e94245068b1c395e13272d8bc4984", null ],
-    [ "print_namespace_begin", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3e2476ccbaa3d2502fa8e6c0e42a628", null ],
-    [ "print_namespace_end", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2f0c1a7b9127c6248b03b296257e8833", null ],
     [ "print_namespace_start", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af2490222aefa83d67238c605e05197a3", null ],
     [ "print_namespace_stop", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1d253986a351e263db95bb63c51775c3", null ],
     [ "print_net_event_call", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae350ed7effbbcf8dbea050231599c8e6", null ],

@@ -866,12 +866,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a190bf9a0838f05780f727a5a90883813"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a190bf9a0838f05780f727a5a90883813">print_headers_include</a> ()=0</td></tr>
 <tr class="memdesc:a190bf9a0838f05780f727a5a90883813"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all includes.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a190bf9a0838f05780f727a5a90883813">More...</a><br /></td></tr>
 <tr class="separator:a190bf9a0838f05780f727a5a90883813"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3e2476ccbaa3d2502fa8e6c0e42a628"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3e2476ccbaa3d2502fa8e6c0e42a628">print_namespace_begin</a> ()=0</td></tr>
-<tr class="memdesc:af3e2476ccbaa3d2502fa8e6c0e42a628"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print start of namespaces.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#af3e2476ccbaa3d2502fa8e6c0e42a628">More...</a><br /></td></tr>
-<tr class="separator:af3e2476ccbaa3d2502fa8e6c0e42a628"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f0c1a7b9127c6248b03b296257e8833"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2f0c1a7b9127c6248b03b296257e8833">print_namespace_end</a> ()=0</td></tr>
-<tr class="memdesc:a2f0c1a7b9127c6248b03b296257e8833"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print end of namespaces.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2f0c1a7b9127c6248b03b296257e8833">More...</a><br /></td></tr>
-<tr class="separator:a2f0c1a7b9127c6248b03b296257e8833"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acbb83079b063cd6b48e07030b1f5df84"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acbb83079b063cd6b48e07030b1f5df84">print_data_structures</a> (bool print_initializers)=0</td></tr>
 <tr class="memdesc:acbb83079b063cd6b48e07030b1f5df84"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print all classes.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acbb83079b063cd6b48e07030b1f5df84">More...</a><br /></td></tr>
 <tr class="separator:acbb83079b063cd6b48e07030b1f5df84"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4281,64 +4275,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="af3e2476ccbaa3d2502fa8e6c0e42a628"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3e2476ccbaa3d2502fa8e6c0e42a628">&#9670;&nbsp;</a></span>print_namespace_begin()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void nmodl::codegen::CodegenCppVisitor::print_namespace_begin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print start of namespaces. </p>
-
-<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a65d00673a1f7d24ba66b6730593da402">nmodl::codegen::CodegenCoreneuronCppVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab72208bf9821d213a933f4b3f5579d20">nmodl::codegen::CodegenNeuronCppVisitor</a>.</p>
-
-</div>
-</div>
-<a id="a2f0c1a7b9127c6248b03b296257e8833"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f0c1a7b9127c6248b03b296257e8833">&#9670;&nbsp;</a></span>print_namespace_end()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void nmodl::codegen::CodegenCppVisitor::print_namespace_end </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print end of namespaces. </p>
-
-<p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aed50b0789d65ce89402dcf00e186f261">nmodl::codegen::CodegenCoreneuronCppVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a6abde0bb8aa4c6bd11cd15303295e9f9">nmodl::codegen::CodegenNeuronCppVisitor</a>.</p>
-
-</div>
-</div>
 <a id="af2490222aefa83d67238c605e05197a3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2490222aefa83d67238c605e05197a3">&#9670;&nbsp;</a></span>print_namespace_start()</h2>
 
@@ -6827,7 +6763,7 @@ template&lt;typename T &gt; </div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2af0317e4ceb9bd3f1bf2999ebb32dcf99">CppObjectSpecifier::ThreadLocal</a>, <span class="stringliteral">&quot;thread_local&quot;</span>},</div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a79ceee9f8e3c1f0cc74223e05d2448bf">CppObjectSpecifier::Const</a>, <span class="stringliteral">&quot;const&quot;</span>}}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01402">1402</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01388">1388</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
