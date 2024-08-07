@@ -1493,6 +1493,15 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
         printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
     }
 
+    for (auto state: info.state_vars) {
+        if (!state->is_array()) {
+            auto state_name = state->get_name();
+            printer->fmt_line("{} = {};",
+                              get_variable_name(state_name),
+                              get_variable_name(state_name + "0"));
+        }
+    }
+
     print_initial_block(info.initial_node);
     printer->pop_block();
 
