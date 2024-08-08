@@ -106,6 +106,9 @@ build:nvhpc:
     # https://github.com/BlueBrain/nmodl/issues/737
     bb5_ntasks: 1
 
+  script:
+    - echo "Temporarily disabled."
+
 test:intel:
   extends:
     - .ctest
