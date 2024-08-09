@@ -1131,15 +1131,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("_nrn_thread_table_reg(mech_type, {});", table_thread_function_name());
     }
 
-    /// Call _nrn_mechanism_register_data_fields() with the correct arguments
-    /// Geenerated code follows the style underneath
-    ///
-    ///     _nrn_mechanism_register_data_fields(mech_type,
-    ///         _nrn_mechanism_field<double>{"var_name"}, /* float var index 0 */
-    ///         ...
-    ///     );
-    ///
-    /// TODO: More things to add here
     printer->add_line("_nrn_mechanism_register_data_fields(mech_type,");
     printer->increase_indent();
 
@@ -1500,6 +1491,22 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
         printer->add_line("int node_id = node_data.nodeindices[id];");
         printer->add_line("auto v = node_data.node_voltages[node_id];");
         printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
+    }
+
+    for (auto state: info.state_vars) {
+        auto state_name = state->get_name();
+        auto lhs_name = get_variable_name(state_name);
+        auto rhs_name = get_variable_name(state_name + "0");
+
+        if (!state->is_array()) {
+            auto state_name = state->get_name();
+            printer->fmt_line("{} = {};", lhs_name, rhs_name);
+        } else {
+            auto n_elements = state->get_length();
+            printer->fmt_push_block("for(size_t _i = 0; _i < {}; ++_i)", n_elements);
+            printer->fmt_line("{}[_i] = {};", lhs_name, rhs_name);
+            printer->pop_block();
+        }
     }
 
     print_initial_block(info.initial_node);
