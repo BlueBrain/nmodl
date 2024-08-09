@@ -8,19 +8,19 @@ def test_default_values():
     s.insert("default_values")
     mech = s(0.5).default_values
 
-    X_hoc = h.Vector().record(mech._ref_X)
-    Y_hoc = h.Vector().record(mech._ref_Y)
-    Z_hoc = h.Vector().record(mech._ref_Z)
-
     h.stdinit()
 
-    X = np.array(X_hoc.as_numpy())
-    Y = np.array(Y_hoc.as_numpy())
-    Z = np.array(Z_hoc.as_numpy())
+    X = mech.X
+    Y = mech.Y
+    Z = mech.Z
+    A = mech.A
 
-    assert X[0] == 2.0
-    assert Y[0] == 0.0
-    assert Z[0] == 3.0
+    assert X == 2.0
+    assert Y == 0.0
+    assert Z == 3.0
+
+    for i in range(3):
+        assert A[i] == 4.0
 
 
 if __name__ == "__main__":
