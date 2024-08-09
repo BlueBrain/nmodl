@@ -10,17 +10,15 @@ def test_default_values():
 
     h.stdinit()
 
-    X = mech.X
-    Y = mech.Y
-    Z = mech.Z
-    A = mech.A
-
-    assert X == 2.0
-    assert Y == 0.0
-    assert Z == 3.0
+    assert mech.X == 2.0
+    assert mech.Y == 0.0
+    assert mech.Z == 7.0
 
     for i in range(3):
-        assert A[i] == 4.0
+        assert mech.A[i] == 4.0
+
+    assert mech.B[0] == 5.0
+    assert mech.B[1] == 8.0
 
 
 if __name__ == "__main__":
