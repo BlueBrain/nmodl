@@ -284,6 +284,53 @@ stages:
       displayName: 'Publish wheel as build artifact'
     - template: ci/upload-wheels.yml
 
+  - job: 'windows_wheels_x86_64'
+    timeoutInMinutes: 45
+    pool:
+      vmImage: 'windows-2022'
+    steps:
+    - checkout: self
+      submodules: True
+      condition: succeeded()
+    - pwsh: |
+        choco install winflexbison3
+      condition: succeeded()
+      displayName: 'Install Dependencies'
+
+    - pwsh: |
+        if ($env:RELEASEWHEELBUILD) {
+          Write-Output "##vso[task.setvariable variable=TAG;]"
+        } else {
+          Write-Output "##vso[task.setvariable variable=TAG;]-nightly"
+        }
+      displayName: "Set wheel tag"
+
+    - pwsh: |
+        Write-Output "##vso[task.setvariable variable=CIBW_BUILD;]cp38* cp312*"
+      condition: and(succeeded(), eq(variables['Build.Reason'], 'PullRequest'))
+      displayName: "Set build identifiers"
+
+    - task: UsePythonVersion@0
+
+    - pwsh: |
+        Write-Output "Using TAG '$env:TAG'"
+        Write-Output "Using CIBW_BUILD '$env:CIBW_BUILD'"
+        python -m pip install --upgrade pip
+        python -m pip install cibuildwheel==2.16.5 tomli tomli-w
+        # change the name accordingly
+        python packaging/change_name.py pyproject.toml "NMODL$env:TAG"
+        $env:SETUPTOOLS_SCM_PRETEND_VERSION=((git describe --tags) -split "-"|Select-Object -First 2) -join "."
+        python -m cibuildwheel --output-dir wheelhouse
+      condition: succeeded()
+      displayName: 'Build Windows Wheel (x86_64)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        pathToPublish: '$(Build.SourcesDirectory)/wheelhouse'
+      condition: succeeded()
+      displayName: 'Publish wheel as build artifact'
+    - template: ci/upload-wheels.yml
+
   - job: 'test_manylinux_wheels'
     dependsOn: 'manylinux_wheels'
     timeoutInMinutes: 45

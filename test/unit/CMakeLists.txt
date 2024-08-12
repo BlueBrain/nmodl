@@ -119,10 +119,6 @@ target_link_libraries(testunitparser PRIVATE lexer test_util config)
 # Use catch_discover instead of add_test for granular test result reporting.
 # =============================================================================
 set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
-set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
-if(NOT LINK_AGAINST_PYTHON)
-  list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
-endif()
 
 # Without main from Catch2
 target_link_libraries(testcodegen PRIVATE Catch2::Catch2)

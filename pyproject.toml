@@ -77,3 +77,6 @@ test-command = "true"
 
 [tool.cibuildwheel.windows]
 environment = { SKBUILD_CMAKE_ARGS = "-DNMODL_BUILD_WHEEL=ON;-DFLEX_INCLUDE_PATH=C:/ProgramData/chocolatey/lib/winflexbison3/tools" }
+test-command = [
+    "pwsh -File {package}/packaging/test_wheel.ps1 {wheel} -venv:false",
+]
