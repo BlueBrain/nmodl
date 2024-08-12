@@ -245,3 +245,123 @@ SCENARIO("ARTIFICIAL_CELL with `net_move`") {
         }
     }
 }
+
+SCENARIO("CVODE codegen") {
+    GIVEN("a mod file with a single KINETIC block") {
+        std::string input_nmodl = R"(
+            STATE {
+                x
+            }
+            KINETIC states {
+                ~ x << (a*c/3.2)
+            }
+            BREAKPOINT {
+                SOLVE states METHOD cnexp
+            })";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Emit CVODE") {
+            REQUIRE(cvisitor->emit_cvode());
+        }
+    }
+    GIVEN("a mod file with a single DERIVATIVE block") {
+        std::string input_nmodl = R"(
+            STATE {
+                m
+            }
+            BREAKPOINT {
+                SOLVE state METHOD derivimplicit
+            }
+            DERIVATIVE state {
+               m' = 2 * m
+            }
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Emit CVODE") {
+            REQUIRE(cvisitor->emit_cvode());
+        }
+    }
+    GIVEN("a mod file with a single PROCEDURE block solved with method `after_cvode`") {
+        std::string input_nmodl = R"(
+        BREAKPOINT {
+            SOLVE state METHOD after_cvode
+        }
+        PROCEDURE state() {}
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Emit CVODE") {
+            REQUIRE(cvisitor->emit_cvode());
+        }
+    }
+    GIVEN("a mod file with a single PROCEDURE block NOT solved with method `after_cvode`") {
+        std::string input_nmodl = R"(
+        BREAKPOINT {
+            SOLVE state METHOD cnexp
+        }
+        PROCEDURE state() {}
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Do not emit CVODE") {
+            REQUIRE(!cvisitor->emit_cvode());
+        }
+    }
+    GIVEN("a mod file with a DERIVATIVE and a KINETIC block") {
+        std::string input_nmodl = R"(
+            STATE {
+                m
+                x
+            }
+            BREAKPOINT {
+                SOLVE der METHOD derivimplicit
+                SOLVE kin METHOD cnexp
+            }
+            DERIVATIVE der {
+               m' = 2 * m
+            }
+            KINETIC kin {
+                ~ x << (a*c/3.2)
+            }
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Do not emit CVODE") {
+            REQUIRE(!cvisitor->emit_cvode());
+        }
+    }
+    GIVEN("a mod file with a PROCEDURE and a DERIVATIVE block") {
+        std::string input_nmodl = R"(
+            STATE {
+                m
+            }
+            BREAKPOINT {
+                SOLVE der METHOD derivimplicit
+                SOLVE func METHOD cnexp
+            }
+            DERIVATIVE der {
+               m' = 2 * m
+            }
+            PROCEDURE func() {
+            }
+        )";
+        const auto& ast = NmodlDriver().parse_string(input_nmodl);
+        std::stringstream ss;
+        auto cvisitor = create_neuron_cpp_visitor(ast, input_nmodl, ss);
+
+        THEN("Do not emit CVODE") {
+            REQUIRE(!cvisitor->emit_cvode());
+        }
+    }
+}

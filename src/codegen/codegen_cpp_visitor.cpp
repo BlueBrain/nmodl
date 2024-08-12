@@ -1031,6 +1031,10 @@ void CodegenCppVisitor::visit_update_dt(const ast::UpdateDt& node) {
     // dt change statement should be pulled outside already
 }
 
+bool CodegenCppVisitor::emit_cvode() const {
+    return info.emit_cvode;
+}
+
 
 void CodegenCppVisitor::visit_protect_statement(const ast::ProtectStatement& node) {
     print_atomic_reduction_pragma();
