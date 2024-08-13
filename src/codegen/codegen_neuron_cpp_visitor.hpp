@@ -671,6 +671,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void visit_watch_statement(const ast::WatchStatement& node) override;
 
 
+    void print_cvode_definitions();
 
 
   public:
