@@ -15,9 +15,6 @@
  * \brief Version information and units file path
  */
 
-#include <cstdlib>
-#include <fstream>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -44,38 +41,38 @@ struct Version {
 /**
  * \brief Information of units database i.e. `nrnunits.lib`
  */
-struct NrnUnitsLib {
-    /// paths where nrnunits.lib can be found
-    static std::vector<std::string> NRNUNITSLIB_PATH;
+class PathHelper {
+    /// pre-defined paths to search for files
+    const static std::vector<std::string> BASE_SEARCH_PATHS;
 
+    /// prefix to use when looking for libraries
+    const static std::string SHARED_LIBRARY_PREFIX;
+
+    /// suffix to use when looking for libraries
+    const static std::string SHARED_LIBRARY_SUFFIX;
+
+    /// base directory of the NMODL installation
+    const static std::string NMODL_HOME;
+
+    /**
+     * Search for a given relative file path
+     */
+    static std::string get_path(const std::string& what, bool is_library = false);
+
+  public:
     /**
      * Return path of units database file
      */
-    static std::string get_path() {
-        // first look for NMODLHOME env variable
-        if (const char* nmodl_home = std::getenv("NMODLHOME")) {
-            auto path = std::string(nmodl_home) + "/share/nmodl/nrnunits.lib";
-            NRNUNITSLIB_PATH.emplace(NRNUNITSLIB_PATH.begin(), path);
-        }
+    static std::string get_units_path() {
+        return get_path("share/nmodl/nrnunits.lib");
+    };
 
-        // check paths in order and return if found
-        for (const auto& path: NRNUNITSLIB_PATH) {
-            std::ifstream f(path.c_str());
-            if (f.good()) {
-                return path;
-            }
-        }
-        std::ostringstream err_msg;
-        err_msg << "Could not find nrnunits.lib in any of:\n";
-        for (const auto& path: NRNUNITSLIB_PATH) {
-            err_msg << path << "\n";
-        }
-        throw std::runtime_error(err_msg.str());
-    }
-};
-
-struct CMakeInfo {
-    static const std::string SHARED_LIBRARY_SUFFIX;
+    /**
+     * Return path of the python wrapper library
+     */
+    static std::string get_wrapper_path() {
+        return get_path("lib/libpywrapper", true);
+    };
 };
 
 }  // namespace nmodl
