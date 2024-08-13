@@ -239,6 +239,73 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
     print_check_table_function_prototypes();
 }
 
+static int get_number_of_odes() {
+    // TODO: make this flexible
+    return 1;
+}
+
+void CodegenNeuronCppVisitor::print_cvode_definitions() {
+    if (!info.emit_cvode) {
+        return;
+    }
+    printer->add_newline(2);
+    printer->add_line("/* Functions related to CVODE codegen */");
+
+    /* return # of ODEs to solve */
+    printer->push_block(fmt::format("static int ode_count_{}(int dummy)", info.mod_suffix));
+    printer->fmt_line("return {};", get_number_of_odes());
+    printer->pop_block();
+
+    /* some spec thing? */
+    printer->push_block(
+        fmt::format("static void ode_spec_{}(_nrn_model_sorted_token const& _sorted_token, "
+                    "NrnThread* nt, Memb_list* _ml_arg, int _type)",
+                    info.mod_suffix));  // begin function definition
+    printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->add_line("auto nodecount = _ml_arg->nodecount;");
+    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
+
+    /* map */
+    printer->push_block(
+        fmt::format("static void ode_map_{}(Prop* _prop, int equation_index, "
+                    "neuron::container::data_handle<double>* _pv, "
+                    "neuron::container::data_handle<double>* _pvdot, double* _atol, int _type)",
+                    info.mod_suffix));  // begin function definition
+    printer->add_line("auto* _ppvar = _nrn_mechanism_access_dparam(_prop);");
+    // printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;");
+    printer->push_block(
+        fmt::format("for (int i = 0; i < {}; i++)", get_number_of_odes()));  // begin for loop
+    printer->add_line("_pv[i] = _nrn_mechanism_get_param_handle(_prop, _slist1[i]);");
+    printer->add_line("_pvdot[i] = _nrn_mechanism_get_param_handle(_prop, _dlist1[i]);");
+    // TODO: add (ion) statements
+    //_cvode_abstol(_atollist, _atol, _i);
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
+
+    /* matsol */
+    printer->push_block(
+        fmt::format("static void ode_matsol_{}(_nrn_model_sorted_token const& _sorted_token, "
+                    "NrnThread* nt, Memb_list* _ml_arg, int _type)",
+                    info.mod_suffix));  // begin function definition
+    printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->add_line("auto nodecount = _ml_arg->nodecount;");
+    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    // TODO: add (ion) statements
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
+}
 
 void CodegenNeuronCppVisitor::print_function_or_procedure(
     const ast::Block& node,
@@ -789,6 +856,14 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         printer->fmt_line("static Symbol* _{}_sym;", ion.name);
     }
 
+    if (info.emit_cvode) {
+        printer->add_line("static Symbol** _atollist;");
+        printer->push_block("static HocStateTolerance _hoc_state_tol[] =");
+        // TODO: add stuff that iterates over `rangestate` in NOCMODL
+        printer->add_line("{0, 0}");
+        printer->pop_block(";");
+    }
+
     printer->add_line("static int mech_type;");
 
     if (info.point_process) {
@@ -1181,16 +1256,21 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
             "_nrn_mechanism_field<int>{\"_cvode_ieq\", \"cvodeieq\"} /* 0 */");
     }
 
+    if (info.emit_cvode) {
+        mech_register_args.push_back(
+            fmt::format("_nrn_mechanism_field<int>{{\"cvodeiq\"}} /* {} */",
+                        codegen_int_variables_size));
+    }
+
     printer->add_multi_line(fmt::format("{}", fmt::join(mech_register_args, ",\n")));
 
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
 
-
     printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
                       float_variables_size(),
-                      int_variables_size());
+                      int_variables_size() + static_cast<int>(info.emit_cvode));
 
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         if (i != info.semantics[i].index) {
@@ -1200,6 +1280,18 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"{}\");",
                           i,
                           info.semantics[i].name);
+    }
+
+    if (info.emit_cvode) {
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeiq\");",
+                          codegen_int_variables_size);
+        printer->fmt_line(
+            "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix);
+        printer->fmt_line("hoc_register_tolerance(mech_type, _hoc_state_tol, &_atollist);");
     }
 
     if (info.write_concentration) {
@@ -2066,6 +2158,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_nrn_destructor();
     print_nrn_alloc();
     print_function_prototypes();
+    print_cvode_definitions();
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
