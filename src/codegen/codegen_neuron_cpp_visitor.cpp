@@ -1656,7 +1656,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
     }
     if (info.semantic_variable_count) {
         printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);",
-                          info.semantic_variable_count);
+                          info.semantic_variable_count + static_cast<int>(info.emit_cvode));
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
     printer->add_multi_line(R"CODE(
