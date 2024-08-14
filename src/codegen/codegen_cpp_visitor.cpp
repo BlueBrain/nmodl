@@ -1675,8 +1675,8 @@ std::tuple<bool, int> CodegenCppVisitor::check_if_var_is_array(const std::string
 void CodegenCppVisitor::print_rename_state_vars() const {
     for (const auto& state: info.state_vars) {
         auto state_name = state->get_name();
-        auto rhs = get_variable_name(state_name);
-        auto lhs = get_variable_name(state_name + "0");
+        auto lhs = get_variable_name(state_name);
+        auto rhs = get_variable_name(state_name + "0");
 
         if (state->is_array()) {
             auto size = state->get_length();
