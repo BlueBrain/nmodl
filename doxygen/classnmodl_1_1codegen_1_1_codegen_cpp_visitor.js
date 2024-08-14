@@ -113,6 +113,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "print_nrn_state", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2453a1be52f39c3fa9bab2603f1f4773", null ],
     [ "print_prcellstate_macros", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a522261006f1cc94869ef15cd26b739da", null ],
     [ "print_procedure", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a60bf374a3063ccd280e46b7af0e48645", null ],
+    [ "print_rename_state_vars", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad52157be3346d8ee276103a8e42d2226", null ],
     [ "print_sdlists_init", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a34ae139e68f31b69fa73c9a84c2197e8", null ],
     [ "print_standard_includes", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6131bec61397f01d9739e694c57afdbf", null ],
     [ "print_statement_block", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8b912ad6d9a4f6d8e4c1bb16f2c95fbf", null ],
