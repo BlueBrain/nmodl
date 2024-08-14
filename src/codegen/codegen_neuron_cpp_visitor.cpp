@@ -1258,7 +1258,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     if (info.emit_cvode) {
         mech_register_args.push_back(
-            fmt::format("_nrn_mechanism_field<int>{{\"cvodeiq\"}} /* {} */",
+            fmt::format("_nrn_mechanism_field<int>{{\"cvodeieq\"}} /* {} */",
                         codegen_int_variables_size));
     }
 
@@ -1283,7 +1283,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     }
 
     if (info.emit_cvode) {
-        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeiq\");",
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
                           codegen_int_variables_size);
         printer->fmt_line(
             "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
