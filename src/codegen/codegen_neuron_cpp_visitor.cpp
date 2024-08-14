@@ -252,7 +252,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("/* Functions related to CVODE codegen */");
 
     /* return # of ODEs to solve */
-    printer->push_block(fmt::format("static int ode_count_{}(int dummy)", info.mod_suffix));
+    printer->push_block(fmt::format("static int ode_count_{}(int _type)", info.mod_suffix));
     printer->fmt_line("return {};", get_number_of_odes());
     printer->pop_block();
 
@@ -262,6 +262,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                     "NrnThread* nt, Memb_list* _ml_arg, int _type)",
                     info.mod_suffix));  // begin function definition
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
@@ -269,6 +270,21 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
+
+    // ion statements
+    {
+        auto read_statements = ion_read_statements(BlockType::State);
+        for (auto& statement: read_statements) {
+            printer->add_line(statement);
+        }
+
+        const auto& write_statements = ion_write_statements(BlockType::State);
+        for (auto& statement: write_statements) {
+            const auto& text = process_shadow_update_statement(statement, BlockType::State);
+            printer->add_line(text);
+        }
+    }
+
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
 
@@ -279,13 +295,12 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                     "neuron::container::data_handle<double>* _pvdot, double* _atol, int _type)",
                     info.mod_suffix));  // begin function definition
     printer->add_line("auto* _ppvar = _nrn_mechanism_access_dparam(_prop);");
-    // printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;");
+    printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;", int_variables_size());
     printer->push_block(
         fmt::format("for (int i = 0; i < {}; i++)", get_number_of_odes()));  // begin for loop
     printer->add_line("_pv[i] = _nrn_mechanism_get_param_handle(_prop, _slist1[i]);");
     printer->add_line("_pvdot[i] = _nrn_mechanism_get_param_handle(_prop, _dlist1[i]);");
-    // TODO: add (ion) statements
-    //_cvode_abstol(_atollist, _atol, _i);
+    printer->add_line("_cvode_abstol(_atollist, _atol, i);");
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
 
@@ -295,6 +310,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                     "NrnThread* nt, Memb_list* _ml_arg, int _type)",
                     info.mod_suffix));  // begin function definition
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
@@ -302,7 +318,15 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
-    // TODO: add (ion) statements
+
+    // ion statements
+    {
+        auto read_statements = ion_read_statements(BlockType::State);
+        for (auto& statement: read_statements) {
+            printer->add_line(statement);
+        }
+    }
+
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
 }
@@ -862,6 +886,7 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         // TODO: add stuff that iterates over `rangestate` in NOCMODL
         printer->add_line("{0, 0}");
         printer->pop_block(";");
+        printer->add_line("extern void _cvode_abstol( Symbol**, double*, int);");
     }
 
     printer->add_line("static int mech_type;");
