@@ -886,7 +886,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         // TODO: add stuff that iterates over `rangestate` in NOCMODL
         printer->add_line("{0, 0}");
         printer->pop_block(";");
-        printer->add_line("extern void _cvode_abstol( Symbol**, double*, int);");
     }
 
     printer->add_line("static int mech_type;");
@@ -1279,7 +1278,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     if (info.emit_cvode) {
         mech_register_args.push_back(
-            fmt::format("_nrn_mechanism_field<int>{{\"cvodeieq\"}} /* {} */",
+            // TODO: figure out why the first parameter should be called "_cvode_ieq"
+            fmt::format("_nrn_mechanism_field<int>{{\"_cvode_ieq\", \"cvodeieq\"}} /* {} */",
                         codegen_int_variables_size));
     }
 
@@ -1680,7 +1680,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         )CODE");
         printer->chain_block("else");
     }
-    if (info.semantic_variable_count) {
+    if (info.semantic_variable_count || info.emit_cvode) {
         printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);",
                           info.semantic_variable_count + static_cast<int>(info.emit_cvode));
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
