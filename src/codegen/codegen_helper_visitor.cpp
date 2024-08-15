@@ -26,6 +26,21 @@ using symtab::syminfo::NmodlType;
 using symtab::syminfo::Status;
 
 /**
+ * Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods
+ */
+static bool check_procedure_has_cvode(
+    const ast::Node& solve_node,
+    const ast::Node& procedure_node
+) {
+    const auto& solve_block = std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node);
+    const auto& method = solve_block->get_method();
+    if (!method){
+        return false;
+    }
+    return procedure_node->get_node_name() == solve_block->get_block_name()->get_node_name() && method->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
+}
+
+/**
  * How symbols are stored in NEURON? See notes written in markdown file.
  *
  * Some variables get printed by iterating over symbol table in mod2c.
@@ -192,16 +207,7 @@ void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
                 procedure_nodes.begin(),
                 procedure_nodes.end(),
                 [&solve_node](const auto& procedure_node) {
-                    const auto& method =
-                        std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)->get_method();
-                    if (!method) {
-                        return false;
-                    }
-                    return procedure_node->get_node_name() ==
-                               std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node)
-                                   ->get_block_name()
-                                   ->get_node_name() &&
-                           method->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
+                    return check_procedure_has_cvode(solve_node, procedure_node);
                 });
         });
 
