@@ -28,16 +28,19 @@ using symtab::syminfo::Status;
 /**
  * Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods
  */
-static bool check_procedure_has_cvode(
-    const ast::Node& solve_node,
-    const ast::Node& procedure_node
-) {
+static bool check_procedure_has_cvode(const std::shared_ptr<const ast::Ast>& solve_node,
+                                      const std::shared_ptr<const ast::Ast>& procedure_node) {
     const auto& solve_block = std::dynamic_pointer_cast<const ast::SolveBlock>(solve_node);
     const auto& method = solve_block->get_method();
-    if (!method){
+    if (!method) {
         return false;
     }
-    return procedure_node->get_node_name() == solve_block->get_block_name()->get_node_name() && method->get_node_name() == codegen::naming::AFTER_CVODE_METHOD;
+    const auto& method_name = method->get_node_name();
+
+    return procedure_node->get_node_name() == solve_block->get_block_name()->get_node_name() &&
+           (method_name == codegen::naming::AFTER_CVODE_METHOD ||
+            method_name == codegen::naming::CVODE_T_METHOD ||
+            method_name == codegen::naming::CVODE_T_V_METHOD);
 }
 
 /**
@@ -186,6 +189,12 @@ void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
         return;
     }
 
+    // there can only be one BREAKPOINT block in the entire program
+    assert(breakpoint_nodes.size() == 1);
+
+    const auto& breakpoint_node = std::dynamic_pointer_cast<const ast::BreakpointBlock>(
+        breakpoint_nodes[0]);
+
     // all (global) kinetic/derivative nodes
     const auto& kinetic_or_derivative_nodes =
         collect_nodes(node, {AstNodeType::KINETIC_BLOCK, AstNodeType::DERIVATIVE_BLOCK});
@@ -193,28 +202,24 @@ void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
     // all (global) procedure nodes
     const auto& procedure_nodes = collect_nodes(node, {AstNodeType::PROCEDURE_BLOCK});
 
-    // there can only be one BREAKPOINT block in the entire program
-    const auto& breakpoint_node = std::dynamic_pointer_cast<const ast::BreakpointBlock>(
-        breakpoint_nodes[0]);
-
     // find all SOLVE blocks in that BREAKPOINT block
     const auto& solve_nodes = collect_nodes(*breakpoint_node, {AstNodeType::SOLVE_BLOCK});
 
-    // check whether any of the SOLVE blocks are solving any PROCEDURE with `after_cvode` method
-    const auto using_after_cvode = std::any_of(
+    // check whether any of the SOLVE blocks are solving any PROCEDURE with `after_cvode`,
+    // `cvode_t`, or `cvode_t_v` methods
+    const auto using_cvode = std::any_of(
         solve_nodes.begin(), solve_nodes.end(), [&procedure_nodes](const auto& solve_node) {
-            return std::any_of(
-                procedure_nodes.begin(),
-                procedure_nodes.end(),
-                [&solve_node](const auto& procedure_node) {
-                    return check_procedure_has_cvode(solve_node, procedure_node);
-                });
+            return std::any_of(procedure_nodes.begin(),
+                               procedure_nodes.end(),
+                               [&solve_node](const auto& procedure_node) {
+                                   return check_procedure_has_cvode(solve_node, procedure_node);
+                               });
         });
 
     // only case when we emit CVODE code is if we have exactly one block, and
     // that block is either a KINETIC/DERIVATIVE with any method, or a
     // PROCEDURE with `after_cvode` method
-    if (solve_nodes.size() == 1 && (kinetic_or_derivative_nodes.size() || using_after_cvode)) {
+    if (solve_nodes.size() == 1 && (kinetic_or_derivative_nodes.size() || using_cvode)) {
         logger->debug("Emitting code for CVODE");
         info.emit_cvode = true;
     }
