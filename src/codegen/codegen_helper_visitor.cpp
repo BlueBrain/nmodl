@@ -220,7 +220,7 @@ void CodegenHelperVisitor::check_cvode_codegen(const ast::Program& node) {
     // that block is either a KINETIC/DERIVATIVE with any method, or a
     // PROCEDURE with `after_cvode` method
     if (solve_nodes.size() == 1 && (kinetic_or_derivative_nodes.size() || using_cvode)) {
-        logger->debug("Emitting code for CVODE");
+        logger->debug("Will emit code for CVODE");
         info.emit_cvode = true;
     }
 }

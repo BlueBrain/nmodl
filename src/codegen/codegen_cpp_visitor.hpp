@@ -1500,12 +1500,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     void print_table_check_function(const ast::Block&);
 
-    /**
-     * Whether or not we need to emit code for CVODE (only makes a difference
-     * for NEURON codegen).
-     */
-    bool emit_cvode() const;
-
 
     const ast::TableStatement* get_table_statement(const ast::Block&);
 
