@@ -1303,18 +1303,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                           info.semantics[i].name);
     }
 
-    if (info.emit_cvode) {
-        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
-                          codegen_int_variables_size);
-        printer->fmt_line(
-            "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
-            info.mod_suffix,
-            info.mod_suffix,
-            info.mod_suffix,
-            info.mod_suffix);
-        printer->fmt_line("hoc_register_tolerance(mech_type, _hoc_state_tol, &_atollist);");
-    }
-
     if (info.write_concentration) {
         printer->fmt_line("nrn_writes_conc(mech_type, 0);");
     }
@@ -1344,6 +1332,18 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     if (info.diam_used) {
         printer->fmt_line("{}._morphology_sym = hoc_lookup(\"morphology\");",
                           global_struct_instance());
+    }
+
+    if (info.emit_cvode) {
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
+                          codegen_int_variables_size);
+        printer->fmt_line(
+            "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix);
+        printer->fmt_line("hoc_register_tolerance(mech_type, _hoc_state_tol, &_atollist);");
     }
 
     printer->pop_block();
