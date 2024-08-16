@@ -113,6 +113,8 @@ $(document).ready(function(){initNavTree('codegen__helper_8cpp.html',''); initRe
 Functions</h2></td></tr>
 <tr class="memitem:ab0473102809db24d2b86e92917fd1260"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#ab0473102809db24d2b86e92917fd1260">run_codegen_helper_visitor</a> (const std::string &amp;text)</td></tr>
 <tr class="separator:ab0473102809db24d2b86e92917fd1260"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aacede45cc21ea8fa85df646ec619d5cb"><td class="memItemLeft" align="right" valign="top">CodegenInfo&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#aacede45cc21ea8fa85df646ec619d5cb">run_codegen_helper_get_info</a> (const std::string &amp;text)</td></tr>
+<tr class="separator:aacede45cc21ea8fa85df646ec619d5cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d2977f3e5be90d8d19125e3b7c5afdb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#a7d2977f3e5be90d8d19125e3b7c5afdb">SCENARIO</a> (&quot;unusual / failing mod files&quot;, &quot;[codegen][var_order]&quot;)</td></tr>
 <tr class="separator:a7d2977f3e5be90d8d19125e3b7c5afdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af719316d34d460bd5da40c71a23970f3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#af719316d34d460bd5da40c71a23970f3">SCENARIO</a> (&quot;Check global variable setup&quot;, &quot;[codegen][global_variables]&quot;)</td></tr>
@@ -121,6 +123,8 @@ Functions</h2></td></tr>
 <tr class="separator:a46131d1303e8fafd2e4d52e81b52cfe1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49a9d001366c1e814f0be445971ae284"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#a49a9d001366c1e814f0be445971ae284">TEST_CASE</a> (&quot;Check ion write/read checks&quot;)</td></tr>
 <tr class="separator:a49a9d001366c1e814f0be445971ae284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5d974a522266c368e291e85a0356bf3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="codegen__helper_8cpp.html#ae5d974a522266c368e291e85a0356bf3">SCENARIO</a> (&quot;CVODE codegen&quot;)</td></tr>
+<tr class="separator:ae5d974a522266c368e291e85a0356bf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a46131d1303e8fafd2e4d52e81b52cfe1"></a>
@@ -139,7 +143,28 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00203">203</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00221">221</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aacede45cc21ea8fa85df646ec619d5cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aacede45cc21ea8fa85df646ec619d5cb">&#9670;&nbsp;</a></span>run_codegen_helper_get_info()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CodegenInfo run_codegen_helper_get_info </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>text</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>construct symbol table and run codegen helper visitor</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00060">60</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>
@@ -168,7 +193,7 @@ Functions</h2></td></tr>
 </div>
 </div>
 <a id="af719316d34d460bd5da40c71a23970f3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af719316d34d460bd5da40c71a23970f3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af719316d34d460bd5da40c71a23970f3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,12 +219,32 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>construct symbol table and run codegen helper visitor</p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00177">177</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00195">195</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ae5d974a522266c368e291e85a0356bf3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5d974a522266c368e291e85a0356bf3">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SCENARIO </td>
+          <td>(</td>
+          <td class="paramtype">&quot;CVODE codegen&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00301">301</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a7d2977f3e5be90d8d19125e3b7c5afdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d2977f3e5be90d8d19125e3b7c5afdb">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d2977f3e5be90d8d19125e3b7c5afdb">&#9670;&nbsp;</a></span>SCENARIO() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -224,7 +269,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00060">60</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00078">78</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>
@@ -244,7 +289,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00213">213</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper_8cpp_source.html#l00231">231</a> of file <a class="el" href="codegen__helper_8cpp_source.html">codegen_helper.cpp</a>.</p>
 
 </div>
 </div>

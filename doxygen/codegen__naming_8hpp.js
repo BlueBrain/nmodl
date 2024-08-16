@@ -9,6 +9,8 @@ var codegen__naming_8hpp =
     [ "CONDUCTANCE_UNUSED_VARIABLE", "codegen__naming_8hpp.html#a294490e33ced4d6fa7f71dc8cff71927", null ],
     [ "CONDUCTANCE_VARIABLE", "codegen__naming_8hpp.html#a630dc57a756db567fccdce663becbeaf", null ],
     [ "CORE_POINTER_SEMANTIC", "codegen__naming_8hpp.html#a43f0110a0fd2ebf794aecd2cc074bad0", null ],
+    [ "CVODE_T_METHOD", "codegen__naming_8hpp.html#ac15dfe5a5baf3975078c5ac88da8694c", null ],
+    [ "CVODE_T_V_METHOD", "codegen__naming_8hpp.html#ae02618a61d1a9e7efb21b4a3a57a6a7c", null ],
     [ "DEFAULT_FLOAT_TYPE", "codegen__naming_8hpp.html#a74f160c5376490c43edfdcf7dccb696f", null ],
     [ "DEFAULT_INTEGER_TYPE", "codegen__naming_8hpp.html#aee7a0157e45769a4a4bb7da2968426e0", null ],
     [ "DEFAULT_LOCAL_VAR_TYPE", "codegen__naming_8hpp.html#ad2cbd6bbd0257f4f39b0220e9b0d0c54", null ],

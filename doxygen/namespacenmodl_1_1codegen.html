@@ -221,6 +221,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ga9a9a3fed3ccfd3e8db280b27163aacbb"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
 <tr class="memitem:ga9a9a3fed3ccfd3e8db280b27163aacbb"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__codegen__details.html#ga9a9a3fed3ccfd3e8db280b27163aacbb">get_prefixsum_from_name</a> (const std::vector&lt; T &gt; &amp;variables, const std::string &amp;name)</td></tr>
 <tr class="separator:ga9a9a3fed3ccfd3e8db280b27163aacbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">check_procedure_has_cvode</a> (const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;solve_node, const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;procedure_node)</td></tr>
+<tr class="memdesc:a3e75c36618ff26dba0e71f1b97fc3778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods.  <a href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">More...</a><br /></td></tr>
+<tr class="separator:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a983af1c34064b33f42068e2767c2287e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">rename_net_receive_arguments</a> (const <a class="el" href="classnmodl_1_1ast_1_1_net_receive_block.html">ast::NetReceiveBlock</a> &amp;net_receive_node, const <a class="el" href="classnmodl_1_1ast_1_1_node.html">ast::Node</a> &amp;node)</td></tr>
 <tr class="memdesc:a983af1c34064b33f42068e2767c2287e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename arguments to NET_RECEIVE block with corresponding pointer variable.  <a href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">More...</a><br /></td></tr>
 <tr class="separator:a983af1c34064b33f42068e2767c2287e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -256,6 +259,46 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="a3e75c36618ff26dba0e71f1b97fc3778"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e75c36618ff26dba0e71f1b97fc3778">&#9670;&nbsp;</a></span>check_procedure_has_cvode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool nmodl::codegen::check_procedure_has_cvode </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>solve_node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>procedure_node</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods. </p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__helper__visitor_8cpp_source.html#l00031">31</a> of file <a class="el" href="codegen__helper__visitor_8cpp_source.html">codegen_helper_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a82b56c421789e1584b7eadf3079d0d05"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a82b56c421789e1584b7eadf3079d0d05">&#9670;&nbsp;</a></span>get_register_type_for_ba_block()</h2>
 
@@ -331,7 +374,7 @@ Variables</h2></td></tr>
 <div class="fragment"><div class="line">x[id] = _args[1];</div>
 </div><!-- fragment --><p>So, the <code>R</code> in AST needs to be renamed with <code>_args[1]</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l02144">2144</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l02140">2140</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>

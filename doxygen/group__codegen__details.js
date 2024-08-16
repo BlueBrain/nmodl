@@ -18,6 +18,7 @@ var group__codegen__details =
       [ "SymbolVectorType", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac113b048e85347649e0845d55c08b376", null ],
       [ "CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab683b05aa11c88966cf20a06d00f5ea7", null ],
       [ "analyze", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aa0e74f461212bcc312cd413641e54c29", null ],
+      [ "check_cvode_codegen", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a09b313cf81aa2c720537d9082891d9be", null ],
       [ "find_ion_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a8a4c6bf98efa9dec17d22c35a897560a", null ],
       [ "find_neuron_global_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a8353ebc226a58da2e7d1651ca8d9854a", null ],
       [ "find_non_range_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#adaa15452418bc8a98d8a205e8fcfb110", null ],
