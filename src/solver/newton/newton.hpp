@@ -72,7 +72,7 @@ EIGEN_DEVICE_FUNC int newton_solver(Eigen::Matrix<double, N, 1>& X,
                                     int max_iter = MAX_ITER) {
     // Vector to store result of function F(X):
     Eigen::Matrix<double, N, 1> F;
-    // Matrix to store jacobian of F(X):
+    // Matrix to store Jacobian of F(X):
     Eigen::Matrix<double, N, N> J;
     // Solver iteration count:
     int iter = -1;
