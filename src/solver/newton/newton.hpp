@@ -34,7 +34,7 @@ namespace newton {
  * @{
  */
 
-static constexpr int MAX_ITER = 1e3;
+static constexpr int MAX_ITER = 50;
 static constexpr double EPS = 1e-12;
 
 /**
