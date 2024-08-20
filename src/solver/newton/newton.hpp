@@ -35,7 +35,7 @@ namespace newton {
  */
 
 static constexpr int MAX_ITER = 50;
-static constexpr double EPS = 1e-12;
+static constexpr double EPS = 1e-13;
 
 template <int N>
 bool is_converged(const Eigen::Matrix<double, N, 1>& X,
