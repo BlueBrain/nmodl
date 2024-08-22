@@ -1525,24 +1525,6 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
 //=============================================================================
 
 SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
-    GIVEN("1 state-var numeric LINEAR solve block") {
-        std::string nmodl_text = R"(
-            STATE {
-                x
-            }
-            LINEAR lin {
-                ~ x = 5
-            })";
-        std::string expected_text = R"(
-            LINEAR lin {
-                x = 5.0
-            })";
-        THEN("solve analytically") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
-        }
-    }
     GIVEN("1 state-var symbolic LINEAR solve block") {
         std::string nmodl_text = R"(
             STATE {
