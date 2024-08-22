@@ -1652,8 +1652,8 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
                 LOCAL a
                 ~ x = y + a
                 if (a == 1) {
-                	a = a + 1
-                	x = a + 1
+                    a = a + 1
+                    x = a + 1
                 }
                 ~ y = a
             })";
