@@ -93,11 +93,11 @@ var NAVTREEINDEX =
 "group__ast__class.html#ga6ca54bc2ec0698aa5a485be7c653781d",
 "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4fb7ea683a98639d84f8d9b07c33a3a5",
 "group__lexer.html",
-"loop__unroll__visitor_8cpp.html",
-"protect__statement_8hpp.html",
-"structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd",
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9",
-"verbatim_8hpp.html"
+"loop__unroll__visitor_8cpp_source.html",
+"pyembed_8cpp_source.html",
+"structnmodl_1_1codegen_1_1_codegen_info.html#af49fe1ab8d7c35c937585ce7ac7992df",
+"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbac8de66f1a4787fe20ffdde46def4be3a",
+"verbatim__var__rename__visitor_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

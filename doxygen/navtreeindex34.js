@@ -1,12 +1,5 @@
 var NAVTREEINDEX34 =
 {
-"verbatim_8hpp.html":[3,0,0,0,0,0,120],
-"verbatim_8hpp_source.html":[3,0,0,0,0,0,120],
-"verbatim__driver_8hpp.html":[3,0,1,4,14],
-"verbatim__driver_8hpp.html#a46229e87df41b4db138f47eeac6c3bfb":[3,0,1,4,14,0],
-"verbatim__driver_8hpp_source.html":[3,0,1,4,14],
-"verbatim__var__rename__visitor_8cpp.html":[3,0,1,11,53],
-"verbatim__var__rename__visitor_8cpp_source.html":[3,0,1,11,53],
 "verbatim__var__rename__visitor_8hpp.html":[3,0,1,11,54],
 "verbatim__var__rename__visitor_8hpp_source.html":[3,0,1,11,54],
 "verbatim__visitor_8cpp.html":[3,0,1,11,55],
