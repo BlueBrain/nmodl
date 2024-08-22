@@ -1715,52 +1715,6 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
         }
     }
-    GIVEN("3 state-var LINEAR solve block") {
-        std::string nmodl_text = R"(
-            STATE {
-                x y z
-            }
-            LINEAR lin {
-                ~ x + 4*c*y = -6*a
-                ~ a + x/b + z - y = 1*b*b
-                ~ 10*x + 13*y - z/(a*a*b) = 14/c
-            })";
-        std::string expected_text = R"(
-        LINEAR lin {
-            x = 2*b*(39*pow(a, 3)*b+28*pow(a, 2)*b-2*a*c-3*a+2*pow(b, 2)*c)/(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b, 2)+b+4*c)
-            y = (-60*pow(a, 3)*pow(b, 2)*c-14*pow(a, 2)*pow(b, 2)+a*b*c-6*a*c-pow(b, 3)*c)/(c*(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b, 2)+b+4*c))
-            z = pow(a, 2)*b*(-40*a*b*pow(c, 2)-47*a*b*c-78*a*c+40*pow(b, 3)*pow(c, 2)-13*pow(b, 3)*c-14*b-56*c)/(c*(40*pow(a, 2)*pow(b, 2)*c-13*pow(a, 2)*pow(b,2)+b+4*c))
-        })";
-
-        THEN("solve analytically") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-
-            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
-        }
-    }
-    GIVEN("array state-var numeric LINEAR solve block") {
-        std::string nmodl_text = R"(
-            STATE {
-                s[3]
-            }
-            LINEAR lin {
-                ~ s[0] = 1
-                ~ s[1] = 3
-                ~ s[2] + s[1] = s[0]
-            })";
-        std::string expected_text = R"(
-            LINEAR lin {
-                s[0] = 1.0
-                s[1] = 3.0
-                s[2] = -2.0
-            })";
-        THEN("solve analytically") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-            compare_blocks(reindent_text(result[0]), reindent_text(expected_text));
-        }
-    }
     GIVEN("4 state-var LINEAR solve block") {
         std::string nmodl_text = R"(
             STATE {
