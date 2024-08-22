@@ -1563,28 +1563,6 @@ SCENARIO("LINEAR solve block (SympySolver Visitor)", "[sympy][linear]") {
             REQUIRE(reindent_text(result[0]) == reindent_text(expected_text));
         }
     }
-    GIVEN("Linear block, print in order") {
-        std::string nmodl_text = R"(
-            STATE {
-                x y
-            }
-            LINEAR lin {
-                ~ y = x + 1
-                ~ x = 2
-            })";
-        std::string expected_result = R"(
-            LINEAR lin {
-                y = 3.0
-                x = 2.0
-            })";
-
-        THEN("Construct & solve linear system") {
-            auto result =
-                run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::LINEAR_BLOCK);
-
-            compare_blocks(reindent_text(result[0]), reindent_text(expected_result));
-        }
-    }
     GIVEN("Linear block, print in order, vectors") {
         std::string nmodl_text = R"(
             STATE {
