@@ -37,8 +37,8 @@ PROCEDURE bar(tau, a, b, d) {
 
     SECTION("FUNCTION") {
         std::string expected = R"(
-FUNCTION foo(_arg_a, _arg_v, _arg_cai) {
-    exp(tau+_arg_a+_arg_v*_arg_cai)
+FUNCTION foo(_la, _lv, _lcai) {
+    exp(tau+_la+_lv*_lcai)
 }
 )";
 
@@ -47,8 +47,8 @@ FUNCTION foo(_arg_a, _arg_v, _arg_cai) {
 
     SECTION("PROCEDURE") {
         std::string expected = R"(
-PROCEDURE bar(_arg_tau, _arg_a, _arg_b, _arg_d) {
-    foo(_arg_tau, _arg_a*_arg_b, _arg_d)
+PROCEDURE bar(_ltau, _la, _lb, _ld) {
+    foo(_ltau, _la*_lb, _ld)
 }
 )";
 

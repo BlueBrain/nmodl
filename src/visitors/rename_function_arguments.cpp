@@ -15,7 +15,7 @@ void RenameFunctionArgumentsVisitor::rename_arguments(Block& block) const {
     }
 
     for (const auto& parameter_name: parameter_names) {
-        auto v = RenameVisitor(parameter_name, "_arg_" + parameter_name);
+        auto v = RenameVisitor(parameter_name, "_l" + parameter_name);
         block.accept(v);
     }
 }
