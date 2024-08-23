@@ -301,7 +301,6 @@ var group__codegen__backends =
       [ "range_variable_setup_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1e105e4b89ba5652f46bb91e49c817eb", null ],
       [ "read_ion_variable_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3ee489972d8827f03490337c96a74b43", null ],
       [ "register_mechanism_arguments", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aec3cef47cc3c1e5901b4ff401ce8e725", null ],
-      [ "rename_function_arguments", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef331b9ddcbd761f3aea6b457f83e88e", null ],
       [ "setup", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae333398890c61148ec60cb52c3d28c10", null ],
       [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8b8b75dcd53ae8e3a641f18cb00bee1d", null ],
       [ "statement_to_skip", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a789dae2310c3496443a8a51c26cc8b71", null ],

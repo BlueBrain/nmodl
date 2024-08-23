@@ -27,6 +27,7 @@ var namespacenmodl_1_1visitor =
     [ "NeuronSolveVisitor", "classnmodl_1_1visitor_1_1_neuron_solve_visitor.html", "classnmodl_1_1visitor_1_1_neuron_solve_visitor" ],
     [ "NmodlPrintVisitor", "classnmodl_1_1visitor_1_1_nmodl_print_visitor.html", "classnmodl_1_1visitor_1_1_nmodl_print_visitor" ],
     [ "PerfVisitor", "classnmodl_1_1visitor_1_1_perf_visitor.html", "classnmodl_1_1visitor_1_1_perf_visitor" ],
+    [ "RenameFunctionArgumentsVisitor", "classnmodl_1_1visitor_1_1_rename_function_arguments_visitor.html", "classnmodl_1_1visitor_1_1_rename_function_arguments_visitor" ],
     [ "RenameVisitor", "classnmodl_1_1visitor_1_1_rename_visitor.html", "classnmodl_1_1visitor_1_1_rename_visitor" ],
     [ "SemanticAnalysisVisitor", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html", "classnmodl_1_1visitor_1_1_semantic_analysis_visitor" ],
     [ "SolveBlockVisitor", "classnmodl_1_1visitor_1_1_solve_block_visitor.html", "classnmodl_1_1visitor_1_1_solve_block_visitor" ],

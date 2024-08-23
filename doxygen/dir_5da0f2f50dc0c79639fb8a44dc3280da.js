@@ -38,6 +38,10 @@ var dir_5da0f2f50dc0c79639fb8a44dc3280da =
     [ "nmodl_visitor_helper.ipp", "nmodl__visitor__helper_8ipp.html", null ],
     [ "perf_visitor.cpp", "perf__visitor_8cpp.html", null ],
     [ "perf_visitor.hpp", "perf__visitor_8hpp.html", null ],
+    [ "rename_function_arguments.cpp", "src_2visitors_2rename__function__arguments_8cpp.html", null ],
+    [ "rename_function_arguments.hpp", "rename__function__arguments_8hpp.html", [
+      [ "RenameFunctionArgumentsVisitor", "classnmodl_1_1visitor_1_1_rename_function_arguments_visitor.html", "classnmodl_1_1visitor_1_1_rename_function_arguments_visitor" ]
+    ] ],
     [ "rename_visitor.cpp", "rename__visitor_8cpp.html", null ],
     [ "rename_visitor.hpp", "rename__visitor_8hpp.html", null ],
     [ "semantic_analysis_visitor.cpp", "semantic__analysis__visitor_8cpp.html", null ],

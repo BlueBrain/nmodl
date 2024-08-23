@@ -238,6 +238,7 @@ var hierarchy =
         [ "nmodl::visitor::LocalVarRenameVisitor", "classnmodl_1_1visitor_1_1_local_var_rename_visitor.html", null ],
         [ "nmodl::visitor::LoopUnrollVisitor", "classnmodl_1_1visitor_1_1_loop_unroll_visitor.html", null ],
         [ "nmodl::visitor::NeuronSolveVisitor", "classnmodl_1_1visitor_1_1_neuron_solve_visitor.html", null ],
+        [ "nmodl::visitor::RenameFunctionArgumentsVisitor", "classnmodl_1_1visitor_1_1_rename_function_arguments_visitor.html", null ],
         [ "nmodl::visitor::SolveBlockVisitor", "classnmodl_1_1visitor_1_1_solve_block_visitor.html", null ],
         [ "nmodl::visitor::SteadystateVisitor", "classnmodl_1_1visitor_1_1_steadystate_visitor.html", null ],
         [ "nmodl::visitor::SympyConductanceVisitor", "classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html", null ],

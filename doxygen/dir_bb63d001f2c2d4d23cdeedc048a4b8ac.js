@@ -20,6 +20,7 @@ var dir_bb63d001f2c2d4d23cdeedc048a4b8ac =
     [ "node_index.cpp", "node__index_8cpp.html", "node__index_8cpp" ],
     [ "perf.cpp", "perf_8cpp.html", "perf_8cpp" ],
     [ "rename.cpp", "rename_8cpp.html", "rename_8cpp" ],
+    [ "rename_function_arguments.cpp", "test_2unit_2visitor_2rename__function__arguments_8cpp.html", "test_2unit_2visitor_2rename__function__arguments_8cpp" ],
     [ "semantic_analysis.cpp", "semantic__analysis_8cpp.html", "semantic__analysis_8cpp" ],
     [ "solve_block.cpp", "solve__block_8cpp.html", "solve__block_8cpp" ],
     [ "steadystate.cpp", "steadystate_8cpp.html", "steadystate_8cpp" ],
