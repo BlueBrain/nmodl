@@ -57,7 +57,6 @@ add_executable(
   visitor/solve_block.cpp
   visitor/steadystate.cpp
   visitor/sympy_conductance.cpp
-  visitor/sympy_solver.cpp
   visitor/units.cpp
   visitor/var_usage.cpp
   visitor/verbatim.cpp
