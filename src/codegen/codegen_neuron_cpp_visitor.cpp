@@ -2115,6 +2115,8 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     if (info.table_count > 0) {
         printer->add_line("void _nrn_thread_table_reg(int, nrn_thread_table_check_t);");
     }
+    // for CVODE
+    printer->add_line("extern void _cvode_abstol(Symbol**, double*, int);");
 }
 
 
