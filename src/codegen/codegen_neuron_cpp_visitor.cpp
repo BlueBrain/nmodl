@@ -822,10 +822,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         // TODO implement these when needed.
     }
 
-    if (!info.vectorize && !info.top_local_variables.empty()) {
-        throw std::runtime_error("Not implemented, global vectorize something.");
-    }
-
     if (!info.thread_variables.empty()) {
         size_t prefix_sum = 0;
         for (size_t i = 0; i < info.thread_variables.size(); ++i) {
@@ -851,6 +847,15 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
             prefix_sum += var->get_length();
         }
     }
+
+    if (!info.vectorize && !info.top_local_variables.empty()) {
+        for (size_t i = 0; i < info.top_local_variables.size(); ++i) {
+            const auto& var = info.top_local_variables[i];
+            std::cout << get_name(var) << std::endl;
+            codegen_global_variables.push_back(var);
+        }
+    }
+
 
     if (!codegen_thread_variables.empty()) {
         if (!info.vectorize) {
