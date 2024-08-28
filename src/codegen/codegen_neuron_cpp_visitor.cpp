@@ -168,6 +168,7 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     printer->push_block();
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml, _type};");
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml);", info.mod_suffix);
     if (!codegen_thread_variables.empty()) {
         printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
                           thread_variables_struct(),
@@ -251,7 +252,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(
         printer->fmt_line("int ret_{} = 0;", name);
     }
 
-    printer->fmt_line("auto v = inst.{}[id];", naming::VOLTAGE_UNUSED_VARIABLE);
+    printer->add_line("auto v = node_data.node_voltages[node_data.nodeindices[id]];");
 
     print_statement_block(*node.get_statement_block(), false, false);
     printer->fmt_line("return ret_{};", name);
@@ -294,6 +295,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
         Datum* _thread;
         NrnThread* nt;
     )CODE");
+
+    std::string prop_name;
     if (info.point_process) {
         printer->add_multi_line(R"CODE(
             auto* const _pnt = static_cast<Point_process*>(_vptr);
@@ -307,6 +310,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _thread = _extcall_thread.data();
             nt = static_cast<NrnThread*>(_pnt->_vnt);
         )CODE");
+
+        prop_name = "_p";
     } else if (wrapper_type == InterpreterWrapper::HOC) {
         if (program_symtab->lookup(block_name)->has_all_properties(NmodlType::use_range_ptr_var)) {
             printer->push_block("if (!_prop_id)");
@@ -328,16 +333,20 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             _thread = _extcall_thread.data();
             nt = nrn_threads;
         )CODE");
+        prop_name = "_local_prop";
     } else {  // wrapper_type == InterpreterWrapper::Python
         printer->add_multi_line(R"CODE(
             _nrn_mechanism_cache_instance _lmc{_prop};
-            size_t const id{};
+            size_t const id = 0;
             _ppvar = _nrn_mechanism_access_dparam(_prop);
             _thread = _extcall_thread.data();
             nt = nrn_threads;
         )CODE");
+        prop_name = "_prop";
     }
+
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->fmt_line("auto node_data = make_node_data_{}({});", info.mod_suffix, prop_name);
     if (!codegen_thread_variables.empty()) {
         printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
                           thread_variables_struct(),
@@ -415,6 +424,7 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_paramete
     ParamVector params;
     params.emplace_back("", "_nrn_mechanism_cache_range&", "", "_lmc");
     params.emplace_back("", fmt::format("{}&", instance_struct()), "", "inst");
+    params.emplace_back("", fmt::format("{}&", node_data_struct()), "", "node_data");
     params.emplace_back("", "size_t", "", "id");
     params.emplace_back("", "Datum*", "", "_ppvar");
     params.emplace_back("", "Datum*", "", "_thread");
@@ -1385,6 +1395,26 @@ void CodegenNeuronCppVisitor::print_make_node_data() const {
 
     printer->pop_block(";");
     printer->pop_block();
+
+
+    printer->fmt_push_block("static {} make_node_data_{}(Prop * _prop)",
+                            node_data_struct(),
+                            info.mod_suffix);
+    printer->add_line("static std::vector<int> node_index{0};");
+    printer->add_line("Node* _node = _nrn_mechanism_access_node(_prop);");
+
+    make_node_data_args = {"node_index.data()",
+                           "&_nrn_mechanism_access_voltage(_node)",
+                           "&_nrn_mechanism_access_d(_node)",
+                           "&_nrn_mechanism_access_rhs(_node)",
+                           "1"};
+
+    printer->fmt_push_block("return {}", node_data_struct());
+    printer->add_multi_line(fmt::format("{}", fmt::join(make_node_data_args, ",\n")));
+
+    printer->pop_block(";");
+    printer->pop_block();
+    printer->add_newline();
 }
 
 void CodegenNeuronCppVisitor::print_thread_variables_structure(bool print_initializers) {
@@ -1475,7 +1505,6 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     if (!info.artificial_cell) {
         printer->add_line("int node_id = node_data.nodeindices[id];");
         printer->add_line("auto v = node_data.node_voltages[node_id];");
-        printer->fmt_line("inst.{}[id] = v;", naming::VOLTAGE_UNUSED_VARIABLE);
     }
 
     print_rename_state_vars();
@@ -2164,6 +2193,7 @@ void CodegenNeuronCppVisitor::print_net_receive() {
     printer->add_line("auto * _ppvar = _nrn_mechanism_access_dparam(_pnt->prop);");
 
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->fmt_line("auto node_data = make_node_data_{}(_pnt->prop);", info.mod_suffix);
     printer->fmt_line("// nocmodl has a nullptr dereference for thread variables.");
     printer->fmt_line("// NMODL will fail to compile at a later point, because of");
     printer->fmt_line("// missing '_thread_vars'.");
