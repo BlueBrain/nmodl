@@ -1,5 +1,5 @@
 NEURON {
-    SUFFIX non_threadsafe
+    POINT_PROCESS point_non_threadsafe
     RANGE x
     GLOBAL gbl
 }
