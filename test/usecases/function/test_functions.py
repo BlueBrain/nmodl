@@ -1,7 +1,7 @@
 from neuron import h
 
 
-def check_functions(get_instance):
+def check_callable(get_instance):
     for x, value in zip(coords, values):
         get_instance(x).x = value
 
@@ -30,11 +30,13 @@ s = h.Section()
 s.nseg = nseg
 
 s.insert("functions")
+s.insert("non_threadsafe")
 
 coords = [(0.5 + k) * 1.0 / nseg for k in range(nseg)]
 values = [0.1 + k for k in range(nseg)]
 
 point_processes = {x: h.point_functions(s(x)) for x in coords}
 
-check_functions(lambda x: s(x).functions)
-check_functions(lambda x: point_processes[x])
+check_callable(lambda x: s(x).functions)
+check_callable(lambda x: s(x).non_threadsafe)
+check_callable(lambda x: point_processes[x])
