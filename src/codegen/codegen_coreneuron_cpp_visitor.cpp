@@ -314,7 +314,7 @@ bool CodegenCoreneuronCppVisitor::optimize_ion_variable_copies() const {
 
 void CodegenCoreneuronCppVisitor::print_memory_allocation_routine() const {
     printer->add_newline(2);
-    auto args = "size_t num, size_t size, size_t alignment = 32";
+    auto args = "size_t num, size_t size, size_t alignment = 64";
     printer->fmt_push_block("static inline void* mem_alloc({})", args);
     printer->add_line(
         "size_t aligned_size = ((num*size + alignment - 1) / alignment) * alignment;");
