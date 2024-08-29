@@ -97,7 +97,7 @@ var NAVTREEINDEX =
 "pyembed_8cpp.html#a6df1d22fb5f09eccc23b9f399670cfd7",
 "structnmodl_1_1codegen_1_1_codegen_info.html#ad5f0120295010083fc2060f8e64b0ffd",
 "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaa2e4822a98337283e39f7b60acf85ec9",
-"verbatim_8cpp.html#a5bb21e656fd24d011abbb8b5f038ca90"
+"verbatim_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
