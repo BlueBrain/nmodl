@@ -743,8 +743,8 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = m</span></div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]*dt+dt*mInf+mTau*(-nmodl_eigen_x[0]+old_m))/mTau</span></div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -(dt+mTau)/mTau</span></div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (dt*(-nmodl_eigen_x[0]+mInf)+mTau*(-nmodl_eigen_x[0]+old_m))/(dt*mTau)</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = (-dt-mTau)/(dt*mTau)</span></div>
 <div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="stringliteral">                }{</span></div>
@@ -782,11 +782,11 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = x</span></div>
 <div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[1]+a*dt+old_y</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[1]+a*dt+old_y)/dt</span></div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = 0</span></div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = -1.0</span></div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = -nmodl_eigen_x[0]+b*dt+old_x</span></div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -1.0</span></div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = -1/dt</span></div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[0]+b*dt+old_x)/dt</span></div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -1/dt</span></div>
 <div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 0</span></div>
 <div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
@@ -826,11 +826,11 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = M[0]</span></div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = M[1]</span></div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[1]+a*dt+old_M_1</span></div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[1]+a*dt+old_M_1)/dt</span></div>
 <div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = 0</span></div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = -1.0</span></div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = -nmodl_eigen_x[0]+b*dt+old_M_0</span></div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -1.0</span></div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = -1/dt</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[0]+b*dt+old_M_0)/dt</span></div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -1/dt</span></div>
 <div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 0</span></div>
 <div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;<span class="stringliteral">                    M[0] = nmodl_eigen_x[0]</span></div>
@@ -871,13 +871,13 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = x</span></div>
 <div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]+a*dt+old_x</span></div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1.0</span></div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+a*dt+old_x)/dt</span></div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1/dt</span></div>
 <div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
 <div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;<span class="stringliteral">                    b = b+1</span></div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = -nmodl_eigen_x[1]+b*dt+old_y</span></div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+b*dt+old_y)/dt</span></div>
 <div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 0</span></div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -1.0</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -1/dt</span></div>
 <div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="stringliteral">                    y = nmodl_eigen_x[1]</span></div>
@@ -949,12 +949,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;<span class="stringliteral">                        nmodl_eigen_x[0] = x</span></div>
 <div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;<span class="stringliteral">                        nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;<span class="stringliteral">                    }{</span></div>
-<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;<span class="stringliteral">                        nmodl_eigen_f[0] = -nmodl_eigen_x[0]+a*dt+old_x</span></div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[0] = -1.0</span></div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;<span class="stringliteral">                        nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+a*dt+old_x)/dt</span></div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[0] = -1/dt</span></div>
 <div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[2] = 0</span></div>
-<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;<span class="stringliteral">                        nmodl_eigen_f[1] = -nmodl_eigen_x[1]+b*dt+old_y</span></div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;<span class="stringliteral">                        nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+b*dt+old_y)/dt</span></div>
 <div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[1] = 0</span></div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[3] = -1.0</span></div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;<span class="stringliteral">                        nmodl_eigen_j[3] = -1/dt</span></div>
 <div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;<span class="stringliteral">                    }{</span></div>
 <div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;<span class="stringliteral">                        x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;<span class="stringliteral">                        y = nmodl_eigen_x[1]</span></div>
@@ -999,15 +999,15 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = x</span></div>
 <div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[1]*a*dt+b*dt+old_x</span></div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1.0</span></div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = a*dt</span></div>
+<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(nmodl_eigen_x[1]*a+b)+old_x)/dt</span></div>
+<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1/dt</span></div>
+<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = a</span></div>
 <div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;<span class="stringliteral">                    IF (b == 1) {</span></div>
 <div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;<span class="stringliteral">                        a = a+1</span></div>
 <div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;<span class="stringliteral">                    }</span></div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt+nmodl_eigen_x[1]*a*dt-nmodl_eigen_x[1]+old_y</span></div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = dt</span></div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = a*dt-1.0</span></div>
+<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]+nmodl_eigen_x[1]*a)+old_y)/dt</span></div>
+<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 1.0</span></div>
+<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = a-1/dt</span></div>
 <div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160;<span class="stringliteral">                    y = nmodl_eigen_x[1]</span></div>
@@ -1025,15 +1025,15 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = x</span></div>
 <div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[1]*a*dt+b*dt+old_x</span></div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1.0</span></div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = a*dt</span></div>
+<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(nmodl_eigen_x[1]*a+b)+old_x)/dt</span></div>
+<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1/dt</span></div>
+<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = a</span></div>
 <div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;<span class="stringliteral">                    IF (b == 1) {</span></div>
 <div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;<span class="stringliteral">                        a = a+1</span></div>
 <div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;<span class="stringliteral">                    }</span></div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt+nmodl_eigen_x[1]*a*dt-nmodl_eigen_x[1]+old_y</span></div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = dt</span></div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = a*dt-1.0</span></div>
+<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]+nmodl_eigen_x[1]*a)+old_y)/dt</span></div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 1.0</span></div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = a-1/dt</span></div>
 <div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;<span class="stringliteral">                    y = nmodl_eigen_x[1]</span></div>
@@ -1080,18 +1080,18 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[2] = z</span></div>
 <div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[2]*a*dt+b*dt*h+old_x</span></div>
-<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1.0</span></div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(nmodl_eigen_x[2]*a+b*h)+old_x)/dt</span></div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1/dt</span></div>
 <div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 0</span></div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = a*dt</span></div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = 2.0*nmodl_eigen_x[0]*dt-nmodl_eigen_x[1]+c*dt+old_y</span></div>
-<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*dt</span></div>
-<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = -1.0</span></div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = a</span></div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(2.0*nmodl_eigen_x[0]+c)+old_y)/dt</span></div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0</span></div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = -1/dt</span></div>
 <div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[7] = 0</span></div>
-<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = -nmodl_eigen_x[1]*dt+nmodl_eigen_x[2]*d*dt-nmodl_eigen_x[2]+old_z</span></div>
+<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = (-nmodl_eigen_x[2]+dt*(-nmodl_eigen_x[1]+nmodl_eigen_x[2]*d)+old_z)/dt</span></div>
 <div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = -dt</span></div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = d*dt-1.0</span></div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = -1.0</span></div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = d-1/dt</span></div>
 <div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;<span class="stringliteral">                    y = nmodl_eigen_x[1]</span></div>
@@ -1112,18 +1112,18 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = y</span></div>
 <div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[2] = z</span></div>
 <div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]+nmodl_eigen_x[2]*a*dt+b*dt*h+old_x</span></div>
-<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1.0</span></div>
+<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(nmodl_eigen_x[2]*a+b*h)+old_x)/dt</span></div>
+<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -1/dt</span></div>
 <div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 0</span></div>
-<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = a*dt</span></div>
-<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = 2.0*nmodl_eigen_x[0]*dt-nmodl_eigen_x[1]+c*dt+old_y</span></div>
-<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*dt</span></div>
-<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = -1.0</span></div>
+<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = a</span></div>
+<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(2.0*nmodl_eigen_x[0]+c)+old_y)/dt</span></div>
+<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0</span></div>
+<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = -1/dt</span></div>
 <div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[7] = 0</span></div>
-<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = -nmodl_eigen_x[1]*dt+nmodl_eigen_x[2]*d*dt-nmodl_eigen_x[2]+old_z</span></div>
+<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = (-nmodl_eigen_x[2]+dt*(-nmodl_eigen_x[1]+nmodl_eigen_x[2]*d)+old_z)/dt</span></div>
 <div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
-<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = -dt</span></div>
-<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = d*dt-1.0</span></div>
+<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = -1.0</span></div>
+<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = d-1/dt</span></div>
 <div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;<span class="stringliteral">                    x = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;<span class="stringliteral">                    y = nmodl_eigen_x[1]</span></div>
@@ -1166,12 +1166,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = mc</span></div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = m</span></div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc</span></div>
-<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a*dt-1.0</span></div>
-<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b*dt</span></div>
-<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[1]*b*dt-nmodl_eigen_x[1]+old_m</span></div>
-<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = a*dt</span></div>
-<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -b*dt-1.0</span></div>
+<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*a+nmodl_eigen_x[1]*b)+old_mc)/dt</span></div>
+<div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a-1/dt</span></div>
+<div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b</span></div>
+<div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*a-nmodl_eigen_x[1]*b)+old_m)/dt</span></div>
+<div class="line"><a name="l01077"></a><span class="lineno"> 1077</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = a</span></div>
+<div class="line"><a name="l01078"></a><span class="lineno"> 1078</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -b-1/dt</span></div>
 <div class="line"><a name="l01079"></a><span class="lineno"> 1079</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01080"></a><span class="lineno"> 1080</span>&#160;<span class="stringliteral">                    mc = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01081"></a><span class="lineno"> 1081</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[1]</span></div>
@@ -1209,9 +1209,9 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01113"></a><span class="lineno"> 1113</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = mc</span></div>
 <div class="line"><a name="l01114"></a><span class="lineno"> 1114</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = m</span></div>
 <div class="line"><a name="l01115"></a><span class="lineno"> 1115</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc</span></div>
-<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a*dt-1.0</span></div>
-<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b*dt</span></div>
+<div class="line"><a name="l01116"></a><span class="lineno"> 1116</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*a+nmodl_eigen_x[1]*b)+old_mc)/dt</span></div>
+<div class="line"><a name="l01117"></a><span class="lineno"> 1117</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a-1/dt</span></div>
+<div class="line"><a name="l01118"></a><span class="lineno"> 1118</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b</span></div>
 <div class="line"><a name="l01119"></a><span class="lineno"> 1119</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = -nmodl_eigen_x[0]-nmodl_eigen_x[1]+1.0</span></div>
 <div class="line"><a name="l01120"></a><span class="lineno"> 1120</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -1.0</span></div>
 <div class="line"><a name="l01121"></a><span class="lineno"> 1121</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -1.0</span></div>
@@ -1255,12 +1255,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01159"></a><span class="lineno"> 1159</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = mc</span></div>
 <div class="line"><a name="l01160"></a><span class="lineno"> 1160</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = m</span></div>
 <div class="line"><a name="l01161"></a><span class="lineno"> 1161</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*b*dt+old_mc</span></div>
-<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a*dt-1.0</span></div>
-<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b*dt</span></div>
-<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*a*dt-nmodl_eigen_x[1]*b*dt-nmodl_eigen_x[1]+old_m</span></div>
-<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = a*dt</span></div>
-<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -b*dt-1.0</span></div>
+<div class="line"><a name="l01162"></a><span class="lineno"> 1162</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*a+nmodl_eigen_x[1]*b)+old_mc)/dt</span></div>
+<div class="line"><a name="l01163"></a><span class="lineno"> 1163</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -a-1/dt</span></div>
+<div class="line"><a name="l01164"></a><span class="lineno"> 1164</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = b</span></div>
+<div class="line"><a name="l01165"></a><span class="lineno"> 1165</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*a-nmodl_eigen_x[1]*b)+old_m)/dt</span></div>
+<div class="line"><a name="l01166"></a><span class="lineno"> 1166</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = a</span></div>
+<div class="line"><a name="l01167"></a><span class="lineno"> 1167</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -b-1/dt</span></div>
 <div class="line"><a name="l01168"></a><span class="lineno"> 1168</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01169"></a><span class="lineno"> 1169</span>&#160;<span class="stringliteral">                    mc = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01170"></a><span class="lineno"> 1170</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[1]</span></div>
@@ -1309,16 +1309,16 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01213"></a><span class="lineno"> 1213</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[3] = p0</span></div>
 <div class="line"><a name="l01214"></a><span class="lineno"> 1214</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[4] = p1</span></div>
 <div class="line"><a name="l01215"></a><span class="lineno"> 1215</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*alpha*dt-nmodl_eigen_x[0]+nmodl_eigen_x[1]*beta*dt+old_c1</span></div>
-<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -alpha*dt-1.0</span></div>
-<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = beta*dt</span></div>
+<div class="line"><a name="l01216"></a><span class="lineno"> 1216</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*alpha+nmodl_eigen_x[1]*beta)+old_c1)/dt</span></div>
+<div class="line"><a name="l01217"></a><span class="lineno"> 1217</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -alpha-1/dt</span></div>
+<div class="line"><a name="l01218"></a><span class="lineno"> 1218</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = beta</span></div>
 <div class="line"><a name="l01219"></a><span class="lineno"> 1219</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[10] = 0</span></div>
 <div class="line"><a name="l01220"></a><span class="lineno"> 1220</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[15] = 0</span></div>
 <div class="line"><a name="l01221"></a><span class="lineno"> 1221</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[20] = 0</span></div>
-<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*alpha*dt-nmodl_eigen_x[1]*beta*dt-nmodl_eigen_x[1]*dt*k3p-nmodl_eigen_x[1]+nmodl_eigen_x[2]*dt*k4+old_o1</span></div>
-<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = alpha*dt</span></div>
-<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = -beta*dt-dt*k3p-1.0</span></div>
-<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[11] = dt*k4</span></div>
+<div class="line"><a name="l01222"></a><span class="lineno"> 1222</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*alpha-nmodl_eigen_x[1]*beta-nmodl_eigen_x[1]*k3p+nmodl_eigen_x[2]*k4)+old_o1)/dt</span></div>
+<div class="line"><a name="l01223"></a><span class="lineno"> 1223</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = alpha</span></div>
+<div class="line"><a name="l01224"></a><span class="lineno"> 1224</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = -beta-k3p-1/dt</span></div>
+<div class="line"><a name="l01225"></a><span class="lineno"> 1225</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[11] = k4</span></div>
 <div class="line"><a name="l01226"></a><span class="lineno"> 1226</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[16] = 0</span></div>
 <div class="line"><a name="l01227"></a><span class="lineno"> 1227</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[21] = 0</span></div>
 <div class="line"><a name="l01228"></a><span class="lineno"> 1228</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = -nmodl_eigen_x[0]-nmodl_eigen_x[1]-nmodl_eigen_x[2]+1.0</span></div>
@@ -1327,12 +1327,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01231"></a><span class="lineno"> 1231</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[12] = -1.0</span></div>
 <div class="line"><a name="l01232"></a><span class="lineno"> 1232</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[17] = 0</span></div>
 <div class="line"><a name="l01233"></a><span class="lineno"> 1233</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[22] = 0</span></div>
-<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[3] = -nmodl_eigen_x[3]*dt*k1ca-nmodl_eigen_x[3]+nmodl_eigen_x[4]*dt*k2+old_p0</span></div>
+<div class="line"><a name="l01234"></a><span class="lineno"> 1234</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[3] = (-nmodl_eigen_x[3]+dt*(-nmodl_eigen_x[3]*k1ca+nmodl_eigen_x[4]*k2)+old_p0)/dt</span></div>
 <div class="line"><a name="l01235"></a><span class="lineno"> 1235</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 0</span></div>
 <div class="line"><a name="l01236"></a><span class="lineno"> 1236</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = 0</span></div>
 <div class="line"><a name="l01237"></a><span class="lineno"> 1237</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[13] = 0</span></div>
-<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[18] = -dt*k1ca-1.0</span></div>
-<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[23] = dt*k2</span></div>
+<div class="line"><a name="l01238"></a><span class="lineno"> 1238</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[18] = -k1ca-1/dt</span></div>
+<div class="line"><a name="l01239"></a><span class="lineno"> 1239</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[23] = k2</span></div>
 <div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[4] = -nmodl_eigen_x[3]-nmodl_eigen_x[4]+1.0</span></div>
 <div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = 0</span></div>
 <div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[9] = 0</span></div>
@@ -1382,8 +1382,8 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01286"></a><span class="lineno"> 1286</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01287"></a><span class="lineno"> 1287</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = W[0]</span></div>
 <div class="line"><a name="l01288"></a><span class="lineno"> 1288</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]+nmodl_eigen_x[0]*dt*B[0]-nmodl_eigen_x[0]+3.0*dt*A[1]+old_W_0</span></div>
-<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -dt*A[0]+dt*B[0]-1.0</span></div>
+<div class="line"><a name="l01289"></a><span class="lineno"> 1289</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*A[0]+nmodl_eigen_x[0]*B[0]+3.0*A[1])+old_W_0)/dt</span></div>
+<div class="line"><a name="l01290"></a><span class="lineno"> 1290</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -A[0]+B[0]-1/dt</span></div>
 <div class="line"><a name="l01291"></a><span class="lineno"> 1291</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01292"></a><span class="lineno"> 1292</span>&#160;<span class="stringliteral">                    W[0] = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01293"></a><span class="lineno"> 1293</span>&#160;<span class="stringliteral">                }{</span></div>
@@ -1424,12 +1424,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01328"></a><span class="lineno"> 1328</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = M[0]</span></div>
 <div class="line"><a name="l01329"></a><span class="lineno"> 1329</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = M[1]</span></div>
 <div class="line"><a name="l01330"></a><span class="lineno"> 1330</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt*B[0]+old_M_0</span></div>
-<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -dt*A[0]-1.0</span></div>
-<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = dt*B[0]</span></div>
-<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt*A[1]-nmodl_eigen_x[1]*dt*B[1]-nmodl_eigen_x[1]+old_M_1</span></div>
-<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = dt*A[1]</span></div>
-<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -dt*B[1]-1.0</span></div>
+<div class="line"><a name="l01331"></a><span class="lineno"> 1331</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*A[0]+nmodl_eigen_x[1]*B[0])+old_M_0)/dt</span></div>
+<div class="line"><a name="l01332"></a><span class="lineno"> 1332</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -A[0]-1/dt</span></div>
+<div class="line"><a name="l01333"></a><span class="lineno"> 1333</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = B[0]</span></div>
+<div class="line"><a name="l01334"></a><span class="lineno"> 1334</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*A[1]-nmodl_eigen_x[1]*B[1])+old_M_1)/dt</span></div>
+<div class="line"><a name="l01335"></a><span class="lineno"> 1335</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = A[1]</span></div>
+<div class="line"><a name="l01336"></a><span class="lineno"> 1336</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -B[1]-1/dt</span></div>
 <div class="line"><a name="l01337"></a><span class="lineno"> 1337</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01338"></a><span class="lineno"> 1338</span>&#160;<span class="stringliteral">                    M[0] = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01339"></a><span class="lineno"> 1339</span>&#160;<span class="stringliteral">                    M[1] = nmodl_eigen_x[1]</span></div>
@@ -1468,8 +1468,8 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01372"></a><span class="lineno"> 1372</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01373"></a><span class="lineno"> 1373</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = W[0]</span></div>
 <div class="line"><a name="l01374"></a><span class="lineno"> 1374</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*A[0]+nmodl_eigen_x[0]*dt*B[0]-nmodl_eigen_x[0]+3.0*dt*A[1]+old_W_0</span></div>
-<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -dt*A[0]+dt*B[0]-1.0</span></div>
+<div class="line"><a name="l01375"></a><span class="lineno"> 1375</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*A[0]+nmodl_eigen_x[0]*B[0]+3.0*A[1])+old_W_0)/dt</span></div>
+<div class="line"><a name="l01376"></a><span class="lineno"> 1376</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -A[0]+B[0]-1/dt</span></div>
 <div class="line"><a name="l01377"></a><span class="lineno"> 1377</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01378"></a><span class="lineno"> 1378</span>&#160;<span class="stringliteral">                    W[0] = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01379"></a><span class="lineno"> 1379</span>&#160;<span class="stringliteral">                }{</span></div>
@@ -1512,18 +1512,18 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01416"></a><span class="lineno"> 1416</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = h</span></div>
 <div class="line"><a name="l01417"></a><span class="lineno"> 1417</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[2] = n</span></div>
 <div class="line"><a name="l01418"></a><span class="lineno"> 1418</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]*dt+dt*minf+mtau*(-nmodl_eigen_x[0]-3.0*nmodl_eigen_x[1]*dt+old_m))/mtau</span></div>
-<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]*dt+dt*hinf+htau*(pow(nmodl_eigen_x[0], 2)*dt-nmodl_eigen_x[1]+old_h))/htau</span></div>
-<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = (-nmodl_eigen_x[2]*dt+dt*ninf+ntau*(-nmodl_eigen_x[2]+old_n))/ntau</span></div>
-<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -(dt+mtau)/mtau</span></div>
-<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -3.0*dt</span></div>
-<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = 0</span></div>
-<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*nmodl_eigen_x[0]*dt</span></div>
-<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = -(dt+htau)/htau</span></div>
-<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[7] = 0</span></div>
+<div class="line"><a name="l01419"></a><span class="lineno"> 1419</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]/mtau-nmodl_eigen_x[0]/dt-3.0*nmodl_eigen_x[1]+minf/mtau+old_m/dt</span></div>
+<div class="line"><a name="l01420"></a><span class="lineno"> 1420</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = (-dt-mtau)/(dt*mtau)</span></div>
+<div class="line"><a name="l01421"></a><span class="lineno"> 1421</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -3.0</span></div>
+<div class="line"><a name="l01422"></a><span class="lineno"> 1422</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[6] = 0</span></div>
+<div class="line"><a name="l01423"></a><span class="lineno"> 1423</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = pow(nmodl_eigen_x[0], 2)-nmodl_eigen_x[1]/htau-nmodl_eigen_x[1]/dt+hinf/htau+old_h/dt</span></div>
+<div class="line"><a name="l01424"></a><span class="lineno"> 1424</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*nmodl_eigen_x[0]</span></div>
+<div class="line"><a name="l01425"></a><span class="lineno"> 1425</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[4] = (-dt-htau)/(dt*htau)</span></div>
+<div class="line"><a name="l01426"></a><span class="lineno"> 1426</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[7] = 0</span></div>
+<div class="line"><a name="l01427"></a><span class="lineno"> 1427</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[2] = (dt*(-nmodl_eigen_x[2]+ninf)+ntau*(-nmodl_eigen_x[2]+old_n))/(dt*ntau)</span></div>
 <div class="line"><a name="l01428"></a><span class="lineno"> 1428</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
 <div class="line"><a name="l01429"></a><span class="lineno"> 1429</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[5] = 0</span></div>
-<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = -(dt+ntau)/ntau</span></div>
+<div class="line"><a name="l01430"></a><span class="lineno"> 1430</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[8] = (-dt-ntau)/(dt*ntau)</span></div>
 <div class="line"><a name="l01431"></a><span class="lineno"> 1431</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01432"></a><span class="lineno"> 1432</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01433"></a><span class="lineno"> 1433</span>&#160;<span class="stringliteral">                    h = nmodl_eigen_x[1]</span></div>
@@ -1570,12 +1570,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01474"></a><span class="lineno"> 1474</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = m</span></div>
 <div class="line"><a name="l01475"></a><span class="lineno"> 1475</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = h</span></div>
 <div class="line"><a name="l01476"></a><span class="lineno"> 1476</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]*dt+dt*minf+mtau*(-nmodl_eigen_x[0]+old_m))/mtau</span></div>
-<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]*dt+dt*hinf+htau*(pow(nmodl_eigen_x[0], 2)*dt-nmodl_eigen_x[1]+old_h))/htau</span></div>
-<div class="line"><a name="l01479"></a><span class="lineno"> 1479</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -(dt+mtau)/mtau</span></div>
-<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
-<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*nmodl_eigen_x[0]*dt</span></div>
-<div class="line"><a name="l01482"></a><span class="lineno"> 1482</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -(dt+htau)/htau</span></div>
+<div class="line"><a name="l01477"></a><span class="lineno"> 1477</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (dt*(-nmodl_eigen_x[0]+minf)+mtau*(-nmodl_eigen_x[0]+old_m))/(dt*mtau)</span></div>
+<div class="line"><a name="l01478"></a><span class="lineno"> 1478</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = (-dt-mtau)/(dt*mtau)</span></div>
+<div class="line"><a name="l01479"></a><span class="lineno"> 1479</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = 0</span></div>
+<div class="line"><a name="l01480"></a><span class="lineno"> 1480</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = pow(nmodl_eigen_x[0], 2)-nmodl_eigen_x[1]/htau- nmodl_eigen_x[1]/dt+hinf/htau+old_h/dt</span></div>
+<div class="line"><a name="l01481"></a><span class="lineno"> 1481</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = 2.0*nmodl_eigen_x[0]</span></div>
+<div class="line"><a name="l01482"></a><span class="lineno"> 1482</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = (-dt-htau)/(dt*htau)</span></div>
 <div class="line"><a name="l01483"></a><span class="lineno"> 1483</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01484"></a><span class="lineno"> 1484</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01485"></a><span class="lineno"> 1485</span>&#160;<span class="stringliteral">                    h = nmodl_eigen_x[1]</span></div>
@@ -1593,12 +1593,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01497"></a><span class="lineno"> 1497</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = m</span></div>
 <div class="line"><a name="l01498"></a><span class="lineno"> 1498</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = h</span></div>
 <div class="line"><a name="l01499"></a><span class="lineno"> 1499</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[1]*dt+dt*hinf+htau*(pow(nmodl_eigen_x[0], 2)*dt-nmodl_eigen_x[1]+old_h))/htau</span></div>
-<div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[0]*dt+dt*minf+mtau*(-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt+old_m))/mtau</span></div>
-<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = 2.0*nmodl_eigen_x[0]*dt</span></div>
-<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = -(dt+htau)/htau</span></div>
-<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = -(dt+mtau)/mtau</span></div>
-<div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = dt</span></div>
+<div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = pow(nmodl_eigen_x[0], 2)-nmodl_eigen_x[1]/htau-nmodl_eigen_x[1]/dt+hinf/htau+old_h/dt</span></div>
+<div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = 2.0*nmodl_eigen_x[0]</span></div>
+<div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = (-dt-htau)/(dt*htau)</span></div>
+<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = -nmodl_eigen_x[0]/mtau-nmodl_eigen_x[0]/dt+nmodl_eigen_x[1]+minf/mtau+old_m/dt</span></div>
+<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = (-dt-mtau)/(dt*mtau)</span></div>
+<div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = 1.0</span></div>
 <div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;<span class="stringliteral">                    m = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01508"></a><span class="lineno"> 1508</span>&#160;<span class="stringliteral">                    h = nmodl_eigen_x[1]</span></div>
@@ -1958,12 +1958,12 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01862"></a><span class="lineno"> 1862</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = C1</span></div>
 <div class="line"><a name="l01863"></a><span class="lineno"> 1863</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = C2</span></div>
 <div class="line"><a name="l01864"></a><span class="lineno"> 1864</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*kf0_-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt*kb0_+old_C1</span></div>
-<div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -dt*kf0_-1.0</span></div>
-<div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = dt*kb0_</span></div>
-<div class="line"><a name="l01868"></a><span class="lineno"> 1868</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt*kf0_-nmodl_eigen_x[1]*dt*kb0_-nmodl_eigen_x[1]+old_C2</span></div>
-<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = dt*kf0_</span></div>
-<div class="line"><a name="l01870"></a><span class="lineno"> 1870</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -dt*kb0_-1.0</span></div>
+<div class="line"><a name="l01865"></a><span class="lineno"> 1865</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*kf0_+nmodl_eigen_x[1]*kb0_)+old_C1)/dt</span></div>
+<div class="line"><a name="l01866"></a><span class="lineno"> 1866</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -kf0_-1/dt</span></div>
+<div class="line"><a name="l01867"></a><span class="lineno"> 1867</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = kb0_</span></div>
+<div class="line"><a name="l01868"></a><span class="lineno"> 1868</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*kf0_-nmodl_eigen_x[1]*kb0_)+old_C2)/dt</span></div>
+<div class="line"><a name="l01869"></a><span class="lineno"> 1869</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = kf0_</span></div>
+<div class="line"><a name="l01870"></a><span class="lineno"> 1870</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -kb0_-1/dt</span></div>
 <div class="line"><a name="l01871"></a><span class="lineno"> 1871</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01872"></a><span class="lineno"> 1872</span>&#160;<span class="stringliteral">                    C1 = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01873"></a><span class="lineno"> 1873</span>&#160;<span class="stringliteral">                    C2 = nmodl_eigen_x[1]</span></div>
@@ -2000,20 +2000,20 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp_source.html',''); i
 <div class="line"><a name="l01904"></a><span class="lineno"> 1904</span>&#160;<span class="stringliteral">                EIGEN_NEWTON_SOLVE[2]{</span></div>
 <div class="line"><a name="l01905"></a><span class="lineno"> 1905</span>&#160;<span class="stringliteral">                    LOCAL kf0_, kb0_, old_C1, old_C2</span></div>
 <div class="line"><a name="l01906"></a><span class="lineno"> 1906</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01907"></a><span class="lineno"> 1907</span>&#160;<span class="stringliteral">                    kb0_ = lowergamma(v)</span></div>
-<div class="line"><a name="l01908"></a><span class="lineno"> 1908</span>&#160;<span class="stringliteral">                    kf0_ = beta(v)</span></div>
+<div class="line"><a name="l01907"></a><span class="lineno"> 1907</span>&#160;<span class="stringliteral">                    kf0_ = beta(v)</span></div>
+<div class="line"><a name="l01908"></a><span class="lineno"> 1908</span>&#160;<span class="stringliteral">                    kb0_ = lowergamma(v)</span></div>
 <div class="line"><a name="l01909"></a><span class="lineno"> 1909</span>&#160;<span class="stringliteral">                    old_C1 = C1</span></div>
 <div class="line"><a name="l01910"></a><span class="lineno"> 1910</span>&#160;<span class="stringliteral">                    old_C2 = C2</span></div>
 <div class="line"><a name="l01911"></a><span class="lineno"> 1911</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01912"></a><span class="lineno"> 1912</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[0] = C1</span></div>
 <div class="line"><a name="l01913"></a><span class="lineno"> 1913</span>&#160;<span class="stringliteral">                    nmodl_eigen_x[1] = C2</span></div>
 <div class="line"><a name="l01914"></a><span class="lineno"> 1914</span>&#160;<span class="stringliteral">                }{</span></div>
-<div class="line"><a name="l01915"></a><span class="lineno"> 1915</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = -nmodl_eigen_x[0]*dt*kf0_-nmodl_eigen_x[0]+nmodl_eigen_x[1]*dt*kb0_+old_C1</span></div>
-<div class="line"><a name="l01916"></a><span class="lineno"> 1916</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -dt*kf0_-1.0</span></div>
-<div class="line"><a name="l01917"></a><span class="lineno"> 1917</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = dt*kb0_</span></div>
-<div class="line"><a name="l01918"></a><span class="lineno"> 1918</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = nmodl_eigen_x[0]*dt*kf0_-nmodl_eigen_x[1]*dt*kb0_-nmodl_eigen_x[1]+old_C2</span></div>
-<div class="line"><a name="l01919"></a><span class="lineno"> 1919</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = dt*kf0_</span></div>
-<div class="line"><a name="l01920"></a><span class="lineno"> 1920</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -dt*kb0_-1.0</span></div>
+<div class="line"><a name="l01915"></a><span class="lineno"> 1915</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[0] = (-nmodl_eigen_x[0]+dt*(-nmodl_eigen_x[0]*kf0_+nmodl_eigen_x[1]*kb0_)+old_C1)/dt</span></div>
+<div class="line"><a name="l01916"></a><span class="lineno"> 1916</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[0] = -kf0_-1/dt</span></div>
+<div class="line"><a name="l01917"></a><span class="lineno"> 1917</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[2] = kb0_</span></div>
+<div class="line"><a name="l01918"></a><span class="lineno"> 1918</span>&#160;<span class="stringliteral">                    nmodl_eigen_f[1] = (-nmodl_eigen_x[1]+dt*(nmodl_eigen_x[0]*kf0_-nmodl_eigen_x[1]*kb0_)+old_C2)/dt</span></div>
+<div class="line"><a name="l01919"></a><span class="lineno"> 1919</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[1] = kf0_</span></div>
+<div class="line"><a name="l01920"></a><span class="lineno"> 1920</span>&#160;<span class="stringliteral">                    nmodl_eigen_j[3] = -kb0_-1/dt</span></div>
 <div class="line"><a name="l01921"></a><span class="lineno"> 1921</span>&#160;<span class="stringliteral">                }{</span></div>
 <div class="line"><a name="l01922"></a><span class="lineno"> 1922</span>&#160;<span class="stringliteral">                    C1 = nmodl_eigen_x[0]</span></div>
 <div class="line"><a name="l01923"></a><span class="lineno"> 1923</span>&#160;<span class="stringliteral">                    C2 = nmodl_eigen_x[1]</span></div>
