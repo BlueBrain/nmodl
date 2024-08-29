@@ -120,7 +120,6 @@ EIGEN_DEVICE_FUNC int newton_solver_small_N(Eigen::Matrix<double, N, 1>& X,
     int iter = -1;
     while (++iter < max_iter) {
         functor(X, F, J);
-        double error = F.norm();
         if (is_converged(X, J, F, eps)) {
             return iter;
         }
