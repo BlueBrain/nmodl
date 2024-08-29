@@ -317,7 +317,7 @@ void CodegenCoreneuronCppVisitor::print_memory_allocation_routine() const {
     auto args = "size_t num, size_t size, size_t alignment = 32";
     printer->fmt_push_block("static inline void* mem_alloc({})", args);
     printer->add_line(
-        "size_t aligned_size = (num*size + alignment - 1) / alignment) * alignment;");
+        "size_t aligned_size = ((num*size + alignment - 1) / alignment) * alignment;");
     printer->add_line("void* ptr = aligned_alloc(alignment, aligned_size);");
     printer->add_line("memset(ptr, 0, aligned_size);");
     printer->add_line("return ptr;");
