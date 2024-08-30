@@ -1,7 +1,5 @@
 var NAVTREEINDEX34 =
 {
-"verbatim_8cpp.html#ac4190e972acac5e76211583970bf3ebf":[3,0,2,0,10,28,0],
-"verbatim_8cpp_source.html":[3,0,2,0,10,28],
 "verbatim_8hpp.html":[3,0,0,0,0,0,120],
 "verbatim_8hpp_source.html":[3,0,0,0,0,0,120],
 "verbatim__driver_8hpp.html":[3,0,1,4,14],
