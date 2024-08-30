@@ -239,11 +239,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
     print_check_table_function_prototypes();
 }
 
-static int get_number_of_odes() {
-    // TODO: make this flexible
-    return 1;
-}
-
 void CodegenNeuronCppVisitor::print_cvode_definitions() {
     if (!info.emit_cvode) {
         return;
@@ -252,8 +247,9 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("/* Functions related to CVODE codegen */");
 
     /* return # of ODEs to solve */
-    printer->push_block(fmt::format("static int ode_count_{}(int _type)", info.mod_suffix));
-    printer->fmt_line("return {};", get_number_of_odes());
+    printer->push_block(
+        fmt::format("static constexpr int ode_count_{}(int _type)", info.mod_suffix));
+    printer->fmt_line("return {};", info.num_equations);
     printer->pop_block();
 
     /* some spec thing? */
@@ -296,8 +292,8 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                     info.mod_suffix));  // begin function definition
     printer->add_line("auto* _ppvar = _nrn_mechanism_access_dparam(_prop);");
     printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;", int_variables_size());
-    printer->push_block(
-        fmt::format("for (int i = 0; i < {}; i++)", get_number_of_odes()));  // begin for loop
+    printer->push_block(fmt::format("for (int i = 0; i < ode_count_{}(0); i++)",
+                                    info.mod_suffix));  // begin for loop
     printer->add_line("_pv[i] = _nrn_mechanism_get_param_handle(_prop, _slist1[i]);");
     printer->add_line("_pvdot[i] = _nrn_mechanism_get_param_handle(_prop, _dlist1[i]);");
     printer->add_line("_cvode_abstol(_atollist, _atol, i);");
