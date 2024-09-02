@@ -38,10 +38,10 @@ static constexpr int MAX_ITER = 50;
 static constexpr double EPS = 1e-13;
 
 template <int N>
-bool is_converged(const Eigen::Matrix<double, N, 1>& X,
-                  const Eigen::Matrix<double, N, N>& J,
-                  const Eigen::Matrix<double, N, 1>& F,
-                  double eps) {
+EIGEN_DEVICE_FUNC bool is_converged(const Eigen::Matrix<double, N, 1>& X,
+                                    const Eigen::Matrix<double, N, N>& J,
+                                    const Eigen::Matrix<double, N, 1>& F,
+                                    double eps) {
     for (Eigen::Index i = 0; i < N; ++i) {
         double square_error = J(i, Eigen::all).cwiseAbs2() * (eps * X).cwiseAbs2();
         if (F(i) * F(i) > square_error) {
