@@ -12,7 +12,7 @@ variables:
     value: main
   SPACK_BRANCH:
     description: Branch of BlueBrain Spack to use for the CI pipeline
-    value: develop
+    value: jelic/nmodl_sympy
   BLUECONFIGS_BRANCH:
     description: Branch of blueconfigs to trigger the simulation stack pipeline from
     value: main
