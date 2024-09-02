@@ -46,6 +46,8 @@ trigger cvf:
   variables:
     # Tell CVF to use the same commits/branches as NMODL.
     SPACK_ENV_FILE_URL: $SPACK_SETUP_COMMIT_MAPPING_URL
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 simulation_stack:
   stage: .pre
@@ -63,11 +65,15 @@ simulation_stack:
     # the blueconfigs CI as well to let it know about both CVF
     # and BLUECONFIGS
     SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 .spack_nmodl:
   variables:
     SPACK_PACKAGE: nmodl
     SPACK_PACKAGE_SPEC: +python+tests
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 spack_setup:
   extends: .spack_setup_ccache
@@ -85,6 +91,8 @@ spack_setup:
     PARSE_GITHUB_PR_DESCRIPTIONS: "true"
     # Ignore CVF ang BLUECONFIGS branches since those don't have a spack package
     SPACK_SETUP_IGNORE_PACKAGE_VARIABLES: "CVF BLUECONFIGS"
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 build:intel:
   extends:
@@ -92,6 +100,8 @@ build:intel:
     - .spack_nmodl
   variables:
     SPACK_PACKAGE_COMPILER: oneapi
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 build:nvhpc:
   extends:
@@ -100,11 +110,15 @@ build:nvhpc:
   variables:
     SPACK_PACKAGE_COMPILER: nvhpc
     SPACK_PACKAGE_DEPENDENCIES: ^bison%gcc^flex%gcc^py-jinja2%gcc^py-sympy%gcc^py-pyyaml%gcc
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 .nmodl_tests:
   variables:
     # https://github.com/BlueBrain/nmodl/issues/737
     bb5_ntasks: 1
+    SPACK_BRANCH:
+      value: jelic/nmodl_sympy
 
 test:intel:
   extends:
