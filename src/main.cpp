@@ -25,6 +25,7 @@
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/derivative_original_visitor.hpp"
 #include "visitors/function_callpath_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -489,6 +490,12 @@ int main(int argc, const char* argv[]) {
             LocalVarRenameVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("localize"));
+        }
+
+        {
+            DerivativeOriginalVisitor().visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("derivative_original"));
         }
 
         const bool sympy_derivimplicit = neuron_code && solver_exists(*ast, "derivimplicit");
