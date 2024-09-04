@@ -413,6 +413,9 @@ struct CodegenInfo {
     /// nrn_state block
     const ast::NrnStateBlock* nrn_state_block = nullptr;
 
+    /// the original DERIVATIVE block
+    const ast::DerivativeOriginalBlock* derivative_original_block = nullptr;
+
     /// net receive block for point process
     const ast::NetReceiveBlock* net_receive_node = nullptr;
 

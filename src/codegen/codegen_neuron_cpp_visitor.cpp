@@ -252,6 +252,30 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->fmt_line("return {};", info.num_equations);
     printer->pop_block();
 
+    printer->add_newline(2);
+
+    {
+        ParamVector args = {{"", "_nrn_mechanism_cache_range*", "", "_ml"},
+                            {"", "size_t", "", "id"},
+                            {"", "Datum*", "", "_ppvar"},
+                            {"", "Datum*", "", "_thread"},
+                            {"", "double*", "", "_globals"},
+                            {"", "NrnThread*", "", "nt"}};
+
+        printer->fmt_push_block("static int ode_spec1_{}({})",
+                                info.mod_suffix,
+                                get_parameter_str(args));  // begin function definition
+
+        printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+        //if (info.derivative_original_block) {
+        //    info.derivative_original_block->visit_children(*this);
+        //}
+
+        printer->pop_block();  // end function definition
+    }
+
+    printer->add_newline(2);
+
     /* some spec thing? */
     printer->push_block(
         fmt::format("static void ode_spec_{}(_nrn_model_sorted_token const& _sorted_token, "
