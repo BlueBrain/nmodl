@@ -42,15 +42,15 @@ EIGEN_DEVICE_FUNC bool is_converged(const Eigen::Matrix<double, N, 1>& X,
                                     const Eigen::Matrix<double, N, N>& J,
                                     const Eigen::Matrix<double, N, 1>& F,
                                     double eps) {
-    double square_eps = eps*eps;
+    double square_eps = eps * eps;
     for (Eigen::Index i = 0; i < N; ++i) {
         double square_error = 0.0;
-        for(Eigen::Index j = 0; j < N; ++j) {
+        for (Eigen::Index j = 0; j < N; ++j) {
             double JX = J(i, j) * X(j);
-            square_error += JX*JX;
+            square_error += JX * JX;
         }
 
-        if (F(i) * F(i) > square_eps*square_error) {
+        if (F(i) * F(i) > square_eps * square_error) {
             return false;
         }
     }
