@@ -851,7 +851,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     if (!info.vectorize && !info.top_local_variables.empty()) {
         for (size_t i = 0; i < info.top_local_variables.size(); ++i) {
             const auto& var = info.top_local_variables[i];
-            std::cout << get_name(var) << std::endl;
             codegen_global_variables.push_back(var);
         }
     }
