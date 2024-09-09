@@ -20,6 +20,7 @@
 #include "visitors/nmodl_visitor.hpp"
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 namespace nmodl {
 namespace visitor {

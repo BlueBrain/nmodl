@@ -8,6 +8,7 @@
 #include "utils/string_utils.hpp"
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 #include <limits>
 #include <string>

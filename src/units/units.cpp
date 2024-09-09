@@ -18,6 +18,7 @@
 
 #include "units.hpp"
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 /**
  * \file

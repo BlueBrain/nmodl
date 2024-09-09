@@ -13,6 +13,8 @@
  */
 
 #include <fmt/format.h>
+#include <fmt/ranges.h>
+
 #include <optional>
 #include <string>
 #include <unordered_map>

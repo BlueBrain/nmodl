@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
