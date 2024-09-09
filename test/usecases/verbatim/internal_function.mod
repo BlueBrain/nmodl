@@ -1,4 +1,4 @@
-NEURON	{ 
+NEURON {
     SUFFIX internal_function
     THREADSAFE
 }
