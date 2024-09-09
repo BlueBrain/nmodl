@@ -16,6 +16,7 @@ var visitor__utils_8hpp =
     [ "get_local_list_statement", "visitor__utils_8hpp.html#adbdbb124708e64f8604f01b60ee326cc", null ],
     [ "get_new_name", "visitor__utils_8hpp.html#a9b51e3f836995236060e8eb8596dd486", null ],
     [ "is_random_construct_function", "visitor__utils_8hpp.html#a08015444c35fc7977d0e82173bf23113", null ],
+    [ "node_exists", "visitor__utils_8hpp.html#a7520d0adea945f2e3b7a7a08f3204f36", null ],
     [ "remove_statements_from_block", "visitor__utils_8hpp.html#adac14bab9e1357ec2c89a2ebeccaf286", null ],
     [ "solver_exists", "visitor__utils_8hpp.html#ae3bf5cf6089006e2ba8b8f93b9077703", null ],
     [ "statement_dependencies", "visitor__utils_8hpp.html#a1cf829797d75f00f7307a89776d9d735", null ],
