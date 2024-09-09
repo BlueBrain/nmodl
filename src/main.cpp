@@ -402,17 +402,6 @@ int main(int argc, const char* argv[]) {
             symtab->print(std::cout);
         }
 
-        ast_to_nmodl(*ast, filepath("ast"));
-
-        if (json_ast) {
-            std::string file{scratch_dir};
-            file += "/";
-            file += modfile;
-            file += ".ast.json";
-            logger->info("Writing AST into {}", file);
-            JSONVisitor(file).write(*ast);
-        }
-
         if (verbatim_rename) {
             logger->info("Running verbatim rename visitor");
             VerbatimVarRenameVisitor().visit_program(*ast);
@@ -571,6 +560,18 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("FunctionCallpathVisitor"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
+
+        ast_to_nmodl(*ast, filepath("ast"));
+
+        if (json_ast) {
+            std::string file{scratch_dir};
+            file += "/";
+            file += modfile;
+            file += ".ast.json";
+            logger->info("Writing AST into {}", file);
+            JSONVisitor(file).write(*ast);
+        }
+
 
         {
             auto blame_level = detailed_blame ? utils::BlameLevel::Detailed
