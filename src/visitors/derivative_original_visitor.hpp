@@ -12,7 +12,9 @@
  * \brief \copybrief nmodl::visitor::DerivativeOriginalVisitor
  */
 
+#include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
+#include <string>
 
 namespace nmodl {
 namespace visitor {
@@ -36,9 +38,21 @@ class DerivativeOriginalVisitor: public AstVisitor {
     /// The copy of the derivative block we are solving
     ast::DerivativeBlock* derivative_original = nullptr;
 
+    /// true while visiting differential equation
+    bool differential_equation = false;
+
+    /// global symbol table
+    symtab::SymbolTable* program_symtab = nullptr;
+
+    /// visiting derivative block
+    bool derivative_block = false;
+
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
+    void visit_derivative_original_block(ast::DerivativeOriginalBlock& node) override;
+    void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
+    void visit_binary_expression(ast::BinaryExpression& node) override;
 };
 
 /** \} */  // end of visitor_classes

@@ -544,6 +544,9 @@ struct CodegenInfo {
     /// all variables/symbols used in the verbatim block
     std::unordered_set<std::string> variables_in_verbatim;
 
+    /// all ODEs in the DERIVATIVE_ORIGINAL block in the form (lhs, rhs)
+    std::vector<std::pair<symtab::Symbol, ast::Expression*>> ode_pairs;
+
     /// unique functor names for all the \c EigenNewtonSolverBlock s
     std::unordered_map<const ast::EigenNewtonSolverBlock*, std::string> functor_names;
 

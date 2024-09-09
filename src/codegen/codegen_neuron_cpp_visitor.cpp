@@ -254,25 +254,36 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     printer->add_newline(2);
 
-    {
-        ParamVector args = {{"", "_nrn_mechanism_cache_range*", "", "_ml"},
-                            {"", "size_t", "", "id"},
-                            {"", "Datum*", "", "_ppvar"},
-                            {"", "Datum*", "", "_thread"},
-                            {"", "double*", "", "_globals"},
-                            {"", "NrnThread*", "", "nt"}};
+    // args for CVode functions ode_spec[num] and ode_matsol[num]
+    ParamVector args_cvode = {{"", "Memb_list*", "", "_ml"},
+                              {"", "size_t", "", "id"},
+                              {"", "Datum*", "", "_ppvar"},
+                              {"", "Datum*", "", "_thread"},
+                              {"", "double*", "", "_globals"},
+                              {"", "NrnThread*", "", "nt"},
+                              {"", "int", "", "_type"},
+                              {"", "const _nrn_model_sorted_token&", "", "_sorted_token"}};
 
-        printer->fmt_push_block("static int ode_spec1_{}({})",
-                                info.mod_suffix,
-                                get_parameter_str(args));  // begin function definition
 
-        printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
-        //if (info.derivative_original_block) {
-        //    info.derivative_original_block->visit_children(*this);
-        //}
+    // params for spec-related functions
+    ParamVector args_setup = {{"", "_nrn_mechanism_cache_range*", "", "_ml"},
+                              {"", "size_t", "", "id"},
+                              {"", "Datum*", "", "_ppvar"},
+                              {"", "Datum*", "", "_thread"},
+                              {"", "double*", "", "_globals"},
+                              {"", "NrnThread*", "", "nt"}};
 
-        printer->pop_block();  // end function definition
+    printer->fmt_push_block("static int ode_spec1_{}({})",
+                            info.mod_suffix,
+                            get_parameter_str(args_cvode));  // begin function definition
+
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    if (info.derivative_original_block) {
+        // TODO probably override `visit_derivative_original_block` so name of eq. is not printed
+        info.derivative_original_block->visit_children(*this);
     }
+
+    printer->pop_block();  // end function definition
 
     printer->add_newline(2);
 
@@ -290,6 +301,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->fmt_line("ode_spec1_{}({});", info.mod_suffix, get_arg_str(args_cvode));
 
     // ion statements
     {
@@ -308,6 +320,8 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
 
+    printer->add_newline(2);
+
     /* map */
     printer->push_block(
         fmt::format("static void ode_map_{}(Prop* _prop, int equation_index, "
@@ -323,6 +337,16 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("_cvode_abstol(_atollist, _atol, i);");
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
+
+    printer->add_newline(2);
+
+    /* matsol instance (?) */
+    printer->push_block(fmt::format("static void ode_matsol_instance1_{}({})",
+                                    info.mod_suffix,
+                                    get_arg_str(args_cvode)));  // begin function definition
+    printer->pop_block();                                       // end function definition
+
+    printer->add_newline(2);
 
     /* matsol */
     printer->push_block(

@@ -635,7 +635,8 @@ void CodegenHelperVisitor::visit_nrn_state_block(const ast::NrnStateBlock& node)
     node.visit_children(*this);
 }
 
-void CodegenHelperVisitor::visit_derivative_original_block(const ast::DerivativeOriginalBlock& node) {
+void CodegenHelperVisitor::visit_derivative_original_block(
+    const ast::DerivativeOriginalBlock& node) {
     info.derivative_original_block = &node;
     node.visit_children(*this);
 }
