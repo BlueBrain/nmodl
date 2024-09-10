@@ -481,7 +481,7 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("localize"));
         }
 
-        {
+        if (neuron_code) {
             DerivativeOriginalVisitor().visit_program(*ast);
             SymtabVisitor(update_symtab).visit_program(*ast);
             ast_to_nmodl(*ast, filepath("derivative_original"));
