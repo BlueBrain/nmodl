@@ -277,8 +277,8 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                             get_parameter_str(args_cvode));  // begin function definition
 
     if (info.derivative_original_block) {
-        // TODO probably override `visit_derivative_original_block` so name of eq. is not printed
-        info.derivative_original_block->get_statement_block()->accept(*this);
+        auto block = info.derivative_original_block->get_statement_block();
+        print_statement_block(*block, false, false);
     }
 
     printer->add_line("return 0;");
@@ -352,7 +352,8 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
         // TODO modify the RHS here so it's 1 / (1 - dt * jac)
         // for mathematical details, see eq. (4.8) in:
         // https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
-        info.derivative_original_block->get_statement_block()->accept(*this);
+        auto block = info.derivative_original_block->get_statement_block();
+        print_statement_block(*block, false, false);
     }
 
     printer->pop_block();  // end function definition
