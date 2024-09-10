@@ -345,7 +345,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
         info.derivative_original_block->get_statement_block()->accept(*this);
     }
 
-    printer->pop_block();                                             // end function definition
+    printer->pop_block();  // end function definition
 
     printer->add_newline(2);
 
