@@ -1,8 +1,8 @@
 #include "blame.hpp"
 
 #include "string_utils.hpp"
-#include <filesystem>
 #include "utils/fmt.h"
+#include <filesystem>
 #include <stdexcept>
 #include <string>
 
