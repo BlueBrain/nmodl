@@ -273,7 +273,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     if (info.derivative_original_block) {
         // TODO probably override `visit_derivative_original_block` so name of eq. is not printed
-        info.derivative_original_block->visit_children(*this);
+        info.derivative_original_block->get_statement_block()->accept(*this);
     }
 
     printer->add_line("return 0;");
