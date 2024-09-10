@@ -8,8 +8,7 @@
 #include "visitors/solve_block_visitor.hpp"
 
 #include <cassert>
-#include <fmt/format.h>
-#include <fmt/ranges.h>
+#include "utils/fmt.h"
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"

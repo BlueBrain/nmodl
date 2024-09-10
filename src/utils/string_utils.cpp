@@ -7,8 +7,7 @@
 
 #include "utils/string_utils.hpp"
 
-#include <fmt/format.h>
-#include <fmt/ranges.h>
+#include "utils/fmt.h"
 
 #include <limits>
 #include <string>

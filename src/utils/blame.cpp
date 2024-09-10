@@ -2,8 +2,7 @@
 
 #include "string_utils.hpp"
 #include <filesystem>
-#include <fmt/format.h>
-#include <fmt/ranges.h>
+#include "utils/fmt.h"
 #include <stdexcept>
 #include <string>
 

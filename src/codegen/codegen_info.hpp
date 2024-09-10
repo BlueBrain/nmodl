@@ -12,8 +12,7 @@
  * \brief Various types to store code generation specific information
  */
 
-#include <fmt/format.h>
-#include <fmt/ranges.h>
+#include "utils/fmt.h"
 
 #include <optional>
 #include <string>

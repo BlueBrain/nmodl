@@ -14,8 +14,7 @@
  * \file
  * \brief \copybrief nmodl::printer::CodePrinter
  */
-#include <fmt/format.h>
-#include <fmt/ranges.h>
+#include "utils/fmt.h"
 
 #include <fstream>
 #include <iostream>
