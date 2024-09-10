@@ -259,12 +259,17 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                                     {"", "Memb_list*", "", "_ml_arg"},
                                     {"", "int", "", "_type"}};
 
-    const ParamVector args_cvode = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
-                                    {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
-                                    {"", "size_t", "", "id"},
-                                    {"", "Datum*", "", "_ppvar"},
-                                    {"", "Datum*", "", "_thread"},
-                                    {"", "NrnThread*", "", "nt"}};
+    ParamVector args_cvode = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
+                              {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
+                              {"", "size_t", "", "id"},
+                              {"", "Datum*", "", "_ppvar"},
+                              {"", "Datum*", "", "_thread"},
+                              {"", "NrnThread*", "", "nt"}};
+
+    if (info.thread_callback_register) {
+        auto type_name = fmt::format("{}&", thread_variables_struct());
+        args_cvode.emplace_back("", type_name, "", "_thread_vars");
+    }
 
     /* The internal spec function */
     printer->fmt_push_block("static int ode_spec1_{}({})",
@@ -290,6 +295,11 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
+                          info.thread_var_thread_id);
+    }
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
@@ -358,6 +368,11 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
+                          info.thread_var_thread_id);
+    }
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
