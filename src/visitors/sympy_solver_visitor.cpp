@@ -391,11 +391,16 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
     }
 }
 
+// Skip visiting DERIVATIVE_ORIGINAL block
+void SympySolverVisitor::visit_derivative_original_block(ast::DerivativeOriginalBlock& node) {}
+
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();
 
     if (!lhs->is_var_name()) {
-        logger->warn("SympySolverVisitor :: LHS of differential equation is not a VariableName");
+        logger->warn(fmt::format(
+            "SympySolverVisitor :: LHS of differential equation {} is not a VariableName",
+            to_nmodl(node)));
         return;
     }
     auto lhs_name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
