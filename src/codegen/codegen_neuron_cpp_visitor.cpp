@@ -270,6 +270,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
         auto type_name = fmt::format("{}&", thread_variables_struct());
         args_cvode.emplace_back("", type_name, "", "_thread_vars");
     }
+    args_cvode.emplace_back("", "double", "", "v");
 
     /* The internal spec function */
     printer->fmt_push_block("static int ode_spec1_{}({})",
