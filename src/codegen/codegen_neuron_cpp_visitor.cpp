@@ -337,6 +337,14 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->push_block(fmt::format("static void ode_matsol_instance1_{}({})",
                                     info.mod_suffix,
                                     get_parameter_str(args_cvode)));  // begin function definition
+
+    if (info.derivative_original_block) {
+        // TODO modify the RHS here so it's 1 / (1 - dt * jac)
+        // for mathematical details, see eq. (4.8) in:
+        // https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
+        info.derivative_original_block->get_statement_block()->accept(*this);
+    }
+
     printer->pop_block();                                             // end function definition
 
     printer->add_newline(2);
