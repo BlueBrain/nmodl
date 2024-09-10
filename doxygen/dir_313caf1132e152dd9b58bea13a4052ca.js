@@ -8,6 +8,7 @@ var dir_313caf1132e152dd9b58bea13a4052ca =
     [ "file_library.hpp", "file__library_8hpp.html", [
       [ "FileLibrary", "classnmodl_1_1_file_library.html", "classnmodl_1_1_file_library" ]
     ] ],
+    [ "fmt.h", "fmt_8h.html", null ],
     [ "logger.cpp", "logger_8cpp.html", "logger_8cpp" ],
     [ "logger.hpp", "logger_8hpp.html", null ],
     [ "perf_stat.cpp", "perf__stat_8cpp.html", "perf__stat_8cpp" ],
