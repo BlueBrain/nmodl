@@ -36,7 +36,9 @@ namespace visitor {
 class DerivativeOriginalVisitor: public AstVisitor {
   private:
     /// The copy of the derivative block we are solving
-    ast::DerivativeBlock* derivative_original = nullptr;
+    ast::DerivativeBlock* der_block_function = nullptr;
+
+    ast::DerivativeBlock* der_block_jacobian = nullptr;
 
     /// true while visiting differential equation
     bool differential_equation = false;
@@ -47,10 +49,15 @@ class DerivativeOriginalVisitor: public AstVisitor {
     /// visiting derivative block
     bool derivative_block = false;
 
+    ast::AstNodeType node_type = ast::AstNodeType::NODE;
+
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
-    void visit_derivative_original_block(ast::DerivativeOriginalBlock& node) override;
+    void visit_derivative_original_function_block(
+        ast::DerivativeOriginalFunctionBlock& node) override;
+    void visit_derivative_original_jacobian_block(
+        ast::DerivativeOriginalJacobianBlock& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
 };

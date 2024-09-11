@@ -18,17 +18,28 @@ void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& nod
     // TODO figure out what happens when we have both a KINETIC and a DERIVATIVE block in the same
     // mod file
     node.visit_children(*this);
-    derivative_original = node.clone();
+    der_block_function = node.clone();
+    der_block_jacobian = node.clone();
 }
 
 
-void DerivativeOriginalVisitor::visit_derivative_original_block(
-    ast::DerivativeOriginalBlock& node) {
+void DerivativeOriginalVisitor::visit_derivative_original_function_block(
+    ast::DerivativeOriginalFunctionBlock& node) {
     derivative_block = true;
+    node_type = node.get_node_type();
     node.visit_children(*this);
+    node_type = ast::AstNodeType::NODE;
     derivative_block = false;
 }
 
+void DerivativeOriginalVisitor::visit_derivative_original_jacobian_block(
+    ast::DerivativeOriginalJacobianBlock& node) {
+    derivative_block = true;
+    node_type = node.get_node_type();
+    node.visit_children(*this);
+    node_type = ast::AstNodeType::NODE;
+    derivative_block = false;
+}
 
 void DerivativeOriginalVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     differential_equation = true;
@@ -53,22 +64,34 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
         if (program_symtab->lookup(varname) == nullptr) {
             auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
             symbol->set_original_name(name->get_node_name());
-            // TODO check if we need below line
-            // symbol->created_from_state();
             program_symtab->insert(symbol);
         }
+        if (node_type == ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK) {
+            // TODO apply the transformation to expression and assign RHS
+        }
+    }
+    // edge case: it's an array, not a scalar
+    else if (name->is_indexed_name()) {
+        // TODO
     }
 }
 
 void DerivativeOriginalVisitor::visit_program(ast::Program& node) {
     program_symtab = node.get_symbol_table();
     node.visit_children(*this);
-    if (derivative_original) {
+    if (der_block_function) {
         auto der_node =
-            new ast::DerivativeOriginalBlock(derivative_original->get_name(),
-                                             derivative_original->get_statement_block());
+            new ast::DerivativeOriginalFunctionBlock(der_block_function->get_name(),
+                                                     der_block_function->get_statement_block());
         node.emplace_back_node(der_node);
     }
+    if (der_block_jacobian) {
+        auto der_node =
+            new ast::DerivativeOriginalJacobianBlock(der_block_jacobian->get_name(),
+                                                     der_block_jacobian->get_statement_block());
+        node.emplace_back_node(der_node);
+    }
+
     // re-visit the AST since we now inserted the DERIVATIVE_ORIGINAL block
     node.visit_children(*this);
 }

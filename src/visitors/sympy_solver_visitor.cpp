@@ -392,7 +392,10 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
 }
 
 // Skip visiting DERIVATIVE_ORIGINAL block
-void SympySolverVisitor::visit_derivative_original_block(ast::DerivativeOriginalBlock& node) {}
+void SympySolverVisitor::visit_derivative_original_function_block(
+    ast::DerivativeOriginalFunctionBlock& node) {}
+void SympySolverVisitor::visit_derivative_original_jacobian_block(
+    ast::DerivativeOriginalJacobianBlock& node) {}
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();
