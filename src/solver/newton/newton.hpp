@@ -42,6 +42,7 @@ EIGEN_DEVICE_FUNC bool is_converged(const Eigen::Matrix<double, N, 1>& X,
                                     const Eigen::Matrix<double, N, N>& J,
                                     const Eigen::Matrix<double, N, 1>& F,
                                     double eps) {
+    bool converged = true;
     double square_eps = eps * eps;
     for (Eigen::Index i = 0; i < N; ++i) {
         double square_error = 0.0;
@@ -51,10 +52,14 @@ EIGEN_DEVICE_FUNC bool is_converged(const Eigen::Matrix<double, N, 1>& X,
         }
 
         if (F(i) * F(i) > square_eps * square_error) {
-            return false;
+            converged = false;
+// The NVHPC is buggy and wont allow us to short-circuit.
+#ifndef __NVCOMPILER
+            return converged;
+#endif
         }
     }
-    return true;
+    return converged;
 }
 
 /**
