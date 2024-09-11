@@ -6,6 +6,7 @@ from neuron import h, gui
 #
 # The pattern is found in the builtin mod file: `apcount.mod`.
 
+
 def test_pointer_in_double():
     s = h.Section()
     s.nseg = 3
