@@ -9,7 +9,7 @@ readme = {file = "README.rst", content-type = "text/x-rst"}
 dynamic = ["version"]
 dependencies = [
     "find_libpython",
-    "sympy>=1.3",
+    "sympy>=1.13",
     "importlib-metadata;python_version<'3.9'",
     "importlib-resources;python_version<'3.9'",
 ]

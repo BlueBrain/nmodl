@@ -245,3 +245,23 @@ SCENARIO("ARTIFICIAL_CELL with `net_move`") {
         }
     }
 }
+
+SCENARIO("Codegen fails when analytic solution not available",
+         "[codegen][solver][sympy][derivative]") {
+    GIVEN("DERIVATIVE block with an equation which is not analytically solvable") {
+        std::string nmodl_text = R"(
+            BREAKPOINT {
+              SOLVE equation METHOD cnexp
+            }
+
+            DERIVATIVE equation {
+            var1' = sin(var1 * var1)
+            })";
+        THEN("Run Kinetic and Sympy Visitor and throw error") {
+            const auto& ast = NmodlDriver().parse_string(nmodl_text);
+            REQUIRE_THROWS_WITH(transpile(nmodl_text),
+                                ContainsSubstring(
+                                    "PRIME encountered during code generation, ODEs not solved?"));
+        }
+    }
+}

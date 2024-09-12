@@ -308,14 +308,14 @@ def solve_lin_system(
                 order="canonical",
             )
             for var, expr in sub_exprs:
-                new_local_vars.append(sp.ccode(var))
+                new_local_vars.append(sp.ccode(var, strict=True))
                 code.append(
-                    f"{var} = {sp.ccode(expr.evalf(), user_functions=custom_fcts)}"
+                    f"{var} = {sp.ccode(expr.evalf(), user_functions=custom_fcts, strict=True)}"
                 )
             solution_vector = simplified_solution_vector[0]
         for var, expr in zip(state_vars, solution_vector):
             code.append(
-                f"{sp.ccode(var)} = {sp.ccode(expr.evalf(), contract=False, user_functions=custom_fcts)}"
+                f"{sp.ccode(var, strict=True)} = {sp.ccode(expr.evalf(), contract=False, user_functions=custom_fcts, strict=True)}"
             )
     else:
         # large linear system: construct and return matrix J, vector F such that
@@ -326,7 +326,7 @@ def solve_lin_system(
         vecFcode = []
         for i, expr in enumerate(vecF):
             vecFcode.append(
-                f"F[{i}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts)}"
+                f"F[{i}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts, strict=True)}"
             )
         # construct matrix J
         vecJcode = []
@@ -334,7 +334,7 @@ def solve_lin_system(
             # todo: fix indexing to be ascending order
             flat_index = matJ.rows * (i % matJ.rows) + (i // matJ.rows)
             vecJcode.append(
-                f"J[{flat_index}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts)}"
+                f"J[{flat_index}] = {sp.ccode(expr.simplify().evalf(), user_functions=custom_fcts, strict=True)}"
             )
         # interweave
         code = _interweave_eqs(vecFcode, vecJcode)
@@ -375,7 +375,7 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
     vecFcode = []
     for i, eq in enumerate(eqs):
         vecFcode.append(
-            f"F[{i}] = {sp.ccode(eq.simplify().subs(X_vec_map).evalf(), user_functions=custom_fcts)}"
+            f"F[{i}] = {sp.ccode(eq.simplify().subs(X_vec_map).evalf(), user_functions=custom_fcts, strict=True)}"
         )
 
     vecJcode = []
@@ -385,6 +385,7 @@ def solve_non_lin_system(eq_strings, vars, constants, function_calls):
         rhs = sp.ccode(
             jacobian[i, j].simplify().subs(X_vec_map).evalf(),
             user_functions=custom_fcts,
+            strict=True,
         )
         vecJcode.append(f"J[{flat_index}] = {rhs}")
 
@@ -500,7 +501,7 @@ def integrate2c(diff_string, dt_var, vars, use_pade_approx=False):
     # return result as C code in NEURON format:
     #   - in the lhs x_0 refers to the state var at time (t+dt)
     #   - in the rhs x_0 refers to the state var at time t
-    return f"{sp.ccode(x)} = {sp.ccode(solution.evalf())}"
+    return f"{sp.ccode(x)} = {sp.ccode(solution.evalf(), strict=True)}"
 
 
 def forwards_euler2c(diff_string, dt_var, vars, function_calls):
@@ -528,7 +529,9 @@ def forwards_euler2c(diff_string, dt_var, vars, function_calls):
 
     custom_fcts = _get_custom_functions(function_calls)
     # return result as C code in NEURON format
-    return f"{sp.ccode(x)} = {sp.ccode(solution, user_functions=custom_fcts)}"
+    return (
+        f"{sp.ccode(x)} = {sp.ccode(solution, user_functions=custom_fcts, strict=True)}"
+    )
 
 
 def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
@@ -612,9 +615,9 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     try:
         # if expression is equal to one of the supplied vars, replace with this var
         # can do a simple string comparison here since a var cannot be further simplified
-        diff_as_string = sp.ccode(diff)
+        diff_as_string = sp.ccode(diff, strict=True)
         for v in sympy_vars:
-            if diff_as_string == sp.ccode(sympy_vars[v]):
+            if diff_as_string == sp.ccode(sympy_vars[v], strict=True):
                 diff = sympy_vars[v]
 
         # or if equal to rhs of one of the supplied equations, replace with lhs
@@ -635,4 +638,4 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
         pass
 
     # return result as C code in NEURON format
-    return sp.ccode(diff.evalf())
+    return sp.ccode(diff.evalf(), strict=True)
