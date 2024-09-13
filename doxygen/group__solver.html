@@ -108,6 +108,9 @@ $(document).ready(function(){initNavTree('group__solver.html',''); initResizable
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memTemplItemLeft" align="right" valign="top">EIGEN_DEVICE_FUNC bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__solver.html#gaf210fdfd748e1d08a48e0191364e3bf5">nmodl::newton::is_converged</a> (const Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, const Eigen::Matrix&lt; double, N, N &gt; &amp;J, const Eigen::Matrix&lt; double, N, 1 &gt; &amp;F, double eps)</td></tr>
+<tr class="separator:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga553e5133f871206a1ad6ab4fc10bde45"><td class="memTemplParams" colspan="2">template&lt;int N, typename FUNC &gt; </td></tr>
 <tr class="memitem:ga553e5133f871206a1ad6ab4fc10bde45"><td class="memTemplItemLeft" align="right" valign="top">EIGEN_DEVICE_FUNC int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">nmodl::newton::newton_solver</a> (Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, FUNC functor, double eps=<a class="el" href="group__solver.html#ga0b8788299c392976f3159910e0af2e9c">EPS</a>, int max_iter=<a class="el" href="group__solver.html#ga45a40394b3d577b79cde4e94e79cbcc0">MAX_ITER</a>)</td></tr>
 <tr class="memdesc:ga553e5133f871206a1ad6ab4fc10bde45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Newton method with user-provided Jacobian.  <a href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">More...</a><br /></td></tr>
@@ -131,12 +134,56 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga45a40394b3d577b79cde4e94e79cbcc0">nmodl::newton::MAX_ITER</a> = 1e3</td></tr>
+<tr class="memitem:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga45a40394b3d577b79cde4e94e79cbcc0">nmodl::newton::MAX_ITER</a> = 50</td></tr>
 <tr class="separator:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0b8788299c392976f3159910e0af2e9c"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga0b8788299c392976f3159910e0af2e9c">nmodl::newton::EPS</a> = 1e-12</td></tr>
+<tr class="memitem:ga0b8788299c392976f3159910e0af2e9c"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga0b8788299c392976f3159910e0af2e9c">nmodl::newton::EPS</a> = 1e-13</td></tr>
 <tr class="separator:ga0b8788299c392976f3159910e0af2e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="gaf210fdfd748e1d08a48e0191364e3bf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gaf210fdfd748e1d08a48e0191364e3bf5">&#9670;&nbsp;</a></span>is_converged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;int N&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">EIGEN_DEVICE_FUNC bool nmodl::newton::is_converged </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, N, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>X</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, N, N &gt; &amp;&#160;</td>
+          <td class="paramname"><em>J</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, N, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>F</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00041">41</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+
+</div>
+</div>
 <a id="gaadcb8093205f450fa8b2b7917f3a2dc0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#gaadcb8093205f450fa8b2b7917f3a2dc0">&#9670;&nbsp;</a></span>newton_solver() <span class="overload">[1/5]</span></h2>
 
@@ -177,7 +224,7 @@ template&lt;typename FUNC &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00129">129</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00150">150</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -221,7 +268,7 @@ template&lt;typename FUNC &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00137">137</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00158">158</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -265,7 +312,7 @@ template&lt;typename FUNC &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00145">145</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00166">166</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -309,7 +356,7 @@ template&lt;typename FUNC &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00153">153</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00174">174</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -361,7 +408,7 @@ template&lt;int N, typename FUNC &gt; </div>
 <p> when \(|F|^2 &lt; eps^2\), solution has converged.</p>
 <dl class="section return"><dt>Returns</dt><dd>number of iterations (-1 if failed to converge) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00055">55</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00080">80</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -408,7 +455,7 @@ template&lt;typename FUNC , int N&gt; </div>
 <p>Newton method template specializations for \(N &lt;= 4\) Use explicit inverse of <code>F</code> instead of LU decomposition. </p>
 <p>This is faster, as there is no pivoting and therefore no branches, but it is not numerically safe for \(N &gt; 4\). </p>
 
-<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00102">102</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="newton_8hpp_source.html#l00124">124</a> of file <a class="el" href="newton_8hpp_source.html">newton.hpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +470,7 @@ template&lt;typename FUNC , int N&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr double nmodl::newton::EPS = 1e-12</td>
+          <td class="memname">constexpr double nmodl::newton::EPS = 1e-13</td>
         </tr>
       </table>
   </td>
@@ -447,7 +494,7 @@ template&lt;typename FUNC , int N&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr int nmodl::newton::MAX_ITER = 1e3</td>
+          <td class="memname">constexpr int nmodl::newton::MAX_ITER = 50</td>
         </tr>
       </table>
   </td>

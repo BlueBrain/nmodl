@@ -122,6 +122,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memTemplParams" colspan="2">template&lt;int N&gt; </td></tr>
+<tr class="memitem:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memTemplItemLeft" align="right" valign="top">EIGEN_DEVICE_FUNC bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__solver.html#gaf210fdfd748e1d08a48e0191364e3bf5">nmodl::newton::is_converged</a> (const Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, const Eigen::Matrix&lt; double, N, N &gt; &amp;J, const Eigen::Matrix&lt; double, N, 1 &gt; &amp;F, double eps)</td></tr>
+<tr class="separator:gaf210fdfd748e1d08a48e0191364e3bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga553e5133f871206a1ad6ab4fc10bde45"><td class="memTemplParams" colspan="2">template&lt;int N, typename FUNC &gt; </td></tr>
 <tr class="memitem:ga553e5133f871206a1ad6ab4fc10bde45"><td class="memTemplItemLeft" align="right" valign="top">EIGEN_DEVICE_FUNC int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">nmodl::newton::newton_solver</a> (Eigen::Matrix&lt; double, N, 1 &gt; &amp;X, FUNC functor, double eps=EPS, int max_iter=MAX_ITER)</td></tr>
 <tr class="memdesc:ga553e5133f871206a1ad6ab4fc10bde45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Newton method with user-provided Jacobian.  <a href="group__solver.html#ga553e5133f871206a1ad6ab4fc10bde45">More...</a><br /></td></tr>
@@ -145,9 +148,9 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga45a40394b3d577b79cde4e94e79cbcc0">nmodl::newton::MAX_ITER</a> = 1e3</td></tr>
+<tr class="memitem:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memItemLeft" align="right" valign="top">static constexpr int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga45a40394b3d577b79cde4e94e79cbcc0">nmodl::newton::MAX_ITER</a> = 50</td></tr>
 <tr class="separator:ga45a40394b3d577b79cde4e94e79cbcc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga0b8788299c392976f3159910e0af2e9c"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga0b8788299c392976f3159910e0af2e9c">nmodl::newton::EPS</a> = 1e-12</td></tr>
+<tr class="memitem:ga0b8788299c392976f3159910e0af2e9c"><td class="memItemLeft" align="right" valign="top">static constexpr double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__solver.html#ga0b8788299c392976f3159910e0af2e9c">nmodl::newton::EPS</a> = 1e-13</td></tr>
 <tr class="separator:ga0b8788299c392976f3159910e0af2e9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->

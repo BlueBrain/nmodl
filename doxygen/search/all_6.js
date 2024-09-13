@@ -180,7 +180,7 @@ var searchData=
   ['global_5fsymtab_850',['global_symtab',['../classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#a406122bab2bc607874f6d992f84e5bb4',1,'nmodl::visitor::DefUseAnalyzeVisitor']]],
   ['global_5fsymtab_5fname_851',['GLOBAL_SYMTAB_NAME',['../classnmodl_1_1symtab_1_1_model_symbol_table.html#acd197e1630bfca7dcfd19fb75b31adfe',1,'nmodl::symtab::ModelSymbolTable']]],
   ['global_5fto_5frange_2ecpp_852',['global_to_range.cpp',['../global__to__range_8cpp.html',1,'']]],
-  ['global_5fvar_853',['GLOBAL_VAR',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aca112e03802a38124f6bf7f468d0b9a8',1,'nmodl::ast::GLOBAL_VAR()'],['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbae5ca58838df33f0052301461a6c39606',1,'nmodl::symtab::syminfo::global_var()']]],
+  ['global_5fvar_853',['global_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbae5ca58838df33f0052301461a6c39606',1,'nmodl::symtab::syminfo::global_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aca112e03802a38124f6bf7f468d0b9a8',1,'nmodl::ast::GLOBAL_VAR()']]],
   ['global_5fvar_2ehpp_854',['global_var.hpp',['../global__var_8hpp.html',1,'']]],
   ['global_5fvar_5fvisitor_2ecpp_855',['global_var_visitor.cpp',['../global__var__visitor_8cpp.html',1,'']]],
   ['global_5fvar_5fvisitor_2ehpp_856',['global_var_visitor.hpp',['../global__var__visitor_8hpp.html',1,'']]],

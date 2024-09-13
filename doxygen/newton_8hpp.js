@@ -1,5 +1,6 @@
 var newton_8hpp =
 [
+    [ "is_converged", "newton_8hpp.html#gaf210fdfd748e1d08a48e0191364e3bf5", null ],
     [ "newton_solver", "newton_8hpp.html#gaadcb8093205f450fa8b2b7917f3a2dc0", null ],
     [ "newton_solver", "newton_8hpp.html#ga7bb7180e26785ce0466e3c9d8c46e2e5", null ],
     [ "newton_solver", "newton_8hpp.html#ga73227f2ab37d3b7c9036f3fe7532da73", null ],
