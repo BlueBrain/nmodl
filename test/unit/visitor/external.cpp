@@ -38,7 +38,7 @@ CodegenInfo compute_code_info(const std::string& text) {
 TEST_CASE("EXTERNAL variables") {
     std::string mod = R"(
 NEURON {
-  EXTERNAL gbl_foo
+  EXTERNAL gbl_foo, param_bar
 }
 
 ASSIGNED {
