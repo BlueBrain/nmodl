@@ -677,6 +677,14 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
         return std::string("nt->_") + naming::NTHREAD_T_VARIABLE;
     }
 
+    // external variable
+    auto e = std::find_if(info.external_variables.begin(),
+                          info.external_variables.end(),
+                          name_comparator);
+    if (e != info.external_variables.end()) {
+        return fmt::format("{}()", varname);
+    }
+
     auto const iter =
         std::find_if(info.neuron_global_variables.begin(),
                      info.neuron_global_variables.end(),
