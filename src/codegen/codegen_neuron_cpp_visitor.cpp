@@ -622,8 +622,7 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         print_macro(name, get_variable_name(name));
     }
 
-    for (size_t i = 0; i < codegen_int_variables.size(); ++i) {
-        const auto& var = codegen_int_variables[i];
+    for (const auto& var: codegen_int_variables) {
         auto name = get_name(var);
         std::string macro_value = get_variable_name(name);
         print_macro(name, macro_value);
