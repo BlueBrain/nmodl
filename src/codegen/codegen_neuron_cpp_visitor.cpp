@@ -678,6 +678,16 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         }
     }
 
+    for (const auto& var : codegen_global_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var : codegen_thread_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
     for (const auto& func: info.functions) {
         auto name = get_name(func);
         print_macro(name, method_name(name));
