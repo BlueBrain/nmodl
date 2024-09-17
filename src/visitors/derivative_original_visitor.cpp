@@ -109,7 +109,6 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             }
             // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
             // complaining, we discard the LHS later
-            // TODO SymPy cannot handle array indexing like s[0], so we should rename those
             auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
                 create_statement(statement));
