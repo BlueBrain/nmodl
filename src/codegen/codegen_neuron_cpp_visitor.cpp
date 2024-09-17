@@ -2386,6 +2386,57 @@ void CodegenNeuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /
     return;
 }
 
+void CodegenNeuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+    // The setup for enabling this loop is:
+    //   double ** _fornetcon_data = ...;
+    //   for(size_t i = 0; i < n_netcons; ++i) {
+    //      double * _netcon_data = _fornetcon_data[i];
+    //
+    //      // loop body.
+    //   }
+    //
+    // Where `_fornetcon_data` is an array of pointers to the arguments, one
+    // for each netcon; and `_netcon_data` points to the arguments for the
+    // current netcon.
+    //
+    // Similar to the CoreNEURON solution, we replace all arguments with the
+    // C++ string that implements them, i.e. `_netcon_data[{}]`. The arguments
+    // are positional and thus simply numbered through.
+    const auto& args = node.get_parameters();
+    RenameVisitor v;
+    const auto& statement_block = node.get_statement_block();
+    for (size_t i_arg = 0; i_arg < args.size(); ++i_arg) {
+        auto old_name = args[i_arg]->get_node_name();
+        auto new_name = fmt::format("_netcon_data[{}]", i_arg);
+        v.set(old_name, new_name);
+        statement_block->accept(v);
+    }
+
+    auto dparam_it =
+        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+            return a.name == naming::FOR_NETCON_SEMANTIC;
+        });
+    if (dparam_it == info.semantics.end()) {
+        throw std::runtime_error("Couldn't find `fornetcon` variable.");
+    }
+
+    int dparam_index = dparam_it->index;
+    auto netcon_var = get_name(codegen_int_variables[dparam_index]);
+
+    // This is called from `print_statement_block` which pre-indents the
+    // current line. Hence `add_text` only.
+    printer->add_text("double ** _fornetcon_data;");
+    printer->add_newline();
+
+    printer->fmt_line("int _n_netcons = _nrn_netcon_args({}, &_fornetcon_data);",
+                      get_variable_name(netcon_var, false));
+
+    printer->push_block("for (size_t _i = 0; _i < _n_netcons; ++_i)");
+    printer->add_line("double * _netcon_data = _fornetcon_data[_i];");
+    print_statement_block(*statement_block, false, false);
+    printer->pop_block();
+}
+
 
 }  // namespace codegen
 }  // namespace nmodl
