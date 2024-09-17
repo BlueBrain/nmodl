@@ -19,7 +19,7 @@
 #include "visitors/lookup_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 
-#include <fmt/format.h>
+#include "utils/fmt.h"
 
 namespace nmodl {
 namespace visitor {
@@ -213,6 +213,11 @@ std::vector<std::shared_ptr<ast::Ast>> collect_nodes(ast::Ast& node,
                                                      const std::vector<ast::AstNodeType>& types) {
     visitor::AstLookupVisitor visitor;
     return visitor.lookup(node, types);
+}
+
+bool node_exists(const ast::Ast& node, ast::AstNodeType ast_type) {
+    const auto blocks = collect_nodes(node, {ast_type});
+    return !blocks.empty();
 }
 
 bool solver_exists(const ast::Ast& node, const std::string& name) {

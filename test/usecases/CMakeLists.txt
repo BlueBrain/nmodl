@@ -1,11 +1,14 @@
 set(NMODL_USECASE_DIRS
     solve
     constant
+    electrode_current
+    constructor
     function
     procedure
     global
     hodgkin_huxley
     kinetic
+    linear
     morphology
     nonspecific_current
     neuron_variables
