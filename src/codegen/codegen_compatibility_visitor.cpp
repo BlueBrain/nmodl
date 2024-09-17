@@ -62,7 +62,7 @@ std::string CodegenCompatibilityVisitor::return_error_extern(
 
     // When generating code for CoreNEURON EXTERNAL variables aren't permitted.
     auto external = std::dynamic_pointer_cast<ast::External>(ast_node);
-    return fmt::format("Found EXTERN at [{}] while generating code for CoreNEURON.\n",
+    return fmt::format("Found EXTERNAL at [{}] while generating code for CoreNEURON.\n",
                        external->get_token()->position());
 }
 
