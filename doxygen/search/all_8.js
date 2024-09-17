@@ -18,7 +18,7 @@ var searchData=
   ['implicit_5fargument_5fvisitor_2ecpp_897',['implicit_argument_visitor.cpp',['../implicit__argument__visitor_8cpp.html',1,'']]],
   ['implicit_5fargument_5fvisitor_2ehpp_898',['implicit_argument_visitor.hpp',['../implicit__argument__visitor_8hpp.html',1,'']]],
   ['implicit_5freads_899',['implicit_reads',['../structnmodl_1_1codegen_1_1_ion.html#a66dcccb8c192e3288d56c75dc5f7853e',1,'nmodl::codegen::Ion']]],
-  ['implicitargumentvisitor_900',['ImplicitArgumentVisitor',['../structnmodl_1_1visitor_1_1_implicit_argument_visitor.html',1,'nmodl::visitor']]],
+  ['implicitargumentvisitor_900',['ImplicitArgumentVisitor',['../structnmodl_1_1visitor_1_1_implicit_argument_visitor.html',1,'nmodl::visitor::ImplicitArgumentVisitor'],['../structnmodl_1_1visitor_1_1_implicit_argument_visitor.html#a9ebed4d4d0f3a9e7470df7e407416153',1,'nmodl::visitor::ImplicitArgumentVisitor::ImplicitArgumentVisitor()']]],
   ['in_5fbreakpoint_5fblock_901',['in_breakpoint_block',['../classnmodl_1_1visitor_1_1_solve_block_visitor.html#a9c5415754e8fd79158693dc6f6f16218',1,'nmodl::visitor::SolveBlockVisitor']]],
   ['in_5fconserve_5fstatement_902',['in_conserve_statement',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#a28a6a04b2606c3f2534dece889adbf58',1,'nmodl::visitor::KineticBlockVisitor']]],
   ['in_5ffunction_903',['in_function',['../classnmodl_1_1visitor_1_1_semantic_analysis_visitor.html#a91b8ab1a73ce4cc96f4076c8d6b165ca',1,'nmodl::visitor::SemanticAnalysisVisitor']]],
