@@ -182,6 +182,30 @@ except Exception as e:
     return {std::move(solution), std::move(exception_message)};
 }
 
+/// A blunt instrument that differentiates expression w.r.t. variable
+std::tuple<std::string, std::string> call_diff2c(const std::string& expression,
+                                                 const std::string& variable) {
+    auto locals = py::dict("expression"_a = expression, "variable"_a = variable);
+    std::string script = R"(
+exception_message = ""
+try:
+    solution = differentiate2c(expression,
+                               variable,
+                               {},
+               )
+except Exception as e:
+    # if we fail, fail silently and return empty string
+    solution = ""
+    exception_message = str(e)
+)";
+
+    py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
+
+    auto solution = locals["solution"].cast<std::string>();
+    auto exception_message = locals["exception_message"].cast<std::string>();
+
+    return {std::move(solution), std::move(exception_message)};
+}
 
 void initialize_interpreter_func() {
     pybind11::initialize_interpreter(true);
@@ -199,7 +223,8 @@ NMODL_EXPORT pybind_wrap_api nmodl_init_pybind_wrapper_api() noexcept {
             &call_solve_nonlinear_system,
             &call_solve_linear_system,
             &call_diffeq_solver,
-            &call_analytic_diff};
+            &call_analytic_diff,
+            &call_diff2c};
 }
 }
 

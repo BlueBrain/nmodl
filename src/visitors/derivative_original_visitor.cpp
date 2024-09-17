@@ -8,7 +8,11 @@
 #include "visitors/derivative_original_visitor.hpp"
 
 #include "ast/all.hpp"
+#include "pybind/pyembed.hpp"
+#include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
+
+namespace pywrap = nmodl::pybind_wrappers;
 
 namespace nmodl {
 namespace visitor {
@@ -67,7 +71,32 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             program_symtab->insert(symbol);
         }
         if (node_type == ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK) {
-            // TODO apply the transformation to expression and assign RHS
+            // rename any array variables (like s[0]) so SymPy can handle it
+            auto rhs = node.get_rhs()->clone();
+            auto variables_to_rename = collect_nodes(*rhs, {ast::AstNodeType::INDEXED_NAME});
+            // map of old names to new names
+            std::unordered_map<std::string, std::string> name_map;
+            if (!variables_to_rename.empty()) {
+                // TODO actually rename them
+                for (const auto& var: variables_to_rename) {
+                }
+            }
+            auto rhs_string = to_nmodl(node.get_rhs());
+            auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
+            auto [jacobian, exception_message] = diff2c(rhs_string, name->get_node_name());
+            if (!exception_message.empty()) {
+                logger->warn("DerivativeOriginalVisitor :: python exception: {}",
+                             exception_message);
+            }
+            // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
+            // complaining, we discard the LHS later
+            // TODO SymPy cannot handle array indexing like s[0], so we should rename those
+            auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
+            auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                create_statement(statement));
+            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+                expr_statement->get_expression());
+            node.set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
         }
     }
     // edge case: it's an array, not a scalar

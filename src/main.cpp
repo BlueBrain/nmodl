@@ -481,19 +481,20 @@ int main(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("localize"));
         }
 
-        if (neuron_code) {
-            DerivativeOriginalVisitor().visit_program(*ast);
-            SymtabVisitor(update_symtab).visit_program(*ast);
-            ast_to_nmodl(*ast, filepath("derivative_original"));
-        }
-
-        const bool sympy_derivimplicit = neuron_code && solver_exists(*ast, "derivimplicit");
+        const bool sympy_derivimplicit = neuron_code;
 
         if (sympy_conductance || sympy_analytic || solver_exists(*ast, "sparse") ||
             sympy_derivimplicit) {
             nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
                 .api()
                 .initialize_interpreter();
+
+            if (neuron_code) {
+                DerivativeOriginalVisitor().visit_program(*ast);
+                SymtabVisitor(update_symtab).visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("derivative_original"));
+            }
+
             if (sympy_conductance) {
                 logger->info("Running sympy conductance visitor");
                 SympyConductanceVisitor().visit_program(*ast);
