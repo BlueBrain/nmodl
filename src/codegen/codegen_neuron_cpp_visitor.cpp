@@ -1259,7 +1259,20 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     }
 
     if (info.net_event_used) {
-        printer->fmt_line("add_nrn_has_net_event(mech_type);");
+        printer->add_line("add_nrn_has_net_event(mech_type);");
+    }
+
+    if (info.for_netcon_used) {
+        auto dparam_it =
+            std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+                return a.name == naming::FOR_NETCON_SEMANTIC;
+            });
+        if (dparam_it == info.semantics.end()) {
+            throw std::runtime_error("Couldn't find `fornetcon` variable.");
+        }
+
+        int dparam_index = dparam_it->index;
+        printer->fmt_line("add_nrn_fornetcons(mech_type, {});", dparam_index);
     }
 
     printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
