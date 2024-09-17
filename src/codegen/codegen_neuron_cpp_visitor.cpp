@@ -975,7 +975,7 @@ void CodegenNeuronCppVisitor::print_global_var_external_access() {
 
     for (const auto& var: info.external_variables) {
         auto var_name = get_name(var);
-        printer->fmt_line("extern double {}();", var_name);
+        printer->fmt_line("double {}();", var_name);
     }
     if (!info.external_variables.empty()) {
         printer->add_newline();
