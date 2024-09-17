@@ -71,19 +71,38 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             program_symtab->insert(symbol);
         }
         if (node_type == ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK) {
-            // rename any array variables (like s[0]) so SymPy can handle it
             auto rhs = node.get_rhs()->clone();
-            auto variables_to_rename = collect_nodes(*rhs, {ast::AstNodeType::INDEXED_NAME});
-            // map of old names to new names
-            std::unordered_map<std::string, std::string> name_map;
-            if (!variables_to_rename.empty()) {
-                // TODO actually rename them
-                for (const auto& var: variables_to_rename) {
+            // map of all symbols and their properties (that SymPy understands)
+            std::unordered_map<std::string, pywrap::SympyInfo> name_map;
+            {
+                // all indexed vars
+                auto indexed_vars = collect_nodes(*rhs, {ast::AstNodeType::INDEXED_NAME});
+                if (!indexed_vars.empty()) {
+                    for (const auto& var: indexed_vars) {
+                        if (!name_map.count(var->get_node_name()) &&
+                            var->get_node_name() != name->get_node_name()) {
+                            name_map[var->get_node_name()] = pywrap::SympyInfo::INDEXED_VARIABLE;
+                        }
+                    }
+                }
+                // all regular vars
+                auto regular_vars = collect_nodes(*rhs, {ast::AstNodeType::NAME});
+                if (!regular_vars.empty()) {
+                    for (const auto& var: regular_vars) {
+                        if (!name_map.count(var->get_node_name()) &&
+                            var->get_node_name() != name->get_node_name()) {
+                            name_map[var->get_node_name()] = pywrap::SympyInfo::REGULAR_VARIABLE;
+                        }
+                    }
                 }
             }
             auto rhs_string = to_nmodl(node.get_rhs());
             auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            auto [jacobian, exception_message] = diff2c(rhs_string, name->get_node_name());
+            // TODO make property of derivative variable flexible
+            auto [jacobian, exception_message] = diff2c(rhs_string,
+                                                        name->get_node_name(),
+                                                        pywrap::SympyInfo::REGULAR_VARIABLE,
+                                                        name_map);
             if (!exception_message.empty()) {
                 logger->warn("DerivativeOriginalVisitor :: python exception: {}",
                              exception_message);

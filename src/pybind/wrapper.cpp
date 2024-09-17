@@ -9,7 +9,7 @@
 
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
-
+#include <fmt/format.h>
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
@@ -183,21 +183,35 @@ except Exception as e:
 }
 
 /// A blunt instrument that differentiates expression w.r.t. variable
-std::tuple<std::string, std::string> call_diff2c(const std::string& expression,
-                                                 const std::string& variable) {
-    auto locals = py::dict("expression"_a = expression, "variable"_a = variable);
-    std::string script = R"(
+std::tuple<std::string, std::string> call_diff2c(
+    const std::string& expression,
+    const std::string& name,
+    const SympyInfo& property,
+    const std::unordered_map<std::string, SympyInfo>& vars) {
+    auto locals = py::dict("expression"_a = expression, "variable"_a = name);
+    std::string statements;
+    for (const auto& [var, prop]: vars) {
+        if (prop == SympyInfo::INDEXED_VARIABLE) {
+            statements += fmt::format("_allvars.append(sp.IndexedBase('{}', shape=[1]))\n", var);
+        } else if (prop == SympyInfo::REGULAR_VARIABLE) {
+            statements += fmt::format("_allvars.append(sp.Symbol('{}'))\n", var);
+        }
+    }
+    std::string script = fmt::format(R"(
+_allvars = []
+{}
 exception_message = ""
 try:
     solution = differentiate2c(expression,
                                variable,
-                               {},
+                               _allvars,
                )
 except Exception as e:
     # if we fail, fail silently and return empty string
     solution = ""
     exception_message = str(e)
-)";
+)",
+                                     statements);
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
 
