@@ -1217,6 +1217,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                    stringutils::starts_with(semantic, "#") &&
                    stringutils::ends_with(semantic, "_ion")) {
             type = "int*";
+        } else if (semantic == naming::FOR_NETCON_SEMANTIC) {
+            type = "void*";
         }
 
         mech_register_args.push_back(
