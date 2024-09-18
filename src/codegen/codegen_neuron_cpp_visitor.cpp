@@ -566,6 +566,10 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
         return fmt::format("_ppvar[{}].literal_value<void*>()", position);
     }
 
+    if (info.semantics[position].name == naming::FOR_NETCON_SEMANTIC) {
+        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
+    }
+
     if (symbol.is_index) {
         if (use_instance) {
             throw std::runtime_error("Not implemented. [wiejo]");
