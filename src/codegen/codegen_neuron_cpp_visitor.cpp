@@ -830,6 +830,14 @@ std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
         return std::string("nt->_") + naming::NTHREAD_T_VARIABLE;
     }
 
+    // external variable
+    auto e = std::find_if(info.external_variables.begin(),
+                          info.external_variables.end(),
+                          name_comparator);
+    if (e != info.external_variables.end()) {
+        return fmt::format("{}()", varname);
+    }
+
     auto const iter =
         std::find_if(info.neuron_global_variables.begin(),
                      info.neuron_global_variables.end(),
@@ -1087,8 +1095,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         }
     }
 
-
-    // for (const auto& f: info.function_tables) {
     if (!info.function_tables.empty()) {
         throw std::runtime_error("Not implemented, global function tables.");
     }
@@ -1106,8 +1112,33 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
 
     print_global_var_struct_assertions();
     print_global_var_struct_decl();
+    print_global_var_external_access();
 
     print_global_param_default_values();
+}
+
+void CodegenNeuronCppVisitor::print_global_var_external_access() {
+    for (const auto& var: codegen_global_variables) {
+        auto var_name = get_name(var);
+        auto var_expr = get_variable_name(var_name, false);
+
+        printer->fmt_push_block("auto {}() -> std::decay<decltype({})>::type ",
+                                method_name(var_name),
+                                var_expr);
+        printer->fmt_line("return {};", var_expr);
+        printer->pop_block();
+    }
+    if (!codegen_global_variables.empty()) {
+        printer->add_newline();
+    }
+
+    for (const auto& var: info.external_variables) {
+        auto var_name = get_name(var);
+        printer->fmt_line("double {}();", var_name);
+    }
+    if (!info.external_variables.empty()) {
+        printer->add_newline();
+    }
 }
 
 void CodegenNeuronCppVisitor::print_global_param_default_values() {
@@ -1705,9 +1736,21 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
     print_rename_state_vars();
 
-    print_initial_block(info.initial_node);
-    printer->pop_block();
+    if (!info.changed_dt.empty()) {
+        printer->fmt_line("double _save_prev_dt = {};",
+                          get_variable_name(naming::NTHREAD_DT_VARIABLE));
+        printer->fmt_line("{} = {};",
+                          get_variable_name(naming::NTHREAD_DT_VARIABLE),
+                          info.changed_dt);
+    }
 
+    print_initial_block(info.initial_node);
+
+    if (!info.changed_dt.empty()) {
+        printer->fmt_line("{} = _save_prev_dt;", get_variable_name(naming::NTHREAD_DT_VARIABLE));
+    }
+
+    printer->pop_block();
     printer->pop_block();
 }
 
@@ -1764,6 +1807,11 @@ void CodegenNeuronCppVisitor::print_callable_preamble_from_prop() {
     printer->add_newline();
 }
 
+void CodegenNeuronCppVisitor::print_nrn_constructor_declaration() {
+    if (info.constructor_node) {
+        printer->fmt_line("void {}(Prop* prop);", method_name(naming::NRN_CONSTRUCTOR_METHOD));
+    }
+}
 
 void CodegenNeuronCppVisitor::print_nrn_constructor() {
     if (info.constructor_node) {
@@ -1778,6 +1826,10 @@ void CodegenNeuronCppVisitor::print_nrn_constructor() {
     }
 }
 
+
+void CodegenNeuronCppVisitor::print_nrn_destructor_declaration() {
+    printer->fmt_line("void {}(Prop* prop);", method_name(naming::NRN_DESTRUCTOR_METHOD));
+}
 
 void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->fmt_push_block("void {}(Prop* prop)", method_name(naming::NRN_DESTRUCTOR_METHOD));
@@ -1914,7 +1966,7 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
             printer->fmt_line("{} = nrnran123_newstream();",
                               get_variable_name(get_name(rv), false));
         }
-        printer->fmt_line("nrn_mech_inst_destruct[mech_type] = {};",
+        printer->fmt_line("nrn_mech_inst_destruct[mech_type] = neuron::{};",
                           method_name(naming::NRN_DESTRUCTOR_METHOD));
     }
 
@@ -2319,8 +2371,8 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_prcellstate_macros();
     print_mechanism_info();
     print_data_structures(true);
-    print_nrn_constructor();
-    print_nrn_destructor();
+    print_nrn_constructor_declaration();
+    print_nrn_destructor_declaration();
     print_nrn_alloc();
     print_function_prototypes();
     print_cvode_definitions();
@@ -2328,6 +2380,8 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
     print_compute_functions();  // only nrn_cur and nrn_state
+    print_nrn_constructor();
+    print_nrn_destructor();
     print_sdlists_init(true);
     print_mechanism_register();
     print_namespace_stop();

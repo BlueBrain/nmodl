@@ -452,6 +452,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_global_variables_for_hoc() override;
 
+    /**
+     * Print functions for EXTERNAL use.
+     *
+     */
+    void print_global_var_external_access();
+
     /** Print global struct with default value of RANGE PARAMETERs.
      */
     void print_global_param_default_values();
@@ -490,6 +496,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      */
     void print_nrn_constructor() override;
+    void print_nrn_constructor_declaration();
 
     /**
      * Print the set of common variables from a `Prop` only.
@@ -501,6 +508,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      */
     void print_nrn_destructor() override;
+    void print_nrn_destructor_declaration();
 
 
     /**
