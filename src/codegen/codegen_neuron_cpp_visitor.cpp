@@ -2150,6 +2150,9 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     if (info.table_count > 0) {
         printer->add_line("void _nrn_thread_table_reg(int, nrn_thread_table_check_t);");
     }
+    if (info.for_netcon_used) {
+        printer->add_line("int _nrn_netcon_args(void*, double***);");
+    }
 }
 
 
