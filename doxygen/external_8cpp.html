@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>User Guide: /home/runner/work/nmodl/nmodl/test/unit/codegen/codegen_compatibility_visitor.cpp File Reference</title>
+<title>User Guide: /home/runner/work/nmodl/nmodl/test/unit/visitor/external.cpp File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -71,7 +71,7 @@ $(function() {
 </div>
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
-$(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html',''); initResizable(); });
+$(document).ready(function(){initNavTree('external_8cpp.html',''); initResizable(); });
 /* @license-end */
 </script>
 <div id="doc-content">
@@ -93,88 +93,65 @@ $(document).ready(function(){initNavTree('test_2unit_2codegen_2codegen__compatib
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
-<div class="title">codegen_compatibility_visitor.cpp File Reference</div>  </div>
+<div class="title">external.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch_test_macros.hpp&gt;</code><br />
-<code>#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="codegen__compatibility__visitor_8hpp_source.html">codegen/codegen_compatibility_visitor.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="test__utils_8hpp_source.html">test/unit/utils/test_utils.hpp</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="perf__visitor_8hpp_source.html">visitors/perf_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="symtab__visitor_8hpp_source.html">visitors/symtab_visitor.hpp</a>&quot;</code><br />
 </div>
-<p><a href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp_source.html">Go to the source code of this file.</a></p>
+<p><a href="external_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0fdd5085d6dbbded4271cb5aae66ced1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html#a0fdd5085d6dbbded4271cb5aae66ced1">runCompatibilityVisitor</a> (const std::string &amp;nmodl_text, const std::string &amp;simulator=&quot;coreneuron&quot;)</td></tr>
-<tr class="memdesc:a0fdd5085d6dbbded4271cb5aae66ced1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return true if it failed and false otherwise.  <a href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html#a0fdd5085d6dbbded4271cb5aae66ced1">More...</a><br /></td></tr>
-<tr class="separator:a0fdd5085d6dbbded4271cb5aae66ced1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a619287bf6d13db34c2070ab472836e66"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html#a619287bf6d13db34c2070ab472836e66">SCENARIO</a> (&quot;Uncompatible constructs should failed&quot;, &quot;[codegen][compatibility_visitor]&quot;)</td></tr>
-<tr class="separator:a619287bf6d13db34c2070ab472836e66"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae538d9499ae7e094b55bb3b39912e97f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html">CodegenInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="external_8cpp.html#ae538d9499ae7e094b55bb3b39912e97f">compute_code_info</a> (const std::string &amp;text)</td></tr>
+<tr class="separator:ae538d9499ae7e094b55bb3b39912e97f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74de00368bdeda319d0a2f3251b010d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="external_8cpp.html#a74de00368bdeda319d0a2f3251b010d1">TEST_CASE</a> (&quot;EXTERNAL variables&quot;)</td></tr>
+<tr class="separator:a74de00368bdeda319d0a2f3251b010d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0fdd5085d6dbbded4271cb5aae66ced1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0fdd5085d6dbbded4271cb5aae66ced1">&#9670;&nbsp;</a></span>runCompatibilityVisitor()</h2>
+<a id="ae538d9499ae7e094b55bb3b39912e97f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae538d9499ae7e094b55bb3b39912e97f">&#9670;&nbsp;</a></span>compute_code_info()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">bool runCompatibilityVisitor </td>
+          <td class="memname"><a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html">CodegenInfo</a> compute_code_info </td>
           <td>(</td>
           <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>nmodl_text</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"><em>text</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">const std::string &amp;&#160;</td>
-          <td class="paramname"><em>simulator</em> = <code>&quot;coreneuron&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>construct symbol table and run codegen helper visitor</p>
+<p>symbols/variables are collected in info object</p>
 
-<p>Return true if it failed and false otherwise. </p>
-
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00027">27</a> of file <a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="external_8cpp_source.html#l00025">25</a> of file <a class="el" href="external_8cpp_source.html">external.cpp</a>.</p>
 
 </div>
 </div>
-<a id="a619287bf6d13db34c2070ab472836e66"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a619287bf6d13db34c2070ab472836e66">&#9670;&nbsp;</a></span>SCENARIO()</h2>
+<a id="a74de00368bdeda319d0a2f3251b010d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74de00368bdeda319d0a2f3251b010d1">&#9670;&nbsp;</a></span>TEST_CASE()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">SCENARIO </td>
+          <td class="memname">TEST_CASE </td>
           <td>(</td>
-          <td class="paramtype">&quot;Uncompatible constructs should failed&quot;&#160;</td>
-          <td class="paramname">, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">&quot;EXTERNAL variables&quot;&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">&quot;&quot;&#160;</td>
-          <td class="paramname">[codegen][compatibility_visitor]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00035">35</a> of file <a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="external_8cpp_source.html#l00038">38</a> of file <a class="el" href="external_8cpp_source.html">external.cpp</a>.</p>
 
 </div>
 </div>
@@ -184,7 +161,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath">
   <ul>
-    <li class="navelem"><a class="el" href="dir_13e138d54eb8818da29c3992edef070a.html">test</a></li><li class="navelem"><a class="el" href="dir_6a07fdbc4b50e86806a88566ca8f66e4.html">unit</a></li><li class="navelem"><a class="el" href="dir_7332c07d01d875d1bc851b44a9068f6c.html">codegen</a></li><li class="navelem"><a class="el" href="test_2unit_2codegen_2codegen__compatibility__visitor_8cpp.html">codegen_compatibility_visitor.cpp</a></li>
+    <li class="navelem"><a class="el" href="dir_13e138d54eb8818da29c3992edef070a.html">test</a></li><li class="navelem"><a class="el" href="dir_6a07fdbc4b50e86806a88566ca8f66e4.html">unit</a></li><li class="navelem"><a class="el" href="dir_bb63d001f2c2d4d23cdeedc048a4b8ac.html">visitor</a></li><li class="navelem"><a class="el" href="external_8cpp.html">external.cpp</a></li>
   </ul>
 </div>
 <hr class="footer"/>

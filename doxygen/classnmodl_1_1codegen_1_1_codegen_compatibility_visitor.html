@@ -521,6 +521,9 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5baabaf8b2f0266a4ba5c1591b27a933">return_error_without_name</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
 <tr class="memdesc:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter an std::shared_ptr&lt;ast::Ast&gt; node and returns a relative error with the type and the location of the unhandled statement.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5baabaf8b2f0266a4ba5c1591b27a933">More...</a><br /></td></tr>
 <tr class="separator:a5baabaf8b2f0266a4ba5c1591b27a933"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b9c027917722a17ae4390b91ffb421a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5b9c027917722a17ae4390b91ffb421a">return_error_extern</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
+<tr class="memdesc:a5b9c027917722a17ae4390b91ffb421a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback when detecting EXTERNAL.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5b9c027917722a17ae4390b91ffb421a">More...</a><br /></td></tr>
+<tr class="separator:a5b9c027917722a17ae4390b91ffb421a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd">return_error_global_var</a> (<a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;ast_node) const</td></tr>
 <tr class="memdesc:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Takes as parameter the <a class="el" href="structnmodl_1_1ast_1_1_ast.html" title="Base class for all Abstract Syntax Tree node types.">ast::Ast</a> to read the symbol table and an std::shared_ptr&lt;ast::Ast&gt; node and returns relative error if a variable that is writen in the mod file is defined as GLOBAL instead of RANGE.  <a href="classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd">More...</a><br /></td></tr>
 <tr class="separator:ad9d74c011314b9b4e4bea2b5848ad1fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -630,7 +633,47 @@ Static Private Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>bool if there are unhandled nodes or not</dd></dl>
 <p>Checks all the <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033" title="Enum type for every AST node type.">ast::AstNodeType</a> that are not handled in NMODL code generation backend for CoreNEURON and prints related messages. If there is some kind of incompatibility return false. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00140">140</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00156">156</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a5b9c027917722a17ae4390b91ffb421a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b9c027917722a17ae4390b91ffb421a">&#9670;&nbsp;</a></span>return_error_extern()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::codegen::CodegenCompatibilityVisitor::return_error_extern </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ast_node</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback when detecting EXTERNAL. </p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00054">54</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -678,7 +721,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00054">54</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00070">70</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -727,7 +770,7 @@ Static Private Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>std::string error </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00094">94</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00110">110</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -813,7 +856,7 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00078">78</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html#l00094">94</a> of file <a class="el" href="src_2codegen_2codegen__compatibility__visitor_8cpp_source.html">codegen_compatibility_visitor.cpp</a>.</p>
 
 </div>
 </div>

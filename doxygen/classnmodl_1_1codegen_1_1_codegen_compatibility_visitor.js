@@ -3,6 +3,7 @@ var classnmodl_1_1codegen_1_1_codegen_compatibility_visitor =
     [ "FunctionPointer", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89d6a29d1c4bbfbe0e0a462da6538600", null ],
     [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a0c839ed2784dd9a9a61fbd655961b504", null ],
     [ "find_unhandled_ast_nodes", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#af8f4da257ecc161c61cabda2eee0cc3e", null ],
+    [ "return_error_extern", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a5b9c027917722a17ae4390b91ffb421a", null ],
     [ "return_error_global_var", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#ad9d74c011314b9b4e4bea2b5848ad1fd", null ],
     [ "return_error_if_no_bbcore_read_write", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a651743cfea039bb30d5468c0ab209134", null ],
     [ "return_error_if_solve_method_is_unhandled", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html#a89229070129331827ec35ca5b6c737ba", null ],

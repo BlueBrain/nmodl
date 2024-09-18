@@ -152,6 +152,7 @@ var group__codegen__details =
       [ "eigen_newton_solver_exist", "structnmodl_1_1codegen_1_1_codegen_info.html#a6e443dc75c590f05e91ed556091be5ec", null ],
       [ "electrode_current", "structnmodl_1_1codegen_1_1_codegen_info.html#a2a91118c33ec64d1cc2fbfde56c53144", null ],
       [ "emit_cvode", "structnmodl_1_1codegen_1_1_codegen_info.html#abe5d06878516f7c55cb089fac760bab2", null ],
+      [ "external_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a5e8c06e04177c38093a12cc649b66c50", null ],
       [ "factor_definitions", "structnmodl_1_1codegen_1_1_codegen_info.html#a0b748c255d71e05ce2c33fa12fa958bd", null ],
       [ "first_pointer_var_index", "structnmodl_1_1codegen_1_1_codegen_info.html#aac10ea818f33243b73521ae7c557815f", null ],
       [ "first_random_var_index", "structnmodl_1_1codegen_1_1_codegen_info.html#a43698e3fac309a14fee5d2945a06a960", null ],
