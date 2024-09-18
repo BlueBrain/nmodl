@@ -10,6 +10,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 namespace nmodl {
 namespace pybind_wrappers {
