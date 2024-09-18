@@ -9,8 +9,8 @@
 
 #include <set>
 #include <string>
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 namespace nmodl {
 namespace pybind_wrappers {
