@@ -105,19 +105,17 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
         printer->push_block("static void _hoc_destroy_pnt(void* _vptr)");
         if (info.is_watch_used() || info.for_netcon_used) {
             printer->add_line("Prop* _prop = ((Point_process*)_vptr)->prop;");
-        }
-        if (info.is_watch_used()) {
             printer->push_block("if (_prop)");
-            printer->fmt_line("_nrn_free_watch(_nrn_mechanism_access_dparam(_prop), {}, {});",
-                              info.watch_count,
-                              info.is_watch_used());
-            printer->pop_block();
-        }
-        if (info.for_netcon_used) {
-            printer->push_block("if (_prop)");
-            printer->fmt_line(
-                "_nrn_free_fornetcon(&(_nrn_mechanism_access_dparam(_prop)[_fnc_index].literal_"
-                "value<void*>()));");
+            printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(_prop);");
+            if (info.is_watch_used()) {
+                printer->fmt_line("_nrn_free_watch(_ppvar, {}, {});",
+                                  info.watch_count,
+                                  info.is_watch_used());
+            }
+            if (info.for_netcon_used) {
+                auto fornetcon_data = get_variable_name("fornetcon_data", false);
+                printer->fmt_line("_nrn_free_fornetcon(&{});", fornetcon_data);
+            }
             printer->pop_block();
         }
         printer->add_line("destroy_point_process(_vptr);");
