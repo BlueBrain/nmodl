@@ -258,6 +258,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     ParamVector args_cvode = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
                               {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
+                              {"", fmt::format("{}_NodeData&", info.mod_suffix), "", "node_data"},
                               {"", "size_t", "", "id"},
                               {"", "Datum*", "", "_ppvar"},
                               {"", "Datum*", "", "_thread"},
@@ -267,13 +268,13 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
         auto type_name = fmt::format("{}&", thread_variables_struct());
         args_cvode.emplace_back("", type_name, "", "_thread_vars");
     }
-    args_cvode.emplace_back("", "double", "", "v");
 
     /* The internal spec function */
     printer->fmt_push_block("static int ode_spec1_{}({})",
                             info.mod_suffix,
                             get_parameter_str(args_cvode));  // begin function definition
-
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
     if (info.der_block_function) {
         auto block = info.der_block_function->get_statement_block();
         print_statement_block(*block, false, false);
