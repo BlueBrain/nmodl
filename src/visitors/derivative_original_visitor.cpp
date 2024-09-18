@@ -8,6 +8,7 @@
 #include "visitors/derivative_original_visitor.hpp"
 
 #include "ast/all.hpp"
+#include "lexer/token_mapping.hpp"
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
@@ -62,6 +63,10 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
 
     if (name->is_prime_name()) {
         auto varname = "D" + name->get_node_name();
+        logger->debug("DerivativeOriginalVisitor :: replacing {} with {} in {}",
+                      name->get_node_name(),
+                      varname,
+                      to_nmodl(node));
         node.set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));
         if (program_symtab->lookup(varname) == nullptr) {
             auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
@@ -69,16 +74,29 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             program_symtab->insert(symbol);
         }
         if (node_type == ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK) {
+            logger->debug(
+                "DerivativeOriginalVisitor :: visiting expr {} in DERIVATIVE_ORIGINAL_JACOBIAN",
+                to_nmodl(node));
+            // TODO do we need to clone this at all?
             auto rhs = node.get_rhs()->clone();
             // map of all symbols and their properties (that SymPy understands)
             std::unordered_map<std::string, pywrap::SympyInfo> name_map;
+            // all of the "reserved" symbols
+            auto reserved_symbols = get_external_functions();
             {
                 // all indexed vars
                 auto indexed_vars = collect_nodes(*rhs, {ast::AstNodeType::INDEXED_NAME});
                 if (!indexed_vars.empty()) {
                     for (const auto& var: indexed_vars) {
                         if (!name_map.count(var->get_node_name()) &&
-                            var->get_node_name() != name->get_node_name()) {
+                            var->get_node_name() != name->get_node_name() &&
+                            std::find(reserved_symbols.begin(),
+                                      reserved_symbols.end(),
+                                      var->get_node_name()) == reserved_symbols.end()) {
+                            logger->debug(
+                                "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
+                                "node_map",
+                                var->get_node_name());
                             name_map[var->get_node_name()] = pywrap::SympyInfo::INDEXED_VARIABLE;
                         }
                     }
@@ -88,7 +106,14 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
                 if (!regular_vars.empty()) {
                     for (const auto& var: regular_vars) {
                         if (!name_map.count(var->get_node_name()) &&
-                            var->get_node_name() != name->get_node_name()) {
+                            var->get_node_name() != name->get_node_name() &&
+                            std::find(reserved_symbols.begin(),
+                                      reserved_symbols.end(),
+                                      var->get_node_name()) == reserved_symbols.end()) {
+                            logger->debug(
+                                "DerivativeOriginalVisitor :: adding REGULAR_VARIABLE {} to "
+                                "node_map",
+                                var->get_node_name());
                             name_map[var->get_node_name()] = pywrap::SympyInfo::REGULAR_VARIABLE;
                         }
                     }
@@ -108,6 +133,7 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
             // complaining, we discard the LHS later
             auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
+            logger->debug("DerivativeOriginalVisitor :: adding statement {}", statement);
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
                 create_statement(statement));
             const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
