@@ -19,8 +19,6 @@ namespace visitor {
 
 
 void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
-    // TODO figure out what happens when we have both a KINETIC and a DERIVATIVE block in the same
-    // mod file
     node.visit_children(*this);
     der_block_function = node.clone();
     der_block_jacobian = node.clone();

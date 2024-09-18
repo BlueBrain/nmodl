@@ -347,7 +347,6 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                                     get_parameter_str(args_cvode)));  // begin function definition
 
     if (info.der_block_jacobian) {
-        // TODO modify the RHS here so it's 1 / (1 - dt * jac)
         // for mathematical details, see eq. (4.8) in:
         // https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
         auto block = info.der_block_jacobian->get_statement_block();
