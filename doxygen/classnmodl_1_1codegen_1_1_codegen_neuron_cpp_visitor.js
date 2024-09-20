@@ -91,6 +91,7 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a77ac6349ba709a4ef7ecd6a4c34b9e0c", null ],
     [ "table_thread_function_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a000f92fb0976845c64c6eda08255e8bd", null ],
     [ "thread_variable_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a73657c5681f2d69ee6d1220a6c864097", null ],
+    [ "visit_for_netcon", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a5d37ab79b25ee60e7f79962006b28b84", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a", null ],
     [ "codegen_thread_variables", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2142740635a801ade67d99228fd71ce2", null ]
 ];
