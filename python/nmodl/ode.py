@@ -358,10 +358,10 @@ def discretize_derivative(expr):
 
 
 def transform_expression(expr, transform):
-    if expr.args is tuple():
+    if not expr:
         return expr
 
-    args = list(transform_expression(transform(arg), transform) for arg in expr.args)
+    args = (transform_expression(transform(arg), transform) for arg in expr.args)
     return expr.func(*args)
 
 
@@ -372,21 +372,6 @@ def transform_matrix_elements(mat, transform):
             for i in range(mat.cols)
         ]
     )
-
-
-def finite_difference_variables(mat):
-    vars = []
-
-    def recurse(expr):
-        for arg in expr.args:
-            if isinstance(arg, sp.Derivative):
-                var = arg.args[1][0]
-                vars.append((var, finite_difference_step_variable(var)))
-
-    for expr in mat:
-        recurse(expr)
-
-    return vars
 
 
 def needs_finite_differences(mat):
