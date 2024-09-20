@@ -18,6 +18,7 @@ var codegen__naming_8hpp =
     [ "DIAM_VARIABLE", "codegen__naming_8hpp.html#aaa763fc5e88f6855340132e3470bb940", null ],
     [ "EULER_METHOD", "codegen__naming_8hpp.html#a45c4407a1a1188869c16415f698f9fe7", null ],
     [ "FOR_NETCON_SEMANTIC", "codegen__naming_8hpp.html#a7006a4fa593d189db03d548e2b8c6223", null ],
+    [ "FOR_NETCON_VARIABLE", "codegen__naming_8hpp.html#a86a975c4db231e3f1da583bfc1bea2fc", null ],
     [ "INST_GLOBAL_MEMBER", "codegen__naming_8hpp.html#a1cbc7704c95e06b613efd121525893bd", null ],
     [ "ION_VARNAME_PREFIX", "codegen__naming_8hpp.html#ac1c238efdb0580c8b482fb29bcb0f4da", null ],
     [ "NET_EVENT_METHOD", "codegen__naming_8hpp.html#a4006ab5754a6dfae9692d6c370eccfce", null ],

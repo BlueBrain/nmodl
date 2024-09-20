@@ -89,15 +89,15 @@ var NAVTREEINDEX =
 "classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a2b2e6c820cc01c94a28aac6dd92f0375",
 "classnmodl_1_1visitor_1_1_visitor.html#a7c216216e061586aeb8bbe2d9918ab97",
 "codegen__helper__visitor_8hpp.html",
-"electrode__cur__var_8hpp_source.html",
+"electrode__cur__var_8hpp.html",
 "group__ast__class.html#ga5eed5c6969860fdf373a7b23dcf0653b",
-"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a29b43b6bd112e5d858c8784eee326b92",
-"group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbae317e08b58d518ba2ecdc4ad07d6b108",
-"lon__difuse_8hpp.html",
-"pointer__var_8hpp_source.html",
-"structnmodl_1_1codegen_1_1_codegen_info.html#a98382c302176bcaf7f52563fd1a96208",
-"symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4db",
-"update__dt_8hpp.html"
+"group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a292355e725443311d6cdf9ac446c5395",
+"group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaa8a105043d90127c760e67170853c2c",
+"logger_8hpp_source.html",
+"pointer__var_8hpp.html",
+"structnmodl_1_1codegen_1_1_codegen_info.html#a937636a93f8059e1b6e6fb9aac1bda2e",
+"symbol__properties_8hpp.html#ad91684881aec64302e92c96e32a04d4f",
+"units__visitor_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
