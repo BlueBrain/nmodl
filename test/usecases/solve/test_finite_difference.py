@@ -10,7 +10,7 @@ def test_finite_difference():
     s.insert("finite_difference")
     s.nseg = nseg
 
-    x_hoc = h.Vector().record(getattr(s(0.5), f"_ref_x_finite_difference"))
+    x_hoc = h.Vector().record(s(0.5)._ref_x_finite_difference)
     t_hoc = h.Vector().record(h._ref_t)
 
     h.stdinit()
