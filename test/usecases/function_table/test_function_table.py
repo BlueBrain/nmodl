@@ -3,6 +3,7 @@ from neuron import h, gui
 import numpy as np
 import scipy
 
+
 def test_constant_1d():
     s = h.Section()
     s.insert("function_table")
@@ -39,7 +40,6 @@ def test_1d():
         np.testing.assert_approx_equal(actual, expected, significant=11)
 
 
-
 def test_2d():
     v = np.array([0.0, 1.0])
     x = np.array([1.0, 2.0, 3.0])
@@ -50,7 +50,9 @@ def test_2d():
     hoc_tau2 = h.Matrix(*tau2.shape)
     hoc_tau2.from_vector(h.Vector(tau2.transpose().reshape(-1)))
 
-    h.table_tau2_function_table(hoc_tau2._ref_x[0][0], v.size, v[0], v[-1], x.size, x[0], x[-1])
+    h.table_tau2_function_table(
+        hoc_tau2._ref_x[0][0], v.size, v[0], v[-1], x.size, x[0], x[-1]
+    )
 
     for vv in np.linspace(v[0], v[-1], 20):
         for xx in np.linspace(x[0], x[-1], 20):
