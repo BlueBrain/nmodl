@@ -19,9 +19,8 @@ namespace pywrap = nmodl::pybind_wrappers;
 namespace nmodl {
 namespace visitor {
 
-static std::unordered_map<std::string, pywrap::SympyInfo> get_name_map(const ast::Expression& node,
-                                                                       const std::string& name) {
-    std::unordered_map<std::string, pywrap::SympyInfo> name_map;
+static auto get_name_map(const ast::Expression& node, const std::string& name) {
+    std::unordered_map<std::string, std::optional<int>> name_map;
     // all of the "reserved" symbols
     auto reserved_symbols = get_external_functions();
     // all indexed vars
@@ -35,7 +34,8 @@ static std::unordered_map<std::string, pywrap::SympyInfo> get_name_map(const ast
                     "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
                     "node_map",
                     var->get_node_name());
-                name_map[var->get_node_name()] = pywrap::SympyInfo::INDEXED_VARIABLE;
+                name_map[var->get_node_name()] = std::optional<int>(std::stoi(to_nmodl(
+                    std::dynamic_pointer_cast<const ast::IndexedName>(var)->get_length())));
             }
         }
     }
@@ -50,7 +50,7 @@ static std::unordered_map<std::string, pywrap::SympyInfo> get_name_map(const ast
                     "DerivativeOriginalVisitor :: adding REGULAR_VARIABLE {} to "
                     "node_map",
                     var->get_node_name());
-                name_map[var->get_node_name()] = pywrap::SympyInfo::REGULAR_VARIABLE;
+                name_map[var->get_node_name()] = std::optional<int>();
             }
         }
     }
@@ -122,8 +122,7 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             auto name_map = get_name_map(*rhs, name->get_node_name());
             auto rhs_string = to_nmodl(node.get_rhs());
             auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            auto variable = std::make_pair(name->get_node_name(),
-                                           pywrap::SympyInfo::REGULAR_VARIABLE);
+            auto variable = std::make_pair(name->get_node_name(), std::optional<int>());
             auto [jacobian, exception_message] = diff2c(rhs_string, variable, name_map);
             if (!exception_message.empty()) {
                 logger->warn("DerivativeOriginalVisitor :: python exception: {}",
@@ -164,8 +163,10 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             auto name_map = get_name_map(*rhs, name->get_node_name());
             auto rhs_string = to_nmodl(node.get_rhs());
             auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            auto variable = std::make_pair(name->get_node_name(),
-                                           pywrap::SympyInfo::INDEXED_VARIABLE);
+            auto variable = std::make_pair(
+                name->get_node_name(),
+                std::optional<int>(std::stoi(to_nmodl(
+                    std::dynamic_pointer_cast<const ast::IndexedName>(name)->get_length()))));
             auto [jacobian, exception_message] = diff2c(rhs_string, variable, name_map);
             if (!exception_message.empty()) {
                 logger->warn("DerivativeOriginalVisitor :: python exception: {}",

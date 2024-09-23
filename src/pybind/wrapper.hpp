@@ -16,8 +16,6 @@
 namespace nmodl {
 namespace pybind_wrappers {
 
-enum class SympyInfo { REGULAR_VARIABLE, INDEXED_VARIABLE };
-
 void initialize_interpreter_func();
 void finalize_interpreter_func();
 
@@ -49,8 +47,8 @@ std::tuple<std::string, std::string> call_analytic_diff(
 
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::pair<std::string, SympyInfo>& variable,
-    const std::unordered_map<std::string, SympyInfo>& vars);
+    const std::pair<std::string, std::optional<int>>& variable,
+    const std::unordered_map<std::string, std::optional<int>>& vars);
 
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;

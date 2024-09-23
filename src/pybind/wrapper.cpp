@@ -186,22 +186,24 @@ except Exception as e:
 /// \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::pair<std::string, SympyInfo>& variable,
-    const std::unordered_map<std::string, SympyInfo>& vars) {
+    const std::pair<std::string, std::optional<int>>& variable,
+    const std::unordered_map<std::string, std::optional<int>>& vars) {
     std::string statements;
     for (const auto& [var, prop]: vars) {
-        if (prop == SympyInfo::INDEXED_VARIABLE) {
+        if (prop.has_value()) {
             statements += fmt::format("_allvars.append(sp.IndexedBase('{}', shape=[1]))\n", var);
-        } else if (prop == SympyInfo::REGULAR_VARIABLE) {
+        } else {
             statements += fmt::format("_allvars.append(sp.Symbol('{}'))\n", var);
         }
     }
     auto [name, property] = variable;
-    if (property == SympyInfo::INDEXED_VARIABLE) {
+    if (property.has_value()) {
         name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
+        statements += fmt::format("_allvars.append({})", name);
     }
     auto locals = py::dict("expression"_a = expression);
-    std::string script = fmt::format(R"(
+    std::string script =
+        fmt::format(R"(
 _allvars = []
 {}
 variable = {}
@@ -216,8 +218,8 @@ except Exception as e:
     solution = ""
     exception_message = str(e)
 )",
-                                     statements,
-                                     name);
+                    statements,
+                    property.has_value() ? fmt::format("{}[{}]", name, property.value()) : name);
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
 
