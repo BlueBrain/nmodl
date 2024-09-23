@@ -304,7 +304,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             auto* const _pnt = static_cast<Point_process*>(_vptr);
             auto* const _p = _pnt->prop;
             if (!_p) {
-                hoc_execerror("POINT_PROCESS data instance not valid", NULL);
+                hoc_execerror("POINT_PROCESS data instance not valid", nullptr);
             }
             _nrn_mechanism_cache_instance _lmc{_p};
             size_t const id{};
@@ -319,7 +319,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             printer->push_block("if (!_prop_id)");
             printer->fmt_line(
                 "hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the "
-                "specified mechanism instance still be in existence.\", NULL);",
+                "specified mechanism instance still be in existence.\", nullptr);",
                 function_or_procedure_block->get_node_name(),
                 info.mod_suffix,
                 info.mod_suffix);
