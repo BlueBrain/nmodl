@@ -362,7 +362,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
                           internal_method_arguments());
     }
     const auto get_func_call_str = [&]() {
-        const auto params = function_or_procedure_block->get_parameters();
+        const auto& params = function_or_procedure_block->get_parameters();
         const auto func_proc_name = block_name + "_" + info.mod_suffix;
         auto func_call = fmt::format("{}({}", func_proc_name, internal_method_arguments());
         for (int i = 0; i < params.size(); ++i) {
