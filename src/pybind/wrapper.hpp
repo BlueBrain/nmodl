@@ -10,6 +10,7 @@
 #include <set>
 #include <string>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace nmodl {
@@ -48,8 +49,7 @@ std::tuple<std::string, std::string> call_analytic_diff(
 
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::string& name,
-    const SympyInfo& property,
+    const std::pair<std::string, SympyInfo>& variable,
     const std::unordered_map<std::string, SympyInfo>& vars);
 
 struct pybind_wrap_api {

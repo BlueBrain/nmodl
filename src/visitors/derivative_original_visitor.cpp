@@ -12,11 +12,50 @@
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
+#include <utility>
 
 namespace pywrap = nmodl::pybind_wrappers;
 
 namespace nmodl {
 namespace visitor {
+
+static std::unordered_map<std::string, pywrap::SympyInfo> get_name_map(const ast::Expression& node,
+                                                                       const std::string& name) {
+    std::unordered_map<std::string, pywrap::SympyInfo> name_map;
+    // all of the "reserved" symbols
+    auto reserved_symbols = get_external_functions();
+    // all indexed vars
+    auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
+    if (!indexed_vars.empty()) {
+        for (const auto& var: indexed_vars) {
+            if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
+                std::find(reserved_symbols.begin(), reserved_symbols.end(), var->get_node_name()) ==
+                    reserved_symbols.end()) {
+                logger->debug(
+                    "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
+                    "node_map",
+                    var->get_node_name());
+                name_map[var->get_node_name()] = pywrap::SympyInfo::INDEXED_VARIABLE;
+            }
+        }
+    }
+    // all regular vars
+    auto regular_vars = collect_nodes(node, {ast::AstNodeType::NAME});
+    if (!regular_vars.empty()) {
+        for (const auto& var: regular_vars) {
+            if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
+                std::find(reserved_symbols.begin(), reserved_symbols.end(), var->get_node_name()) ==
+                    reserved_symbols.end()) {
+                logger->debug(
+                    "DerivativeOriginalVisitor :: adding REGULAR_VARIABLE {} to "
+                    "node_map",
+                    var->get_node_name());
+                name_map[var->get_node_name()] = pywrap::SympyInfo::REGULAR_VARIABLE;
+            }
+        }
+    }
+    return name_map;
+}
 
 
 void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
@@ -80,52 +119,12 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             // TODO do we need to clone this at all?
             auto rhs = node.get_rhs()->clone();
             // map of all symbols and their properties (that SymPy understands)
-            std::unordered_map<std::string, pywrap::SympyInfo> name_map;
-            // all of the "reserved" symbols
-            auto reserved_symbols = get_external_functions();
-            {
-                // all indexed vars
-                auto indexed_vars = collect_nodes(*rhs, {ast::AstNodeType::INDEXED_NAME});
-                if (!indexed_vars.empty()) {
-                    for (const auto& var: indexed_vars) {
-                        if (!name_map.count(var->get_node_name()) &&
-                            var->get_node_name() != name->get_node_name() &&
-                            std::find(reserved_symbols.begin(),
-                                      reserved_symbols.end(),
-                                      var->get_node_name()) == reserved_symbols.end()) {
-                            logger->debug(
-                                "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
-                                "node_map",
-                                var->get_node_name());
-                            name_map[var->get_node_name()] = pywrap::SympyInfo::INDEXED_VARIABLE;
-                        }
-                    }
-                }
-                // all regular vars
-                auto regular_vars = collect_nodes(*rhs, {ast::AstNodeType::NAME});
-                if (!regular_vars.empty()) {
-                    for (const auto& var: regular_vars) {
-                        if (!name_map.count(var->get_node_name()) &&
-                            var->get_node_name() != name->get_node_name() &&
-                            std::find(reserved_symbols.begin(),
-                                      reserved_symbols.end(),
-                                      var->get_node_name()) == reserved_symbols.end()) {
-                            logger->debug(
-                                "DerivativeOriginalVisitor :: adding REGULAR_VARIABLE {} to "
-                                "node_map",
-                                var->get_node_name());
-                            name_map[var->get_node_name()] = pywrap::SympyInfo::REGULAR_VARIABLE;
-                        }
-                    }
-                }
-            }
+            auto name_map = get_name_map(*rhs, name->get_node_name());
             auto rhs_string = to_nmodl(node.get_rhs());
             auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            // TODO make property of derivative variable flexible
-            auto [jacobian, exception_message] = diff2c(rhs_string,
-                                                        name->get_node_name(),
-                                                        pywrap::SympyInfo::REGULAR_VARIABLE,
-                                                        name_map);
+            auto variable = std::make_pair(name->get_node_name(),
+                                           pywrap::SympyInfo::REGULAR_VARIABLE);
+            auto [jacobian, exception_message] = diff2c(rhs_string, variable, name_map);
             if (!exception_message.empty()) {
                 logger->warn("DerivativeOriginalVisitor :: python exception: {}",
                              exception_message);
@@ -133,7 +132,9 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
             // complaining, we discard the LHS later
             auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
-            logger->debug("DerivativeOriginalVisitor :: adding statement {}", statement);
+            logger->debug("DerivativeOriginalVisitor :: replacing statement {} with {}",
+                          to_nmodl(node),
+                          statement);
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
                 create_statement(statement));
             const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
@@ -143,7 +144,45 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
     }
     // edge case: it's an array, not a scalar
     else if (name->is_indexed_name()) {
-        // TODO
+        auto varname = "D" + stringutils::remove_character(to_nmodl(node.get_lhs()), '\'');
+        auto statement = fmt::format("{} = {}", varname, varname);
+        logger->debug("DerivativeOriginalVisitor :: replacing statement {} with {}",
+                      to_nmodl(node),
+                      statement);
+        auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+            create_statement(statement));
+        const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+            expr_statement->get_expression());
+        node.set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
+        if (node_type == ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK) {
+            logger->debug(
+                "DerivativeOriginalVisitor :: visiting expr {} in DERIVATIVE_ORIGINAL_JACOBIAN",
+                to_nmodl(node));
+            // TODO do we need to clone this at all?
+            auto rhs = node.get_rhs()->clone();
+            // map of all symbols and their properties (that SymPy understands)
+            auto name_map = get_name_map(*rhs, name->get_node_name());
+            auto rhs_string = to_nmodl(node.get_rhs());
+            auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
+            auto variable = std::make_pair(name->get_node_name(),
+                                           pywrap::SympyInfo::INDEXED_VARIABLE);
+            auto [jacobian, exception_message] = diff2c(rhs_string, variable, name_map);
+            if (!exception_message.empty()) {
+                logger->warn("DerivativeOriginalVisitor :: python exception: {}",
+                             exception_message);
+            }
+            // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
+            // complaining, we discard the LHS later
+            auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
+            logger->debug("DerivativeOriginalVisitor :: replacing statement {} with {}",
+                          to_nmodl(node),
+                          statement);
+            auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                create_statement(statement));
+            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+                expr_statement->get_expression());
+            node.set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
+        }
     }
 }
 

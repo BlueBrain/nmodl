@@ -182,13 +182,12 @@ except Exception as e:
     return {std::move(solution), std::move(exception_message)};
 }
 
-/// A blunt instrument that differentiates expression w.r.t. variable
+/// \brief A blunt instrument that differentiates expression w.r.t. variable
+/// \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::string& name,
-    const SympyInfo& property,
+    const std::pair<std::string, SympyInfo>& variable,
     const std::unordered_map<std::string, SympyInfo>& vars) {
-    auto locals = py::dict("expression"_a = expression, "variable"_a = name);
     std::string statements;
     for (const auto& [var, prop]: vars) {
         if (prop == SympyInfo::INDEXED_VARIABLE) {
@@ -197,9 +196,15 @@ std::tuple<std::string, std::string> call_diff2c(
             statements += fmt::format("_allvars.append(sp.Symbol('{}'))\n", var);
         }
     }
+    auto [name, property] = variable;
+    if (property == SympyInfo::INDEXED_VARIABLE) {
+        name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
+    }
+    auto locals = py::dict("expression"_a = expression);
     std::string script = fmt::format(R"(
 _allvars = []
 {}
+variable = {}
 exception_message = ""
 try:
     solution = differentiate2c(expression,
@@ -211,7 +216,8 @@ except Exception as e:
     solution = ""
     exception_message = str(e)
 )",
-                                     statements);
+                                     statements,
+                                     name);
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
 

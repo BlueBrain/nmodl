@@ -567,7 +567,11 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     # every symbol (a.k.a variable) that SymPy
     # is going to manipulate needs to be declared
     # explicitly
-    x = sp.symbols(dependent_var, real=True)
+    x = (
+        sp.symbols(dependent_var, real=True)
+        if isinstance(dependent_var, str)
+        else dependent_var
+    )
     vars = set(vars)
     vars.discard(dependent_var)
     # declare all other supplied variables
@@ -577,7 +581,9 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
         )
         for var in vars
     }
-    sympy_vars[dependent_var] = x
+    sympy_vars[
+        dependent_var if isinstance(dependent_var, str) else str(dependent_var)
+    ] = x
 
     # parse string into SymPy equation
     expr = sp.sympify(expression, locals=sympy_vars)
