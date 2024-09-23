@@ -26,12 +26,5 @@ BREAKPOINT {
 }
 
 DERIVATIVE dX {
-    :LOCAL s0_nmodl, s1_nmodl, z0_nmodl, z1_nmodl, z2_nmodl
-    :s0_nmodl = s[0]
-    :s1_nmodl = s[1]
-    :z0_nmodl = z[0]
-    :z1_nmodl = z[1]
-    :z2_nmodl = z[2]
     x' = (s[0] + s[1])*(z[0]*z[1]*z[2])*x
-    :x' = (s0_nmodl + s1_nmodl)*(z0_nmodl*z1_nmodl*z2_nmodl)*x
 }
