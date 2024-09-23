@@ -358,7 +358,7 @@ def discretize_derivative(expr):
 
 
 def transform_expression(expr, transform):
-    if not expr:
+    if not expr.args:
         return expr
 
     args = (transform_expression(transform(arg), transform) for arg in expr.args)
