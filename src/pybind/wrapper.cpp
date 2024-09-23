@@ -201,6 +201,9 @@ std::tuple<std::string, std::string> call_diff2c(
         name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
         statements += fmt::format("_allvars.append({})", name);
     }
+    else {
+        name = fmt::format("'{}'", name);
+    }
     auto locals = py::dict("expression"_a = expression);
     std::string script =
         fmt::format(R"(
