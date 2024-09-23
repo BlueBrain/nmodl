@@ -108,12 +108,17 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-nmodl.ode">nmodl.ode module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.differentiate2c"><code class="docutils literal notranslate"><span class="pre">differentiate2c()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.discretize_derivative"><code class="docutils literal notranslate"><span class="pre">discretize_derivative()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.finite_difference_step_variable"><code class="docutils literal notranslate"><span class="pre">finite_difference_step_variable()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.forwards_euler2c"><code class="docutils literal notranslate"><span class="pre">forwards_euler2c()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.integrate2c"><code class="docutils literal notranslate"><span class="pre">integrate2c()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.needs_finite_differences"><code class="docutils literal notranslate"><span class="pre">needs_finite_differences()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.search_and_replace_protected_identifiers_from_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_identifiers_from_sympy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.search_and_replace_protected_identifiers_to_sympy"><code class="docutils literal notranslate"><span class="pre">search_and_replace_protected_identifiers_to_sympy()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.solve_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_lin_system()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.solve_non_lin_system"><code class="docutils literal notranslate"><span class="pre">solve_non_lin_system()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.transform_expression"><code class="docutils literal notranslate"><span class="pre">transform_expression()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#nmodl.ode.transform_matrix_elements"><code class="docutils literal notranslate"><span class="pre">transform_matrix_elements()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#module-nmodl.symtab">nmodl.symtab module</a></li>
@@ -369,6 +374,16 @@ of variables from supplied prev_expressions) w.r.t. dependent_var as C code.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="nmodl.ode.discretize_derivative">
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">discretize_derivative</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#discretize_derivative"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.discretize_derivative" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nmodl.ode.finite_difference_step_variable">
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">finite_difference_step_variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sym</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#finite_difference_step_variable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.finite_difference_step_variable" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="nmodl.ode.forwards_euler2c">
 <span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">forwards_euler2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">diff_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function_calls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#forwards_euler2c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.forwards_euler2c" title="Permalink to this definition"></a></dt>
 <dd><p>Return forwards euler solution of diff_string as C code.</p>
@@ -431,6 +446,11 @@ correct to second order in dt_var</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nmodl.ode.needs_finite_differences">
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">needs_finite_differences</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#needs_finite_differences"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.needs_finite_differences" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="nmodl.ode.search_and_replace_protected_identifiers_from_sympy">
@@ -508,6 +528,16 @@ vars: list of strings containing new local variables</p>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nmodl.ode.transform_expression">
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">transform_expression</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#transform_expression"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.transform_expression" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nmodl.ode.transform_matrix_elements">
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">transform_matrix_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#transform_matrix_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.transform_matrix_elements" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </section>
 <section id="module-nmodl.symtab">

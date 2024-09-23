@@ -455,6 +455,40 @@
     <span class="k">return</span> <span class="n">code</span><span class="p">,</span> <span class="n">new_local_vars</span></div>
 
 
+<div class="viewcode-block" id="finite_difference_step_variable"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.finite_difference_step_variable">[docs]</a><span class="k">def</span> <span class="nf">finite_difference_step_variable</span><span class="p">(</span><span class="n">sym</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sym</span><span class="si">}</span><span class="s2">_delta_&quot;</span></div>
+
+
+<div class="viewcode-block" id="discretize_derivative"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.discretize_derivative">[docs]</a><span class="k">def</span> <span class="nf">discretize_derivative</span><span class="p">(</span><span class="n">expr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Derivative</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">finite_difference_step_variable</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">expr</span><span class="o">.</span><span class="n">as_finite_difference</span><span class="p">(</span><span class="n">dx</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">expr</span></div>
+
+
+<div class="viewcode-block" id="transform_expression"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.transform_expression">[docs]</a><span class="k">def</span> <span class="nf">transform_expression</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">expr</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">expr</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">transform_expression</span><span class="p">(</span><span class="n">transform</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">transform</span><span class="p">)</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">expr</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">expr</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="transform_matrix_elements"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.transform_matrix_elements">[docs]</a><span class="k">def</span> <span class="nf">transform_matrix_elements</span><span class="p">(</span><span class="n">mat</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="n">transform_expression</span><span class="p">(</span><span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">transform</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">rows</span><span class="p">)]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mat</span><span class="o">.</span><span class="n">cols</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="needs_finite_differences"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.needs_finite_differences">[docs]</a><span class="k">def</span> <span class="nf">needs_finite_differences</span><span class="p">(</span><span class="n">mat</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">sp</span><span class="o">.</span><span class="n">Derivative</span><span class="p">)</span> <span class="k">for</span> <span class="n">expr</span> <span class="ow">in</span> <span class="n">sp</span><span class="o">.</span><span class="n">preorder_traversal</span><span class="p">(</span><span class="n">mat</span><span class="p">))</span></div>
+
+
 <div class="viewcode-block" id="solve_non_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_non_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_non_lin_system</span><span class="p">(</span><span class="n">eq_strings</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">constants</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Solve non-linear system of equations, return solution as C code.</span>
 
@@ -480,28 +514,31 @@
     <span class="n">custom_fcts</span> <span class="o">=</span> <span class="n">_get_custom_functions</span><span class="p">(</span><span class="n">function_calls</span><span class="p">)</span>
 
     <span class="n">jacobian</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">(</span><span class="n">eqs</span><span class="p">)</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="n">state_vars</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">needs_finite_differences</span><span class="p">(</span><span class="n">jacobian</span><span class="p">):</span>
+        <span class="n">jacobian</span> <span class="o">=</span> <span class="n">transform_matrix_elements</span><span class="p">(</span><span class="n">jacobian</span><span class="p">,</span> <span class="n">discretize_derivative</span><span class="p">)</span>
 
     <span class="n">X_vec_map</span> <span class="o">=</span> <span class="p">{</span><span class="n">x</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_vars</span><span class="p">)}</span>
+    <span class="n">dX_vec_map</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">finite_difference_step_variable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dX_[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">]&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_vars</span><span class="p">)</span>
+    <span class="p">}</span>
 
     <span class="n">vecFcode</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">eq</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">eqs</span><span class="p">):</span>
-        <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">eq</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">eq</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">expr</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span>
+        <span class="n">vecFcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;F[</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">rhs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="n">vecJcode</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="n">jacobian</span><span class="o">.</span><span class="n">cols</span><span class="p">)):</span>
         <span class="n">flat_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">jacobian</span><span class="o">.</span><span class="n">rows</span> <span class="o">*</span> <span class="n">j</span>
 
-        <span class="n">rhs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span>
-            <span class="n">jacobian</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">X_vec_map</span><span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span>
-            <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="n">Jij</span> <span class="o">=</span> <span class="n">jacobian</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span><span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="o">**</span><span class="n">X_vec_map</span><span class="p">,</span> <span class="o">**</span><span class="n">dX_vec_map</span><span class="p">})</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">Jij</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span>
         <span class="n">vecJcode</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;J[</span><span class="si">{</span><span class="n">flat_index</span><span class="si">}</span><span class="s2">] = </span><span class="si">{</span><span class="n">rhs</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># interweave</span>
     <span class="n">code</span> <span class="o">=</span> <span class="n">_interweave_eqs</span><span class="p">(</span><span class="n">vecFcode</span><span class="p">,</span> <span class="n">vecJcode</span><span class="p">)</span>
-
     <span class="n">code</span> <span class="o">=</span> <span class="n">search_and_replace_protected_identifiers_from_sympy</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">function_calls</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">code</span></div>
