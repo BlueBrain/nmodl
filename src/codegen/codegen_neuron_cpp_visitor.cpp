@@ -2274,7 +2274,7 @@ void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node)
     printer->add_text(')');
 }
 
-void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& /* node */) {
     const auto& point_process = get_variable_name(naming::POINT_PROCESS_VARIABLE,
                                                   /* use_instance */ false);
     printer->fmt_text("net_event({}, t)", point_process);
