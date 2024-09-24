@@ -6,7 +6,7 @@ def test_globals():
 
     h.gbl_globals = 654.0
 
-    assert h.globals.get_gbl() == h.gbl
+    assert s(0.5).globals.get_gbl() == h.gbl_globals
 
 
 if __name__ == "__main__":
