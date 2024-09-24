@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from neuron import gui
 from neuron import h
@@ -20,34 +19,39 @@ def simulate(rtol):
     var1_hoc = h.Vector().record(getattr(s(0.5), f"_ref_var1_{mech}"))
     var2_hoc = h.Vector().record(getattr(s(0.5), f"_ref_var2_{mech}"))
     var3_hoc = h.Vector().record(getattr(s(0.5), f"_ref_var3_{mech}"))
-    var4_hoc = h.Vector().record(getattr(s(0.5), f"_ref_var4_{mech}"))
 
     h.stdinit()
     h.tstop = 2.0 * ms
     h.run()
 
+    freq = getattr(h, f"freq_{mech}")
+    a = getattr(h, f"a_{mech}")
+    v1 = getattr(h, f"v1_{mech}")
+    v2 = getattr(h, f"v2_{mech}")
+    v3 = getattr(h, f"v3_{mech}")
+    r = getattr(h, f"r_{mech}")
+    k = getattr(h, f"k_{mech}")
+
     t = np.array(t_hoc.as_numpy())
     var1 = np.array(var1_hoc.as_numpy())
     var2 = np.array(var2_hoc.as_numpy())
     var3 = np.array(var3_hoc.as_numpy())
-    var4 = np.array(var4_hoc.as_numpy())
 
-    var1_exact = (
-        np.cos(t * getattr(h, f"freq_{mech}"))
-        + getattr(h, f"v1_{mech}") * getattr(h, f"freq_{mech}")
-        - 1
-    ) / getattr(h, f"freq_{mech}")
-    var2_exact = getattr(h, f"v2_{mech}") * np.exp(-t * getattr(h, f"v2_{mech}"))
+    var1_exact = (np.cos(t * freq) + v1 * freq - 1) / freq
+    var2_exact = v2 * np.exp(-t * a)
+    var3_exact = k * v3 / (v3 + (k - v3) * np.exp(-r * t))
 
     np.testing.assert_allclose(var1, var1_exact, rtol=rtol)
     np.testing.assert_allclose(var2, var2_exact, rtol=rtol)
+    np.testing.assert_allclose(var3, var3_exact, rtol=rtol)
 
-    return t, var1, var2, var3, var4
+    return t, var1, var2, var3
 
 
 if __name__ == "__main__":
     t, *x = simulate(rtol=1e-5)
-    fig, ax = plt.subplots(nrows=len(x))
-    for a, val in zip(ax, x):
-        a.plot(t, val, ls="", marker="x", markersize=0.1)
-    plt.show()
+    # import matplotlib.pyplot as plt
+    # fig, ax = plt.subplots(nrows=len(x))
+    # for a, val in zip(ax, x):
+    #    a.plot(t, val, ls="", marker="x", markersize=0.1)
+    # plt.show()

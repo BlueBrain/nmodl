@@ -26,7 +26,8 @@ set(NMODL_USECASE_DIRS
     steady_state
     table
     useion
-    at_time)
+    at_time
+    cvode)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
