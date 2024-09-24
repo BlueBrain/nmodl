@@ -656,9 +656,11 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
 
     # could be something generic like f'(x), in which case we use finite differences
     if needs_finite_differences(diff):
-        diff = transform_expression(diff, discretize_derivative).subs(
-            {finite_difference_step_variable(x): 1e-3}
-        ).evalf()
+        diff = (
+            transform_expression(diff, discretize_derivative)
+            .subs({finite_difference_step_variable(x): 1e-3})
+            .evalf()
+        )
 
     # the codegen method does not like undefined function calls, so we extract
     # them here
