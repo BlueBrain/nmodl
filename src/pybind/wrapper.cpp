@@ -10,6 +10,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
 #include <fmt/format.h>
+#include <optional>
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 

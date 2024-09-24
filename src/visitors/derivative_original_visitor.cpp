@@ -12,6 +12,7 @@
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
+#include <optional>
 #include <utility>
 
 namespace pywrap = nmodl::pybind_wrappers;
