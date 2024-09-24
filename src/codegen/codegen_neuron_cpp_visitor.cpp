@@ -229,10 +229,6 @@ void CodegenNeuronCppVisitor::print_function_prototypes() {
         printer->add_text(';');
         printer->add_newline();
     }
-
-    print_point_process_function_definitions();
-    print_setdata_functions();
-    print_check_table_entrypoint();
 }
 
 void CodegenNeuronCppVisitor::print_cvode_definitions() {
@@ -1243,20 +1239,15 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         printer->fmt_line("{{\"setdata_{}\", _hoc_setdata}},", info.mod_suffix);
     }
 
-    for (const auto& procedure: info.procedures) {
-        const auto proc_name = procedure->get_node_name();
-        printer->fmt_line("{{\"{}{}\", {}}},",
-                          proc_name,
-                          info.rsuffix,
-                          hoc_function_name(proc_name));
-    }
-    for (const auto& function: info.functions) {
-        const auto func_name = function->get_node_name();
-        printer->fmt_line("{{\"{}{}\", {}}},",
-                          func_name,
-                          info.rsuffix,
-                          hoc_function_name(func_name));
-    }
+    auto print_callable_reg = [this](const auto& callables) {
+        for (const auto& node: callables) {
+            const auto name = node->get_node_name();
+            printer->fmt_line("{{\"{}{}\", {}}},", name, info.rsuffix, hoc_function_name(name));
+        }
+    };
+
+    print_callable_reg(info.procedures);
+    print_callable_reg(info.functions);
 
     printer->add_line("{nullptr, nullptr}");
     printer->decrease_indent();
@@ -2405,6 +2396,9 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_nrn_alloc();
     print_function_prototypes();
     print_cvode_definitions();
+    print_point_process_function_definitions();
+    print_setdata_functions();
+    print_check_table_entrypoint();
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
