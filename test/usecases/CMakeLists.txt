@@ -27,7 +27,6 @@ set(NMODL_USECASE_DIRS
     suffix
     table
     useion
-    at_time
     cvode)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
