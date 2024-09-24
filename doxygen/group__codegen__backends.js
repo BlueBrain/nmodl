@@ -262,6 +262,7 @@ var group__codegen__backends =
       [ "print_functors_definitions", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1875fbbecca3538023fc45900a91d9a9", null ],
       [ "print_g_unused", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a430f1ba9b0f5fe9f3b74678f63025384", null ],
       [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6d73d64a97cc8f024e1ee3367bfd119d", null ],
+      [ "print_global_struct_function_table_ptrs", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a62b9784473e79ee257fc3b0307ca6699", null ],
       [ "print_global_var_struct_assertions", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a49519f5b846f396cd1a4bf0b8775ac65", null ],
       [ "print_global_var_struct_decl", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e", null ],
       [ "print_global_variables_for_hoc", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acd5e0d9dafe7c14f8946e980b77410ae", null ],
