@@ -79,7 +79,7 @@ var NAVTREEINDEX =
 "classnmodl_1_1ast_1_1_suffix.html#a7ea45f3672eab37276fc1a805a9ade1f",
 "classnmodl_1_1ast_1_1_useion.html#a2738a2e7bbadf0a7b1927aa3a8a27d12",
 "classnmodl_1_1ast_1_1_write_ion_var.html#afdbfd431fc9946611b2cb1014ce330ab",
-"classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a679b657463892cddf8e20d553f2ca682",
+"classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6b6f336bd93b1a3053428a92cf0fc909",
 "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#afdd6466ebac569ec670c3b6f4ca11d3e",
 "classnmodl_1_1symtab_1_1_symbol.html#aab8a84bc35ad31d248461bbcd6c36c85",
 "classnmodl_1_1visitor_1_1_ast_visitor.html#afa6ee27bbcfe8d2e73c4a26292996c79",

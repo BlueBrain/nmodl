@@ -48,7 +48,6 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab530015ada1f6f6299b526a32e277a0c", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5be32556e7bb7fd48b1bdb71d75fe5bb", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a4dd6948c9064a446dc45cf6f4d463975", null ],
-    [ "print_function_tables", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9a8ec34d0a51fbf43a5318f67fc5d278", null ],
     [ "print_g_unused", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a151c9e289cdc4df282ed47b1f72ecc6e", null ],
     [ "print_get_memb_list", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a2973dd8bba370083e1bfe449a70359ee", null ],
     [ "print_global_function_common_code", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a3fb561fbaba6ab77da1d69e531eac7d5", null ],

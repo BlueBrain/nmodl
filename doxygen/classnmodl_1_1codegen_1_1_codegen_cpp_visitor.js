@@ -83,6 +83,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9ec8d64ef0941d98af29b31060155c0b", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa017bbe95ad7539e72d182dac59f2454", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50ccadf68055ea9e26439ccaed0d68f7", null ],
+    [ "print_function_tables", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aedbc4853fc3389e41da25ddc1d6852ee", null ],
     [ "print_functor_definition", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aef9a70a351e1280377e85b254029a6b8", null ],
     [ "print_functors_definitions", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1875fbbecca3538023fc45900a91d9a9", null ],
     [ "print_g_unused", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a430f1ba9b0f5fe9f3b74678f63025384", null ],
