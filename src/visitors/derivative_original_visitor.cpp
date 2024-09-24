@@ -20,32 +20,6 @@ namespace pywrap = nmodl::pybind_wrappers;
 namespace nmodl {
 namespace visitor {
 
-static int get_index(const ast::IndexedName& node) {
-    return std::stoi(to_nmodl(node.get_length()));
-}
-
-static auto get_name_map(const ast::Expression& node, const std::string& name) {
-    std::unordered_map<std::string, int> name_map;
-    // all of the "reserved" symbols
-    auto reserved_symbols = get_external_functions();
-    // all indexed vars
-    auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
-    for (const auto& var: indexed_vars) {
-        if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
-            std::none_of(reserved_symbols.begin(), reserved_symbols.end(), [&var](const auto item) {
-                return var->get_node_name() == item;
-            })) {
-            logger->debug(
-                "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
-                "node_map",
-                var->get_node_name());
-            name_map[var->get_node_name()] = get_index(
-                *std::dynamic_pointer_cast<const ast::IndexedName>(var));
-        }
-    }
-    return name_map;
-}
-
 
 void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
     node.visit_children(*this);
