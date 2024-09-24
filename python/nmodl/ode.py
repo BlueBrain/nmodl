@@ -664,7 +664,7 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
 
     # the codegen method does not like undefined function calls, so we extract
     # them here
-    custom_fcts = {f.name: f.name for f in diff.atoms(sp.Function)}
+    custom_fcts = {str(f): str(f) for f in diff.atoms(sp.Function)}
 
     # try to simplify expression in terms of existing variables
     # ignore any exceptions here, since we already have a valid solution
