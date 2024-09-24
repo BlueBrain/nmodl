@@ -105,19 +105,17 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
         printer->push_block("static void _hoc_destroy_pnt(void* _vptr)");
         if (info.is_watch_used() || info.for_netcon_used) {
             printer->add_line("Prop* _prop = ((Point_process*)_vptr)->prop;");
-        }
-        if (info.is_watch_used()) {
             printer->push_block("if (_prop)");
-            printer->fmt_line("_nrn_free_watch(_nrn_mechanism_access_dparam(_prop), {}, {});",
-                              info.watch_count,
-                              info.is_watch_used());
-            printer->pop_block();
-        }
-        if (info.for_netcon_used) {
-            printer->push_block("if (_prop)");
-            printer->fmt_line(
-                "_nrn_free_fornetcon(&(_nrn_mechanism_access_dparam(_prop)[_fnc_index].literal_"
-                "value<void*>()));");
+            printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(_prop);");
+            if (info.is_watch_used()) {
+                printer->fmt_line("_nrn_free_watch(_ppvar, {}, {});",
+                                  info.watch_count,
+                                  info.is_watch_used());
+            }
+            if (info.for_netcon_used) {
+                auto fornetcon_data = get_variable_name("fornetcon_data", false);
+                printer->fmt_line("_nrn_free_fornetcon(&{});", fornetcon_data);
+            }
             printer->pop_block();
         }
         printer->add_line("destroy_point_process(_vptr);");
@@ -139,7 +137,7 @@ void CodegenNeuronCppVisitor::print_point_process_function_definitions() {
 }
 
 
-void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
+void CodegenNeuronCppVisitor::print_check_table_entrypoint() {
     if (info.table_count == 0) {
         return;
     }
@@ -185,6 +183,7 @@ void CodegenNeuronCppVisitor::print_check_table_function_prototypes() {
     printer->pop_block();
 }
 
+
 void CodegenNeuronCppVisitor::print_setdata_functions() {
     printer->add_line("/* Neuron setdata functions */");
     printer->add_line("extern void _nrn_setdata_reg(int, void(*)(Prop*));");
@@ -213,6 +212,11 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
         )CODE");
     }
     printer->pop_block();
+}
+
+
+void CodegenNeuronCppVisitor::print_function_prototypes() {
+    printer->add_newline(2);
 
     printer->add_line("/* Mechanism procedures and functions */");
     for (const auto& node: info.functions) {
@@ -225,15 +229,10 @@ void CodegenNeuronCppVisitor::print_setdata_functions() {
         printer->add_text(';');
         printer->add_newline();
     }
-}
-
-
-void CodegenNeuronCppVisitor::print_function_prototypes() {
-    printer->add_newline(2);
 
     print_point_process_function_definitions();
     print_setdata_functions();
-    print_check_table_function_prototypes();
+    print_check_table_entrypoint();
 }
 
 void CodegenNeuronCppVisitor::print_cvode_definitions() {
@@ -460,7 +459,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             auto* const _pnt = static_cast<Point_process*>(_vptr);
             auto* const _p = _pnt->prop;
             if (!_p) {
-                hoc_execerror("POINT_PROCESS data instance not valid", NULL);
+                hoc_execerror("POINT_PROCESS data instance not valid", nullptr);
             }
             _nrn_mechanism_cache_instance _lmc{_p};
             size_t const id{};
@@ -475,7 +474,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
             printer->push_block("if (!_prop_id)");
             printer->fmt_line(
                 "hoc_execerror(\"No data for {}_{}. Requires prior call to setdata_{} and that the "
-                "specified mechanism instance still be in existence.\", NULL);",
+                "specified mechanism instance still be in existence.\", nullptr);",
                 function_or_procedure_block->get_node_name(),
                 info.mod_suffix,
                 info.mod_suffix);
@@ -518,7 +517,7 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
                           internal_method_arguments());
     }
     const auto get_func_call_str = [&]() {
-        const auto params = function_or_procedure_block->get_parameters();
+        const auto& params = function_or_procedure_block->get_parameters();
         const auto func_proc_name = block_name + "_" + info.mod_suffix;
         auto func_call = fmt::format("{}({}", func_proc_name, internal_method_arguments());
         for (int i = 0; i < params.size(); ++i) {
@@ -545,14 +544,15 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
 
 
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
-    for (const auto& procedure: info.procedures) {
-        print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::HOC);
-        print_hoc_py_wrapper_function_body(procedure, InterpreterWrapper::Python);
-    }
-    for (const auto& function: info.functions) {
-        print_hoc_py_wrapper_function_body(function, InterpreterWrapper::HOC);
-        print_hoc_py_wrapper_function_body(function, InterpreterWrapper::Python);
-    }
+    auto print_wrappers = [this](const auto& callables) {
+        for (const auto& callable: callables) {
+            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::HOC);
+            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::Python);
+        }
+    };
+
+    print_wrappers(info.procedures);
+    print_wrappers(info.functions);
 }
 
 
@@ -622,6 +622,10 @@ std::string CodegenNeuronCppVisitor::nrn_thread_internal_arguments() {
     return {};
 }
 
+std::pair<CodegenNeuronCppVisitor::ParamVector, CodegenNeuronCppVisitor::ParamVector>
+CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock& node) {
+    throw std::runtime_error("Not implemented.");
+}
 
 /// TODO: Write for NEURON
 std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
@@ -719,6 +723,10 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     auto position = position_of_int_var(name);
 
     if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
+        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
+    }
+
+    if (info.semantics[position].name == naming::FOR_NETCON_SEMANTIC) {
         return fmt::format("_ppvar[{}].literal_value<void*>()", position);
     }
 
@@ -1202,24 +1210,20 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
     printer->add_newline(2);
     printer->add_line("/* declaration of user functions */");
-    for (const auto& procedure: info.procedures) {
-        const auto proc_name = procedure->get_node_name();
-        printer->fmt_line("{};", hoc_function_signature(proc_name));
-    }
-    for (const auto& function: info.functions) {
-        const auto func_name = function->get_node_name();
-        printer->fmt_line("{};", hoc_function_signature(func_name));
-    }
-    if (!info.point_process) {
-        for (const auto& procedure: info.procedures) {
-            const auto proc_name = procedure->get_node_name();
-            printer->fmt_line("{};", py_function_signature(proc_name));
+
+    auto print_entrypoint_decl = [this](const auto& callables) {
+        for (const auto& node: callables) {
+            const auto name = node->get_node_name();
+            printer->fmt_line("{};", hoc_function_signature(name));
+
+            if (!info.point_process) {
+                printer->fmt_line("{};", py_function_signature(name));
+            }
         }
-        for (const auto& function: info.functions) {
-            const auto func_name = function->get_node_name();
-            printer->fmt_line("{};", py_function_signature(func_name));
-        }
-    }
+    };
+
+    print_entrypoint_decl(info.functions);
+    print_entrypoint_decl(info.procedures);
 
     printer->add_newline(2);
     printer->add_line("/* connect user functions to hoc names */");
@@ -1368,6 +1372,7 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         if (i != info.semantics[i].index) {
             throw std::runtime_error("Broken logic.");
         }
+        const auto& semantic = info.semantics[i].name;
 
         auto type = "double*";
         if (name == naming::POINT_PROCESS_VARIABLE) {
@@ -1375,9 +1380,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         } else if (name == naming::TQITEM_VARIABLE) {
             type = "void*";
         } else if (stringutils::starts_with(name, "style_") &&
-                   stringutils::starts_with(info.semantics[i].name, "#") &&
-                   stringutils::ends_with(info.semantics[i].name, "_ion")) {
+                   stringutils::starts_with(semantic, "#") &&
+                   stringutils::ends_with(semantic, "_ion")) {
             type = "int*";
+        } else if (semantic == naming::FOR_NETCON_SEMANTIC) {
+            type = "void*";
         }
 
         mech_register_args.push_back(
@@ -1424,7 +1431,20 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     }
 
     if (info.net_event_used) {
-        printer->fmt_line("add_nrn_has_net_event(mech_type);");
+        printer->add_line("add_nrn_has_net_event(mech_type);");
+    }
+
+    if (info.for_netcon_used) {
+        auto dparam_it =
+            std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+                return a.name == naming::FOR_NETCON_SEMANTIC;
+            });
+        if (dparam_it == info.semantics.end()) {
+            throw std::runtime_error("Couldn't find `fornetcon` variable.");
+        }
+
+        int dparam_index = dparam_it->index;
+        printer->fmt_line("add_nrn_fornetcons(mech_type, {});", dparam_index);
     }
 
     printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
@@ -1434,6 +1454,10 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     if (info.net_receive_node) {
         printer->fmt_line("pnt_receive[mech_type] = nrn_net_receive_{};", info.mod_suffix);
         printer->fmt_line("pnt_receive_size[mech_type] = {};", info.num_net_receive_parameters);
+    }
+
+    if (info.net_receive_initial_node) {
+        printer->fmt_line("pnt_receive_init[mech_type] = net_init;");
     }
 
     if (info.thread_callback_register) {
@@ -2312,6 +2336,9 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     }
     // for CVODE
     printer->add_line("extern void _cvode_abstol(Symbol**, double*, int);");
+    if (info.for_netcon_used) {
+        printer->add_line("int _nrn_netcon_args(void*, double***);");
+    }
 }
 
 
@@ -2359,6 +2386,7 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     print_nrn_state();
     print_nrn_jacob();
     print_net_receive();
+    print_net_init();
 }
 
 
@@ -2431,10 +2459,14 @@ void CodegenNeuronCppVisitor::print_net_move_call(const ast::FunctionCall& node)
     printer->add_text(')');
 }
 
-void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& node) {
+void CodegenNeuronCppVisitor::print_net_event_call(const ast::FunctionCall& /* node */) {
     const auto& point_process = get_variable_name(naming::POINT_PROCESS_VARIABLE,
                                                   /* use_instance */ false);
     printer->fmt_text("net_event({}, t)", point_process);
+}
+
+void CodegenNeuronCppVisitor::print_function_table_call(const FunctionCall& node) {
+    throw std::runtime_error("Not implemented.");
 }
 
 /**
@@ -2469,23 +2501,14 @@ static void rename_net_receive_arguments(const ast::NetReceiveBlock& net_receive
     }
 }
 
-void CodegenNeuronCppVisitor::print_net_receive() {
-    printing_net_receive = true;
-    auto node = info.net_receive_node;
-    if (!node) {
-        return;
-    }
+CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::net_receive_args() {
+    return {{"", "Point_process*", "", "_pnt"},
+            {"", "double*", "", "_args"},
+            {"", "double", "", "flag"}};
+}
 
-    ParamVector args = {{"", "Point_process*", "", "_pnt"},
-                        {"", "double*", "", "_args"},
-                        {"", "double", "", "flag"}};
 
-    printer->fmt_push_block("static void nrn_net_receive_{}({})",
-                            info.mod_suffix,
-                            get_parameter_str(args));
-
-    rename_net_receive_arguments(*node, *node);
-
+void CodegenNeuronCppVisitor::print_net_receive_common_code() {
     printer->add_line("_nrn_mechanism_cache_instance _lmc{_pnt->prop};");
     printer->add_line("auto * nt = static_cast<NrnThread*>(_pnt->_vnt);");
     printer->add_line("auto * _ppvar = _nrn_mechanism_access_dparam(_pnt->prop);");
@@ -2501,12 +2524,50 @@ void CodegenNeuronCppVisitor::print_net_receive() {
 
     printer->add_line("size_t id = 0;");
     printer->add_line("double t = nt->_t;");
+}
+
+void CodegenNeuronCppVisitor::print_net_receive() {
+    printing_net_receive = true;
+    auto node = info.net_receive_node;
+    if (!node) {
+        return;
+    }
+
+    printer->fmt_push_block("static void nrn_net_receive_{}({})",
+                            info.mod_suffix,
+                            get_parameter_str(net_receive_args()));
+
+    rename_net_receive_arguments(*node, *node);
+    print_net_receive_common_code();
+
 
     print_statement_block(*node->get_statement_block(), false, false);
 
     printer->add_newline();
     printer->pop_block();
     printing_net_receive = false;
+}
+
+void CodegenNeuronCppVisitor::print_net_init() {
+    const auto node = info.net_receive_initial_node;
+    if (node == nullptr) {
+        return;
+    }
+
+    // rename net_receive arguments used in the initial block of net_receive
+    rename_net_receive_arguments(*info.net_receive_node, *node);
+
+    printing_net_init = true;
+    printer->add_newline(2);
+    printer->fmt_push_block("static void net_init({})", get_parameter_str(net_receive_args()));
+
+    auto block = node->get_statement_block().get();
+    if (!block->get_statements().empty()) {
+        print_net_receive_common_code();
+        print_statement_block(*block, false, false);
+    }
+    printer->pop_block();
+    printing_net_init = false;
 }
 
 
@@ -2517,6 +2578,57 @@ void CodegenNeuronCppVisitor::print_net_receive() {
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
     return;
+}
+
+void CodegenNeuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
+    // The setup for enabling this loop is:
+    //   double ** _fornetcon_data = ...;
+    //   for(size_t i = 0; i < n_netcons; ++i) {
+    //      double * _netcon_data = _fornetcon_data[i];
+    //
+    //      // loop body.
+    //   }
+    //
+    // Where `_fornetcon_data` is an array of pointers to the arguments, one
+    // for each netcon; and `_netcon_data` points to the arguments for the
+    // current netcon.
+    //
+    // Similar to the CoreNEURON solution, we replace all arguments with the
+    // C++ string that implements them, i.e. `_netcon_data[{}]`. The arguments
+    // are positional and thus simply numbered through.
+    const auto& args = node.get_parameters();
+    RenameVisitor v;
+    const auto& statement_block = node.get_statement_block();
+    for (size_t i_arg = 0; i_arg < args.size(); ++i_arg) {
+        auto old_name = args[i_arg]->get_node_name();
+        auto new_name = fmt::format("_netcon_data[{}]", i_arg);
+        v.set(old_name, new_name);
+        statement_block->accept(v);
+    }
+
+    auto dparam_it =
+        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
+            return a.name == naming::FOR_NETCON_SEMANTIC;
+        });
+    if (dparam_it == info.semantics.end()) {
+        throw std::runtime_error("Couldn't find `fornetcon` variable.");
+    }
+
+    int dparam_index = dparam_it->index;
+    auto netcon_var = get_name(codegen_int_variables[dparam_index]);
+
+    // This is called from `print_statement_block` which pre-indents the
+    // current line. Hence `add_text` only.
+    printer->add_text("double ** _fornetcon_data;");
+    printer->add_newline();
+
+    printer->fmt_line("int _n_netcons = _nrn_netcon_args({}, &_fornetcon_data);",
+                      get_variable_name(netcon_var, false));
+
+    printer->push_block("for (size_t _i = 0; _i < _n_netcons; ++_i)");
+    printer->add_line("double * _netcon_data = _fornetcon_data[_i];");
+    print_statement_block(*statement_block, false, false);
+    printer->pop_block();
 }
 
 

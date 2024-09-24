@@ -166,6 +166,13 @@ bool CodegenCppVisitor::defined_method(const std::string& name) const {
     return function && function->has_any_property(properties);
 }
 
+bool CodegenCppVisitor::is_function_table_call(const std::string& name) const {
+    auto it = std::find_if(info.function_tables.begin(),
+                           info.function_tables.end(),
+                           [name](const auto& node) { return node->get_node_name() == name; });
+    return it != info.function_tables.end();
+}
+
 int CodegenCppVisitor::float_variables_size() const {
     int n_floats = 0;
     for (const auto& var: codegen_float_variables) {
@@ -433,6 +440,14 @@ void CodegenCppVisitor::print_backend_info() {
 }
 
 
+void CodegenCppVisitor::print_global_struct_function_table_ptrs() {
+    for (const auto& f: info.function_tables) {
+        printer->fmt_line("void* _ptable_{}{{}};", f->get_node_name());
+        codegen_global_variables.push_back(make_symbol("_ptable_" + f->get_node_name()));
+    }
+}
+
+
 void CodegenCppVisitor::print_global_var_struct_assertions() const {
     // Assert some things that we assume when copying instances of this struct
     // to the GPU and so on.
@@ -484,6 +499,11 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
         return;
     }
 
+    if (is_function_table_call(name)) {
+        print_function_table_call(node);
+        return;
+    }
+
     const auto& arguments = node.get_arguments();
     printer->add_text(function_name, '(');
 
@@ -527,6 +547,31 @@ void CodegenCppVisitor::print_function(const ast::FunctionBlock& node) {
     block->accept(v);
 
     print_function_procedure_helper(node);
+}
+
+
+void CodegenCppVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
+    auto name = node.get_node_name();
+    const auto& p = node.get_parameters();
+    auto [params, table_params] = function_table_parameters(node);
+    printer->fmt_push_block("double {}({})", method_name(name), get_parameter_str(params));
+    printer->fmt_line("double _arg[{}];", p.size());
+    for (size_t i = 0; i < p.size(); ++i) {
+        printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());
+    }
+    printer->fmt_line("return hoc_func_table({}, {}, _arg);",
+                      get_variable_name(std::string("_ptable_" + name), true),
+                      p.size());
+    printer->pop_block();
+
+    printer->fmt_push_block("double table_{}({})",
+                            method_name(name),
+                            get_parameter_str(table_params));
+    printer->fmt_line("hoc_spec_table(&{}, {});",
+                      get_variable_name(std::string("_ptable_" + name)),
+                      p.size());
+    printer->add_line("return 0.;");
+    printer->pop_block();
 }
 
 
@@ -708,6 +753,7 @@ void CodegenCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlo
 
     printer->fmt_text(
         "void operator()(const Eigen::Matrix<{0}, {1}, 1>& nmodl_eigen_xm, Eigen::Matrix<{0}, {1}, "
+        "1>& nmodl_eigen_dxm, Eigen::Matrix<{0}, {1}, "
         "1>& nmodl_eigen_fm, "
         "Eigen::Matrix<{0}, {1}, {1}>& nmodl_eigen_jm) {2}",
         float_type,
@@ -715,8 +761,15 @@ void CodegenCppVisitor::print_functor_definition(const ast::EigenNewtonSolverBlo
         is_functor_const(variable_block, functor_block) ? "const " : "");
     printer->push_block();
     printer->fmt_line("const {}* nmodl_eigen_x = nmodl_eigen_xm.data();", float_type);
+    printer->fmt_line("{}* nmodl_eigen_dx = nmodl_eigen_dxm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_j = nmodl_eigen_jm.data();", float_type);
     printer->fmt_line("{}* nmodl_eigen_f = nmodl_eigen_fm.data();", float_type);
+
+    for (size_t i = 0; i < N; ++i) {
+        printer->fmt_line(
+            "nmodl_eigen_dx[{0}] = std::max(1e-6, 0.02*std::fabs(nmodl_eigen_x[{0}]));", i);
+    }
+
     print_statement_block(functor_block, false, false);
     printer->pop_block();
     printer->add_newline();
@@ -1353,6 +1406,10 @@ std::vector<IndexVariableInfo> CodegenCppVisitor::get_int_variables() {
         for (int i = 0; i < info.watch_statements.size() + 1; i++) {
             variables.emplace_back(make_symbol(fmt::format("watch{}", i)), false, false, true);
         }
+    }
+
+    if (info.for_netcon_used) {
+        variables.emplace_back(make_symbol(naming::FOR_NETCON_VARIABLE), false, false, true);
     }
     return variables;
 }

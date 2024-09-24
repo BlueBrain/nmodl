@@ -445,33 +445,6 @@ void CodegenCoreneuronCppVisitor::print_function_procedure_helper(const ast::Blo
 }
 
 
-void CodegenCoreneuronCppVisitor::print_function_tables(const ast::FunctionTableBlock& node) {
-    auto name = node.get_node_name();
-    const auto& p = node.get_parameters();
-    auto params = internal_method_parameters();
-    for (const auto& i: p) {
-        params.emplace_back("", "double", "", i->get_node_name());
-    }
-    printer->fmt_line("double {}({})", method_name(name), get_parameter_str(params));
-    printer->push_block();
-    printer->fmt_line("double _arg[{}];", p.size());
-    for (size_t i = 0; i < p.size(); ++i) {
-        printer->fmt_line("_arg[{}] = {};", i, p[i]->get_node_name());
-    }
-    printer->fmt_line("return hoc_func_table({}, {}, _arg);",
-                      get_variable_name(std::string("_ptable_" + name), true),
-                      p.size());
-    printer->pop_block();
-
-    printer->fmt_push_block("double table_{}()", method_name(name));
-    printer->fmt_line("hoc_spec_table(&{}, {});",
-                      get_variable_name(std::string("_ptable_" + name)),
-                      p.size());
-    printer->add_line("return 0.;");
-    printer->pop_block();
-}
-
-
 /****************************************************************************************/
 /*                           Code-specific helper routines                              */
 /****************************************************************************************/
@@ -563,6 +536,15 @@ std::string CodegenCoreneuronCppVisitor::nrn_thread_arguments() const {
  */
 std::string CodegenCoreneuronCppVisitor::nrn_thread_internal_arguments() {
     return get_arg_str(internal_method_parameters());
+}
+
+std::pair<CodegenCoreneuronCppVisitor::ParamVector, CodegenCoreneuronCppVisitor::ParamVector>
+CodegenCoreneuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock& node) {
+    auto params = internal_method_parameters();
+    for (const auto& i: node.get_parameters()) {
+        params.emplace_back("", "double", "", i->get_node_name());
+    }
+    return {params, internal_method_parameters()};
 }
 
 
@@ -1181,10 +1163,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_global_var_structure(bool prin
         }
     }
 
-    for (const auto& f: info.function_tables) {
-        printer->fmt_line("void* _ptable_{}{{}};", f->get_node_name());
-        codegen_global_variables.push_back(make_symbol("_ptable_" + f->get_node_name()));
-    }
+    print_global_struct_function_table_ptrs();
 
     if (info.vectorize && info.thread_data_index) {
         printer->fmt_line("ThreadDatum ext_call_thread[{}]{};",
@@ -1426,11 +1405,7 @@ void CodegenCoreneuronCppVisitor::print_mechanism_register() {
                           net_recv_init_arg);
     }
     if (info.for_netcon_used) {
-        // index where information about FOR_NETCON is stored in the integer array
-        const auto index =
-            std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
-                return a.name == naming::FOR_NETCON_SEMANTIC;
-            })->index;
+        const auto index = position_of_int_var(naming::FOR_NETCON_VARIABLE);
         printer->fmt_line("add_nrn_fornetcons(mech_type, {});", index);
     }
 
@@ -2283,6 +2258,20 @@ void CodegenCoreneuronCppVisitor::print_net_event_call(const FunctionCall& node)
     printer->add_text(")");
 }
 
+void CodegenCoreneuronCppVisitor::print_function_table_call(const FunctionCall& node) {
+     auto name = node.get_node_name();
+    const auto& arguments = node.get_arguments();
+    printer->add_text(method_name(name), '(');
+
+    printer->add_text(internal_method_arguments());
+    if (!arguments.empty()) {
+        printer->add_text(", ");
+    }
+
+    print_vector_elements(arguments, ", ");
+    printer->add_text(')');
+}
+
 /**
  * Rename arguments to NET_RECEIVE block with corresponding pointer variable
  *
@@ -3062,10 +3051,7 @@ void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
         statement_block->accept(v);
     }
 
-    const auto index =
-        std::find_if(info.semantics.begin(), info.semantics.end(), [](const IndexSemantics& a) {
-            return a.name == naming::FOR_NETCON_SEMANTIC;
-        })->index;
+    const auto index = position_of_int_var(naming::FOR_NETCON_VARIABLE);
 
     printer->fmt_text("const size_t offset = {}*pnodecount + id;", index);
     printer->add_newline();
@@ -3074,12 +3060,9 @@ void CodegenCoreneuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
     printer->add_line(
         "const size_t for_netcon_end = nt->_fornetcon_perm_indices[indexes[offset] + 1];");
 
-    printer->add_line("for (auto i = for_netcon_start; i < for_netcon_end; ++i) {");
-    printer->increase_indent();
+    printer->push_block("for (auto i = for_netcon_start; i < for_netcon_end; ++i)");
     print_statement_block(*statement_block, false, false);
-    printer->decrease_indent();
-
-    printer->add_line("}");
+    printer->pop_block();
 }
 
 

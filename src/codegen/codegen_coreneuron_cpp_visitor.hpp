@@ -355,13 +355,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     void print_function_procedure_helper(const ast::Block& node) override;
 
 
-    /**
-     * Print NMODL function_table in target backend code
-     * \param node
-     */
-    void print_function_tables(const ast::FunctionTableBlock& node);
-
-
     /****************************************************************************************/
     /*                             Code-specific helper routines                            */
     /****************************************************************************************/
@@ -412,6 +405,10 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * Arguments for "_threadargs_" macro in neuron implementation
      */
     std::string nrn_thread_internal_arguments() override;
+
+
+    std::pair<ParamVector, ParamVector> function_table_parameters(
+        const ast::FunctionTableBlock& node) override;
 
 
     /**
@@ -742,6 +739,8 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param node The AST node representing the function call
      */
     void print_net_event_call(const ast::FunctionCall& node) override;
+
+    void print_function_table_call(const ast::FunctionCall& node) override;
 
 
     /**

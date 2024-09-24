@@ -166,6 +166,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                         Printing routines for code generation                        */
     /****************************************************************************************/
 
+    /**
+     * Print NET_RECEIVE{ INITIAL{ ... }} block.
+     */
+    void print_net_init();
 
     /**
      * Print call to \c net\_send
@@ -187,10 +191,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_net_event_call(const ast::FunctionCall& node) override;
 
+    void print_function_table_call(const ast::FunctionCall& node) override;
+
     /**
      * Print `net_receive` call-back.
      */
     void print_net_receive();
+    void print_net_receive_common_code();
+    ParamVector net_receive_args();
 
     /**
      * Print code to register the call-back for the NET_RECEIVE block.
@@ -220,7 +228,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print all `check_*` function declarations
      */
-    void print_check_table_function_prototypes();
+    void print_check_table_entrypoint();
 
 
     void print_function_or_procedure(const ast::Block& node,
@@ -293,6 +301,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * Arguments for "_threadargs_" macro in neuron implementation
      */
     std::string nrn_thread_internal_arguments() override;
+
+    std::pair<ParamVector, ParamVector> function_table_parameters(
+        const ast::FunctionTableBlock& /* node */) override;
 
 
     /**
@@ -683,6 +694,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
 
     void visit_watch_statement(const ast::WatchStatement& node) override;
+    void visit_for_netcon(const ast::ForNetcon& node) override;
 
 
   public:
