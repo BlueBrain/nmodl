@@ -200,8 +200,7 @@ std::tuple<std::string, std::string> call_diff2c(
     if (property.has_value()) {
         name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
         statements += fmt::format("_allvars.append({})", name);
-    }
-    else {
+    } else {
         name = fmt::format("'{}'", name);
     }
     auto locals = py::dict("expression"_a = expression);
