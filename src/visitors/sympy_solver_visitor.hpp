@@ -185,6 +185,8 @@ class SympySolverVisitor: public AstVisitor {
     void visit_expression_statement(ast::ExpressionStatement& node) override;
     void visit_statement_block(ast::StatementBlock& node) override;
     void visit_program(ast::Program& node) override;
+    void visit_derivative_original_function_block(
+        ast::DerivativeOriginalFunctionBlock& node) override;
 };
 
 /** @} */  // end of visitor_classes
