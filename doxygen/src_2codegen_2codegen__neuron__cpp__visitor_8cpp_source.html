@@ -314,17 +314,17 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__neuron__cpp__vi
 <div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a7f941bd8151d12ef887be3670dec264e">  218</a></span>&#160;<span class="stringliteral"></span><span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a7f941bd8151d12ef887be3670dec264e">CodegenNeuronCppVisitor::print_function_prototypes</a>() {</div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;    printer-&gt;add_newline(2);</div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;/* Mechanism procedures and functions */&quot;</span>);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node: info.functions) {</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        print_function_declaration(*node, node-&gt;get_node_name());</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;        printer-&gt;add_text(<span class="charliteral">&#39;;&#39;</span>);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        printer-&gt;add_newline();</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    }</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node: info.procedures) {</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        print_function_declaration(*node, node-&gt;get_node_name());</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        printer-&gt;add_text(<span class="charliteral">&#39;;&#39;</span>);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        printer-&gt;add_newline();</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    <span class="keyword">auto</span> print_decl = [<span class="keyword">this</span>](<span class="keyword">const</span> <span class="keyword">auto</span>&amp; callables) {</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; node: callables) {</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            print_function_declaration(*node, node-&gt;get_node_name());</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;            printer-&gt;add_text(<span class="charliteral">&#39;;&#39;</span>);</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            printer-&gt;add_newline();</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        }</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    };</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;/* Mechanism procedures and functions */&quot;</span>);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    print_decl(info.functions);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    print_decl(info.procedures);</div>
 <div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;}</div>
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
