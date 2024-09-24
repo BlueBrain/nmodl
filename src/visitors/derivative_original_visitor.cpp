@@ -25,38 +25,22 @@ static int get_index(const ast::IndexedName& node) {
 }
 
 static auto get_name_map(const ast::Expression& node, const std::string& name) {
-    std::unordered_map<std::string, std::optional<int>> name_map;
+    std::unordered_map<std::string, int> name_map;
     // all of the "reserved" symbols
     auto reserved_symbols = get_external_functions();
     // all indexed vars
     auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
-    if (!indexed_vars.empty()) {
-        for (const auto& var: indexed_vars) {
-            if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
-                std::find(reserved_symbols.begin(), reserved_symbols.end(), var->get_node_name()) ==
-                    reserved_symbols.end()) {
-                logger->debug(
-                    "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
-                    "node_map",
-                    var->get_node_name());
-                auto index = get_index(*std::dynamic_pointer_cast<const ast::IndexedName>(var));
-                name_map[var->get_node_name()] = std::optional<int>(index);
-            }
-        }
-    }
-    // all regular vars
-    auto regular_vars = collect_nodes(node, {ast::AstNodeType::NAME});
-    if (!regular_vars.empty()) {
-        for (const auto& var: regular_vars) {
-            if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
-                std::find(reserved_symbols.begin(), reserved_symbols.end(), var->get_node_name()) ==
-                    reserved_symbols.end()) {
-                logger->debug(
-                    "DerivativeOriginalVisitor :: adding REGULAR_VARIABLE {} to "
-                    "node_map",
-                    var->get_node_name());
-                name_map[var->get_node_name()] = std::optional<int>();
-            }
+    for (const auto& var: indexed_vars) {
+        if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
+            std::none_of(reserved_symbols.begin(), reserved_symbols.end(), [&var](const auto item) {
+                return var->get_node_name() == item;
+            })) {
+            logger->debug(
+                "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
+                "node_map",
+                var->get_node_name());
+            name_map[var->get_node_name()] = get_index(
+                *std::dynamic_pointer_cast<const ast::IndexedName>(var));
         }
     }
     return name_map;
@@ -121,6 +105,7 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
             }
         } else {
             varname = "D" + stringutils::remove_character(to_nmodl(node.get_lhs()), '\'');
+            // we discard the RHS here so it can be anything (as long as NMODL considers it valid)
             auto statement = fmt::format("{} = {}", varname, varname);
             logger->debug("DerivativeOriginalVisitor :: replacing {} with {} on LHS of {}",
                           to_nmodl(node.get_lhs()),
