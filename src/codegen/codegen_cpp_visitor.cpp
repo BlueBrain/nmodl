@@ -530,15 +530,8 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
 }
 
 void CodegenCppVisitor::print_nrn_pointing(const ast::FunctionCall& node) {
-    const auto& args = node.get_arguments();
-    if (args.size() != 1) {
-        throw std::runtime_error(
-            fmt::format("nrn_pointing excepts exactly one argument, got: {}", args.size()));
-    }
-
-
     printer->add_text("nrn_pointing(&");
-    args[0]->accept(*this);
+    print_vector_elements(node.get_arguments(), ", ");
     printer->add_text(")");
 }
 
