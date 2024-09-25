@@ -34,12 +34,11 @@ TEST_CASE("Make sure DERIVATIVE block is copied properly", "[visitor][derivative
                 SUFFIX example
             }
 
-            STATE {x z[2]}
+            STATE {x z}
 
             DERIVATIVE equation {
-                x' = -x
-                z'[0] = x
-                z'[1] = x + z[0]
+                x' = -x + z * z
+                z' = z * x
             }
 )";
         auto ast = run_derivative_original_visitor(nmodl_text);

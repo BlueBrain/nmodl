@@ -47,8 +47,6 @@ class DerivativeOriginalVisitor: public AstVisitor {
     /// visiting derivative block
     bool derivative_block = false;
 
-    ast::AstNodeType node_type = ast::AstNodeType::NODE;
-
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
