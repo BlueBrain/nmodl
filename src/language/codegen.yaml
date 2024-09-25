@@ -100,16 +100,15 @@
                                   brief: "Block with statements vector"
                                   type: StatementBlock
                                   getter: {override: true}
-                            brief: "Represents the original, unmodified `DERIVATIVE` block in the NMODL"
+                            brief: "Represents a copy of the `DERIVATIVE` block in NMODL with prime vars replaced by D vars"
                             description: |
                                   The original `DERIVATIVE` block in NMODL is
                                   replaced in-place if the system of ODEs is
                                   solvable analytically. Therefore, this
-                                  block's sole purpose is to keep the
-                                  original, unsolved block in the AST. This is
-                                  primarily useful when we need to solve the
-                                  ODE system using implicit methods, for
-                                  instance, CVode.
+                                  block's sole purpose is to keep the unsolved
+                                  block in the AST. This is primarily useful
+                                  when we need to solve the ODE system using
+                                  implicit methods, for instance, CVode.
 
                   - WrappedExpression:
                       brief: "Wrap any other expression type"
