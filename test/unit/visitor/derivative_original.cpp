@@ -51,5 +51,14 @@ TEST_CASE("Make sure DERIVATIVE block is copied properly", "[visitor][derivative
                 REQUIRE(primed_vars.empty());
             }
         }
+        THEN("DERIVATIVE_ORIGINAL_JACOBIAN block is added") {
+            auto block = collect_nodes(*ast,
+                                       {ast::AstNodeType::DERIVATIVE_ORIGINAL_JACOBIAN_BLOCK});
+            REQUIRE(!block.empty());
+            THEN("No primed variables exist in the DERIVATIVE_ORIGINAL_JACOBIAN block") {
+                auto primed_vars = collect_nodes(*block[0], {ast::AstNodeType::PRIME_NAME});
+                REQUIRE(primed_vars.empty());
+            }
+        }
     }
 }
