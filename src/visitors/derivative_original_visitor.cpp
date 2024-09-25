@@ -23,7 +23,7 @@ namespace visitor {
 
 void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
     node.visit_children(*this);
-    der_block_function = node.clone();
+    der_block_function = std::shared_ptr<ast::DerivativeBlock>(node.clone());
 }
 
 

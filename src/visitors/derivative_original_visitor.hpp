@@ -36,7 +36,7 @@ namespace visitor {
 class DerivativeOriginalVisitor: public AstVisitor {
   private:
     /// The copy of the derivative block we are solving
-    ast::DerivativeBlock* der_block_function = nullptr;
+    std::shared_ptr<ast::DerivativeBlock> der_block_function = nullptr;
 
     /// true while visiting differential equation
     bool differential_equation = false;
