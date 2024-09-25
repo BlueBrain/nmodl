@@ -297,5 +297,4 @@ bool is_nrn_pointing(const std::string& name) {
 }
 
 
-
 }  // namespace nmodl
