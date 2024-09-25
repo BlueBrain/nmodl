@@ -4,9 +4,9 @@
 #include "parser/nmodl_driver.hpp"
 #include "test/unit/utils/test_utils.hpp"
 #include "visitors/checkparent_visitor.hpp"
+#include "visitors/derivative_original_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
-#include "visitors/derivative_original_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
 using namespace nmodl;
@@ -28,8 +28,8 @@ auto run_derivative_original_visitor(const std::string& text) {
 
 
 TEST_CASE("Make sure DERIVATIVE block is copied properly", "[visitor][derivative_original]") {
-        GIVEN("DERIVATIVE block") {
-            std::string nmodl_text = R"(
+    GIVEN("DERIVATIVE block") {
+        std::string nmodl_text = R"(
             NEURON	{
                 SUFFIX example
             }
@@ -42,14 +42,15 @@ TEST_CASE("Make sure DERIVATIVE block is copied properly", "[visitor][derivative
                 z'[1] = x + z[0]
             }
 )";
-            auto ast = run_derivative_original_visitor(nmodl_text);
-            THEN("DERIVATIVE_ORIGINAL_FUNCTION block is added") {
-                auto block = collect_nodes(*ast, {ast::AstNodeType::DERIVATIVE_ORIGINAL_FUNCTION_BLOCK});
-                REQUIRE(!block.empty());
-                THEN("No primed variables exist in the DERIVATIVE_ORIGINAL_FUNCTION block") {
-                    auto primed_vars = collect_nodes(*block[0], {ast::AstNodeType::PRIME_NAME});
-                    REQUIRE(primed_vars.empty());
-                }
+        auto ast = run_derivative_original_visitor(nmodl_text);
+        THEN("DERIVATIVE_ORIGINAL_FUNCTION block is added") {
+            auto block = collect_nodes(*ast,
+                                       {ast::AstNodeType::DERIVATIVE_ORIGINAL_FUNCTION_BLOCK});
+            REQUIRE(!block.empty());
+            THEN("No primed variables exist in the DERIVATIVE_ORIGINAL_FUNCTION block") {
+                auto primed_vars = collect_nodes(*block[0], {ast::AstNodeType::PRIME_NAME});
+                REQUIRE(primed_vars.empty());
             }
         }
+    }
 }
