@@ -17,8 +17,7 @@ schedules:
   always: True
 
 # Auto cancel old PR builds
-pr:
-  autoCancel: true
+pr: none
 
 # Trigger build for certain branches only
 trigger:
