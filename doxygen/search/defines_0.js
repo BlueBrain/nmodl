@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['b_5f_5807',['b_',['../crout_8hpp.html#aae39d0b8c911528824cc5bad8ab20144',1,'crout.hpp']]]
+  ['b_5f_5813',['b_',['../crout_8hpp.html#aae39d0b8c911528824cc5bad8ab20144',1,'crout.hpp']]]
 ];

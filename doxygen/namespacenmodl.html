@@ -267,6 +267,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a08015444c35fc7977d0e82173bf23113"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a08015444c35fc7977d0e82173bf23113">is_random_construct_function</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a08015444c35fc7977d0e82173bf23113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is given name a one of the function for RANDOM construct.  <a href="namespacenmodl.html#a08015444c35fc7977d0e82173bf23113">More...</a><br /></td></tr>
 <tr class="separator:a08015444c35fc7977d0e82173bf23113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa17a783f9467d1aeeca6210555b1832a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#aa17a783f9467d1aeeca6210555b1832a">is_nrn_pointing</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:aa17a783f9467d1aeeca6210555b1832a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is given name <code>nrn_pointing</code>.  <a href="namespacenmodl.html#aa17a783f9467d1aeeca6210555b1832a">More...</a><br /></td></tr>
+<tr class="separator:aa17a783f9467d1aeeca6210555b1832a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a457c69d76cbb7d9318af1fc030946326"><td class="memTemplItemLeft" align="right" valign="top">std::enable_if&lt; std::is_base_of&lt; <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a>, T &gt;::value, std::string &gt;::type&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a457c69d76cbb7d9318af1fc030946326">to_nmodl</a> (const std::shared_ptr&lt; T &gt; &amp;node, const std::set&lt; <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">ast::AstNodeType</a> &gt; &amp;exclude_types={})</td></tr>
 <tr class="memdesc:a457c69d76cbb7d9318af1fc030946326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a shared pointer to an AST node, return the NMODL string representation.  <a href="namespacenmodl.html#a457c69d76cbb7d9318af1fc030946326">More...</a><br /></td></tr>
@@ -688,6 +691,28 @@ Variables</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>true if name is an integration method in NMODL </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="token__mapping_8cpp_source.html#l00274">274</a> of file <a class="el" href="token__mapping_8cpp_source.html">token_mapping.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aa17a783f9467d1aeeca6210555b1832a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa17a783f9467d1aeeca6210555b1832a">&#9670;&nbsp;</a></span>is_nrn_pointing()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool nmodl::is_nrn_pointing </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Is given name <code>nrn_pointing</code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00295">295</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
