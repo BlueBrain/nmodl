@@ -75,6 +75,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/define.hpp
     ${PROJECT_BINARY_DIR}/src/ast/derivative_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/derivative_original_function_block.hpp
+    ${PROJECT_BINARY_DIR}/src/ast/derivative_original_jacobian_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/derivimplicit_callback.hpp
     ${PROJECT_BINARY_DIR}/src/ast/destructor_block.hpp
     ${PROJECT_BINARY_DIR}/src/ast/diff_eq_expression.hpp
