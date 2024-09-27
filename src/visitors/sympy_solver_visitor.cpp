@@ -6,6 +6,7 @@
  */
 
 #include "visitors/sympy_solver_visitor.hpp"
+
 #include "visitors/sympy_replace_solutions_visitor.hpp"
 
 #include "ast/all.hpp"
