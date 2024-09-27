@@ -185,6 +185,7 @@ add_custom_command(
 
 add_library(lexer STATIC ${LEXER_SOURCE_FILES} ${BISON_GENERATED_SOURCE_FILES}
                          ${AST_GENERATED_SOURCES} ${UNIT_SOURCE_FILES})
+target_precompile_nmodl_headers(lexer)
 set_property(TARGET lexer PROPERTY POSITION_INDEPENDENT_CODE ON)
 target_link_libraries(lexer PRIVATE util)
 
