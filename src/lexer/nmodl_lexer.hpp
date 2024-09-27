@@ -12,7 +12,6 @@
  * \brief Lexer implementations
  */
 
-#include "ast/ast.hpp"
 #include "parser/nmodl/nmodl_parser.hpp"
 
 
