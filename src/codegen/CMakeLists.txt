@@ -13,10 +13,7 @@ add_library(codegen STATIC
   codegen_utils.cpp
   ${NMODL_CODEGEN_SOURCES})
 
-target_precompile_headers(codegen
-  PRIVATE <string>
-  PRIVATE <ast/ast.hpp>
-  PRIVATE <ast/all.hpp>)
+target_precompile_nmodl_headers(codegen)
 
 add_dependencies(codegen lexer util visitor)
 target_link_libraries(codegen PRIVATE util)

@@ -40,10 +40,7 @@ add_library(
   visitor_utils.cpp
   ${VISITORS_GENERATED_SOURCES})
 
-target_precompile_headers(visitor
-  PRIVATE <string>
-  PRIVATE <ast/ast.hpp>
-  PRIVATE <ast/all.hpp>)
+target_precompile_nmodl_headers(visitor)
 set_property(TARGET visitor PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(visitor pywrapper)
 target_link_libraries(visitor PUBLIC lexer util)

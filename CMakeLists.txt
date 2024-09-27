@@ -72,6 +72,7 @@ include(cmake/GitRevision.cmake)
 include(cmake/PythonLinkHelper.cmake)
 include(cmake/RpathHelper.cmake)
 include(cmake/ExternalProjectHelper.cmake)
+include(cmake/PrecompileHeaders.cmake)
 
 # This should apply to all NMODL targets but should not leak out when NMODL is built as a submodule.
 add_compile_options(${NMODL_COMPILER_WARNING_SUPPRESSIONS})

@@ -64,10 +64,7 @@ add_executable(
   visitor/verbatim.cpp
   visitor/node_index.cpp)
 
-target_precompile_headers(testvisitor
-  PRIVATE <string>
-  PRIVATE <ast/ast.hpp>
-  PRIVATE <ast/all.hpp>)
+target_precompile_nmodl_headers(testvisitor)
 
 add_executable(testprinter printer/printer.cpp)
 target_precompile_headers(testprinter REUSE_FROM testvisitor)
