@@ -7,32 +7,13 @@ add_compile_options(${NMODL_EXTRA_CXX_FLAGS})
 add_link_options(${NMODL_EXTRA_CXX_FLAGS})
 add_compile_options(${NMODL_TESTS_COMPILER_WARNING_SUPPRESSIONS})
 
-include_directories(${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS})
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/test)
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/solver)
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/src/utils)
-include_directories(${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
-
-# =============================================================================
-# Common input data library
-# =============================================================================
-add_library(test_util STATIC utils/nmodl_constructs.cpp utils/test_utils.cpp)
-target_link_libraries(test_util PUBLIC spdlog::spdlog)
-
-# =============================================================================
-# Common input data library
-# =============================================================================
-add_library(config STATIC ${PROJECT_BINARY_DIR}/src/config/config.cpp)
-
 # =============================================================================
 # Test executables
 # =============================================================================
-add_executable(testutils utils/string_utils.cpp)
-add_executable(testmodtoken modtoken/modtoken.cpp)
-add_executable(testlexer lexer/tokens.cpp)
-add_executable(testparser parser/parser.cpp)
-add_executable(
-  testvisitor
+add_executable(testnmodl
+  utils/nmodl_constructs.cpp
+  utils/test_utils.cpp
+  ${PROJECT_BINARY_DIR}/src/config/config.cpp
   visitor/main.cpp
   visitor/after_cvode_to_cnexp.cpp
   visitor/constant_folder.cpp
@@ -62,30 +43,17 @@ add_executable(
   visitor/units.cpp
   visitor/var_usage.cpp
   visitor/verbatim.cpp
-  visitor/node_index.cpp)
-
-target_precompile_nmodl_headers(testvisitor)
-
-add_executable(testprinter printer/printer.cpp)
-target_precompile_headers(testprinter REUSE_FROM testvisitor)
-
-add_executable(testsymtab symtab/symbol_table.cpp)
-target_precompile_headers(testsymtab REUSE_FROM testvisitor)
-
-add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
-target_precompile_headers(testnewton REUSE_FROM testvisitor)
-
-add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
-target_precompile_headers(testcrout REUSE_FROM testvisitor)
-
-add_executable(testunitlexer units/lexer.cpp)
-target_precompile_headers(testunitlexer REUSE_FROM testvisitor)
-
-add_executable(testunitparser units/parser.cpp)
-target_precompile_headers(testunitparser REUSE_FROM testvisitor)
-add_executable(
-  testcodegen
-  codegen/main.cpp
+  visitor/node_index.cpp
+  utils/string_utils.cpp
+  modtoken/modtoken.cpp
+  lexer/tokens.cpp
+  parser/parser.cpp
+  printer/printer.cpp
+  symtab/symbol_table.cpp
+  newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES}
+  crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES}
+  units/lexer.cpp
+  units/parser.cpp
   codegen/codegen_info.cpp
   codegen/codegen_helper.cpp
   codegen/codegen_utils.cpp
@@ -94,97 +62,47 @@ add_executable(
   codegen/transform.cpp
   codegen/codegen_compatibility_visitor.cpp)
 
-target_precompile_headers(testcodegen REUSE_FROM testvisitor)
+target_precompile_nmodl_headers(testnmodl)
 
-target_link_libraries(testutils PRIVATE lexer util)
-target_link_libraries(testmodtoken PRIVATE lexer util)
-target_link_libraries(testlexer PRIVATE lexer util)
+target_include_directories(testnmodl PRIVATE
+    ${PYBIND11_INCLUDE_DIR} ${PYTHON_INCLUDE_DIRS}
+    ${NMODL_PROJECT_SOURCE_DIR}/test
+    ${NMODL_PROJECT_SOURCE_DIR}/src/solver
+    ${NMODL_PROJECT_SOURCE_DIR}/src/utils
+    ${NMODL_PROJECT_SOURCE_DIR}/ext/eigen)
+
 target_link_libraries(
-  testparser
+  testnmodl
+  PUBLIC  spdlog::spdlog
   PRIVATE visitor
           symtab
           lexer
           util
-          test_util
-          printer
-          ${NMODL_WRAPPER_LIBS})
-target_link_libraries(
-  testvisitor
-  PRIVATE visitor
-          symtab
-          lexer
-          util
-          test_util
           printer
           codegen
           ${NMODL_WRAPPER_LIBS})
-target_link_libraries(
-  testcodegen
-  PRIVATE codegen
-          visitor
-          symtab
-          lexer
-          util
-          test_util
-          printer
-          ${NMODL_WRAPPER_LIBS})
-target_link_libraries(testprinter PRIVATE printer util)
-target_link_libraries(testsymtab PRIVATE symtab lexer util)
-target_link_libraries(testunitlexer PRIVATE lexer util)
-target_link_libraries(testunitparser PRIVATE lexer test_util config)
 
 # =============================================================================
 # Use catch_discover instead of add_test for granular test result reporting.
 # =============================================================================
 set(test_env ${NMODL_SANITIZER_ENABLE_ENVIRONMENT})
-set(testvisitor_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
+list(APPEND test_env "PYTHONPATH=${PROJECT_BINARY_DIR}/lib:$ENV{PYTHONPATH}")
 if(NOT LINK_AGAINST_PYTHON)
-  list(APPEND testvisitor_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
+  list(APPEND test_env "NMODL_PYLIB=$ENV{NMODL_PYLIB}")
 endif()
 
 # Without main from Catch2
-target_link_libraries(testcodegen PRIVATE Catch2::Catch2)
-target_link_libraries(testvisitor PRIVATE Catch2::Catch2)
+target_link_libraries(testnmodl PRIVATE Catch2::Catch2)
 
-# With main from Catch2
-target_link_libraries(testutils PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testmodtoken PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testlexer PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testparser PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testprinter PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testsymtab PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testnewton PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testcrout PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testunitlexer PRIVATE Catch2::Catch2WithMain)
-target_link_libraries(testunitparser PRIVATE Catch2::Catch2WithMain)
-
-foreach(
-  test_name
-  testutils
-  testcodegen
-  testmodtoken
-  testlexer
-  testparser
-  testvisitor
-  testprinter
-  testsymtab
-  testnewton
-  testcrout
-  testunitlexer
-  testunitparser)
-
-  cpp_cc_configure_sanitizers(TARGET ${test_name})
-  set(env ${test_env})
-  list(APPEND env ${${test_name}_env})
-  # See https://github.com/catchorg/Catch2/issues/2424
-  string(REPLACE ";" ";ENVIRONMENT;" _environment_vars_list "${env}")
-  # Catch2 doesn't set these environment variables when running the executable to discover tests
-  # (https://github.com/catchorg/Catch2/issues/1810). This means that in builds that enable it, we
-  # see errors from the LeakSanitizer during the build. These seem to be harmless because Catch2
-  # does not seem to check the exit code.
-  catch_discover_tests(${test_name} TEST_PREFIX "${test_name}/" PROPERTIES ENVIRONMENT
-                       "${_environment_vars_list}")
-endforeach()
+cpp_cc_configure_sanitizers(TARGET testnmodl)
+# See https://github.com/catchorg/Catch2/issues/2424
+string(REPLACE ";" ";ENVIRONMENT;" _environment_vars_list "${test_env}")
+# Catch2 doesn't set these environment variables when running the executable to discover tests
+# (https://github.com/catchorg/Catch2/issues/1810). This means that in builds that enable it, we
+# see errors from the LeakSanitizer during the build. These seem to be harmless because Catch2
+# does not seem to check the exit code.
+catch_discover_tests(testnmodl TEST_PREFIX "testnmodl/" PROPERTIES ENVIRONMENT
+                     "${_environment_vars_list}")
 
 # Generate include files used in test input, see test/unit/utils/nmodl_constructs.cpp
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/Unit.inc" "UNITSON \n UNITSOFF \n UNITSON \n UNITSOFF")
