@@ -63,12 +63,29 @@ add_executable(
   visitor/var_usage.cpp
   visitor/verbatim.cpp
   visitor/node_index.cpp)
+
+target_precompile_headers(testvisitor
+  PRIVATE <string>
+  PRIVATE <ast/ast.hpp>
+  PRIVATE <ast/all.hpp>)
+
 add_executable(testprinter printer/printer.cpp)
+target_precompile_headers(testprinter REUSE_FROM testvisitor)
+
 add_executable(testsymtab symtab/symbol_table.cpp)
+target_precompile_headers(testsymtab REUSE_FROM testvisitor)
+
 add_executable(testnewton newton/newton.cpp ${NEWTON_SOLVER_SOURCE_FILES})
+target_precompile_headers(testnewton REUSE_FROM testvisitor)
+
 add_executable(testcrout crout/crout.cpp ${CROUT_SOLVER_SOURCE_FILES})
+target_precompile_headers(testcrout REUSE_FROM testvisitor)
+
 add_executable(testunitlexer units/lexer.cpp)
+target_precompile_headers(testunitlexer REUSE_FROM testvisitor)
+
 add_executable(testunitparser units/parser.cpp)
+target_precompile_headers(testunitparser REUSE_FROM testvisitor)
 add_executable(
   testcodegen
   codegen/main.cpp
@@ -79,6 +96,8 @@ add_executable(
   codegen/codegen_neuron_cpp_visitor.cpp
   codegen/transform.cpp
   codegen/codegen_compatibility_visitor.cpp)
+
+target_precompile_headers(testcodegen REUSE_FROM testvisitor)
 
 target_link_libraries(testutils PRIVATE lexer util)
 target_link_libraries(testmodtoken PRIVATE lexer util)

@@ -39,6 +39,11 @@ add_library(
   verbatim_visitor.cpp
   visitor_utils.cpp
   ${VISITORS_GENERATED_SOURCES})
+
+target_precompile_headers(visitor
+  PRIVATE <string>
+  PRIVATE <ast/ast.hpp>
+  PRIVATE <ast/all.hpp>)
 set_property(TARGET visitor PROPERTY POSITION_INDEPENDENT_CODE ON)
 add_dependencies(visitor pywrapper)
 target_link_libraries(visitor PUBLIC lexer util)
