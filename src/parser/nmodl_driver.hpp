@@ -17,8 +17,6 @@
 #include <unordered_map>
 
 #include "ast/ast.hpp"
-#include "lexer/nmodl_lexer.hpp"
-#include "parser/nmodl_driver.hpp"
 #include "utils/file_library.hpp"
 
 
@@ -26,6 +24,9 @@
 namespace nmodl {
 /// encapsulate lexer and parsers implementations
 namespace parser {
+
+// Declared in <lexer/nmodl_lexer.hpp>
+class NmodlLexer;
 
 /**
  * \defgroup parser Parser Implementation

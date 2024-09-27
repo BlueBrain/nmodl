@@ -4,6 +4,7 @@
 #include "parser/nmodl_driver.hpp"
 #include "visitors/rename_function_arguments.hpp"
 #include "visitors/visitor_utils.hpp"
+#include "ast/program.hpp"
 
 using namespace nmodl;
 using namespace visitor;
