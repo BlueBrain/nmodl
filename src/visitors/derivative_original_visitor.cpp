@@ -21,27 +21,26 @@ namespace nmodl {
 namespace visitor {
 
 
-void DerivativeOriginalVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
+void CvodeVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
     node.visit_children(*this);
-    der_block_function = std::shared_ptr<ast::DerivativeBlock>(node.clone());
+    der_block = std::shared_ptr<ast::DerivativeBlock>(node.clone());
 }
 
 
-void DerivativeOriginalVisitor::visit_derivative_original_function_block(
-    ast::DerivativeOriginalFunctionBlock& node) {
+void CvodeVisitor::visit_cvode_block(ast::CvodeBlock& node) {
     derivative_block = true;
     node.visit_children(*this);
     derivative_block = false;
 }
 
-void DerivativeOriginalVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
+void CvodeVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     differential_equation = true;
     node.visit_children(*this);
     differential_equation = false;
 }
 
 
-void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& node) {
+void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
     const auto& lhs = node.get_lhs();
 
     /// we have to only solve ODEs under original derivative block where lhs is variable
@@ -66,13 +65,13 @@ void DerivativeOriginalVisitor::visit_binary_expression(ast::BinaryExpression& n
     }
 }
 
-void DerivativeOriginalVisitor::visit_program(ast::Program& node) {
+void CvodeVisitor::visit_program(ast::Program& node) {
     program_symtab = node.get_symbol_table();
     node.visit_children(*this);
-    if (der_block_function) {
-        auto der_node =
-            new ast::DerivativeOriginalFunctionBlock(der_block_function->get_name(),
-                                                     der_block_function->get_statement_block());
+    if (der_block) {
+        auto der_node = new ast::CvodeBlock(der_block->get_name(),
+                                            der_block->get_statement_block(),
+                                            der_block->get_statement_block());
         node.emplace_back_node(der_node);
     }
 

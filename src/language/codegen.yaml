@@ -88,27 +88,21 @@
                               - finalize_block:
                                   brief: "Statement block to be executed after calling linear solver"
                                   type: StatementBlock
-                        - DerivativeOriginalFunctionBlock:
-                            nmodl: "DERIVATIVE_ORIGINAL_FUNCTION "
+                        - CvodeBlock:
+                            nmodl: "CVODE_BLOCK "
                             members:
                               - name:
-                                  brief: "Name of the derivative block"
+                                  brief: "Name of the block"
                                   type: Name
                                   node_name: true
                                   suffix: {value: " "}
-                              - statement_block:
-                                  brief: "Block with statements vector"
+                              - function_block:
+                                  brief: "Block with statements of the form Dvar = f(var)"
                                   type: StatementBlock
-                                  getter: {override: true}
-                            brief: "Represents a copy of the `DERIVATIVE` block in NMODL with prime vars replaced by D vars"
-                            description: |
-                                  The original `DERIVATIVE` block in NMODL is
-                                  replaced in-place if the system of ODEs is
-                                  solvable analytically. Therefore, this
-                                  block's sole purpose is to keep the unsolved
-                                  block in the AST. This is primarily useful
-                                  when we need to solve the ODE system using
-                                  implicit methods, for instance, CVode.
+                              - diagonal_jacobian_block:
+                                  brief: "Block with statements of the form Dvar = Dvar / (1 - dt * J(f))"
+                                  type: StatementBlock
+                            brief: "Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks"
 
                   - WrappedExpression:
                       brief: "Wrap any other expression type"

@@ -399,9 +399,8 @@ void SympySolverVisitor::visit_var_name(ast::VarName& node) {
     }
 }
 
-// Skip visiting DERIVATIVE_ORIGINAL block
-void SympySolverVisitor::visit_derivative_original_function_block(
-    ast::DerivativeOriginalFunctionBlock& node) {}
+// Skip visiting CVODE block
+void SympySolverVisitor::visit_cvode_block(ast::CvodeBlock& node) {}
 
 void SympySolverVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
     const auto& lhs = node.get_expression()->get_lhs();

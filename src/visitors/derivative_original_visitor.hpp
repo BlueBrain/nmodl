@@ -33,10 +33,10 @@ namespace visitor {
  * solution. This block is inserted before that to prevent losing access to
  * information about the block.
  */
-class DerivativeOriginalVisitor: public AstVisitor {
+class CvodeVisitor: public AstVisitor {
   private:
     /// The copy of the derivative block we are solving
-    std::shared_ptr<ast::DerivativeBlock> der_block_function = nullptr;
+    std::shared_ptr<ast::DerivativeBlock> der_block = nullptr;
 
     /// true while visiting differential equation
     bool differential_equation = false;
@@ -50,8 +50,7 @@ class DerivativeOriginalVisitor: public AstVisitor {
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
-    void visit_derivative_original_function_block(
-        ast::DerivativeOriginalFunctionBlock& node) override;
+    void visit_cvode_block(ast::CvodeBlock& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
 };
