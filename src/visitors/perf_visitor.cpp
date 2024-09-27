@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <utility>
+#include <cassert>
 
 #include "ast/all.hpp"
 #include "printer/json_printer.hpp"

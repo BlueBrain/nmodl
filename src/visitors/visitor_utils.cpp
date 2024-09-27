@@ -11,6 +11,7 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <string>
+#include <nlohmann/json.hpp>
 
 #include "ast/all.hpp"
 #include "codegen/codegen_naming.hpp"
