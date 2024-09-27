@@ -6,7 +6,8 @@
  */
 
 #include "symtab/symbol.hpp"
-#include "utils/logger.hpp"
+
+#include <utils/fmt.h>
 #include <ast/ast.hpp>
 
 namespace nmodl {

@@ -16,7 +16,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "ast/ast.hpp"
+#include "ast/ast_decl.hpp"
 #include "symtab/symbol.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
