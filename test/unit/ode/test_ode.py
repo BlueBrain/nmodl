@@ -100,6 +100,16 @@ def test_differentiate2c():
         "g",
     )
 
+    assert _equivalent(
+        differentiate2c(
+            "-f(x)",
+            "x",
+            {},
+        ),
+        "1000.0*f(x - 0.00050000000000000001) - 1000.0*f(x + 0.00050000000000000001)",
+        {"x"},
+    )
+
 
 def test_integrate2c():
 

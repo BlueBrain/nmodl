@@ -643,15 +643,27 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     # differentiate w.r.t. x
     diff = expr.diff(x).simplify()
 
+    # could be something generic like f'(x), in which case we use finite differences
+    if needs_finite_differences(diff):
+        diff = (
+            transform_expression(diff, discretize_derivative)
+            .subs({finite_difference_step_variable(x): 1e-3})
+            .evalf()
+        )
+
+    # the codegen method does not like undefined function calls, so we extract
+    # them here
+    custom_fcts = {str(f.func): str(f.func) for f in diff.atoms(sp.Function)}
+
     # try to simplify expression in terms of existing variables
     # ignore any exceptions here, since we already have a valid solution
     # so if this further simplification step fails the error is not fatal
     try:
         # if expression is equal to one of the supplied vars, replace with this var
         # can do a simple string comparison here since a var cannot be further simplified
-        diff_as_string = sp.ccode(diff)
+        diff_as_string = sp.ccode(diff, user_functions=custom_fcts)
         for v in sympy_vars:
-            if diff_as_string == sp.ccode(sympy_vars[v]):
+            if diff_as_string == sp.ccode(sympy_vars[v], user_functions=custom_fcts):
                 diff = sympy_vars[v]
 
         # or if equal to rhs of one of the supplied equations, replace with lhs
@@ -672,4 +684,4 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
         pass
 
     # return result as C code in NEURON format
-    return sp.ccode(diff.evalf())
+    return sp.ccode(diff.evalf(), user_functions=custom_fcts)
