@@ -29,9 +29,7 @@ def _equivalent(
     lhs = lhs.replace("pow(", "Pow(")
     rhs = rhs.replace("pow(", "Pow(")
     sympy_vars = {
-        var if isinstance(var, str) else str(var): (
-            sp.symbols(var, real=True) if isinstance(var, str) else var
-        )
+        str(var): (sp.symbols(var, real=True) if isinstance(var, str) else var)
         for var in vars
     }
     for l, r in zip(lhs.split("=", 1), rhs.split("=", 1)):

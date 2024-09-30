@@ -609,9 +609,7 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     vars.discard(dependent_var)
     # declare all other supplied variables
     sympy_vars = {
-        var if isinstance(var, str) else str(var): (
-            sp.symbols(var, real=True) if isinstance(var, str) else var
-        )
+        str(var): (sp.symbols(var, real=True) if isinstance(var, str) else var)
         for var in vars
     }
     sympy_vars[dependent_var] = x
