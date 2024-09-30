@@ -8,8 +8,7 @@
 #include <string>
 #include <utility>
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "config/config.h"
 #include "parser/diffeq_driver.hpp"
@@ -21,7 +20,6 @@
 //=============================================================================
 
 using namespace nmodl::test_utils;
-using Catch::Matchers::ContainsSubstring;
 
 // Driver is defined as global to store all the units inserted to it and to be
 // able to define complex units based on base units

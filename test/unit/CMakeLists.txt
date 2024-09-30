@@ -94,6 +94,12 @@ endif()
 # Without main from Catch2
 target_link_libraries(testnmodl PRIVATE Catch2::Catch2)
 
+if(NMODL_3RDPARTY_USE_CATCH2)
+  target_compile_definitions(testnmodl PRIVATE NMODL_CATCH2_VERSION_MAJOR=3)
+else()
+  target_compile_definitions(testnmodl PRIVATE NMODL_CATCH2_VERSION_MAJOR=${Catch2_VERSION_MAJOR})
+endif()
+
 cpp_cc_configure_sanitizers(TARGET testnmodl)
 # See https://github.com/catchorg/Catch2/issues/2424
 string(REPLACE ";" ";ENVIRONMENT;" _environment_vars_list "${test_env}")

@@ -213,7 +213,15 @@ set(MEMORYCHECK_COMMAND_OPTIONS
 # do not enable tests if nmodl is used as submodule
 if(NOT NMODL_AS_SUBPROJECT AND NMODL_ENABLE_TESTS)
   cpp_cc_git_submodule(eigen)
-  cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
+
+  if(NMODL_3RDPARTY_USE_CATCH2)
+    cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
+  else()
+    find_package(Catch2)
+  endif()
+
+  message(STATUS "Catch2 VERSION: ${Catch2_VERSION}")
+
   if(NMODL_3RDPARTY_USE_CATCH2)
     # If we're using the submodule then make sure the Catch.cmake helper can be found. In newer
     # versions of Catch2, and with hpc-coding-conventions#130, this should just work...

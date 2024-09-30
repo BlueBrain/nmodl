@@ -1,5 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -9,7 +8,6 @@
 using namespace nmodl;
 using namespace visitor;
 
-using Catch::Matchers::ContainsSubstring;
 using nmodl::parser::NmodlDriver;
 
 

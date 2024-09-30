@@ -8,7 +8,7 @@
 #include <memory.h>
 #include <string>
 
-#include <catch2/catch_test_macros.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "lexer/modtoken.hpp"
 #include "lexer/nmodl_lexer.hpp"

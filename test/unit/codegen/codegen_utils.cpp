@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <catch2/catch_test_macros.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_utils.hpp"

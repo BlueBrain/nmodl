@@ -5,8 +5,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "test/unit/utils/catch2.hpp"
 #include "utils/fmt.h"
-#include <catch2/catch_test_macros.hpp>
 
 #include "ast/double.hpp"
 #include "ast/factor_def.hpp"

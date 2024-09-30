@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "ast/program.hpp"
 #include "parser/nmodl_driver.hpp"
@@ -153,8 +152,7 @@ SCENARIO("Symbol table generation with Perf stat visitor", "[visitor][performanc
         WHEN("Perf visitor pass runs before symtab visitor") {
             PerfVisitor v;
             THEN("exception is thrown") {
-                REQUIRE_THROWS_WITH(v.visit_program(*ast),
-                                    Catch::Matchers::ContainsSubstring("table not setup"));
+                REQUIRE_THROWS_WITH(v.visit_program(*ast), ContainsSubstring("table not setup"));
             }
         }
     }
