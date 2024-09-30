@@ -98,6 +98,8 @@ $(document).ready(function(){initNavTree('sympy__solver_8cpp.html',''); initResi
 <div class="contents">
 <div class="textblock"><code>#include &lt;catch2/catch_test_macros.hpp&gt;</code><br />
 <code>#include &lt;catch2/matchers/catch_matchers_string.hpp&gt;</code><br />
+<code>#include &lt;pybind11/embed.h&gt;</code><br />
+<code>#include &lt;pybind11/stl.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="program_8hpp_source.html">ast/program.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__coreneuron__cpp__visitor_8hpp_source.html">codegen/codegen_coreneuron_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="nmodl__driver_8hpp_source.html">parser/nmodl_driver.hpp</a>&quot;</code><br />
@@ -160,7 +162,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00249">249</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00252">252</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -211,7 +213,7 @@ Functions</h2></td></tr>
 <p><code>require_fail</code> requires that the equations are different. Used only for unit-test this function</p>
 <dl class="section warning"><dt>Warning</dt><dd>do not use this method when there are tmp variables not in the form: tmp_&lt;number&gt; </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00126">126</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00129">129</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -231,7 +233,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00085">85</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00088">88</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -279,7 +281,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00045">45</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00048">48</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -299,7 +301,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00231">231</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00234">234</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -329,7 +331,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00255">255</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00258">258</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -359,7 +361,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00328">328</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00331">331</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -389,7 +391,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01527">1527</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01530">1530</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -419,7 +421,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01836">1836</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01839">1839</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -449,7 +451,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01761">1761</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l01764">1764</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -481,7 +483,7 @@ Functions</h2></td></tr>
 <p>sympy 1.9 able to solve ode but not older versions</p>
 <p>sympy 1.4 able to solve ode but not older versions</p>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00371">371</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00374">374</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
@@ -513,7 +515,7 @@ Functions</h2></td></tr>
 <p>new derivative block with EigenNewtonSolverBlock node</p>
 <p>EigenNewtonSolverBlock in each derivative block</p>
 
-<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00621">621</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="sympy__solver_8cpp_source.html#l00624">624</a> of file <a class="el" href="sympy__solver_8cpp_source.html">sympy_solver.cpp</a>.</p>
 
 </div>
 </div>
