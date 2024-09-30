@@ -50,7 +50,7 @@ jobs:
       - name: Run build-wrapper
         working-directory: ${{runner.workspace}}/nmodl
         run: |
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} cmake --build build/ --verbose --parallel
       - name: Run sonar-scanner
         continue-on-error: true
         env:
