@@ -27,7 +27,7 @@ auto run_cvode_visitor(const std::string& text) {
 }
 
 
-TEST_CASE("Make sure DERIVATIVE block is copied properly", "[visitor][cvode]") {
+TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
     GIVEN("DERIVATIVE block") {
         std::string nmodl_text = R"(
             NEURON	{

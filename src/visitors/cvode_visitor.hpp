@@ -31,16 +31,19 @@ namespace visitor {
 class CvodeVisitor: public AstVisitor {
   private:
     /// The copy of the derivative block of a given mod file
-    std::shared_ptr<ast::DerivativeBlock> der_block = nullptr;
+    std::shared_ptr<ast::DerivativeBlock> derivative_block = nullptr;
 
     /// true while visiting differential equation
-    bool differential_equation = false;
+    bool in_differential_equation = false;
 
     /// global symbol table
     symtab::SymbolTable* program_symtab = nullptr;
 
-    /// visiting derivative block
-    bool derivative_block = false;
+    /// true while we are visiting a CVODE block
+    bool in_cvode_block = false;
+
+    /// index of the block to modify (0 = function block, 1 = Jacobian block)
+    int block_index = 0;
 
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
@@ -48,6 +51,7 @@ class CvodeVisitor: public AstVisitor {
     void visit_cvode_block(ast::CvodeBlock& node) override;
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
+    void visit_statement_block(ast::StatementBlock& node) override;
 };
 
 /** \} */  // end of visitor_classes

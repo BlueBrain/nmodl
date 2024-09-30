@@ -9,6 +9,7 @@
 
 #include <set>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace nmodl {
@@ -44,6 +45,11 @@ std::tuple<std::string, std::string> call_analytic_diff(
     const std::vector<std::string>& expressions,
     const std::set<std::string>& used_names_in_block);
 
+std::tuple<std::string, std::string> call_diff2c(
+    const std::string& expression,
+    const std::string& variable,
+    const std::unordered_map<std::string, int>& indexed_vars = {});
+
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;
     decltype(&finalize_interpreter_func) finalize_interpreter;
@@ -51,6 +57,7 @@ struct pybind_wrap_api {
     decltype(&call_solve_linear_system) solve_linear_system;
     decltype(&call_diffeq_solver) diffeq_solver;
     decltype(&call_analytic_diff) analytic_diff;
+    decltype(&call_diff2c) diff2c;
 };
 
 #ifdef _WIN32
