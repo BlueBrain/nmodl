@@ -9,7 +9,7 @@
 
 /**
  * \file
- * \brief \copybrief nmodl::visitor::DerivativeOriginalVisitor
+ * \brief \copybrief nmodl::visitor::CvodeVisitor
  */
 
 #include "symtab/decl.hpp"
@@ -25,17 +25,12 @@ namespace visitor {
  */
 
 /**
- * \class DerivativeOriginalVisitor
- * \brief Make a copy of the `DERIVATIVE` block (if it exists), and insert back as
- * `DERIVATIVE_ORIGINAL_FUNCTION` block.
- *
- * If \ref SympySolverVisitor runs successfully, it replaces the original
- * solution. This block is inserted before that to prevent losing access to
- * information about the block.
+ * \class CvodeVisitor
+ * \brief Visitor used for generating the necessary AST nodes for CVODE
  */
 class CvodeVisitor: public AstVisitor {
   private:
-    /// The copy of the derivative block we are solving
+    /// The copy of the derivative block of a given mod file
     std::shared_ptr<ast::DerivativeBlock> der_block = nullptr;
 
     /// true while visiting differential equation

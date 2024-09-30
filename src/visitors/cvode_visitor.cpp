@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "visitors/derivative_original_visitor.hpp"
+#include "visitors/cvode_visitor.hpp"
 
 #include "ast/all.hpp"
 #include "lexer/token_mapping.hpp"
@@ -52,7 +52,7 @@ void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
 
     if (name->is_prime_name()) {
         auto varname = "D" + name->get_node_name();
-        logger->debug("DerivativeOriginalVisitor :: replacing {} with {} on LHS of {}",
+        logger->debug("CvodeVisitor :: replacing {} with {} on LHS of {}",
                       name->get_node_name(),
                       varname,
                       to_nmodl(node));
@@ -75,7 +75,7 @@ void CvodeVisitor::visit_program(ast::Program& node) {
         node.emplace_back_node(der_node);
     }
 
-    // re-visit the AST since we now inserted the DERIVATIVE_ORIGINAL block
+    // re-visit the AST since we now inserted the CVODE block
     node.visit_children(*this);
 }
 
