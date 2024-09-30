@@ -8,8 +8,7 @@
 #include <string>
 #include <utility>
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "ast/program.hpp"
 #include "lexer/modtoken.hpp"
@@ -63,7 +62,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE SIX 6 DEFINE NSTEP SIX") {
             THEN("parser throws an error") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE SIX 6 DEFINE NSTEP SIX"),
-                                    Catch::Matchers::ContainsSubstring("unexpected INVALID_TOKEN"));
+                                    ContainsSubstring("unexpected INVALID_TOKEN"));
             }
         }
     }
@@ -72,7 +71,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP 6.0") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP 6.0"),
-                                    Catch::Matchers::ContainsSubstring("unexpected REAL"));
+                                    ContainsSubstring("unexpected REAL"));
             }
         }
     }
@@ -81,7 +80,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP"),
-                                    Catch::Matchers::ContainsSubstring("expecting INTEGER"));
+                                    ContainsSubstring("expecting INTEGER"));
             }
         }
     }
@@ -90,7 +89,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE NSTEP SIX") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE NSTEP SIX"),
-                                    Catch::Matchers::ContainsSubstring("expecting INTEGER"));
+                                    ContainsSubstring("expecting INTEGER"));
             }
         }
     }
@@ -99,7 +98,7 @@ SCENARIO("NMODL can define macros using DEFINE keyword", "[parser]") {
         WHEN("DEFINE 6") {
             THEN("parser throws an exception") {
                 REQUIRE_THROWS_WITH(is_valid_construct("DEFINE 6"),
-                                    Catch::Matchers::ContainsSubstring("expecting NAME"));
+                                    ContainsSubstring("expecting NAME"));
             }
         }
     }
@@ -161,18 +160,17 @@ SCENARIO("NMODL parser running number of invalid NMODL constructs") {
 SCENARIO("Check that the parser doesn't crash when passing invalid INCLUDE constructs") {
     GIVEN("An empty filename") {
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"\""),
-                            Catch::Matchers::ContainsSubstring("empty filename"));
+                            ContainsSubstring("empty filename"));
     }
 
     GIVEN("An missing included file") {
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"unknown.file\""),
-                            Catch::Matchers::ContainsSubstring(
-                                "can not open file : \"unknown.file\""));
+                            ContainsSubstring("can not open file : \"unknown.file\""));
     }
 
     GIVEN("An invalid included file") {
         REQUIRE_THROWS_WITH(is_valid_construct("INCLUDE \"included.file\""),
-                            Catch::Matchers::ContainsSubstring("unexpected End of file"));
+                            ContainsSubstring("unexpected End of file"));
     }
 }
 
@@ -187,9 +185,9 @@ SCENARIO("NEURON block can add CURIE information", "[parser][represents]") {
     GIVEN("Incomplete CURIE information statement") {
         THEN("parser throws an error") {
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS }"),
-                                Catch::Matchers::ContainsSubstring("Lexer Error"));
+                                ContainsSubstring("Lexer Error"));
             REQUIRE_THROWS_WITH(is_valid_construct("NEURON { REPRESENTS NCIT}"),
-                                Catch::Matchers::ContainsSubstring("Lexer Error"));
+                                ContainsSubstring("Lexer Error"));
         }
     }
 }

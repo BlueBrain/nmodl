@@ -5,8 +5,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#define CATCH_CONFIG_RUNNER
+
+#include "test/unit/utils/catch2.hpp"
+#if NMODL_CATCH2_VERSION_MAJOR == 3
 #include <catch2/catch_session.hpp>
-#include <catch2/catch_test_macros.hpp>
+#endif
 
 #include "pybind/pyembed.hpp"
 #include "utils/logger.hpp"

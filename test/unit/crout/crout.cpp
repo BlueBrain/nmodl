@@ -7,7 +7,7 @@
 
 #include "crout/crout.hpp"
 
-#include <catch2/catch_test_macros.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include <chrono>
 #include <iostream>

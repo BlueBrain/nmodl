@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "ast/program.hpp"
 #include "codegen/codegen_neuron_cpp_visitor.hpp"
@@ -17,8 +16,6 @@
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/solve_block_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
-
-using Catch::Matchers::ContainsSubstring;
 
 using namespace nmodl;
 using namespace visitor;

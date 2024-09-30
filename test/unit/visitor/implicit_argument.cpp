@@ -13,13 +13,10 @@
 #include "visitors/symtab_visitor.hpp"
 #include "visitors/visitor_utils.hpp"
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 using namespace nmodl;
 using nmodl::test_utils::reindent_text;
-
-using Catch::Matchers::ContainsSubstring;  // ContainsSubstring in newer Catch2
 
 //=============================================================================
 // Implicit visitor tests

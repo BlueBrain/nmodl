@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include <catch2/catch_test_macros.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include "lexer/unit_lexer.hpp"
 #include "parser/unit_driver.hpp"

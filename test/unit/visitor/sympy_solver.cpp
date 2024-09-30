@@ -5,8 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include <catch2/catch_test_macros.hpp>
-#include <catch2/matchers/catch_matchers_string.hpp>
+#include "test/unit/utils/catch2.hpp"
 
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
@@ -32,8 +31,6 @@ using namespace codegen;
 using namespace visitor;
 using namespace test;
 using namespace test_utils;
-
-using Catch::Matchers::ContainsSubstring;  // ContainsSubstring in newer Catch2
 
 using nmodl::test_utils::reindent_text;
 
@@ -822,10 +819,9 @@ SCENARIO("Solve ODEs with derivimplicit method using SympySolverVisitor",
             "equations") {
             REQUIRE_THROWS_WITH(
                 run_sympy_solver_visitor(nmodl_text, false, false, AstNodeType::DERIVATIVE_BLOCK),
-                Catch::Matchers::ContainsSubstring(
-                    "State variable assignment(s) interleaved in system of "
-                    "equations/differential equations") &&
-                    Catch::Matchers::StartsWith("SympyReplaceSolutionsVisitor"));
+                ContainsSubstring("State variable assignment(s) interleaved in system of "
+                                  "equations/differential equations") &&
+                    StartsWith("SympyReplaceSolutionsVisitor"));
         }
     }
     GIVEN("Derivative block in control flow block") {
