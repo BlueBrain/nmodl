@@ -28,7 +28,12 @@ def _equivalent(
     """
     lhs = lhs.replace("pow(", "Pow(")
     rhs = rhs.replace("pow(", "Pow(")
-    sympy_vars = {var: sp.symbols(var, real=True) for var in vars}
+    sympy_vars = {
+        var if isinstance(var, str) else str(var): (
+            sp.symbols(var, real=True) if isinstance(var, str) else var
+        )
+        for var in vars
+    }
     for l, r in zip(lhs.split("=", 1), rhs.split("=", 1)):
         eq_l = sp.sympify(l, locals=sympy_vars)
         eq_r = sp.sympify(r, locals=sympy_vars)
@@ -98,6 +103,16 @@ def test_differentiate2c():
             ["g2 = sqrt(d) + 3", "g1 = 2*c", "g = g1 + g2"],
         ),
         "g",
+    )
+
+    assert _equivalent(
+        differentiate2c(
+            "(s[0] + s[1])*(z[0]*z[1]*z[2])*x",
+            "x",
+            {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
+        ),
+        "(s[0] + s[1])*(z[0]*z[1]*z[2])",
+        {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
     )
 
 
