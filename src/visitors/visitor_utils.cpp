@@ -9,6 +9,7 @@
 
 #include <map>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <string>
 
 #include "ast/all.hpp"
@@ -291,5 +292,10 @@ std::string get_full_var_name(const ast::VarName& node) {
 bool is_random_construct_function(const std::string& name) {
     return codegen::naming::RANDOM_FUNCTIONS_MAPPING.count(name) != 0;
 }
+
+bool is_nrn_pointing(const std::string& name) {
+    return name == codegen::naming::NRN_POINTING_METHOD;
+}
+
 
 }  // namespace nmodl

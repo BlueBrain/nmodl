@@ -647,6 +647,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
         return name == codegen::naming::NET_SEND_METHOD;
     }
 
+    bool is_nrn_pointing(const std::string& name) const noexcept {
+        return name == codegen::naming::NRN_POINTING_METHOD;
+    }
+
 
     /**
      * Checks if given function name is \c net_move
@@ -840,6 +844,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      * \param node The AST node representing the function call
      */
     virtual void print_net_send_call(const ast::FunctionCall& node) = 0;
+
+    /**
+     * Print \c nrn\_pointing.
+     */
+    virtual void print_nrn_pointing(const ast::FunctionCall& node);
 
 
     /**
@@ -1544,7 +1553,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void print_rename_state_vars() const;
 };
 
-/* Templated functions need to be defined in header file */
 template <typename T>
 void CodegenCppVisitor::print_vector_elements(const std::vector<T>& elements,
                                               const std::string& separator,

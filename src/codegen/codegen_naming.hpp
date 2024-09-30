@@ -50,6 +50,9 @@ static constexpr char NET_MOVE_METHOD[] = "net_move";
 /// net_send function call in nmodl
 static constexpr char NET_SEND_METHOD[] = "net_send";
 
+/// nrn_pointing function in nmodl
+static constexpr char NRN_POINTING_METHOD[] = "nrn_pointing";
+
 /// artificial cell keyword in nmodl
 static constexpr char ARTIFICIAL_CELL[] = "ARTIFICIAL_CELL";
 
@@ -178,10 +181,6 @@ static constexpr char THREAD_ARGS_PROTO[] = "_threadargsproto_";
 
 /// prefix for ion variable
 static constexpr char ION_VARNAME_PREFIX[] = "ion_";
-
-/// hoc_nrnpointerindex name
-static constexpr char NRN_POINTERINDEX[] = "hoc_nrnpointerindex";
-
 
 /// commonly used variables in verbatim block and how they
 /// should be mapped to new code generation backends
