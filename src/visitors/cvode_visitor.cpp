@@ -95,7 +95,7 @@ void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
             symbol->set_original_name(name->get_node_name());
             program_symtab->insert(symbol);
         }
-        if (block_index == 1) {
+        if (block_index == BlockIndex::JACOBIAN) {
             auto rhs = node.get_rhs();
             // map of all indexed symbols (need special treatment in SymPy)
             auto name_map = get_name_map(*rhs, name->get_node_name());

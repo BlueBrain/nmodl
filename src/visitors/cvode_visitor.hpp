@@ -19,6 +19,16 @@
 namespace nmodl {
 namespace visitor {
 
+enum class BlockIndex { FUNCTION = 0, JACOBIAN = 1 };
+
+inline BlockIndex& operator++(BlockIndex& index) {
+    if (index == BlockIndex::FUNCTION) {
+        index = BlockIndex::JACOBIAN;
+    } else {
+        index = BlockIndex::FUNCTION;
+    }
+    return index;
+}
 /**
  * \addtogroup visitor_classes
  * \{
@@ -42,8 +52,8 @@ class CvodeVisitor: public AstVisitor {
     /// true while we are visiting a CVODE block
     bool in_cvode_block = false;
 
-    /// index of the block to modify (0 = function block, 1 = Jacobian block)
-    int block_index = 0;
+    /// index of the block to modify
+    BlockIndex block_index = BlockIndex::FUNCTION;
 
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
