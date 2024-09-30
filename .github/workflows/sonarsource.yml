@@ -19,7 +19,7 @@ jobs:
       - name: Install packages
         run: |
           sudo apt-get install bison ccache flex lcov libfl-dev \
-            python3-dev python3-pip
+            python3-dev python3-pip catch2 libfmt-dev libspdlog-dev
         shell: bash
       - name: Set up Python3
         uses: actions/setup-python@v5
@@ -42,7 +42,10 @@ jobs:
           mkdir build
           cmake -S . -B build \
             -DPYTHON_EXECUTABLE=$(which python3) \
-            -DCMAKE_BUILD_TYPE=Release
+            -DNMODL_3RDPARTY_USE_SPDLOG=Off \
+            -DNMODL_3RDPARTY_USE_FMT=Off \
+            -DNMODL_3RDPARTY_USE_CATCH2=Off \
+            -DCMAKE_BUILD_TYPE=Debug
 
       - name: Run build-wrapper
         working-directory: ${{runner.workspace}}/nmodl
