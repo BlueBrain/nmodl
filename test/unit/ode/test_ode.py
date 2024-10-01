@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from nmodl.ode import differentiate2c, integrate2c
+import numpy as np
 
 import sympy as sp
 
@@ -100,15 +101,29 @@ def test_differentiate2c():
         "g",
     )
 
-    assert _equivalent(
-        differentiate2c(
-            "-f(x)",
-            "x",
-            {},
-        ),
-        "1000.0*f(x - 0.00050000000000000001) - 1000.0*f(x + 0.00050000000000000001)",
-        {"x"},
+    result = differentiate2c(
+        "-f(x)",
+        "x",
+        {},
     )
+    # instead of comparing the expression as a string, we convert the string
+    # back to an expression and insert various functions
+    for function in [sp.sin, sp.exp, sp.tanh]:
+        for value in np.linspace(-5, 5, 100):
+            np.testing.assert_allclose(
+                float(
+                    sp.sympify(result)
+                    .subs(sp.Function("f"), function)
+                    .subs({"x": value})
+                    .evalf()
+                ),
+                float(
+                    -sp.Derivative(function("x"))
+                    .as_finite_difference(1e-3)
+                    .subs({"x": value})
+                    .evalf()
+                ),
+            )
 
 
 def test_integrate2c():
