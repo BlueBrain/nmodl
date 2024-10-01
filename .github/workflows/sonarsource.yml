@@ -10,8 +10,8 @@ env:
 jobs:
   remove-label:
     runs-on: ubuntu-latest
-    if: ${{ github.event.label.name == 'run-sonarsource' }}
     steps:
+      - name: Remove label
         run: |
           gh pr edit $PR_URL --remove-label run-sonarsource
 
