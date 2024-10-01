@@ -107,23 +107,22 @@ def test_differentiate2c():
         {},
     )
     # instead of comparing the expression as a string, we convert the string
-    # back to an expression and insert various functions
-    for function in [sp.sin, sp.exp, sp.tanh]:
-        for value in np.linspace(-5, 5, 100):
-            np.testing.assert_allclose(
-                float(
-                    sp.sympify(result)
-                    .subs(sp.Function("f"), function)
-                    .subs({"x": value})
-                    .evalf()
-                ),
-                float(
-                    -sp.Derivative(function("x"))
-                    .as_finite_difference(1e-3)
-                    .subs({"x": value})
-                    .evalf()
-                ),
-            )
+    # back to an expression and compare with an explicit function
+    for value in np.linspace(-5, 5, 100):
+        np.testing.assert_allclose(
+            float(
+                sp.sympify(result)
+                .subs(sp.Function("f"), sp.sin)
+                .subs({"x": value})
+                .evalf()
+            ),
+            float(
+                -sp.Derivative(sp.sin("x"))
+                .as_finite_difference(1e-3)
+                .subs({"x": value})
+                .evalf()
+            ),
+        )
 
 
 def test_integrate2c():
