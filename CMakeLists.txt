@@ -214,14 +214,7 @@ set(MEMORYCHECK_COMMAND_OPTIONS
 if(NOT NMODL_AS_SUBPROJECT AND NMODL_ENABLE_TESTS)
   cpp_cc_git_submodule(eigen)
 
-  option(NMODL_3RDPARTY_USE_CATCH2 "Use the git submodule catch2" On)
-  if(NMODL_3RDPARTY_USE_CATCH2)
-    cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
-  else()
-    find_package(Catch2)
-  endif()
-
-  message(STATUS "Catch2 VERSION: ${Catch2_VERSION}")
+  cpp_cc_git_submodule(catch2 BUILD PACKAGE Catch2 REQUIRED)
 
   if(NMODL_3RDPARTY_USE_CATCH2)
     # If we're using the submodule then make sure the Catch.cmake helper can be found. In newer
