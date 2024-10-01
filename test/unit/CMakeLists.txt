@@ -94,14 +94,20 @@ endif()
 # Without main from Catch2
 target_link_libraries(testnmodl PRIVATE Catch2::Catch2)
 
-set(CMAKE_REQUIRED_LIBRARIES Catch2::Catch2)
-check_include_file_cxx("catch2/catch_version_macros.hpp" HAVE_CATCH2_V3)
-unset(CMAKE_REQUIRED_LIBRARIES)
-if(HAVE_CATCH2_V3)
-  target_compile_definitions(testnmodl PRIVATE NMODL_CATCH2_VERSION_MAJOR=3)
+if(NMODL_3RDPARTY_USE_CATCH2)
+  set(NMODL_CATCH2_VERSION_MAJOR 3)
 else()
-  target_compile_definitions(testnmodl PRIVATE NMODL_CATCH2_VERSION_MAJOR=2)
+  set(CMAKE_REQUIRED_LIBRARIES Catch2::Catch2)
+  check_include_file_cxx("catch2/catch_version_macros.hpp" HAVE_CATCH2_V3)
+  unset(CMAKE_REQUIRED_LIBRARIES)
+  if(HAVE_CATCH2_V3)
+    set(NMODL_CATCH2_VERSION_MAJOR 3)
+  else()
+    set(NMODL_CATCH2_VERSION_MAJOR 2)
+  endif()
 endif()
+target_compile_definitions(testnmodl
+                           PRIVATE NMODL_CATCH2_VERSION_MAJOR=${NMODL_CATCH2_VERSION_MAJOR})
 
 cpp_cc_configure_sanitizers(TARGET testnmodl)
 # See https://github.com/catchorg/Catch2/issues/2424
