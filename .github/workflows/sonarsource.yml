@@ -8,20 +8,16 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  remove-label:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Remove label
-        run: |
-          gh pr edit $PR_URL --remove-label run-sonarsource
-
   build:
     name: Build and analyze
-    needs: remove-label
+    if: ${{ github.event.label.name == 'run-sonarsource' }}
     runs-on: ubuntu-latest
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
     steps:
+      - name: Remove label
+        run: |
+          gh pr edit $PR_URL --remove-label run-sonarsource
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
