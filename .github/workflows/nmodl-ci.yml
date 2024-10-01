@@ -188,7 +188,7 @@ jobs:
       - name: Build Windows
         if: startsWith(matrix.config.os, 'windows')
         run: |
-          cmake --build build
+          cmake --build build --verbose
   
       - name: Build Linux/MacOS
         if: ${{ !startsWith(matrix.config.os, 'windows') }}
@@ -209,7 +209,7 @@ jobs:
           ccache -z
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
-          cmake --build build
+          cmake --build build --verbose
           ccache -vs 2>/dev/null || ccache -s
       - name: Test
         shell: bash
