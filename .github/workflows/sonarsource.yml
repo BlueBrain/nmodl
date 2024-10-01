@@ -8,17 +8,16 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  trigger:
+  remove-label:
     runs-on: ubuntu-latest
     if: ${{ github.event.label.name == 'run-sonarsource' }}
     steps:
-      - id: remove-label
         run: |
           gh pr edit $PR_URL --remove-label run-sonarsource
 
   build:
     name: Build and analyze
-    needs: trigger
+    needs: remove-label
     runs-on: ubuntu-latest
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
@@ -66,13 +65,3 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           sonar-scanner --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}"
-
-  on-pr-update:
-    needs:
-      - trigger
-      - build
-
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Success."
