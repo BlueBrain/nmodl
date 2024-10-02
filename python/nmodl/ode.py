@@ -247,6 +247,11 @@ def _interweave_eqs(F, J):
     return code
 
 
+def make_symbol(var, /):
+    """Create SymPy symbol from a variable."""
+    return sp.Symbol(var, real=True) if isinstance(var, str) else var
+
+
 def solve_lin_system(
     eq_strings,
     vars,
@@ -608,10 +613,7 @@ def differentiate2c(expression, dependent_var, vars, prev_expressions=None):
     vars = set(vars)
     vars.discard(dependent_var)
     # declare all other supplied variables
-    sympy_vars = {
-        str(var): (sp.symbols(var, real=True) if isinstance(var, str) else var)
-        for var in vars
-    }
+    sympy_vars = {str(var): make_symbol(var) for var in vars}
     sympy_vars[dependent_var] = x
 
     # parse string into SymPy equation
