@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from nmodl.ode import differentiate2c, integrate2c
+import numpy as np
+import pytest
 
 import sympy as sp
 
@@ -103,15 +105,35 @@ def test_differentiate2c():
         "g",
     )
 
-    assert _equivalent(
-        differentiate2c(
-            "(s[0] + s[1])*(z[0]*z[1]*z[2])*x",
-            "x",
-            {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
-        ),
-        "(s[0] + s[1])*(z[0]*z[1]*z[2])",
-        {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
+    result = differentiate2c(
+        "-f(x)",
+        "x",
+        {},
     )
+    # instead of comparing the expression as a string, we convert the string
+    # back to an expression and compare with an explicit function
+    for value in np.linspace(-5, 5, 100):
+        np.testing.assert_allclose(
+            float(
+                sp.sympify(result)
+                .subs(sp.Function("f"), sp.sin)
+                .subs({"x": value})
+                .evalf()
+            ),
+            float(
+                -sp.Derivative(sp.sin("x"))
+                .as_finite_difference(1e-3)
+                .subs({"x": value})
+                .evalf()
+            ),
+        )
+    with pytest.raises(ValueError):
+        differentiate2c(
+            "-f(x)",
+            "x",
+            {},
+            stepsize=-1,
+        )
 
 
 def test_integrate2c():

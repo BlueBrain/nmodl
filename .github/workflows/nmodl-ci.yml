@@ -16,7 +16,7 @@ on:
 
 env:
   CTEST_PARALLEL_LEVEL: 1
-  PYTHON_VERSION: 3.8
+  PYTHON_VERSION: 3.9
   DESIRED_CMAKE_VERSION: 3.15.0
 
 jobs:
@@ -33,9 +33,9 @@ jobs:
               glibc_asserts: ON
               os: ubuntu-22.04
           - config:
-              os: macos-12
-          - config:
               os: macos-13
+          - config:
+              os: macos-14
           - config:
               os: windows-latest
           # TODO: might be interesting to add the thread sanitizer too
@@ -72,7 +72,7 @@ jobs:
           brew install python@3.12 || true
           brew link --overwrite python@3.12
           brew install ccache coreutils bison boost flex ninja
-          echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin >> $GITHUB_PATH
+          echo /usr/local/opt/flex/bin:/usr/local/opt/bison/bin:/opt/homebrew/opt/flex/bin:/opt/homebrew/opt/bison/bin >> $GITHUB_PATH
           # Taken from https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources
           echo CMAKE_BUILD_PARALLEL_LEVEL=3 >> $GITHUB_ENV
         shell: bash
@@ -188,7 +188,7 @@ jobs:
       - name: Build Windows
         if: startsWith(matrix.config.os, 'windows')
         run: |
-          cmake --build build
+          cmake --build build --verbose
   
       - name: Build Linux/MacOS
         if: ${{ !startsWith(matrix.config.os, 'windows') }}
@@ -209,7 +209,7 @@ jobs:
           ccache -z
           # Older versions don't support -v (verbose)
           ccache -vs 2>/dev/null || ccache -s
-          cmake --build build
+          cmake --build build --verbose
           ccache -vs 2>/dev/null || ccache -s
       - name: Test
         shell: bash
