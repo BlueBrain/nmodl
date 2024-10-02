@@ -25,6 +25,7 @@
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/derivative_original_visitor.hpp"
 #include "visitors/function_callpath_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -403,17 +404,6 @@ int run_nmodl(int argc, const char* argv[]) {
             symtab->print(std::cout);
         }
 
-        ast_to_nmodl(*ast, filepath("ast"));
-
-        if (json_ast) {
-            std::string file{scratch_dir};
-            file += "/";
-            file += modfile;
-            file += ".ast.json";
-            logger->info("Writing AST into {}", file);
-            JSONVisitor(file).write(*ast);
-        }
-
         if (verbatim_rename) {
             logger->info("Running verbatim rename visitor");
             VerbatimVarRenameVisitor().visit_program(*ast);
@@ -497,11 +487,17 @@ int run_nmodl(int argc, const char* argv[]) {
         const bool sympy_linear = node_exists(*ast, ast::AstNodeType::LINEAR_BLOCK);
         const bool sympy_sparse = solver_exists(*ast, "sparse");
 
+        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api().initialize_interpreter();
+
+        if (neuron_code) {
+            logger->info("Running derivative visitor");
+            DerivativeOriginalVisitor().visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("derivative_original"));
+        }
+
         if (sympy_conductance || sympy_analytic || sympy_sparse || sympy_derivimplicit ||
             sympy_linear) {
-            nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
-                .api()
-                .initialize_interpreter();
             if (sympy_conductance) {
                 logger->info("Running sympy conductance visitor");
                 SympyConductanceVisitor().visit_program(*ast);
@@ -529,10 +525,8 @@ int run_nmodl(int argc, const char* argv[]) {
                 SymtabVisitor(update_symtab).visit_program(*ast);
                 ast_to_nmodl(*ast, filepath("sympy_solve"));
             }
-            nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
-                .api()
-                .finalize_interpreter();
         }
+        nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance().api().finalize_interpreter();
 
         {
             logger->info("Running cnexp visitor");
@@ -577,6 +571,18 @@ int run_nmodl(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("FunctionCallpathVisitor"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
+
+        ast_to_nmodl(*ast, filepath("ast"));
+
+        if (json_ast) {
+            std::string file{scratch_dir};
+            file += "/";
+            file += modfile;
+            file += ".ast.json";
+            logger->info("Writing AST into {}", file);
+            JSONVisitor(file).write(*ast);
+        }
+
 
         {
             auto blame_level = detailed_blame ? utils::BlameLevel::Detailed

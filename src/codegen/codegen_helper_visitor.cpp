@@ -636,6 +636,18 @@ void CodegenHelperVisitor::visit_nrn_state_block(const ast::NrnStateBlock& node)
     node.visit_children(*this);
 }
 
+void CodegenHelperVisitor::visit_derivative_original_function_block(
+    const ast::DerivativeOriginalFunctionBlock& node) {
+    info.der_block_function = &node;
+    node.visit_children(*this);
+}
+
+void CodegenHelperVisitor::visit_derivative_original_jacobian_block(
+    const ast::DerivativeOriginalJacobianBlock& node) {
+    info.der_block_jacobian = &node;
+    node.visit_children(*this);
+}
+
 
 void CodegenHelperVisitor::visit_procedure_block(const ast::ProcedureBlock& node) {
     info.procedures.push_back(&node);

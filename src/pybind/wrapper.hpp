@@ -7,13 +7,15 @@
 
 #pragma once
 
+#include <optional>
 #include <set>
 #include <string>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace nmodl {
 namespace pybind_wrappers {
-
 
 void initialize_interpreter_func();
 void finalize_interpreter_func();
@@ -44,6 +46,11 @@ std::tuple<std::string, std::string> call_analytic_diff(
     const std::vector<std::string>& expressions,
     const std::set<std::string>& used_names_in_block);
 
+std::tuple<std::string, std::string> call_diff2c(
+    const std::string& expression,
+    const std::pair<std::string, std::optional<int>>& variable,
+    const std::unordered_map<std::string, int>& indexed_vars = {});
+
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;
     decltype(&finalize_interpreter_func) finalize_interpreter;
@@ -51,6 +58,7 @@ struct pybind_wrap_api {
     decltype(&call_solve_linear_system) solve_linear_system;
     decltype(&call_diffeq_solver) diffeq_solver;
     decltype(&call_analytic_diff) analytic_diff;
+    decltype(&call_diff2c) diff2c;
 };
 
 #ifdef _WIN32

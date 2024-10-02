@@ -686,15 +686,15 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_ion_variable() override;
 
 
+    void print_cvode_definitions();
+
+
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
 
-
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
-
-
 
 
   public:
