@@ -35,8 +35,6 @@ jobs:
           - config:
               os: macos-13
           - config:
-              os: macos-14
-          - config:
               os: windows-latest
           # TODO: might be interesting to add the thread sanitizer too
           - config:
