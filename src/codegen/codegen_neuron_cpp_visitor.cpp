@@ -856,6 +856,14 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
         printer->fmt_line("static Symbol* _{}_sym;", ion.name);
     }
 
+    if (info.emit_cvode) {
+        printer->add_line("static Symbol** _atollist;");
+        printer->push_block("static HocStateTolerance _hoc_state_tol[] =");
+        // TODO: add stuff that iterates over `rangestate` in NOCMODL
+        printer->add_line("{0, 0}");
+        printer->pop_block(";");
+    }
+
     printer->add_line("static int mech_type;");
 
     if (info.point_process) {
@@ -1280,16 +1288,22 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                         i));
     }
 
+    if (info.emit_cvode) {
+        mech_register_args.push_back(
+            // TODO: figure out why the first parameter should be called "_cvode_ieq"
+            fmt::format("_nrn_mechanism_field<int>{{\"_cvode_ieq\", \"cvodeieq\"}} /* {} */",
+                        codegen_int_variables_size));
+    }
+
     printer->add_multi_line(fmt::format("{}", fmt::join(mech_register_args, ",\n")));
 
     printer->decrease_indent();
     printer->add_line(");");
     printer->add_newline();
 
-
     printer->fmt_line("hoc_register_prop_size(mech_type, {}, {});",
                       float_variables_size(),
-                      int_variables_size());
+                      int_variables_size() + static_cast<int>(info.emit_cvode));
 
     for (int i = 0; i < codegen_int_variables_size; ++i) {
         if (i != info.semantics[i].index) {
@@ -1347,6 +1361,18 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
     if (info.diam_used) {
         printer->fmt_line("{}._morphology_sym = hoc_lookup(\"morphology\");",
                           global_struct_instance());
+    }
+
+    if (info.emit_cvode) {
+        printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
+                          codegen_int_variables_size);
+        printer->fmt_line(
+            "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix,
+            info.mod_suffix);
+        printer->fmt_line("hoc_register_tolerance(mech_type, _hoc_state_tol, &_atollist);");
     }
 
     printer->pop_block();
@@ -1757,9 +1783,9 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
         )CODE");
         printer->chain_block("else");
     }
-    if (info.semantic_variable_count) {
+    if (info.semantic_variable_count || info.emit_cvode) {
         printer->fmt_line("_ppvar = nrn_prop_datum_alloc(mech_type, {}, _prop);",
-                          info.semantic_variable_count);
+                          info.semantic_variable_count + static_cast<int>(info.emit_cvode));
         printer->add_line("_nrn_mechanism_access_dparam(_prop) = _ppvar;");
     }
     printer->add_multi_line(R"CODE(
@@ -2201,6 +2227,8 @@ void CodegenNeuronCppVisitor::print_mechanism_variables_macros() {
     if (info.table_count > 0) {
         printer->add_line("void _nrn_thread_table_reg(int, nrn_thread_table_check_t);");
     }
+    // for CVODE
+    printer->add_line("extern void _cvode_abstol(Symbol**, double*, int);");
     if (info.for_netcon_used) {
         printer->add_line("int _nrn_netcon_args(void*, double***);");
     }
@@ -2273,6 +2301,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_nrn_destructor_declaration();
     print_nrn_alloc();
     print_function_prototypes();
+    print_cvode_definitions();
     print_point_process_function_definitions();
     print_setdata_functions();
     print_check_table_entrypoint();
@@ -2399,6 +2428,139 @@ void CodegenNeuronCppVisitor::print_net_receive_common_code() {
 
     printer->add_line("size_t id = 0;");
     printer->add_line("double t = nt->_t;");
+}
+
+void CodegenNeuronCppVisitor::print_cvode_definitions() {
+    if (!info.emit_cvode) {
+        return;
+    }
+    printer->add_newline(2);
+    printer->add_line("/* Functions related to CVODE codegen */");
+
+    /* return # of ODEs to solve */
+    printer->push_block(
+        fmt::format("static constexpr int ode_count_{}(int _type)", info.mod_suffix));
+    printer->fmt_line("return {};", info.num_equations);
+    printer->pop_block();
+
+    printer->add_newline(2);
+
+    const ParamVector args_setup = {{"", "const _nrn_model_sorted_token&", "", "_sorted_token"},
+                                    {"", "NrnThread*", "", "nt"},
+                                    {"", "Memb_list*", "", "_ml_arg"},
+                                    {"", "int", "", "_type"}};
+
+    ParamVector args_cvode = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
+                              {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
+                              {"", fmt::format("{}_NodeData&", info.mod_suffix), "", "node_data"},
+                              {"", "size_t", "", "id"},
+                              {"", "Datum*", "", "_ppvar"},
+                              {"", "Datum*", "", "_thread"},
+                              {"", "NrnThread*", "", "nt"}};
+
+    if (info.thread_callback_register) {
+        auto type_name = fmt::format("{}&", thread_variables_struct());
+        args_cvode.emplace_back("", type_name, "", "_thread_vars");
+    }
+
+    /* The internal spec function */
+    printer->fmt_push_block("static int ode_spec1_{}({})",
+                            info.mod_suffix,
+                            get_parameter_str(args_cvode));  // begin function definition
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    if (info.cvode_block) {
+        auto block = info.cvode_block->get_function_block();
+        print_statement_block(*block, false, false);
+    }
+
+    printer->add_line("return 0;");
+    printer->pop_block();  // end function definition
+
+    printer->add_newline(2);
+
+    /* Main spec function */
+    printer->push_block(fmt::format("static void ode_spec_{}({})",
+                                    info.mod_suffix,
+                                    get_parameter_str(args_setup)));  // begin function definition
+    printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->add_line("auto nodecount = _ml_arg->nodecount;");
+    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
+                          info.thread_var_thread_id);
+    }
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->fmt_line("ode_spec1_{}({});", info.mod_suffix, get_arg_str(args_cvode));
+
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
+
+    printer->add_newline(2);
+
+    /* map */
+    printer->push_block(
+        fmt::format("static void ode_map_{}(Prop* _prop, int equation_index, "
+                    "neuron::container::data_handle<double>* _pv, "
+                    "neuron::container::data_handle<double>* _pvdot, double* _atol, int _type)",
+                    info.mod_suffix));  // begin function definition
+    printer->add_line("auto* _ppvar = _nrn_mechanism_access_dparam(_prop);");
+    printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;", int_variables_size());
+    printer->push_block(fmt::format("for (int i = 0; i < ode_count_{}(0); i++)",
+                                    info.mod_suffix));  // begin for loop
+    printer->add_line("_pv[i] = _nrn_mechanism_get_param_handle(_prop, _slist1[i]);");
+    printer->add_line("_pvdot[i] = _nrn_mechanism_get_param_handle(_prop, _dlist1[i]);");
+    printer->add_line("_cvode_abstol(_atollist, _atol, i);");
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
+
+    printer->add_newline(2);
+
+    /* matsol instance (?) */
+    printer->push_block(fmt::format("static void ode_matsol_instance1_{}({})",
+                                    info.mod_suffix,
+                                    get_parameter_str(args_cvode)));  // begin function definition
+
+    if (info.cvode_block) {
+        // for mathematical details, see eq. (4.8) in:
+        // https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
+        auto block = info.cvode_block->get_diagonal_jacobian_block();
+        print_statement_block(*block, false, false);
+    }
+
+    printer->pop_block();  // end function definition
+
+    printer->add_newline(2);
+
+    /* matsol */
+    printer->push_block(fmt::format("static void ode_matsol_{}({})",
+                                    info.mod_suffix,
+                                    get_parameter_str(args_setup)));  // begin function definition
+    printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->add_line("auto nodecount = _ml_arg->nodecount;");
+    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
+                          info.thread_var_thread_id);
+    }
+    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->add_line("int node_id = node_data.nodeindices[id];");
+    printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
+    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    // TODO check if this can be replaced by ode_matsol1
+    printer->fmt_line("ode_matsol_instance1_{}({});", info.mod_suffix, get_arg_str(args_cvode));
+
+    printer->pop_block();  // end for loop
+    printer->pop_block();  // end function definition
 }
 
 void CodegenNeuronCppVisitor::print_net_receive() {

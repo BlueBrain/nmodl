@@ -686,6 +686,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_ion_variable() override;
 
 
+    void print_cvode_definitions();
+
+
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
