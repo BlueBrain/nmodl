@@ -434,6 +434,19 @@ int run_nmodl(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("unroll"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
+        if (neuron_code) {
+            nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
+                .api()
+                .initialize_interpreter();
+            logger->info("Running CVODE visitor");
+            CvodeVisitor().visit_program(*ast);
+            SymtabVisitor(update_symtab).visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("cvode"));
+            nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
+                .api()
+                .finalize_interpreter();
+        }
+
 
         /// note that we can not symtab visitor in update mode as we
         /// replace kinetic block with derivative block of same name
@@ -499,17 +512,10 @@ int run_nmodl(int argc, const char* argv[]) {
         const bool sympy_sparse = solver_exists(*ast, "sparse");
 
         if (sympy_conductance || sympy_analytic || sympy_sparse || sympy_derivimplicit ||
-            sympy_linear || neuron_code) {
+            sympy_linear) {
             nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
                 .api()
                 .initialize_interpreter();
-
-            if (neuron_code) {
-                logger->info("Running CVODE visitor");
-                CvodeVisitor().visit_program(*ast);
-                SymtabVisitor(update_symtab).visit_program(*ast);
-                ast_to_nmodl(*ast, filepath("cvode"));
-            }
 
             if (sympy_conductance) {
                 logger->info("Running sympy conductance visitor");
