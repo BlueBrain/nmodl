@@ -36,10 +36,7 @@ def _equivalent(
     """
     lhs = lhs.replace("pow(", "Pow(")
     rhs = rhs.replace("pow(", "Pow(")
-    sympy_vars = {
-        str(var): (sp.symbols(var, real=True) if isinstance(var, str) else var)
-        for var in vars
-    }
+    sympy_vars = {str(var): make_symbol(var) for var in vars}
     for l, r in zip(lhs.split("=", 1), rhs.split("=", 1)):
         eq_l = sp.sympify(l, locals=sympy_vars)
         eq_r = sp.sympify(r, locals=sympy_vars)
