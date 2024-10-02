@@ -5,6 +5,7 @@
 
 from nmodl.ode import differentiate2c, integrate2c
 import numpy as np
+import pytest
 
 import sympy as sp
 
@@ -122,6 +123,13 @@ def test_differentiate2c():
                 .subs({"x": value})
                 .evalf()
             ),
+        )
+    with pytest.raises(ValueError):
+        differentiate2c(
+            "-f(x)",
+            "x",
+            {},
+            stepsize=-1,
         )
 
 
