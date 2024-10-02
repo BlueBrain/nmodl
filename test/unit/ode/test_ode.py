@@ -3,14 +3,21 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from nmodl.ode import differentiate2c, integrate2c
-import pytest
+from nmodl.ode import differentiate2c, integrate2c, make_symbol
 
 import sympy as sp
 
 
+def make_symbols(iterable):
+    return [make_symbol(arg) for arg in iterable]
+
+
 def _equivalent(
-    lhs, rhs, vars=["a", "b", "c", "d", "e", "f", "v", "w", "x", "y", "z", "t", "dt"]
+    lhs,
+    rhs,
+    vars=make_symbols(
+        ["a", "b", "c", "d", "e", "f", "v", "w", "x", "y", "z", "t", "dt"]
+    ),
 ):
     """Helper function to test equivalence of analytic expressions
     Analytic expressions can often be written in many different,
@@ -29,10 +36,7 @@ def _equivalent(
     """
     lhs = lhs.replace("pow(", "Pow(")
     rhs = rhs.replace("pow(", "Pow(")
-    sympy_vars = {
-        str(var): (sp.symbols(var, real=True) if isinstance(var, str) else var)
-        for var in vars
-    }
+    sympy_vars = {str(var): make_symbol(var) for var in vars}
     for l, r in zip(lhs.split("=", 1), rhs.split("=", 1)):
         eq_l = sp.sympify(l, locals=sympy_vars)
         eq_r = sp.sympify(r, locals=sympy_vars)
