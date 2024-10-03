@@ -118,7 +118,7 @@ endif()
 # If we're building from the submodule, make sure we pass -fPIC so that we can link the code into a
 # shared library later.
 if(NMODL_3RDPARTY_USE_FMT)
-  set_property(TARGET fmt::fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
+  set_property(TARGET fmt PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 if(NOT NMODL_3RDPARTY_USE_FMT
    AND ((NMODL_PGI_COMPILER AND CMAKE_CXX_COMPILER_VERSION LESS_EQUAL 22.3.0)
