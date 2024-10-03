@@ -679,7 +679,13 @@
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">solution</span><span class="p">,</span><span class="w"> </span><span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
-<div class="viewcode-block" id="differentiate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.differentiate2c">[docs]</a><span class="k">def</span> <span class="nf">differentiate2c</span><span class="p">(</span><span class="n">expression</span><span class="p">,</span> <span class="n">dependent_var</span><span class="p">,</span> <span class="nb">vars</span><span class="p">,</span> <span class="n">prev_expressions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="differentiate2c"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.differentiate2c">[docs]</a><span class="k">def</span> <span class="nf">differentiate2c</span><span class="p">(</span>
+    <span class="n">expression</span><span class="p">,</span>
+    <span class="n">dependent_var</span><span class="p">,</span>
+    <span class="nb">vars</span><span class="p">,</span>
+    <span class="n">prev_expressions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">stepsize</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytically differentiate supplied expression, return solution as C code.</span>
 
 <span class="sd">    Expression should be of the form &quot;f(x)&quot;, where &quot;x&quot; is</span>
@@ -706,11 +712,15 @@
 <span class="sd">        vars: set of all other variables used in expression, e.g. {&quot;a&quot;, &quot;b&quot;, &quot;c&quot;}</span>
 <span class="sd">        prev_expressions: time-ordered list of preceeding expressions</span>
 <span class="sd">                          to evaluate &amp; substitute, e.g. [&quot;b = x + c&quot;, &quot;a = 12*b&quot;]</span>
+<span class="sd">        stepsize: in case an analytic expression is not possible, finite differences are used;</span>
+<span class="sd">                  this argument sets the step size</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        string containing analytic derivative of expression (including any substitutions</span>
 <span class="sd">        of variables from supplied prev_expressions) w.r.t. dependent_var as C code.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">stepsize</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;arg `stepsize` must be &gt; 0&quot;</span><span class="p">)</span>
     <span class="n">prev_expressions</span> <span class="o">=</span> <span class="n">prev_expressions</span> <span class="ow">or</span> <span class="p">[]</span>
     <span class="c1"># every symbol (a.k.a variable) that SymPy</span>
     <span class="c1"># is going to manipulate needs to be declared</span>
@@ -754,15 +764,27 @@
     <span class="c1"># differentiate w.r.t. x</span>
     <span class="n">diff</span> <span class="o">=</span> <span class="n">expr</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span>
 
+    <span class="c1"># could be something generic like f&#39;(x), in which case we use finite differences</span>
+    <span class="k">if</span> <span class="n">needs_finite_differences</span><span class="p">(</span><span class="n">diff</span><span class="p">):</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">transform_expression</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">discretize_derivative</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">subs</span><span class="p">({</span><span class="n">finite_difference_step_variable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="n">stepsize</span><span class="p">})</span>
+            <span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="c1"># the codegen method does not like undefined function calls, so we extract</span>
+    <span class="c1"># them here</span>
+    <span class="n">custom_fcts</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">func</span><span class="p">):</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">func</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">diff</span><span class="o">.</span><span class="n">atoms</span><span class="p">(</span><span class="n">sp</span><span class="o">.</span><span class="n">Function</span><span class="p">)}</span>
+
     <span class="c1"># try to simplify expression in terms of existing variables</span>
     <span class="c1"># ignore any exceptions here, since we already have a valid solution</span>
     <span class="c1"># so if this further simplification step fails the error is not fatal</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="c1"># if expression is equal to one of the supplied vars, replace with this var</span>
         <span class="c1"># can do a simple string comparison here since a var cannot be further simplified</span>
-        <span class="n">diff_as_string</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+        <span class="n">diff_as_string</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sympy_vars</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">diff_as_string</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">sympy_vars</span><span class="p">[</span><span class="n">v</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">diff_as_string</span> <span class="o">==</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">sympy_vars</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">):</span>
                 <span class="n">diff</span> <span class="o">=</span> <span class="n">sympy_vars</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
 
         <span class="c1"># or if equal to rhs of one of the supplied equations, replace with lhs</span>
@@ -783,7 +805,7 @@
         <span class="k">pass</span>
 
     <span class="c1"># return result as C code in NEURON format</span>
-    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">evalf</span><span class="p">())</span></div>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">ccode</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">evalf</span><span class="p">(),</span> <span class="n">user_functions</span><span class="o">=</span><span class="n">custom_fcts</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

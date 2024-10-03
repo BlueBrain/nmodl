@@ -340,7 +340,7 @@ file.</p>
 <span id="nmodl-ode-module"></span><h2>nmodl.ode module<a class="headerlink" href="#module-nmodl.ode" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="nmodl.ode.differentiate2c">
-<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">differentiate2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_expressions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#differentiate2c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.differentiate2c" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">nmodl.ode.</span></span><span class="sig-name descname"><span class="pre">differentiate2c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent_var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vars</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prev_expressions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stepsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/nmodl/ode.html#differentiate2c"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nmodl.ode.differentiate2c" title="Permalink to this definition"></a></dt>
 <dd><p>Analytically differentiate supplied expression, return solution as C code.</p>
 <p>Expression should be of the form “f(x)”, where “x” is
 the dependent variable, and the function returns df(x)/dx</p>
@@ -364,6 +364,8 @@ the prev_expressions, then it is simplified to this expression.</p>
 <li><p><strong>vars</strong> – set of all other variables used in expression, e.g. {“a”, “b”, “c”}</p></li>
 <li><p><strong>prev_expressions</strong> – time-ordered list of preceeding expressions
 to evaluate &amp; substitute, e.g. [“b = x + c”, “a = 12*b”]</p></li>
+<li><p><strong>stepsize</strong> – in case an analytic expression is not possible, finite differences are used;
+this argument sets the step size</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
