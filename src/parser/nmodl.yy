@@ -268,7 +268,7 @@
 %type   <ast::Conserve*>                    conserve
 %type   <ast::Expression*>                  react
 %type   <ast::Compartment*>                 compartment
-%type   <ast::LonDiffuse*>                   longitudinal_diffusion
+%type   <ast::LonDiffuse*>                  longitudinal_diffusion
 %type   <ast::NameVector>                   name_list
 %type   <ast::ExpressionVector>             unit_block_body
 %type   <ast::UnitDef*>                     unit_definition
