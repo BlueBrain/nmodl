@@ -218,8 +218,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1parser_1_1diffeq_1_1_diff_eq_context.html#a92f7bdeedb0c276227253254a5202d51">nmodl::parser::diffeq::DiffEqContext</a>
 </li>
 <li>get_expression()
-: <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#a9b836338bee4c554f4fc4b496caf5c5b">nmodl::ast::Compartment</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_diff_eq_expression.html#a1b0aa5e1d1035c373f932513790cc0fe">nmodl::ast::DiffEqExpression</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_diff_eq_expression.html#a1b0aa5e1d1035c373f932513790cc0fe">nmodl::ast::DiffEqExpression</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_expression_statement.html#a9a844a76e3628356f9cd04375c60186e">nmodl::ast::ExpressionStatement</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_lon_difuse.html#a8a5b06209388627badeb9c3db43f0cc9">nmodl::ast::LonDifuse</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_paren_expression.html#a86c758447bf98ef75d1a6eb3bbcdbd1a">nmodl::ast::ParenExpression</a>
@@ -270,6 +269,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 </li>
 <li>get_index()
 : <a class="el" href="classnmodl_1_1ast_1_1_var_name.html#a095bfbb4c82c18b9a7d3f4c0a1e33a76">nmodl::ast::VarName</a>
+</li>
+<li>get_index_name()
+: <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#a158e72afe5f80d909bd161fa613517cd">nmodl::ast::Compartment</a>
 </li>
 <li>get_indexed_name()
 : <a class="el" href="classnmodl_1_1visitor_1_1_indexed_name_visitor.html#a5931caefcbb91b6136a8f93e275c7346">nmodl::visitor::IndexedNameVisitor</a>
@@ -339,7 +341,6 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1ast_1_1_argument.html#ae434a4926f38ed33dbf116f487b8de8d">nmodl::ast::Argument</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html#a1cce10fb56a5fb8b1d72744003c7bcb3">nmodl::ast::AssignedDefinition</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a411760e6b55cfcfa8ffd45b625a4c7e1">nmodl::ast::BbcorePointerVar</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#ad9229fa93359bd3e0220657de89c03e0">nmodl::ast::Compartment</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html#a6f40bdc1c063cb4c0ea0267347d50eba">nmodl::ast::ConstantVar</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_define.html#a39ae87cb14f4d81aa339034e78c533db">nmodl::ast::Define</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_derivative_block.html#a3826762ca4ac5f9bff100a648b99cc65">nmodl::ast::DerivativeBlock</a>
@@ -377,8 +378,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1units_1_1_unit.html#ab643356ecc04c78b3d8ea3a528d0d9fd">nmodl::units::Unit</a>
 </li>
 <li>get_names()
-: <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#a2eb62d66f3d0904d73404f3983e2584d">nmodl::ast::Compartment</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_lon_difuse.html#a421ee46478af8f26d973d50fd3ef93a8">nmodl::ast::LonDifuse</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_lon_difuse.html#a421ee46478af8f26d973d50fd3ef93a8">nmodl::ast::LonDifuse</a>
 </li>
 <li>get_nmodl_name()
 : <a class="el" href="classnmodl_1_1ast_1_1_after_block.html#a4ac2358f334825dcd8d9f4e180da58ff">nmodl::ast::AfterBlock</a>
@@ -838,12 +838,12 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1ast_1_1_after_block.html#abec76b3b7fcc2f323b6e0b6600b190db">nmodl::ast::AfterBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_argument.html#af00bcab43990d828ce275814866f40a0">nmodl::ast::Argument</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_assigned_block.html#adb0680aebeb9e4a0fb2a344cd1fdaa74">nmodl::ast::AssignedBlock</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html#a7cb7bca2a09d51ffb281203aa441ddd9">nmodl::ast::AssignedDefinition</a>
-, <a class="el" href="group__ast__class.html#gacb568ad839f6ec0eae735e8cf96c8ae7">nmodl::ast::Ast</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_b_a_block.html#a217bfab8c7d561a9ede3258f4b1a927b">nmodl::ast::BABlock</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_b_a_block_type.html#ae1415ee1818391237beb106fdf7d6c70">nmodl::ast::BABlockType</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer.html#a14cf4e0993824ea8e7a6476781665471">nmodl::ast::BbcorePointer</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html#af76a78338026e7d346aefbe86762aa79">nmodl::ast::BbcorePointerVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html#a7d4099c418e3cd9178e9e9eef0d3f503">nmodl::ast::AssignedDefinition</a>
+, <a class="el" href="group__ast__class.html#ga153cbb003a93974756d7842f01679902">nmodl::ast::Ast</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_b_a_block.html#a6f8555a110633f3ef4c94cd6618dc0b0">nmodl::ast::BABlock</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_b_a_block_type.html#a46006e401bbe6653069921a2e9633eef">nmodl::ast::BABlockType</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer.html#ad4332c3f2689af81b064ad8c1f4ee913">nmodl::ast::BbcorePointer</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a9e8d2da3218d7aa89e6cbbc94da2adfb">nmodl::ast::BbcorePointerVar</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_before_block.html#ad9a925db8f586be1043622cbc5b50887">nmodl::ast::BeforeBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html#a532ee57c94d4c36d115602dea520607c">nmodl::ast::BinaryExpression</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_binary_operator.html#a49e73a209a32c0f9fae883618e36f832">nmodl::ast::BinaryOperator</a>
@@ -924,39 +924,39 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1ast_1_1_prime_name.html#a3fca3bfbbe0a24fa65f1df6e21c481a5">nmodl::ast::PrimeName</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_procedure_block.html#aa5ff1dbe4fe2e739169810298c48e7ee">nmodl::ast::ProcedureBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_program.html#a39e9712610f12e338c3eec2481f61880">nmodl::ast::Program</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html#a348be0913d28eb476b21e781ccd08c88">nmodl::ast::ProtectStatement</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_random_var.html#aa814456cea6ae1794d1d33a104779d7e">nmodl::ast::RandomVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_protect_statement.html#a035eb871240d8dc960c6bba6e7cc7ed3">nmodl::ast::ProtectStatement</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_random_var.html#a3e504107f0b0e7bfc081cdde92fa1517">nmodl::ast::RandomVar</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_random_var_list.html#a8eb5387effb7adedb17e09e15ed78d35">nmodl::ast::RandomVarList</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_range.html#a3f0726c0ff9ff3f5116e62c9c48be2b2">nmodl::ast::Range</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_range_var.html#acd44c26e8a0d74484f67c5a264d5f428">nmodl::ast::RangeVar</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_reaction_operator.html#a2bfa88e51c55cf402080895117f2dca7">nmodl::ast::ReactionOperator</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_range.html#a956b47996050128317c3e5bef0c425f5">nmodl::ast::Range</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_range_var.html#a1eec2fa9caf0da313f407905ea0c556a">nmodl::ast::RangeVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_reaction_operator.html#a577782b572a5df6a0a4c69182625fdc7">nmodl::ast::ReactionOperator</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_reaction_statement.html#a875169b53a57472fb636c46c5f27e8ff">nmodl::ast::ReactionStatement</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_react_var_name.html#aa631b5a03c98bb508cd1cca443daab5a">nmodl::ast::ReactVarName</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_read_ion_var.html#a2385920aea2e5f6fe884ee0d20a3cfa1">nmodl::ast::ReadIonVar</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html#a81de155ae7111237c93621c8b6a92369">nmodl::ast::SolutionExpression</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_read_ion_var.html#a7bdab5f216754b952794aa2a0a560e74">nmodl::ast::ReadIonVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_solution_expression.html#a821a45aed38e6df3e18cf94c1e1a4f44">nmodl::ast::SolutionExpression</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_solve_block.html#a144cfc0dda231943477954c8ad0a9320">nmodl::ast::SolveBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_state_block.html#a829d882f998455b8e1b7cdbe82534b00">nmodl::ast::StateBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_statement.html#af479edd20b50a96f7ebc2ffdfcb9db88">nmodl::ast::Statement</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#ae21c2ae5123951cad091b8e6ba71f600">nmodl::ast::StatementBlock</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_string.html#a695fe14312f507abfac1ee6dd8f0a03c">nmodl::ast::String</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html#a97476b630ddc99bb224aeb37d11f09bd">nmodl::ast::StatementBlock</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_string.html#a2d5d95394ff23a25c306df3a79ee07de">nmodl::ast::String</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_suffix.html#a4cbcb169137f34917d3daa87b35636c4">nmodl::ast::Suffix</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#abe8fe88dfe87d29954e2294d704fc407">nmodl::ast::TableStatement</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#ae9d49c76f7037d68529517e8523b54fd">nmodl::ast::ThreadSafe</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#a394dc275ec9e23bc40cafb74ecc7d552">nmodl::ast::TableStatement</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#ab81405975a0b327a41882d76dbc73136">nmodl::ast::ThreadSafe</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_unary_expression.html#a8d7b921b706956d65ad1c2b5c655c4f0">nmodl::ast::UnaryExpression</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_unary_operator.html#a0c0173ed5eae48eefbbe8e77dc0588ae">nmodl::ast::UnaryOperator</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_unit.html#a2d9e2e4e9beee25b0a0f8acf3f327460">nmodl::ast::Unit</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_unit_block.html#a6ff450de4181bb1e5e0578ec9a5799d5">nmodl::ast::UnitBlock</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_unit_def.html#a0ea25c6fb6e6640f59aa25668b7f1a4c">nmodl::ast::UnitDef</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_unary_operator.html#a45376431a15795c4ba2c33eaef3f98d7">nmodl::ast::UnaryOperator</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_unit.html#a17b4c1a064849bb933e58d9d49ddc030">nmodl::ast::Unit</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_unit_block.html#ad6591e615aa9b2f3ca9fa1af31003bbe">nmodl::ast::UnitBlock</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_unit_def.html#a84222b9bb283e3185fdf24d9a1f10dc5">nmodl::ast::UnitDef</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html#a50a21d81f8d2425e7aad1ce5235bb741">nmodl::ast::UnitState</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a70f79d2682afc4295e3f6d2c4b16f189">nmodl::ast::UpdateDt</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a09a54e4334339a3421aa2e81c6e957a0">nmodl::ast::UpdateDt</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_useion.html#a9c6a8da4b42cb1d913e685b8d7a1f60b">nmodl::ast::Useion</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_valence.html#af766a93bc9bda62889f5b346e272c2ae">nmodl::ast::Valence</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_var_name.html#aee8f0e9c95b6ea4db942bef6a039702a">nmodl::ast::VarName</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#ab375a49ed8a0e175ab793c1d5d9fdaf7">nmodl::ast::Verbatim</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_watch.html#ab6974b3e935ba6ba4c05e06a45848dd6">nmodl::ast::Watch</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#a314ec57fc6eb889b53b0df86574b64fa">nmodl::ast::WatchStatement</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_watch.html#aa9331c69c5f2111f51ee0d116aae9905">nmodl::ast::Watch</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#ae19aec7d82c1fce4945ac685ae94f11a">nmodl::ast::WatchStatement</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html#a034176beed574aca1cecc1fc5c012567">nmodl::ast::WhileStatement</a>
-, <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html#aa70c8afbac09395e249a560b2deaacc0">nmodl::ast::WrappedExpression</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html#af5309b003eb24a4e393736f54644ce58">nmodl::ast::WrappedExpression</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_write_ion_var.html#a00c5860c0cdaa8d422a88484fbfcb97e">nmodl::ast::WriteIonVar</a>
 </li>
 <li>get_solution()
@@ -975,6 +975,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html#abcc5a443ad570f688376a0da1b38bdc3">nmodl::ast::KineticBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_linear_block.html#ace2a62862f5445a9e4032b18ce8dcebc">nmodl::ast::LinearBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_non_linear_block.html#a0b9765a30ea7d9adf690a0dfa6005fcb">nmodl::ast::NonLinearBlock</a>
+</li>
+<li>get_species()
+: <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#a711d634eb55143d3acbeb5e4dc0f4674">nmodl::ast::Compartment</a>
 </li>
 <li>get_start()
 : <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html#af1a1ba1fe5ba662767ec70525d1f0a85">nmodl::ast::AssignedDefinition</a>
@@ -1283,6 +1286,9 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 <li>get_variables_with_status()
 : <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html#a3ba2976ad6daadc8ab240ebc898569a8">nmodl::symtab::SymbolTable</a>
 </li>
+<li>get_volume()
+: <a class="el" href="classnmodl_1_1ast_1_1_compartment.html#a8ba5531d6876099f15365b8fad4b7fa7">nmodl::ast::Compartment</a>
+</li>
 <li>get_with()
 : <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#ac9c4a1511a2595379f738de57d754878">nmodl::ast::TableStatement</a>
 </li>
@@ -1296,7 +1302,7 @@ $(document).ready(function(){initNavTree('functions_g.html',''); initResizable()
 : <a class="el" href="structnmodl_1_1_version.html#af097f42c21c0e833ed31e3c2c2ea6b69">nmodl::Version</a>
 </li>
 <li>Global()
-: <a class="el" href="classnmodl_1_1ast_1_1_global.html#acfa6246beca257faebf25c6ac02282b7">nmodl::ast::Global</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_global.html#ae012e622034bb370b9aa3d8b9fd079ce">nmodl::ast::Global</a>
 </li>
 <li>global
 : <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html#a5ef2b25f8696b0348b501411de8d7681">nmodl::symtab::SymbolTable</a>
