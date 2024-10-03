@@ -112,7 +112,7 @@ if(NOT TARGET CLI11::CLI11)
   cpp_cc_git_submodule(cli11 BUILD PACKAGE CLI11 REQUIRED)
 endif()
 # We could have fmt incoming from NEURON
-if(NOT TARGET fmt)
+if(NOT TARGET fmt::fmt)
   cpp_cc_git_submodule(fmt BUILD EXCLUDE_FROM_ALL PACKAGE fmt REQUIRED)
 endif()
 # If we're building from the submodule, make sure we pass -fPIC so that we can link the code into a
@@ -139,11 +139,11 @@ endif()
 # installation for consistency. This line should be harmless if we use an external spdlog.
 option(SPDLOG_FMT_EXTERNAL "Force to use an external {{fmt}}" ON)
 option(SPDLOG_SYSTEM_INCLUDE "Include spdlog as a system lib" ON)
+cpp_cc_git_submodule(spdlog BUILD PACKAGE spdlog REQUIRED)
 if(NMODL_3RDPARTY_USE_SPDLOG)
   # See above, same logic as fmt
-  option(SPDLOG_BUILD_PIC "Needed to be PIC to be put compiled as a lib" ON)
+  set_target_properties(spdlog PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
-cpp_cc_git_submodule(spdlog BUILD PACKAGE spdlog REQUIRED)
 
 if(NMODL_ENABLE_BACKWARD)
   cpp_cc_git_submodule(backward BUILD EXCLUDE_FROM_ALL PACKAGE backward REQUIRED)
