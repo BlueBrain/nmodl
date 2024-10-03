@@ -3,12 +3,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-<<<<<<< HEAD
 from nmodl.ode import differentiate2c, integrate2c, make_symbol
-=======
-from nmodl.ode import differentiate2c, integrate2c
 import pytest
->>>>>>> master
 
 import sympy as sp
 
