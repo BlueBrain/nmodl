@@ -307,7 +307,7 @@ int run_nmodl(int argc, const char* argv[]) {
     };
 
     for (const auto& file: mod_files) {
-        logger->info("Processing {}", file.c_str());
+        logger->info("Processing {}", file.string());
 
         const auto modfile = file.stem().string();
 
@@ -410,7 +410,7 @@ int run_nmodl(int argc, const char* argv[]) {
         if (json_ast) {
             std::filesystem::path file{scratch_dir};
             file /= modfile + ".ast.json";
-            logger->info("Writing AST into {}", file.c_str());
+            logger->info("Writing AST into {}", file.string());
             JSONVisitor(file.string()).write(*ast);
         }
 
