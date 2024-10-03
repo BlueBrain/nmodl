@@ -328,9 +328,6 @@ int run_nmodl(int argc, const char* argv[]) {
         /// one whenever we run symtab visitor.
         bool update_symtab = false;
 
-        /// just visit the ast
-        AstVisitor().visit_program(*ast);
-
         {
             logger->info("Running argument renaming visitor");
             RenameFunctionArgumentsVisitor().visit_program(*ast);
