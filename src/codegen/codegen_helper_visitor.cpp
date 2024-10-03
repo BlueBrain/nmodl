@@ -346,20 +346,15 @@ void CodegenHelperVisitor::find_non_range_variables() {
     }
 
     /// find pointer or bbcore pointer variables
-    // clang-format off
     auto properties = NmodlType::pointer_var
                       | NmodlType::bbcore_pointer_var;
-    // clang-format on
     info.pointer_variables = psymtab->get_variables_with_properties(properties);
 
     /// find RANDOM variables
-    // clang-format off
     properties = NmodlType::random_var;
-    // clang-format on
     info.random_variables = psymtab->get_variables_with_properties(properties);
 
     // find special variables like diam, area
-    // clang-format off
     properties = NmodlType::assigned_definition
             | NmodlType::param_assign;
     vars = psymtab->get_variables_with_properties(properties);
@@ -371,7 +366,6 @@ void CodegenHelperVisitor::find_non_range_variables() {
             info.diam_used = true;
         }
     }
-    // clang-format on
 }
 
 /**
