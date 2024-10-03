@@ -68,7 +68,7 @@ var dir_10cca6630a6360973d2d553e1924be84 =
     [ "linear_block.hpp", "linear__block_8hpp.html", null ],
     [ "local_list_statement.hpp", "local__list__statement_8hpp.html", null ],
     [ "local_var.hpp", "local__var_8hpp.html", null ],
-    [ "lon_difuse.hpp", "lon__difuse_8hpp.html", null ],
+    [ "lon_diffuse.hpp", "lon__diffuse_8hpp.html", null ],
     [ "model.hpp", "model_8hpp.html", null ],
     [ "mutex_lock.hpp", "mutex__lock_8hpp.html", null ],
     [ "mutex_unlock.hpp", "mutex__unlock_8hpp.html", null ],

@@ -13,6 +13,6 @@ var searchData=
   ['localvar_2909',['LocalVar',['../classnmodl_1_1ast_1_1_local_var.html',1,'nmodl::ast']]],
   ['localvarrenamevisitor_2910',['LocalVarRenameVisitor',['../classnmodl_1_1visitor_1_1_local_var_rename_visitor.html',1,'nmodl::visitor']]],
   ['logger_2911',['Logger',['../structnmodl_1_1_logger.html',1,'nmodl']]],
-  ['londifuse_2912',['LonDifuse',['../classnmodl_1_1ast_1_1_lon_difuse.html',1,'nmodl::ast']]],
+  ['londiffuse_2912',['LonDiffuse',['../classnmodl_1_1ast_1_1_lon_diffuse.html',1,'nmodl::ast']]],
   ['loopunrollvisitor_2913',['LoopUnrollVisitor',['../classnmodl_1_1visitor_1_1_loop_unroll_visitor.html',1,'nmodl::visitor']]]
 ];

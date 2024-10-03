@@ -80,7 +80,7 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_linear_block", "group__ast__class.html#gae136e55afd10a9c0a4f7de0134ab4593", null ],
     [ "is_local_list_statement", "group__ast__class.html#ga7bb648c89549d0a1440c348da8db48cd", null ],
     [ "is_local_var", "group__ast__class.html#gad0fc98ce521337690e9715bbc8e52848", null ],
-    [ "is_lon_difuse", "group__ast__class.html#gaf47927781853e1b1d888dc16b227b2e8", null ],
+    [ "is_lon_diffuse", "group__ast__class.html#ga9fb43fa1fe69f84fc0c86b82e2b7cd7b", null ],
     [ "is_model", "group__ast__class.html#gae12e18a06af2fd43a83356f1cd75b66d", null ],
     [ "is_mutex_lock", "group__ast__class.html#ga26205d58d3a56e11a1af97124b07a68e", null ],
     [ "is_mutex_unlock", "group__ast__class.html#gaefcd48a1c371deac5a65b9ccf68a3cdf", null ],

@@ -11,7 +11,7 @@ var searchData=
   ['local_5flist_5fstatement_5727',['LOCAL_LIST_STATEMENT',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033add537057e9e54831244cf4c0c249c0ce',1,'nmodl::ast']]],
   ['local_5fvar_5728',['local_var',['../namespacenmodl_1_1symtab_1_1syminfo.html#ad9b6b8559b36d0a500ef5110badcc4dbaff8e22f8b3dbe1f8b52602184e4a637a',1,'nmodl::symtab::syminfo::local_var()'],['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af53e8790c3c25006702880ee581f9b00',1,'nmodl::ast::LOCAL_VAR()']]],
   ['localized_5729',['localized',['../namespacenmodl_1_1symtab_1_1syminfo.html#a7d0b8aa765db0de7491021b4d403b6e2afedcf9bd957a1f9acca6ef0bf5ae7145',1,'nmodl::symtab::syminfo']]],
-  ['lon_5fdifuse_5730',['LON_DIFUSE',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033afce0dd6dff2cacac58e00fa5ded9bc4e',1,'nmodl::ast']]],
+  ['lon_5fdiffuse_5730',['LON_DIFFUSE',['../group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033abd5171524ce94c74a641e7f66538d2b7',1,'nmodl::ast']]],
   ['ltlt_5731',['LTLT',['../group__ast__prop.html#gga132ea63177a1f70f366ea0edb09dfa14a0f6a2801127bda3c03edc3e423546e26',1,'nmodl::ast']]],
   ['ltminusgt_5732',['LTMINUSGT',['../group__ast__prop.html#gga132ea63177a1f70f366ea0edb09dfa14aa2c6106ceef9ca6372bfdb3be8e4de31',1,'nmodl::ast']]],
   ['lu_5733',['LU',['../namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9a920d0c66f3d2ad926a6d590a5d244bd9',1,'nmodl::visitor']]]

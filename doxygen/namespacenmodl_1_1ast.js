@@ -65,7 +65,7 @@ var namespacenmodl_1_1ast =
     [ "LinEquation", "classnmodl_1_1ast_1_1_lin_equation.html", "classnmodl_1_1ast_1_1_lin_equation" ],
     [ "LocalListStatement", "classnmodl_1_1ast_1_1_local_list_statement.html", "classnmodl_1_1ast_1_1_local_list_statement" ],
     [ "LocalVar", "classnmodl_1_1ast_1_1_local_var.html", "classnmodl_1_1ast_1_1_local_var" ],
-    [ "LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html", "classnmodl_1_1ast_1_1_lon_difuse" ],
+    [ "LonDiffuse", "classnmodl_1_1ast_1_1_lon_diffuse.html", "classnmodl_1_1ast_1_1_lon_diffuse" ],
     [ "Model", "classnmodl_1_1ast_1_1_model.html", "classnmodl_1_1ast_1_1_model" ],
     [ "MutexLock", "classnmodl_1_1ast_1_1_mutex_lock.html", "classnmodl_1_1ast_1_1_mutex_lock" ],
     [ "MutexUnlock", "classnmodl_1_1ast_1_1_mutex_unlock.html", "classnmodl_1_1ast_1_1_mutex_unlock" ],

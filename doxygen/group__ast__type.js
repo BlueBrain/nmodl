@@ -95,7 +95,7 @@ var group__ast__type =
       [ "MUTEX_UNLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a292355e725443311d6cdf9ac446c5395", null ],
       [ "CONSERVE", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033adaeae9a63e28037b52804cbf49895470", null ],
       [ "COMPARTMENT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af97e22defb3be95f0a2361cdff43e24c", null ],
-      [ "LON_DIFUSE", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033afce0dd6dff2cacac58e00fa5ded9bc4e", null ],
+      [ "LON_DIFFUSE", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033abd5171524ce94c74a641e7f66538d2b7", null ],
       [ "REACTION_STATEMENT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a701e48c3ad78eac11c35eaec7cdff7d2", null ],
       [ "LAG_STATEMENT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aedc1e3df943d314eb4c16460d1bbd50c", null ],
       [ "CONSTANT_STATEMENT", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a37a5407574515075eb374eb90514c8f3", null ],

@@ -153,7 +153,7 @@ var hierarchy =
             [ "nmodl::ast::LagStatement", "classnmodl_1_1ast_1_1_lag_statement.html", null ],
             [ "nmodl::ast::LineComment", "classnmodl_1_1ast_1_1_line_comment.html", null ],
             [ "nmodl::ast::LocalListStatement", "classnmodl_1_1ast_1_1_local_list_statement.html", null ],
-            [ "nmodl::ast::LonDifuse", "classnmodl_1_1ast_1_1_lon_difuse.html", null ],
+            [ "nmodl::ast::LonDiffuse", "classnmodl_1_1ast_1_1_lon_diffuse.html", null ],
             [ "nmodl::ast::Model", "classnmodl_1_1ast_1_1_model.html", null ],
             [ "nmodl::ast::MutexLock", "classnmodl_1_1ast_1_1_mutex_lock.html", null ],
             [ "nmodl::ast::MutexUnlock", "classnmodl_1_1ast_1_1_mutex_unlock.html", null ],

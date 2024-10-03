@@ -147,7 +147,7 @@ var searchData=
   ['is_5flocal_5fstatement_3935',['is_local_statement',['../namespacenmodl_1_1visitor.html#acf13026c7db7c8b24a2457082942ccba',1,'nmodl::visitor']]],
   ['is_5flocal_5fvar_3936',['is_local_var',['../group__ast__class.html#gad0fc98ce521337690e9715bbc8e52848',1,'nmodl::ast::Ast::is_local_var()'],['../classnmodl_1_1ast_1_1_local_var.html#a3414ae7ae86b6e988ab59dd534fb875e',1,'nmodl::ast::LocalVar::is_local_var()']]],
   ['is_5flocal_5fvariable_3937',['is_local_variable',['../classnmodl_1_1visitor_1_1_perf_visitor.html#ae3aea3387fc83e06e3315246cb9502d7',1,'nmodl::visitor::PerfVisitor']]],
-  ['is_5flon_5fdifuse_3938',['is_lon_difuse',['../group__ast__class.html#gaf47927781853e1b1d888dc16b227b2e8',1,'nmodl::ast::Ast::is_lon_difuse()'],['../classnmodl_1_1ast_1_1_lon_difuse.html#af276b314c5a239cbf65b3498c85cb542',1,'nmodl::ast::LonDifuse::is_lon_difuse()']]],
+  ['is_5flon_5fdiffuse_3938',['is_lon_diffuse',['../group__ast__class.html#ga9fb43fa1fe69f84fc0c86b82e2b7cd7b',1,'nmodl::ast::Ast::is_lon_diffuse()'],['../classnmodl_1_1ast_1_1_lon_diffuse.html#a5507e14c438afbc9fda2fb447bd9e534',1,'nmodl::ast::LonDiffuse::is_lon_diffuse()']]],
   ['is_5fmethod_3939',['is_method',['../namespacenmodl.html#a2d1b1903ca3f4f531b67406da6b62ae6',1,'nmodl']]],
   ['is_5fmethod_5fdefined_3940',['is_method_defined',['../classnmodl_1_1symtab_1_1_symbol_table.html#a9dc1cf50ad5aa1bff132033d6ca2c676',1,'nmodl::symtab::SymbolTable']]],
   ['is_5fmodel_3941',['is_model',['../group__ast__class.html#gae12e18a06af2fd43a83356f1cd75b66d',1,'nmodl::ast::Ast::is_model()'],['../classnmodl_1_1ast_1_1_model.html#a5f9200326f12de6acc51967e6d8e5256',1,'nmodl::ast::Model::is_model()']]],

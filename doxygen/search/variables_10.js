@@ -21,7 +21,7 @@ var searchData=
   ['solvefor_5306',['solvefor',['../classnmodl_1_1ast_1_1_kinetic_block.html#a703f0f7b84b73779a295ebdfb75bf0ea',1,'nmodl::ast::KineticBlock::solvefor()'],['../classnmodl_1_1ast_1_1_linear_block.html#a8a0c1169d48388186a46ec34d8a46ce3',1,'nmodl::ast::LinearBlock::solvefor()'],['../classnmodl_1_1ast_1_1_non_linear_block.html#a642889d1692786ae19584d23eb1ad3cf',1,'nmodl::ast::NonLinearBlock::solvefor()']]],
   ['source_5fstem_5307',['source_stem',['../classnmodl_1_1visitor_1_1_local_rate_names.html#aaa3ed327cc658dbef59b0a1d70d6cf3b',1,'nmodl::visitor::LocalRateNames']]],
   ['sparse_5fmethod_5308',['SPARSE_METHOD',['../namespacenmodl_1_1codegen_1_1naming.html#ab99ca442353e35fef1d26ce063842717',1,'nmodl::codegen::naming']]],
-  ['species_5309',['species',['../classnmodl_1_1ast_1_1_compartment.html#aacd763b24544e07040bb67b6a4158bb6',1,'nmodl::ast::Compartment']]],
+  ['species_5309',['species',['../classnmodl_1_1ast_1_1_compartment.html#aacd763b24544e07040bb67b6a4158bb6',1,'nmodl::ast::Compartment::species()'],['../classnmodl_1_1ast_1_1_lon_diffuse.html#ab5a83413bce54048f211e8901c5a9906',1,'nmodl::ast::LonDiffuse::species()']]],
   ['stack_5310',['stack',['../classnmodl_1_1printer_1_1_j_s_o_n_printer.html#affc73b2da5c85b5035fcb0a30a9ef04b',1,'nmodl::printer::JSONPrinter']]],
   ['start_5311',['start',['../classnmodl_1_1ast_1_1_assigned_definition.html#a88b67a185afd13c015de00a64d098754',1,'nmodl::ast::AssignedDefinition']]],
   ['start_5fmeasurement_5312',['start_measurement',['../classnmodl_1_1visitor_1_1_perf_visitor.html#aeaab694b2635c7c0d6187ab382c976cb',1,'nmodl::visitor::PerfVisitor']]],

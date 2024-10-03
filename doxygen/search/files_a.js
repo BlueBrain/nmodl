@@ -19,7 +19,7 @@ var searchData=
   ['localrename_2ecpp_3195',['localrename.cpp',['../localrename_8cpp.html',1,'']]],
   ['logger_2ecpp_3196',['logger.cpp',['../logger_8cpp.html',1,'']]],
   ['logger_2ehpp_3197',['logger.hpp',['../logger_8hpp.html',1,'']]],
-  ['lon_5fdifuse_2ehpp_3198',['lon_difuse.hpp',['../lon__difuse_8hpp.html',1,'']]],
+  ['lon_5fdiffuse_2ehpp_3198',['lon_diffuse.hpp',['../lon__diffuse_8hpp.html',1,'']]],
   ['lookup_2ecpp_3199',['lookup.cpp',['../lookup_8cpp.html',1,'']]],
   ['lookup_5fvisitor_2ecpp_3200',['lookup_visitor.cpp',['../lookup__visitor_8cpp.html',1,'']]],
   ['lookup_5fvisitor_2ehpp_3201',['lookup_visitor.hpp',['../lookup__visitor_8hpp.html',1,'']]],

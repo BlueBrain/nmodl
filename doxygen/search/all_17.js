@@ -73,7 +73,7 @@ var searchData=
   ['_7elinequation_2730',['~LinEquation',['../classnmodl_1_1ast_1_1_lin_equation.html#a6003b26185fe65cb221385bcf29f2968',1,'nmodl::ast::LinEquation']]],
   ['_7elocalliststatement_2731',['~LocalListStatement',['../classnmodl_1_1ast_1_1_local_list_statement.html#a8e95d062f4f50501c5632f519e4131c1',1,'nmodl::ast::LocalListStatement']]],
   ['_7elocalvar_2732',['~LocalVar',['../classnmodl_1_1ast_1_1_local_var.html#acf5e188265dfc80a6ac4b25f6cd2c8a8',1,'nmodl::ast::LocalVar']]],
-  ['_7elondifuse_2733',['~LonDifuse',['../classnmodl_1_1ast_1_1_lon_difuse.html#aba2f64f12e3105da24cbe9f30d6098e3',1,'nmodl::ast::LonDifuse']]],
+  ['_7elondiffuse_2733',['~LonDiffuse',['../classnmodl_1_1ast_1_1_lon_diffuse.html#a5ec4cc39ccc1cbf2bbef4723b245709a',1,'nmodl::ast::LonDiffuse']]],
   ['_7emodel_2734',['~Model',['../classnmodl_1_1ast_1_1_model.html#aa6cc67002c27d29f648d9261214791c4',1,'nmodl::ast::Model']]],
   ['_7emutexlock_2735',['~MutexLock',['../classnmodl_1_1ast_1_1_mutex_lock.html#acbc7564c9a3df3794d02d88715b5e6e2',1,'nmodl::ast::MutexLock']]],
   ['_7emutexunlock_2736',['~MutexUnlock',['../classnmodl_1_1ast_1_1_mutex_unlock.html#adf51a6a82638ac31b28f925cc787bf5b',1,'nmodl::ast::MutexUnlock']]],

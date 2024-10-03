@@ -64,7 +64,7 @@ var classnmodl_1_1visitor_1_1_const_ast_visitor =
     [ "visit_linear_block", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a66939f63d205ec42ff3dd90436f1b5fa", null ],
     [ "visit_local_list_statement", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#adae434a9714a871075971ff3750c298e", null ],
     [ "visit_local_var", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a64651a1284c868e4a433e02bec22d713", null ],
-    [ "visit_lon_difuse", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a629f540356f3cf8ee5413c68c2959ded", null ],
+    [ "visit_lon_diffuse", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#aea62f733b34b537b7b1e5761dd5dbd2e", null ],
     [ "visit_model", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a97a2f88f102369cca2dfd4322e6fb0ee", null ],
     [ "visit_mutex_lock", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#a7b2b7c502248068ff4cca5f3796089ca", null ],
     [ "visit_mutex_unlock", "classnmodl_1_1visitor_1_1_const_ast_visitor.html#aa4900b2ea9e000893307c52e14519859", null ],
