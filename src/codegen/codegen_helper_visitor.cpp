@@ -346,8 +346,7 @@ void CodegenHelperVisitor::find_non_range_variables() {
     }
 
     /// find pointer or bbcore pointer variables
-    auto properties = NmodlType::pointer_var
-                      | NmodlType::bbcore_pointer_var;
+    auto properties = NmodlType::pointer_var | NmodlType::bbcore_pointer_var;
     info.pointer_variables = psymtab->get_variables_with_properties(properties);
 
     /// find RANDOM variables
@@ -355,10 +354,9 @@ void CodegenHelperVisitor::find_non_range_variables() {
     info.random_variables = psymtab->get_variables_with_properties(properties);
 
     // find special variables like diam, area
-    properties = NmodlType::assigned_definition
-            | NmodlType::param_assign;
+    properties = NmodlType::assigned_definition | NmodlType::param_assign;
     vars = psymtab->get_variables_with_properties(properties);
-    for (auto& var : vars) {
+    for (auto& var: vars) {
         if (var->get_name() == naming::AREA_VARIABLE) {
             info.area_used = true;
         }
