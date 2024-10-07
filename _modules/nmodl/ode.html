@@ -358,6 +358,11 @@
     <span class="k">return</span> <span class="n">code</span>
 
 
+<div class="viewcode-block" id="make_symbol"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.make_symbol">[docs]</a><span class="k">def</span> <span class="nf">make_symbol</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="o">/</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create SymPy symbol from a variable.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sp</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">var</span></div>
+
+
 <div class="viewcode-block" id="solve_lin_system"><a class="viewcode-back" href="../../nmodl.html#nmodl.ode.solve_lin_system">[docs]</a><span class="k">def</span> <span class="nf">solve_lin_system</span><span class="p">(</span>
     <span class="n">eq_strings</span><span class="p">,</span>
     <span class="nb">vars</span><span class="p">,</span>
@@ -729,7 +734,7 @@
     <span class="nb">vars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span>
     <span class="nb">vars</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">)</span>
     <span class="c1"># declare all other supplied variables</span>
-    <span class="n">sympy_vars</span> <span class="o">=</span> <span class="p">{</span><span class="n">var</span><span class="p">:</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">}</span>
+    <span class="n">sympy_vars</span> <span class="o">=</span> <span class="p">{</span><span class="nb">str</span><span class="p">(</span><span class="n">var</span><span class="p">):</span> <span class="n">make_symbol</span><span class="p">(</span><span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">}</span>
     <span class="n">sympy_vars</span><span class="p">[</span><span class="n">dependent_var</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
 
     <span class="c1"># parse string into SymPy equation</span>
