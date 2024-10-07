@@ -36,7 +36,7 @@ static auto get_name_map(const ast::Expression& node, const std::string& name) {
                 return var->get_node_name() == item;
             })) {
             logger->debug(
-                "DerivativeOriginalVisitor :: adding INDEXED_VARIABLE {} to "
+                "CvodeVisitor :: adding INDEXED_VARIABLE {} to "
                 "node_map",
                 var->get_node_name());
             name_map[var->get_node_name()] = get_index(
@@ -103,13 +103,12 @@ void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
             auto [jacobian,
                   exception_message] = diff2c(to_nmodl(*rhs), name->get_node_name(), name_map);
             if (!exception_message.empty()) {
-                logger->warn("DerivativeOriginalVisitor :: python exception: {}",
-                             exception_message);
+                logger->warn("CvodeVisitor :: python exception: {}", exception_message);
             }
             // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
             // complaining, we discard the LHS later
             auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
-            logger->debug("DerivativeOriginalVisitor :: replacing statement {} with {}",
+            logger->debug("CvodeVisitor :: replacing statement {} with {}",
                           to_nmodl(node),
                           statement);
             auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
