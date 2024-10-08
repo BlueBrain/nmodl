@@ -608,8 +608,6 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
     // essentially what NOCMODL does. Therefore, the logic isn't sharp (and
     // doesn't have to be).
 
-    auto symtab = node.get_symbol_table();
-
     std::vector<std::string> macros_defined;
     auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
                                                           const std::string& macro_value) {
@@ -654,6 +652,15 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         auto name = get_name(proc);
         print_macro(name, method_name(name));
     }
+
+
+    auto symtab = node.get_parent()->get_symbol_table();
+    auto locals = symtab->get_variables(/* with= */ NmodlType::local_var);
+    for (const auto& local: locals) {
+        std::string name = local->get_name();
+        print_macro(fmt::format("_l{}", name), get_variable_name(name));
+    }
+
 
     print_macro("t", "nt->_t");
     print_macro("_nt", "nt");
