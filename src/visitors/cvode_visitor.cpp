@@ -24,6 +24,20 @@ static int get_index(const ast::IndexedName& node) {
     return std::stoi(to_nmodl(node.get_length()));
 }
 
+void CvodeVisitor::visit_conserve(ast::Conserve& node) {
+    logger->debug("CvodeVisitor :: CONSERVE statement: {}", to_nmodl(node));
+    std::string conserve_equation_statevar;
+    if (node.get_react()->is_react_var_name()) {
+        conserve_equation_statevar = node.get_react()->get_node_name();
+    }
+    auto conserve_equation_str = to_nmodl(*node.get_expr());
+    logger->debug("CvodeVisitor :: --> replace ODE for state var {} with equation {}",
+                  conserve_equation_statevar,
+                  conserve_equation_str);
+    conserve_equations[conserve_equation_statevar] = conserve_equation_str;
+}
+
+
 static auto get_name_map(const ast::Expression& node, const std::string& name) {
     std::unordered_map<std::string, int> name_map;
     // all of the "reserved" symbols
@@ -95,6 +109,28 @@ void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
             symbol->set_original_name(name->get_node_name());
             program_symtab->insert(symbol);
         }
+        // case: there is a variable being CONSERVEd, but it's not the current one
+        if (!conserve_equations.empty() && !conserve_equations.count(name->get_node_name())) {
+            auto rhs = node.get_rhs();
+            auto nodes = collect_nodes(*node.get_rhs(), {ast::AstNodeType::VAR_NAME});
+            for (auto& n: nodes) {
+                if (conserve_equations.count(n->get_node_name())) {
+                    auto statement = fmt::format("{} = {}", n->get_node_name(), conserve_equations[n->get_node_name()]);
+                    logger->debug("CvodeVisitor :: replacing CONSERVEd variable {} with {} in {}",
+                                  n->get_node_name(),
+                                  conserve_equations[n->get_node_name()],
+                                  to_nmodl(*node.get_rhs()));
+                    auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                        create_statement(statement));
+                    const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+                        expr_statement->get_expression());
+                    auto thing = std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone());
+                    n = std::move(std::dynamic_pointer_cast<ast::Expression>(thing));
+                    std::cout << to_nmodl(*n) << std::endl;
+                }
+            }
+        }
+        std::cout << to_nmodl(node) << std::endl;
         if (block_index == BlockIndex::JACOBIAN) {
             auto rhs = node.get_rhs();
             // map of all indexed symbols (need special treatment in SymPy)
@@ -129,6 +165,10 @@ void CvodeVisitor::visit_program(ast::Program& node) {
                                             std::shared_ptr<ast::StatementBlock>(
                                                 derivative_block->get_statement_block()->clone()));
         node.emplace_back_node(der_node);
+    }
+
+    for (const auto& [key, value]: conserve_equations) {
+        std::cout << key << ", " << value << std::endl;
     }
 
     // re-visit the AST since we now inserted the CVODE block

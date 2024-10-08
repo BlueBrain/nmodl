@@ -55,6 +55,9 @@ class CvodeVisitor: public AstVisitor {
     /// index of the block to modify
     BlockIndex block_index = BlockIndex::FUNCTION;
 
+    /// map of state vars to conserve equations
+    std::unordered_map<std::string, std::string> conserve_equations;
+
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
@@ -62,6 +65,7 @@ class CvodeVisitor: public AstVisitor {
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
     void visit_statement_block(ast::StatementBlock& node) override;
+    void visit_conserve(ast::Conserve& node) override;
 };
 
 /** \} */  // end of visitor_classes
