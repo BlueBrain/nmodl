@@ -600,12 +600,15 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
 }
 
 std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
+    const ast::Verbatim& node,
     const std::string& verbatim) {
     // Note, the logic for reducing the number of macros printed, aims to
     // improve legibility of the generated code by reducing number of lines of
     // code. It would be correct to print all macros, because that's
     // essentially what NOCMODL does. Therefore, the logic isn't sharp (and
     // doesn't have to be).
+
+    auto symtab = node.get_symbol_table();
 
     std::vector<std::string> macros_defined;
     auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
@@ -711,7 +714,7 @@ void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
     const auto& verbatim_code = node.get_statement()->eval();
     auto massaged_verbatim = process_verbatim_text(verbatim_code);
 
-    auto macros_defined = print_verbatim_setup(massaged_verbatim);
+    auto macros_defined = print_verbatim_setup(node, massaged_verbatim);
     printer->add_line("// Begin VERBATIM");
     const auto& lines = stringutils::split_string(massaged_verbatim, '\n');
     for (const auto& line: lines) {
