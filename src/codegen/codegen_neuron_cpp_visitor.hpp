@@ -507,8 +507,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /**
      * Prints setup code for entrypoints NEURON.
      *
-     * See `print_entrypoint_setup_code`. This variation should be used when one only has
-     * access to a `Prop`, but not the full `Memb_list`.
+     * See `print_entrypoint_setup_code_from_memb_list`. This variation should be used when one only
+     * has access to a `Prop`, but not the full `Memb_list`.
      */
     void print_entrypoint_setup_code_from_prop();
 
