@@ -284,6 +284,31 @@ struct IndexSemantics {
         , size(size) {}
 };
 
+class LongitudinalDiffusionInfo {
+  public:
+    LongitudinalDiffusionInfo(const std::shared_ptr<ast::Name>& index_name,
+                              std::shared_ptr<ast::Expression> volume_expr,
+                              const std::shared_ptr<ast::Name>& rate_index_name,
+                              std::shared_ptr<ast::Expression> rate_expr);
+    std::shared_ptr<ast::Expression> volume(const std::string& index_name) const;
+    std::shared_ptr<ast::Expression> diffusion_rate(const std::string& index_name) const;
+
+    double dfcdc(const std::string& /* index_name */) const;
+
+  protected:
+    std::shared_ptr<ast::Expression> substitute_index(
+        const std::string& index_name,
+        const std::string& old_index_name,
+        const std::shared_ptr<ast::Expression>& old_expr) const;
+
+  private:
+    std::string volume_index_name;
+    std::shared_ptr<ast::Expression> volume_expr;
+
+    std::string rate_index_name;
+    std::shared_ptr<ast::Expression> rate_expr;
+};
+
 
 /**
  * \class CodegenInfo
@@ -446,6 +471,9 @@ struct CodegenInfo {
 
     /// all factors defined in the mod file
     std::vector<const ast::FactorDef*> factor_definitions;
+
+    /// for each state, the information needed to print the callbacks.
+    std::map<std::string, LongitudinalDiffusionInfo> longitudinal_diffusion_info;
 
     /// ions used in the mod file
     std::vector<Ion> ions;
