@@ -114,7 +114,7 @@ var searchData=
   ['nmodl_5futils_2ecpp_1470',['nmodl_utils.cpp',['../nmodl__utils_8cpp.html',1,'']]],
   ['nmodl_5futils_2ehpp_1471',['nmodl_utils.hpp',['../nmodl__utils_8hpp.html',1,'']]],
   ['nmodl_5fvalid_5fconstructs_1472',['nmodl_valid_constructs',['../namespacenmodl_1_1test__utils.html#ab598732ca197ae873a7b247fe2ea1a47',1,'nmodl::test_utils']]],
-  ['nmodl_5fversion_1473',['NMODL_VERSION',['../structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091',1,'nmodl::Version::NMODL_VERSION()'],['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c0ac0823d48779ad3c84ee0bedf1e23',1,'nmodl::codegen::CodegenCppVisitor::nmodl_version()'],['../namespacenmodl_1_1codegen_1_1naming.html#a86a9d3a0e50e4b2647e45c1ea5fd2e07',1,'nmodl::codegen::naming::NMODL_VERSION()']]],
+  ['nmodl_5fversion_1473',['nmodl_version',['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6c0ac0823d48779ad3c84ee0bedf1e23',1,'nmodl::codegen::CodegenCppVisitor::nmodl_version()'],['../structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091',1,'nmodl::Version::NMODL_VERSION()'],['../namespacenmodl_1_1codegen_1_1naming.html#a86a9d3a0e50e4b2647e45c1ea5fd2e07',1,'nmodl::codegen::naming::NMODL_VERSION()']]],
   ['nmodl_5fvisitor_2ecpp_1474',['nmodl_visitor.cpp',['../nmodl__visitor_8cpp.html',1,'']]],
   ['nmodl_5fvisitor_2ehpp_1475',['nmodl_visitor.hpp',['../nmodl__visitor_8hpp.html',1,'']]],
   ['nmodl_5fvisitor_5fhelper_2eipp_1476',['nmodl_visitor_helper.ipp',['../nmodl__visitor__helper_8ipp.html',1,'']]],
