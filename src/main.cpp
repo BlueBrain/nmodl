@@ -35,6 +35,7 @@
 #include "visitors/local_to_assigned_visitor.hpp"
 #include "visitors/local_var_rename_visitor.hpp"
 #include "visitors/localize_visitor.hpp"
+#include "visitors/longitudinal_diffusion_visitor.hpp"
 #include "visitors/loop_unroll_visitor.hpp"
 #include "visitors/neuron_solve_visitor.hpp"
 #include "visitors/nmodl_visitor.hpp"
@@ -292,6 +293,7 @@ int run_nmodl(int argc, const char* argv[]) {
     CLI11_PARSE(app, argc, argv);
 
     std::string simulator_name = neuron_code ? "neuron" : "coreneuron";
+    verbatim_rename = neuron_code ? false : verbatim_rename;
 
     fs::create_directories(output_dir);
     fs::create_directories(scratch_dir);
@@ -429,6 +431,13 @@ int run_nmodl(int argc, const char* argv[]) {
             ast_to_nmodl(*ast, filepath("unroll"));
             SymtabVisitor(update_symtab).visit_program(*ast);
         }
+
+        if (neuron_code) {
+            CreateLongitudinalDiffusionBlocks().visit_program(*ast);
+            ast_to_nmodl(*ast, filepath("londifus"));
+            SymtabVisitor(update_symtab).visit_program(*ast);
+        }
+
 
         /// note that we can not symtab visitor in update mode as we
         /// replace kinetic block with derivative block of same name

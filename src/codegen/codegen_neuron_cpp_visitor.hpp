@@ -24,6 +24,8 @@
 #include <string_view>
 #include <utility>
 
+#include "ast/function_block.hpp"
+#include "ast/procedure_block.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_info.hpp"
 #include "codegen/codegen_naming.hpp"
@@ -128,7 +130,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /****************************************************************************************/
     /*                     Common helper routines accross codegen functions                 */
     /****************************************************************************************/
-
 
     /**
      * Determine the position in the data array for a given float variable
@@ -250,6 +251,21 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void print_hoc_py_wrapper_function_definitions();
 
+    /**
+     * Prints the callbacks required for LONGITUDINAL_DIFFUSION.
+     */
+    void print_longitudinal_diffusion_callbacks();
+
+    /**
+     * Parameters for what NEURON calls `ldifusfunc1_t`.
+     */
+    ParamVector ldifusfunc1_parameters() const;
+
+    /**
+     * Parameters for what NEURON calls `ldifusfunc3_t`.
+     */
+    ParamVector ldifusfunc3_parameters() const;
+
 
     /****************************************************************************************/
     /*                             Code-specific helper routines                            */
@@ -291,6 +307,14 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     const ParamVector external_method_parameters(bool table = false) noexcept override;
 
 
+    /** The parameters for the four macros `_internalthreadargs*_`. */
+    ParamVector internalthreadargs_parameters();
+
+
+    /** The parameters for the four macros `_threadargs*_`. */
+    ParamVector threadargs_parameters();
+
+
     /**
      * Arguments for "_threadargs_" macro in neuron implementation
      */
@@ -306,12 +330,21 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
         const ast::FunctionTableBlock& /* node */) override;
 
 
-    /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
+    void print_verbatim_overload(const std::string& return_type, const ast::Ast& node);
+    void print_procedure_verbatim_overload(const ast::ProcedureBlock& procedure);
+    void print_function_verbatim_overload(const ast::FunctionBlock& function);
+
+
+    /** Print compatibility macros required for VERBATIM blocks.
+     *
+     *  Returns the names of all macros introduced.
      */
-    std::string process_verbatim_text(std::string const& text) override;
+    std::vector<std::string> print_verbatim_setup(const std::string& verbatim);
+
+
+    /** Print `#undef`s to erase all compatibility macros.
+     */
+    void print_verbatim_cleanup(const std::vector<std::string>& macros_defined);
 
 
     /**
@@ -418,7 +451,10 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Determine variable name in the structure of mechanism properties
+     * Determine the C++ string to replace variable names with.
+     *
+     * Given a variable name such as `ion_cai` or `v`, return the C++ code
+     * required to get the value.
      *
      * \param name         Variable name that is being printed
      * \param use_instance Should the variable be accessed via instance or data array
@@ -426,6 +462,18 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      * thread structure
      */
     std::string get_variable_name(const std::string& name, bool use_instance = true) const override;
+
+    /**
+     * Determine the C++ string to replace pointer names with.
+     *
+     * Given a variable name such as `_p_ptr` or `_p_rng`, return the C++ code
+     * required to get a pointer to `ptr` (or `rng`).
+     *
+     * \param name         Variable name that is being printed
+     * \return             The C++ string representing the variable.
+     * thread structure
+     */
+    std::string get_pointer_name(const std::string& name) const;
 
 
     /****************************************************************************************/
@@ -492,6 +540,26 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_global_function_common_code(BlockType type,
                                            const std::string& function_name = "") override;
 
+    /**
+     * Prints setup code for entrypoints from NEURON.
+     *
+     * The entrypoints typically receive a `sorted_token` and a bunch of other things, which then
+     * need to be converted into the default arguments for functions called (recursively) from the
+     * entrypoint.
+     *
+     * This variation prints the fast entrypoint, where NEURON is fully initialized and setup.
+     */
+    void print_entrypoint_setup_code_from_memb_list();
+
+
+    /**
+     * Prints setup code for entrypoints NEURON.
+     *
+     * See `print_entrypoint_setup_code`. This variation should be used when one only has
+     * access to a `Prop`, but not the full `Memb_list`.
+     */
+    void print_entrypoint_setup_code_from_prop();
+
 
     /**
      * Print the \c nrn\_init function definition
@@ -508,11 +576,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_nrn_constructor() override;
     void print_nrn_constructor_declaration();
-
-    /**
-     * Print the set of common variables from a `Prop` only.
-     */
-    void print_callable_preamble_from_prop();
 
     /**
      * Print nrn_destructor function definition
@@ -690,12 +753,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     /*                            Overloaded visitor routines                               */
     /****************************************************************************************/
 
-
+    std::string process_verbatim_text(const std::string& verbatim);
+    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
-
-
-
+    void visit_longitudinal_diffusion_block(const ast::LongitudinalDiffusionBlock& node);
+    void visit_lon_diffuse(const ast::LonDiffuse& node);
 
   public:
     /****************************************************************************************/

@@ -16,10 +16,12 @@
 #include <stdexcept>
 
 #include "ast/all.hpp"
+#include "ast/procedure_block.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "codegen_naming.hpp"
 #include "config/config.h"
+#include "parser/c11_driver.hpp"
 #include "solver/solver.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -35,7 +37,6 @@ using visitor::RenameVisitor;
 using visitor::VarUsageVisitor;
 
 using symtab::syminfo::NmodlType;
-
 
 /****************************************************************************************/
 /*                              Generic information getters                             */
@@ -436,6 +437,79 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
     }
 }
 
+CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::ldifusfunc1_parameters() const {
+    return ParamVector{{"", "ldifusfunc2_t", "", "_f"},
+                       {"", "const _nrn_model_sorted_token&", "", "_sorted_token"},
+                       {"", "NrnThread&", "", "_nt"}};
+}
+
+
+CodegenNeuronCppVisitor::ParamVector CodegenNeuronCppVisitor::ldifusfunc3_parameters() const {
+    return ParamVector{{"", "int", "", "_i"},
+                       {"", "Memb_list*", "", "_ml_arg"},
+                       {"", "size_t", "", "id"},
+                       {"", "Datum*", "", "_ppvar"},
+                       {"", "double*", "", "_pdvol"},
+                       {"", "double*", "", "_pdfcdc"},
+                       {"", "Datum*", "", "/* _thread */"},
+                       {"", "NrnThread*", "", "nt"},
+                       {"", "const _nrn_model_sorted_token&", "", "_sorted_token"}};
+}
+
+void CodegenNeuronCppVisitor::print_longitudinal_diffusion_callbacks() {
+    auto coeff_callback_name = [](const std::string& var_name) {
+        return fmt::format("_diffusion_coefficient_{}", var_name);
+    };
+
+    auto space_name = [](const std::string& var_name) {
+        return fmt::format("_diffusion_space_{}", var_name);
+    };
+
+    for (auto [var_name, values]: info.longitudinal_diffusion_info) {
+        printer->fmt_line("static void* {};", space_name(var_name));
+        printer->fmt_push_block("static double {}({})",
+                                coeff_callback_name(var_name),
+                                get_parameter_str(ldifusfunc3_parameters()));
+
+        print_entrypoint_setup_code_from_memb_list();
+
+        auto volume_expr = values.volume("_i");
+        auto mu_expr = values.diffusion_rate("_i");
+
+        printer->add_indent();
+        printer->add_text("*_pdvol= ");
+        volume_expr->accept(*this);
+        printer->add_text(";");
+        printer->add_newline();
+
+        printer->add_line("*_pdfcdc = 0.0;");
+        printer->add_indent();
+        printer->add_text("return ");
+        mu_expr->accept(*this);
+        printer->add_text(";");
+        printer->add_newline();
+
+        printer->pop_block();
+    }
+
+    printer->fmt_push_block("static void _apply_diffusion_function({})",
+                            get_parameter_str(ldifusfunc1_parameters()));
+    for (auto [var_name, values]: info.longitudinal_diffusion_info) {
+        auto var = program_symtab->lookup(var_name);
+        size_t array_size = var->get_length();
+        printer->fmt_push_block("for(size_t _i = 0; _i < {}; ++_i)", array_size);
+        printer->fmt_line(
+            "(*_f)(mech_type, {}, &{}, _i, /* x pos */ {}, /* Dx pos */ {}, _sorted_token, _nt);",
+            coeff_callback_name(var_name),
+            space_name(var_name),
+            position_of_float_var(var_name),
+            position_of_float_var("D" + var_name));
+        printer->pop_block();
+    }
+    printer->pop_block();
+    printer->add_newline();
+}
+
 /****************************************************************************************/
 /*                           Code-specific helper routines                              */
 /****************************************************************************************/
@@ -491,6 +565,19 @@ const CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::external_method_pa
 }
 
 
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internalthreadargs_parameters() {
+    return internal_method_parameters();
+}
+
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::threadargs_parameters() {
+    return {{"", "Memb_list*", "", "_ml"},
+            {"", "size_t", "", "_iml"},
+            {"", "Datum*", "", "_ppvar"},
+            {"", "Datum*", "", "_thread"},
+            {"", "double*", "", "_globals"},
+            {"", "NrnThread*", "", "_nt"}};
+}
+
 /// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
     return {};
@@ -512,9 +599,126 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
     return {params, {}};
 }
 
-/// TODO: Write for NEURON
-std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
-    return {};
+std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
+    const std::string& verbatim) {
+    // Note, the logic for reducing the number of macros printed, aims to
+    // improve legibility of the generated code by reducing number of lines of
+    // code. It would be correct to print all macros, because that's
+    // essentially what NOCMODL does. Therefore, the logic isn't sharp (and
+    // doesn't have to be).
+
+    std::vector<std::string> macros_defined;
+    auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
+                                                          const std::string& macro_value) {
+        if (verbatim.find(macro_name) != std::string::npos) {
+            printer->fmt_line("#define {} {}", macro_name, macro_value);
+            macros_defined.push_back(macro_name);
+        }
+    };
+
+    printer->add_line("// Setup for VERBATIM");
+    for (const auto& var: codegen_float_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var: codegen_int_variables) {
+        auto name = get_name(var);
+        std::string macro_value = get_variable_name(name);
+        print_macro(name, macro_value);
+        if (verbatim.find("_p_" + name) != std::string::npos) {
+            print_macro("_p_" + name, get_pointer_name(name));
+        }
+    }
+
+    for (const auto& var : codegen_global_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var : codegen_thread_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& func: info.functions) {
+        auto name = get_name(func);
+        print_macro(name, method_name(name));
+        print_macro(fmt::format("_l{}", name), fmt::format("ret_{}", name));
+    }
+
+    for (const auto& proc: info.procedures) {
+        auto name = get_name(proc);
+        print_macro(name, method_name(name));
+    }
+
+    print_macro("t", "nt->_t");
+    print_macro("_nt", "nt");
+    print_macro("_tqitem", "tqitem");
+
+    auto print_args_macro = [this, print_macro](const std::string& macro_basename,
+                                                const ParamVector& params) {
+        print_macro("_" + macro_basename + "_", get_arg_str(params));
+        print_macro("_" + macro_basename + "comma_", get_arg_str(params) + ",");
+        print_macro("_" + macro_basename + "proto_", get_parameter_str(params));
+        print_macro("_" + macro_basename + "protocomma_", get_parameter_str(params) + ",");
+    };
+
+    print_args_macro("internalthreadargs", internalthreadargs_parameters());
+    print_args_macro("threadargs", threadargs_parameters());
+
+    return macros_defined;
+}
+
+void CodegenNeuronCppVisitor::print_verbatim_cleanup(
+    const std::vector<std::string>& macros_defined) {
+    for (const auto& macro: macros_defined) {
+        printer->fmt_line("#undef {}", macro);
+    }
+    printer->add_line("// End of cleanup for VERBATIM");
+}
+
+std::string CodegenNeuronCppVisitor::process_verbatim_text(const std::string& verbatim) {
+    parser::CDriver driver;
+    driver.scan_string(verbatim);
+    auto tokens = driver.all_tokens();
+    std::string result;
+    for (size_t i = 0; i < tokens.size(); i++) {
+        auto token = tokens[i];
+
+        // check if we have function call in the verbatim block where
+        // function is defined in the same mod file
+        if (program_symtab->is_method_defined(token) && tokens[i + 1] == "(") {
+            result += token + "(";
+            if (tokens[i + 2] == "_threadargs_") {
+                result += "_internalthreadargs_";
+            } else if (tokens[i + 2] == "_threadargscomma_") {
+                result += "_internalthreadargscomma_";
+            } else {
+                result += tokens[i + 2];
+            }
+
+            i += 2;
+        } else {
+            result += token;
+        }
+    }
+    return result;
+}
+
+
+void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
+    const auto& verbatim_code = node.get_statement()->eval();
+    auto massaged_verbatim = process_verbatim_text(verbatim_code);
+
+    auto macros_defined = print_verbatim_setup(massaged_verbatim);
+    printer->add_line("// Begin VERBATIM");
+    const auto& lines = stringutils::split_string(massaged_verbatim, '\n');
+    for (const auto& line: lines) {
+        printer->add_line(line);
+    }
+    printer->add_line("// End VERBATIM");
+    print_verbatim_cleanup(macros_defined);
 }
 
 
@@ -608,7 +812,7 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     auto position = position_of_int_var(name);
 
     if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
-        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
+        return fmt::format("(nrnran123_State*) _ppvar[{}].literal_value<void*>()", position);
     }
 
     if (info.semantics[position].name == naming::FOR_NETCON_SEMANTIC) {
@@ -670,6 +874,20 @@ std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symb
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
+}
+
+
+std::string CodegenNeuronCppVisitor::get_pointer_name(const std::string& name) const {
+    auto name_comparator = [&name](const auto& sym) { return name == get_name(sym); };
+
+    auto var =
+        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), name_comparator);
+
+    if (var == codegen_int_variables.end()) {
+        throw std::runtime_error("Only integer variables have a 'pointer name'.");
+    }
+    auto position = position_of_int_var(name);
+    return fmt::format("_ppvar[{}].literal_value<void*>()", position);
 }
 
 
@@ -1301,6 +1519,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
                           info.semantics[i].name);
     }
 
+    if (!info.longitudinal_diffusion_info.empty()) {
+        printer->fmt_line("hoc_register_ldifus1(_apply_diffusion_function);");
+    }
+
+
     if (info.write_concentration) {
         printer->fmt_line("nrn_writes_conc(mech_type, 0);");
     }
@@ -1589,6 +1812,41 @@ void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
     }
 }
 
+void CodegenNeuronCppVisitor::print_entrypoint_setup_code_from_memb_list() {
+    printer->add_line(
+        "_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _ml_arg->type()};");
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    if (!info.artificial_cell) {
+        printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    }
+    printer->add_line("auto* _thread = _ml_arg->_thread;");
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
+                          thread_variables_struct(),
+                          info.thread_var_thread_id);
+    }
+}
+
+
+void CodegenNeuronCppVisitor::print_entrypoint_setup_code_from_prop() {
+    printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(prop);");
+    printer->add_line("_nrn_mechanism_cache_instance _lmc{prop};");
+    printer->add_line("const size_t id = 0;");
+
+    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    if (!info.artificial_cell) {
+        printer->fmt_line("auto node_data = make_node_data_{}(prop);", info.mod_suffix);
+    }
+
+    if (!codegen_thread_variables.empty()) {
+        printer->fmt_line("auto _thread_vars = {}({}_global.thread_data);",
+                          thread_variables_struct(),
+                          info.mod_suffix);
+    }
+
+    printer->add_newline();
+}
+
 
 void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
                                                                 const std::string& function_name) {
@@ -1598,18 +1856,8 @@ void CodegenNeuronCppVisitor::print_global_function_common_code(BlockType type,
                         {"", "Memb_list*", "", "_ml_arg"},
                         {"", "int", "", "_type"}};
     printer->fmt_push_block("void {}({})", method, get_parameter_str(args));
-
-    printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
-    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
-
+    print_entrypoint_setup_code_from_memb_list();
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
-    printer->add_line("auto* _thread = _ml_arg->_thread;");
-    if (!codegen_thread_variables.empty()) {
-        printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
-                          thread_variables_struct(),
-                          info.thread_var_thread_id);
-    }
 }
 
 
@@ -1659,11 +1907,7 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
                             get_parameter_str(args));  // begin function
 
 
-    printer->add_multi_line(
-        "_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-
-    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
-    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    print_entrypoint_setup_code_from_memb_list();
     printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
@@ -1680,25 +1924,6 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
 }
 
 
-void CodegenNeuronCppVisitor::print_callable_preamble_from_prop() {
-    printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(prop);");
-    printer->add_line("_nrn_mechanism_cache_instance _lmc{prop};");
-    printer->add_line("const size_t id = 0;");
-
-    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
-    if (!info.artificial_cell) {
-        printer->fmt_line("auto node_data = make_node_data_{}(prop);", info.mod_suffix);
-    }
-
-    if (!codegen_thread_variables.empty()) {
-        printer->fmt_line("auto _thread_vars = {}({}_global.thread_data);",
-                          thread_variables_struct(),
-                          info.mod_suffix);
-    }
-
-    printer->add_newline();
-}
-
 void CodegenNeuronCppVisitor::print_nrn_constructor_declaration() {
     if (info.constructor_node) {
         printer->fmt_line("void {}(Prop* prop);", method_name(naming::NRN_CONSTRUCTOR_METHOD));
@@ -1709,7 +1934,7 @@ void CodegenNeuronCppVisitor::print_nrn_constructor() {
     if (info.constructor_node) {
         printer->fmt_push_block("void {}(Prop* prop)", method_name(naming::NRN_CONSTRUCTOR_METHOD));
 
-        print_callable_preamble_from_prop();
+        print_entrypoint_setup_code_from_prop();
 
         auto block = info.constructor_node->get_statement_block();
         print_statement_block(*block, false, false);
@@ -1725,7 +1950,7 @@ void CodegenNeuronCppVisitor::print_nrn_destructor_declaration() {
 
 void CodegenNeuronCppVisitor::print_nrn_destructor() {
     printer->fmt_push_block("void {}(Prop* prop)", method_name(naming::NRN_DESTRUCTOR_METHOD));
-    print_callable_preamble_from_prop();
+    print_entrypoint_setup_code_from_prop();
 
     for (const auto& rv: info.random_variables) {
         printer->fmt_line("nrnran123_deletestream((nrnran123_State*) {});",
@@ -1855,8 +2080,9 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
 
     if (!info.random_variables.empty()) {
         for (const auto& rv: info.random_variables) {
-            printer->fmt_line("{} = nrnran123_newstream();",
-                              get_variable_name(get_name(rv), false));
+            auto position = position_of_int_var(get_name(rv));
+            printer->fmt_line("_ppvar[{}].literal_value<void*>() = nrnran123_newstream();",
+                              position);
         }
         printer->fmt_line("nrn_mech_inst_destruct[mech_type] = neuron::{};",
                           method_name(naming::NRN_DESTRUCTOR_METHOD));
@@ -2239,6 +2465,7 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
 
 
 void CodegenNeuronCppVisitor::print_compute_functions() {
+    print_top_verbatim_blocks();
     print_hoc_py_wrapper_function_definitions();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
@@ -2273,6 +2500,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_nrn_destructor_declaration();
     print_nrn_alloc();
     print_function_prototypes();
+    print_longitudinal_diffusion_callbacks();
     print_point_process_function_definitions();
     print_setdata_functions();
     print_check_table_entrypoint();
@@ -2453,6 +2681,15 @@ void CodegenNeuronCppVisitor::print_net_init() {
 /// TODO: Edit for NEURON
 void CodegenNeuronCppVisitor::visit_watch_statement(const ast::WatchStatement& /* node */) {
     return;
+}
+
+void CodegenNeuronCppVisitor::visit_longitudinal_diffusion_block(
+    const ast::LongitudinalDiffusionBlock& /* node */) {
+    // These are handled via `print_longitdudinal_*`.
+}
+
+void CodegenNeuronCppVisitor::visit_lon_diffuse(const ast::LonDiffuse& /* node */) {
+    // These are handled via `print_longitdudinal_*`.
 }
 
 void CodegenNeuronCppVisitor::visit_for_netcon(const ast::ForNetcon& node) {
