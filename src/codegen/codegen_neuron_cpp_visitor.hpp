@@ -339,7 +339,7 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *
      *  Returns the names of all macros introduced.
      */
-    std::vector<std::string> print_verbatim_setup(const std::string& verbatim);
+    std::vector<std::string> print_verbatim_setup(const ast::Verbatim& node, const std::string& verbatim);
 
 
     /** Print `#undef`s to erase all compatibility macros.
