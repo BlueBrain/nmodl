@@ -599,6 +599,34 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
     return {params, {}};
 }
 
+
+std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(const symtab::SymbolTable& symtab) {
+    if(symtab.global_scope()) {
+        return {};
+    }
+
+    auto local_variables = symtab.get_variables(NmodlType::local_var);
+    auto parent_symtab = symtab.get_parent_table();
+    if(parent_symtab == nullptr) {
+        throw std::runtime_error("Internal NMODL error: non top-level symbol table doesn't have a parent.");
+    }
+
+    auto variable_names = get_nonglobal_local_variable_names(*parent_symtab);
+
+    for(const auto& symbol : local_variables) {
+        auto status = symbol->get_status();
+        bool is_renamed = (status & symtab::syminfo::Status::renamed) != symtab::syminfo::Status::empty;
+        auto current_name = symbol->get_name();
+        auto mod_name = is_renamed ? symbol->get_original_name() : current_name;
+
+        variable_names[mod_name] = current_name;
+    }
+
+    return variable_names;
+}
+
+
+
 std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
     const ast::Verbatim& node,
     const std::string& verbatim) {
@@ -655,12 +683,10 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
 
 
     auto symtab = node.get_parent()->get_symbol_table();
-    auto locals = symtab->get_variables(/* with= */ NmodlType::local_var);
-    for (const auto& local: locals) {
-        std::string name = local->get_name();
-        print_macro(fmt::format("_l{}", name), get_variable_name(name));
+    auto locals = get_nonglobal_local_variable_names(*symtab);
+    for (const auto& [mod_name, current_name]: locals) {
+        print_macro(fmt::format("_l{}", mod_name), get_variable_name(current_name));
     }
-
 
     print_macro("t", "nt->_t");
     print_macro("_nt", "nt");
