@@ -15,6 +15,7 @@
 #include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 #include <string>
+#include <unordered_set>
 
 namespace nmodl {
 namespace visitor {
@@ -55,8 +56,8 @@ class CvodeVisitor: public AstVisitor {
     /// index of the block to modify
     BlockIndex block_index = BlockIndex::FUNCTION;
 
-    /// map of state vars to conserve equations
-    std::unordered_map<std::string, std::string> conserve_equations;
+    /// list of conserve equations encountered
+    std::unordered_set<ast::Node*> conserve_equations;
 
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
