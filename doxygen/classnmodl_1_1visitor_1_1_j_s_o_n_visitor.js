@@ -72,6 +72,7 @@ var classnmodl_1_1visitor_1_1_j_s_o_n_visitor =
     [ "visit_local_list_statement", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a3e961657205b5352e6010c9d5ee00201", null ],
     [ "visit_local_var", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a72735a7f987fd4640abee5408b806adf", null ],
     [ "visit_lon_diffuse", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a8bc47dcc499c5989267d6f437fe8aa72", null ],
+    [ "visit_longitudinal_diffusion_block", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a56652c87a267f3c178d1d326be6a24a1", null ],
     [ "visit_model", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a3a0e0012b6967c823a3ff9c3315aebb6", null ],
     [ "visit_mutex_lock", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a53a8b46dadc03c0dc281c9b980bfd00f", null ],
     [ "visit_mutex_unlock", "classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a32e9b1a94a3a039a3d5df06cc66cef80", null ],

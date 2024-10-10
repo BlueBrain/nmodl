@@ -498,6 +498,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0a515b4626c99a01b4fd8d4bafcf583d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a0a515b4626c99a01b4fd8d4bafcf583d">visit_eigen_linear_solver_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html">ast::EigenLinearSolverBlock</a> &amp;node) override</td></tr>
 <tr class="memdesc:a0a515b4626c99a01b4fd8d4bafcf583d"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html" title="Represent linear solver solution block based on Eigen.">ast::EigenLinearSolverBlock</a>  <a href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a0a515b4626c99a01b4fd8d4bafcf583d">More...</a><br /></td></tr>
 <tr class="separator:a0a515b4626c99a01b4fd8d4bafcf583d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56652c87a267f3c178d1d326be6a24a1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a56652c87a267f3c178d1d326be6a24a1">visit_longitudinal_diffusion_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:a56652c87a267f3c178d1d326be6a24a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html" title="Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.">ast::LongitudinalDiffusionBlock</a>  <a href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a56652c87a267f3c178d1d326be6a24a1">More...</a><br /></td></tr>
+<tr class="separator:a56652c87a267f3c178d1d326be6a24a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a042111321a97e7bc69e3f9f16ed47653"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a042111321a97e7bc69e3f9f16ed47653">visit_wrapped_expression</a> (const <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html">ast::WrappedExpression</a> &amp;node) override</td></tr>
 <tr class="memdesc:a042111321a97e7bc69e3f9f16ed47653"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html" title="Wrap any other expression type.">ast::WrappedExpression</a>  <a href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a042111321a97e7bc69e3f9f16ed47653">More...</a><br /></td></tr>
 <tr class="separator:a042111321a97e7bc69e3f9f16ed47653"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1512,7 +1515,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#aca63850c7c0b6e65e397ecc84f63eece">nmodl::visitor::ConstAstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01092">1092</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01101">1101</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2796,6 +2799,38 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a56652c87a267f3c178d1d326be6a24a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56652c87a267f3c178d1d326be6a24a1">&#9670;&nbsp;</a></span>visit_longitudinal_diffusion_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::visitor::JSONVisitor::visit_longitudinal_diffusion_block </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html" title="Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.">ast::LongitudinalDiffusionBlock</a> </p>
+
+<p>Reimplemented from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a54e14b0a1dbd8dc974e98c91596665d8">nmodl::visitor::ConstAstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01083">1083</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a3a0e0012b6967c823a3ff9c3315aebb6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3a0e0012b6967c823a3ff9c3315aebb6">&#9670;&nbsp;</a></span>visit_model()</h2>
 
@@ -3848,7 +3883,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a34cada098d1d7275af540c3124e5afa1">nmodl::visitor::ConstAstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01101">1101</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01110">1110</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4328,7 +4363,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#aaee5bfcc26a1a00ee29b544c6c038803">nmodl::visitor::ConstAstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01110">1110</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01119">1119</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4584,7 +4619,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reimplemented from <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a4adcc9f119269eec1623dbf084917658">nmodl::visitor::ConstAstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01083">1083</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="json__visitor_8cpp_source.html#l01092">1092</a> of file <a class="el" href="json__visitor_8cpp_source.html">json_visitor.cpp</a>.</p>
 
 </div>
 </div>

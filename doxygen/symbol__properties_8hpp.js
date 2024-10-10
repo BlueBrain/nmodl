@@ -46,7 +46,8 @@ var symbol__properties_8hpp =
       [ "define", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf1edc500eb1136f10c17eeffb9eecbc5", null ],
       [ "codegen_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbaf502fdd34c60ff3223d4f18ec72f4cc8", null ],
       [ "random_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba697324bc2a726114814b9ae77caa789a", null ],
-      [ "use_range_ptr_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba1cd9364d44a46a92179c359099d0e7c7", null ]
+      [ "use_range_ptr_var", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba1cd9364d44a46a92179c359099d0e7c7", null ],
+      [ "longitudinal_diffusion_block", "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dba66224eac40ce3942960ce448c6fcf70c", null ]
     ] ],
     [ "Scope", "symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75", [
       [ "local", "symbol__properties_8hpp.html#a901f9299d7c59b1694463d26928f2a75af5ddaf0ca7929578b408c909429f68f2", null ],

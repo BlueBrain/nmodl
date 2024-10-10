@@ -46,6 +46,7 @@ var group__codegen__details =
       [ "visit_function_table_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a2aff08b60865116219d130e2a8189853", null ],
       [ "visit_initial_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af20451367756d95c85cd561cde6fe755", null ],
       [ "visit_linear_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a37db9662cf6af6319e88c1911c0bbc18", null ],
+      [ "visit_longitudinal_diffusion_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a404a8a6f1fff6dcd94266cb0f8c0151f", null ],
       [ "visit_net_receive_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab54869b24980697de8034a756a39e290", null ],
       [ "visit_non_linear_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a0a80f1e473082fab332fb68134382ba9", null ],
       [ "visit_nrn_state_block", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a29fcfd40619e84e41d6d11834fd7116f", null ],
@@ -117,6 +118,17 @@ var group__codegen__details =
       [ "name", "structnmodl_1_1codegen_1_1_index_semantics.html#a3de5378a1498770d97a4e46cb14a0b70", null ],
       [ "size", "structnmodl_1_1codegen_1_1_index_semantics.html#a0803c134bfb137b0dcdc214bb1d1d307", null ]
     ] ],
+    [ "LongitudinalDiffusionInfo", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html", [
+      [ "LongitudinalDiffusionInfo", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#aa88483b3bb2288b16b64debe9c4bfcc5", null ],
+      [ "dfcdc", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#a723edaa027802da7484fb7ef2d836a08", null ],
+      [ "diffusion_rate", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#aafc963bfaab57d18d80b9aab7014845e", null ],
+      [ "substitute_index", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#a6c0b0a470c965df59f75c54e5d9f8080", null ],
+      [ "volume", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#a62a1d573760cfe3766d63482c6d6eb69", null ],
+      [ "rate_expr", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#ae017168a08fa81068ac890fccb97eec2", null ],
+      [ "rate_index_name", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#ad3f3caae3d0ef29ede236fc40c95548d", null ],
+      [ "volume_expr", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#a7213f631fbea049a04b5cca9bdd83520", null ],
+      [ "volume_index_name", "classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#ab646d83f1dc6a6400ab65cfaf9a664fe", null ]
+    ] ],
     [ "CodegenInfo", "structnmodl_1_1codegen_1_1_codegen_info.html", [
       [ "SymbolType", "structnmodl_1_1codegen_1_1_codegen_info.html#a9ed0ac0e4a57563e267a4ebbbcbd4203", null ],
       [ "derivimplicit_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a9074abdb41f5138d971e9ef66e2c93c2", null ],
@@ -164,6 +176,7 @@ var group__codegen__details =
       [ "global_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a41dec4bc8295bae5fd9f216e2877d478", null ],
       [ "initial_node", "structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810", null ],
       [ "ions", "structnmodl_1_1codegen_1_1_codegen_info.html#a92c83194913f5a2766c912b3ed8ba55e", null ],
+      [ "longitudinal_diffusion_info", "structnmodl_1_1codegen_1_1_codegen_info.html#abc1ba7166743ddf5508c7ccc9f8caf6a", null ],
       [ "mod_file", "structnmodl_1_1codegen_1_1_codegen_info.html#a713fd3d8497c602e733e755ffaffacac", null ],
       [ "mod_suffix", "structnmodl_1_1codegen_1_1_codegen_info.html#ad173d2b9f305f30ca7c87f71ff2b28eb", null ],
       [ "net_event_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a488be1456bcf72fedaec26349687ae86", null ],

@@ -144,6 +144,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_ion.html">Ion</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent ions used in mod file.  <a href="structnmodl_1_1codegen_1_1_ion.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html">LongitudinalDiffusionInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Information required to print LONGITUDINAL_DIFFUSION callbacks.  <a href="classnmodl_1_1codegen_1_1_longitudinal_diffusion_info.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structnmodl_1_1codegen_1_1_shadow_use_statement.html">ShadowUseStatement</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents ion write statement during code generation.  <a href="structnmodl_1_1codegen_1_1_shadow_use_statement.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,6 +227,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">check_procedure_has_cvode</a> (const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;solve_node, const std::shared_ptr&lt; const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &gt; &amp;procedure_node)</td></tr>
 <tr class="memdesc:a3e75c36618ff26dba0e71f1b97fc3778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods.  <a href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">More...</a><br /></td></tr>
 <tr class="separator:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca4a0c24d0f98ca82fd7a9c5d9b3725c"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_compartment.html">ast::Compartment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#aca4a0c24d0f98ca82fd7a9c5d9b3725c">find_compartment</a> (const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;node, const std::string &amp;var_name)</td></tr>
+<tr class="separator:aca4a0c24d0f98ca82fd7a9c5d9b3725c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a983af1c34064b33f42068e2767c2287e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">rename_net_receive_arguments</a> (const <a class="el" href="classnmodl_1_1ast_1_1_net_receive_block.html">ast::NetReceiveBlock</a> &amp;net_receive_node, const <a class="el" href="classnmodl_1_1ast_1_1_node.html">ast::Node</a> &amp;node)</td></tr>
 <tr class="memdesc:a983af1c34064b33f42068e2767c2287e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename arguments to NET_RECEIVE block with corresponding pointer variable.  <a href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">More...</a><br /></td></tr>
 <tr class="separator:a983af1c34064b33f42068e2767c2287e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,7 +300,45 @@ Variables</h2></td></tr>
 
 <p>Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods. </p>
 
-<p class="definition">Definition at line <a class="el" href="codegen__helper__visitor_8cpp_source.html#l00031">31</a> of file <a class="el" href="codegen__helper__visitor_8cpp_source.html">codegen_helper_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__helper__visitor_8cpp_source.html#l00033">33</a> of file <a class="el" href="codegen__helper__visitor_8cpp_source.html">codegen_helper_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aca4a0c24d0f98ca82fd7a9c5d9b3725c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca4a0c24d0f98ca82fd7a9c5d9b3725c">&#9670;&nbsp;</a></span>find_compartment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_compartment.html">ast::Compartment</a>&gt; nmodl::codegen::find_compartment </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>var_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="codegen__helper__visitor_8cpp_source.html#l00858">858</a> of file <a class="el" href="codegen__helper__visitor_8cpp_source.html">codegen_helper_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -424,7 +467,7 @@ Variables</h2></td></tr>
 <div class="fragment"><div class="line">x[id] = _args[1];</div>
 </div><!-- fragment --><p>So, the <code>R</code> in AST needs to be renamed with <code>_args[1]</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l02366">2366</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l02444">2444</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>

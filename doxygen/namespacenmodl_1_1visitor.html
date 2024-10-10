@@ -128,6 +128,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html">ConstVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class for all constant visitors implementation.  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks.html">CreateLongitudinalDiffusionBlocks</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html">DefUseAnalyzeVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor to return Def-Use chain for a given variable in the block/node  <a href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,6 +286,10 @@ Functions</h2></td></tr>
 <tr class="separator:a8510111d3c4032626374d463da3d429c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee96ed86397883848d9b56714492e13c"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#aee96ed86397883848d9b56714492e13c">create_expr</a> (const std::string &amp;str_expr)</td></tr>
 <tr class="separator:aee96ed86397883848d9b56714492e13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cd2406f0a623ebcb6c533c948268de8"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a8cd2406f0a623ebcb6c533c948268de8">make_statement_block</a> (<a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">ast::KineticBlock</a> &amp;kinetic_block, <a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">nmodl::ast::AstNodeType</a> node_type)</td></tr>
+<tr class="separator:a8cd2406f0a623ebcb6c533c948268de8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee5a18e608f66ff910e1260d64be4f02"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#aee5a18e608f66ff910e1260d64be4f02">create_block</a> (<a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">ast::KineticBlock</a> &amp;node)</td></tr>
+<tr class="separator:aee5a18e608f66ff910e1260d64be4f02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b5db33bfc3c6c9d41c199ad73c3cea7"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a2b5db33bfc3c6c9d41c199ad73c3cea7">unwrap</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;expr)</td></tr>
 <tr class="memdesc:a2b5db33bfc3c6c9d41c199ad73c3cea7"><td class="mdescLeft">&#160;</td><td class="mdescRight">return underlying expression wrapped by WrappedExpression  <a href="namespacenmodl_1_1visitor.html#a2b5db33bfc3c6c9d41c199ad73c3cea7">More...</a><br /></td></tr>
 <tr class="separator:a2b5db33bfc3c6c9d41c199ad73c3cea7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -686,6 +692,34 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aee5a18e608f66ff910e1260d64be4f02"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee5a18e608f66ff910e1260d64be4f02">&#9670;&nbsp;</a></span>create_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a>&gt; nmodl::visitor::create_block </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">ast::KineticBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="longitudinal__diffusion__visitor_8cpp_source.html#l00034">34</a> of file <a class="el" href="longitudinal__diffusion__visitor_8cpp_source.html">longitudinal_diffusion_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aee96ed86397883848d9b56714492e13c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee96ed86397883848d9b56714492e13c">&#9670;&nbsp;</a></span>create_expr()</h2>
 
@@ -1040,6 +1074,44 @@ Functions</h2></td></tr>
 <p>check if given expression is a number note that the DEFINE node is already expanded to integer </p>
 
 <p class="definition">Definition at line <a class="el" href="constant__folder__visitor_8cpp_source.html#l00020">20</a> of file <a class="el" href="constant__folder__visitor_8cpp_source.html">constant_folder_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a8cd2406f0a623ebcb6c533c948268de8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cd2406f0a623ebcb6c533c948268de8">&#9670;&nbsp;</a></span>make_statement_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a>&gt; nmodl::visitor::make_statement_block </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_kinetic_block.html">ast::KineticBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>kinetic_block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="group__ast__type.html#gac392e49849e60c05e42ea02c7b445033">nmodl::ast::AstNodeType</a>&#160;</td>
+          <td class="paramname"><em>node_type</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="longitudinal__diffusion__visitor_8cpp_source.html#l00019">19</a> of file <a class="el" href="longitudinal__diffusion__visitor_8cpp_source.html">longitudinal_diffusion_visitor.cpp</a>.</p>
 
 </div>
 </div>

@@ -30,6 +30,10 @@ var dir_5da0f2f50dc0c79639fb8a44dc3280da =
     [ "local_var_rename_visitor.hpp", "local__var__rename__visitor_8hpp.html", null ],
     [ "localize_visitor.cpp", "localize__visitor_8cpp.html", null ],
     [ "localize_visitor.hpp", "localize__visitor_8hpp.html", null ],
+    [ "longitudinal_diffusion_visitor.cpp", "longitudinal__diffusion__visitor_8cpp.html", "longitudinal__diffusion__visitor_8cpp" ],
+    [ "longitudinal_diffusion_visitor.hpp", "longitudinal__diffusion__visitor_8hpp.html", [
+      [ "CreateLongitudinalDiffusionBlocks", "classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks.html", "classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks" ]
+    ] ],
     [ "loop_unroll_visitor.cpp", "loop__unroll__visitor_8cpp.html", "loop__unroll__visitor_8cpp" ],
     [ "loop_unroll_visitor.hpp", "loop__unroll__visitor_8hpp.html", null ],
     [ "main.cpp", "src_2visitors_2main_8cpp.html", "src_2visitors_2main_8cpp" ],

@@ -46,6 +46,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "global_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a41dec4bc8295bae5fd9f216e2877d478", null ],
     [ "initial_node", "structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810", null ],
     [ "ions", "structnmodl_1_1codegen_1_1_codegen_info.html#a92c83194913f5a2766c912b3ed8ba55e", null ],
+    [ "longitudinal_diffusion_info", "structnmodl_1_1codegen_1_1_codegen_info.html#abc1ba7166743ddf5508c7ccc9f8caf6a", null ],
     [ "mod_file", "structnmodl_1_1codegen_1_1_codegen_info.html#a713fd3d8497c602e733e755ffaffacac", null ],
     [ "mod_suffix", "structnmodl_1_1codegen_1_1_codegen_info.html#ad173d2b9f305f30ca7c87f71ff2b28eb", null ],
     [ "net_event_used", "structnmodl_1_1codegen_1_1_codegen_info.html#a488be1456bcf72fedaec26349687ae86", null ],

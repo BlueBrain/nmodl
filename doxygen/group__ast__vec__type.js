@@ -65,6 +65,7 @@ var group__ast__vec__type =
     [ "LocalListStatementVector", "group__ast__vec__type.html#ga43670b46856b8bf19329d63074ff22ee", null ],
     [ "LocalVarVector", "group__ast__vec__type.html#ga4c71df722cb1596c542e28b55e48ac2b", null ],
     [ "LonDiffuseVector", "group__ast__vec__type.html#ga0d32edcd8b38d9a29d9626b7d34a7697", null ],
+    [ "LongitudinalDiffusionBlockVector", "group__ast__vec__type.html#ga3ba4db6c4623e8fd028596c2e4d4e9b3", null ],
     [ "ModelVector", "group__ast__vec__type.html#gaa7ba889fd6c67c766e97bbfd4ce967ab", null ],
     [ "MutexLockVector", "group__ast__vec__type.html#ga68ba84b79158fa8e2111c31be626ecff", null ],
     [ "MutexUnlockVector", "group__ast__vec__type.html#ga6eebf892b271eef7cab7a8bca3e1542d", null ],

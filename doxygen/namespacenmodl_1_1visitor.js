@@ -6,6 +6,7 @@ var namespacenmodl_1_1visitor =
     [ "ConstantFolderVisitor", "classnmodl_1_1visitor_1_1_constant_folder_visitor.html", "classnmodl_1_1visitor_1_1_constant_folder_visitor" ],
     [ "ConstAstVisitor", "classnmodl_1_1visitor_1_1_const_ast_visitor.html", "classnmodl_1_1visitor_1_1_const_ast_visitor" ],
     [ "ConstVisitor", "classnmodl_1_1visitor_1_1_const_visitor.html", "classnmodl_1_1visitor_1_1_const_visitor" ],
+    [ "CreateLongitudinalDiffusionBlocks", "classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks.html", "classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks" ],
     [ "DefUseAnalyzeVisitor", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html", "classnmodl_1_1visitor_1_1_def_use_analyze_visitor" ],
     [ "DUChain", "classnmodl_1_1visitor_1_1_d_u_chain.html", "classnmodl_1_1visitor_1_1_d_u_chain" ],
     [ "DUInstance", "classnmodl_1_1visitor_1_1_d_u_instance.html", "classnmodl_1_1visitor_1_1_d_u_instance" ],

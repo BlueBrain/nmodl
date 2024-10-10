@@ -100,7 +100,9 @@ $(document).ready(function(){initNavTree('codegen__helper__visitor_8cpp.html',''
 <div class="textblock"><code>#include &quot;<a class="el" href="codegen__helper__visitor_8hpp_source.html">codegen/codegen_helper_visitor.hpp</a>&quot;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &quot;<a class="el" href="all_8hpp_source.html">ast/all.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="constant__var_8hpp_source.html">ast/constant_var.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen/codegen_naming.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="c11__driver_8hpp_source.html">parser/c11_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="visitor__utils_8hpp_source.html">visitors/visitor_utils.hpp</a>&quot;</code><br />
@@ -121,6 +123,8 @@ Functions</h2></td></tr>
 <tr class="memitem:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">nmodl::codegen::check_procedure_has_cvode</a> (const std::shared_ptr&lt; const ast::Ast &gt; &amp;solve_node, const std::shared_ptr&lt; const ast::Ast &gt; &amp;procedure_node)</td></tr>
 <tr class="memdesc:a3e75c36618ff26dba0e71f1b97fc3778"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check whether a given SOLVE block solves a PROCEDURE with any of the CVode methods.  <a href="namespacenmodl_1_1codegen.html#a3e75c36618ff26dba0e71f1b97fc3778">More...</a><br /></td></tr>
 <tr class="separator:a3e75c36618ff26dba0e71f1b97fc3778"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca4a0c24d0f98ca82fd7a9c5d9b3725c"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; ast::Compartment &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#aca4a0c24d0f98ca82fd7a9c5d9b3725c">nmodl::codegen::find_compartment</a> (const ast::LongitudinalDiffusionBlock &amp;node, const std::string &amp;var_name)</td></tr>
+<tr class="separator:aca4a0c24d0f98ca82fd7a9c5d9b3725c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->

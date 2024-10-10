@@ -305,6 +305,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_lon_diffuse.html">LonDiffuse</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent LONGITUDINAL_DIFFUSION statement in NMODL.  <a href="classnmodl_1_1ast_1_1_lon_diffuse.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">LongitudinalDiffusionBlock</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.  <a href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1ast_1_1_model.html">Model</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO.  <a href="classnmodl_1_1ast_1_1_model.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -715,6 +718,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ga5761cc3e2890eeaed3f4566009cbf096"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae08bb1de5f4b894eccf307e0a048a6f6"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#gae08bb1de5f4b894eccf307e0a048a6f6">EigenLinearSolverBlockVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html">EigenLinearSolverBlock</a> &gt; &gt;</td></tr>
 <tr class="separator:gae08bb1de5f4b894eccf307e0a048a6f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3ba4db6c4623e8fd028596c2e4d4e9b3"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#ga3ba4db6c4623e8fd028596c2e4d4e9b3">LongitudinalDiffusionBlockVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">LongitudinalDiffusionBlock</a> &gt; &gt;</td></tr>
+<tr class="separator:ga3ba4db6c4623e8fd028596c2e4d4e9b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga14f26d676627a4771b541cef2a35748f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#ga14f26d676627a4771b541cef2a35748f">WrappedExpressionVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html">WrappedExpression</a> &gt; &gt;</td></tr>
 <tr class="separator:ga14f26d676627a4771b541cef2a35748f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae61adf9ec92b26e3a88af2b70de5bda2"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__vec__type.html#gae61adf9ec92b26e3a88af2b70de5bda2">DerivimplicitCallbackVector</a> = std::vector&lt; std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_derivimplicit_callback.html">DerivimplicitCallback</a> &gt; &gt;</td></tr>
@@ -919,10 +924,11 @@ Enumerations</h2></td></tr>
 <br />
 &#160;&#160;<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa94fa2efd7b3aa56d6e93ca2ded9f8c4">AstNodeType::EIGEN_NEWTON_SOLVER_BLOCK</a>, 
 <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a517df820ec4c846300b1dea014500d0f">AstNodeType::EIGEN_LINEAR_SOLVER_BLOCK</a>, 
+<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ad965faf821f14283d12f2a59714f2bb8">AstNodeType::LONGITUDINAL_DIFFUSION_BLOCK</a>, 
 <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53">AstNodeType::WRAPPED_EXPRESSION</a>, 
-<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206">AstNodeType::DERIVIMPLICIT_CALLBACK</a>, 
 <br />
-&#160;&#160;<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d">AstNodeType::SOLUTION_EXPRESSION</a>, 
+&#160;&#160;<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206">AstNodeType::DERIVIMPLICIT_CALLBACK</a>, 
+<a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a03d2d4d474a5e228e6708a598e75d72d">AstNodeType::SOLUTION_EXPRESSION</a>, 
 <a class="el" href="group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a4fb7ea683a98639d84f8d9b07c33a3a5">AstNodeType::UPDATE_DT</a>
 <br />
  }</td></tr>

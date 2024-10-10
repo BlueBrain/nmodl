@@ -39,6 +39,7 @@ var classnmodl_1_1visitor_1_1_symtab_visitor =
     [ "visit_kinetic_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a3c82994499855c5758eb6d6197edff89", null ],
     [ "visit_linear_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a7066a01b2d2015cc0228a99254330b6f", null ],
     [ "visit_local_var", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a072518e9ec13c2743cabc1b9e8db876e", null ],
+    [ "visit_longitudinal_diffusion_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a369a75c8b0edf1d6851b296eea498e2d", null ],
     [ "visit_net_receive_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a4e0cc041fca95cc62db0618875330b00", null ],
     [ "visit_neuron_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a0dbebec67c1ea6ed2a9f0bbecfdf51b8", null ],
     [ "visit_non_linear_block", "classnmodl_1_1visitor_1_1_symtab_visitor.html#a0404c1247e787a03c8bec68f6419ab22", null ],
