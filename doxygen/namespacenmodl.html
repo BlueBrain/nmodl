@@ -255,6 +255,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a4004b62c9ab28101181960aefda0d8e7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a4004b62c9ab28101181960aefda0d8e7">to_json</a> (const <a class="el" href="structnmodl_1_1ast_1_1_ast.html">ast::Ast</a> &amp;node, bool compact=false, bool expand=false, bool add_nmodl=false)</td></tr>
 <tr class="memdesc:a4004b62c9ab28101181960aefda0d8e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given AST node, return the JSON string representation.  <a href="namespacenmodl.html#a4004b62c9ab28101181960aefda0d8e7">More...</a><br /></td></tr>
 <tr class="separator:a4004b62c9ab28101181960aefda0d8e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a440c5acebcac5ff3c16dc050f916ce05"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a440c5acebcac5ff3c16dc050f916ce05">statement_dependencies_key</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;lhs)</td></tr>
+<tr class="memdesc:a440c5acebcac5ff3c16dc050f916ce05"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code>result.first</code> of <code>statement_dependencies</code>.  <a href="namespacenmodl.html#a440c5acebcac5ff3c16dc050f916ce05">More...</a><br /></td></tr>
+<tr class="separator:a440c5acebcac5ff3c16dc050f916ce05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1cf829797d75f00f7307a89776d9d735"><td class="memItemLeft" align="right" valign="top">std::pair&lt; std::string, std::unordered_set&lt; std::string &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl.html#a1cf829797d75f00f7307a89776d9d735">statement_dependencies</a> (const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;lhs, const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;rhs)</td></tr>
 <tr class="memdesc:a1cf829797d75f00f7307a89776d9d735"><td class="mdescLeft">&#160;</td><td class="mdescRight">If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on.  <a href="namespacenmodl.html#a1cf829797d75f00f7307a89776d9d735">More...</a><br /></td></tr>
 <tr class="separator:a1cf829797d75f00f7307a89776d9d735"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -562,7 +565,7 @@ Variables</h2></td></tr>
 
 <p>Given a VarName node, return the full var name including index. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00281">281</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00286">286</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -584,7 +587,7 @@ Variables</h2></td></tr>
 
 <p>Given a Indexed node, return the name with index. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00277">277</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00282">282</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -712,7 +715,7 @@ Variables</h2></td></tr>
 
 <p>Is given name <code>nrn_pointing</code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00296">296</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00301">301</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -734,7 +737,7 @@ Variables</h2></td></tr>
 
 <p>Is given name a one of the function for RANDOM construct. </p>
 
-<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00292">292</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00297">297</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -988,6 +991,28 @@ Variables</h2></td></tr>
 
 <p>If <code>lhs</code> and <code>rhs</code> combined represent an assignment (we assume to have an "=" in between them) we extract the variables on which the assigned variable depends on. </p>
 <p>We provide the input with lhs and rhs because there are a few nodes that have this similar structure but slightly different naming (binaryExpression, diff_eq_expression, linExpression) </p>
+
+<p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00262">262</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a440c5acebcac5ff3c16dc050f916ce05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a440c5acebcac5ff3c16dc050f916ce05">&#9670;&nbsp;</a></span>statement_dependencies_key()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::statement_dependencies_key </td>
+          <td>(</td>
+          <td class="paramtype">const std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The <code>result.first</code> of <code>statement_dependencies</code>. </p>
 
 <p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00253">253</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
 
