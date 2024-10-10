@@ -26,7 +26,7 @@ static int get_index(const ast::IndexedName& node) {
 
 void CvodeVisitor::visit_conserve(ast::Conserve& node) {
     if (in_cvode_block) {
-        logger->warn("CvodeVisitor :: CONSERVE statement {} will be ignored in CVODE codegen",
+        logger->warn("CvodeVisitor :: statement {} will be ignored in CVODE codegen",
                      to_nmodl(node));
         conserve_equations.emplace(&node);
     }
@@ -143,7 +143,10 @@ void CvodeVisitor::visit_program(ast::Program& node) {
     // re-visit the AST since we now inserted the CVODE block
     node.visit_children(*this);
     if (!conserve_equations.empty()) {
-        node.erase_node(conserve_equations);
+        auto blocks = collect_nodes(node, {ast::AstNodeType::CVODE_BLOCK});
+        auto block = std::dynamic_pointer_cast<ast::CvodeBlock>(blocks[0]);
+        block->get_function_block()->erase_statement(conserve_equations);
+        block->get_diagonal_jacobian_block()->erase_statement(conserve_equations);
     }
 }
 

@@ -57,7 +57,7 @@ class CvodeVisitor: public AstVisitor {
     BlockIndex block_index = BlockIndex::FUNCTION;
 
     /// list of conserve equations encountered
-    std::unordered_set<ast::Node*> conserve_equations;
+    std::unordered_set<ast::Statement*> conserve_equations;
 
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
