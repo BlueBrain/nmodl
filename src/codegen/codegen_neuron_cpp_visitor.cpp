@@ -859,7 +859,6 @@ void CodegenNeuronCppVisitor::print_mechanism_global_var_structure(bool print_in
     if (info.emit_cvode) {
         printer->add_line("static Symbol** _atollist;");
         printer->push_block("static HocStateTolerance _hoc_state_tol[] =");
-        // TODO: add stuff that iterates over `rangestate` in NOCMODL
         printer->add_line("{0, 0}");
         printer->pop_block(";");
     }
@@ -1290,7 +1289,6 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
 
     if (info.emit_cvode) {
         mech_register_args.push_back(
-            // TODO: figure out why the first parameter should be called "_cvode_ieq"
             fmt::format("_nrn_mechanism_field<int>{{\"_cvode_ieq\", \"cvodeieq\"}} /* {} */",
                         codegen_int_variables_size));
     }
@@ -1367,7 +1365,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
                           codegen_int_variables_size);
         printer->fmt_line(
-            "hoc_register_cvode(mech_type, ode_count_{}, ode_map_{}, ode_spec_{}, ode_matsol_{});",
+            "hoc_register_cvode(mech_type, ode_count_{}, ode_setup_tolerance_{}, "
+            "ode_setup_nonstiff_{}, ode_setup_stiff_{});",
             info.mod_suffix,
             info.mod_suffix,
             info.mod_suffix,
@@ -2432,6 +2431,29 @@ void CodegenNeuronCppVisitor::print_net_receive_common_code() {
     printer->add_line("double t = nt->_t;");
 }
 
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::cvode_setup_parameters() {
+    return {{"", "const _nrn_model_sorted_token&", "", "_sorted_token"},
+            {"", "NrnThread*", "", "nt"},
+            {"", "Memb_list*", "", "_ml_arg"},
+            {"", "int", "", "_type"}};
+}
+
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::cvode_update_parameters() {
+    ParamVector args = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
+                        {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
+                        {"", fmt::format("{}_NodeData&", info.mod_suffix), "", "node_data"},
+                        {"", "size_t", "", "id"},
+                        {"", "Datum*", "", "_ppvar"},
+                        {"", "Datum*", "", "_thread"},
+                        {"", "NrnThread*", "", "nt"}};
+
+    if (info.thread_callback_register) {
+        auto type_name = fmt::format("{}&", thread_variables_struct());
+        args.emplace_back("", type_name, "", "_thread_vars");
+    }
+    return args;
+}
+
 void CodegenNeuronCppVisitor::print_cvode_definitions() {
     if (!info.emit_cvode) {
         return;
@@ -2447,28 +2469,13 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     printer->add_newline(2);
 
-    const ParamVector args_setup = {{"", "const _nrn_model_sorted_token&", "", "_sorted_token"},
-                                    {"", "NrnThread*", "", "nt"},
-                                    {"", "Memb_list*", "", "_ml_arg"},
-                                    {"", "int", "", "_type"}};
+    auto update_nonstiff_name = fmt::format("ode_update_nonstiff_{}", info.mod_suffix);
 
-    ParamVector args_cvode = {{"", "_nrn_mechanism_cache_range&", "", "_lmc"},
-                              {"", fmt::format("{}_Instance&", info.mod_suffix), "", "inst"},
-                              {"", fmt::format("{}_NodeData&", info.mod_suffix), "", "node_data"},
-                              {"", "size_t", "", "id"},
-                              {"", "Datum*", "", "_ppvar"},
-                              {"", "Datum*", "", "_thread"},
-                              {"", "NrnThread*", "", "nt"}};
-
-    if (info.thread_callback_register) {
-        auto type_name = fmt::format("{}&", thread_variables_struct());
-        args_cvode.emplace_back("", type_name, "", "_thread_vars");
-    }
-
-    /* The internal spec function */
-    printer->fmt_push_block("static int ode_spec1_{}({})",
-                            info.mod_suffix,
-                            get_parameter_str(args_cvode));  // begin function definition
+    /* The update function for non-stiff systems */
+    printer->fmt_push_block("static int {}({})",
+                            update_nonstiff_name,
+                            get_parameter_str(cvode_update_parameters()));  // begin function
+                                                                            // definition
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
     if (info.cvode_block) {
@@ -2481,10 +2488,13 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     printer->add_newline(2);
 
-    /* Main spec function */
-    printer->push_block(fmt::format("static void ode_spec_{}({})",
-                                    info.mod_suffix,
-                                    get_parameter_str(args_setup)));  // begin function definition
+    auto setup_nonstiff_name = fmt::format("ode_setup_nonstiff_{}", info.mod_suffix);
+
+    /* The setup function for non-stiff systems */
+    printer->push_block(
+        fmt::format("static void {}({})",
+                    setup_nonstiff_name,
+                    get_parameter_str(cvode_setup_parameters())));  // begin function definition
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
@@ -2499,16 +2509,16 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
-    printer->fmt_line("ode_spec1_{}({});", info.mod_suffix, get_arg_str(args_cvode));
+    printer->fmt_line("{}({});", update_nonstiff_name, get_arg_str(cvode_update_parameters()));
 
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
 
     printer->add_newline(2);
 
-    /* map */
+    /* The function for setup of tolerance */
     printer->push_block(
-        fmt::format("static void ode_map_{}(Prop* _prop, int equation_index, "
+        fmt::format("static void ode_setup_tolerance_{}(Prop* _prop, int equation_index, "
                     "neuron::container::data_handle<double>* _pv, "
                     "neuron::container::data_handle<double>* _pvdot, double* _atol, int _type)",
                     info.mod_suffix));  // begin function definition
@@ -2524,14 +2534,15 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     printer->add_newline(2);
 
-    /* matsol instance (?) */
-    printer->push_block(fmt::format("static void ode_matsol_instance1_{}({})",
-                                    info.mod_suffix,
-                                    get_parameter_str(args_cvode)));  // begin function definition
+    auto update_stiff_name = fmt::format("ode_update_stiff_{}", info.mod_suffix);
+
+    /* The update function for stiff systems */
+    printer->push_block(
+        fmt::format("static void {}({})",
+                    update_stiff_name,
+                    get_parameter_str(cvode_update_parameters())));  // begin function definition
 
     if (info.cvode_block) {
-        // for mathematical details, see eq. (4.8) in:
-        // https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
         auto block = info.cvode_block->get_diagonal_jacobian_block();
         print_statement_block(*block, false, false);
     }
@@ -2540,26 +2551,30 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     printer->add_newline(2);
 
-    /* matsol */
-    printer->push_block(fmt::format("static void ode_matsol_{}({})",
-                                    info.mod_suffix,
-                                    get_parameter_str(args_setup)));  // begin function definition
+    auto setup_stiff_name = fmt::format("ode_setup_stiff_{}", info.mod_suffix);
+
+    /* The setup function for stiff systems */
+    printer->push_block(
+        fmt::format("static void {}({})",
+                    setup_stiff_name,
+                    get_parameter_str(cvode_setup_parameters())));  // begin function definition
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
+
     if (!codegen_thread_variables.empty()) {
         printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
                           thread_variables_struct(),
                           info.thread_var_thread_id);
     }
+
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
-    // TODO check if this can be replaced by ode_matsol1
-    printer->fmt_line("ode_matsol_instance1_{}({});", info.mod_suffix, get_arg_str(args_cvode));
+    printer->fmt_line("{}({});", update_stiff_name, get_arg_str(cvode_update_parameters()));
 
     printer->pop_block();  // end for loop
     printer->pop_block();  // end function definition
