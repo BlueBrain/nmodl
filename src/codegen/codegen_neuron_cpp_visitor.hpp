@@ -723,8 +723,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
-    void visit_longitudinal_diffusion_block(const ast::LongitudinalDiffusionBlock& node);
-    void visit_lon_diffuse(const ast::LonDiffuse& node);
+    void visit_longitudinal_diffusion_block(const ast::LongitudinalDiffusionBlock& node) override;
+    void visit_lon_diffuse(const ast::LonDiffuse& node) override;
 
 
   public:

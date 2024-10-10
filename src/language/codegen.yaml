@@ -93,7 +93,7 @@
                             nmodl: "LONGITUDINAL_DIFFUSION_BLOCK"
                             members:
                               - name:
-                                  brief: "Name of the derivative block"
+                                  brief: "Name of the longitudinal diffusion block"
                                   type: Name
                                   node_name: true
                                   prefix: { value: " "}

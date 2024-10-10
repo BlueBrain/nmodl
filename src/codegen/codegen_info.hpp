@@ -284,15 +284,28 @@ struct IndexSemantics {
         , size(size) {}
 };
 
+/**
+ * \brief Information required to print LONGITUDINAL_DIFFUSION callbacks.
+ */
 class LongitudinalDiffusionInfo {
   public:
     LongitudinalDiffusionInfo(const std::shared_ptr<ast::Name>& index_name,
                               std::shared_ptr<ast::Expression> volume_expr,
                               const std::shared_ptr<ast::Name>& rate_index_name,
                               std::shared_ptr<ast::Expression> rate_expr);
+    /// Volume of this species.
+    ///
+    /// If the volume expression is an indexed expression, the index in the
+    /// expression is substituted with `index_name`.
     std::shared_ptr<ast::Expression> volume(const std::string& index_name) const;
+
+    /// Difusion rate of this species.
+    ///
+    /// If the diffusion expression is an indexed expression, the index in the
+    /// expression is substituted with `index_name`.
     std::shared_ptr<ast::Expression> diffusion_rate(const std::string& index_name) const;
 
+    /// The value of what NEURON calls `dfcdc`.
     double dfcdc(const std::string& /* index_name */) const;
 
   protected:

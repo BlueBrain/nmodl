@@ -31,7 +31,7 @@ static std::shared_ptr<ast::StatementBlock> make_statement_block(
 }
 
 
-std::shared_ptr<ast::LongitudinalDiffusionBlock> create_block(ast::KineticBlock& node) {
+static std::shared_ptr<ast::LongitudinalDiffusionBlock> create_block(ast::KineticBlock& node) {
     return std::make_shared<ast::LongitudinalDiffusionBlock>(
         std::make_shared<ast::Name>(std::make_shared<ast::String>("ld_" + node.get_node_name())),
         make_statement_block(node, nmodl::ast::AstNodeType::LON_DIFFUSE),

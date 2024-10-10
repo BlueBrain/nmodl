@@ -855,8 +855,9 @@ void CodegenHelperVisitor::visit_after_block(const ast::AfterBlock& node) {
     info.before_after_blocks.push_back(&node);
 }
 
-std::shared_ptr<ast::Compartment> find_compartment(const ast::LongitudinalDiffusionBlock& node,
-                                                   const std::string& var_name) {
+static std::shared_ptr<ast::Compartment> find_compartment(
+    const ast::LongitudinalDiffusionBlock& node,
+    const std::string& var_name) {
     const auto& compartment_block = node.get_compartment_statements();
     for (const auto& stmt: compartment_block->get_statements()) {
         auto comp = std::dynamic_pointer_cast<ast::Compartment>(stmt);
