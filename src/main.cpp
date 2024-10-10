@@ -25,6 +25,7 @@
 #include "visitors/after_cvode_to_cnexp_visitor.hpp"
 #include "visitors/ast_visitor.hpp"
 #include "visitors/constant_folder_visitor.hpp"
+#include "visitors/cvode_visitor.hpp"
 #include "visitors/function_callpath_visitor.hpp"
 #include "visitors/global_var_visitor.hpp"
 #include "visitors/implicit_argument_visitor.hpp"
@@ -494,10 +495,18 @@ int run_nmodl(int argc, const char* argv[]) {
         const bool sympy_sparse = solver_exists(*ast, "sparse");
 
         if (sympy_conductance || sympy_analytic || sympy_sparse || sympy_derivimplicit ||
-            sympy_linear) {
+            sympy_linear || neuron_code) {
             nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
                 .api()
                 .initialize_interpreter();
+
+            if (neuron_code) {
+                logger->info("Running CVODE visitor");
+                CvodeVisitor().visit_program(*ast);
+                SymtabVisitor(update_symtab).visit_program(*ast);
+                ast_to_nmodl(*ast, filepath("cvode"));
+            }
+
             if (sympy_conductance) {
                 logger->info("Running sympy conductance visitor");
                 SympyConductanceVisitor().visit_program(*ast);

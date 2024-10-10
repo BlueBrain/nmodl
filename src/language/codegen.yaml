@@ -87,7 +87,23 @@
                                   type: StatementBlock
                               - finalize_block:
                                   brief: "Statement block to be executed after calling linear solver"
-                                  type: StatementBlock                                  
+                                  type: StatementBlock
+                        - CvodeBlock:
+                            nmodl: "CVODE_BLOCK "
+                            members:
+                              - name:
+                                  brief: "Name of the block"
+                                  type: Name
+                                  node_name: true
+                                  suffix: {value: " "}
+                              - function_block:
+                                  brief: "Block with statements of the form Dvar = f(var)"
+                                  type: StatementBlock
+                              - diagonal_jacobian_block:
+                                  brief: "Block with statements of the form Dvar = Dvar / (1 - dt * J(f))"
+                                  type: StatementBlock
+                            brief: "Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks"
+
                   - WrappedExpression:
                       brief: "Wrap any other expression type"
                       members:
