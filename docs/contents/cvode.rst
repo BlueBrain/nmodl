@@ -20,9 +20,10 @@ is satisfied:
 In NMODL, all ``KINETIC`` blocks are internally first converted to
 ``DERIVATIVE`` blocks. The ``DERIVATIVE`` block is then converted to a
 ``CVODE`` block, which contains two parts; the first part contains the update
-step for linear systems, while the second part contains the update step for
-non-linear systems (see `CVODES documentation`_, eqs. (4.8) and (4.9)). Given
-a ``DERIVATIVE`` block of the form:
+step for non-stiff systems (functional iteration), while the second part
+contains the update step for stiff systems (additional step using the
+Jacobian).  For more information, see `CVODES documentation`_, eqs. (4.8) and
+(4.9)). Given a ``DERIVATIVE`` block of the form:
 
 .. _CVODES documentation: https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
 
