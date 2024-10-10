@@ -44,14 +44,14 @@ TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
 )";
         auto ast = run_cvode_visitor(nmodl_text);
         THEN("CVODE block is added") {
-            auto block = collect_nodes(*ast, {ast::AstNodeType::CVODE_BLOCK});
-            REQUIRE(!block.empty());
+            auto blocks = collect_nodes(*ast, {ast::AstNodeType::CVODE_BLOCK});
+            REQUIRE(blocks.size() == 1);
             THEN("No primed variables exist in the CVODE block") {
-                auto primed_vars = collect_nodes(*block[0], {ast::AstNodeType::PRIME_NAME});
+                auto primed_vars = collect_nodes(*blocks[0], {ast::AstNodeType::PRIME_NAME});
                 REQUIRE(primed_vars.empty());
             }
             THEN("No CONSERVE statements are present in the CVODE block") {
-                auto conserved_stmts = collect_nodes(*block[0], {ast::AstNodeType::CONSERVE});
+                auto conserved_stmts = collect_nodes(*blocks[0], {ast::AstNodeType::CONSERVE});
                 REQUIRE(conserved_stmts.empty());
             }
         }
