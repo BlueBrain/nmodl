@@ -23,7 +23,7 @@ In NMODL, all ``KINETIC`` blocks are internally first converted to
 step for non-stiff systems (functional iteration), while the second part
 contains the update step for stiff systems (additional step using the
 Jacobian).  For more information, see `CVODES documentation`_, eqs. (4.8) and
-(4.9)). Given a ``DERIVATIVE`` block of the form:
+(4.9). Given a ``DERIVATIVE`` block of the form:
 
 .. _CVODES documentation: https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html
 
