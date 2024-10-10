@@ -50,8 +50,3 @@ def simulate(rtol):
 
 if __name__ == "__main__":
     t, *x = simulate(rtol=1e-5)
-    # import matplotlib.pyplot as plt
-    # fig, ax = plt.subplots(nrows=len(x))
-    # for a, val in zip(ax, x):
-    #    a.plot(t, val, ls="", marker="x", markersize=0.1)
-    # plt.show()
