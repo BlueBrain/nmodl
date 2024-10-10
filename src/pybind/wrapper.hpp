@@ -45,6 +45,12 @@ std::tuple<std::string, std::string> call_analytic_diff(
     const std::vector<std::string>& expressions,
     const std::set<std::string>& used_names_in_block);
 
+
+/// \brief Differentiates an expression with respect to a variable
+/// \param expression The expression we want to differentiate
+/// \param variable   The name of the independent variable we are differentiating against
+/// \param index_vars A map of array (indexable) variables (and their associated indices) that
+/// appear in \ref expression \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::string& variable,

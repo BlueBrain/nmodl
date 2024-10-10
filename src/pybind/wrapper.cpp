@@ -186,8 +186,6 @@ except Exception as e:
     return {std::move(solution), std::move(exception_message)};
 }
 
-/// \brief A blunt instrument that differentiates expression w.r.t. variable
-/// \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::string& variable,
