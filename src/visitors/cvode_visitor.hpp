@@ -15,6 +15,7 @@
 #include "symtab/decl.hpp"
 #include "visitors/ast_visitor.hpp"
 #include <string>
+#include <unordered_set>
 
 namespace nmodl {
 namespace visitor {
@@ -55,6 +56,9 @@ class CvodeVisitor: public AstVisitor {
     /// index of the block to modify
     BlockIndex block_index = BlockIndex::FUNCTION;
 
+    /// list of conserve equations encountered
+    std::unordered_set<ast::Statement*> conserve_equations;
+
   public:
     void visit_derivative_block(ast::DerivativeBlock& node) override;
     void visit_program(ast::Program& node) override;
@@ -62,6 +66,7 @@ class CvodeVisitor: public AstVisitor {
     void visit_diff_eq_expression(ast::DiffEqExpression& node) override;
     void visit_binary_expression(ast::BinaryExpression& node) override;
     void visit_statement_block(ast::StatementBlock& node) override;
+    void visit_conserve(ast::Conserve& node) override;
 };
 
 /** \} */  // end of visitor_classes

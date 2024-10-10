@@ -109,6 +109,16 @@ def test_differentiate2c():
         "g",
     )
 
+    assert _equivalent(
+        differentiate2c(
+            "(s[0] + s[1])*(z[0]*z[1]*z[2])*x",
+            "x",
+            {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
+        ),
+        "(s[0] + s[1])*(z[0]*z[1]*z[2])",
+        {sp.IndexedBase("s", shape=[1]), sp.IndexedBase("z", shape=[1])},
+    )
+
     result = differentiate2c(
         "-f(x)",
         "x",
