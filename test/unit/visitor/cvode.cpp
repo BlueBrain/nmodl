@@ -37,6 +37,7 @@ TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
             STATE {x z}
 
             DERIVATIVE equation {
+                CONSERVE x + z = 5
                 x' = -x + z * z
                 z' = z * x
             }
@@ -48,6 +49,10 @@ TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
             THEN("No primed variables exist in the CVODE block") {
                 auto primed_vars = collect_nodes(*block[0], {ast::AstNodeType::PRIME_NAME});
                 REQUIRE(primed_vars.empty());
+            }
+            THEN("No CONSERVE statements are present in the CVODE block") {
+                auto conserved_stmts = collect_nodes(*block[0], {ast::AstNodeType::CONSERVE});
+                REQUIRE(conserved_stmts.empty());
             }
         }
     }
