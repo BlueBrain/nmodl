@@ -1219,16 +1219,26 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
     printer->add_line("{nullptr, nullptr}");
     printer->decrease_indent();
     printer->add_line("};");
+
+
+    auto print_py_callable_reg = [this](const auto& callables, auto get_name) {
+        for (const auto& callable: callables) {
+            const auto name = get_name(callable);
+            printer->fmt_line("{{\"{}\", {}}},", name, py_function_name(name));
+        }
+    };
+
     if (!info.point_process) {
         printer->push_block("static NPyDirectMechFunc npy_direct_func_proc[] =");
-        for (const auto& procedure: info.procedures) {
-            const auto proc_name = procedure->get_node_name();
-            printer->fmt_line("{{\"{}\", {}}},", proc_name, py_function_name(proc_name));
-        }
-        for (const auto& function: info.functions) {
-            const auto func_name = function->get_node_name();
-            printer->fmt_line("{{\"{}\", {}}},", func_name, py_function_name(func_name));
-        }
+        print_py_callable_reg(info.procedures,
+                              [](const auto& callable) { return callable->get_node_name(); });
+        print_py_callable_reg(info.functions,
+                              [](const auto& callable) { return callable->get_node_name(); });
+        print_py_callable_reg(info.function_tables,
+                              [](const auto& callable) { return callable->get_node_name(); });
+        print_py_callable_reg(info.function_tables, [](const auto& callable) {
+            return "table_" + callable->get_node_name();
+        });
         printer->add_line("{nullptr, nullptr}");
         printer->pop_block(";");
     }
