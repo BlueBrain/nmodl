@@ -28,7 +28,8 @@ set(NMODL_USECASE_DIRS
     steady_state
     suffix
     table
-    useion)
+    useion
+    longitudinal_diffusion)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
