@@ -98,7 +98,7 @@ class CvodeHelperVisitor: public AstVisitor {
 
 class NonStiffVisitor: public CvodeHelperVisitor {
   public:
-    NonStiffVisitor(symtab::SymbolTable* symtab) {
+    explicit NonStiffVisitor(symtab::SymbolTable* symtab) {
         program_symtab = symtab;
     }
 
@@ -122,7 +122,7 @@ class NonStiffVisitor: public CvodeHelperVisitor {
 
 class StiffVisitor: public CvodeHelperVisitor {
   public:
-    StiffVisitor(symtab::SymbolTable* symtab) {
+    explicit StiffVisitor(symtab::SymbolTable* symtab) {
         program_symtab = symtab;
     }
 
