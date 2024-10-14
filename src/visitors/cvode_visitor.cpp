@@ -24,6 +24,16 @@ static int get_index(const ast::IndexedName& node) {
     return std::stoi(to_nmodl(node.get_length()));
 }
 
+static std::pair<std::string, std::optional<int>> parse_independent_var(
+    std::shared_ptr<ast::Identifier> node) {
+    auto variable = std::make_pair(node->get_node_name(), std::optional<int>());
+    if (node->is_indexed_name()) {
+        variable.second = std::optional<int>(
+            get_index(*std::dynamic_pointer_cast<const ast::IndexedName>(node)));
+    }
+    return variable;
+}
+
 void CvodeVisitor::visit_conserve(ast::Conserve& node) {
     if (in_cvode_block) {
         logger->warn("CvodeVisitor :: statement {} will be ignored in CVODE codegen",
@@ -92,25 +102,32 @@ void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
 
     auto name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
 
-    if (name->is_prime_name()) {
-        auto varname = "D" + name->get_node_name();
-        logger->debug("CvodeVisitor :: replacing {} with {} on LHS of {}",
-                      name->get_node_name(),
-                      varname,
-                      to_nmodl(node));
-        node.set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));
-        if (program_symtab->lookup(varname) == nullptr) {
-            auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
-            symbol->set_original_name(name->get_node_name());
-            program_symtab->insert(symbol);
+    if (name->is_prime_name() || name->is_indexed_name()) {
+        std::string varname;
+        if (name->is_prime_name()) {
+            varname = "D" + name->get_node_name();
+            node.set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));
+            if (program_symtab->lookup(varname) == nullptr) {
+                auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
+                symbol->set_original_name(name->get_node_name());
+                program_symtab->insert(symbol);
+            }
+        } else {
+            varname = "D" + stringutils::remove_character(to_nmodl(node.get_lhs()), '\'');
+            auto statement = fmt::format("{} = {}", varname, varname);
+            auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                create_statement(statement));
+            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+                expr_statement->get_expression());
+            node.set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
         }
         if (block_index == BlockIndex::JACOBIAN) {
             auto rhs = node.get_rhs();
             // map of all indexed symbols (need special treatment in SymPy)
             auto name_map = get_name_map(*rhs, name->get_node_name());
             auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            auto [jacobian,
-                  exception_message] = diff2c(to_nmodl(*rhs), name->get_node_name(), name_map);
+            auto [jacobian, exception_message] =
+                diff2c(to_nmodl(*rhs), parse_independent_var(name), name_map);
             if (!exception_message.empty()) {
                 logger->warn("CvodeVisitor :: python exception: {}", exception_message);
             }
