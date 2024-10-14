@@ -1152,15 +1152,15 @@
                             type: Expression
 
                   - LinEquation:
-                      brief: "TODO"
+                      brief: "One equation in a system of equations tha collectively form a LINEAR block."
                       nmodl: "~ "
                       members:
-                        - left_linxpression:
-                            brief: "TODO"
+                        - lhs:
+                            brief: "Left-hand-side of the equation."
                             type: Expression
                             suffix: {value: " = "}
-                        - linxpression:
-                            brief: "TODO"
+                        - rhs:
+                            brief: "Right-hand-side of the equation."
                             type: Expression
 
                   - FunctionCall:
@@ -1568,6 +1568,7 @@
                             separator: " "
                       brief: "Represent LONGITUDINAL_DIFFUSION statement in NMODL"
 
+
                   - ReactionStatement:
                       brief: "TODO"
                       nmodl: "~ "
@@ -1750,14 +1751,14 @@
                             separator: ", "
                       description: |
                                 Here is an example of RANDOM statement
-                                
-                                \code{.mod}   
+
+                                \code{.mod}
                                       NEURON {
                                           THREADSAFE
                                           POINT_PROCESS NetStim
                                           RANDOM ranvar
                                 \endcode
- 
+
                   - Pointer:
                       nmodl: "POINTER "
                       members:
