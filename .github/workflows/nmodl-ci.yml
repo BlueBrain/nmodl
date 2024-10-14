@@ -216,7 +216,7 @@ jobs:
         env:
           PYTHONMALLOC: malloc
         run:  |
-          ctest --output-on-failure --parallel
+          ctest --output-on-failure --parallel 4
       - name: Install
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
