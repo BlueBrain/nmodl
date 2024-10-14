@@ -11,6 +11,7 @@ set(NMODL_USECASE_DIRS
     hodgkin_huxley
     kinetic
     linear
+    longitudinal_diffusion
     morphology
     net_event
     net_move
@@ -28,8 +29,7 @@ set(NMODL_USECASE_DIRS
     steady_state
     suffix
     table
-    useion
-    longitudinal_diffusion)
+    useion)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
