@@ -31,9 +31,7 @@ jobs:
 
       - name: Prepare Pip
         run: |
-          mkdir -p ${HOME}/.config/pip
-          echo "[global]" >> ${HOME}/.config/pip/pip.conf
-          echo "break-system-packages = true" >> ${HOME}/.config/pip/pip.conf
+          python3 -m pip config set global.break-system-packages true
 
       - name: Install Python3 dependencies
         working-directory: ${{runner.workspace}}/nmodl
