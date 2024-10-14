@@ -30,18 +30,10 @@ bool InlineVisitor::can_inline_block(const StatementBlock& block) {
             to_inline = false;
             break;
         }
-        // verbatim blocks with return statement are not safe to inline
-        // especially for net_receive block
+
+        // verbatim blocks (especially with return statements) are not safe to inline
         if (statement->is_verbatim()) {
-            const auto node = dynamic_cast<const Verbatim*>(statement.get());
-            assert(node);
-            auto text = node->get_statement()->eval();
-            parser::CDriver driver;
-            driver.scan_string(text);
-            if (driver.has_token("return")) {
-                to_inline = false;
-                break;
-            }
+            to_inline = false;
         }
     }
     return to_inline;
@@ -318,11 +310,32 @@ void InlineVisitor::visit_wrapped_expression(WrappedExpression& node) {
 }
 
 void InlineVisitor::visit_program(Program& node) {
+    if (!is_inlineable(node)) {
+        return;
+    }
+
     program_symtab = node.get_symbol_table();
     if (program_symtab == nullptr) {
         throw std::runtime_error("Program node doesn't have symbol table");
     }
+
     node.visit_children(*this);
+}
+
+class CanInlineVisitor: public ConstAstVisitor {
+  private:
+    void visit_verbatim(const ast::Verbatim&) override {
+        is_inlineable = false;
+    }
+
+  public:
+    bool is_inlineable = true;
+};
+
+bool InlineVisitor::is_inlineable(ast::Program& node) {
+    auto v = CanInlineVisitor();
+    v.visit_program(node);
+    return v.is_inlineable;
 }
 
 }  // namespace visitor
