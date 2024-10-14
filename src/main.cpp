@@ -523,7 +523,7 @@ int run_nmodl(int argc, const char* argv[]) {
         }
 
 
-        if (sympy_conductance || sympy_analytic) {
+        if (sympy_conductance || sympy_analytic || neuron_code) {
             nmodl::pybind_wrappers::EmbeddedPythonLoader::get_instance()
                 .api()
                 .initialize_interpreter();
