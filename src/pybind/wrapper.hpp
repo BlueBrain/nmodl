@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <optional>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -53,7 +54,7 @@ std::tuple<std::string, std::string> call_analytic_diff(
 /// appear in \ref expression \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::string& variable,
+    const std::pair<std::string, std::optional<int>>& variable,
     const std::unordered_map<std::string, int>& indexed_vars = {});
 
 struct pybind_wrap_api {

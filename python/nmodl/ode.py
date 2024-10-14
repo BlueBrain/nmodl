@@ -619,7 +619,7 @@ def differentiate2c(
     # every symbol (a.k.a variable) that SymPy
     # is going to manipulate needs to be declared
     # explicitly
-    x = sp.symbols(dependent_var, real=True)
+    x = make_symbol(dependent_var)
     vars = set(vars)
     vars.discard(dependent_var)
     # declare all other supplied variables
