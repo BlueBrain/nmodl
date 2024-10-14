@@ -82,11 +82,6 @@ std::shared_ptr<ast::StatementBlock> create_statement_block(
     const std::vector<std::string>& code_statements);
 
 
-///  Remove statements from given statement block if they exist
-void remove_statements_from_block(ast::StatementBlock& block,
-                                  const std::set<ast::Node*>& statements);
-
-
 /// Return set of strings with the names of all global variables
 std::set<std::string> get_global_vars(const ast::Program& node);
 
@@ -128,6 +123,9 @@ std::string to_json(const ast::Ast& node,
                     bool compact = false,
                     bool expand = false,
                     bool add_nmodl = false);
+
+/// The `result.first` of `statement_dependencies`.
+std::string statement_dependencies_key(const std::shared_ptr<ast::Expression>& lhs);
 
 /// If \p lhs and \p rhs combined represent an assignment (we assume to have an "=" in between them)
 /// we extract the variables on which the assigned variable depends on. We provide the input with

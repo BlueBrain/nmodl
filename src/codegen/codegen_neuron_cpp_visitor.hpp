@@ -250,6 +250,21 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void print_hoc_py_wrapper_function_definitions();
 
+    /**
+     * Prints the callbacks required for LONGITUDINAL_DIFFUSION.
+     */
+    void print_longitudinal_diffusion_callbacks();
+
+    /**
+     * Parameters for what NEURON calls `ldifusfunc1_t`.
+     */
+    ParamVector ldifusfunc1_parameters() const;
+
+    /**
+     * Parameters for what NEURON calls `ldifusfunc3_t`.
+     */
+    ParamVector ldifusfunc3_parameters() const;
+
 
     /****************************************************************************************/
     /*                             Code-specific helper routines                            */
@@ -492,6 +507,26 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_global_function_common_code(BlockType type,
                                            const std::string& function_name = "") override;
 
+    /**
+     * Prints setup code for entrypoints from NEURON.
+     *
+     * The entrypoints typically receive a `sorted_token` and a bunch of other things, which then
+     * need to be converted into the default arguments for functions called (recursively) from the
+     * entrypoint.
+     *
+     * This variation prints the fast entrypoint, where NEURON is fully initialized and setup.
+     */
+    void print_entrypoint_setup_code_from_memb_list();
+
+
+    /**
+     * Prints setup code for entrypoints NEURON.
+     *
+     * See `print_entrypoint_setup_code_from_memb_list`. This variation should be used when one only
+     * has access to a `Prop`, but not the full `Memb_list`.
+     */
+    void print_entrypoint_setup_code_from_prop();
+
 
     /**
      * Print the \c nrn\_init function definition
@@ -508,11 +543,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_nrn_constructor() override;
     void print_nrn_constructor_declaration();
-
-    /**
-     * Print the set of common variables from a `Prop` only.
-     */
-    void print_callable_preamble_from_prop();
 
     /**
      * Print nrn_destructor function definition
@@ -693,8 +723,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void visit_watch_statement(const ast::WatchStatement& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
-
-
+    void visit_longitudinal_diffusion_block(const ast::LongitudinalDiffusionBlock& node) override;
+    void visit_lon_diffuse(const ast::LonDiffuse& node) override;
 
 
   public:
