@@ -1,5 +1,6 @@
 from neuron import h, gui
 
+
 def check_solve(make_inst):
     s = h.Section()
     s.insert("nonlin")
