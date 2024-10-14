@@ -72,6 +72,11 @@ def check_2d(make_inst, mech_name):
 
     inst = make_inst(s)
     set_table, eval_table = make_callbacks(inst, "tau2", mech_name)
+    eval_use_table = make_callable(inst, "use_tau2", mech_name)
+
+    if inst is None:
+        setdata = getattr(h, f"setdata_{mech_name}")
+        setdata(s(0.5))
 
     v = np.array([0.0, 1.0])
     x = np.array([1.0, 2.0, 3.0])
@@ -88,27 +93,10 @@ def check_2d(make_inst, mech_name):
         for xx in np.linspace(x[0], x[-1], 20):
             expected = scipy.interpolate.interpn((v, x), tau2, (vv, xx))
             actual = eval_table(vv, xx)
+            actual_indirect = eval_use_table(vv, xx)
 
             np.testing.assert_approx_equal(actual, expected, significant=11)
-
-
-def check_use_table(make_inst, mech_name):
-    s = h.Section()
-    s.insert("function_table")
-
-    inst = make_inst(s)
-    _, eval_table = make_callbacks(inst, "tau2", mech_name)
-    eval_use_table = make_callable(inst, "use_tau2", mech_name)
-
-    if inst is None:
-        setdata = getattr(h, f"setdata_{mech_name}")
-        setdata(s(0.5))
-
-    vv, xx = 0.33, 2.24
-
-    expected = eval_table(vv, xx)
-    actual = eval_use_table(vv, xx)
-    np.testing.assert_approx_equal(actual, expected, significant=11)
+            np.testing.assert_approx_equal(actual_indirect, expected, significant=11)
 
 
 if __name__ == "__main__":
@@ -125,7 +113,3 @@ if __name__ == "__main__":
 
         check_1d(make_instance, mech_name)
         check_2d(make_instance, mech_name)
-
-        # Must run after `check_2d`, because it assumes the table
-        # has been initialized.
-        check_use_table(make_instance, mech_name)
