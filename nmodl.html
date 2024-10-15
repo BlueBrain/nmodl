@@ -353,10 +353,15 @@ Before differentiating each of these expressions will be substituted into expres
 where possible, in reverse order - i.e. starting from the end of the list.</p>
 <p>If the result coincides with one of the vars, or the LHS of one of
 the prev_expressions, then it is simplified to this expression.</p>
+<p>Note that, in order to differentiate against indexed variables (such as
+<code class="docutils literal notranslate"><span class="pre">x[0]</span></code>), you must pass an instance of <code class="docutils literal notranslate"><span class="pre">sympy.Indexed</span></code> to
+<code class="docutils literal notranslate"><span class="pre">dependent_var</span></code> (_not_ an instance of <code class="docutils literal notranslate"><span class="pre">sympy.IndexedBase</span></code>), as well as
+an instance of <code class="docutils literal notranslate"><span class="pre">sympy.IndexedBase</span></code> to <code class="docutils literal notranslate"><span class="pre">vars</span></code>.</p>
 <p>Some simple examples of use:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">nmodl.ode.differentiate2c</span> <span class="pre">(&quot;a*x&quot;,</span> <span class="pre">&quot;x&quot;,</span> <span class="pre">{&quot;a&quot;})</span> <span class="pre">==</span> <span class="pre">&quot;a&quot;</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">differentiate2c</span> <span class="pre">(&quot;cos(y)</span> <span class="pre">+</span> <span class="pre">b*y**2&quot;,</span> <span class="pre">&quot;y&quot;,</span> <span class="pre">{&quot;a&quot;,&quot;b&quot;})</span> <span class="pre">==</span> <span class="pre">&quot;Dy</span> <span class="pre">=</span> <span class="pre">2*b*y</span> <span class="pre">-</span> <span class="pre">sin(y)&quot;</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">differentiate2c(&quot;a</span> <span class="pre">*</span> <span class="pre">x[0]&quot;,</span> <span class="pre">sympy.IndexedBase(&quot;x&quot;,</span> <span class="pre">shape=[1])[0],</span> <span class="pre">{&quot;a&quot;,</span> <span class="pre">sympy.IndexedBase(&quot;x&quot;,</span> <span class="pre">shape=[1])})</span> <span class="pre">==</span> <span class="pre">&quot;a&quot;</span></code></p></li>
 </ul>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

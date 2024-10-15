@@ -707,10 +707,16 @@
 <span class="sd">    If the result coincides with one of the vars, or the LHS of one of</span>
 <span class="sd">    the prev_expressions, then it is simplified to this expression.</span>
 
+<span class="sd">    Note that, in order to differentiate against indexed variables (such as</span>
+<span class="sd">    ``x[0]``), you must pass an instance of ``sympy.Indexed`` to</span>
+<span class="sd">    ``dependent_var`` (_not_ an instance of ``sympy.IndexedBase``), as well as</span>
+<span class="sd">    an instance of ``sympy.IndexedBase`` to ``vars``.</span>
+
 <span class="sd">    Some simple examples of use:</span>
 
 <span class="sd">    - ``nmodl.ode.differentiate2c (&quot;a*x&quot;, &quot;x&quot;, {&quot;a&quot;}) == &quot;a&quot;``</span>
 <span class="sd">    - ``differentiate2c (&quot;cos(y) + b*y**2&quot;, &quot;y&quot;, {&quot;a&quot;,&quot;b&quot;}) == &quot;Dy = 2*b*y - sin(y)&quot;``</span>
+<span class="sd">    - ``differentiate2c(&quot;a * x[0]&quot;, sympy.IndexedBase(&quot;x&quot;, shape=[1])[0], {&quot;a&quot;, sympy.IndexedBase(&quot;x&quot;, shape=[1])}) == &quot;a&quot;``</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        expression: expression to be differentiated e.g. &quot;a*x + b&quot;</span>
@@ -731,7 +737,7 @@
     <span class="c1"># every symbol (a.k.a variable) that SymPy</span>
     <span class="c1"># is going to manipulate needs to be declared</span>
     <span class="c1"># explicitly</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">sp</span><span class="o">.</span><span class="n">symbols</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">,</span> <span class="n">real</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">make_symbol</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">)</span>
     <span class="nb">vars</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">vars</span><span class="p">)</span>
     <span class="nb">vars</span><span class="o">.</span><span class="n">discard</span><span class="p">(</span><span class="n">dependent_var</span><span class="p">)</span>
     <span class="c1"># declare all other supplied variables</span>
