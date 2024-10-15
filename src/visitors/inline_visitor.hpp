@@ -195,7 +195,10 @@ class InlineVisitor: public AstVisitor {
     void visit_wrapped_expression(ast::WrappedExpression& node) override;
 
     void visit_program(ast::Program& node) override;
+
+    static bool is_inlineable(ast::Program& node);
 };
+
 
 /** \} */  // end of visitor_classes
 
