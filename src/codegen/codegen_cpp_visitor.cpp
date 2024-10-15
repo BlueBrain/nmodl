@@ -13,6 +13,7 @@
 #include "ast/all.hpp"
 #include "codegen/codegen_helper_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
+#include "utils/string_utils.hpp"
 #include "visitors/defuse_analyze_visitor.hpp"
 #include "visitors/rename_visitor.hpp"
 #include "visitors/symtab_visitor.hpp"
@@ -462,7 +463,7 @@ void CodegenCppVisitor::print_global_var_struct_assertions() const {
 
 
 void CodegenCppVisitor::print_global_var_struct_decl() {
-    printer->add_line(global_struct(), ' ', global_struct_instance(), ';');
+    printer->fmt_line("static {} {};", global_struct(), global_struct_instance());
 }
 
 
@@ -517,12 +518,6 @@ void CodegenCppVisitor::print_function_call(const FunctionCall& node) {
         if (!arguments.empty()) {
             printer->add_text(", ");
         }
-    }
-
-    // first argument to random functions need to be type casted
-    // from void* to nrnran123_State*.
-    if (is_random_function && !arguments.empty()) {
-        printer->add_text("(nrnran123_State*)");
     }
 
     print_vector_elements(arguments, ", ");
@@ -636,6 +631,28 @@ void CodegenCppVisitor::print_namespace_start() {
 
 void CodegenCppVisitor::print_namespace_stop() {
     printer->pop_block();
+}
+
+
+void CodegenCppVisitor::print_top_verbatim_blocks() {
+    if (info.top_verbatim_blocks.empty()) {
+        return;
+    }
+    print_namespace_stop();
+
+    printer->add_newline(2);
+    print_using_namespace();
+
+    printing_top_verbatim_blocks = true;
+
+    for (const auto& block: info.top_verbatim_blocks) {
+        printer->add_newline(2);
+        block->accept(*this);
+    }
+
+    printing_top_verbatim_blocks = false;
+
+    print_namespace_start();
 }
 
 
@@ -1045,22 +1062,6 @@ void CodegenCppVisitor::visit_statement_block(const StatementBlock& node) {
 
 void CodegenCppVisitor::visit_function_call(const FunctionCall& node) {
     print_function_call(node);
-}
-
-
-void CodegenCppVisitor::visit_verbatim(const Verbatim& node) {
-    const auto& text = node.get_statement()->eval();
-    printer->add_line("// VERBATIM");
-    const auto& result = process_verbatim_text(text);
-
-    const auto& statements = stringutils::split_string(result, '\n');
-    for (const auto& statement: statements) {
-        const auto& trimed_stmt = stringutils::trim_newline(statement);
-        if (trimed_stmt.find_first_not_of(' ') != std::string::npos) {
-            printer->add_line(trimed_stmt);
-        }
-    }
-    printer->add_line("// ENDVERBATIM");
 }
 
 
