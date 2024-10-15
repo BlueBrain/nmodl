@@ -24,6 +24,17 @@ static int get_index(const ast::IndexedName& node) {
     return std::stoi(to_nmodl(node.get_length()));
 }
 
+static void remove_conserve_statements(ast::StatementBlock& node) {
+    auto conserve_equations = collect_nodes(node, {ast::AstNodeType::CONSERVE});
+    if (!conserve_equations.empty()) {
+        std::unordered_set<ast::Statement*> eqs;
+        for (const auto& item: conserve_equations) {
+            eqs.insert(std::dynamic_pointer_cast<ast::Statement>(item).get());
+        }
+        node.erase_statement(eqs);
+    }
+}
+
 static std::pair<std::string, std::optional<int>> parse_independent_var(
     std::shared_ptr<ast::Identifier> node) {
     auto variable = std::make_pair(node->get_node_name(), std::optional<int>());
@@ -170,29 +181,10 @@ void CvodeVisitor::visit_program(ast::Program& node) {
         auto der_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(der_blocks[0]);
 
         auto non_stiff_block = der_block->get_statement_block()->clone();
-        {
-            auto conserve_equations = collect_nodes(*non_stiff_block, {ast::AstNodeType::CONSERVE});
-            if (!conserve_equations.empty()) {
-                std::unordered_set<ast::Statement*> eqs;
-                for (const auto& item: conserve_equations) {
-                    eqs.insert(std::dynamic_pointer_cast<ast::Statement>(item).get());
-                }
-                non_stiff_block->erase_statement(eqs);
-            }
-        }
+        remove_conserve_statements(*non_stiff_block);
 
         auto stiff_block = der_block->get_statement_block()->clone();
-        {
-            auto conserve_equations = collect_nodes(*stiff_block, {ast::AstNodeType::CONSERVE});
-            if (!conserve_equations.empty()) {
-                std::unordered_set<ast::Statement*> eqs;
-                for (const auto& item: conserve_equations) {
-                    eqs.insert(std::dynamic_pointer_cast<ast::Statement>(item).get());
-                }
-                stiff_block->erase_statement(eqs);
-            }
-        }
-
+        remove_conserve_statements(*stiff_block);
 
         NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
         StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
