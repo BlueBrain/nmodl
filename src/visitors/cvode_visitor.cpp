@@ -98,7 +98,6 @@ class CvodeHelperVisitor: public AstVisitor {
   protected:
     symtab::SymbolTable* program_symtab = nullptr;
     bool in_differential_equation = false;
-    std::unordered_set<ast::Statement*> conserve_equations;
   public:
     inline void visit_diff_eq_expression(ast::DiffEqExpression& node) {
         in_differential_equation = true;
