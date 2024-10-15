@@ -604,6 +604,7 @@ def differentiate2c(
 
     - ``nmodl.ode.differentiate2c ("a*x", "x", {"a"}) == "a"``
     - ``differentiate2c ("cos(y) + b*y**2", "y", {"a","b"}) == "Dy = 2*b*y - sin(y)"``
+    - ``differentiate2c("a * x[0]", sympy.IndexedBase("x", shape=[1])[0], {"a", sympy.IndexedBase("x", shape=[1])}) == "a"``
 
     Args:
         expression: expression to be differentiated e.g. "a*x + b"
