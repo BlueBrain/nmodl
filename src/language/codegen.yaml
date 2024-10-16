@@ -96,7 +96,7 @@
                                   type: Name
                                   node_name: true
                                   suffix: {value: " "}
-                              - nonstiff_block:
+                              - non_stiff_block:
                                   brief: "Block with statements of the form Dvar = f(var), used for updating non-stiff systems"
                                   type: StatementBlock
                               - stiff_block:
