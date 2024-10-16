@@ -2559,7 +2559,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto v = node_data.node_voltages[node_id];");
     if (info.cvode_block) {
-        auto block = info.cvode_block->get_function_block();
+        auto block = info.cvode_block->get_stiff_block();
         print_statement_block(*block, false, false);
     }
 
@@ -2623,7 +2623,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                     get_parameter_str(cvode_update_parameters())));  // begin function definition
 
     if (info.cvode_block) {
-        auto block = info.cvode_block->get_diagonal_jacobian_block();
+        auto block = info.cvode_block->get_non_stiff_block();
         print_statement_block(*block, false, false);
     }
 
