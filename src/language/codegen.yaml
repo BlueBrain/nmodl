@@ -96,11 +96,11 @@
                                   type: Name
                                   node_name: true
                                   suffix: {value: " "}
-                              - function_block:
-                                  brief: "Block with statements of the form Dvar = f(var)"
+                              - nonstiff_block:
+                                  brief: "Block with statements of the form Dvar = f(var), used for updating non-stiff systems"
                                   type: StatementBlock
-                              - diagonal_jacobian_block:
-                                  brief: "Block with statements of the form Dvar = Dvar / (1 - dt * J(f))"
+                              - stiff_block:
+                                  brief: "Block with statements of the form Dvar = Dvar / (1 - dt * J(f)), used for updating stiff systems"
                                   type: StatementBlock
                             brief: "Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks"
                         - LongitudinalDiffusionBlock:
