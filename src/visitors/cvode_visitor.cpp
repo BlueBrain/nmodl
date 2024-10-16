@@ -24,16 +24,29 @@ static int get_index(const ast::IndexedName& node) {
     return std::stoi(to_nmodl(node.get_length()));
 }
 
-void CvodeVisitor::visit_conserve(ast::Conserve& node) {
-    if (in_cvode_block) {
-        logger->warn("CvodeVisitor :: statement {} will be ignored in CVODE codegen",
-                     to_nmodl(node));
-        conserve_equations.emplace(&node);
+static void remove_conserve_statements(ast::StatementBlock& node) {
+    auto conserve_equations = collect_nodes(node, {ast::AstNodeType::CONSERVE});
+    if (!conserve_equations.empty()) {
+        std::unordered_set<ast::Statement*> eqs;
+        for (const auto& item: conserve_equations) {
+            eqs.insert(std::dynamic_pointer_cast<ast::Statement>(item).get());
+        }
+        node.erase_statement(eqs);
     }
 }
 
+static std::pair<std::string, std::optional<int>> parse_independent_var(
+    std::shared_ptr<ast::Identifier> node) {
+    auto variable = std::make_pair(node->get_node_name(), std::optional<int>());
+    if (node->is_indexed_name()) {
+        variable.second = std::optional<int>(
+            get_index(*std::dynamic_pointer_cast<const ast::IndexedName>(node)));
+    }
+    return variable;
+}
 
-static auto get_name_map(const ast::Expression& node, const std::string& name) {
+static std::unordered_map<std::string, int> get_name_map(const ast::Expression& node,
+                                                         const std::string& name) {
     std::unordered_map<std::string, int> name_map;
     // all of the "reserved" symbols
     auto reserved_symbols = get_external_functions();
@@ -55,98 +68,129 @@ static auto get_name_map(const ast::Expression& node, const std::string& name) {
     return name_map;
 }
 
-void CvodeVisitor::visit_derivative_block(ast::DerivativeBlock& node) {
-    node.visit_children(*this);
-    derivative_block = std::shared_ptr<ast::DerivativeBlock>(node.clone());
-}
-
-
-void CvodeVisitor::visit_cvode_block(ast::CvodeBlock& node) {
-    in_cvode_block = true;
-    node.visit_children(*this);
-    in_cvode_block = false;
-}
-
-void CvodeVisitor::visit_diff_eq_expression(ast::DiffEqExpression& node) {
-    in_differential_equation = true;
-    node.visit_children(*this);
-    in_differential_equation = false;
-}
-
-
-void CvodeVisitor::visit_statement_block(ast::StatementBlock& node) {
-    node.visit_children(*this);
-    if (in_cvode_block) {
-        ++block_index;
-    }
-}
-
-
-void CvodeVisitor::visit_binary_expression(ast::BinaryExpression& node) {
+static std::string cvode_set_lhs(ast::BinaryExpression& node) {
     const auto& lhs = node.get_lhs();
-
-    /// we have to only solve ODEs under original derivative block where lhs is variable
-    if (!in_cvode_block || !in_differential_equation || !lhs->is_var_name()) {
-        return;
-    }
 
     auto name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
 
+    std::string varname;
     if (name->is_prime_name()) {
-        auto varname = "D" + name->get_node_name();
-        logger->debug("CvodeVisitor :: replacing {} with {} on LHS of {}",
-                      name->get_node_name(),
-                      varname,
-                      to_nmodl(node));
+        varname = "D" + name->get_node_name();
         node.set_lhs(std::make_shared<ast::Name>(new ast::String(varname)));
+    } else if (name->is_indexed_name()) {
+        auto nodes = collect_nodes(*name, {ast::AstNodeType::PRIME_NAME});
+        // make sure the LHS isn't just a plain indexed var
+        if (!nodes.empty()) {
+            varname = "D" + stringutils::remove_character(to_nmodl(node.get_lhs()), '\'');
+            auto statement = fmt::format("{} = {}", varname, varname);
+            auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+                create_statement(statement));
+            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+                expr_statement->get_expression());
+            node.set_lhs(std::shared_ptr<ast::Expression>(bin_expr->get_lhs()->clone()));
+        }
+    }
+    return varname;
+}
+
+
+class CvodeHelperVisitor: public AstVisitor {
+  protected:
+    symtab::SymbolTable* program_symtab = nullptr;
+    bool in_differential_equation = false;
+  public:
+    inline void visit_diff_eq_expression(ast::DiffEqExpression& node) {
+        in_differential_equation = true;
+        node.visit_children(*this);
+        in_differential_equation = false;
+    }
+};
+
+class NonStiffVisitor: public CvodeHelperVisitor {
+  public:
+    explicit NonStiffVisitor(symtab::SymbolTable* symtab) {
+        program_symtab = symtab;
+    }
+
+    inline void visit_binary_expression(ast::BinaryExpression& node) {
+        const auto& lhs = node.get_lhs();
+
+        if (!in_differential_equation || !lhs->is_var_name()) {
+            return;
+        }
+
+        auto name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
+        auto varname = cvode_set_lhs(node);
+
         if (program_symtab->lookup(varname) == nullptr) {
             auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
             symbol->set_original_name(name->get_node_name());
             program_symtab->insert(symbol);
         }
-        if (block_index == BlockIndex::JACOBIAN) {
-            auto rhs = node.get_rhs();
-            // map of all indexed symbols (need special treatment in SymPy)
-            auto name_map = get_name_map(*rhs, name->get_node_name());
-            auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-            auto [jacobian,
-                  exception_message] = diff2c(to_nmodl(*rhs), name->get_node_name(), name_map);
-            if (!exception_message.empty()) {
-                logger->warn("CvodeVisitor :: python exception: {}", exception_message);
-            }
-            // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
-            // complaining, we discard the LHS later
-            auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
-            logger->debug("CvodeVisitor :: replacing statement {} with {}",
-                          to_nmodl(node),
-                          statement);
-            auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
-                create_statement(statement));
-            const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
-                expr_statement->get_expression());
-            node.set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
-        }
     }
-}
+};
+
+class StiffVisitor: public CvodeHelperVisitor {
+  public:
+    explicit StiffVisitor(symtab::SymbolTable* symtab) {
+        program_symtab = symtab;
+    }
+
+    inline void visit_binary_expression(ast::BinaryExpression& node) {
+        const auto& lhs = node.get_lhs();
+
+        if (!in_differential_equation || !lhs->is_var_name()) {
+            return;
+        }
+
+        auto name = std::dynamic_pointer_cast<ast::VarName>(lhs)->get_name();
+        auto varname = cvode_set_lhs(node);
+
+        if (program_symtab->lookup(varname) == nullptr) {
+            auto symbol = std::make_shared<symtab::Symbol>(varname, ModToken());
+            symbol->set_original_name(name->get_node_name());
+            program_symtab->insert(symbol);
+        }
+
+        auto rhs = node.get_rhs();
+        // map of all indexed symbols (need special treatment in SymPy)
+        auto name_map = get_name_map(*rhs, name->get_node_name());
+        auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
+        auto [jacobian,
+              exception_message] = diff2c(to_nmodl(*rhs), parse_independent_var(name), name_map);
+        if (!exception_message.empty()) {
+            logger->warn("CvodeVisitor :: python exception: {}", exception_message);
+        }
+        // NOTE: LHS can be anything here, the equality is to keep `create_statement` from
+        // complaining, we discard the LHS later
+        auto statement = fmt::format("{} = {} / (1 - dt * ({}))", varname, varname, jacobian);
+        logger->debug("CvodeVisitor :: replacing statement {} with {}", to_nmodl(node), statement);
+        auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
+            create_statement(statement));
+        const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
+            expr_statement->get_expression());
+        node.set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
+    }
+};
+
 
 void CvodeVisitor::visit_program(ast::Program& node) {
-    program_symtab = node.get_symbol_table();
-    node.visit_children(*this);
-    if (derivative_block) {
-        auto der_node = new ast::CvodeBlock(derivative_block->get_name(),
-                                            derivative_block->get_statement_block(),
-                                            std::shared_ptr<ast::StatementBlock>(
-                                                derivative_block->get_statement_block()->clone()));
-        node.emplace_back_node(der_node);
-    }
+    auto der_blocks = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
+    if (!der_blocks.empty()) {
+        auto der_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(der_blocks[0]);
 
-    // re-visit the AST since we now inserted the CVODE block
-    node.visit_children(*this);
-    if (!conserve_equations.empty()) {
-        auto blocks = collect_nodes(node, {ast::AstNodeType::CVODE_BLOCK});
-        auto block = std::dynamic_pointer_cast<ast::CvodeBlock>(blocks[0]);
-        block->get_function_block()->erase_statement(conserve_equations);
-        block->get_diagonal_jacobian_block()->erase_statement(conserve_equations);
+        auto non_stiff_block = der_block->get_statement_block()->clone();
+        remove_conserve_statements(*non_stiff_block);
+
+        auto stiff_block = der_block->get_statement_block()->clone();
+        remove_conserve_statements(*stiff_block);
+
+        NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
+        StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
+        node.emplace_back_node(
+            new ast::CvodeBlock(der_block->get_name(),
+                                std::shared_ptr<ast::StatementBlock>(non_stiff_block),
+                                std::shared_ptr<ast::StatementBlock>(stiff_block)));
     }
 }
 

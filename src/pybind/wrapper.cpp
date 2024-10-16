@@ -10,6 +10,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
 #include <fmt/format.h>
+#include <optional>
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
 
@@ -188,17 +189,26 @@ except Exception as e:
 
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
-    const std::string& variable,
+    const std::pair<std::string, std::optional<int>>& variable,
     const std::unordered_map<std::string, int>& indexed_vars) {
     std::string statements;
     // only indexed variables require special treatment
     for (const auto& [var, prop]: indexed_vars) {
         statements += fmt::format("_allvars.append(sp.IndexedBase('{}', shape=[1]))\n", var);
     }
-    auto locals = py::dict("expression"_a = expression, "variable"_a = variable);
-    std::string script = fmt::format(R"(
+    auto [name, property] = variable;
+    if (property.has_value()) {
+        name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
+        statements += fmt::format("_allvars.append({})", name);
+    } else {
+        name = fmt::format("'{}'", name);
+    }
+    auto locals = py::dict("expression"_a = expression);
+    std::string script =
+        fmt::format(R"(
 _allvars = []
 {}
+variable = {}
 exception_message = ""
 try:
     solution = differentiate2c(expression,
@@ -210,7 +220,8 @@ except Exception as e:
     solution = ""
     exception_message = str(e)
 )",
-                                     statements);
+                    statements,
+                    property.has_value() ? fmt::format("{}[{}]", name, property.value()) : name);
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
 

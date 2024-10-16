@@ -11,12 +11,14 @@ set(NMODL_USECASE_DIRS
     hodgkin_huxley
     kinetic
     linear
+    longitudinal_diffusion
     morphology
     net_event
     net_move
     net_receive
     net_send
     neuron_variables
+    nonlinear
     nonspecific_current
     parameter
     point_process

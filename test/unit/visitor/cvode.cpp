@@ -34,12 +34,14 @@ TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
                 SUFFIX example
             }
 
-            STATE {x z}
+            STATE {X Y[2] Z}
 
             DERIVATIVE equation {
-                CONSERVE x + z = 5
-                x' = -x + z * z
-                z' = z * x
+                CONSERVE X + Z = 5
+                X' = -X + Z * Z
+                Z' = Z * X
+                Y'[1] = -Y[0]
+                Y'[0] = -Y[1]
             }
 )";
         auto ast = run_cvode_visitor(nmodl_text);

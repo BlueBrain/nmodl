@@ -15,7 +15,6 @@ on:
       - release/**
 
 env:
-  CTEST_PARALLEL_LEVEL: 1
   PYTHON_VERSION: 3.8
   DESIRED_CMAKE_VERSION: 3.15.0
 
@@ -217,7 +216,7 @@ jobs:
         env:
           PYTHONMALLOC: malloc
         run:  |
-          ctest --output-on-failure -T Test
+          ctest --output-on-failure --parallel 4
       - name: Install
         shell: bash
         working-directory: ${{runner.workspace}}/nmodl
