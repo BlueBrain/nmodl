@@ -260,7 +260,7 @@ void CodegenNeuronCppVisitor::print_function_or_procedure(
         printer->fmt_line("int ret_{} = 0;", name);
     }
 
-    if (!info.artificial_cell) {
+    if (info.mod_suffix != "nothing" && !info.artificial_cell) {
         printer->add_line("auto v = node_data.node_voltages[node_data.nodeindices[id]];");
     }
 
@@ -284,21 +284,52 @@ void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& 
     }
 }
 
-
-void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_call_impl(
     const ast::Block* function_or_procedure_block,
     InterpreterWrapper wrapper_type) {
-    if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
+    const auto block_name = function_or_procedure_block->get_node_name();
+
+    const auto get_func_call_str = [&]() {
+        const auto& params = function_or_procedure_block->get_parameters();
+        const auto func_proc_name = block_name + "_" + info.mod_suffix;
+        std::vector<std::string> args;
+        args.reserve(params.size());
+        for (int i = 0; i < params.size(); ++i) {
+            args.push_back(fmt::format("*getarg({})", i + 1));
+        }
+
+        auto internal_args = internal_method_arguments();
+        return fmt::format("{}({})",
+                           func_proc_name,
+                           stringutils::join_arguments(internal_args,
+                                                       fmt::format("{}", fmt::join(args, ", "))));
+    };
+
+    printer->add_line("double _r = 0.0;");
+    if (function_or_procedure_block->is_function_block()) {
+        printer->add_indent();
+        printer->fmt_text("_r = {};", get_func_call_str());
+        printer->add_newline();
+    } else {
+        printer->add_line("_r = 1.;");
+        printer->fmt_line("{};", get_func_call_str());
+    }
+    if (info.point_process || wrapper_type != InterpreterWrapper::HOC) {
+        printer->add_line("return(_r);");
+    } else if (wrapper_type == InterpreterWrapper::HOC) {
+        printer->add_line("hoc_retpushx(_r);");
+    }
+}
+
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper_setup(
+    const ast::Block* function_or_procedure_block,
+    InterpreterWrapper wrapper_type) {
+    if (info.mod_suffix == "nothing") {
         return;
     }
+
     const auto block_name = function_or_procedure_block->get_node_name();
-    if (wrapper_type == InterpreterWrapper::HOC) {
-        printer->fmt_push_block("{}", hoc_function_signature(block_name));
-    } else {
-        printer->fmt_push_block("{}", py_function_signature(block_name));
-    }
     printer->add_multi_line(R"CODE(
-        double _r{};
         Datum* _ppvar;
         Datum* _thread;
         NrnThread* nt;
@@ -367,29 +398,31 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
                           table_update_function_name(block_name),
                           internal_method_arguments());
     }
-    const auto get_func_call_str = [&]() {
-        const auto& params = function_or_procedure_block->get_parameters();
-        const auto func_proc_name = block_name + "_" + info.mod_suffix;
-        auto func_call = fmt::format("{}({}", func_proc_name, internal_method_arguments());
-        for (int i = 0; i < params.size(); ++i) {
-            func_call.append(fmt::format(", *getarg({})", i + 1));
-        }
-        func_call.append(")");
-        return func_call;
-    };
-    if (function_or_procedure_block->is_function_block()) {
-        printer->add_indent();
-        printer->fmt_text("_r = {};", get_func_call_str());
-        printer->add_newline();
+}
+
+
+std::string CodegenNeuronCppVisitor::hoc_py_wrapper_signature(
+    const ast::Block* function_or_procedure_block,
+    InterpreterWrapper wrapper_type) {
+    const auto block_name = function_or_procedure_block->get_node_name();
+    if (wrapper_type == InterpreterWrapper::HOC) {
+        return hoc_function_signature(block_name);
     } else {
-        printer->add_line("_r = 1.;");
-        printer->fmt_line("{};", get_func_call_str());
+        return py_function_signature(block_name);
     }
-    if (info.point_process || wrapper_type != InterpreterWrapper::HOC) {
-        printer->add_line("return(_r);");
-    } else if (wrapper_type == InterpreterWrapper::HOC) {
-        printer->add_line("hoc_retpushx(_r);");
+}
+
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper(const ast::Block* function_or_procedure_block,
+                                                   InterpreterWrapper wrapper_type) {
+    if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
+        return;
     }
+
+    printer->push_block(hoc_py_wrapper_signature(function_or_procedure_block, wrapper_type));
+
+    print_hoc_py_wrapper_setup(function_or_procedure_block, wrapper_type);
+    print_hoc_py_wrapper_call_impl(function_or_procedure_block, wrapper_type);
+
     printer->pop_block();
 }
 
@@ -397,8 +430,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
     auto print_wrappers = [this](const auto& callables) {
         for (const auto& callable: callables) {
-            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::HOC);
-            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::Python);
+            print_hoc_py_wrapper(callable, InterpreterWrapper::HOC);
+            print_hoc_py_wrapper(callable, InterpreterWrapper::Python);
         }
     };
 
@@ -537,6 +570,10 @@ std::string CodegenNeuronCppVisitor::internal_method_arguments() {
 
 
 CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internal_method_parameters() {
+    if (info.mod_suffix == "nothing") {
+        return {};
+    }
+
     ParamVector params;
     params.emplace_back("", "_nrn_mechanism_cache_range&", "", "_lmc");
     params.emplace_back("", fmt::format("{}&", instance_struct()), "", "inst");
@@ -1382,7 +1419,9 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
         {"has_loc", _hoc_has_loc},
         {"get_loc", _hoc_get_loc_pnt},)CODE");
     } else {
-        printer->fmt_line("{{\"setdata_{}\", _hoc_setdata}},", info.mod_suffix);
+        if (info.mod_suffix != "nothing") {
+            printer->fmt_line("{{\"setdata_{}\", _hoc_setdata}},", info.mod_suffix);
+        }
     }
 
     auto print_callable_reg = [this](const auto& callables, auto get_name) {
@@ -1430,8 +1469,16 @@ void CodegenNeuronCppVisitor::print_global_variables_for_hoc() {
 
 void CodegenNeuronCppVisitor::print_mechanism_register() {
     printer->add_newline(2);
-    printer->add_line("/** register channel with the simulator */");
     printer->fmt_push_block("extern \"C\" void _{}_reg()", info.mod_file);
+    if (info.mod_suffix == "nothing") {
+        print_mechanism_register_nothing();
+    } else {
+        print_mechanism_register_regular();
+    }
+    printer->pop_block();
+}
+
+void CodegenNeuronCppVisitor::print_mechanism_register_regular() {
     printer->add_line("_initlists();");
     printer->add_newline();
 
@@ -1622,8 +1669,10 @@ void CodegenNeuronCppVisitor::print_mechanism_register() {
         printer->fmt_line("{}._morphology_sym = hoc_lookup(\"morphology\");",
                           global_struct_instance());
     }
+}
 
-    printer->pop_block();
+void CodegenNeuronCppVisitor::print_mechanism_register_nothing() {
+    printer->add_line("hoc_register_var(hoc_scalar_double, hoc_vector_double, hoc_intfunc);");
 }
 
 
@@ -1864,6 +1913,10 @@ void CodegenNeuronCppVisitor::print_initial_block(const InitialBlock* node) {
 }
 
 void CodegenNeuronCppVisitor::print_entrypoint_setup_code_from_memb_list() {
+    if (info.mod_suffix == "nothing") {
+        return;
+    }
+
     printer->add_line(
         "_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _ml_arg->type()};");
     printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
@@ -1880,6 +1933,10 @@ void CodegenNeuronCppVisitor::print_entrypoint_setup_code_from_memb_list() {
 
 
 void CodegenNeuronCppVisitor::print_entrypoint_setup_code_from_prop() {
+    if (info.mod_suffix == "nothing") {
+        return;
+    }
+
     printer->add_line("Datum* _ppvar = _nrn_mechanism_access_dparam(prop);");
     printer->add_line("_nrn_mechanism_cache_instance _lmc{prop};");
     printer->add_line("const size_t id = 0;");
@@ -2514,9 +2571,7 @@ void CodegenNeuronCppVisitor::print_g_unused() const {
     )CODE");
 }
 
-
-void CodegenNeuronCppVisitor::print_compute_functions() {
-    print_top_verbatim_blocks();
+void CodegenNeuronCppVisitor::print_function_definitions() {
     print_hoc_py_wrapper_function_definitions();
     for (const auto& procedure: info.procedures) {
         print_procedure(*procedure);
@@ -2527,7 +2582,10 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     for (const auto& function_table: info.function_tables) {
         print_function_tables(*function_table);
     }
+}
 
+void CodegenNeuronCppVisitor::print_compute_functions() {
+    print_top_verbatim_blocks();
     print_nrn_init();
     print_nrn_cur();
     print_nrn_state();
@@ -2536,8 +2594,7 @@ void CodegenNeuronCppVisitor::print_compute_functions() {
     print_net_init();
 }
 
-
-void CodegenNeuronCppVisitor::print_codegen_routines() {
+void CodegenNeuronCppVisitor::print_codegen_routines_regular() {
     print_backend_info();
     print_headers_include();
     print_macro_definitions();
@@ -2558,12 +2615,32 @@ void CodegenNeuronCppVisitor::print_codegen_routines() {
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
+    print_function_definitions();
     print_compute_functions();  // only nrn_cur and nrn_state
     print_nrn_constructor();
     print_nrn_destructor();
     print_sdlists_init(true);
     print_mechanism_register();
     print_namespace_stop();
+}
+
+void CodegenNeuronCppVisitor::print_codegen_routines_nothing() {
+    print_backend_info();
+    print_headers_include();
+    print_namespace_start();
+    print_function_prototypes();
+    print_global_variables_for_hoc();
+    print_function_definitions();
+    print_mechanism_register();
+    print_namespace_stop();
+}
+
+void CodegenNeuronCppVisitor::print_codegen_routines() {
+    if (info.mod_suffix == "nothing") {
+        print_codegen_routines_nothing();
+    } else {
+        print_codegen_routines_regular();
+    }
 }
 
 void CodegenNeuronCppVisitor::print_ion_variable() {
