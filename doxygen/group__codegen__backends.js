@@ -258,7 +258,7 @@ var group__codegen__backends =
       [ "print_fast_imem_calculation", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a34492b32e18b9fbfd3ba01ba8ad85eb5", null ],
       [ "print_function", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aec5684647e34e9f3381635ab50ce4ed0", null ],
       [ "print_function_call", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad63b4318b5abd6b8c224fab70fe61081", null ],
-      [ "print_function_declaration", "group__codegen__backends.html#gabf8cfdf6adba4da78b0d92b81d9ff160", null ],
+      [ "print_function_declaration", "group__codegen__backends.html#gadb57c0920613cf50915a12efe5e987c2", null ],
       [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a9ec8d64ef0941d98af29b31060155c0b", null ],
       [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa017bbe95ad7539e72d182dac59f2454", null ],
       [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a50ccadf68055ea9e26439ccaed0d68f7", null ],
@@ -476,6 +476,6 @@ var group__codegen__backends =
       [ "codegen_thread_variables", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a2142740635a801ade67d99228fd71ce2", null ]
     ] ],
     [ "get_name", "group__codegen__backends.html#ga9dc150643b36d2a9087f4ab7c94325c7", null ],
-    [ "print_function_declaration", "group__codegen__backends.html#gabf8cfdf6adba4da78b0d92b81d9ff160", null ],
+    [ "print_function_declaration", "group__codegen__backends.html#gadb57c0920613cf50915a12efe5e987c2", null ],
     [ "print_vector_elements", "group__codegen__backends.html#ga743bcd56c5822a14381fd87fe586ed6c", null ]
 ];

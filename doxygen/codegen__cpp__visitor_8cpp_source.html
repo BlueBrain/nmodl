@@ -558,7 +558,7 @@ $(document).ready(function(){initNavTree('codegen__cpp__visitor_8cpp_source.html
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160; </div>
 <div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160; </div>
 <div class="line"><a name="l00464"></a><span class="lineno"><a class="line" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">  464</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">CodegenCppVisitor::print_global_var_struct_decl</a>() {</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    printer-&gt;add_line(global_struct(), <span class="charliteral">&#39; &#39;</span>, global_struct_instance(), <span class="charliteral">&#39;;&#39;</span>);</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    printer-&gt;fmt_line(<span class="stringliteral">&quot;static {} {};&quot;</span>, global_struct(), global_struct_instance());</div>
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;}</div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160; </div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
