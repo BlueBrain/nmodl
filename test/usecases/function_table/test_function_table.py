@@ -99,7 +99,7 @@ def check_2d(make_inst, mech_name):
             np.testing.assert_approx_equal(actual_indirect, expected, significant=11)
 
 
-if __name__ == "__main__":
+def test_function_table():
     variations = [
         (lambda s: None, "function_table"),
         (lambda s: s(0.5).function_table, "function_table"),
@@ -113,3 +113,7 @@ if __name__ == "__main__":
 
         check_1d(make_instance, mech_name)
         check_2d(make_instance, mech_name)
+
+
+if __name__ == "__main__":
+    test_function_table()
