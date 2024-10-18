@@ -285,7 +285,6 @@ void CodegenNeuronCppVisitor::print_function_procedure_helper(const ast::Block& 
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_call_impl(
     const ast::Block* function_or_procedure_block,
     InterpreterWrapper wrapper_type) {
-
     const auto block_name = function_or_procedure_block->get_node_name();
 
     const auto get_func_call_str = [&]() {
@@ -298,7 +297,6 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_call_impl(
         func_call.append(")");
         return func_call;
     };
-
 
     printer->add_line("double _r = 0.0;");
     if (function_or_procedure_block->is_function_block()) {
@@ -391,19 +389,25 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_setup(
     }
 }
 
+
+std::string CodegenNeuronCppVisitor::hoc_py_wrapper_signature(
+    const ast::Block* function_or_procedure_block,
+    InterpreterWrapper wrapper_type) {
+    const auto block_name = function_or_procedure_block->get_node_name();
+    if (wrapper_type == InterpreterWrapper::HOC) {
+        return hoc_function_signature(block_name);
+    } else {
+        return py_function_signature(block_name);
+    }
+}
+
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper(const ast::Block* function_or_procedure_block,
                                                    InterpreterWrapper wrapper_type) {
     if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
         return;
     }
-    const auto block_name = function_or_procedure_block->get_node_name();
-    if (info.point_process) {
-        printer->fmt_push_block("static double _hoc_{}(void* _vptr)", block_name);
-    } else if (wrapper_type == InterpreterWrapper::HOC) {
-        printer->fmt_push_block("static void _hoc_{}(void)", block_name);
-    } else {
-        printer->fmt_push_block("static double _npy_{}(Prop* _prop)", block_name);
-    }
+
+    printer->push_block(hoc_py_wrapper_signature(function_or_procedure_block, wrapper_type));
 
     print_hoc_py_wrapper_setup(function_or_procedure_block, wrapper_type);
     print_hoc_py_wrapper_call_impl(function_or_procedure_block, wrapper_type);

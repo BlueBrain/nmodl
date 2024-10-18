@@ -264,6 +264,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_hoc_py_wrapper_call_impl(const ast::Block* function_or_procedure_block,
                                         InterpreterWrapper wrapper_type);
 
+    /** Return the wrapper signature.
+     *
+     * Everything without the { or ;.
+     */
+    std::string hoc_py_wrapper_signature(const ast::Block* function_or_procedure_block,
+                                         InterpreterWrapper wrapper_type);
 
     void print_hoc_py_wrapper_function_definitions();
 
