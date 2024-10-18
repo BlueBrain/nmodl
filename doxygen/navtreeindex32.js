@@ -1,5 +1,6 @@
 var NAVTREEINDEX32 =
 {
+"string__utils_8hpp.html#ga536e9fa8a76c71e6ee211e35020c89ce":[3,0,1,10,12,5],
 "string__utils_8hpp.html#ga78d349a9974c648c44f8f47c82a1bb6c":[3,0,1,10,12,11],
 "string__utils_8hpp.html#gab27701783c8231e8a759a2ce717dfc8b":[3,0,1,10,12,7],
 "string__utils_8hpp.html#gadedfb99b5da8fe0c5995b5e881875d45":[3,0,1,10,12,9],
@@ -248,6 +249,5 @@ var NAVTREEINDEX32 =
 "structnmodl_1_1utils_1_1_perf_stat.html#a9ffc41c68e3caa6bd13eb6f6606e06bb":[0,7,1,4],
 "structnmodl_1_1utils_1_1_perf_stat.html#aa363aedc365cd8a7c3cfaa87b68d2ba7":[0,7,1,17],
 "structnmodl_1_1utils_1_1_perf_stat.html#aa960b2aec7f733ae1d07afd6e82b274c":[0,7,1,28],
-"structnmodl_1_1utils_1_1_perf_stat.html#aab66768f7cd4a2e4c5749ab700c2f686":[0,7,1,32],
-"structnmodl_1_1utils_1_1_perf_stat.html#aae870000fa6e6d78e6e29fe6d007af1c":[0,7,1,20]
+"structnmodl_1_1utils_1_1_perf_stat.html#aab66768f7cd4a2e4c5749ab700c2f686":[0,7,1,32]
 };

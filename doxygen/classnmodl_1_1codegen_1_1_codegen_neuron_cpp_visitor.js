@@ -37,6 +37,7 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "print_entrypoint_setup_code_from_memb_list", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a631cd066f97558e6dc5a491cfa4d3adb", null ],
     [ "print_entrypoint_setup_code_from_prop", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8f2937bc2fc0b00f9a83f128704924d6", null ],
     [ "print_fast_imem_calculation", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#abce8ff7e8bd0754c8d61066779b4e72f", null ],
+    [ "print_function_definitions", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8ec964e3dc55a132277d9273a3de33fe", null ],
     [ "print_function_or_procedure", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a8c240b7ccb8aa19ad0cfca2e57fd8496", null ],
     [ "print_function_procedure_helper", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#af6a5224b66dde062241120381b3cb8df", null ],
     [ "print_function_prototypes", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a7f941bd8151d12ef887be3670dec264e", null ],

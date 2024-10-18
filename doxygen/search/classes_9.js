@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['kineticblock_2924',['KineticBlock',['../classnmodl_1_1ast_1_1_kinetic_block.html',1,'nmodl::ast']]],
-  ['kineticblockvisitor_2925',['KineticBlockVisitor',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html',1,'nmodl::visitor']]]
+  ['kineticblock_2925',['KineticBlock',['../classnmodl_1_1ast_1_1_kinetic_block.html',1,'nmodl::ast']]],
+  ['kineticblockvisitor_2926',['KineticBlockVisitor',['../classnmodl_1_1visitor_1_1_kinetic_block_visitor.html',1,'nmodl::visitor']]]
 ];
