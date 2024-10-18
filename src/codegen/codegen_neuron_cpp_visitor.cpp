@@ -2585,7 +2585,6 @@ void CodegenNeuronCppVisitor::print_function_definitions() {
 }
 
 void CodegenNeuronCppVisitor::print_compute_functions() {
-    print_top_verbatim_blocks();
     print_nrn_init();
     print_nrn_cur();
     print_nrn_state();
@@ -2615,6 +2614,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines_regular() {
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
+    print_top_verbatim_blocks();
     print_function_definitions();
     print_compute_functions();  // only nrn_cur and nrn_state
     print_nrn_constructor();
