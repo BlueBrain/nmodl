@@ -2630,6 +2630,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines_nothing() {
     print_namespace_start();
     print_function_prototypes();
     print_global_variables_for_hoc();
+    print_top_verbatim_blocks();
     print_function_definitions();
     print_mechanism_register();
     print_namespace_stop();
