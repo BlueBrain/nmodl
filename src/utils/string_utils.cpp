@@ -28,7 +28,7 @@ std::string to_string(double value, const std::string& format_spec) {
 }
 
 std::string join_arguments(const std::string& lhs, const std::string& rhs) {
-    if (lhs == "") {
+    if (lhs.empty()) {
         return rhs;
     } else if (rhs == "") {
         return lhs;
