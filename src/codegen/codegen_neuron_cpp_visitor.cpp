@@ -391,9 +391,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_setup(
     }
 }
 
-void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
-    const ast::Block* function_or_procedure_block,
-    InterpreterWrapper wrapper_type) {
+void CodegenNeuronCppVisitor::print_hoc_py_wrapper(const ast::Block* function_or_procedure_block,
+                                                   InterpreterWrapper wrapper_type) {
     if (info.point_process && wrapper_type == InterpreterWrapper::Python) {
         return;
     }
@@ -416,8 +415,8 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_body(
 void CodegenNeuronCppVisitor::print_hoc_py_wrapper_function_definitions() {
     auto print_wrappers = [this](const auto& callables) {
         for (const auto& callable: callables) {
-            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::HOC);
-            print_hoc_py_wrapper_function_body(callable, InterpreterWrapper::Python);
+            print_hoc_py_wrapper(callable, InterpreterWrapper::HOC);
+            print_hoc_py_wrapper(callable, InterpreterWrapper::Python);
         }
     };
 
