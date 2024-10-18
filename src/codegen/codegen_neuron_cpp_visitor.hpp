@@ -244,8 +244,25 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     void print_function_procedure_helper(const ast::Block& node) override;
 
 
+    /** Print the wrapper for calling FUNCION/PROCEDURES from HOC/Py.
+     *
+     *  Usually the function is made up of the following parts:
+     *    * Print setup code `inst`, etc.
+     *    * Print code to call the function and return.
+     */
     void print_hoc_py_wrapper_function_body(const ast::Block* function_or_procedure_block,
                                             InterpreterWrapper wrapper_type);
+
+    /** Print the setup code for HOC/Py wrapper.
+     */
+    void print_hoc_py_wrapper_setup(const ast::Block* function_or_procedure_block,
+                                    InterpreterWrapper wrapper_type);
+
+
+    /** Print the code that calls the impl from the HOC/Py wrapper.
+     */
+    void print_hoc_py_wrapper_call_impl(const ast::Block* function_or_procedure_block,
+                                        InterpreterWrapper wrapper_type);
 
 
     void print_hoc_py_wrapper_function_definitions();
