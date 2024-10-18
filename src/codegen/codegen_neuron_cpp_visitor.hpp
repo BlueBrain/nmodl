@@ -250,8 +250,8 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      *    * Print setup code `inst`, etc.
      *    * Print code to call the function and return.
      */
-    void print_hoc_py_wrapper_function_body(const ast::Block* function_or_procedure_block,
-                                            InterpreterWrapper wrapper_type);
+    void print_hoc_py_wrapper(const ast::Block* function_or_procedure_block,
+                              InterpreterWrapper wrapper_type);
 
     /** Print the setup code for HOC/Py wrapper.
      */
