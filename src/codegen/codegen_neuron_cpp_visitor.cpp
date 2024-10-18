@@ -298,6 +298,9 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_call_impl(
         func_call.append(")");
         return func_call;
     };
+
+
+    printer->add_line("double _r = 0.0;");
     if (function_or_procedure_block->is_function_block()) {
         printer->add_indent();
         printer->fmt_text("_r = {};", get_func_call_str());
@@ -318,7 +321,6 @@ void CodegenNeuronCppVisitor::print_hoc_py_wrapper_setup(
     InterpreterWrapper wrapper_type) {
     const auto block_name = function_or_procedure_block->get_node_name();
     printer->add_multi_line(R"CODE(
-        double _r{};
         Datum* _ppvar;
         Datum* _thread;
         NrnThread* nt;
