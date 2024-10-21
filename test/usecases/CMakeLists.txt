@@ -3,6 +3,7 @@ set(NMODL_USECASE_DIRS
     builtin_functions
     constant
     constructor
+    cvode
     electrode_current
     external
     function
@@ -30,8 +31,7 @@ set(NMODL_USECASE_DIRS
     steady_state
     suffix
     table
-    useion
-    cvode)
+    useion)
 
 foreach(usecase ${NMODL_USECASE_DIRS})
   add_test(NAME usecase_${usecase}
