@@ -45,27 +45,26 @@ static std::pair<std::string, std::optional<int>> parse_independent_var(
     return variable;
 }
 
-static std::unordered_map<std::string, int> get_name_map(const ast::Expression& node,
-                                                         const std::string& name) {
-    std::unordered_map<std::string, int> name_map;
-    // all of the "reserved" symbols
+/// set of all indexed variables not equal to ``name``
+static std::unordered_set<std::string> get_indexed_variables(const ast::Expression& node,
+                                                             const std::string& name) {
+    std::unordered_set<std::string> indexed_variables;
+    // all of the "reserved" vars
     auto reserved_symbols = get_external_functions();
     // all indexed vars
     auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
     for (const auto& var: indexed_vars) {
-        if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
-            std::none_of(reserved_symbols.begin(), reserved_symbols.end(), [&var](const auto item) {
-                return var->get_node_name() == item;
-            })) {
-            logger->debug(
-                "CvodeVisitor :: adding INDEXED_VARIABLE {} to "
-                "node_map",
-                var->get_node_name());
-            name_map[var->get_node_name()] = get_index(
-                *std::dynamic_pointer_cast<const ast::IndexedName>(var));
+        const auto& varname = var->get_node_name();
+        // skip if it's a reserved var
+        auto varname_not_reserved =
+            std::none_of(reserved_symbols.begin(),
+                         reserved_symbols.end(),
+                         [&varname](const auto item) { return varname == item; });
+        if (indexed_variables.count(varname) == 0 && varname != name && varname_not_reserved) {
+            indexed_variables.insert(varname);
         }
     }
-    return name_map;
+    return indexed_variables;
 }
 
 static std::string cvode_set_lhs(ast::BinaryExpression& node) {
@@ -153,8 +152,8 @@ class StiffVisitor: public CvodeHelperVisitor {
         }
 
         auto rhs = node.get_rhs();
-        // map of all indexed symbols (need special treatment in SymPy)
-        auto name_map = get_name_map(*rhs, name->get_node_name());
+        // all indexed variables (need special treatment in SymPy)
+        auto name_map = get_indexed_variables(*rhs, name->get_node_name());
         auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
         auto [jacobian,
               exception_message] = diff2c(to_nmodl(*rhs), parse_independent_var(name), name_map);

@@ -10,7 +10,7 @@
 #include <optional>
 #include <set>
 #include <string>
-#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace nmodl {
@@ -50,12 +50,12 @@ std::tuple<std::string, std::string> call_analytic_diff(
 /// \brief Differentiates an expression with respect to a variable
 /// \param expression The expression we want to differentiate
 /// \param variable   The name of the independent variable we are differentiating against
-/// \param index_vars A map of array (indexable) variables (and their associated indices) that
-/// appear in \ref expression \return The tuple (solution, exception)
+/// \param index_vars A set of array (indexable) variables that appear in \ref expression
+/// \return The tuple (solution, exception)
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::pair<std::string, std::optional<int>>& variable,
-    const std::unordered_map<std::string, int>& indexed_vars = {});
+    const std::unordered_set<std::string>& indexed_vars = {});
 
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;
