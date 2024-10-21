@@ -8,6 +8,7 @@ var string__utils_8hpp =
     [ "align_text", "string__utils_8hpp.html#ga287cad41afb0bf66e8767af03a681894", null ],
     [ "ends_with", "string__utils_8hpp.html#ga471a8e5bc38d473327cd002177cdeb2d", null ],
     [ "escape_quotes", "string__utils_8hpp.html#gaf540c93e2be6257255681bea72895aa4", null ],
+    [ "join_arguments", "string__utils_8hpp.html#gad3278450c9087afa3a4ff17c7d9880fe", null ],
     [ "ltrim", "string__utils_8hpp.html#ga09e2cad122ecf35cb2d5fbfc4b1daa2e", null ],
     [ "remove_character", "string__utils_8hpp.html#ga536e9fa8a76c71e6ee211e35020c89ce", null ],
     [ "rtrim", "string__utils_8hpp.html#ga4b59a2f419f635684fb06ed850e61f57", null ],

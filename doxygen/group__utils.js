@@ -72,6 +72,7 @@ var group__utils =
     [ "escape_quotes", "group__utils.html#gaf540c93e2be6257255681bea72895aa4", null ],
     [ "generate_random_string", "group__utils.html#ga9413d5b6162f1e722b6d6b59c3cc5f56", null ],
     [ "is_last", "group__utils.html#ga08a8b444018d46999224618bb102b3e5", null ],
+    [ "join_arguments", "group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe", null ],
     [ "ltrim", "group__utils.html#ga09e2cad122ecf35cb2d5fbfc4b1daa2e", null ],
     [ "remove_character", "group__utils.html#ga536e9fa8a76c71e6ee211e35020c89ce", null ],
     [ "rtrim", "group__utils.html#ga4b59a2f419f635684fb06ed850e61f57", null ],

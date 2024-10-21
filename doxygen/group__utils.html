@@ -172,6 +172,9 @@ Functions</h2></td></tr>
 <tr class="memitem:gadedfb99b5da8fe0c5995b5e881875d45"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#gadedfb99b5da8fe0c5995b5e881875d45">nmodl::stringutils::to_string</a> (double value, const std::string &amp;format_spec=&quot;{:.16g}&quot;)</td></tr>
 <tr class="memdesc:gadedfb99b5da8fe0c5995b5e881875d45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert double value to string without trailing zeros.  <a href="group__utils.html#gadedfb99b5da8fe0c5995b5e881875d45">More...</a><br /></td></tr>
 <tr class="separator:gadedfb99b5da8fe0c5995b5e881875d45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gad3278450c9087afa3a4ff17c7d9880fe"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe">nmodl::stringutils::join_arguments</a> (const std::string &amp;lhs, const std::string &amp;rhs)</td></tr>
+<tr class="memdesc:gad3278450c9087afa3a4ff17c7d9880fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Joint two (list of) arguments.  <a href="group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe">More...</a><br /></td></tr>
+<tr class="separator:gad3278450c9087afa3a4ff17c7d9880fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -434,6 +437,39 @@ template&lt;typename Iter , typename Cont &gt; </div>
 <p>Check if the iterator is pointing to last element in the container. </p>
 
 <p class="definition">Definition at line <a class="el" href="common__utils_8hpp_source.html#l00037">37</a> of file <a class="el" href="common__utils_8hpp_source.html">common_utils.hpp</a>.</p>
+
+</div>
+</div>
+<a id="gad3278450c9087afa3a4ff17c7d9880fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#gad3278450c9087afa3a4ff17c7d9880fe">&#9670;&nbsp;</a></span>join_arguments()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string nmodl::stringutils::join_arguments </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>lhs</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>rhs</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Joint two (list of) arguments. </p>
+<p>The tricks is to not add a ',' when either side is empty. </p>
+
+<p class="definition">Definition at line <a class="el" href="src_2utils_2string__utils_8cpp_source.html#l00030">30</a> of file <a class="el" href="src_2utils_2string__utils_8cpp_source.html">string_utils.cpp</a>.</p>
 
 </div>
 </div>

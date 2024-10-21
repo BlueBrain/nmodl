@@ -1,12 +1,15 @@
 var NAVTREEINDEX32 =
 {
-"string__utils_8hpp.html#ga536e9fa8a76c71e6ee211e35020c89ce":[3,0,1,10,12,5],
-"string__utils_8hpp.html#ga78d349a9974c648c44f8f47c82a1bb6c":[3,0,1,10,12,11],
-"string__utils_8hpp.html#gab27701783c8231e8a759a2ce717dfc8b":[3,0,1,10,12,7],
-"string__utils_8hpp.html#gadedfb99b5da8fe0c5995b5e881875d45":[3,0,1,10,12,9],
-"string__utils_8hpp.html#gaf48c384e44fa0350df08bfebba589dc5":[3,0,1,10,12,12],
+"string__utils_8hpp.html#ga471a8e5bc38d473327cd002177cdeb2d":[3,0,1,10,12,2],
+"string__utils_8hpp.html#ga4b59a2f419f635684fb06ed850e61f57":[3,0,1,10,12,7],
+"string__utils_8hpp.html#ga536e9fa8a76c71e6ee211e35020c89ce":[3,0,1,10,12,6],
+"string__utils_8hpp.html#ga78d349a9974c648c44f8f47c82a1bb6c":[3,0,1,10,12,12],
+"string__utils_8hpp.html#gab27701783c8231e8a759a2ce717dfc8b":[3,0,1,10,12,8],
+"string__utils_8hpp.html#gad3278450c9087afa3a4ff17c7d9880fe":[3,0,1,10,12,4],
+"string__utils_8hpp.html#gadedfb99b5da8fe0c5995b5e881875d45":[3,0,1,10,12,10],
+"string__utils_8hpp.html#gaf48c384e44fa0350df08bfebba589dc5":[3,0,1,10,12,13],
 "string__utils_8hpp.html#gaf540c93e2be6257255681bea72895aa4":[3,0,1,10,12,3],
-"string__utils_8hpp.html#gafabc5b4697fbf07498453a407dc336fd":[3,0,1,10,12,8],
+"string__utils_8hpp.html#gafabc5b4697fbf07498453a407dc336fd":[3,0,1,10,12,9],
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6a7c4f29407893c334a6cb7a87bf045c0d":[3,0,1,10,12,0,1],
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6a811882fecd5c7618d7099ebbd39ea254":[3,0,1,10,12,0,0],
 "string__utils_8hpp.html#gga45f97a3d578ade6b9b49b1a92ec688a6aadb115059e28d960fa8badfac5516667":[3,0,1,10,12,0,2],
@@ -246,8 +249,5 @@ var NAVTREEINDEX32 =
 "structnmodl_1_1utils_1_1_perf_stat.html#a91ba4b67b628111a38139f6c296dcc92":[0,7,1,31],
 "structnmodl_1_1utils_1_1_perf_stat.html#a9206f3b387f5a40aaf1a1d964710d871":[0,7,1,13],
 "structnmodl_1_1utils_1_1_perf_stat.html#a9cefd15b34eb6815c1a73daac24b1bd7":[0,7,1,30],
-"structnmodl_1_1utils_1_1_perf_stat.html#a9ffc41c68e3caa6bd13eb6f6606e06bb":[0,7,1,4],
-"structnmodl_1_1utils_1_1_perf_stat.html#aa363aedc365cd8a7c3cfaa87b68d2ba7":[0,7,1,17],
-"structnmodl_1_1utils_1_1_perf_stat.html#aa960b2aec7f733ae1d07afd6e82b274c":[0,7,1,28],
-"structnmodl_1_1utils_1_1_perf_stat.html#aab66768f7cd4a2e4c5749ab700c2f686":[0,7,1,32]
+"structnmodl_1_1utils_1_1_perf_stat.html#a9ffc41c68e3caa6bd13eb6f6606e06bb":[0,7,1,4]
 };

@@ -123,10 +123,22 @@ $(document).ready(function(){initNavTree('src_2utils_2string__utils_8cpp_source.
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordflow">return</span> fmt::format(format_spec, value);</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}  <span class="comment">// namespace stringutils</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe">   30</a></span>&#160;std::string <a class="code" href="group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe">join_arguments</a>(<span class="keyword">const</span> std::string&amp; lhs, <span class="keyword">const</span> std::string&amp; rhs) {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (lhs.empty()) {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">return</span> rhs;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    } <span class="keywordflow">else</span> <span class="keywordflow">if</span> (rhs.empty()) {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keywordflow">return</span> lhs;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keywordflow">return</span> fmt::format(<span class="stringliteral">&quot;{}&quot;</span>, fmt::join({lhs, rhs}, <span class="stringliteral">&quot;, &quot;</span>));</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}  <span class="comment">// namespace stringutils</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}  <span class="comment">// namespace nmodl</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="agroup__utils_html_gad3278450c9087afa3a4ff17c7d9880fe"><div class="ttname"><a href="group__utils.html#gad3278450c9087afa3a4ff17c7d9880fe">nmodl::stringutils::join_arguments</a></div><div class="ttdeci">std::string join_arguments(const std::string &amp;lhs, const std::string &amp;rhs)</div><div class="ttdoc">Joint two (list of) arguments.</div><div class="ttdef"><b>Definition:</b> <a href="src_2utils_2string__utils_8cpp_source.html#l00030">string_utils.cpp:30</a></div></div>
 <div class="ttc" id="anamespacenmodl_html"><div class="ttname"><a href="namespacenmodl.html">nmodl</a></div><div class="ttdoc">encapsulates code generation backend implementations</div><div class="ttdef"><b>Definition:</b> <a href="ast__common_8hpp_source.html#l00026">ast_common.hpp:26</a></div></div>
 <div class="ttc" id="astring__utils_8hpp_html"><div class="ttname"><a href="string__utils_8hpp.html">string_utils.hpp</a></div><div class="ttdoc">Implement string manipulation functions.</div></div>
 <div class="ttc" id="afmt_8h_html"><div class="ttname"><a href="fmt_8h.html">fmt.h</a></div></div>
