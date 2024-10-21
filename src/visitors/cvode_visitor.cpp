@@ -175,25 +175,43 @@ class StiffVisitor: public CvodeHelperVisitor {
 
 void CvodeVisitor::visit_program(ast::Program& node) {
     auto derivative_blocks = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
-    if (!derivative_blocks.empty()) {
-        auto derivative_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(
-            derivative_blocks[0]);
-
-        auto non_stiff_block = derivative_block->get_statement_block()->clone();
-        remove_conserve_statements(*non_stiff_block);
-
-        auto stiff_block = derivative_block->get_statement_block()->clone();
-        remove_conserve_statements(*stiff_block);
-
-        NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
-        StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
-        auto prime_vars = collect_nodes(*derivative_block, {ast::AstNodeType::PRIME_NAME});
-        node.emplace_back_node(new ast::CvodeBlock(
-            derivative_block->get_name(),
-            std::shared_ptr<ast::Integer>(new ast::Integer(prime_vars.size(), nullptr)),
-            std::shared_ptr<ast::StatementBlock>(non_stiff_block),
-            std::shared_ptr<ast::StatementBlock>(stiff_block)));
+    if (derivative_blocks.empty()) {
+        return;
     }
+
+    // steady state adds a DERIVATIVE block with a `_steadystate` suffix
+    auto not_steadystate = [](const auto& item) {
+        auto name = std::dynamic_pointer_cast<const ast::DerivativeBlock>(item)->get_node_name();
+        return !stringutils::ends_with(name, "_steadystate");
+    };
+    decltype(derivative_blocks) derivative_blocks_copy;
+    std::copy_if(derivative_blocks.begin(),
+                 derivative_blocks.end(),
+                 std::back_inserter(derivative_blocks_copy),
+                 not_steadystate);
+    if (derivative_blocks_copy.size() > 1) {
+        auto message = "CvodeVisitor :: cannot have multiple DERIVATIVE blocks";
+        logger->error(message);
+        throw std::runtime_error(message);
+    }
+
+    auto derivative_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(
+        derivative_blocks_copy[0]);
+
+    auto non_stiff_block = derivative_block->get_statement_block()->clone();
+    remove_conserve_statements(*non_stiff_block);
+
+    auto stiff_block = derivative_block->get_statement_block()->clone();
+    remove_conserve_statements(*stiff_block);
+
+    NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
+    StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
+    auto prime_vars = collect_nodes(*derivative_block, {ast::AstNodeType::PRIME_NAME});
+    node.emplace_back_node(new ast::CvodeBlock(
+        derivative_block->get_name(),
+        std::shared_ptr<ast::Integer>(new ast::Integer(prime_vars.size(), nullptr)),
+        std::shared_ptr<ast::StatementBlock>(non_stiff_block),
+        std::shared_ptr<ast::StatementBlock>(stiff_block)));
 }
 
 }  // namespace visitor
