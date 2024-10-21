@@ -28,8 +28,16 @@ auto run_cvode_visitor(const std::string& text) {
 
 
 TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
+    GIVEN("No DERIVATIVE block") {
+        auto nmodl_text = "NEURON { SUFFIX example }";
+        auto ast = run_cvode_visitor(nmodl_text);
+        THEN("No CVODE block is added") {
+            auto blocks = collect_nodes(*ast, {ast::AstNodeType::CVODE_BLOCK});
+            REQUIRE(blocks.empty());
+        }
+    }
     GIVEN("DERIVATIVE block") {
-        std::string nmodl_text = R"(
+        auto nmodl_text = R"(
             NEURON	{
                 SUFFIX example
             }
@@ -56,6 +64,26 @@ TEST_CASE("Make sure CVODE block is generated properly", "[visitor][cvode]") {
                 auto conserved_stmts = collect_nodes(*blocks[0], {ast::AstNodeType::CONSERVE});
                 REQUIRE(conserved_stmts.empty());
             }
+        }
+    }
+    GIVEN("Multiple DERIVATIVE blocks") {
+        auto nmodl_text = R"(
+            NEURON	{
+                SUFFIX example
+            }
+
+            STATE {X}
+
+            DERIVATIVE equation {
+                X' = -X
+            }
+
+            DERIVATIVE equation2 {
+                X' = -X * X
+            }
+)";
+        THEN("An error is raised") {
+            REQUIRE_THROWS_AS(run_cvode_visitor(nmodl_text), std::runtime_error);
         }
     }
 }

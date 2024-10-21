@@ -190,10 +190,10 @@ except Exception as e:
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::pair<std::string, std::optional<int>>& variable,
-    const std::unordered_map<std::string, int>& indexed_vars) {
+    const std::unordered_set<std::string>& indexed_vars) {
     std::string statements;
     // only indexed variables require special treatment
-    for (const auto& [var, prop]: indexed_vars) {
+    for (const auto& var: indexed_vars) {
         statements += fmt::format("_allvars.append(sp.IndexedBase('{}', shape=[1]))\n", var);
     }
     auto [name, property] = variable;

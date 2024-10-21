@@ -45,27 +45,26 @@ static std::pair<std::string, std::optional<int>> parse_independent_var(
     return variable;
 }
 
-static std::unordered_map<std::string, int> get_name_map(const ast::Expression& node,
-                                                         const std::string& name) {
-    std::unordered_map<std::string, int> name_map;
-    // all of the "reserved" symbols
+/// set of all indexed variables not equal to ``name``
+static std::unordered_set<std::string> get_indexed_variables(const ast::Expression& node,
+                                                             const std::string& name) {
+    std::unordered_set<std::string> indexed_variables;
+    // all of the "reserved" vars
     auto reserved_symbols = get_external_functions();
     // all indexed vars
     auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
     for (const auto& var: indexed_vars) {
-        if (!name_map.count(var->get_node_name()) && var->get_node_name() != name &&
-            std::none_of(reserved_symbols.begin(), reserved_symbols.end(), [&var](const auto item) {
-                return var->get_node_name() == item;
-            })) {
-            logger->debug(
-                "CvodeVisitor :: adding INDEXED_VARIABLE {} to "
-                "node_map",
-                var->get_node_name());
-            name_map[var->get_node_name()] = get_index(
-                *std::dynamic_pointer_cast<const ast::IndexedName>(var));
+        const auto& varname = var->get_node_name();
+        // skip if it's a reserved var
+        auto varname_not_reserved =
+            std::none_of(reserved_symbols.begin(),
+                         reserved_symbols.end(),
+                         [&varname](const auto item) { return varname == item; });
+        if (indexed_variables.count(varname) == 0 && varname != name && varname_not_reserved) {
+            indexed_variables.insert(varname);
         }
     }
-    return name_map;
+    return indexed_variables;
 }
 
 static std::string cvode_set_lhs(ast::BinaryExpression& node) {
@@ -153,8 +152,8 @@ class StiffVisitor: public CvodeHelperVisitor {
         }
 
         auto rhs = node.get_rhs();
-        // map of all indexed symbols (need special treatment in SymPy)
-        auto name_map = get_name_map(*rhs, name->get_node_name());
+        // all indexed variables (need special treatment in SymPy)
+        auto name_map = get_indexed_variables(*rhs, name->get_node_name());
         auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
         auto [jacobian,
               exception_message] = diff2c(to_nmodl(*rhs), parse_independent_var(name), name_map);
@@ -175,25 +174,44 @@ class StiffVisitor: public CvodeHelperVisitor {
 
 
 void CvodeVisitor::visit_program(ast::Program& node) {
-    auto der_blocks = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
-    if (!der_blocks.empty()) {
-        auto der_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(der_blocks[0]);
-
-        auto non_stiff_block = der_block->get_statement_block()->clone();
-        remove_conserve_statements(*non_stiff_block);
-
-        auto stiff_block = der_block->get_statement_block()->clone();
-        remove_conserve_statements(*stiff_block);
-
-        NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
-        StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
-        auto prime_vars = collect_nodes(*der_block, {ast::AstNodeType::PRIME_NAME});
-        node.emplace_back_node(new ast::CvodeBlock(
-            der_block->get_name(),
-            std::shared_ptr<ast::Integer>(new ast::Integer(prime_vars.size(), nullptr)),
-            std::shared_ptr<ast::StatementBlock>(non_stiff_block),
-            std::shared_ptr<ast::StatementBlock>(stiff_block)));
+    auto derivative_blocks = collect_nodes(node, {ast::AstNodeType::DERIVATIVE_BLOCK});
+    if (derivative_blocks.empty()) {
+        return;
     }
+
+    // steady state adds a DERIVATIVE block with a `_steadystate` suffix
+    auto not_steadystate = [](const auto& item) {
+        auto name = std::dynamic_pointer_cast<const ast::DerivativeBlock>(item)->get_node_name();
+        return !stringutils::ends_with(name, "_steadystate");
+    };
+    decltype(derivative_blocks) derivative_blocks_copy;
+    std::copy_if(derivative_blocks.begin(),
+                 derivative_blocks.end(),
+                 std::back_inserter(derivative_blocks_copy),
+                 not_steadystate);
+    if (derivative_blocks_copy.size() > 1) {
+        auto message = "CvodeVisitor :: cannot have multiple DERIVATIVE blocks";
+        logger->error(message);
+        throw std::runtime_error(message);
+    }
+
+    auto derivative_block = std::dynamic_pointer_cast<ast::DerivativeBlock>(
+        derivative_blocks_copy[0]);
+
+    auto non_stiff_block = derivative_block->get_statement_block()->clone();
+    remove_conserve_statements(*non_stiff_block);
+
+    auto stiff_block = derivative_block->get_statement_block()->clone();
+    remove_conserve_statements(*stiff_block);
+
+    NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
+    StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
+    auto prime_vars = collect_nodes(*derivative_block, {ast::AstNodeType::PRIME_NAME});
+    node.emplace_back_node(new ast::CvodeBlock(
+        derivative_block->get_name(),
+        std::shared_ptr<ast::Integer>(new ast::Integer(prime_vars.size(), nullptr)),
+        std::shared_ptr<ast::StatementBlock>(non_stiff_block),
+        std::shared_ptr<ast::StatementBlock>(stiff_block)));
 }
 
 }  // namespace visitor
