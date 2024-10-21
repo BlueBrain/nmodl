@@ -37,20 +37,20 @@ the structure of the ``CVODE`` block is then roughly:
 
 .. code-block::
 
-   CVODE state {
+   CVODE state[n] {
        Dx_i = f_i(x_1, ..., x_n)
    }{
        Dx_i = Dx_i / (1 - dt * J_ii(f))
    }
 
-where ``J_ii(f)`` is the diagonal part of the Jacobian, i.e.
+where ``N`` is the total number of ODEs to solve, and ``J_ii(f)`` is the
+diagonal part of the Jacobian, i.e.
 
 .. math::
 
    J_{ii}(f) = \frac{ \partial f_i(x_1, \ldots, x_n) }{\partial x_i}
 
-As an example, consider the following ``DERIVATIVE``
-block:
+As an example, consider the following ``DERIVATIVE`` block:
 
 .. code-block::
 
@@ -63,7 +63,7 @@ Where ``X`` is a ``STATE`` variable with some initial value, specified in the
 
 .. code-block::
 
-   CVODE state {
+   CVODE state[1] {
        DX = - X
    }{
        DX = DX / (1 - dt * (-1))
