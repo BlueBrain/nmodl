@@ -2544,7 +2544,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     /* return # of ODEs to solve */
     printer->push_block(
         fmt::format("static constexpr int ode_count_{}(int _type)", info.mod_suffix));
-    printer->fmt_line("return {};", info.num_equations);
+    printer->fmt_line("return {};", info.cvode_block->get_n_odes()->get_value());
     printer->pop_block();
 
     printer->add_newline(2);
