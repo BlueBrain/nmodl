@@ -96,6 +96,11 @@
                                   type: Name
                                   node_name: true
                                   suffix: {value: " "}
+                              - n_odes:
+                                  brief: "number of ODEs to solve"
+                                  type: Integer
+                                  prefix: {value: "["}
+                                  suffix: {value: "]"}
                               - non_stiff_block:
                                   brief: "Block with statements of the form Dvar = f(var), used for updating non-stiff systems"
                                   type: StatementBlock

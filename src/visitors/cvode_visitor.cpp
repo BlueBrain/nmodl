@@ -187,10 +187,12 @@ void CvodeVisitor::visit_program(ast::Program& node) {
 
         NonStiffVisitor(node.get_symbol_table()).visit_statement_block(*non_stiff_block);
         StiffVisitor(node.get_symbol_table()).visit_statement_block(*stiff_block);
-        node.emplace_back_node(
-            new ast::CvodeBlock(der_block->get_name(),
-                                std::shared_ptr<ast::StatementBlock>(non_stiff_block),
-                                std::shared_ptr<ast::StatementBlock>(stiff_block)));
+        auto prime_vars = collect_nodes(*der_block, {ast::AstNodeType::PRIME_NAME});
+        node.emplace_back_node(new ast::CvodeBlock(
+            der_block->get_name(),
+            std::shared_ptr<ast::Integer>(new ast::Integer(prime_vars.size(), nullptr)),
+            std::shared_ptr<ast::StatementBlock>(non_stiff_block),
+            std::shared_ptr<ast::StatementBlock>(stiff_block)));
     }
 }
 

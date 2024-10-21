@@ -632,6 +632,7 @@ void CodegenHelperVisitor::visit_nrn_state_block(const ast::NrnStateBlock& node)
 
 void CodegenHelperVisitor::visit_cvode_block(const ast::CvodeBlock& node) {
     info.cvode_block = &node;
+    info.num_equations = node.get_n_odes()->get_value();
     node.visit_children(*this);
 }
 
@@ -745,7 +746,6 @@ void CodegenHelperVisitor::visit_statement_block(const ast::StatementBlock& node
                                          return sym->get_name() == symbol->get_name();
                                      }) == info.prime_variables_by_order.end()) {
                         info.prime_variables_by_order.push_back(symbol);
-                        info.num_equations++;
                     }
                 }
             }
