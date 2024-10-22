@@ -14,5 +14,6 @@ var searchData=
   ['headers_890',['headers',['../structnmodl_1_1utils_1_1_table_data.html#a5d52acd4ad1f650e788e5d3b10ff47d7',1,'nmodl::utils::TableData']]],
   ['hoc_891',['HOC',['../namespacenmodl_1_1codegen.html#ae9d20aa89d0b81ed34e45cf0dc8e99caa3b78e2828fff7425b896b992aab3f54b',1,'nmodl::codegen']]],
   ['hoc_5ffunction_5fname_892',['hoc_function_name',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ad2fd467cd42a02e358169e3ada7301d8',1,'nmodl::codegen::CodegenNeuronCppVisitor']]],
-  ['hoc_5ffunction_5fsignature_893',['hoc_function_signature',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#afb9bb4944afddadd2b154bf48a65cffe',1,'nmodl::codegen::CodegenNeuronCppVisitor']]]
+  ['hoc_5ffunction_5fsignature_893',['hoc_function_signature',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#afb9bb4944afddadd2b154bf48a65cffe',1,'nmodl::codegen::CodegenNeuronCppVisitor']]],
+  ['hoc_5fpy_5fwrapper_5fsignature_894',['hoc_py_wrapper_signature',['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ae3101bee2798c98c0b2235b6921c3900',1,'nmodl::codegen::CodegenNeuronCppVisitor']]]
 ];
