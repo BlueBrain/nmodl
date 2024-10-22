@@ -266,7 +266,12 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     /** Return the wrapper signature.
      *
-     * Everything without the { or ;.
+     * Everything without the { or ; as an example:
+            return_type function_name(<internal_args>, <args>)
+            
+       were `<internal_args> is the list of arguments required by the
+       code to be passed along, while <args> are the arguments in of
+       function as they appear in the MOD file.
      */
     std::string hoc_py_wrapper_signature(const ast::Block* function_or_procedure_block,
                                          InterpreterWrapper wrapper_type);
