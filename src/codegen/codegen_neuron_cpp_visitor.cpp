@@ -2613,8 +2613,10 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                             naming::CVODE_UPDATE_NON_STIFF_NAME,
                             info.mod_suffix,
                             get_parameter_str(cvode_update_parameters()));  // begin fn
-    printer->add_line("int node_id = node_data.nodeindices[id];");
-    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->add_line(
+        "auto v = node_data.node_voltages ? "
+        "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
+
     print_statement_block(*info.cvode_block->get_non_stiff_block(), false, false);
 
     printer->add_line("return 0;");
@@ -2628,7 +2630,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                             info.mod_suffix,
                             get_parameter_str(cvode_setup_parameters()));  // begin fn
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->fmt_line("auto inst = make_instance_{}(&_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
@@ -2638,9 +2640,11 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                           info.thread_var_thread_id);
     }
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
-    printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
-    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->add_line(
+        "auto v = node_data.node_voltages ? "
+        "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
+
     printer->fmt_line("{}_{}({});",
                       naming::CVODE_UPDATE_NON_STIFF_NAME,
                       info.mod_suffix,
@@ -2688,7 +2692,7 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                             info.mod_suffix,
                             get_parameter_str(cvode_setup_parameters()));  // begin fn
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-    printer->fmt_line("auto inst = make_instance_{}(_lmc);", info.mod_suffix);
+    printer->fmt_line("auto inst = make_instance_{}(&_lmc);", info.mod_suffix);
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
     printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
     printer->add_line("auto* _thread = _ml_arg->_thread;");
@@ -2700,9 +2704,10 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     }
 
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
-    printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
-    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    printer->add_line(
+        "auto v = node_data.node_voltages ? "
+        "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
     printer->fmt_line("{}_{}({});",
                       naming::CVODE_UPDATE_STIFF_NAME,
                       info.mod_suffix,
