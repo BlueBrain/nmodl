@@ -45,13 +45,13 @@ static std::pair<std::string, std::optional<int>> parse_independent_var(
     return variable;
 }
 
-/// set of all indexed variables not equal to ``name``
-static std::unordered_set<std::string> get_indexed_variables(const ast::Expression& node,
-                                                             const std::string& name) {
-    std::unordered_set<std::string> indexed_variables;
+/// get of all variables not equal to ``name``
+static auto get_sympy_variables(const ast::Expression& node, const std::string& name) {
     // all of the "reserved" vars
     auto reserved_symbols = get_external_functions();
+
     // all indexed vars
+    std::unordered_set<std::string> indexed_vars_set;
     auto indexed_vars = collect_nodes(node, {ast::AstNodeType::INDEXED_NAME});
     for (const auto& var: indexed_vars) {
         const auto& varname = var->get_node_name();
@@ -60,11 +60,45 @@ static std::unordered_set<std::string> get_indexed_variables(const ast::Expressi
             std::none_of(reserved_symbols.begin(),
                          reserved_symbols.end(),
                          [&varname](const auto item) { return varname == item; });
-        if (indexed_variables.count(varname) == 0 && varname != name && varname_not_reserved) {
-            indexed_variables.insert(varname);
+        if (indexed_vars_set.count(varname) == 0 && varname != name && varname_not_reserved) {
+            indexed_vars_set.insert(varname);
         }
     }
-    return indexed_variables;
+
+    // all function calls
+    std::unordered_set<std::string> function_calls_set;
+    auto function_calls = collect_nodes(node, {ast::AstNodeType::FUNCTION_CALL});
+    for (const auto& var: function_calls) {
+        const auto& varname = var->get_node_name();
+        // skip if it's a reserved var
+        auto varname_not_reserved =
+            std::none_of(reserved_symbols.begin(),
+                         reserved_symbols.end(),
+                         [&varname](const auto item) { return varname == item; });
+        if (function_calls_set.count(varname) == 0 && varname != name && varname_not_reserved) {
+            function_calls_set.insert(varname);
+        }
+    }
+
+    // all ordinary vars
+    // note that we want to prevent double inclusion since all indexed vars are vars, but not all
+    // vars are indexed vars
+    std::unordered_set<std::string> vars_set;
+    auto vars = collect_nodes(node, {ast::AstNodeType::VAR_NAME});
+    for (const auto& var: vars) {
+        const auto& varname = var->get_node_name();
+        // skip if it's a reserved var
+        auto varname_not_reserved =
+            std::none_of(reserved_symbols.begin(),
+                         reserved_symbols.end(),
+                         [&varname](const auto item) { return varname == item; });
+        if (vars_set.count(varname) == 0 && indexed_vars_set.count(varname) == 0 &&
+            varname != name && varname_not_reserved) {
+            vars_set.insert(varname);
+        }
+    }
+
+    return pywrap::SympySpecialSymbols(vars_set, indexed_vars_set, function_calls_set);
 }
 
 static std::string cvode_set_lhs(ast::BinaryExpression& node) {
@@ -152,11 +186,11 @@ class StiffVisitor: public CvodeHelperVisitor {
         }
 
         auto rhs = node.get_rhs();
-        // all indexed variables (need special treatment in SymPy)
-        auto name_map = get_indexed_variables(*rhs, name->get_node_name());
+        // all variables we will pass to SymPy for processing
+        auto sympy_variables = get_sympy_variables(*rhs, name->get_node_name());
         auto diff2c = pywrap::EmbeddedPythonLoader::get_instance().api().diff2c;
-        auto [jacobian,
-              exception_message] = diff2c(to_nmodl(*rhs), parse_independent_var(name), name_map);
+        auto [jacobian, exception_message] =
+            diff2c(to_nmodl(*rhs), parse_independent_var(name), sympy_variables);
         if (!exception_message.empty()) {
             logger->warn("CvodeVisitor :: python exception: {}", exception_message);
         }
