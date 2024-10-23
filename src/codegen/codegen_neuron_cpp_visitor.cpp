@@ -2680,6 +2680,10 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                             info.mod_suffix,
                             get_parameter_str(cvode_update_parameters()));  // begin fn
 
+    printer->add_line(
+        "auto v = node_data.node_voltages ? "
+        "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
+
     print_statement_block(*info.cvode_block->get_stiff_block(), false, false);
 
     printer->pop_block();  // end fn
