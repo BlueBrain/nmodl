@@ -45,9 +45,9 @@ static std::pair<std::string, std::optional<int>> parse_independent_var(
     return variable;
 }
 
-/// set of all indexed variables not equal to ``name``
+/// set of all indexed variables not equal to ``ignored_name``
 static std::unordered_set<std::string> get_indexed_variables(const ast::Expression& node,
-                                                             const std::string& name) {
+                                                             const std::string& ignored_name) {
     std::unordered_set<std::string> indexed_variables;
     // all of the "reserved" vars
     auto reserved_symbols = get_external_functions();
@@ -60,7 +60,8 @@ static std::unordered_set<std::string> get_indexed_variables(const ast::Expressi
             std::none_of(reserved_symbols.begin(),
                          reserved_symbols.end(),
                          [&varname](const auto item) { return varname == item; });
-        if (indexed_variables.count(varname) == 0 && varname != name && varname_not_reserved) {
+        if (indexed_variables.count(varname) == 0 && varname != ignored_name &&
+            varname_not_reserved) {
             indexed_variables.insert(varname);
         }
     }
