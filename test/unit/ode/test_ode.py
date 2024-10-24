@@ -169,6 +169,10 @@ def test_integrate2c():
         ("a", "x + a*dt"),
         ("a*x", "x*exp(a*dt)"),
         ("a*x+b", "(-b + (a*x + b)*exp(a*dt))/a"),
+        (
+            "a*x+custom_function(a)",
+            "(-custom_function(a) + (a*x + custom_function(a))*exp(a*dt))/a",
+        ),
     ]
     for eq, sol in test_cases:
         assert _equivalent(
