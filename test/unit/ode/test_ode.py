@@ -3,7 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from nmodl.ode import differentiate2c, integrate2c, make_symbol
+from nmodl.ode import differentiate2c, integrate2c, make_symbol, forbidden_var
 import pytest
 
 import sympy as sp
@@ -155,6 +155,10 @@ def test_differentiate2c():
             {},
             stepsize=-1,
         )
+
+    # test reserved symbols
+    for var in forbidden_var:
+        assert sp.parse_expr(differentiate2c(var, var, {})) == sp.parse_expr("1.")
 
 
 def test_integrate2c():
