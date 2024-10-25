@@ -1272,7 +1272,7 @@ std::vector<CodegenCppVisitor::SymbolType> CodegenCppVisitor::get_float_variable
         }
     }
 
-    if (info.vectorize) {
+    if (needs_v_unused()) {
         variables.push_back(make_symbol(naming::VOLTAGE_UNUSED_VARIABLE));
     }
 
