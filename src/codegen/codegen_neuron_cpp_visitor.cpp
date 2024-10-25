@@ -57,6 +57,10 @@ std::string CodegenNeuronCppVisitor::table_thread_function_name() const {
     return "_check_table_thread";
 }
 
+bool CodegenNeuronCppVisitor::needs_v_unused() const {
+    return true;
+}
+
 
 /****************************************************************************************/
 /*                     Common helper routines accross codegen functions                 */
@@ -973,7 +977,10 @@ std::string CodegenNeuronCppVisitor::get_pointer_name(const std::string& name) c
 
 std::string CodegenNeuronCppVisitor::get_variable_name(const std::string& name,
                                                        bool use_instance) const {
-    const std::string& varname = update_if_ion_variable_name(name);
+    std::string varname = update_if_ion_variable_name(name);
+    if (!info.artificial_cell && varname == "v") {
+        varname = naming::VOLTAGE_UNUSED_VARIABLE;
+    }
 
     auto name_comparator = [&varname](const auto& sym) { return varname == get_name(sym); };
 
@@ -1134,9 +1141,6 @@ void CodegenNeuronCppVisitor::print_sdlists_init(bool /* print_initializers */) 
 
 CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::functor_params() {
     auto params = internal_method_parameters();
-    if (!info.artificial_cell) {
-        params.push_back({"", "double", "", "v"});
-    }
 
     return params;
 }
@@ -1993,7 +1997,7 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     if (!info.artificial_cell) {
         printer->add_line("int node_id = node_data.nodeindices[id];");
-        printer->add_line("auto v = node_data.node_voltages[node_id];");
+        printer->add_line("inst.v_unused[id] = node_data.node_voltages[node_id];");
     }
 
     print_rename_state_vars();
@@ -2238,7 +2242,9 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     printer->push_block("for (int id = 0; id < nodecount; id++)");
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
-    printer->add_line("auto v = node_data.node_voltages[node_id];");
+    if (!info.artificial_cell) {
+        printer->add_line("inst.v_unused[id] = node_data.node_voltages[node_id];");
+    }
 
     /**
      * \todo Eigen solver node also emits IonCurVar variable in the functor
@@ -2311,6 +2317,7 @@ void CodegenNeuronCppVisitor::print_nrn_current(const BreakpointBlock& node) {
     printer->fmt_push_block("static inline double nrn_current_{}({})",
                             info.mod_suffix,
                             get_parameter_str(args));
+    printer->add_line("inst.v_unused[id] = v;");
     printer->add_line("double current = 0.0;");
     print_statement_block(*block, false, false);
     for (auto& current: info.currents) {
