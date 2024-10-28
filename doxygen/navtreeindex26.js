@@ -1,5 +1,8 @@
 var NAVTREEINDEX26 =
 {
+"constant__block_8hpp_source.html":[3,0,0,0,0,0,22],
+"constant__folder_8cpp.html":[3,0,2,0,10,1],
+"constant__folder_8cpp.html#a30c8dca443e861e172b8cc0444b3c3a7":[3,0,2,0,10,1,0],
 "constant__folder_8cpp.html#af5f70a13dba6c2bbdce5e5053abf6642":[3,0,2,0,10,1,1],
 "constant__folder_8cpp_source.html":[3,0,2,0,10,1],
 "constant__folder__visitor_8cpp.html":[3,0,1,11,2],
@@ -219,8 +222,8 @@ var NAVTREEINDEX26 =
 "functions_e.html":[2,3,0,4],
 "functions_enum.html":[2,3,4],
 "functions_f.html":[2,3,0,5],
-"functions_func.html":[2,3,1,0],
 "functions_func.html":[2,3,1],
+"functions_func.html":[2,3,1,0],
 "functions_func_b.html":[2,3,1,1],
 "functions_func_c.html":[2,3,1,2],
 "functions_func_d.html":[2,3,1,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX26 =
 "functions_g.html":[2,3,0,6],
 "functions_h.html":[2,3,0,7],
 "functions_i.html":[2,3,0,8],
-"functions_j.html":[2,3,0,9],
-"functions_k.html":[2,3,0,10],
-"functions_l.html":[2,3,0,11],
-"functions_m.html":[2,3,0,12]
+"functions_j.html":[2,3,0,9]
 };

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nlinf_5971',['NLINF',['../modl_8h.html#af41b52becd124ffeffcafeddbdc1041c',1,'modl.h']]],
-  ['nmodl_5fexport_5972',['NMODL_EXPORT',['../wrapper_8hpp.html#adadb78a7853ec313aaec37d629ccaa68',1,'wrapper.hpp']]]
+  ['nlinf_5973',['NLINF',['../modl_8h.html#af41b52becd124ffeffcafeddbdc1041c',1,'modl.h']]],
+  ['nmodl_5fexport_5974',['NMODL_EXPORT',['../wrapper_8hpp.html#adadb78a7853ec313aaec37d629ccaa68',1,'wrapper.hpp']]]
 ];

@@ -58,6 +58,7 @@ var classnmodl_1_1codegen_1_1_codegen_cpp_visitor =
     [ "method_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a7cb14cb8ebe04982bb17999fa1a2c479", null ],
     [ "namespace_name", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a1618d24f8fc2ae9e22e3d65e6651ba07", null ],
     [ "need_semicolon", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afdf8d3232526bf1978bb298755f42958", null ],
+    [ "needs_v_unused", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a6aa1a4d529cb3159d3a4534dd673e861", null ],
     [ "net_receive_buffering_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a29c095f39a79b5fe0782a6ee22d597ff", null ],
     [ "net_receive_exist", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a3a441ca48ae4cff29a4f715314fcb0c9", null ],
     [ "net_receive_required", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a5c6520580009a4608d6ea4e221ef3d29", null ],

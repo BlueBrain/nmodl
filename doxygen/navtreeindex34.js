@@ -1,5 +1,8 @@
 var NAVTREEINDEX34 =
 {
+"sympy__conductance__visitor_8hpp_source.html":[3,0,1,11,49],
+"sympy__replace__solutions__visitor_8cpp.html":[3,0,1,11,50],
+"sympy__replace__solutions__visitor_8cpp_source.html":[3,0,1,11,50],
 "sympy__replace__solutions__visitor_8hpp.html":[3,0,1,11,51],
 "sympy__replace__solutions__visitor_8hpp_source.html":[3,0,1,11,51],
 "sympy__solver_8cpp.html":[3,0,2,0,10,27],
@@ -246,8 +249,5 @@ var NAVTREEINDEX34 =
 "visitor__utils_8cpp.html#aab8fd730b218414affb4b93f13ea59bd":[3,0,1,11,63,0],
 "visitor__utils_8cpp.html#adbdbb124708e64f8604f01b60ee326cc":[3,0,1,11,63,13],
 "visitor__utils_8cpp.html#ae3bf5cf6089006e2ba8b8f93b9077703":[3,0,1,11,63,18],
-"visitor__utils_8cpp.html#ae59f52180eceecfe49a5f180360b6895":[3,0,1,11,63,2],
-"visitor__utils_8cpp.html#aff0836bad8bc5b832bf1ad6cc4fee27a":[3,0,1,11,63,8],
-"visitor__utils_8cpp_source.html":[3,0,1,11,63],
-"visitor__utils_8hpp.html":[3,0,1,11,64]
+"visitor__utils_8cpp.html#ae59f52180eceecfe49a5f180360b6895":[3,0,1,11,63,2]
 };

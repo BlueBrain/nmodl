@@ -19,6 +19,7 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "internal_method_parameters", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af48766525e3a1c8f88471a9338ae59e7", null ],
     [ "is_constant_variable", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a5d1ca0fcb615508f88c56b6d7a987419", null ],
     [ "namespace_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a49e936212e05a59a733f34f7d5d9defe", null ],
+    [ "needs_v_unused", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8b2afe32358d62209aa346918879cca6", null ],
     [ "net_receive_buffering_declaration", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a18c00e97466c3bf5a83f277ca48b0d95", null ],
     [ "nrn_cur_reduction_loop_required", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a1e15a71e22ad32b958dd83b1df5d10fb", null ],
     [ "nrn_thread_arguments", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a294fadf1935383379dd1002208363c71", null ],

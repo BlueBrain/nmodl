@@ -22,6 +22,7 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "ldifusfunc1_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aee579fd91abcded93b1728f2c0f2ff43", null ],
     [ "ldifusfunc3_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a3be37e0f3134950c8353fa7a89d62a29", null ],
     [ "namespace_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab4825994a75303b29f77f0913275258c", null ],
+    [ "needs_v_unused", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a10991a152a1da86120836c2f3a95408e", null ],
     [ "net_receive_args", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a425dc1af0daa5b3349d17035a7ef2eaf", null ],
     [ "nrn_current_arguments", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a5eabd60e4b1c6ca3fddab4ec5838e4c7", null ],
     [ "nrn_current_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a606e755398e68eb19f67a321a75170e3", null ],
