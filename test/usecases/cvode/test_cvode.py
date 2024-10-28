@@ -4,7 +4,7 @@ from neuron import h
 from neuron.units import ms
 
 
-def simulate(rtol):
+def test_cvode(rtol):
     nseg = 1
     mech = "scalar"
 
@@ -49,4 +49,4 @@ def simulate(rtol):
 
 
 if __name__ == "__main__":
-    t, *x = simulate(rtol=1e-5)
+    t, *x = test_cvode(rtol=1e-5)
