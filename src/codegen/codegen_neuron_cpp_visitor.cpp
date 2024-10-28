@@ -2646,7 +2646,6 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::cvode_update_parameters(
 }
 
 
-/* print the function returning the # of ODEs to solve */
 void CodegenNeuronCppVisitor::print_cvode_count() {
     printer->fmt_push_block("static constexpr int {}(int _type)",
                             method_name(naming::CVODE_COUNT_NAME));
@@ -2655,7 +2654,6 @@ void CodegenNeuronCppVisitor::print_cvode_count() {
     printer->add_newline(2);
 }
 
-/* print the function for setup of tolerances */
 void CodegenNeuronCppVisitor::print_cvode_tolerances() {
     const CodegenNeuronCppVisitor::ParamVector tolerances_parameters = {
         {"", "Prop*", "", "_prop"},
@@ -2692,7 +2690,6 @@ void CodegenNeuronCppVisitor::print_cvode_tolerances() {
     printer->add_newline(2);
 }
 
-/* print the CVODE update function (called ``name``) from ``block`` */
 void CodegenNeuronCppVisitor::print_cvode_update(const std::string& name,
                                                  const ast::StatementBlock& block) {
     printer->fmt_push_block("static int {}({})",
@@ -2709,7 +2706,6 @@ void CodegenNeuronCppVisitor::print_cvode_update(const std::string& name,
     printer->add_newline(2);
 }
 
-/* print the setup function (that calls an update function) */
 void CodegenNeuronCppVisitor::print_cvode_setup(const std::string& setup_name,
                                                 const std::string& update_name) {
     printer->fmt_push_block("static void {}({})",
