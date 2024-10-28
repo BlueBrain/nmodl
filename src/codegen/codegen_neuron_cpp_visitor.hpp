@@ -792,8 +792,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
 
     void print_cvode_setup(const std::string& setup_name, const std::string& update_name);
 
-    std::string method_name(const std::string& name);
-
 
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */

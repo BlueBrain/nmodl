@@ -2646,11 +2646,6 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::cvode_update_parameters(
 }
 
 
-std::string CodegenNeuronCppVisitor::method_name(const std::string& name) {
-    return fmt::format("{}_{}", name, info.mod_suffix);
-}
-
-
 /* print the function returning the # of ODEs to solve */
 void CodegenNeuronCppVisitor::print_cvode_count() {
     printer->fmt_push_block("static constexpr int {}(int _type)",
