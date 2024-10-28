@@ -1507,15 +1507,11 @@ void CodegenNeuronCppVisitor::print_mechanism_register_regular() {
     if (info.emit_cvode) {
         printer->fmt_line("hoc_register_dparam_semantics(mech_type, {}, \"cvodeieq\");",
                           codegen_int_variables_size);
-        printer->fmt_line("hoc_register_cvode(mech_type, {}_{}, {}_{}, {}_{}, {}_{});",
-                          naming::CVODE_COUNT_NAME,
-                          info.mod_suffix,
-                          naming::CVODE_SETUP_TOLERANCES_NAME,
-                          info.mod_suffix,
-                          naming::CVODE_SETUP_NON_STIFF_NAME,
-                          info.mod_suffix,
-                          naming::CVODE_SETUP_STIFF_NAME,
-                          info.mod_suffix);
+        printer->fmt_line("hoc_register_cvode(mech_type, {}, {}, {}, {});",
+                          method_name(naming::CVODE_COUNT_NAME),
+                          method_name(naming::CVODE_SETUP_TOLERANCES_NAME),
+                          method_name(naming::CVODE_SETUP_NON_STIFF_NAME),
+                          method_name(naming::CVODE_SETUP_STIFF_NAME));
         printer->fmt_line("hoc_register_tolerance(mech_type, _hoc_state_tol, &_atollist);");
     }
 }
@@ -2644,27 +2640,63 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::cvode_update_parameters(
     return args;
 }
 
-void CodegenNeuronCppVisitor::print_cvode_definitions() {
-    if (!info.emit_cvode) {
-        return;
-    }
-    printer->add_newline(2);
-    printer->add_line("/* Functions related to CVODE codegen */");
 
-    /* return # of ODEs to solve */
-    printer->fmt_push_block("static constexpr int {}_{}(int _type)",
-                            naming::CVODE_COUNT_NAME,
-                            info.mod_suffix);
+std::string CodegenNeuronCppVisitor::method_name(const std::string& name) {
+    return fmt::format("{}_{}", name, info.mod_suffix);
+}
+
+
+/* print the function returning the # of ODEs to solve */
+void CodegenNeuronCppVisitor::print_cvode_count() {
+    printer->fmt_push_block("static constexpr int {}(int _type)",
+                            method_name(naming::CVODE_COUNT_NAME));
     printer->fmt_line("return {};", info.cvode_block->get_n_odes()->get_value());
     printer->pop_block();
-
     printer->add_newline(2);
+}
 
-    /* The update function for non-stiff systems */
-    printer->fmt_push_block("static int {}_{}({})",
-                            naming::CVODE_UPDATE_NON_STIFF_NAME,
-                            info.mod_suffix,
-                            get_parameter_str(cvode_update_parameters()));  // begin fn
+/* print the function for setup of tolerances */
+void CodegenNeuronCppVisitor::print_cvode_tolerances() {
+    CodegenNeuronCppVisitor::ParamVector tolerances_parameters = {
+        {"", "Prop*", "", "_prop"},
+        {"", "int", "", "equation_index"},
+        {"", "neuron::container::data_handle<double>*", "", "_pv"},
+        {"", "neuron::container::data_handle<double>*", "", "_pvdot"},
+        {"", "double*", "", "_atol"},
+        {"", "int", "", "_type"}};
+
+    auto get_param_name = [](const auto& item) { return std::get<3>(item); };
+
+    auto prop_name = get_param_name(tolerances_parameters[0]);
+    auto eqindex_name = get_param_name(tolerances_parameters[1]);
+    auto pv_name = get_param_name(tolerances_parameters[2]);
+    auto pvdot_name = get_param_name(tolerances_parameters[3]);
+    auto atol_name = get_param_name(tolerances_parameters[4]);
+
+    printer->fmt_push_block("static void {}({})",
+                            method_name(naming::CVODE_SETUP_TOLERANCES_NAME),
+                            get_parameter_str(tolerances_parameters));
+    printer->fmt_line("auto* _ppvar = _nrn_mechanism_access_dparam({});", prop_name);
+    printer->fmt_line("_ppvar[{}].literal_value<int>() = {};", int_variables_size(), eqindex_name);
+    printer->fmt_push_block("for (int i = 0; i < {}(0); i++)",
+                            method_name(naming::CVODE_COUNT_NAME));
+    printer->fmt_line("{}[i] = _nrn_mechanism_get_param_handle({}, _slist1[i]);",
+                      pv_name,
+                      prop_name);
+    printer->fmt_line("{}[i] = _nrn_mechanism_get_param_handle({}, _dlist1[i]);",
+                      pvdot_name,
+                      prop_name);
+    printer->fmt_line("_cvode_abstol(_atollist, {}, i);", atol_name);
+    printer->pop_block();
+    printer->pop_block();
+    printer->add_newline(2);
+}
+
+/* print the update function for non-stiff systems */
+void CodegenNeuronCppVisitor::print_cvode_non_stiff_update() {
+    printer->fmt_push_block("static int {}({})",
+                            method_name(naming::CVODE_UPDATE_NON_STIFF_NAME),
+                            get_parameter_str(cvode_update_parameters()));
     printer->add_line(
         "auto v = node_data.node_voltages ? "
         "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
@@ -2672,65 +2704,45 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
     print_statement_block(*info.cvode_block->get_non_stiff_block(), false, false);
 
     printer->add_line("return 0;");
-    printer->pop_block();  // end fn
-
+    printer->pop_block();
     printer->add_newline(2);
+}
 
-    /* The setup function for non-stiff systems */
-    printer->fmt_push_block("static void {}_{}({})",
-                            naming::CVODE_SETUP_NON_STIFF_NAME,
-                            info.mod_suffix,
-                            get_parameter_str(cvode_setup_parameters()));  // begin fn
+/* print the setup function for non-stiff systems */
+void CodegenNeuronCppVisitor::print_cvode_non_stiff_setup() {
+    printer->fmt_push_block("static void {}({})",
+                            method_name(naming::CVODE_SETUP_NON_STIFF_NAME),
+                            get_parameter_str(cvode_setup_parameters()));
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-    printer->fmt_line("auto inst = make_instance_{}(&_lmc);", info.mod_suffix);
+    printer->fmt_line("auto inst = {}(&_lmc);", method_name("make_instance"));
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
-    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->fmt_line("auto node_data = {}(*nt, *_ml_arg);", method_name("make_node_data"));
     printer->add_line("auto* _thread = _ml_arg->_thread;");
     if (!codegen_thread_variables.empty()) {
         printer->fmt_line("auto _thread_vars = {}(_thread[{}].get<double*>());",
                           thread_variables_struct(),
                           info.thread_var_thread_id);
     }
-    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->push_block("for (int id = 0; id < nodecount; id++)");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line(
         "auto v = node_data.node_voltages ? "
         "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
 
-    printer->fmt_line("{}_{}({});",
-                      naming::CVODE_UPDATE_NON_STIFF_NAME,
-                      info.mod_suffix,
+    printer->fmt_line("{}({});",
+                      method_name(naming::CVODE_UPDATE_NON_STIFF_NAME),
                       get_arg_str(cvode_update_parameters()));
 
-    printer->pop_block();  // end for loop
-    printer->pop_block();  // end fn
-
+    printer->pop_block();
+    printer->pop_block();
     printer->add_newline(2);
+}
 
-    /* The function for setup of tolerance */
-    printer->fmt_push_block(
-        "static void {}_{}(Prop* _prop, int equation_index, "
-        "neuron::container::data_handle<double>* _pv, "
-        "neuron::container::data_handle<double>* _pvdot, double* _atol, int _type)",
-        naming::CVODE_SETUP_TOLERANCES_NAME,
-        info.mod_suffix);  // begin fn
-    printer->add_line("auto* _ppvar = _nrn_mechanism_access_dparam(_prop);");
-    printer->fmt_line("_ppvar[{}].literal_value<int>() = equation_index;", int_variables_size());
-    printer->fmt_push_block("for (int i = 0; i < ode_count_{}(0); i++)",
-                            info.mod_suffix);  // begin for loop
-    printer->add_line("_pv[i] = _nrn_mechanism_get_param_handle(_prop, _slist1[i]);");
-    printer->add_line("_pvdot[i] = _nrn_mechanism_get_param_handle(_prop, _dlist1[i]);");
-    printer->add_line("_cvode_abstol(_atollist, _atol, i);");
-    printer->pop_block();  // end for loop
-    printer->pop_block();  // end fn
-
-    printer->add_newline(2);
-
-    /* The update function for stiff systems */
-    printer->fmt_push_block("static void {}_{}({})",
-                            naming::CVODE_UPDATE_STIFF_NAME,
-                            info.mod_suffix,
-                            get_parameter_str(cvode_update_parameters()));  // begin fn
+/* print the update function for stiff systems */
+void CodegenNeuronCppVisitor::print_cvode_stiff_update() {
+    printer->fmt_push_block("static void {}({})",
+                            method_name(naming::CVODE_UPDATE_STIFF_NAME),
+                            get_parameter_str(cvode_update_parameters()));
 
     printer->add_line(
         "auto v = node_data.node_voltages ? "
@@ -2738,19 +2750,19 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
 
     print_statement_block(*info.cvode_block->get_stiff_block(), false, false);
 
-    printer->pop_block();  // end fn
-
+    printer->pop_block();
     printer->add_newline(2);
+}
 
-    /* The setup function for stiff systems */
-    printer->fmt_push_block("static void {}_{}({})",
-                            naming::CVODE_SETUP_STIFF_NAME,
-                            info.mod_suffix,
-                            get_parameter_str(cvode_setup_parameters()));  // begin fn
+/* print the setup function for stiff systems */
+void CodegenNeuronCppVisitor::print_cvode_stiff_setup() {
+    printer->fmt_push_block("static void {}({})",
+                            method_name(naming::CVODE_SETUP_STIFF_NAME),
+                            get_parameter_str(cvode_setup_parameters()));
     printer->add_line("_nrn_mechanism_cache_range _lmc{_sorted_token, *nt, *_ml_arg, _type};");
-    printer->fmt_line("auto inst = make_instance_{}(&_lmc);", info.mod_suffix);
+    printer->fmt_line("auto inst = {}(&_lmc);", method_name("make_instance"));
     printer->add_line("auto nodecount = _ml_arg->nodecount;");
-    printer->fmt_line("auto node_data = make_node_data_{}(*nt, *_ml_arg);", info.mod_suffix);
+    printer->fmt_line("auto node_data = {}(*nt, *_ml_arg);", method_name("make_node_data"));
     printer->add_line("auto* _thread = _ml_arg->_thread;");
 
     if (!codegen_thread_variables.empty()) {
@@ -2759,18 +2771,34 @@ void CodegenNeuronCppVisitor::print_cvode_definitions() {
                           info.thread_var_thread_id);
     }
 
-    printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for loop
+    printer->push_block("for (int id = 0; id < nodecount; id++)");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
     printer->add_line(
         "auto v = node_data.node_voltages ? "
         "node_data.node_voltages[node_data.nodeindices[id]] : 0.0;");
-    printer->fmt_line("{}_{}({});",
-                      naming::CVODE_UPDATE_STIFF_NAME,
-                      info.mod_suffix,
+    printer->fmt_line("{}({});",
+                      method_name(naming::CVODE_UPDATE_STIFF_NAME),
                       get_arg_str(cvode_update_parameters()));
 
-    printer->pop_block();  // end for loop
-    printer->pop_block();  // end fn
+    printer->pop_block();
+    printer->pop_block();
+
+    printer->add_newline(2);
+}
+
+void CodegenNeuronCppVisitor::print_cvode_definitions() {
+    if (!info.emit_cvode) {
+        return;
+    }
+
+    printer->add_newline(2);
+    printer->add_line("/* Functions related to CVODE codegen */");
+    print_cvode_count();
+    print_cvode_non_stiff_update();
+    print_cvode_non_stiff_setup();
+    print_cvode_tolerances();
+    print_cvode_stiff_update();
+    print_cvode_stiff_setup();
 }
 
 void CodegenNeuronCppVisitor::print_net_receive() {

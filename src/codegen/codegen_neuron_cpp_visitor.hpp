@@ -783,6 +783,20 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_cvode_definitions();
 
+    void print_cvode_count();
+
+    void print_cvode_tolerances();
+
+    void print_cvode_non_stiff_update();
+
+    void print_cvode_non_stiff_setup();
+
+    void print_cvode_stiff_update();
+
+    void print_cvode_stiff_setup();
+
+    std::string method_name(const std::string& name);
+
 
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
