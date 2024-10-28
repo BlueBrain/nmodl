@@ -1431,7 +1431,8 @@ void CodegenNeuronCppVisitor::print_mechanism_register_regular() {
 
     if (info.emit_cvode) {
         mech_register_args.push_back(
-            fmt::format("_nrn_mechanism_field<int>{{\"_cvode_ieq\", \"cvodeieq\"}} /* {} */",
+            fmt::format("_nrn_mechanism_field<int>{{\"{}\", \"cvodeieq\"}} /* {} */",
+                        naming::CVODE_VARIABLE_NAME,
                         codegen_int_variables_size));
     }
 

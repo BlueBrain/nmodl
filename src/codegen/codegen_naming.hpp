@@ -200,6 +200,9 @@ static constexpr char CVODE_SETUP_STIFF_NAME[] = "ode_setup_stiff";
 /// name of CVODE method for setting up tolerances
 static constexpr char CVODE_SETUP_TOLERANCES_NAME[] = "ode_setup_tolerances";
 
+/// name of the CVODE variable (can be arbitrary)
+static constexpr char CVODE_VARIABLE_NAME[] = "cvode_ieq";
+
 /// commonly used variables in verbatim block and how they
 /// should be mapped to new code generation backends
 // clang-format off
