@@ -62,6 +62,7 @@ var hierarchy =
               [ "nmodl::ast::BreakpointBlock", "classnmodl_1_1ast_1_1_breakpoint_block.html", null ],
               [ "nmodl::ast::ConstantBlock", "classnmodl_1_1ast_1_1_constant_block.html", null ],
               [ "nmodl::ast::ConstructorBlock", "classnmodl_1_1ast_1_1_constructor_block.html", null ],
+              [ "nmodl::ast::CvodeBlock", "classnmodl_1_1ast_1_1_cvode_block.html", null ],
               [ "nmodl::ast::DerivativeBlock", "classnmodl_1_1ast_1_1_derivative_block.html", null ],
               [ "nmodl::ast::DestructorBlock", "classnmodl_1_1ast_1_1_destructor_block.html", null ],
               [ "nmodl::ast::DiscreteBlock", "classnmodl_1_1ast_1_1_discrete_block.html", null ],
@@ -230,6 +231,11 @@ var hierarchy =
         [ "nmodl::visitor::AfterCVodeToCnexpVisitor", "classnmodl_1_1visitor_1_1_after_c_vode_to_cnexp_visitor.html", null ],
         [ "nmodl::visitor::ConstantFolderVisitor", "classnmodl_1_1visitor_1_1_constant_folder_visitor.html", null ],
         [ "nmodl::visitor::CreateLongitudinalDiffusionBlocks", "classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks.html", null ],
+        [ "nmodl::visitor::CvodeHelperVisitor", "classnmodl_1_1visitor_1_1_cvode_helper_visitor.html", [
+          [ "nmodl::visitor::NonStiffVisitor", "classnmodl_1_1visitor_1_1_non_stiff_visitor.html", null ],
+          [ "nmodl::visitor::StiffVisitor", "classnmodl_1_1visitor_1_1_stiff_visitor.html", null ]
+        ] ],
+        [ "nmodl::visitor::CvodeVisitor", "classnmodl_1_1visitor_1_1_cvode_visitor.html", null ],
         [ "nmodl::visitor::GlobalToRangeVisitor", "classnmodl_1_1visitor_1_1_global_to_range_visitor.html", null ],
         [ "nmodl::visitor::ImplicitArgumentVisitor", "structnmodl_1_1visitor_1_1_implicit_argument_visitor.html", null ],
         [ "nmodl::visitor::IndexedNameVisitor", "classnmodl_1_1visitor_1_1_indexed_name_visitor.html", null ],

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Variable timestep integration (CVODE) &mdash; NMODL 0.6 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="The NMODL Jupyter notebooks" href="../notebooks.html" />
+    <link rel="prev" title="Longitudinal Diffusion" href="longitudinal_diffusion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            NMODL
+          </a>
+              <div class="version">
+                0.6
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">The NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Installing the NMODL Framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">The NEURON MODeling language</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="visitors.html">Visitors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="currents.html">Currents</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ions.html">Ions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pointers.html">NMODL “pointers”</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cable_equations.html">Cable Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="globals.html">Global Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="longitudinal_diffusion.html">Longitudinal Diffusion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Variable timestep integration (CVODE)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#implementation-in-nmodl">Implementation in NMODL</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Jupyter Notebooks:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">The NMODL Jupyter notebooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-python-tutorial.html">NMODL Python Interface Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-odes-overview.html">NMODL integration of ODEs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-kinetic-schemes.html">NMODL Kinetic Scheme</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-cnexp.html">NMODL SympySolver - cnexp</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-sparse.html">NMODL SympySolver - sparse</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-solver-derivimplicit.html">NMODL SympySolver - derivimplicit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-linear-solver.html">NMODL LINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-nonlinear-solver.html">NMODL NONLINEAR solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks/nmodl-sympy-conductance.html">NMODL CONDUCTANCE</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing to the NMODL Framework</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Python package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">C++ API</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">NMODL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Variable timestep integration (CVODE)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/contents/cvode.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="variable-timestep-integration-cvode">
+<h1>Variable timestep integration (CVODE)<a class="headerlink" href="#variable-timestep-integration-cvode" title="Permalink to this heading"></a></h1>
+<p>As opposed to fixed timestep integration, variable timestep integration (CVODE
+in NEURON parlance) uses the SUNDIALS package to solve a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> or
+<code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block using a variable timestep. This allows for faster computation
+times if the function in question does not vary too wildly.</p>
+<section id="implementation-in-nmodl">
+<h2>Implementation in NMODL<a class="headerlink" href="#implementation-in-nmodl" title="Permalink to this heading"></a></h2>
+<p>The code generation for CVODE is activated only if exactly one of the following
+is satisfied:</p>
+<ol class="arabic simple">
+<li><p>there is one <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> block in the mod file</p></li>
+<li><p>there is one <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block in the mod file</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">PROCEDURE</span></code> block is solved with the <code class="docutils literal notranslate"><span class="pre">after_cvode</span></code>, <code class="docutils literal notranslate"><span class="pre">cvode_t</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">cvode_t_v</span></code> methods</p></li>
+</ol>
+<p>In NMODL, all <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks are internally first converted to
+<code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> blocks. The <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block is then converted to a
+<code class="docutils literal notranslate"><span class="pre">CVODE</span></code> block, which contains two parts; the first part contains the update
+step for non-stiff systems (functional iteration), while the second part
+contains the update step for stiff systems (additional step using the
+Jacobian).  For more information, see <a class="reference external" href="https://sundials.readthedocs.io/en/latest/cvodes/Mathematics_link.html">CVODES documentation</a>, eqs. (4.8) and
+(4.9). Given a <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block of the form:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DERIVATIVE</span> <span class="n">state</span> <span class="p">{</span>
+    <span class="n">x_i</span><span class="s1">&#39; = f(x_1, ..., x_n)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>the structure of the <code class="docutils literal notranslate"><span class="pre">CVODE</span></code> block is then roughly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CVODE</span> <span class="n">state</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="p">{</span>
+    <span class="n">Dx_i</span> <span class="o">=</span> <span class="n">f_i</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">x_n</span><span class="p">)</span>
+<span class="p">}{</span>
+    <span class="n">Dx_i</span> <span class="o">=</span> <span class="n">Dx_i</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">J_ii</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">N</span></code> is the total number of ODEs to solve, and <code class="docutils literal notranslate"><span class="pre">J_ii(f)</span></code> is the
+diagonal part of the Jacobian, i.e.</p>
+<div class="math">
+<p><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz4KPCEtLSBUaGlzIGZpbGUgd2FzIGdlbmVyYXRlZCBieSBkdmlzdmdtIDIuOC4xIC0tPgo8c3ZnIHZlcnNpb249JzEuMScgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB4bWxuczp4bGluaz0naHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluaycgd2lkdGg9JzE0MC4yMTc0NDhwdCcgaGVpZ2h0PSczMS41NTYwNTdwdCcgdmlld0JveD0nMTYyLjQxOTMwOSA3OC43MDQ4NTcgMTQwLjIxNzQ0OCAzMS41NTYwNTcnPgo8ZGVmcz4KPHBhdGggaWQ9J2czLTQwJyBkPSdNNC41MzMwMDEgMy4zODkyOUM0LjUzMzAwMSAzLjM0NzQ0NyA0LjUzMzAwMSAzLjMxOTU1MiA0LjI5NTg5IDMuMDgyNDQxQzIuOTAxMTIxIDEuNjczNzI0IDIuMTIwMDUtLjYyNzY0NiAyLjEyMDA1LTMuNDcyOTc2QzIuMTIwMDUtNi4xNzg4MjkgMi43NzU1OTItOC41MDgwOTUgNC4zOTM1MjQtMTAuMTUzOTIzQzQuNTMzMDAxLTEwLjI3OTQ1MiA0LjUzMzAwMS0xMC4zMDczNDcgNC41MzMwMDEtMTAuMzQ5MTkxQzQuNTMzMDAxLTEwLjQzMjg3NyA0LjQ2MzI2My0xMC40NjA3NzIgNC40MDc0NzItMTAuNDYwNzcyQzQuMjI2MTUyLTEwLjQ2MDc3MiAzLjA4MjQ0MS05LjQ1NjUzOCAyLjM5OTAwNC04LjA4OTY2NEMxLjY4NzY3MS02LjY4MDk0NiAxLjM2Njg3NC01LjE4ODU0MyAxLjM2Njg3NC0zLjQ3Mjk3NkMxLjM2Njg3NC0yLjIzMTYzMSAxLjU2MjE0Mi0uNTcxODU2IDIuMjg3NDIyIC45MjA1NDhDMy4xMTAzMzYgMi41OTQyNzEgNC4yNTQwNDcgMy41MDA4NzIgNC40MDc0NzIgMy41MDA4NzJDNC40NjMyNjMgMy41MDA4NzIgNC41MzMwMDEgMy40NzI5NzYgNC41MzMwMDEgMy4zODkyOVonLz4KPHBhdGggaWQ9J2czLTQxJyBkPSdNMy45MzMyNS0zLjQ3Mjk3NkMzLjkzMzI1LTQuNTMzMDAxIDMuNzkzNzczLTYuMjYyNTE2IDMuMDEyNzAyLTcuODgwNDQ4QzIuMTg5Nzg4LTkuNTU0MTcyIDEuMDQ2MDc3LTEwLjQ2MDc3MiAuODkyNjUzLTEwLjQ2MDc3MkMuODM2ODYyLTEwLjQ2MDc3MiAuNzY3MTIzLTEwLjQzMjg3NyAuNzY3MTIzLTEwLjM0OTE5MUMuNzY3MTIzLTEwLjMwNzM0NyAuNzY3MTIzLTEwLjI3OTQ1MiAxLjAwNDIzNC0xMC4wNDIzNDFDMi4zOTkwMDQtOC42MzM2MjQgMy4xODAwNzUtNi4zMzIyNTQgMy4xODAwNzUtMy40ODY5MjRDMy4xODAwNzUtLjc4MTA3MSAyLjUyNDUzMyAxLjU0ODE5NCAuOTA2NiAzLjE5NDAyMkMuNzY3MTIzIDMuMzE5NTUyIC43NjcxMjMgMy4zNDc0NDcgLjc2NzEyMyAzLjM4OTI5Qy43NjcxMjMgMy40NzI5NzYgLjgzNjg2MiAzLjUwMDg3MiAuODkyNjUzIDMuNTAwODcyQzEuMDczOTczIDMuNTAwODcyIDIuMjE3Njg0IDIuNDk2NjM4IDIuOTAxMTIxIDEuMTI5NzYzQzMuNjEyNDUzLS4yOTI5MDIgMy45MzMyNS0xLjc5OTI1MyAzLjkzMzI1LTMuNDcyOTc2WicvPgo8cGF0aCBpZD0nZzMtNjEnIGQ9J005LjQxNDY5NS00LjUxOTA1NEM5LjYwOTk2My00LjUxOTA1NCA5Ljg2MTAyMS00LjUxOTA1NCA5Ljg2MTAyMS00Ljc3MDExMkM5Ljg2MTAyMS01LjAzNTExOCA5LjYyMzkxLTUuMDM1MTE4IDkuNDE0Njk1LTUuMDM1MTE4SDEuMTk5NTAyQzEuMDA0MjM0LTUuMDM1MTE4IC43NTMxNzYtNS4wMzUxMTggLjc1MzE3Ni00Ljc4NDA2Qy43NTMxNzYtNC41MTkwNTQgLjk5MDI4Ni00LjUxOTA1NCAxLjE5OTUwMi00LjUxOTA1NEg5LjQxNDY5NVpNOS40MTQ2OTUtMS45MjQ3ODJDOS42MDk5NjMtMS45MjQ3ODIgOS44NjEwMjEtMS45MjQ3ODIgOS44NjEwMjEtMi4xNzU4NDFDOS44NjEwMjEtMi40NDA4NDcgOS42MjM5MS0yLjQ0MDg0NyA5LjQxNDY5NS0yLjQ0MDg0N0gxLjE5OTUwMkMxLjAwNDIzNC0yLjQ0MDg0NyAuNzUzMTc2LTIuNDQwODQ3IC43NTMxNzYtMi4xODk3ODhDLjc1MzE3Ni0xLjkyNDc4MiAuOTkwMjg2LTEuOTI0NzgyIDEuMTk5NTAyLTEuOTI0NzgySDkuNDE0Njk1WicvPgo8cGF0aCBpZD0nZzAtMTA1JyBkPSdNMi43NzI3OS02LjEwMjA5QzIuNzcyNzktNi4yOTczNTcgMi42MzYxMDMtNi40NTM1NzEgMi40MTE1NDYtNi40NTM1NzFDMi4xNDc5MzYtNi40NTM1NzEgMS44ODQzMjYtNi4xOTk3MjQgMS44ODQzMjYtNS45MzYxMTRDMS44ODQzMjYtNS43NTA2MSAyLjAyMTAxMi01LjU4NDYzMyAyLjI1NTMzMy01LjU4NDYzM0MyLjQ3OTg5LTUuNTg0NjMzIDIuNzcyNzktNS44MDkxOSAyLjc3Mjc5LTYuMTAyMDlaTTIuMDMwNzc2LTIuNDMxMDczQzIuMTQ3OTM2LTIuNzE0MjEgMi4xNDc5MzYtMi43MzM3MzcgMi4yNDU1NjktMi45OTczNDdDMi4zMjM2NzYtMy4xOTI2MTQgMi4zNzI0OTMtMy4zMjkzMDEgMi4zNzI0OTMtMy41MTQ4MDRDMi4zNzI0OTMtMy45NTQxNTUgMi4wNjAwNjYtNC4zMTUzOTggMS41NzE4OTktNC4zMTUzOThDLjY1NDE0NC00LjMxNTM5OCAuMjgzMTM3LTIuODk5NzEzIC4yODMxMzctMi44MTE4NDNDLjI4MzEzNy0yLjcxNDIxIC4zODA3Ny0yLjcxNDIxIC40MDAyOTctMi43MTQyMUMuNDk3OTMxLTIuNzE0MjEgLjUwNzY5NC0yLjczMzczNyAuNTU2NTExLTIuODg5OTVDLjgyMDEyMS0zLjgwNzcwNCAxLjIxMDY1NS00LjEwMDYwNSAxLjU0MjYwOC00LjEwMDYwNUMxLjYyMDcxNS00LjEwMDYwNSAxLjc4NjY5Mi00LjEwMDYwNSAxLjc4NjY5Mi0zLjc4ODE3OEMxLjc4NjY5Mi0zLjU4MzE0OCAxLjcxODM0OS0zLjM3ODExNyAxLjY3OTI5NS0zLjI4MDQ4NEMxLjYwMTE4OS0zLjAyNjYzNyAxLjE2MTgzOC0xLjg5NDA4OSAxLjAwNTYyNS0xLjQ3NDI2NUMuOTA3OTkxLTEuMjIwNDE4IC43ODEwNjgtLjg5ODIyOCAuNzgxMDY4LS42OTMxOTdDLjc4MTA2OC0uMjM0MzIgMS4xMTMwMjEgLjEwNzM5NyAxLjU4MTY2MiAuMTA3Mzk3QzIuNDk5NDE2IC4xMDczOTcgMi44NjA2Ni0xLjMwODI4OCAyLjg2MDY2LTEuMzk2MTU4QzIuODYwNjYtMS40OTM3OTIgMi43NzI3OS0xLjQ5Mzc5MiAyLjc0MzUtMS40OTM3OTJDMi42NDU4NjYtMS40OTM3OTIgMi42NDU4NjYtMS40NjQ1MDIgMi41OTcwNS0xLjMxODA1MkMyLjQyMTMwOS0uNzAyOTYxIDIuMDk5MTE5LS4xMDczOTcgMS42MDExODktLjEwNzM5N0MxLjQzNTIxMi0uMTA3Mzk3IDEuMzY2ODY4LS4yMDUwMyAxLjM2Njg2OC0uNDI5NTg3QzEuMzY2ODY4LS42NzM2NzEgMS40MjU0NDgtLjgxMDM1OCAxLjY1MDAwNS0xLjQwNTkyMkwyLjAzMDc3Ni0yLjQzMTA3M1onLz4KPHBhdGggaWQ9J2cwLTExMCcgZD0nTS44NTkxNzQtLjU3NjAzN0MuODI5ODg0LS40Mjk1ODcgLjc3MTMwNC0uMjA1MDMgLjc3MTMwNC0uMTU2MjE0Qy43NzEzMDQgLjAxOTUyNyAuOTA3OTkxIC4xMDczOTcgMS4wNTQ0NDEgLjEwNzM5N0MxLjE3MTYwMSAuMTA3Mzk3IDEuMzQ3MzQyIC4wMjkyOSAxLjQxNTY4NS0uMTY1OTc3QzEuNDI1NDQ4LS4xODU1MDQgMS41NDI2MDgtLjY0NDM4MSAxLjYwMTE4OS0uODg4NDY0TDEuODE1OTgyLTEuNzY3MTY1QzEuODc0NTYyLTEuOTgxOTU5IDEuOTMzMTQyLTIuMTk2NzUzIDEuOTgxOTU5LTIuNDIxMzA5QzIuMDIxMDEyLTIuNTg3Mjg2IDIuMDk5MTE5LTIuODcwNDIzIDIuMTA4ODgyLTIuOTA5NDc3QzIuMjU1MzMzLTMuMjEyMTQgMi43NzI3OS00LjEwMDYwNSAzLjcwMDMwOC00LjEwMDYwNUM0LjEzOTY1OC00LjEwMDYwNSA0LjIyNzUyOC0zLjczOTM2MSA0LjIyNzUyOC0zLjQxNzE3MUM0LjIyNzUyOC0yLjgxMTg0MyAzLjc0OTEyNC0xLjU2MjEzNSAzLjU5MjkxMS0xLjE0MjMxMUMzLjUwNTA0MS0uOTE3NzU0IDMuNDk1Mjc3LS44MDA1OTQgMy40OTUyNzctLjY5MzE5N0MzLjQ5NTI3Ny0uMjM0MzIgMy44MzY5OTQgLjEwNzM5NyA0LjI5NTg3MiAuMTA3Mzk3QzUuMjEzNjI2IC4xMDczOTcgNS41NzQ4Ny0xLjMxODA1MiA1LjU3NDg3LTEuMzk2MTU4QzUuNTc0ODctMS40OTM3OTIgNS40ODctMS40OTM3OTIgNS40NTc3MS0xLjQ5Mzc5MkM1LjM2MDA3Ni0xLjQ5Mzc5MiA1LjM2MDA3Ni0xLjQ2NDUwMiA1LjMxMTI2LTEuMzE4MDUyQzUuMTE1OTkzLS42NTQxNDQgNC43OTM4MDItLjEwNzM5NyA0LjMxNTM5OC0uMTA3Mzk3QzQuMTQ5NDIyLS4xMDczOTcgNC4wODEwNzgtLjIwNTAzIDQuMDgxMDc4LS40Mjk1ODdDNC4wODEwNzgtLjY3MzY3MSA0LjE2ODk0OC0uOTA3OTkxIDQuMjU2ODE4LTEuMTIyNzg1QzQuNDQyMzIyLTEuNjQwMjQyIDQuODUyMzgyLTIuNzE0MjEgNC44NTIzODItMy4yNzA3MkM0Ljg1MjM4Mi0zLjkyNDg2NSA0LjQzMjU1OS00LjMxNTM5OCAzLjcyOTU5OC00LjMxNTM5OEMyLjg1MDg5Ny00LjMxNTM5OCAyLjM3MjQ5My0zLjY5MDU0NCAyLjIwNjUxNi0zLjQ2NTk4N0MyLjE1NzY5OS00LjAxMjczNSAxLjc1NzQwMi00LjMxNTM5OCAxLjMwODI4OC00LjMxNTM5OFMuNjczNjcxLTMuOTM0NjI4IC41NzYwMzctMy43NTg4ODhDLjQxOTgyNC0zLjQyNjkzNCAuMjgzMTM3LTIuODUwODk3IC4yODMxMzctMi44MTE4NDNDLjI4MzEzNy0yLjcxNDIxIC4zODA3Ny0yLjcxNDIxIC40MDAyOTctMi43MTQyMUMuNDk3OTMxLTIuNzE0MjEgLjUwNzY5NC0yLjcyMzk3MyAuNTY2Mjc0LTIuOTM4NzY3Qy43MzIyNTEtMy42MzE5NjQgLjkyNzUxOC00LjEwMDYwNSAxLjI3ODk5OC00LjEwMDYwNUMxLjQ3NDI2NS00LjEwMDYwNSAxLjU4MTY2Mi0zLjk3MzY4MSAxLjU4MTY2Mi0zLjY1MTQ5MUMxLjU4MTY2Mi0zLjQ0NjQ2MSAxLjU1MjM3Mi0zLjMzOTA2NCAxLjQyNTQ0OC0yLjgzMTM3TC44NTkxNzQtLjU3NjAzN1onLz4KPHBhdGggaWQ9J2cyLTQ5JyBkPSdNMi44NzA0MjMtNi4yNDg1NDFDMi44NzA0MjMtNi40ODI4NjEgMi44NzA0MjMtNi41MDIzODggMi42NDU4NjYtNi41MDIzODhDMi4wNDA1MzktNS44Nzc1MzQgMS4xODEzNjUtNS44Nzc1MzQgLjg2ODkzOC01Ljg3NzUzNFYtNS41NzQ4N0MxLjA2NDIwNS01LjU3NDg3IDEuNjQwMjQyLTUuNTc0ODcgMi4xNDc5MzYtNS44Mjg3MTdWLS43NzEzMDRDMi4xNDc5MzYtLjQxOTgyNCAyLjExODY0Ni0uMzAyNjY0IDEuMjM5OTQ1LS4zMDI2NjRILjkyNzUxOFYwQzEuMjY5MjM1LS4wMjkyOSAyLjExODY0Ni0uMDI5MjkgMi41MDkxOC0uMDI5MjlTMy43NDkxMjQtLjAyOTI5IDQuMDkwODQxIDBWLS4zMDI2NjRIMy43Nzg0MTRDMi44OTk3MTMtLjMwMjY2NCAyLjg3MDQyMy0uNDEwMDYgMi44NzA0MjMtLjc3MTMwNFYtNi4yNDg1NDFaJy8+CjxwYXRoIGlkPSdnMS01OCcgZD0nTTIuNTY2Mzc2LS42Njk0ODlDMi41NjYzNzYtMS4wNzM5NzMgMi4yMzE2MzEtMS4zNTI5MjcgMS44OTY4ODctMS4zNTI5MjdDMS40OTI0MDMtMS4zNTI5MjcgMS4yMTM0NS0xLjAxODE4MiAxLjIxMzQ1LS42ODM0MzdDMS4yMTM0NS0uMjc4OTU0IDEuNTQ4MTk0IDAgMS44ODI5MzkgMEMyLjI4NzQyMiAwIDIuNTY2Mzc2LS4zMzQ3NDUgMi41NjYzNzYtLjY2OTQ4OVonLz4KPHBhdGggaWQ9J2cxLTU5JyBkPSdNMi43MTk4MDEgLjA1NTc5MUMyLjcxOTgwMS0uNzUzMTc2IDIuNDU0Nzk1LTEuMzUyOTI3IDEuODgyOTM5LTEuMzUyOTI3QzEuNDM2NjEzLTEuMzUyOTI3IDEuMjEzNDUtLjk5MDI4NiAxLjIxMzQ1LS42ODM0MzdTMS40MjI2NjUgMCAxLjg5Njg4NyAwQzIuMDc4MjA3IDAgMi4yMzE2MzEtLjA1NTc5MSAyLjM1NzE2MS0uMTgxMzJDMi4zODUwNTYtLjIwOTIxNSAyLjM5OTAwNC0uMjA5MjE1IDIuNDEyOTUxLS4yMDkyMTVDMi40NDA4NDctLjIwOTIxNSAyLjQ0MDg0Ny0uMDEzOTQ4IDIuNDQwODQ3IC4wNTU3OTFDMi40NDA4NDcgLjUxNjA2NSAyLjM1NzE2MSAxLjQyMjY2NSAxLjU0ODE5NCAyLjMyOTI2NUMxLjM5NDc3IDIuNDk2NjM4IDEuMzk0NzcgMi41MjQ1MzMgMS4zOTQ3NyAyLjU1MjQyOEMxLjM5NDc3IDIuNjIyMTY3IDEuNDY0NTA4IDIuNjkxOTA1IDEuNTM0MjQ3IDIuNjkxOTA1QzEuNjQ1ODI4IDIuNjkxOTA1IDIuNzE5ODAxIDEuNjU5Nzc2IDIuNzE5ODAxIC4wNTU3OTFaJy8+CjxwYXRoIGlkPSdnMS02NCcgZD0nTTYuMzMyMjU0LTQuNjU4NTMxQzYuMjQ4NTY4LTUuNDM5NjAxIDUuNzYwMzk5LTYuMzc0MDk3IDQuNTA1MTA2LTYuMzc0MDk3QzIuNTM4NDgxLTYuMzc0MDk3IC41MzAwMTItNC4zNzk1NzcgLjUzMDAxMi0yLjE2MTg5M0MuNTMwMDEyLTEuMzExMDgzIDEuMTE1ODE2IC4yOTI5MDIgMy4wMTI3MDIgLjI5MjkwMkM2LjMwNDM1OSAuMjkyOTAyIDcuNzEzMDc2LTQuNTA1MTA2IDcuNzEzMDc2LTYuNDE1OTRDNy43MTMwNzYtOC40MjQ0MDggNi41ODMzMTMtOS45NzI2MDMgNC43OTgwMDctOS45NzI2MDNDMi43NzU1OTItOS45NzI2MDMgMi4xNzU4NDEtOC4yMDEyNDUgMi4xNzU4NDEtNy44MjQ2NThDMi4xNzU4NDEtNy42OTkxMjggMi4yNTk1MjctNy4zOTIyNzkgMi42NTAwNjItNy4zOTIyNzlDMy4xMzgyMzItNy4zOTIyNzkgMy4zNDc0NDctNy44Mzg2MDUgMy4zNDc0NDctOC4wNzU3MTZDMy4zNDc0NDctOC41MDgwOTUgMi45MTUwNjgtOC41MDgwOTUgMi43MzM3NDgtOC41MDgwOTVDMy4zMDU2MDQtOS41NDAyMjQgNC4zNjU2MjktOS42Mzc4NTggNC43NDIyMTctOS42Mzc4NThDNS45Njk2MTQtOS42Mzc4NTggNi43NTA2ODUtOC42NjE1MTkgNi43NTA2ODUtNy4wOTkzNzdDNi43NTA2ODUtNi4yMDY3MjUgNi40ODU2NzktNS4xNzQ1OTUgNi4zNDYyMDItNC42NTg1MzFINi4zMzIyNTRaTTMuMDU0NTQ1LS4wODM2ODZDMS43NDM0NjItLjA4MzY4NiAxLjUyMDI5OS0xLjExNTgxNiAxLjUyMDI5OS0xLjcwMTYxOUMxLjUyMDI5OS0yLjMxNTMxOCAxLjkxMDgzNC0zLjc1MTkzIDIuMTIwMDUtNC4yNjc5OTVDMi4zMDEzNy00LjY4NjQyNiAzLjA5NjM4OS02LjA5NTE0MyA0LjU0Njk0OS02LjA5NTE0M0M1LjgxNjE4OS02LjA5NTE0MyA2LjEwOTA5MS00Ljk5MzI3NSA2LjEwOTA5MS00LjI0MDFDNi4xMDkwOTEtMy4yMDc5NyA1LjIwMjQ5MS0uMDgzNjg2IDMuMDU0NTQ1LS4wODM2ODZaJy8+CjxwYXRoIGlkPSdnMS03NCcgZD0nTTcuNDQ4MDctOC41NjM4ODVDNy41NTk2NTEtOC45ODIzMTYgNy41ODc1NDctOS4xMjE3OTMgOC4yNzA5ODQtOS4xMjE3OTNDOC40OTQxNDctOS4xMjE3OTMgOC42MzM2MjQtOS4xMjE3OTMgOC42MzM2MjQtOS4zNzI4NTJDOC42MzM2MjQtOS41MjYyNzYgOC41MDgwOTUtOS41MjYyNzYgOC40NTIzMDQtOS41MjYyNzZDOC4yMTUxOTMtOS41MjYyNzYgNy45NTAxODctOS40OTgzODEgNy42OTkxMjgtOS40OTgzODFINi45MzIwMDVDNi4zNDYyMDItOS40OTgzODEgNS43MzI1MDMtOS41MjYyNzYgNS4xNDY3LTkuNTI2Mjc2QzUuMDIxMTcxLTkuNTI2Mjc2IDQuODUzNzk4LTkuNTI2Mjc2IDQuODUzNzk4LTkuMjc1MjE4QzQuODUzNzk4LTkuMTM1NzQxIDQuOTY1MzgtOS4xMzU3NDEgNC45NjUzOC05LjEyMTc5M0g1LjMxNDA3MkM2LjQyOTg4OC05LjEyMTc5MyA2LjQyOTg4OC05LjAxMDIxMiA2LjQyOTg4OC04LjgwMDk5NkM2LjQyOTg4OC04Ljc4NzA0OSA2LjQyOTg4OC04LjY4OTQxNSA2LjM3NDA5Ny04LjQ2NjI1Mkw0Ljc3MDExMi0yLjA5MjE1NEM0LjQwNzQ3Mi0uNjY5NDg5IDMuNDcyOTc2IC4wMTM5NDggMi44MDM0ODcgLjAxMzk0OEMyLjMyOTI2NSAuMDEzOTQ4IDEuNjU5Nzc2LS4yMDkyMTUgMS40OTI0MDMtLjk0ODQ0M0MxLjU0ODE5NC0uOTM0NDk2IDEuNjE3OTMzLS45MjA1NDggMS42NzM3MjQtLjkyMDU0OEMyLjEzMzk5OC0uOTIwNTQ4IDIuNDk2NjM4LTEuMzI1MDMxIDIuNDk2NjM4LTEuNzI5NTE0QzIuNDk2NjM4LTEuOTUyNjc3IDIuMzU3MTYxLTIuMjQ1NTc5IDEuOTM4NzMtMi4yNDU1NzlDMS42ODc2NzEtMi4yNDU1NzkgMS4xMDE4NjgtMi4xMDYxMDIgMS4xMDE4NjgtMS4xOTk1MDJDMS4xMDE4NjgtLjMyMDc5NyAxLjgyNzE0OCAuMjkyOTAyIDIuODMxMzgyIC4yOTI5MDJDNC4xMDA2MjMgLjI5MjkwMiA1LjQ2NzQ5Ny0uNjY5NDg5IDUuODAyMjQyLTEuOTk0NTIxTDcuNDQ4MDctOC41NjM4ODVaJy8+CjxwYXRoIGlkPSdnMS0xMDInIGQ9J002LjIyMDY3Mi01LjYwNjk3NEM2LjQ5OTYyNi01LjYwNjk3NCA2LjYxMTIwOC01LjYwNjk3NCA2LjYxMTIwOC01Ljg3MTk4QzYuNjExMjA4LTYuMDExNDU3IDYuNDk5NjI2LTYuMDExNDU3IDYuMjQ4NTY4LTYuMDExNDU3SDUuMTE4ODA0QzUuMzgzODExLTcuNDQ4MDcgNS41NzkwNzgtOC40MzgzNTYgNS42OTA2Ni04Ljg4NDY4MkM1Ljc3NDM0Ni05LjIxOTQyNyA2LjA2NzI0OC05LjU0MDIyNCA2LjQyOTg4OC05LjU0MDIyNEM2LjcyMjc5LTkuNTQwMjI0IDcuMDE1NjkxLTkuNDE0Njk1IDcuMTU1MTY4LTkuMjg5MTY2QzYuNjExMjA4LTkuMjMzMzc1IDYuNDQzODM2LTguODI4ODkyIDYuNDQzODM2LTguNTkxNzgxQzYuNDQzODM2LTguMzEyODI3IDYuNjUzMDUxLTguMTQ1NDU1IDYuOTE4MDU3LTguMTQ1NDU1QzcuMTk3MDExLTguMTQ1NDU1IDcuNjE1NDQyLTguMzgyNTY1IDcuNjE1NDQyLTguOTEyNTc4QzcuNjE1NDQyLTkuNDk4MzgxIDcuMDI5NjM5LTkuODE5MTc4IDYuNDE1OTQtOS44MTkxNzhDNS44MTYxODktOS44MTkxNzggNS4yMzAzODYtOS4zNzI4NTIgNC45NTE0MzItOC44Mjg4OTJDNC43MDAzNzQtOC4zNDA3MjIgNC41NjA4OTctNy44Mzg2MDUgNC4yNDAxLTYuMDExNDU3SDMuMzA1NjA0QzMuMDQwNTk4LTYuMDExNDU3IDIuOTAxMTIxLTYuMDExNDU3IDIuOTAxMTIxLTUuNzYwMzk5QzIuOTAxMTIxLTUuNjA2OTc0IDIuOTg0ODA3LTUuNjA2OTc0IDMuMjYzNzYxLTUuNjA2OTc0SDQuMTU2NDEzQzMuOTA1MzU1LTQuMzA5ODM4IDMuMzMzNDk5LTEuMTU3NjU5IDMuMDEyNzAyIC4zMzQ3NDVDMi43NzU1OTIgMS41NDgxOTQgMi41NjYzNzYgMi41NjYzNzYgMS44Njg5OTEgMi41NjYzNzZDMS44MjcxNDggMi41NjYzNzYgMS40MjI2NjUgMi41NjYzNzYgMS4xNzE2MDYgMi4zMDEzN0MxLjg4MjkzOSAyLjI0NTU3OSAxLjg4MjkzOSAxLjYzMTg4IDEuODgyOTM5IDEuNjE3OTMzQzEuODgyOTM5IDEuMzM4OTc5IDEuNjczNzI0IDEuMTcxNjA2IDEuNDA4NzE3IDEuMTcxNjA2QzEuMTI5NzYzIDEuMTcxNjA2IC43MTEzMzMgMS40MDg3MTcgLjcxMTMzMyAxLjkzODczQy43MTEzMzMgMi41Mzg0ODEgMS4zMjUwMzEgMi44NDUzMyAxLjg2ODk5MSAyLjg0NTMzQzMuMjkxNjU2IDIuODQ1MzMgMy44Nzc0NiAuMjkyOTAyIDQuMDMwODg0LS40MDQ0ODNDNC4yODE5NDMtMS40Nzg0NTYgNC45NjUzOC01LjE4ODU0MyA1LjAzNTExOC01LjYwNjk3NEg2LjIyMDY3MlonLz4KPHBhdGggaWQ9J2cxLTEyMCcgZD0nTTYuNjExMjA4LTUuNjkwNjZDNi4xNjQ4ODItNS42MDY5NzQgNS45OTc1MDktNS4yNzIyMjkgNS45OTc1MDktNS4wMDcyMjNDNS45OTc1MDktNC42NzI0NzggNi4yNjI1MTYtNC41NjA4OTcgNi40NTc3ODMtNC41NjA4OTdDNi44NzYyMTQtNC41NjA4OTcgNy4xNjkxMTYtNC45MjM1MzcgNy4xNjkxMTYtNS4zMDAxMjVDNy4xNjkxMTYtNS44ODU5MjggNi40OTk2MjYtNi4xNTA5MzQgNS45MTM4MjMtNi4xNTA5MzRDNS4wNjMwMTQtNi4xNTA5MzQgNC41ODg3OTItNS4zMTQwNzIgNC40NjMyNjMtNS4wNDkwNjZDNC4xNDI0NjYtNi4wOTUxNDMgMy4yNzc3MDktNi4xNTA5MzQgMy4wMjY2NS02LjE1MDkzNEMxLjYwMzk4NS02LjE1MDkzNCAuODUwODA5LTQuMzIzNzg2IC44NTA4MDktNC4wMTY5MzZDLjg1MDgwOS0zLjk2MTE0NiAuOTA2Ni0zLjg5MTQwNyAxLjAwNDIzNC0zLjg5MTQwN0MxLjExNTgxNi0zLjg5MTQwNyAxLjE0MzcxMS0zLjk3NTA5MyAxLjE3MTYwNi00LjAzMDg4NEMxLjY0NTgyOC01LjU3OTA3OCAyLjU4MDMyNC01Ljg3MTk4IDIuOTg0ODA3LTUuODcxOThDMy42MTI0NTMtNS44NzE5OCAzLjczNzk4My01LjI4NjE3NyAzLjczNzk4My00Ljk1MTQzMkMzLjczNzk4My00LjY0NDU4MyAzLjY1NDI5Ni00LjMyMzc4NiAzLjQ4NjkyNC0zLjY1NDI5NkwzLjAxMjcwMi0xLjc0MzQ2MkMyLjgwMzQ4Ny0uOTA2NiAyLjM5OTAwNC0uMTM5NDc3IDEuNjU5Nzc2LS4xMzk0NzdDMS41OTAwMzctLjEzOTQ3NyAxLjI0MTM0NS0uMTM5NDc3IC45NDg0NDMtLjMyMDc5N0MxLjQ1MDU2LS40MTg0MzEgMS41NjIxNDItLjgzNjg2MiAxLjU2MjE0Mi0xLjAwNDIzNEMxLjU2MjE0Mi0xLjI4MzE4OCAxLjM1MjkyNy0xLjQ1MDU2IDEuMDg3OTItMS40NTA1NkMuNzUzMTc2LTEuNDUwNTYgLjM5MDUzNS0xLjE1NzY1OSAuMzkwNTM1LS43MTEzMzNDLjM5MDUzNS0uMTI1NTI5IDEuMDQ2MDc3IC4xMzk0NzcgMS42NDU4MjggLjEzOTQ3N0MyLjMxNTMxOCAuMTM5NDc3IDIuNzg5NTM5LS4zOTA1MzUgMy4wODI0NDEtLjk2MjM5MUMzLjMwNTYwNC0uMTM5NDc3IDQuMDAyOTg5IC4xMzk0NzcgNC41MTkwNTQgLjEzOTQ3N0M1Ljk0MTcxOSAuMTM5NDc3IDYuNjk0ODk0LTEuNjg3NjcxIDYuNjk0ODk0LTEuOTk0NTIxQzYuNjk0ODk0LTIuMDY0MjU5IDYuNjM5MTAzLTIuMTIwMDUgNi41NTU0MTctMi4xMjAwNUM2LjQyOTg4OC0yLjEyMDA1IDYuNDE1OTQtMi4wNTAzMTEgNi4zNzQwOTctMS45Mzg3M0M1Ljk5NzUwOS0uNzExMzMzIDUuMTg4NTQzLS4xMzk0NzcgNC41NjA4OTctLjEzOTQ3N0M0LjA3MjcyNy0uMTM5NDc3IDMuODA3NzIxLS41MDIxMTcgMy44MDc3MjEtMS4wNzM5NzNDMy44MDc3MjEtMS4zODA4MjIgMy44NjM1MTItMS42MDM5ODUgNC4wODY2NzUtMi41MjQ1MzNMNC41NzQ4NDQtNC40MjE0MkM0Ljc4NDA2LTUuMjU4MjgxIDUuMjU4MjgxLTUuODcxOTggNS44OTk4NzUtNS44NzE5OEM1LjkyNzc3MS01Ljg3MTk4IDYuMzE4MzA2LTUuODcxOTggNi42MTEyMDgtNS42OTA2NlonLz4KPC9kZWZzPgo8ZyBpZD0ncGFnZTEnPgo8dXNlIHg9JzE2Mi40MTkzMDknIHk9Jzk4LjYwMTM0NScgeGxpbms6aHJlZj0nI2cxLTc0Jy8+Cjx1c2UgeD0nMTY5Ljk2NzgyNCcgeT0nMTAwLjY5MzQ5JyB4bGluazpocmVmPScjZzAtMTA1Jy8+Cjx1c2UgeD0nMTczLjMzMTQyMycgeT0nMTAwLjY5MzQ5JyB4bGluazpocmVmPScjZzAtMTA1Jy8+Cjx1c2UgeD0nMTc3LjE5MzE0JyB5PSc5OC42MDEzNDUnIHhsaW5rOmhyZWY9JyNnMy00MCcvPgo8dXNlIHg9JzE4Mi41MDQxODcnIHk9Jzk4LjYwMTM0NScgeGxpbms6aHJlZj0nI2cxLTEwMicvPgo8dXNlIHg9JzE5MC43MjUwMjInIHk9Jzk4LjYwMTM0NScgeGxpbms6aHJlZj0nI2czLTQxJy8+Cjx1c2UgeD0nMTk5LjkxMDM5NScgeT0nOTguNjAxMzQ1JyB4bGluazpocmVmPScjZzMtNjEnLz4KPHVzZSB4PScyMTUuNjAyMzI4JyB5PSc4OS4xNjU2MjknIHhsaW5rOmhyZWY9JyNnMS02NCcvPgo8dXNlIHg9JzIyMy41NzA1MDgnIHk9Jzg5LjE2NTYyOScgeGxpbms6aHJlZj0nI2cxLTEwMicvPgo8dXNlIHg9JzIzMC4zMDIxNjEnIHk9JzkxLjI1Nzc3NCcgeGxpbms6aHJlZj0nI2cwLTEwNScvPgo8dXNlIHg9JzIzNC4xNjM4ODUnIHk9Jzg5LjE2NTYyOScgeGxpbms6aHJlZj0nI2czLTQwJy8+Cjx1c2UgeD0nMjM5LjQ3NDkzMicgeT0nODkuMTY1NjI5JyB4bGluazpocmVmPScjZzEtMTIwJy8+Cjx1c2UgeD0nMjQ3LjIzNTcnIHk9JzkxLjI1Nzc3NCcgeGxpbms6aHJlZj0nI2cyLTQ5Jy8+Cjx1c2UgeD0nMjUyLjYxNTUyJyB5PSc4OS4xNjU2MjknIHhsaW5rOmhyZWY9JyNnMS01OScvPgo8dXNlIHg9JzI1OC43MzM3MicgeT0nODkuMTY1NjI5JyB4bGluazpocmVmPScjZzEtNTgnLz4KPHVzZSB4PScyNjQuODUxOTIxJyB5PSc4OS4xNjU2MjknIHhsaW5rOmhyZWY9JyNnMS01OCcvPgo8dXNlIHg9JzI3MC45NzAxMjInIHk9Jzg5LjE2NTYyOScgeGxpbms6aHJlZj0nI2cxLTU4Jy8+Cjx1c2UgeD0nMjc3LjA4ODMyMicgeT0nODkuMTY1NjI5JyB4bGluazpocmVmPScjZzEtNTknLz4KPHVzZSB4PScyODMuMjA2NTIzJyB5PSc4OS4xNjU2MjknIHhsaW5rOmhyZWY9JyNnMS0xMjAnLz4KPHVzZSB4PScyOTAuOTY3MjkxJyB5PSc5MS4yNTc3NzQnIHhsaW5rOmhyZWY9JyNnMC0xMTAnLz4KPHVzZSB4PScyOTcuMzI1NzEnIHk9Jzg5LjE2NTYyOScgeGxpbms6aHJlZj0nI2czLTQxJy8+CjxyZWN0IHg9JzIxNS42MDIzMjgnIHk9Jzk0LjgzNTQ2OCcgaGVpZ2h0PScuNTU3ODknIHdpZHRoPSc4Ny4wMzQ0MTUnLz4KPHVzZSB4PScyNDkuMzI0MjE0JyB5PScxMDguMTY4NzY5JyB4bGluazpocmVmPScjZzEtNjQnLz4KPHVzZSB4PScyNTcuMjkyMzk0JyB5PScxMDguMTY4NzY5JyB4bGluazpocmVmPScjZzEtMTIwJy8+Cjx1c2UgeD0nMjY1LjA1MzE2MicgeT0nMTEwLjI2MDkxNCcgeGxpbms6aHJlZj0nI2cwLTEwNScvPgo8L2c+Cjwvc3ZnPg==" alt="J_{ii}(f) = \frac{ \partial f_i(x_1, \ldots, x_n) }{\partial x_i}"/></p>
+</div><p>As an example, consider the following <code class="docutils literal notranslate"><span class="pre">DERIVATIVE</span></code> block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DERIVATIVE</span> <span class="n">state</span> <span class="p">{</span>
+    <span class="n">X</span><span class="s1">&#39; = - X</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Where <code class="docutils literal notranslate"><span class="pre">X</span></code> is a <code class="docutils literal notranslate"><span class="pre">STATE</span></code> variable with some initial value, specified in the
+<code class="docutils literal notranslate"><span class="pre">INITIAL</span></code> block. The corresponding <code class="docutils literal notranslate"><span class="pre">CVODE</span></code> block is then:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CVODE</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">{</span>
+    <span class="n">DX</span> <span class="o">=</span> <span class="o">-</span> <span class="n">X</span>
+<span class="p">}{</span>
+    <span class="n">DX</span> <span class="o">=</span> <span class="n">DX</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>NOTE</strong>: in case there are <code class="docutils literal notranslate"><span class="pre">CONSERVE</span></code> statements in <code class="docutils literal notranslate"><span class="pre">KINETIC</span></code> blocks, as
+they are merely hints to NMODL, and have no impact on the results, they are
+removed from <code class="docutils literal notranslate"><span class="pre">CVODE</span></code> blocks before the codegen stage.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="longitudinal_diffusion.html" class="btn btn-neutral float-left" title="Longitudinal Diffusion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../notebooks.html" class="btn btn-neutral float-right" title="The NMODL Jupyter notebooks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, BlueBrain HPC team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

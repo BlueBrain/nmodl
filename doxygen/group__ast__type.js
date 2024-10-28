@@ -119,6 +119,7 @@ var group__ast__type =
       [ "NRN_STATE_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033af189eb9042faaf839ba0d1de89355374", null ],
       [ "EIGEN_NEWTON_SOLVER_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033aa94fa2efd7b3aa56d6e93ca2ded9f8c4", null ],
       [ "EIGEN_LINEAR_SOLVER_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a517df820ec4c846300b1dea014500d0f", null ],
+      [ "CVODE_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a826c8a2fe513ff58c32444a201b329c3", null ],
       [ "LONGITUDINAL_DIFFUSION_BLOCK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033ad965faf821f14283d12f2a59714f2bb8", null ],
       [ "WRAPPED_EXPRESSION", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a24e8edf8ee3bf4dc4d1a06e764665b53", null ],
       [ "DERIVIMPLICIT_CALLBACK", "group__ast__type.html#ggac392e49849e60c05e42ea02c7b445033a6fe40378290f559b18d043a4a4393206", null ],

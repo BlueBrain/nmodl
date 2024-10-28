@@ -38,6 +38,7 @@ var structnmodl_1_1ast_1_1_ast =
     [ "is_constant_statement", "group__ast__class.html#ga1b5521cd31ec4d26c0ec8a039bf7a9c9", null ],
     [ "is_constant_var", "group__ast__class.html#ga05e0889bf71fb5b456293ae784a4830c", null ],
     [ "is_constructor_block", "group__ast__class.html#gad920ec3fd8147522e85d67bfacb8ebdd", null ],
+    [ "is_cvode_block", "group__ast__class.html#ga9ce603148a38735382611779880b0363", null ],
     [ "is_define", "group__ast__class.html#gab35a10b4c8f5ca2515f0bb122853e447", null ],
     [ "is_derivative_block", "group__ast__class.html#ga571f5c2475e8e6fbfd898f82e710960a", null ],
     [ "is_derivimplicit_callback", "group__ast__class.html#ga4ac0e01057626ba84f0511ea12370956", null ],

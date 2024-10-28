@@ -183,6 +183,9 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 <li>n_not
 : <a class="el" href="structnmodl_1_1utils_1_1_perf_stat.html#aa960b2aec7f733ae1d07afd6e82b274c">nmodl::utils::PerfStat</a>
 </li>
+<li>n_odes
+: <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html#a8f90b6355e248a213d259631388af583">nmodl::ast::CvodeBlock</a>
+</li>
 <li>n_or
 : <a class="el" href="structnmodl_1_1utils_1_1_perf_stat.html#a5752fb60ccc9f4d46bb11258d3d22be0">nmodl::utils::PerfStat</a>
 </li>
@@ -213,6 +216,7 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1ast_1_1_assigned_definition.html#ace9908aac676af1087a3114aace71df1">nmodl::ast::AssignedDefinition</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_bbcore_pointer_var.html#a3fe9472103b9e3f7302a88aaf3d96340">nmodl::ast::BbcorePointerVar</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_constant_var.html#ab341e0383aa1a2a98f4e296baa02f668">nmodl::ast::ConstantVar</a>
+, <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html#a3dc63c3f5a71e4e9c151f2a44b830424">nmodl::ast::CvodeBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_define.html#ae9e6c721b58897d4593b8dd7ab614400">nmodl::ast::Define</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_derivative_block.html#a12f02c18537effac4ecdd6cb22b0e02f">nmodl::ast::DerivativeBlock</a>
 , <a class="el" href="classnmodl_1_1ast_1_1_discrete_block.html#a7808e1f0ca6eaeb86830f4480a53f652">nmodl::ast::DiscreteBlock</a>
@@ -307,7 +311,7 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 : <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a4ff9a275178c249645a980dad11a7c10">nmodl::codegen::CodegenInfo</a>
 </li>
 <li>NetReceiveBlock()
-: <a class="el" href="classnmodl_1_1ast_1_1_net_receive_block.html#add1853328845703ca326839a4d690dbf">nmodl::ast::NetReceiveBlock</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_net_receive_block.html#ad96fb4f3c01f4c0e3a359b3aaa1dd5db">nmodl::ast::NetReceiveBlock</a>
 </li>
 <li>neuron_global_variables
 : <a class="el" href="structnmodl_1_1codegen_1_1_codegen_info.html#a04914559f3a67551dfa95ca1514f4719">nmodl::codegen::CodegenInfo</a>
@@ -343,7 +347,7 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 : <a class="el" href="structnmodl_1_1_version.html#a14c75c06b7f3fb779053105e763fe091">nmodl::Version</a>
 </li>
 <li>NmodlDriver()
-: <a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#a4a49b7841863c29f9eea917dd6f445d2">nmodl::parser::NmodlDriver</a>
+: <a class="el" href="classnmodl_1_1parser_1_1_nmodl_driver.html#ab43a698541c416156154995fdcf7e514">nmodl::parser::NmodlDriver</a>
 </li>
 <li>NmodlLexer()
 : <a class="el" href="classnmodl_1_1parser_1_1_nmodl_lexer.html#aa4942b591afe90c03776a7ccf372a304">nmodl::parser::NmodlLexer</a>
@@ -352,10 +356,10 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1printer_1_1_n_m_o_d_l_printer.html#a014accfe7f2a025b1a3049f4a811d416">nmodl::printer::NMODLPrinter</a>
 </li>
 <li>NmodlPrintVisitor()
-: <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a63ddfeaf65d6ba4bd892c3a38db75919">nmodl::visitor::NmodlPrintVisitor</a>
+: <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#aa264781ae76d5374c15e0180a2b4d1e5">nmodl::visitor::NmodlPrintVisitor</a>
 </li>
 <li>NmodlTestCase()
-: <a class="el" href="structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a2343bb5b6add3e9c124673d558789eb3">nmodl::test_utils::NmodlTestCase</a>
+: <a class="el" href="structnmodl_1_1test__utils_1_1_nmodl_test_case.html#a50cbab8eb69dbd5808d7da31e983dfde">nmodl::test_utils::NmodlTestCase</a>
 </li>
 <li>node
 : <a class="el" href="classnmodl_1_1symtab_1_1_symbol_table.html#aff69a865f425c2a8be50a83f7c2f7764">nmodl::symtab::SymbolTable</a>
@@ -386,14 +390,17 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 <li>non_state_var_fflux
 : <a class="el" href="classnmodl_1_1visitor_1_1_kinetic_block_visitor.html#af46d59d6b3ddbde95e5bd071fcfbed17">nmodl::visitor::KineticBlockVisitor</a>
 </li>
+<li>non_stiff_block
+: <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html#a9747d9709d0ee00ae4ca9a30f92baea2">nmodl::ast::CvodeBlock</a>
+</li>
 <li>NonLinearBlock()
-: <a class="el" href="classnmodl_1_1ast_1_1_non_linear_block.html#a4a04a471cff0bb187d8bf19278a9c84f">nmodl::ast::NonLinearBlock</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_non_linear_block.html#ae7e41106b3d932ccce81f0ab50ea9f8e">nmodl::ast::NonLinearBlock</a>
 </li>
 <li>NonLinEquation()
-: <a class="el" href="classnmodl_1_1ast_1_1_non_lin_equation.html#a6f6c94f2c9cbb00d6d472cab9d14927d">nmodl::ast::NonLinEquation</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_non_lin_equation.html#a2c62ec057d233bec54f8036854d0573e">nmodl::ast::NonLinEquation</a>
 </li>
 <li>Nonspecific()
-: <a class="el" href="classnmodl_1_1ast_1_1_nonspecific.html#a3b82c650f8f84fcf78e9af55dedf7fa6">nmodl::ast::Nonspecific</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_nonspecific.html#a4d5a39bc77cff51a94ce8eb9f79ef02b">nmodl::ast::Nonspecific</a>
 </li>
 <li>NONSPECIFIC_CONDUCTANCE_ALREADY_EXISTS
 : <a class="el" href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a9fa5e0545dc669559fcf1bbf6cee2a1e">nmodl::visitor::SympyConductanceVisitor</a>
@@ -402,7 +409,10 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#a940f00cf653680c1b2b7c4579b13c58f">nmodl::visitor::SympyConductanceVisitor</a>
 </li>
 <li>NonspecificCurVar()
-: <a class="el" href="classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a74bb4c3c2172c5da154442ffcdc79488">nmodl::ast::NonspecificCurVar</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_nonspecific_cur_var.html#a95b3fab3710731319694b04a5fb21914">nmodl::ast::NonspecificCurVar</a>
+</li>
+<li>NonStiffVisitor()
+: <a class="el" href="classnmodl_1_1visitor_1_1_non_stiff_visitor.html#a635560ff436f1efc43c487e5f1855f45">nmodl::visitor::NonStiffVisitor</a>
 </li>
 <li>nrn_cur_reduction_loop_required()
 : <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a31d7b0c263809e51473f6769c402fb53">nmodl::codegen::CodegenAccVisitor</a>
@@ -440,7 +450,7 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 , <a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aa08a55bc62e18a9c545e8903dd3b1530">nmodl::codegen::CodegenNeuronCppVisitor</a>
 </li>
 <li>NrnStateBlock()
-: <a class="el" href="classnmodl_1_1ast_1_1_nrn_state_block.html#abe44b1fb9b25fdb47d42780bf05d353f">nmodl::ast::NrnStateBlock</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_nrn_state_block.html#aa47754e736a84f3ca834611f88254bf5">nmodl::ast::NrnStateBlock</a>
 </li>
 <li>NRNUNITSLIB_PATH
 : <a class="el" href="structnmodl_1_1_nrn_units_lib.html#a4a437a7593b80831b607356db2588ffe">nmodl::NrnUnitsLib</a>
@@ -500,7 +510,7 @@ $(document).ready(function(){initNavTree('functions_n.html',''); initResizable()
 : <a class="el" href="classnmodl_1_1symtab_1_1_symbol.html#ae92851845346b1d3f4c4fd4128b3b688">nmodl::symtab::Symbol</a>
 </li>
 <li>NumberRange()
-: <a class="el" href="classnmodl_1_1ast_1_1_number_range.html#a617904f6358345e175f52d66f83750ea">nmodl::ast::NumberRange</a>
+: <a class="el" href="classnmodl_1_1ast_1_1_number_range.html#a7402180e86fd7e327fd30055bf393db9">nmodl::ast::NumberRange</a>
 </li>
 </ul>
 </div><!-- contents -->

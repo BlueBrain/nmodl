@@ -13,6 +13,7 @@ var classnmodl_1_1visitor_1_1_sympy_solver_visitor =
     [ "solve_non_linear_system", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a30769ca35a03c41a0687d2db8482c508", null ],
     [ "to_nmodl_for_sympy", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#aa9afac6463b3a8c08091b6afbd05fe97", null ],
     [ "visit_conserve", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a69f924bb4138d8641ed544f4edf87efe", null ],
+    [ "visit_cvode_block", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#abf80c3c3858f1d4027c7c3f91909e205", null ],
     [ "visit_derivative_block", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#ac3434ca7b32b2f098935e9bd0079406a", null ],
     [ "visit_diff_eq_expression", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#a47b5650f5dbc0ec0bfef74d8aace8bbd", null ],
     [ "visit_expression_statement", "classnmodl_1_1visitor_1_1_sympy_solver_visitor.html#aa46abaf12558330f690cca7c29ee0c88", null ],

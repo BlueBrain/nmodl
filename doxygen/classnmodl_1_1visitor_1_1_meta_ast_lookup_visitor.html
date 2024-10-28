@@ -379,6 +379,8 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:af94a0d1451792e42afc5693b5f6a6dbc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38b1eccb5e2f6517d28b8df988c4df21"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a38b1eccb5e2f6517d28b8df988c4df21">visit_eigen_linear_solver_block</a> (typename <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8">visit_arg_trait</a>&lt; <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html">ast::EigenLinearSolverBlock</a> &gt;::type &amp;node) override</td></tr>
 <tr class="separator:a38b1eccb5e2f6517d28b8df988c4df21"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55eeab957da157bd87564ddef7124d99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a55eeab957da157bd87564ddef7124d99">visit_cvode_block</a> (typename <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8">visit_arg_trait</a>&lt; <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &gt;::type &amp;node) override</td></tr>
+<tr class="separator:a55eeab957da157bd87564ddef7124d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac62fc6fe426b284414022333c4388706"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#ac62fc6fe426b284414022333c4388706">visit_longitudinal_diffusion_block</a> (typename <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8">visit_arg_trait</a>&lt; <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &gt;::type &amp;node) override</td></tr>
 <tr class="separator:ac62fc6fe426b284414022333c4388706"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae94290aec2bc7f6af3afef8b663946e5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#ae94290aec2bc7f6af3afef8b663946e5">visit_wrapped_expression</a> (typename <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8">visit_arg_trait</a>&lt; <a class="el" href="classnmodl_1_1ast_1_1_wrapped_expression.html">ast::WrappedExpression</a> &gt;::type &amp;node) override</td></tr>
@@ -1382,6 +1384,36 @@ template&lt;typename DefaultVisitor &gt; </div>
 
 </div>
 </div>
+<a id="a55eeab957da157bd87564ddef7124d99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55eeab957da157bd87564ddef7124d99">&#9670;&nbsp;</a></span>visit_cvode_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DefaultVisitor &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html">nmodl::visitor::MetaAstLookupVisitor</a>&lt; DefaultVisitor &gt;::visit_cvode_block </td>
+          <td>(</td>
+          <td class="paramtype">typename <a class="el" href="classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a2b780cb504f51c876c523689a04e8fe8">visit_arg_trait</a>&lt; <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &gt;::type &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00969">969</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a3f95ed2b5c4dbdd3f63afc0f23e6157d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f95ed2b5c4dbdd3f63afc0f23e6157d">&#9670;&nbsp;</a></span>visit_define()</h2>
 
@@ -1468,7 +1500,7 @@ template&lt;typename DefaultVisitor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00985">985</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00993">993</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2698,7 +2730,7 @@ template&lt;typename DefaultVisitor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00969">969</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00977">977</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3688,7 +3720,7 @@ template&lt;typename DefaultVisitor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00993">993</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l01001">1001</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4138,7 +4170,7 @@ template&lt;typename DefaultVisitor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l01001">1001</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l01009">1009</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4378,7 +4410,7 @@ template&lt;typename DefaultVisitor &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00977">977</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="lookup__visitor_8cpp_source.html#l00985">985</a> of file <a class="el" href="lookup__visitor_8cpp_source.html">lookup_visitor.cpp</a>.</p>
 
 </div>
 </div>

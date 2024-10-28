@@ -124,6 +124,9 @@ Functions</h2></td></tr>
 <tr class="separator:a8a2f979314520723f3c9cbbcbea7002b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d308338965a84736fa0216a58822079"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a4d308338965a84736fa0216a58822079">call_analytic_diff</a> (const std::vector&lt; std::string &gt; &amp;expressions, const std::set&lt; std::string &gt; &amp;used_names_in_block)</td></tr>
 <tr class="separator:a4d308338965a84736fa0216a58822079"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15358bde66a78fe8f2076a8747d02330"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a15358bde66a78fe8f2076a8747d02330">call_diff2c</a> (const std::string &amp;expression, const std::pair&lt; std::string, std::optional&lt; int &gt;&gt; &amp;variable, const std::unordered_set&lt; std::string &gt; &amp;indexed_vars={})</td></tr>
+<tr class="memdesc:a15358bde66a78fe8f2076a8747d02330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Differentiates an expression with respect to a variable.  <a href="namespacenmodl_1_1pybind__wrappers.html#a15358bde66a78fe8f2076a8747d02330">More...</a><br /></td></tr>
+<tr class="separator:a15358bde66a78fe8f2076a8747d02330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27c3c1c878a8460a679efb3356ac29f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a27c3c1c878a8460a679efb3356ac29f7">initialize_interpreter_func</a> ()</td></tr>
 <tr class="separator:a27c3c1c878a8460a679efb3356ac29f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48d905174e33fd0f0f6e85735fed432f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a48d905174e33fd0f0f6e85735fed432f">finalize_interpreter_func</a> ()</td></tr>
@@ -194,7 +197,54 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00161">161</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00162">162</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a15358bde66a78fe8f2076a8747d02330"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15358bde66a78fe8f2076a8747d02330">&#9670;&nbsp;</a></span>call_diff2c()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::tuple&lt; std::string, std::string &gt; nmodl::pybind_wrappers::call_diff2c </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>expression</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::pair&lt; std::string, std::optional&lt; int &gt;&gt; &amp;&#160;</td>
+          <td class="paramname"><em>variable</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::unordered_set&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>indexed_vars</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Differentiates an expression with respect to a variable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">expression</td><td>The expression we want to differentiate </td></tr>
+    <tr><td class="paramname">variable</td><td>The name of the independent variable we are differentiating against </td></tr>
+    <tr><td class="paramname">index_vars</td><td>A set of array (indexable) variables that appear in expression </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The tuple (solution, exception) </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00190">190</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -248,7 +298,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00105">105</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00106">106</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -308,7 +358,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00028">28</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00029">29</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -350,7 +400,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00072">72</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00073">73</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -369,7 +419,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00194">194</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00238">238</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -388,7 +438,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00190">190</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00234">234</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>
@@ -415,7 +465,7 @@ Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00200">200</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="wrapper_8cpp_source.html#l00244">244</a> of file <a class="el" href="wrapper_8cpp_source.html">wrapper.cpp</a>.</p>
 
 </div>
 </div>

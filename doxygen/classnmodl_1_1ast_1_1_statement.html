@@ -553,6 +553,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ga6d8c02bfb7a35cf3ac7858e61f24bf00 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga6d8c02bfb7a35cf3ac7858e61f24bf00">is_eigen_linear_solver_block</a> () const noexcept</td></tr>
 <tr class="memdesc:ga6d8c02bfb7a35cf3ac7858e61f24bf00 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html" title="Represent linear solver solution block based on Eigen.">ast::EigenLinearSolverBlock</a>.  <a href="group__ast__class.html#ga6d8c02bfb7a35cf3ac7858e61f24bf00">More...</a><br /></td></tr>
 <tr class="separator:ga6d8c02bfb7a35cf3ac7858e61f24bf00 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9ce603148a38735382611779880b0363 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga9ce603148a38735382611779880b0363">is_cvode_block</a> () const noexcept</td></tr>
+<tr class="memdesc:ga9ce603148a38735382611779880b0363 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html" title="Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks.">ast::CvodeBlock</a>.  <a href="group__ast__class.html#ga9ce603148a38735382611779880b0363">More...</a><br /></td></tr>
+<tr class="separator:ga9ce603148a38735382611779880b0363 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga94bd299850978ac874ca75863f544d99 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__ast__class.html#ga94bd299850978ac874ca75863f544d99">is_longitudinal_diffusion_block</a> () const noexcept</td></tr>
 <tr class="memdesc:ga94bd299850978ac874ca75863f544d99 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the ast node is an instance of <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html" title="Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.">ast::LongitudinalDiffusionBlock</a>.  <a href="group__ast__class.html#ga94bd299850978ac874ca75863f544d99">More...</a><br /></td></tr>
 <tr class="separator:ga94bd299850978ac874ca75863f544d99 inherit pub_methods_structnmodl_1_1ast_1_1_ast"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -668,7 +671,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_useion.html#ae907041a8b2a48b42a553b4b002cd862">nmodl::ast::Useion</a>, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#aaed16de7f1310185eb621f6fc2f7503d">nmodl::ast::TableStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#a7ae3ae1c6f0ac960b5fdc9d7ed095e07">nmodl::ast::WatchStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html#a0cdb3dec2882d90fa975220b64581912">nmodl::ast::WhileStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_suffix.html#a591e556c02663ba71a4eaa67daa4bbb0">nmodl::ast::Suffix</a>, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a56bb6e3d413e64623496b2f14e30ad69">nmodl::ast::UpdateDt</a>, <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#a54a5298cbd9a11c438a0b4d1bb53f620">nmodl::ast::Verbatim</a>, <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html#a7a8bb6ef304f90a7b57e253c323c5a6f">nmodl::ast::UnitState</a>, and <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#aab1e96f2a5508b688f1b89b67b9b27fe">nmodl::ast::ThreadSafe</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00356">356</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00358">358</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -710,7 +713,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_useion.html#abcf87c9e97ec429d9c9d48ea2fabc197">nmodl::ast::Useion</a>, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#a54fbf3b5e29f15eeea05f4a08b0c0f50">nmodl::ast::TableStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#aa1106f372956c08290856f4c26371c82">nmodl::ast::WatchStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html#ae7dfa8e0f656131af07dfb1a4bc95735">nmodl::ast::WhileStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_suffix.html#a7ea45f3672eab37276fc1a805a9ade1f">nmodl::ast::Suffix</a>, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a2b5c93e4ef652665fec3278b563f256a">nmodl::ast::UpdateDt</a>, <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#afb14d00efa78d92e381443d3baeee524">nmodl::ast::Verbatim</a>, <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html#aa4b2328d2aac54d0fd3e16e2a3a1dd7d">nmodl::ast::UnitState</a>, and <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#a8bcf68d780824edb1ff4507d08e64028">nmodl::ast::ThreadSafe</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00352">352</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00354">354</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -958,7 +961,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_useion.html#a4b6b1fba6b92e96bfaad4cc6a2b5370a">nmodl::ast::Useion</a>, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#a0d9b9fed0a7d9bdf01a7fca1e07d2e46">nmodl::ast::TableStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#a4da5e16b1a2c9e64a819beaee9e71eaf">nmodl::ast::WatchStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html#af4e26c0c535b6efb97ad07923c80e875">nmodl::ast::WhileStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_suffix.html#a1ae040bba4e60e236ad0cd232933e032">nmodl::ast::Suffix</a>, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a64164d5cca8239bad57d1f5ece9c5ddc">nmodl::ast::UpdateDt</a>, <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#a77e00848bf65aadf34b2db4afbaf6ce5">nmodl::ast::Verbatim</a>, <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html#aadd2a332d828b8aa6bbd6d9da684ac7c">nmodl::ast::UnitState</a>, and <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#a7703337029868e1c2fc69a110458c6f5">nmodl::ast::ThreadSafe</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00349">349</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00351">351</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>
@@ -1002,7 +1005,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Reimplemented in <a class="el" href="classnmodl_1_1ast_1_1_useion.html#aeb3cb6fe2598f81f71da929d6759a6be">nmodl::ast::Useion</a>, <a class="el" href="classnmodl_1_1ast_1_1_table_statement.html#a98c0f95f70960365c0083b16f7140e49">nmodl::ast::TableStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html#aa6b97f1d36f94f4659287772456b647a">nmodl::ast::WatchStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html#abd0aa671453aacc91d21aaf41804265a">nmodl::ast::WhileStatement</a>, <a class="el" href="classnmodl_1_1ast_1_1_suffix.html#a5e835bba1b5b5b72f3786015cf429d42">nmodl::ast::Suffix</a>, <a class="el" href="classnmodl_1_1ast_1_1_update_dt.html#a02035c8a3771d32f6eeadb676f8dc8e3">nmodl::ast::UpdateDt</a>, <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html#a0bb1aac98302f662e3536a5a36a42a2f">nmodl::ast::Verbatim</a>, <a class="el" href="classnmodl_1_1ast_1_1_unit_state.html#a1309e621fa40e8888c061ab7cadc1eca">nmodl::ast::UnitState</a>, and <a class="el" href="classnmodl_1_1ast_1_1_thread_safe.html#a6ddbc7d59d71c74c3d0fc2f95746d1fe">nmodl::ast::ThreadSafe</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00346">346</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ast_8cpp_source.html#l00348">348</a> of file <a class="el" href="ast_8cpp_source.html">ast.cpp</a>.</p>
 
 </div>
 </div>

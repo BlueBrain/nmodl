@@ -3,6 +3,7 @@ var wrapper_8hpp =
     [ "pybind_wrap_api", "structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api.html", "structnmodl_1_1pybind__wrappers_1_1pybind__wrap__api" ],
     [ "NMODL_EXPORT", "wrapper_8hpp.html#adadb78a7853ec313aaec37d629ccaa68", null ],
     [ "call_analytic_diff", "wrapper_8hpp.html#a4d308338965a84736fa0216a58822079", null ],
+    [ "call_diff2c", "wrapper_8hpp.html#a15358bde66a78fe8f2076a8747d02330", null ],
     [ "call_diffeq_solver", "wrapper_8hpp.html#a8a2f979314520723f3c9cbbcbea7002b", null ],
     [ "call_solve_linear_system", "wrapper_8hpp.html#aa87d2101e70d9656c7a472691e5f9814", null ],
     [ "call_solve_nonlinear_system", "wrapper_8hpp.html#a04632caa6edc875ac46fa77208a729e6", null ],

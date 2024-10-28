@@ -483,6 +483,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a8928df570c40a816bcd188915f124f90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a8928df570c40a816bcd188915f124f90">visit_eigen_linear_solver_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html">ast::EigenLinearSolverBlock</a> &amp;node) override</td></tr>
 <tr class="memdesc:a8928df570c40a816bcd188915f124f90"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html" title="Represent linear solver solution block based on Eigen.">ast::EigenLinearSolverBlock</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#a8928df570c40a816bcd188915f124f90">More...</a><br /></td></tr>
 <tr class="separator:a8928df570c40a816bcd188915f124f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad33d355db35e5bc0940e16a19e4544fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ad33d355db35e5bc0940e16a19e4544fe">visit_cvode_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &amp;node) override</td></tr>
+<tr class="memdesc:ad33d355db35e5bc0940e16a19e4544fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html" title="Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks.">ast::CvodeBlock</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ad33d355db35e5bc0940e16a19e4544fe">More...</a><br /></td></tr>
+<tr class="separator:ad33d355db35e5bc0940e16a19e4544fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad19b6fb52e465ee66348b14e0f33671a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ad19b6fb52e465ee66348b14e0f33671a">visit_longitudinal_diffusion_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;node) override</td></tr>
 <tr class="memdesc:ad19b6fb52e465ee66348b14e0f33671a"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html" title="Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.">ast::LongitudinalDiffusionBlock</a>  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ad19b6fb52e465ee66348b14e0f33671a">More...</a><br /></td></tr>
 <tr class="separator:ad19b6fb52e465ee66348b14e0f33671a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1377,6 +1380,38 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad33d355db35e5bc0940e16a19e4544fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad33d355db35e5bc0940e16a19e4544fe">&#9670;&nbsp;</a></span>visit_cvode_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::visitor::NmodlPrintVisitor::visit_cvode_block </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html" title="Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks.">ast::CvodeBlock</a> </p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae897be6a9af9f38b3f6ad3ee00aedce9">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01928">1928</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a04a59b61fc754b59f7a119fc5a8b4867"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a04a59b61fc754b59f7a119fc5a8b4867">&#9670;&nbsp;</a></span>visit_define()</h2>
 
@@ -1469,7 +1504,7 @@ Private Attributes</h2></td></tr>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#afab4e50b8b3fa41bc61d8269d4de0997">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01963">1963</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01991">1991</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -2847,7 +2882,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a71ecb1e871b002f193a95f0ec17e5ff2">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01928">1928</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01956">1956</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -3903,7 +3938,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a62fc9a812bba862a3ec56eac5ceb2d38">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01974">1974</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l02002">2002</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4383,7 +4418,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a00f4d360a1345e059f1e9e09a8d4f4a6">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01988">1988</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l02016">2016</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -4639,7 +4674,7 @@ template&lt;typename T &gt; </div>
 
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a4db75b11c17eb4e53a4492bd3625dcba">nmodl::visitor::ConstVisitor</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01952">1952</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="nmodl__visitor_8cpp_source.html#l01980">1980</a> of file <a class="el" href="nmodl__visitor_8cpp_source.html">nmodl_visitor.cpp</a>.</p>
 
 </div>
 </div>

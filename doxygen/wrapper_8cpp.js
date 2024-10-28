@@ -1,6 +1,7 @@
 var wrapper_8cpp =
 [
     [ "call_analytic_diff", "wrapper_8cpp.html#a4d308338965a84736fa0216a58822079", null ],
+    [ "call_diff2c", "wrapper_8cpp.html#a15358bde66a78fe8f2076a8747d02330", null ],
     [ "call_diffeq_solver", "wrapper_8cpp.html#a8a2f979314520723f3c9cbbcbea7002b", null ],
     [ "call_solve_linear_system", "wrapper_8cpp.html#aa87d2101e70d9656c7a472691e5f9814", null ],
     [ "call_solve_nonlinear_system", "wrapper_8cpp.html#a04632caa6edc875ac46fa77208a729e6", null ],

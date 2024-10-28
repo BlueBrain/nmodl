@@ -100,6 +100,8 @@ $(document).ready(function(){initNavTree('wrapper_8cpp.html',''); initResizable(
 <div class="textblock"><code>#include &quot;<a class="el" href="wrapper_8hpp_source.html">wrapper.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen/codegen_naming.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="pyembed_8hpp_source.html">pybind/pyembed.hpp</a>&quot;</code><br />
+<code>#include &lt;fmt/format.h&gt;</code><br />
+<code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;pybind11/embed.h&gt;</code><br />
 <code>#include &lt;pybind11/stl.h&gt;</code><br />
 <code>#include &lt;set&gt;</code><br />
@@ -126,6 +128,9 @@ Functions</h2></td></tr>
 <tr class="separator:a8a2f979314520723f3c9cbbcbea7002b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4d308338965a84736fa0216a58822079"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a4d308338965a84736fa0216a58822079">nmodl::pybind_wrappers::call_analytic_diff</a> (const std::vector&lt; std::string &gt; &amp;expressions, const std::set&lt; std::string &gt; &amp;used_names_in_block)</td></tr>
 <tr class="separator:a4d308338965a84736fa0216a58822079"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15358bde66a78fe8f2076a8747d02330"><td class="memItemLeft" align="right" valign="top">std::tuple&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a15358bde66a78fe8f2076a8747d02330">nmodl::pybind_wrappers::call_diff2c</a> (const std::string &amp;expression, const std::pair&lt; std::string, std::optional&lt; int &gt;&gt; &amp;variable, const std::unordered_set&lt; std::string &gt; &amp;indexed_vars={})</td></tr>
+<tr class="memdesc:a15358bde66a78fe8f2076a8747d02330"><td class="mdescLeft">&#160;</td><td class="mdescRight">Differentiates an expression with respect to a variable.  <a href="namespacenmodl_1_1pybind__wrappers.html#a15358bde66a78fe8f2076a8747d02330">More...</a><br /></td></tr>
+<tr class="separator:a15358bde66a78fe8f2076a8747d02330"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27c3c1c878a8460a679efb3356ac29f7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a27c3c1c878a8460a679efb3356ac29f7">nmodl::pybind_wrappers::initialize_interpreter_func</a> ()</td></tr>
 <tr class="separator:a27c3c1c878a8460a679efb3356ac29f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48d905174e33fd0f0f6e85735fed432f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1pybind__wrappers.html#a48d905174e33fd0f0f6e85735fed432f">nmodl::pybind_wrappers::finalize_interpreter_func</a> ()</td></tr>

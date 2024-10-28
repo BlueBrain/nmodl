@@ -23,6 +23,7 @@ var namespacenmodl_1_1ast =
     [ "ConstantStatement", "classnmodl_1_1ast_1_1_constant_statement.html", "classnmodl_1_1ast_1_1_constant_statement" ],
     [ "ConstantVar", "classnmodl_1_1ast_1_1_constant_var.html", "classnmodl_1_1ast_1_1_constant_var" ],
     [ "ConstructorBlock", "classnmodl_1_1ast_1_1_constructor_block.html", "classnmodl_1_1ast_1_1_constructor_block" ],
+    [ "CvodeBlock", "classnmodl_1_1ast_1_1_cvode_block.html", "classnmodl_1_1ast_1_1_cvode_block" ],
     [ "Define", "classnmodl_1_1ast_1_1_define.html", "classnmodl_1_1ast_1_1_define" ],
     [ "DerivativeBlock", "classnmodl_1_1ast_1_1_derivative_block.html", "classnmodl_1_1ast_1_1_derivative_block" ],
     [ "DerivimplicitCallback", "classnmodl_1_1ast_1_1_derivimplicit_callback.html", "classnmodl_1_1ast_1_1_derivimplicit_callback" ],

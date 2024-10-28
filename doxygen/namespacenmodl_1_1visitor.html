@@ -130,6 +130,11 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_create_longitudinal_diffusion_blocks.html">CreateLongitudinalDiffusionBlocks</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_cvode_helper_visitor.html">CvodeHelperVisitor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_cvode_visitor.html">CvodeVisitor</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classnmodl_1_1visitor_1_1_visitor.html" title="Abstract base class for all visitors implementation.">Visitor</a> used for generating the necessary AST nodes for CVODE.  <a href="classnmodl_1_1visitor_1_1_cvode_visitor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html">DefUseAnalyzeVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor to return Def-Use chain for a given variable in the block/node  <a href="classnmodl_1_1visitor_1_1_def_use_analyze_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,6 +192,8 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html">NmodlPrintVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for printing AST back to NMODL  <a href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_non_stiff_visitor.html">NonStiffVisitor</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html">PerfVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for measuring performance related information  <a href="classnmodl_1_1visitor_1_1_perf_visitor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +210,8 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_steadystate_visitor.html">SteadystateVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for STEADYSTATE solve statements  <a href="classnmodl_1_1visitor_1_1_steadystate_visitor.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_stiff_visitor.html">StiffVisitor</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html">SympyConductanceVisitor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Visitor for generating CONDUCTANCE statements for ions  <a href="classnmodl_1_1visitor_1_1_sympy_conductance_visitor.html#details">More...</a><br /></td></tr>
@@ -279,6 +288,19 @@ Functions</h2></td></tr>
 <tr class="memitem:a7b08d91645042b3be9ad57d18fe5af74"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a7b08d91645042b3be9ad57d18fe5af74">compute</a> (double lhs, <a class="el" href="group__ast__prop.html#ga0296e9888cfe8fbbdfefcd752bba3ef0">ast::BinaryOp</a> op, double rhs)</td></tr>
 <tr class="memdesc:a7b08d91645042b3be9ad57d18fe5af74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate binary operation TODO : add support for other binary operators like ^ (pow)  <a href="namespacenmodl_1_1visitor.html#a7b08d91645042b3be9ad57d18fe5af74">More...</a><br /></td></tr>
 <tr class="separator:a7b08d91645042b3be9ad57d18fe5af74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1f7e592133e73835be3070bf00aa837"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#ad1f7e592133e73835be3070bf00aa837">get_index</a> (const <a class="el" href="classnmodl_1_1ast_1_1_indexed_name.html">ast::IndexedName</a> &amp;node)</td></tr>
+<tr class="separator:ad1f7e592133e73835be3070bf00aa837"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9677053a52d21f598a95da7ea3db5f70"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a9677053a52d21f598a95da7ea3db5f70">remove_conserve_statements</a> (<a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;node)</td></tr>
+<tr class="separator:a9677053a52d21f598a95da7ea3db5f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662e977f9442f04da82eb1e55d2ea09c"><td class="memItemLeft" align="right" valign="top">static std::pair&lt; std::string, std::optional&lt; int &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a662e977f9442f04da82eb1e55d2ea09c">parse_independent_var</a> (std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">ast::Identifier</a> &gt; node)</td></tr>
+<tr class="separator:a662e977f9442f04da82eb1e55d2ea09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af625ec3419d8ca560fc2ae36b08736db"><td class="memItemLeft" align="right" valign="top">static std::unordered_set&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#af625ec3419d8ca560fc2ae36b08736db">get_indexed_variables</a> (const <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &amp;node, const std::string &amp;ignored_name)</td></tr>
+<tr class="memdesc:af625ec3419d8ca560fc2ae36b08736db"><td class="mdescLeft">&#160;</td><td class="mdescRight">set of all indexed variables not equal to <code>ignored_name</code>  <a href="namespacenmodl_1_1visitor.html#af625ec3419d8ca560fc2ae36b08736db">More...</a><br /></td></tr>
+<tr class="separator:af625ec3419d8ca560fc2ae36b08736db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa39defc21f5166e0de87cd34f589ec82"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#aa39defc21f5166e0de87cd34f589ec82">cvode_set_lhs</a> (<a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html">ast::BinaryExpression</a> &amp;node)</td></tr>
+<tr class="separator:aa39defc21f5166e0de87cd34f589ec82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ee19784fcc5c2a913fdd5fdf887c32b"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_derivative_block.html">ast::DerivativeBlock</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a4ee19784fcc5c2a913fdd5fdf887c32b">get_derivative_block</a> (<a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;node)</td></tr>
+<tr class="separator:a4ee19784fcc5c2a913fdd5fdf887c32b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e424f6fd3fed3f1c0616e1bb84defea"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1visitor.html#a0e424f6fd3fed3f1c0616e1bb84defea">to_string</a> (<a class="el" href="namespacenmodl_1_1visitor.html#a68c860c43f4bea4e1af16c016d2959f9">DUState</a> state)</td></tr>
 <tr class="memdesc:a0e424f6fd3fed3f1c0616e1bb84defea"><td class="mdescLeft">&#160;</td><td class="mdescRight">DUState to string conversion for pretty-printing.  <a href="namespacenmodl_1_1visitor.html#a0e424f6fd3fed3f1c0616e1bb84defea">More...</a><br /></td></tr>
 <tr class="separator:a0e424f6fd3fed3f1c0616e1bb84defea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -867,6 +889,62 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="aa39defc21f5166e0de87cd34f589ec82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa39defc21f5166e0de87cd34f589ec82">&#9670;&nbsp;</a></span>cvode_set_lhs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string nmodl::visitor::cvode_set_lhs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html">ast::BinaryExpression</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00071">71</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4ee19784fcc5c2a913fdd5fdf887c32b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ee19784fcc5c2a913fdd5fdf887c32b">&#9670;&nbsp;</a></span>get_derivative_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt;<a class="el" href="classnmodl_1_1ast_1_1_derivative_block.html">ast::DerivativeBlock</a>&gt; nmodl::visitor::get_derivative_block </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_program.html">ast::Program</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00176">176</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aaaeeb47344f97f2ba49f4d17c19b1a58"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaaeeb47344f97f2ba49f4d17c19b1a58">&#9670;&nbsp;</a></span>get_global_vars()</h2>
 
@@ -886,6 +964,74 @@ Functions</h2></td></tr>
 <p>Return set of strings with the names of all global variables. </p>
 
 <p class="definition">Definition at line <a class="el" href="visitor__utils_8cpp_source.html#l00171">171</a> of file <a class="el" href="visitor__utils_8cpp_source.html">visitor_utils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad1f7e592133e73835be3070bf00aa837"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1f7e592133e73835be3070bf00aa837">&#9670;&nbsp;</a></span>get_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int nmodl::visitor::get_index </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_indexed_name.html">ast::IndexedName</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00023">23</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="af625ec3419d8ca560fc2ae36b08736db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af625ec3419d8ca560fc2ae36b08736db">&#9670;&nbsp;</a></span>get_indexed_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unordered_set&lt;std::string&gt; nmodl::visitor::get_indexed_variables </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_expression.html">ast::Expression</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>ignored_name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>set of all indexed variables not equal to <code>ignored_name</code> </p>
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00049">49</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -1142,6 +1288,62 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="defuse__analyze__visitor_8cpp_source.html#l00052">52</a> of file <a class="el" href="defuse__analyze__visitor_8cpp_source.html">defuse_analyze_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a662e977f9442f04da82eb1e55d2ea09c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a662e977f9442f04da82eb1e55d2ea09c">&#9670;&nbsp;</a></span>parse_independent_var()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::pair&lt;std::string, std::optional&lt;int&gt; &gt; nmodl::visitor::parse_independent_var </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classnmodl_1_1ast_1_1_identifier.html">ast::Identifier</a> &gt;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00038">38</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9677053a52d21f598a95da7ea3db5f70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9677053a52d21f598a95da7ea3db5f70">&#9670;&nbsp;</a></span>remove_conserve_statements()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void nmodl::visitor::remove_conserve_statements </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classnmodl_1_1ast_1_1_statement_block.html">ast::StatementBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="cvode__visitor_8cpp_source.html#l00027">27</a> of file <a class="el" href="cvode__visitor_8cpp_source.html">cvode_visitor.cpp</a>.</p>
 
 </div>
 </div>

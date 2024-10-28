@@ -22,6 +22,7 @@ var group__ast__vec__type =
     [ "ConstantStatementVector", "group__ast__vec__type.html#gaca71ea378f67c58ebf46669a222be576", null ],
     [ "ConstantVarVector", "group__ast__vec__type.html#ga21589e2ce557036bdf8342d8f351d307", null ],
     [ "ConstructorBlockVector", "group__ast__vec__type.html#gad96b680285df25b483e2c1dfbe6f9387", null ],
+    [ "CvodeBlockVector", "group__ast__vec__type.html#ga5c0671718dea1bfe63cdf5fe92a2c699", null ],
     [ "DefineVector", "group__ast__vec__type.html#ga3b42311790865c9f4ed1cd963b36fc59", null ],
     [ "DerivativeBlockVector", "group__ast__vec__type.html#ga97a92558683a3e96938381b6867fb68e", null ],
     [ "DerivimplicitCallbackVector", "group__ast__vec__type.html#gae61adf9ec92b26e3a88af2b70de5bda2", null ],

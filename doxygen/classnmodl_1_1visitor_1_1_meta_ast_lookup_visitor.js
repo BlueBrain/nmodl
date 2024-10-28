@@ -34,6 +34,7 @@ var classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor =
     [ "visit_constant_statement", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#af916850f9b44c257468c7dcaf960d5b0", null ],
     [ "visit_constant_var", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#ab2a0854ec26cc75c42180ecc20f3c16a", null ],
     [ "visit_constructor_block", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#ad402586b4302c96819ac536261251205", null ],
+    [ "visit_cvode_block", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a55eeab957da157bd87564ddef7124d99", null ],
     [ "visit_define", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#a3f95ed2b5c4dbdd3f63afc0f23e6157d", null ],
     [ "visit_derivative_block", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#aa3139b96c280dfd5a2eec0dd862672b1", null ],
     [ "visit_derivimplicit_callback", "classnmodl_1_1visitor_1_1_meta_ast_lookup_visitor.html#ae59128a40e4f9217c54637f3ecea0a4f", null ],

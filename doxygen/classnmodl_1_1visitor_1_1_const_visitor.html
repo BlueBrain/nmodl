@@ -105,7 +105,7 @@ $(document).ready(function(){initNavTree('classnmodl_1_1visitor_1_1_const_visito
 <p>This class defines interface for all concrete constant visitors implementation. Note that this class only provides interface that could be implemented by concrete visitors like ast::ConstAstVisitor.</p>
 <dl class="section see"><dt>See also</dt><dd>ast::ConstAstVisitor </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00300">300</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="visitor_8hpp_source.html#l00302">302</a> of file <a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>.</p>
 </div>
 <p><code>#include &lt;<a class="el" href="visitor_8hpp_source.html">visitor.hpp</a>&gt;</code></p>
 <div class="dynheader">
@@ -489,6 +489,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a823773ac45f20e28d2400f7b16f3adca"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a823773ac45f20e28d2400f7b16f3adca">visit_eigen_linear_solver_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html">ast::EigenLinearSolverBlock</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a823773ac45f20e28d2400f7b16f3adca"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_eigen_linear_solver_block.html" title="Represent linear solver solution block based on Eigen.">ast::EigenLinearSolverBlock</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#a823773ac45f20e28d2400f7b16f3adca">More...</a><br /></td></tr>
 <tr class="separator:a823773ac45f20e28d2400f7b16f3adca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae897be6a9af9f38b3f6ad3ee00aedce9"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#ae897be6a9af9f38b3f6ad3ee00aedce9">visit_cvode_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &amp;node)=0</td></tr>
+<tr class="memdesc:ae897be6a9af9f38b3f6ad3ee00aedce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html" title="Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks.">ast::CvodeBlock</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#ae897be6a9af9f38b3f6ad3ee00aedce9">More...</a><br /></td></tr>
+<tr class="separator:ae897be6a9af9f38b3f6ad3ee00aedce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71ecb1e871b002f193a95f0ec17e5ff2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a71ecb1e871b002f193a95f0ec17e5ff2">visit_longitudinal_diffusion_block</a> (const <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html">ast::LongitudinalDiffusionBlock</a> &amp;node)=0</td></tr>
 <tr class="memdesc:a71ecb1e871b002f193a95f0ec17e5ff2"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_longitudinal_diffusion_block.html" title="Extracts information required for LONGITUDINAL_DIFFUSION for each KINETIC block.">ast::LongitudinalDiffusionBlock</a>  <a href="classnmodl_1_1visitor_1_1_const_visitor.html#a71ecb1e871b002f193a95f0ec17e5ff2">More...</a><br /></td></tr>
 <tr class="separator:a71ecb1e871b002f193a95f0ec17e5ff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1189,6 +1192,36 @@ Public Member Functions</h2></td></tr>
 <p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_constructor_block.html" title="Represents a CONSTRUCTOR block in the NMODL.">ast::ConstructorBlock</a> </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a413e9ad8558ffbb49791b289fcd7164b">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_perf_visitor.html#a44fb2a26355e8eec7d888e46779adc5c">nmodl::visitor::PerfVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#ac24e3e2359a0f5f110c706918400e300">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#abb66053202d6d818c44bf35c5d1baeb9">nmodl::visitor::JSONVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#af34b139b9b0b1b0189b0a34bf7f49581">nmodl::visitor::NmodlPrintVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a947fa9e5e2a9a8c30af9f64825dd3116">nmodl::codegen::CodegenHelperVisitor</a>.</p>
+
+</div>
+</div>
+<a id="ae897be6a9af9f38b3f6ad3ee00aedce9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae897be6a9af9f38b3f6ad3ee00aedce9">&#9670;&nbsp;</a></span>visit_cvode_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void nmodl::visitor::ConstVisitor::visit_cvode_block </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html">ast::CvodeBlock</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_cvode_block.html" title="Represents a block used for variable timestep integration (CVODE) of DERIVATIVE blocks.">ast::CvodeBlock</a> </p>
+
+<p>Implemented in <a class="el" href="classnmodl_1_1visitor_1_1test_1_1_check_parent_visitor.html#a8b8dd5098a454589598146d6822da7e4">nmodl::visitor::test::CheckParentVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_const_ast_visitor.html#a8b8e6acd8a95b9d156e4972a3aa4d8e8">nmodl::visitor::ConstAstVisitor</a>, <a class="el" href="classnmodl_1_1visitor_1_1_j_s_o_n_visitor.html#a3961174e551b6684620338e5f2be0063">nmodl::visitor::JSONVisitor</a>, and <a class="el" href="classnmodl_1_1visitor_1_1_nmodl_print_visitor.html#ad33d355db35e5bc0940e16a19e4544fe">nmodl::visitor::NmodlPrintVisitor</a>.</p>
 
 </div>
 </div>
