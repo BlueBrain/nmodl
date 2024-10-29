@@ -51,6 +51,6 @@ def test_state():
 
 
 if __name__ == "__main__":
-    # test_voltage_access()
-    # test_breakpoint()
+    test_voltage_access()
+    test_breakpoint()
     test_state()
