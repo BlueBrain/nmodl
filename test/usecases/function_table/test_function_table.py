@@ -115,5 +115,40 @@ def test_function_table():
         check_2d(make_instance, mech_name)
 
 
+def check_use_table(make_inst, mech_name):
+    s = h.Section()
+    s.insert("function_table")
+
+    inst = make_inst(s)
+    _, eval_table = make_callbacks(inst, "tau2", mech_name)
+    eval_use_table = make_callable(inst, "use_tau2", mech_name)
+
+    if inst is None:
+        setdata = getattr(h, f"setdata_{mech_name}")
+        setdata(s(0.5))
+
+    vv, xx = 0.33, 2.24
+
+    expected = eval_table(vv, xx)
+    actual = eval_use_table(vv, xx)
+    np.testing.assert_approx_equal(actual, expected, significant=11)
+
+
 if __name__ == "__main__":
-    test_function_table()
+    variations = [
+        (lambda s: None, "function_table"),
+        (lambda s: s(0.5).function_table, "function_table"),
+        (lambda s: h.point_function_table(s(0.5)), "point_function_table"),
+        (lambda s: h.art_function_table(s(0.5)), "art_function_table"),
+    ]
+
+    for make_instance, mech_name in variations:
+        check_constant_1d(make_instance, mech_name)
+        check_constant_2d(make_instance, mech_name)
+
+        check_1d(make_instance, mech_name)
+        check_2d(make_instance, mech_name)
+
+        # Must run after `check_2d`, because it assumes the table
+        # has been initialized.
+        check_use_table(make_instance, mech_name)

@@ -118,6 +118,21 @@ std::string CodegenCoreneuronCppVisitor::process_verbatim_token(const std::strin
     return get_variable_name(token, use_instance);
 }
 
+void CodegenCoreneuronCppVisitor::visit_verbatim(const Verbatim& node) {
+    const auto& text = node.get_statement()->eval();
+    printer->add_line("// VERBATIM");
+    const auto& result = process_verbatim_text(text);
+
+    const auto& statements = stringutils::split_string(result, '\n');
+    for (const auto& statement: statements) {
+        const auto& trimed_stmt = stringutils::trim_newline(statement);
+        if (trimed_stmt.find_first_not_of(' ') != std::string::npos) {
+            printer->add_line(trimed_stmt);
+        }
+    }
+    printer->add_line("// ENDVERBATIM");
+}
+
 
 /**
  * \details This can be override in the backend. For example, parameters can be constant
@@ -344,28 +359,6 @@ void CodegenCoreneuronCppVisitor::print_abort_routine() const {
 /****************************************************************************************/
 /*                         Printing routines for code generation                        */
 /****************************************************************************************/
-
-
-void CodegenCoreneuronCppVisitor::print_top_verbatim_blocks() {
-    if (info.top_verbatim_blocks.empty()) {
-        return;
-    }
-    print_namespace_stop();
-
-    printer->add_newline(2);
-    print_using_namespace();
-
-    printing_top_verbatim_blocks = true;
-
-    for (const auto& block: info.top_verbatim_blocks) {
-        printer->add_newline(2);
-        block->accept(*this);
-    }
-
-    printing_top_verbatim_blocks = false;
-
-    print_namespace_start();
-}
 
 
 void CodegenCoreneuronCppVisitor::print_function_prototypes() {
@@ -872,7 +865,13 @@ std::string CodegenCoreneuronCppVisitor::get_variable_name(const std::string& na
     auto i =
         std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), index_comparator);
     if (i != codegen_int_variables.end()) {
-        return int_variable_name(*i, varname, use_instance);
+        auto full_name = int_variable_name(*i, varname, use_instance);
+        auto pos = position_of_int_var(varname);
+
+        if (info.semantics[pos].name == naming::RANDOM_SEMANTIC) {
+            return "(nrnran123_State*) " + full_name;
+        }
+        return full_name;
     }
 
     // global variable
@@ -1680,7 +1679,7 @@ void CodegenCoreneuronCppVisitor::print_instance_variable_setup() {
         printer->push_block("for (int id = 0; id < nodecount; id++)");
         for (const auto& var: info.random_variables) {
             const auto& name = get_variable_name(var->get_name());
-            printer->fmt_line("nrnran123_deletestream((nrnran123_State*){});", name);
+            printer->fmt_line("nrnran123_deletestream({});", name);
         }
         printer->pop_block();
     }

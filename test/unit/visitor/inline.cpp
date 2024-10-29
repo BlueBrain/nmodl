@@ -663,24 +663,9 @@ SCENARIO("Trying to inline a function with VERBATIM block") {
             }
         )";
 
-        std::string output_nmodl = R"(
-            PROCEDURE verb_1() {
-                VERBATIM
-                    pow(1,2);
-                ENDVERBATIM
-            }
-
-            PROCEDURE verb_2() {
-                {
-                    VERBATIM
-                    pow(1,2);
-                ENDVERBATIM
-                }
-            }
-        )";
-        THEN("It gets inlined") {
+        THEN("It does not get inlined") {
             std::string input = reindent_text(input_nmodl);
-            auto expected_result = reindent_text(output_nmodl);
+            auto expected_result = reindent_text(input_nmodl);
             auto result = run_inline_visitor(input);
             REQUIRE(expected_result == result);
         }

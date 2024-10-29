@@ -123,7 +123,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      */
     std::string process_verbatim_token(const std::string& token);
 
-
     /**
      * Check if variable is qualified as constant
      * \param name The name of variable
@@ -326,12 +325,6 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
 
     /**
-     * Print top level (global scope) verbatim blocks
-     */
-    void print_top_verbatim_blocks();
-
-
-    /**
      * Print function and procedures prototype declaration
      */
     void print_function_prototypes() override;
@@ -425,7 +418,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
      * \param text The verbatim code to be processed
      * \return     The code with all variables renamed as needed
      */
-    std::string process_verbatim_text(std::string const& text) override;
+    std::string process_verbatim_text(std::string const& text);
 
 
     /**
@@ -964,6 +957,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
 
     void visit_derivimplicit_callback(const ast::DerivimplicitCallback& node) override;
     void visit_for_netcon(const ast::ForNetcon& node) override;
+    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_watch_statement(const ast::WatchStatement& node) override;
 
     ParamVector functor_params() override;

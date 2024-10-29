@@ -48,8 +48,12 @@ def test_state():
     # Effectively, the timing when states are computed results in backward Euler.
     check_ode("state_ode", lambda v, c: (1.0 + c * h.dt) * v)
 
-
-if __name__ == "__main__":
     test_voltage_access()
     test_breakpoint()
+    check_ode("state_ode", lambda v, c: (1.0 + c * h.dt) * v)
+
+
+if __name__ == "__main__":
+    # test_voltage_access()
+    # test_breakpoint()
     test_state()

@@ -169,6 +169,10 @@ struct ShadowUseStatement {
     std::string rhs;
 };
 
+inline std::string get_name(ast::Ast const* sym) {
+    return sym->get_node_name();
+}
+
 inline std::string get_name(const std::shared_ptr<symtab::Symbol>& sym) {
     return sym->get_name();
 }
@@ -1034,14 +1038,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual std::string nrn_thread_internal_arguments() = 0;
 
     /**
-     * Process a verbatim block for possible variable renaming
-     * \param text The verbatim code to be processed
-     * \return     The code with all variables renamed as needed
-     */
-    virtual std::string process_verbatim_text(std::string const& text) = 0;
-
-
-    /**
      * Arguments for register_mech or point_register_mech function
      */
     virtual std::string register_mechanism_arguments() const = 0;
@@ -1455,6 +1451,11 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
      */
     void print_nmodl_constants();
 
+    /**
+     * Print top level (global scope) verbatim blocks
+     */
+    void print_top_verbatim_blocks();
+
 
     /****************************************************************************************/
     /*                            Overloaded visitor routines                               */
@@ -1480,7 +1481,6 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     void visit_unary_operator(const ast::UnaryOperator& node) override;
     void visit_unit(const ast::Unit& node) override;
     void visit_var_name(const ast::VarName& node) override;
-    void visit_verbatim(const ast::Verbatim& node) override;
     void visit_while_statement(const ast::WhileStatement& node) override;
     void visit_update_dt(const ast::UpdateDt& node) override;
     void visit_protect_statement(const ast::ProtectStatement& node) override;

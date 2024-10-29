@@ -16,10 +16,12 @@
 #include <stdexcept>
 
 #include "ast/all.hpp"
+#include "ast/procedure_block.hpp"
 #include "codegen/codegen_cpp_visitor.hpp"
 #include "codegen/codegen_utils.hpp"
 #include "codegen_naming.hpp"
 #include "config/config.h"
+#include "parser/c11_driver.hpp"
 #include "solver/solver.hpp"
 #include "utils/string_utils.hpp"
 #include "visitors/rename_visitor.hpp"
@@ -610,6 +612,19 @@ const CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::external_method_pa
 }
 
 
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internalthreadargs_parameters() {
+    return internal_method_parameters();
+}
+
+CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::threadargs_parameters() {
+    return {{"", "Memb_list*", "", "_ml"},
+            {"", "size_t", "", "_iml"},
+            {"", "Datum*", "", "_ppvar"},
+            {"", "Datum*", "", "_thread"},
+            {"", "double*", "", "_globals"},
+            {"", "NrnThread*", "", "_nt"}};
+}
+
 /// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
     return {};
@@ -631,9 +646,164 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
     return {params, {}};
 }
 
-/// TODO: Write for NEURON
-std::string CodegenNeuronCppVisitor::process_verbatim_text(std::string const& text) {
-    return {};
+
+std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(
+    const symtab::SymbolTable& symtab) {
+    if (symtab.global_scope()) {
+        return {};
+    }
+
+    auto local_variables = symtab.get_variables(NmodlType::local_var);
+    auto parent_symtab = symtab.get_parent_table();
+    if (parent_symtab == nullptr) {
+        throw std::runtime_error(
+            "Internal NMODL error: non top-level symbol table doesn't have a parent.");
+    }
+
+    auto variable_names = get_nonglobal_local_variable_names(*parent_symtab);
+
+    for (const auto& symbol: local_variables) {
+        auto status = symbol->get_status();
+        bool is_renamed = (status & symtab::syminfo::Status::renamed) !=
+                          symtab::syminfo::Status::empty;
+        auto current_name = symbol->get_name();
+        auto mod_name = is_renamed ? symbol->get_original_name() : current_name;
+
+        variable_names[mod_name] = current_name;
+    }
+
+    return variable_names;
+}
+
+
+std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
+    const ast::Verbatim& node,
+    const std::string& verbatim) {
+    // Note, the logic for reducing the number of macros printed, aims to
+    // improve legibility of the generated code by reducing number of lines of
+    // code. It would be correct to print all macros, because that's
+    // essentially what NOCMODL does. Therefore, the logic isn't sharp (and
+    // doesn't have to be).
+
+    std::vector<std::string> macros_defined;
+    auto print_macro = [this, &verbatim, &macros_defined](const std::string& macro_name,
+                                                          const std::string& macro_value) {
+        if (verbatim.find(macro_name) != std::string::npos) {
+            printer->fmt_line("#define {} {}", macro_name, macro_value);
+            macros_defined.push_back(macro_name);
+        }
+    };
+
+    printer->add_line("// Setup for VERBATIM");
+    for (const auto& var: codegen_float_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var: codegen_int_variables) {
+        auto name = get_name(var);
+        std::string macro_value = get_variable_name(name);
+        print_macro(name, macro_value);
+        if (verbatim.find("_p_" + name) != std::string::npos) {
+            print_macro("_p_" + name, get_pointer_name(name));
+        }
+    }
+
+    for (const auto& var: codegen_global_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& var: codegen_thread_variables) {
+        auto name = get_name(var);
+        print_macro(name, get_variable_name(name));
+    }
+
+    for (const auto& func: info.functions) {
+        auto name = get_name(func);
+        print_macro(name, method_name(name));
+        print_macro(fmt::format("_l{}", name), fmt::format("ret_{}", name));
+    }
+
+    for (const auto& proc: info.procedures) {
+        auto name = get_name(proc);
+        print_macro(name, method_name(name));
+    }
+
+
+    auto symtab = node.get_parent()->get_symbol_table();
+    auto locals = get_nonglobal_local_variable_names(*symtab);
+    for (const auto& [mod_name, current_name]: locals) {
+        print_macro(fmt::format("_l{}", mod_name), get_variable_name(current_name));
+    }
+
+    print_macro("t", "nt->_t");
+    print_macro("_nt", "nt");
+    print_macro("_tqitem", "tqitem");
+
+    auto print_args_macro = [this, print_macro](const std::string& macro_basename,
+                                                const ParamVector& params) {
+        print_macro("_" + macro_basename + "_", get_arg_str(params));
+        print_macro("_" + macro_basename + "comma_", get_arg_str(params) + ",");
+        print_macro("_" + macro_basename + "proto_", get_parameter_str(params));
+        print_macro("_" + macro_basename + "protocomma_", get_parameter_str(params) + ",");
+    };
+
+    print_args_macro("internalthreadargs", internalthreadargs_parameters());
+    print_args_macro("threadargs", threadargs_parameters());
+
+    return macros_defined;
+}
+
+void CodegenNeuronCppVisitor::print_verbatim_cleanup(
+    const std::vector<std::string>& macros_defined) {
+    for (const auto& macro: macros_defined) {
+        printer->fmt_line("#undef {}", macro);
+    }
+    printer->add_line("// End of cleanup for VERBATIM");
+}
+
+std::string CodegenNeuronCppVisitor::process_verbatim_text(const std::string& verbatim) {
+    parser::CDriver driver;
+    driver.scan_string(verbatim);
+    auto tokens = driver.all_tokens();
+    std::string result;
+    for (size_t i = 0; i < tokens.size(); i++) {
+        auto token = tokens[i];
+
+        // check if we have function call in the verbatim block where
+        // function is defined in the same mod file
+        if (program_symtab->is_method_defined(token) && tokens[i + 1] == "(") {
+            result += token + "(";
+            if (tokens[i + 2] == "_threadargs_") {
+                result += "_internalthreadargs_";
+            } else if (tokens[i + 2] == "_threadargscomma_") {
+                result += "_internalthreadargscomma_";
+            } else {
+                result += tokens[i + 2];
+            }
+
+            i += 2;
+        } else {
+            result += token;
+        }
+    }
+    return result;
+}
+
+
+void CodegenNeuronCppVisitor::visit_verbatim(const Verbatim& node) {
+    const auto& verbatim_code = node.get_statement()->eval();
+    auto massaged_verbatim = process_verbatim_text(verbatim_code);
+
+    auto macros_defined = print_verbatim_setup(node, massaged_verbatim);
+    printer->add_line("// Begin VERBATIM");
+    const auto& lines = stringutils::split_string(massaged_verbatim, '\n');
+    for (const auto& line: lines) {
+        printer->add_line(line);
+    }
+    printer->add_line("// End VERBATIM");
+    print_verbatim_cleanup(macros_defined);
 }
 
 
@@ -728,7 +898,7 @@ std::string CodegenNeuronCppVisitor::int_variable_name(const IndexVariableInfo& 
     auto position = position_of_int_var(name);
 
     if (info.semantics[position].name == naming::RANDOM_SEMANTIC) {
-        return fmt::format("_ppvar[{}].literal_value<void*>()", position);
+        return fmt::format("(nrnran123_State*) _ppvar[{}].literal_value<void*>()", position);
     }
 
     if (info.semantics[position].name == naming::FOR_NETCON_SEMANTIC) {
@@ -790,6 +960,20 @@ std::string CodegenNeuronCppVisitor::global_variable_name(const SymbolType& symb
     } else {
         return fmt::format("{}.{}", global_struct_instance(), symbol->get_name());
     }
+}
+
+
+std::string CodegenNeuronCppVisitor::get_pointer_name(const std::string& name) const {
+    auto name_comparator = [&name](const auto& sym) { return name == get_name(sym); };
+
+    auto var =
+        std::find_if(codegen_int_variables.begin(), codegen_int_variables.end(), name_comparator);
+
+    if (var == codegen_int_variables.end()) {
+        throw std::runtime_error("Only integer variables have a 'pointer name'.");
+    }
+    auto position = position_of_int_var(name);
+    return fmt::format("_ppvar[{}].literal_value<void*>()", position);
 }
 
 
@@ -1587,10 +1771,14 @@ void CodegenNeuronCppVisitor::print_mechanism_range_var_structure(bool print_ini
     }
     for (auto& var: codegen_int_variables) {
         const auto& name = var.symbol->get_name();
+        auto position = position_of_int_var(name);
+
         if (name == naming::POINT_PROCESS_VARIABLE) {
             continue;
         } else if (var.is_index || var.is_integer) {
             // In NEURON we don't create caches for `int*`. Hence, do nothing.
+        } else if (info.semantics[position].name == naming::POINTER_SEMANTIC) {
+            // we don't need these either.
         } else {
             auto qualifier = var.is_constant ? "const " : "";
             auto type = var.is_vdata ? "void*" : default_float_data_type();
@@ -1642,10 +1830,13 @@ void CodegenNeuronCppVisitor::print_make_instance() const {
     for (size_t i = 0; i < codegen_int_variables_size; ++i) {
         const auto& var = codegen_int_variables[i];
         auto name = var.symbol->get_name();
-        auto const variable = [&var, i]() -> std::string {
+        auto sem = info.semantics[i].name;
+        auto const variable = [&var, &sem, i]() -> std::string {
             if (var.is_index || var.is_integer) {
                 return "";
             } else if (var.is_vdata) {
+                return "";
+            } else if (sem == naming::POINTER_SEMANTIC) {
                 return "";
             } else {
                 return fmt::format("_lmc->template dptr_field_ptr<{}>()", i);
@@ -2052,8 +2243,9 @@ void CodegenNeuronCppVisitor::print_nrn_alloc() {
 
     if (!info.random_variables.empty()) {
         for (const auto& rv: info.random_variables) {
-            printer->fmt_line("{} = nrnran123_newstream();",
-                              get_variable_name(get_name(rv), false));
+            auto position = position_of_int_var(get_name(rv));
+            printer->fmt_line("_ppvar[{}].literal_value<void*>() = nrnran123_newstream();",
+                              position);
         }
         printer->fmt_line("nrn_mech_inst_destruct[mech_type] = neuron::{};",
                           method_name(naming::NRN_DESTRUCTOR_METHOD));
@@ -2483,6 +2675,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines_regular() {
     print_functors_definitions();
     print_global_variables_for_hoc();
     print_thread_memory_callbacks();
+    print_top_verbatim_blocks();
     print_function_definitions();
     print_compute_functions();  // only nrn_cur and nrn_state
     print_nrn_constructor();
@@ -2498,6 +2691,7 @@ void CodegenNeuronCppVisitor::print_codegen_routines_nothing() {
     print_namespace_start();
     print_function_prototypes();
     print_global_variables_for_hoc();
+    print_top_verbatim_blocks();
     print_function_definitions();
     print_mechanism_register();
     print_namespace_stop();
