@@ -784,17 +784,25 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
      */
     void print_cvode_definitions();
 
-    /* print the CVODE function returning the # of ODEs to solve */
+    /**
+     * Print the CVODE function returning the # of ODEs to solve
+     */
     void print_cvode_count();
 
-    /* print the CVODE function for setup of tolerances */
+    /**
+     * Print the CVODE function for setup of tolerances
+     */
     void print_cvode_tolerances();
 
-    /* print the CVODE update function ``name`` from ``block`` */
+    /**
+     * Print the CVODE update function \c name from \c block
+     */
     void print_cvode_update(const std::string& name, const ast::StatementBlock& block);
 
-    /* print the CVODE setup function ``setup_name`` that calls the CVODE update function
-     * ``update_name`` */
+    /**
+     * Print the CVODE setup function \c setup_name that calls the CVODE update function
+     * \c update_name
+     */
     void print_cvode_setup(const std::string& setup_name, const std::string& update_name);
 
 
