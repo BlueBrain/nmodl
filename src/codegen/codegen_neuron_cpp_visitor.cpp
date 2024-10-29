@@ -76,6 +76,12 @@ int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const 
 }
 
 
+bool CodegenNeuronCppVisitor::parallel_iteration_condition(BlockType type,
+                                                           const ast::Block* block) {
+    return info.thread_safe && CodegenCppVisitor::parallel_iteration_condition(type, block);
+}
+
+
 /****************************************************************************************/
 /*                                Backend specific routines                             */
 /****************************************************************************************/
