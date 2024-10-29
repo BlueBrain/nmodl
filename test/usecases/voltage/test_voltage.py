@@ -36,7 +36,6 @@ def check_ode(mech_name, step):
     for _ in range(4):
         v_expected = step(s(0.5).v, c)
         h.fadvance()
-        # print(f"{s(0.5).v = }, {v_expected}")
         np.testing.assert_approx_equal(s(0.5).v, v_expected, significant=10)
 
 
