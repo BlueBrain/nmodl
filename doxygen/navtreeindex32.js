@@ -1,6 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"rename__visitor_8cpp.html":[3,0,1,11,40],
 "rename__visitor_8cpp_source.html":[3,0,1,11,40],
 "rename__visitor_8hpp.html":[3,0,1,11,41],
 "rename__visitor_8hpp_source.html":[3,0,1,11,41],
@@ -249,5 +248,6 @@ var NAVTREEINDEX32 =
 "structnmodl_1_1codegen_1_1_ion.html#a2bb2210d8b41a8fa36ea7402b60c559a":[0,1,1,4,7],
 "structnmodl_1_1codegen_1_1_ion.html#a2d97aad3f5cee3bbc44dbe3c86486c78":[0,1,1,4,4],
 "structnmodl_1_1codegen_1_1_ion.html#a31867a7ec328f7333c16c5049f330ed1":[0,1,1,4,6],
-"structnmodl_1_1codegen_1_1_ion.html#a5fef7a697395c4ccf380fed9a7fff241":[0,1,1,4,34]
+"structnmodl_1_1codegen_1_1_ion.html#a5fef7a697395c4ccf380fed9a7fff241":[0,1,1,4,34],
+"structnmodl_1_1codegen_1_1_ion.html#a6266f04720d983a7cd76c92156740b18":[0,1,1,4,1]
 };

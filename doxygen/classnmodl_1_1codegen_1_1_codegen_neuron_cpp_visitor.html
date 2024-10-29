@@ -672,9 +672,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a0d2e3ea31dfc23e9bb67c3418b3ef09c"><td class="memItemLeft" align="right" valign="top">std::pair&lt; <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">ParamVector</a>, <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a73d001ad3c271c56d89e09e2cebfceb3">ParamVector</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a0d2e3ea31dfc23e9bb67c3418b3ef09c">function_table_parameters</a> (const <a class="el" href="classnmodl_1_1ast_1_1_function_table_block.html">ast::FunctionTableBlock</a> &amp;) override</td></tr>
 <tr class="memdesc:a0d2e3ea31dfc23e9bb67c3418b3ef09c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Parameters of the function itself <code>"{}"</code> and <code>"table_{}"</code>.  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a0d2e3ea31dfc23e9bb67c3418b3ef09c">More...</a><br /></td></tr>
 <tr class="separator:a0d2e3ea31dfc23e9bb67c3418b3ef09c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a13af4fa40fc5b97bfcf91d199fe6a8e2"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a13af4fa40fc5b97bfcf91d199fe6a8e2">process_verbatim_text</a> (std::string const &amp;text) override</td></tr>
-<tr class="memdesc:a13af4fa40fc5b97bfcf91d199fe6a8e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Process a verbatim block for possible variable renaming.  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a13af4fa40fc5b97bfcf91d199fe6a8e2">More...</a><br /></td></tr>
-<tr class="separator:a13af4fa40fc5b97bfcf91d199fe6a8e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50026c205b223b41ffe682526735873c"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c">register_mechanism_arguments</a> () const override</td></tr>
 <tr class="memdesc:a50026c205b223b41ffe682526735873c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arguments for register_mech or point_register_mech function.  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c">More...</a><br /></td></tr>
 <tr class="separator:a50026c205b223b41ffe682526735873c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -843,6 +840,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a63c12682de4f91faa14cc743ec4def84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e20117b03f0840cc7686eb849e5ea74"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a0e20117b03f0840cc7686eb849e5ea74">print_ion_variable</a> () override</td></tr>
 <tr class="separator:a0e20117b03f0840cc7686eb849e5ea74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf1649ae221f6ee5dd2bbc4d0e160b18"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aaf1649ae221f6ee5dd2bbc4d0e160b18">visit_verbatim</a> (const <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html">ast::Verbatim</a> &amp;node) override</td></tr>
+<tr class="memdesc:aaf1649ae221f6ee5dd2bbc4d0e160b18"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block.">ast::Verbatim</a>  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aaf1649ae221f6ee5dd2bbc4d0e160b18">More...</a><br /></td></tr>
+<tr class="separator:aaf1649ae221f6ee5dd2bbc4d0e160b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403636272eebe18cf3f25759c06ec00a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a">visit_watch_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_watch_statement.html">ast::WatchStatement</a> &amp;node) override</td></tr>
 <tr class="memdesc:a403636272eebe18cf3f25759c06ec00a"><td class="mdescLeft">&#160;</td><td class="mdescRight">TODO: Edit for NEURON.  <a href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a403636272eebe18cf3f25759c06ec00a">More...</a><br /></td></tr>
 <tr class="separator:a403636272eebe18cf3f25759c06ec00a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -977,6 +977,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">breakpoint_current</a> (std::string current) const</td></tr>
 <tr class="memdesc:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for the "current" used in breakpoint block taking into account intermediate code transformations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">More...</a><br /></td></tr>
 <tr class="separator:aada5b6eeb7fd6f21a4ce2c68da1e2994 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa50f442d44647586d74e3a29d3708cd3 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa50f442d44647586d74e3a29d3708cd3">print_channel_iteration_block_parallel_hint</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type, const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *block)</td></tr>
+<tr class="memdesc:aa50f442d44647586d74e3a29d3708cd3 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print pragma annotations for channel iterations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa50f442d44647586d74e3a29d3708cd3">More...</a><br /></td></tr>
+<tr class="separator:aa50f442d44647586d74e3a29d3708cd3 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">print_global_var_struct_decl</a> ()</td></tr>
 <tr class="memdesc:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiate global var instance.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aadbceff0e1e871a3b7fb3730faf07f3e">More...</a><br /></td></tr>
 <tr class="separator:aadbceff0e1e871a3b7fb3730faf07f3e inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1061,6 +1064,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a8cefcce52cd721b3869701367f456a71 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8cefcce52cd721b3869701367f456a71">print_nmodl_constants</a> ()</td></tr>
 <tr class="memdesc:a8cefcce52cd721b3869701367f456a71 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print the nmodl constants used in backend code.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a8cefcce52cd721b3869701367f456a71">More...</a><br /></td></tr>
 <tr class="separator:a8cefcce52cd721b3869701367f456a71 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2048f207d5eafad3f1bf21d33424fc8b inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2048f207d5eafad3f1bf21d33424fc8b">print_top_verbatim_blocks</a> ()</td></tr>
+<tr class="memdesc:a2048f207d5eafad3f1bf21d33424fc8b inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print top level (global scope) verbatim blocks.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2048f207d5eafad3f1bf21d33424fc8b">More...</a><br /></td></tr>
+<tr class="separator:a2048f207d5eafad3f1bf21d33424fc8b inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae02024096ab4490b8a6215b3e59e6de0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae02024096ab4490b8a6215b3e59e6de0">visit_binary_expression</a> (const <a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html">ast::BinaryExpression</a> &amp;node) override</td></tr>
 <tr class="memdesc:ae02024096ab4490b8a6215b3e59e6de0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_binary_expression.html" title="Represents binary expression in the NMODL.">ast::BinaryExpression</a>  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ae02024096ab4490b8a6215b3e59e6de0">More...</a><br /></td></tr>
 <tr class="separator:ae02024096ab4490b8a6215b3e59e6de0 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1122,9 +1128,6 @@ Protected Member Functions</h2></td></tr>
 <tr class="separator:a20a5b2ac403015cf48bc09b6f1f26408 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f2304d508e3d9645581004c676d94ca inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a4f2304d508e3d9645581004c676d94ca">visit_var_name</a> (const <a class="el" href="classnmodl_1_1ast_1_1_var_name.html">ast::VarName</a> &amp;node) override</td></tr>
 <tr class="separator:a4f2304d508e3d9645581004c676d94ca inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad283ce438acd2faea2bbb309251890a1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad283ce438acd2faea2bbb309251890a1">visit_verbatim</a> (const <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html">ast::Verbatim</a> &amp;node) override</td></tr>
-<tr class="memdesc:ad283ce438acd2faea2bbb309251890a1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block.">ast::Verbatim</a>  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad283ce438acd2faea2bbb309251890a1">More...</a><br /></td></tr>
-<tr class="separator:ad283ce438acd2faea2bbb309251890a1 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad488bc63dac24ac7e5c29a1138172ed7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad488bc63dac24ac7e5c29a1138172ed7">visit_while_statement</a> (const <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html">ast::WhileStatement</a> &amp;node) override</td></tr>
 <tr class="memdesc:ad488bc63dac24ac7e5c29a1138172ed7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="mdescLeft">&#160;</td><td class="mdescRight">visit node of type <a class="el" href="classnmodl_1_1ast_1_1_while_statement.html" title="TODO.">ast::WhileStatement</a>  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad488bc63dac24ac7e5c29a1138172ed7">More...</a><br /></td></tr>
 <tr class="separator:ad488bc63dac24ac7e5c29a1138172ed7 inherit pro_methods_classnmodl_1_1codegen_1_1_codegen_cpp_visitor"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -4535,46 +4538,6 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="a13af4fa40fc5b97bfcf91d199fe6a8e2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a13af4fa40fc5b97bfcf91d199fe6a8e2">&#9670;&nbsp;</a></span>process_verbatim_text()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::string nmodl::codegen::CodegenNeuronCppVisitor::process_verbatim_text </td>
-          <td>(</td>
-          <td class="paramtype">std::string const &amp;&#160;</td>
-          <td class="paramname"><em>text</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Process a verbatim block for possible variable renaming. </p>
-<p>TODO: Write for NEURON.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">text</td><td>The verbatim code to be processed </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The code with all variables renamed as needed </dd></dl>
-
-<p>Implements <a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ac53419e9abc2d2f9b12acf10507e7954">nmodl::codegen::CodegenCppVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00635">635</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
 <a id="acaac1c205538693499bc4a62f7d3ab17"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acaac1c205538693499bc4a62f7d3ab17">&#9670;&nbsp;</a></span>py_function_name()</h2>
 
@@ -4867,6 +4830,38 @@ Additional Inherited Members</h2></td></tr>
 <p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a71ecb1e871b002f193a95f0ec17e5ff2">nmodl::visitor::ConstVisitor</a>.</p>
 
 <p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l02661">2661</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aaf1649ae221f6ee5dd2bbc4d0e160b18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1649ae221f6ee5dd2bbc4d0e160b18">&#9670;&nbsp;</a></span>visit_verbatim()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenNeuronCppVisitor::visit_verbatim </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html">ast::Verbatim</a> &amp;&#160;</td>
+          <td class="paramname"><em>node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>visit node of type <a class="el" href="classnmodl_1_1ast_1_1_verbatim.html" title="Represents a C code block.">ast::Verbatim</a> </p>
+
+<p>Implements <a class="el" href="classnmodl_1_1visitor_1_1_const_visitor.html#a096625c78ed685a7ee6233a13b1793a3">nmodl::visitor::ConstVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html#l00635">635</a> of file <a class="el" href="src_2codegen_2codegen__neuron__cpp__visitor_8cpp_source.html">codegen_neuron_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
