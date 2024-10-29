@@ -46,6 +46,19 @@ std::tuple<std::string, std::string> call_analytic_diff(
     const std::vector<std::string>& expressions,
     const std::set<std::string>& used_names_in_block);
 
+struct SympySpecialSymbols {
+    using set_type = std::unordered_set<std::string>;
+    set_type vars;
+    set_type indexed_vars;
+    set_type function_calls;
+    SympySpecialSymbols() = default;
+    inline SympySpecialSymbols(set_type vars, set_type indexed_vars, set_type function_calls)
+        : vars(vars)
+        , indexed_vars(indexed_vars)
+        , function_calls(function_calls) {}
+    set_type join() const;
+};
+
 
 /// \brief Differentiates an expression with respect to a variable
 /// \param expression The expression we want to differentiate
@@ -55,7 +68,7 @@ std::tuple<std::string, std::string> call_analytic_diff(
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::pair<std::string, std::optional<int>>& variable,
-    const std::unordered_set<std::string>& indexed_vars = {});
+    const SympySpecialSymbols& special_symbols = {});
 
 struct pybind_wrap_api {
     decltype(&initialize_interpreter_func) initialize_interpreter;

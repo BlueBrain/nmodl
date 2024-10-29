@@ -10,6 +10,7 @@
 #include "codegen/codegen_naming.hpp"
 #include "pybind/pyembed.hpp"
 #include <fmt/format.h>
+#include <fmt/ranges.h>
 #include <optional>
 #include <pybind11/embed.h>
 #include <pybind11/stl.h>
@@ -25,6 +26,19 @@ using namespace py::literals;
 namespace nmodl {
 namespace pybind_wrappers {
 
+std::unordered_set<std::string> SympySpecialSymbols::join() const {
+    std::unordered_set<std::string> result;
+    for (const auto& var: vars) {
+        result.insert(fmt::format("sp.Symbol('{}')", var));
+    }
+    for (const auto& var: indexed_vars) {
+        result.insert(fmt::format("sp.IndexedBase('{}', shape=[1])", var));
+    }
+    for (const auto& var: function_calls) {
+        result.insert(fmt::format("sp.Function('{}')", var));
+    }
+    return result;
+}
 std::tuple<std::vector<std::string>, std::vector<std::string>, std::string>
 call_solve_linear_system(const std::vector<std::string>& eq_system,
                          const std::vector<std::string>& state_vars,
@@ -190,24 +204,19 @@ except Exception as e:
 std::tuple<std::string, std::string> call_diff2c(
     const std::string& expression,
     const std::pair<std::string, std::optional<int>>& variable,
-    const std::unordered_set<std::string>& indexed_vars) {
-    std::string statements;
-    // only indexed variables require special treatment
-    for (const auto& var: indexed_vars) {
-        statements += fmt::format("_allvars.append(sp.IndexedBase('{}', shape=[1]))\n", var);
-    }
+    const SympySpecialSymbols& special_symbols) {
+    auto symbols = special_symbols.join();
     auto [name, property] = variable;
     if (property.has_value()) {
         name = fmt::format("sp.IndexedBase('{}', shape=[1])", name);
-        statements += fmt::format("_allvars.append({})", name);
+        symbols.insert(name);
     } else {
         name = fmt::format("'{}'", name);
     }
     auto locals = py::dict("expression"_a = expression);
     std::string script =
         fmt::format(R"(
-_allvars = []
-{}
+_allvars = [{}]
 variable = {}
 exception_message = ""
 try:
@@ -220,7 +229,7 @@ except Exception as e:
     solution = ""
     exception_message = str(e)
 )",
-                    statements,
+                    fmt::join(symbols, ","),
                     property.has_value() ? fmt::format("{}[{}]", name, property.value()) : name);
 
     py::exec(nmodl::pybind_wrappers::ode_py + script, locals);
