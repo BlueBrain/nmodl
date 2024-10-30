@@ -1,5 +1,6 @@
 from neuron import h, gui
 
+
 def test_globals():
     s = h.Section()
     s.insert("globals")

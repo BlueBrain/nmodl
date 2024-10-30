@@ -647,22 +647,25 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
 }
 
 
-std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(const symtab::SymbolTable& symtab) {
-    if(symtab.global_scope()) {
+std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(
+    const symtab::SymbolTable& symtab) {
+    if (symtab.global_scope()) {
         return {};
     }
 
     auto local_variables = symtab.get_variables(NmodlType::local_var);
     auto parent_symtab = symtab.get_parent_table();
-    if(parent_symtab == nullptr) {
-        throw std::runtime_error("Internal NMODL error: non top-level symbol table doesn't have a parent.");
+    if (parent_symtab == nullptr) {
+        throw std::runtime_error(
+            "Internal NMODL error: non top-level symbol table doesn't have a parent.");
     }
 
     auto variable_names = get_nonglobal_local_variable_names(*parent_symtab);
 
-    for(const auto& symbol : local_variables) {
+    for (const auto& symbol: local_variables) {
         auto status = symbol->get_status();
-        bool is_renamed = (status & symtab::syminfo::Status::renamed) != symtab::syminfo::Status::empty;
+        bool is_renamed = (status & symtab::syminfo::Status::renamed) !=
+                          symtab::syminfo::Status::empty;
         auto current_name = symbol->get_name();
         auto mod_name = is_renamed ? symbol->get_original_name() : current_name;
 
@@ -671,7 +674,6 @@ std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(
 
     return variable_names;
 }
-
 
 
 std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
@@ -707,12 +709,12 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         }
     }
 
-    for (const auto& var : codegen_global_variables) {
+    for (const auto& var: codegen_global_variables) {
         auto name = get_name(var);
         print_macro(name, get_variable_name(name));
     }
 
-    for (const auto& var : codegen_thread_variables) {
+    for (const auto& var: codegen_thread_variables) {
         auto name = get_name(var);
         print_macro(name, get_variable_name(name));
     }
