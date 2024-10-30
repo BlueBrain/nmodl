@@ -669,9 +669,11 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
         print_macro(name, get_variable_name(name));
     }
 
-    for (const auto& var: codegen_int_variables) {
+    for (size_t i = 0; i < codegen_int_variables.size(); ++i) {
+        const auto& var = codegen_int_variables[i];
         auto name = get_name(var);
-        print_macro(name, get_variable_name(name));
+        std::string macro_value = get_variable_name(name);
+        print_macro(name, macro_value);
         if (verbatim.find("_p_" + name) != std::string::npos) {
             print_macro("_p_" + name, get_pointer_name(name));
         }
@@ -680,6 +682,7 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
     for (const auto& func: info.functions) {
         auto name = get_name(func);
         print_macro(name, method_name(name));
+        print_macro(fmt::format("_l{}", name), fmt::format("ret_{}", name));
     }
 
     for (const auto& proc: info.procedures) {
