@@ -368,11 +368,6 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
         const ast::FunctionTableBlock& /* node */) override;
 
 
-    void print_verbatim_overload(const std::string& return_type, const ast::Ast& node);
-    void print_procedure_verbatim_overload(const ast::ProcedureBlock& procedure);
-    void print_function_verbatim_overload(const ast::FunctionBlock& function);
-
-
     /** Print compatibility macros required for VERBATIM blocks.
      *
      *  Returns the names of all macros introduced.
