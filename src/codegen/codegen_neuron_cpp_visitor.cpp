@@ -616,6 +616,7 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::internalthreadargs_param
     return internal_method_parameters();
 }
 
+
 CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::threadargs_parameters() {
     return {{"", "Memb_list*", "", "_ml"},
             {"", "size_t", "", "_iml"},
@@ -624,6 +625,7 @@ CodegenCppVisitor::ParamVector CodegenNeuronCppVisitor::threadargs_parameters() 
             {"", "double*", "", "_globals"},
             {"", "NrnThread*", "", "_nt"}};
 }
+
 
 /// TODO: Edit for NEURON
 std::string CodegenNeuronCppVisitor::nrn_thread_arguments() const {
@@ -755,6 +757,7 @@ std::vector<std::string> CodegenNeuronCppVisitor::print_verbatim_setup(
     return macros_defined;
 }
 
+
 void CodegenNeuronCppVisitor::print_verbatim_cleanup(
     const std::vector<std::string>& macros_defined) {
     for (const auto& macro: macros_defined) {
@@ -762,6 +765,7 @@ void CodegenNeuronCppVisitor::print_verbatim_cleanup(
     }
     printer->add_line("// End of cleanup for VERBATIM");
 }
+
 
 std::string CodegenNeuronCppVisitor::process_verbatim_text(const std::string& verbatim) {
     parser::CDriver driver;
