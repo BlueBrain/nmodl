@@ -779,10 +779,10 @@ std::string CodegenNeuronCppVisitor::process_verbatim_text(const std::string& ve
         // function is defined in the same mod file
         if (program_symtab->is_method_defined(token) && tokens[i + 1] == "(") {
             result += token + "(";
-            if (tokens[i + 2] == "_threadargs_") {
-                result += "_internalthreadargs_";
-            } else if (tokens[i + 2] == "_threadargscomma_") {
-                result += "_internalthreadargscomma_";
+            if (tokens[i + 2] == naming::THREAD_ARGS) {
+                result += naming::INTERNAL_THREAD_ARGS;
+            } else if (tokens[i + 2] == naming::THREAD_ARGS_COMMA) {
+                result += naming::INTERNAL_THREAD_ARGS_COMMA;
             } else {
                 result += tokens[i + 2];
             }
