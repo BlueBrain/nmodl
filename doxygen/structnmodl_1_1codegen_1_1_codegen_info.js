@@ -25,6 +25,7 @@ var structnmodl_1_1codegen_1_1_codegen_info =
     [ "constant_variables", "structnmodl_1_1codegen_1_1_codegen_info.html#a77a0c8f8fff0887d9afde6cae64ccab8", null ],
     [ "constructor_node", "structnmodl_1_1codegen_1_1_codegen_info.html#ae0ae57c15bffa577993551d4345276e3", null ],
     [ "currents", "structnmodl_1_1codegen_1_1_codegen_info.html#a8fa0f0fde4a3b95bc3ec05405f1c1528", null ],
+    [ "cvode_block", "structnmodl_1_1codegen_1_1_codegen_info.html#a1603c9368b90b28e421d33078c7254fb", null ],
     [ "declared_thread_safe", "structnmodl_1_1codegen_1_1_codegen_info.html#a529d6c7f0343461a8e4a8c9369b20ba0", null ],
     [ "derivimplicit_callbacks", "structnmodl_1_1codegen_1_1_codegen_info.html#a81fd9bff894b9a1f2234f86a1494408f", null ],
     [ "derivimplicit_list_num", "structnmodl_1_1codegen_1_1_codegen_info.html#ad7f2152ae0d0997d34a6335cddea5db1", null ],
