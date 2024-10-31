@@ -649,6 +649,17 @@ CodegenNeuronCppVisitor::function_table_parameters(const ast::FunctionTableBlock
 }
 
 
+/** Map of the non-(global/top-local) LOCAL variables.
+ *
+ *  The map associates the name in the MOD file, e.g. `a` with
+ *  the current name of that LOCAL variable, e.g. `a_r_4`.
+ *
+ *      auto map = get_nonglobal_local_variable_names();
+ *      assert map["a"] == "a_r_4";
+ *
+ *  The two names can differ, because an early pass makes all
+ *  names unique by renaming local variables.
+ */
 std::unordered_map<std::string, std::string> get_nonglobal_local_variable_names(
     const symtab::SymbolTable& symtab) {
     if (symtab.global_scope()) {
