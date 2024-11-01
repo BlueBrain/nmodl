@@ -684,9 +684,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:aada5b6eeb7fd6f21a4ce2c68da1e2994"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">breakpoint_current</a> (std::string current) const</td></tr>
 <tr class="memdesc:aada5b6eeb7fd6f21a4ce2c68da1e2994"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determine the variable name for the "current" used in breakpoint block taking into account intermediate code transformations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aada5b6eeb7fd6f21a4ce2c68da1e2994">More...</a><br /></td></tr>
 <tr class="separator:aada5b6eeb7fd6f21a4ce2c68da1e2994"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa50f442d44647586d74e3a29d3708cd3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa50f442d44647586d74e3a29d3708cd3">print_channel_iteration_block_parallel_hint</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type, const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *block)</td></tr>
-<tr class="memdesc:aa50f442d44647586d74e3a29d3708cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print pragma annotations for channel iterations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa50f442d44647586d74e3a29d3708cd3">More...</a><br /></td></tr>
-<tr class="separator:aa50f442d44647586d74e3a29d3708cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39f53b61e542c912e8f6366bad9cf5d4"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a39f53b61e542c912e8f6366bad9cf5d4">print_parallel_iteration_hint</a> (<a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a> type, const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *block)</td></tr>
+<tr class="memdesc:a39f53b61e542c912e8f6366bad9cf5d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print pragma annotations for channel iterations.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a39f53b61e542c912e8f6366bad9cf5d4">More...</a><br /></td></tr>
+<tr class="separator:a39f53b61e542c912e8f6366bad9cf5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92bfb8a4daec705014f8e871fb0feacb"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a92bfb8a4daec705014f8e871fb0feacb">print_atomic_reduction_pragma</a> ()=0</td></tr>
 <tr class="memdesc:a92bfb8a4daec705014f8e871fb0feacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Print atomic update pragma for reduction statements.  <a href="classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a92bfb8a4daec705014f8e871fb0feacb">More...</a><br /></td></tr>
 <tr class="separator:a92bfb8a4daec705014f8e871fb0feacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1306,7 +1306,7 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The same string with double-quotes pre- and postfixed </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01065">1065</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01064">1064</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3036,7 +3036,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A symbol based on the given name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01092">1092</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01091">1091</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3073,7 +3073,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The name of the function or procedure postfixed with the model name </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01075">1075</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01074">1074</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>
@@ -3678,62 +3678,6 @@ template&lt;typename T &gt; </div>
 <p>Print top file header printed in generated code. </p>
 
 <p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l00458">458</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
-
-</div>
-</div>
-<a id="aa50f442d44647586d74e3a29d3708cd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa50f442d44647586d74e3a29d3708cd3">&#9670;&nbsp;</a></span>print_channel_iteration_block_parallel_hint()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void nmodl::codegen::CodegenCppVisitor::print_channel_iteration_block_parallel_hint </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
-          <td class="paramname"><em>type</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *&#160;</td>
-          <td class="paramname"><em>block</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Print pragma annotations for channel iterations. </p>
-<p>This can be overriden by backends to provide additonal annotations or pragmas to enable for example SIMD code generation (e.g. through <code>ivdep</code>) The default implementation prints</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#pragma ivdep</span></div>
-</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">type</td><td>The block type</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Depending programming model and compiler, we print compiler hint for parallelization. For example:</p>
-<div class="fragment"><div class="line"><span class="preprocessor">#pragma omp simd</span></div>
-<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">int</span> <span class="keywordtype">id</span> = 0; <span class="keywordtype">id</span> &lt; nodecount; <span class="keywordtype">id</span>++) {</div>
-<div class="line"> </div>
-<div class="line"><span class="preprocessor">#pragma acc parallel loop</span></div>
-<div class="line"><span class="preprocessor">for(int id = 0; id &lt; nodecount; id++) {</span></div>
-</div><!-- fragment --> 
-<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0d8527584a257a10b5685356bea2911d">nmodl::codegen::CodegenAccVisitor</a>.</p>
-
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l00393">393</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -5108,6 +5052,62 @@ template&lt;typename T &gt; </div>
 <p>Print nrn_state / state update function definition. </p>
 
 <p>Implemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a38c76390b1d1c0a5cf1fe8df3f27fb57">nmodl::codegen::CodegenCoreneuronCppVisitor</a>, and <a class="el" href="classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a24c55a8420d179cbbd7bc6968f3c12e3">nmodl::codegen::CodegenNeuronCppVisitor</a>.</p>
+
+</div>
+</div>
+<a id="a39f53b61e542c912e8f6366bad9cf5d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39f53b61e542c912e8f6366bad9cf5d4">&#9670;&nbsp;</a></span>print_parallel_iteration_hint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void nmodl::codegen::CodegenCppVisitor::print_parallel_iteration_hint </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="group__codegen__details.html#ga2d0a1f473f039b495e9cc349c3b57dbb">BlockType</a>&#160;</td>
+          <td class="paramname"><em>type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classnmodl_1_1ast_1_1_block.html">ast::Block</a> *&#160;</td>
+          <td class="paramname"><em>block</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Print pragma annotations for channel iterations. </p>
+<p>This can be overriden by backends to provide additonal annotations or pragmas to enable for example SIMD code generation (e.g. through <code>ivdep</code>) The default implementation prints</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#pragma ivdep</span></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td>The block type</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Depending programming model and compiler, we print compiler hint for parallelization. For example:</p>
+<div class="fragment"><div class="line"><span class="preprocessor">#pragma omp simd</span></div>
+<div class="line"><span class="keywordflow">for</span>(<span class="keywordtype">int</span> <span class="keywordtype">id</span> = 0; <span class="keywordtype">id</span> &lt; nodecount; <span class="keywordtype">id</span>++) {</div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#pragma acc parallel loop</span></div>
+<div class="line"><span class="preprocessor">for(int id = 0; id &lt; nodecount; id++) {</span></div>
+</div><!-- fragment --> 
+<p>Reimplemented in <a class="el" href="classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aa9f0c35cf1fcbbae5606841e784969ba">nmodl::codegen::CodegenAccVisitor</a>.</p>
+
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8cpp_source.html#l00393">393</a> of file <a class="el" href="codegen__cpp__visitor_8cpp_source.html">codegen_cpp_visitor.cpp</a>.</p>
 
 </div>
 </div>
@@ -7091,7 +7091,7 @@ template&lt;typename T &gt; </div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2af0317e4ceb9bd3f1bf2999ebb32dcf99">CppObjectSpecifier::ThreadLocal</a>, <span class="stringliteral">&quot;thread_local&quot;</span>},</div>
 <div class="line">        {<a class="code" href="group__codegen__details.html#gga8e2cdb825b828ca3fab27731ac2a83c2a79ceee9f8e3c1f0cc74223e05d2448bf">CppObjectSpecifier::Const</a>, <span class="stringliteral">&quot;const&quot;</span>}}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01439">1439</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="codegen__cpp__visitor_8hpp_source.html#l01438">1438</a> of file <a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen_cpp_visitor.hpp</a>.</p>
 
 </div>
 </div>

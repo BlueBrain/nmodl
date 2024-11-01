@@ -1943,7 +1943,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l01847"></a><span class="lineno"> 1847</span>&#160;        print_dt_update_to_device();</div>
 <div class="line"><a name="l01848"></a><span class="lineno"> 1848</span>&#160;    }</div>
 <div class="line"><a name="l01849"></a><span class="lineno"> 1849</span>&#160; </div>
-<div class="line"><a name="l01850"></a><span class="lineno"> 1850</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4f2a91e15af2631ff9424564b8a45fb2">BlockType::Initial</a>, info.initial_node);</div>
+<div class="line"><a name="l01850"></a><span class="lineno"> 1850</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba4f2a91e15af2631ff9424564b8a45fb2">BlockType::Initial</a>, info.initial_node);</div>
 <div class="line"><a name="l01851"></a><span class="lineno"> 1851</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int id = 0; id &lt; nodecount; id++)&quot;</span>);</div>
 <div class="line"><a name="l01852"></a><span class="lineno"> 1852</span>&#160; </div>
 <div class="line"><a name="l01853"></a><span class="lineno"> 1853</span>&#160;    <span class="keywordflow">if</span> (info.net_receive_node != <span class="keyword">nullptr</span>) {</div>
@@ -1998,7 +1998,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l01902"></a><span class="lineno"> 1902</span>&#160;    printer-&gt;fmt_line(<span class="stringliteral">&quot;/** {} of block type {} # {} */&quot;</span>, ba_type, ba_block_type, block_id);</div>
 <div class="line"><a name="l01903"></a><span class="lineno"> 1903</span>&#160;    print_global_function_common_code(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba6a8abec098e536813680364230f5a26b">BlockType::BeforeAfter</a>, function_name);</div>
 <div class="line"><a name="l01904"></a><span class="lineno"> 1904</span>&#160; </div>
-<div class="line"><a name="l01905"></a><span class="lineno"> 1905</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba6a8abec098e536813680364230f5a26b">BlockType::BeforeAfter</a>, node);</div>
+<div class="line"><a name="l01905"></a><span class="lineno"> 1905</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba6a8abec098e536813680364230f5a26b">BlockType::BeforeAfter</a>, node);</div>
 <div class="line"><a name="l01906"></a><span class="lineno"> 1906</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int id = 0; id &lt; nodecount; id++)&quot;</span>);</div>
 <div class="line"><a name="l01907"></a><span class="lineno"> 1907</span>&#160; </div>
 <div class="line"><a name="l01908"></a><span class="lineno"> 1908</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;int node_id = node_index[id];&quot;</span>);</div>
@@ -2127,7 +2127,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l02031"></a><span class="lineno"> 2031</span>&#160;    <span class="comment">// net_receive function we already check if it contains any MUTEX/PROTECT</span></div>
 <div class="line"><a name="l02032"></a><span class="lineno"> 2032</span>&#160;    <span class="comment">// constructs. As WATCH is not a top level block but list of statements,</span></div>
 <div class="line"><a name="l02033"></a><span class="lineno"> 2033</span>&#160;    <span class="comment">// we don&#39;t need to have ivdep pragma related check</span></div>
-<div class="line"><a name="l02034"></a><span class="lineno"> 2034</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaf20658650d987d31063b593c05980397">BlockType::Watch</a>, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l02034"></a><span class="lineno"> 2034</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaf20658650d987d31063b593c05980397">BlockType::Watch</a>, <span class="keyword">nullptr</span>);</div>
 <div class="line"><a name="l02035"></a><span class="lineno"> 2035</span>&#160; </div>
 <div class="line"><a name="l02036"></a><span class="lineno"> 2036</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int id = 0; id &lt; nodecount; id++)&quot;</span>);</div>
 <div class="line"><a name="l02037"></a><span class="lineno"> 2037</span>&#160; </div>
@@ -2441,7 +2441,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l02345"></a><span class="lineno"> 2345</span>&#160; </div>
 <div class="line"><a name="l02346"></a><span class="lineno"><a class="line" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aaf42cb87b55f8b75effc9a052bb58dc1"> 2346</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aaf42cb87b55f8b75effc9a052bb58dc1">CodegenCoreneuronCppVisitor::print_net_receive_loop_begin</a>() {</div>
 <div class="line"><a name="l02347"></a><span class="lineno"> 2347</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;int count = nrb-&gt;_displ_cnt;&quot;</span>);</div>
-<div class="line"><a name="l02348"></a><span class="lineno"> 2348</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba0d352ea25a80edac16b8f2597e2cc27a">BlockType::NetReceive</a>, info.net_receive_node);</div>
+<div class="line"><a name="l02348"></a><span class="lineno"> 2348</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba0d352ea25a80edac16b8f2597e2cc27a">BlockType::NetReceive</a>, info.net_receive_node);</div>
 <div class="line"><a name="l02349"></a><span class="lineno"> 2349</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int i = 0; i &lt; count; i++)&quot;</span>);</div>
 <div class="line"><a name="l02350"></a><span class="lineno"> 2350</span>&#160;}</div>
 <div class="line"><a name="l02351"></a><span class="lineno"> 2351</span>&#160; </div>
@@ -2743,7 +2743,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l02647"></a><span class="lineno"> 2647</span>&#160;    printer-&gt;add_newline(2);</div>
 <div class="line"><a name="l02648"></a><span class="lineno"> 2648</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;/** update state */&quot;</span>);</div>
 <div class="line"><a name="l02649"></a><span class="lineno"> 2649</span>&#160;    print_global_function_common_code(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba46a2a41cc6e552044816a2d04634545d">BlockType::State</a>);</div>
-<div class="line"><a name="l02650"></a><span class="lineno"> 2650</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba46a2a41cc6e552044816a2d04634545d">BlockType::State</a>, info.nrn_state_block);</div>
+<div class="line"><a name="l02650"></a><span class="lineno"> 2650</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbba46a2a41cc6e552044816a2d04634545d">BlockType::State</a>, info.nrn_state_block);</div>
 <div class="line"><a name="l02651"></a><span class="lineno"> 2651</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int id = 0; id &lt; nodecount; id++)&quot;</span>);</div>
 <div class="line"><a name="l02652"></a><span class="lineno"> 2652</span>&#160; </div>
 <div class="line"><a name="l02653"></a><span class="lineno"> 2653</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;int node_id = node_index[id];&quot;</span>);</div>
@@ -2956,7 +2956,7 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__coreneuron__cpp
 <div class="line"><a name="l02860"></a><span class="lineno"> 2860</span>&#160;    printer-&gt;add_newline(2);</div>
 <div class="line"><a name="l02861"></a><span class="lineno"> 2861</span>&#160;    printer-&gt;add_line(<span class="stringliteral">&quot;/** update current */&quot;</span>);</div>
 <div class="line"><a name="l02862"></a><span class="lineno"> 2862</span>&#160;    print_global_function_common_code(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaa8a105043d90127c760e67170853c2c">BlockType::Equation</a>);</div>
-<div class="line"><a name="l02863"></a><span class="lineno"> 2863</span>&#160;    print_channel_iteration_block_parallel_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaa8a105043d90127c760e67170853c2c">BlockType::Equation</a>, info.breakpoint_node);</div>
+<div class="line"><a name="l02863"></a><span class="lineno"> 2863</span>&#160;    print_parallel_iteration_hint(<a class="code" href="group__codegen__details.html#gga2d0a1f473f039b495e9cc349c3b57dbbaaa8a105043d90127c760e67170853c2c">BlockType::Equation</a>, info.breakpoint_node);</div>
 <div class="line"><a name="l02864"></a><span class="lineno"> 2864</span>&#160;    printer-&gt;push_block(<span class="stringliteral">&quot;for (int id = 0; id &lt; nodecount; id++)&quot;</span>);</div>
 <div class="line"><a name="l02865"></a><span class="lineno"> 2865</span>&#160;    print_nrn_cur_kernel(*info.breakpoint_node);</div>
 <div class="line"><a name="l02866"></a><span class="lineno"> 2866</span>&#160;    print_nrn_cur_matrix_shadow_update();</div>

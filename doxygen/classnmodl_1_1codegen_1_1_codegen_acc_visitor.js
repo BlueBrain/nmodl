@@ -5,7 +5,6 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_abort_routine", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6", null ],
     [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef", null ],
     [ "print_backend_includes", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a2a52b48b11fbf0757fb037d7e579daf3", null ],
-    [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0d8527584a257a10b5685356bea2911d", null ],
     [ "print_deriv_advance_flag_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1", null ],
     [ "print_device_atomic_capture_annotation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576", null ],
     [ "print_device_stream_wait", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4", null ],
@@ -29,5 +28,6 @@ var classnmodl_1_1codegen_1_1_codegen_acc_visitor =
     [ "print_newtonspace_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943", null ],
     [ "print_nrn_cur_matrix_shadow_reduction", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6a6d2369a69a4de0bda555ffe52c946e", null ],
     [ "print_nrn_cur_matrix_shadow_update", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a645c96bca7fc93af0c4e1898ec06f02e", null ],
+    [ "print_parallel_iteration_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aa9f0c35cf1fcbbae5606841e784969ba", null ],
     [ "print_rhs_d_shadow_variables", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab2b1180f70d5559ced0633638dd14b5a", null ]
 ];

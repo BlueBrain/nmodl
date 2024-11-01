@@ -6,7 +6,6 @@ var group__codegen__backends =
       [ "print_abort_routine", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0afbe91263bad633cba874fd9c7b5af6", null ],
       [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#af3e32e5cec32f5b55fa81a654bc4afef", null ],
       [ "print_backend_includes", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a2a52b48b11fbf0757fb037d7e579daf3", null ],
-      [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a0d8527584a257a10b5685356bea2911d", null ],
       [ "print_deriv_advance_flag_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#abf9de5982b1d8f6fb492e668183c2ee1", null ],
       [ "print_device_atomic_capture_annotation", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ad3cf0f9dd9a34da7d16712815c805576", null ],
       [ "print_device_stream_wait", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ae69707b056c2db2a8c209b7e8cc97bf4", null ],
@@ -30,6 +29,7 @@ var group__codegen__backends =
       [ "print_newtonspace_transfer_to_device", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a621a8824135ca3ca077dee6917e30943", null ],
       [ "print_nrn_cur_matrix_shadow_reduction", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a6a6d2369a69a4de0bda555ffe52c946e", null ],
       [ "print_nrn_cur_matrix_shadow_update", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#a645c96bca7fc93af0c4e1898ec06f02e", null ],
+      [ "print_parallel_iteration_hint", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#aa9f0c35cf1fcbbae5606841e784969ba", null ],
       [ "print_rhs_d_shadow_variables", "classnmodl_1_1codegen_1_1_codegen_acc_visitor.html#ab2b1180f70d5559ced0633638dd14b5a", null ]
     ] ],
     [ "CodegenCompatibilityVisitor", "classnmodl_1_1codegen_1_1_codegen_compatibility_visitor.html", [
@@ -252,7 +252,6 @@ var group__codegen__backends =
       [ "position_of_int_var", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aaa6dae67e44cbd29e86e10b270249bed", null ],
       [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a92bfb8a4daec705014f8e871fb0feacb", null ],
       [ "print_backend_info", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#afc26a2583e8b283deae9944939788f79", null ],
-      [ "print_channel_iteration_block_parallel_hint", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aa50f442d44647586d74e3a29d3708cd3", null ],
       [ "print_codegen_routines", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a20666add7b3f75937954a038c51f5b55", null ],
       [ "print_compute_functions", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a407af2b73f564d5db79381b5b2699c97", null ],
       [ "print_data_structures", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#acbb83079b063cd6b48e07030b1f5df84", null ],
@@ -296,6 +295,7 @@ var group__codegen__backends =
       [ "print_nrn_destructor", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a481001b393776c233ccdc069916d2d7c", null ],
       [ "print_nrn_pointing", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a179ec184fad5533dd35859beea905e37", null ],
       [ "print_nrn_state", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a2453a1be52f39c3fa9bab2603f1f4773", null ],
+      [ "print_parallel_iteration_hint", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a39f53b61e542c912e8f6366bad9cf5d4", null ],
       [ "print_prcellstate_macros", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a522261006f1cc94869ef15cd26b739da", null ],
       [ "print_procedure", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#a60bf374a3063ccd280e46b7af0e48645", null ],
       [ "print_rename_state_vars", "classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#ad52157be3346d8ee276103a8e42d2226", null ],
