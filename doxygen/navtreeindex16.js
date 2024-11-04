@@ -248,6 +248,6 @@ var NAVTREEINDEX16 =
 "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#af27eb43d5a4f76227692de56333b6c08":[0,1,1,2,21],
 "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#afade7f98dc6e604097cca537fb45b9b7":[0,1,1,2,18],
 "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html":[0,1,0,5],
-"classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a000f92fb0976845c64c6eda08255e8bd":[0,1,0,5,110],
-"classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a0195ec229853e6a5568228b868829942":[0,1,0,5,89]
+"classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a000f92fb0976845c64c6eda08255e8bd":[0,1,0,5,115],
+"classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a0195ec229853e6a5568228b868829942":[0,1,0,5,91]
 };

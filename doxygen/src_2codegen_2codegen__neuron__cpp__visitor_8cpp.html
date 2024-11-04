@@ -106,10 +106,12 @@ $(document).ready(function(){initNavTree('src_2codegen_2codegen__neuron__cpp__vi
 <code>#include &lt;regex&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &quot;<a class="el" href="all_8hpp_source.html">ast/all.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="procedure__block_8hpp_source.html">ast/procedure_block.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__cpp__visitor_8hpp_source.html">codegen/codegen_cpp_visitor.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__utils_8hpp_source.html">codegen/codegen_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="codegen__naming_8hpp_source.html">codegen_naming.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="config_8h_source.html">config/config.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="c11__driver_8hpp_source.html">parser/c11_driver.hpp</a>&quot;</code><br />
 <code>#include &quot;solver/solver.hpp&quot;</code><br />
 <code>#include &quot;<a class="el" href="string__utils_8hpp_source.html">utils/string_utils.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="rename__visitor_8hpp_source.html">visitors/rename_visitor.hpp</a>&quot;</code><br />
@@ -128,6 +130,9 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a9dd1571848496d4e7f2e8773c3e7b969"><td class="memItemLeft" align="right" valign="top">std::unordered_map&lt; std::string, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a9dd1571848496d4e7f2e8773c3e7b969">nmodl::codegen::get_nonglobal_local_variable_names</a> (const symtab::SymbolTable &amp;symtab)</td></tr>
+<tr class="memdesc:a9dd1571848496d4e7f2e8773c3e7b969"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map of the non-(global/top-local) LOCAL variables.  <a href="namespacenmodl_1_1codegen.html#a9dd1571848496d4e7f2e8773c3e7b969">More...</a><br /></td></tr>
+<tr class="separator:a9dd1571848496d4e7f2e8773c3e7b969"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a983af1c34064b33f42068e2767c2287e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">nmodl::codegen::rename_net_receive_arguments</a> (const ast::NetReceiveBlock &amp;net_receive_node, const ast::Node &amp;node)</td></tr>
 <tr class="memdesc:a983af1c34064b33f42068e2767c2287e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rename arguments to NET_RECEIVE block with corresponding pointer variable.  <a href="namespacenmodl_1_1codegen.html#a983af1c34064b33f42068e2767c2287e">More...</a><br /></td></tr>
 <tr class="separator:a983af1c34064b33f42068e2767c2287e"><td class="memSeparator" colspan="2">&#160;</td></tr>

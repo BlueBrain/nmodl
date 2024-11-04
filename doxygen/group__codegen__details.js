@@ -266,6 +266,7 @@ var group__codegen__details =
     [ "get_index_from_name", "group__codegen__details.html#ga26c6760d6a41a6c64a8b4a7b431562f0", null ],
     [ "get_length", "group__codegen__details.html#ga7c0e8fc9aadefdc80e51e6d3fc2a748d", null ],
     [ "get_length", "group__codegen__details.html#ga207530f6d3d65c81d38a9d754d43f8b7", null ],
+    [ "get_name", "group__codegen__details.html#ga52bae224dafc4307bc1d331a1ac513a5", null ],
     [ "get_name", "group__codegen__details.html#ga207b386a660ce6cbdd3878e0c55926a0", null ],
     [ "get_name", "group__codegen__details.html#ga352ff88d761a8223947290e7ad7e7b07", null ],
     [ "get_prefixsum_from_name", "group__codegen__details.html#ga9a9a3fed3ccfd3e8db280b27163aacbb", null ]
