@@ -1,5 +1,5 @@
 #
-# THIS FILE IS GENERATED AND SHALL NOT BE EDITED.
+# THIS FILE IS GENERATED.
 #
 
 # cmake-format: off
@@ -34,4 +34,5 @@ set(NMODL_GENERATED_SOURCES
     ${{ '{' }}{{ dir | upper }}_GENERATED_SOURCES}
 {% endfor %}
 )
+
 # cmake-format: on

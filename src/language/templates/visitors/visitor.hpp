@@ -41,8 +41,8 @@ class Visitor {
     virtual ~Visitor() = default;
 
     {% for node in nodes %}
-      /// visit node of type ast::{{ node.class_name }}
-      virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) = 0;
+    /// visit node of type ast::{{ node.class_name }}
+    virtual void visit_{{ node.class_name|snake_case }}(ast::{{ node.class_name }}& node) = 0;
     {% endfor %}
 };
 
@@ -60,8 +60,8 @@ class ConstVisitor {
     virtual ~ConstVisitor() = default;
 
     {% for node in nodes %}
-      /// visit node of type ast::{{ node.class_name }}
-      virtual void visit_{{ node.class_name|snake_case }}(const ast::{{ node.class_name }}& node) = 0;
+    /// visit node of type ast::{{ node.class_name }}
+    virtual void visit_{{ node.class_name|snake_case }}(const ast::{{ node.class_name }}& node) = 0;
     {% endfor %}
 };
 
