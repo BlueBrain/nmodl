@@ -98,7 +98,7 @@ var NAVTREEINDEX =
 "random__var__list_8hpp.html",
 "structnmodl_1_1codegen_1_1_conductance.html#a423dd7cd8b302e448024a19859d68193",
 "symbol__properties_8hpp.html#ad9b6b8559b36d0a500ef5110badcc4dbacb2f7556254f071fb944800a31272b6b",
-"verbatim__visitor_8cpp_source.html"
+"verbatim__visitor_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

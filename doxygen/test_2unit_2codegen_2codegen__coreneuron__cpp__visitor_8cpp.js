@@ -3,8 +3,6 @@ var test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp =
     [ "create_acc_visitor", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#ad6b03395b7f6ae595a2c4b3fecc67a56", null ],
     [ "create_coreneuron_cpp_visitor", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a9922484fe22c5bd8478e75d7ad7970f2", null ],
     [ "get_coreneuron_cpp_code", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a5b62ca4a31bf0699a5174ea8e39cf472", null ],
-    [ "get_instance_structure", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#ab6505bf89fc4573d824bb53a5f591c9e", null ],
-    [ "get_instance_var_setup_function", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#aad099bc716a26661997af855020e2dc4", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a0f8302124417a0290de4c61c58348f97", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#a41044133b4ee2b429529cfbc7b33dcc3", null ],
     [ "SCENARIO", "test_2unit_2codegen_2codegen__coreneuron__cpp__visitor_8cpp.html#aeabcf0ad13cf3e5ae258accc595743e2", null ],

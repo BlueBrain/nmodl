@@ -1,7 +1,5 @@
 var NAVTREEINDEX35 =
 {
-"verbatim__visitor_8cpp_source.html":[3,0,1,11,61],
-"verbatim__visitor_8hpp.html":[3,0,1,11,62],
 "verbatim__visitor_8hpp_source.html":[3,0,1,11,62],
 "visitor_8hpp.html":[3,0,0,0,0,1,12],
 "visitor_8hpp_source.html":[3,0,0,0,0,1,12],
