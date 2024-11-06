@@ -176,7 +176,7 @@ set(AST_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/ast/write_ion_var.hpp
 )
 
-if(NMODL_ENABLE_PYTHON)
+if(NMODL_ENABLE_PYTHON_BINDINGS)
 set(PYBIND_GENERATED_SOURCES
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.cpp
     ${PROJECT_BINARY_DIR}/src/pybind/pyast.hpp
