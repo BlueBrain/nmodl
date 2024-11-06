@@ -1,8 +1,5 @@
 var NAVTREEINDEX32 =
 {
-"pynmodl_8cpp_source.html":[3,0,1,6,3],
-"random__var_8hpp.html":[3,0,0,0,0,0,95],
-"random__var_8hpp_source.html":[3,0,0,0,0,0,95],
 "random__var__list_8hpp.html":[3,0,0,0,0,0,96],
 "random__var__list_8hpp_source.html":[3,0,0,0,0,0,96],
 "range_8hpp.html":[3,0,0,0,0,0,97],
@@ -249,5 +246,8 @@ var NAVTREEINDEX32 =
 "structnmodl_1_1codegen_1_1_codegen_info.html#ae6f18ddfee31d5a335b0421f24428a60":[0,1,1,7,9],
 "structnmodl_1_1codegen_1_1_codegen_info.html#af49fe1ab8d7c35c937585ce7ac7992df":[0,1,1,7,74],
 "structnmodl_1_1codegen_1_1_codegen_info.html#af61629cf3b042744e0ae3655e807e52a":[0,1,1,7,91],
-"structnmodl_1_1codegen_1_1_codegen_info.html#afbc429aec58b9dbf16f0db7fc2d1869a":[0,1,1,7,75]
+"structnmodl_1_1codegen_1_1_codegen_info.html#afbc429aec58b9dbf16f0db7fc2d1869a":[0,1,1,7,75],
+"structnmodl_1_1codegen_1_1_codegen_info.html#afbd7bbb54c12a07fce90d62325799810":[0,1,1,7,46],
+"structnmodl_1_1codegen_1_1_codegen_info.html#afda3a06d247507a8e4a90d9e14486320":[0,1,1,7,86],
+"structnmodl_1_1codegen_1_1_conductance.html":[0,1,1,3]
 };

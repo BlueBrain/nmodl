@@ -59,7 +59,7 @@ var searchData=
   ['reads_1994',['reads',['../structnmodl_1_1codegen_1_1_ion.html#ad3b1eb176f8e00671fb36cc625ad0f49',1,'nmodl::codegen::Ion']]],
   ['regex_5fspecial_5fchars_1995',['regex_special_chars',['../namespacenmodl_1_1codegen.html#a7fe9cbd601e67e2d2726026c0008b16f',1,'nmodl::codegen']]],
   ['register_5fmechanism_5farguments_1996',['register_mechanism_arguments',['../classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#af7e3a49a86646f3b69a3d387aa4116bb',1,'nmodl::codegen::CodegenCoreneuronCppVisitor::register_mechanism_arguments()'],['../classnmodl_1_1codegen_1_1_codegen_cpp_visitor.html#aec3cef47cc3c1e5901b4ff401ce8e725',1,'nmodl::codegen::CodegenCppVisitor::register_mechanism_arguments()'],['../classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a50026c205b223b41ffe682526735873c',1,'nmodl::codegen::CodegenNeuronCppVisitor::register_mechanism_arguments()']]],
-  ['reindent_5ftext_1997',['reindent_text',['../namespacenmodl_1_1test__utils.html#af64fc17c60e5c8a5b8114147591aec3d',1,'nmodl::test_utils']]],
+  ['reindent_5ftext_1997',['reindent_text',['../namespacenmodl_1_1test__utils.html#ad054bcad0b3d821b5e18689cd8015d54',1,'nmodl::test_utils']]],
   ['remove_5fcharacter_1998',['remove_character',['../group__utils.html#ga536e9fa8a76c71e6ee211e35020c89ce',1,'nmodl::stringutils']]],
   ['remove_5fconserve_5fstatements_1999',['remove_conserve_statements',['../namespacenmodl_1_1visitor.html#a9677053a52d21f598a95da7ea3db5f70',1,'nmodl::visitor']]],
   ['remove_5fproperty_2000',['remove_property',['../classnmodl_1_1symtab_1_1_symbol.html#afb5d0d09562531fdb3954f0a54a4e91e',1,'nmodl::symtab::Symbol']]],

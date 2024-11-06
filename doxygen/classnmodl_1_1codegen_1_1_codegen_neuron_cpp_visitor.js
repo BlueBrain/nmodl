@@ -4,7 +4,6 @@ var classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor =
     [ "add_variable_tqitem", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab88a7d20486baa43e3e217b6deacead7", null ],
     [ "append_conc_write_statements", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#aea611e83959c5e3f6faa50d47ee69c0f", null ],
     [ "backend_name", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a89c5a0f046f8752579636a3db97d669a", null ],
-    [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a668abea41fecf3599122af773e93c385", null ],
     [ "CodegenCppVisitor", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#ab58b5680bc2f8e2e0fb8f693c5c1d8e4", null ],
     [ "cvode_setup_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a47ec475151d85f556126ab808d2896fe", null ],
     [ "cvode_update_parameters", "classnmodl_1_1codegen_1_1_codegen_neuron_cpp_visitor.html#a6dd3012e7064a1ec13ed321b28fb5d9f", null ],
