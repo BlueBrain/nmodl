@@ -2,7 +2,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
 [
     [ "SymbolType", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab841caeec69dcf6b4431e1ef539ea0da", null ],
     [ "SymbolVectorType", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac113b048e85347649e0845d55c08b376", null ],
-    [ "CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ab683b05aa11c88966cf20a06d00f5ea7", null ],
+    [ "CodegenHelperVisitor", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#abfd5123a54d4a05bfe58597d8d7e395e", null ],
     [ "analyze", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aa0e74f461212bcc312cd413641e54c29", null ],
     [ "check_cvode_codegen", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a09b313cf81aa2c720537d9082891d9be", null ],
     [ "find_ion_variables", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a8a4c6bf98efa9dec17d22c35a897560a", null ],
@@ -48,6 +48,7 @@ var classnmodl_1_1codegen_1_1_codegen_helper_visitor =
     [ "visit_watch", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac98fcbdbc8f2b054d5bb00672fb9d0e2", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#ac01121d1dd0368351ce2e5d6a8ba2cf1", null ],
     [ "assign_lhs", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a7cb34bd62328c72fe1fabfadd868119d", null ],
+    [ "enable_cvode", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a879218d47bb2b0094e778e8b4fb5d5c7", null ],
     [ "info", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#acedcc55aa34f647623eb9e0060df4c54", null ],
     [ "psymtab", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#aca39902c52d91249971ef71c786b0a66", null ],
     [ "table_statement_used", "classnmodl_1_1codegen_1_1_codegen_helper_visitor.html#a1ab87012c2eac94f31e917cab518e805", null ],
