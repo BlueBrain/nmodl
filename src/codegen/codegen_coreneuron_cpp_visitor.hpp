@@ -230,7 +230,7 @@ class CodegenCoreneuronCppVisitor: public CodegenCppVisitor {
     /**
      * Print atomic update pragma for reduction statements
      */
-    void print_atomic_reduction_pragma() override;
+    virtual void print_atomic_reduction_pragma();
 
 
     /**
