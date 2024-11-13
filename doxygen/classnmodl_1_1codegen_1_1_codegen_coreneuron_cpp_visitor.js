@@ -29,7 +29,7 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "position_of_float_var", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9494db3e1dfa2a390f133a9a8b5aa8e0", null ],
     [ "position_of_int_var", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#aeada2d6cff883f8cbd1924f1d9729250", null ],
     [ "print_abort_routine", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab87a69ec67fe4d42df3cb0084c99dc85", null ],
-    [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a66833aede8ecc336b85129ca1e8b8b2e", null ],
+    [ "print_atomic_reduction_pragma", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab21de33c81f273ad3db2d5271221bcdc", null ],
     [ "print_backend_includes", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#abd6be1c541190358a512f0021ea82b16", null ],
     [ "print_before_after_block", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a9d1748ca9db1665902c25c32a2b458d6", null ],
     [ "print_check_table_thread_function", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a45b1dc5e371bf956e045d40f19b2470c", null ],
@@ -124,6 +124,7 @@ var classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor =
     [ "simulator_name", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ab13ca7a0bef674739095466ff66f9843", null ],
     [ "visit_derivimplicit_callback", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a97acfbb75ee033066beb784570ad4a04", null ],
     [ "visit_for_netcon", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a524be3f8fa4165f983647ed8ebbb9f01", null ],
+    [ "visit_protect_statement", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#affd885d93ced7c0bd58ad023444a4737", null ],
     [ "visit_verbatim", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#ac5b4b072e64caba7ea89e89f0ea0090a", null ],
     [ "visit_watch_statement", "classnmodl_1_1codegen_1_1_codegen_coreneuron_cpp_visitor.html#a8d05784b3300be188775cf2ec9958dc6", null ]
 ];
