@@ -68,7 +68,7 @@ class ModToken {
     /// \{
 
     ModToken()
-        : pos(nullptr, 0){};
+        : pos(nullptr, 0) {};
 
     explicit ModToken(bool ext)
         : pos(nullptr, 0)
