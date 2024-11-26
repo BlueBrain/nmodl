@@ -14,7 +14,7 @@ dependencies = [
     "importlib-resources;python_version<'3.9'",
 ]
 scripts = {nmodl = "nmodl._binwrapper:main"}
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 optional-dependencies.test = ["pytest>=3.3.0", "pytest-cov", "numpy", "scipy"]
 optional-dependencies.docs = [
