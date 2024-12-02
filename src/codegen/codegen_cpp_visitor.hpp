@@ -797,6 +797,10 @@ class CodegenCppVisitor: public visitor::ConstAstVisitor {
     virtual void print_parallel_iteration_hint(BlockType type, const ast::Block* block);
 
 
+    /** Condition for parallel iteration. */
+    virtual bool parallel_iteration_condition(BlockType type, const ast::Block* block);
+
+
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/

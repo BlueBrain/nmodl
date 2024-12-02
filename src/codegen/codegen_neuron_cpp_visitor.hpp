@@ -149,6 +149,9 @@ class CodegenNeuronCppVisitor: public CodegenCppVisitor {
     int position_of_int_var(const std::string& name) const override;
 
 
+    bool parallel_iteration_condition(BlockType type, const ast::Block* block) override;
+
+
     /****************************************************************************************/
     /*                                Backend specific routines                             */
     /****************************************************************************************/
