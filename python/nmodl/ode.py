@@ -52,6 +52,10 @@ forbidden_var = [
     "trigamma",
     # sympy.assumptions.ask.ask
     "ask",
+    # sympy.series.order.Order
+    "O",
+    # alias for sympy.core.evalf
+    "N",
 ]
 
 
