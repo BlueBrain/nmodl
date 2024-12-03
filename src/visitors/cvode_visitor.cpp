@@ -36,9 +36,12 @@ static void remove_conserve_statements(ast::StatementBlock& node) {
     }
 }
 
-// remove units using state-of-the-art technology
+// remove units from CVODE block so sympy can parse it properly
 static void remove_units(ast::BinaryExpression& node) {
-    std::regex unit_pattern(R"((\d*\.?\d+)\([a-zA-Z]+\))");
+    // matches either an int or a float, followed by any (including zero)
+    // number of spaces, followed by an expression in parentheses, that only
+    // has letters of the alphabet
+    std::regex unit_pattern(R"((\d+\.?\d*|\.\d+)\s*\([a-zA-Z]+\))");
     auto rhs_string = to_nmodl(node.get_rhs());
     auto rhs_string_no_units = fmt::format("{} = {}",
                                            to_nmodl(node.get_lhs()),
