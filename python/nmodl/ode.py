@@ -50,6 +50,12 @@ forbidden_var = [
     "loggamma",
     "digamma",
     "trigamma",
+    # sympy.assumptions.ask.ask
+    "ask",
+    # sympy.series.order.Order
+    "O",
+    # alias for sympy.core.evalf
+    "N",
 ]
 
 
@@ -638,6 +644,11 @@ def differentiate2c(
     sympy_vars = {str(var): make_symbol(var) for var in vars}
     sympy_vars[dependent_var] = x
 
+    expression, _ = search_and_replace_protected_identifiers_to_sympy(
+        [expression], [], []
+    )
+    expression = expression[0]
+
     # parse string into SymPy equation
     expr = sp.sympify(expression, locals=sympy_vars)
 
@@ -711,4 +722,6 @@ def differentiate2c(
         pass
 
     # return result as C code in NEURON format
-    return sp.ccode(diff.evalf(), user_functions=custom_fcts)
+    result = sp.ccode(diff.evalf(), user_functions=custom_fcts)
+
+    return search_and_replace_protected_identifiers_from_sympy([result], [])[0]
