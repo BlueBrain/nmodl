@@ -76,6 +76,12 @@ int CodegenNeuronCppVisitor::position_of_int_var(const std::string& name) const 
 }
 
 
+bool CodegenNeuronCppVisitor::parallel_iteration_condition(BlockType type,
+                                                           const ast::Block* block) {
+    return info.thread_safe && CodegenCppVisitor::parallel_iteration_condition(type, block);
+}
+
+
 /****************************************************************************************/
 /*                                Backend specific routines                             */
 /****************************************************************************************/
@@ -2036,6 +2042,7 @@ void CodegenNeuronCppVisitor::print_nrn_init(bool skip_init_check) {
 
     print_global_function_common_code(BlockType::Initial);
 
+    print_parallel_iteration_hint(BlockType::Initial, info.initial_node);
     printer->push_block("for (int id = 0; id < nodecount; id++)");
 
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
@@ -2079,6 +2086,8 @@ void CodegenNeuronCppVisitor::print_nrn_jacob() {
 
     print_entrypoint_setup_code_from_memb_list();
     printer->fmt_line("auto nodecount = _ml_arg->nodecount;");
+
+    print_parallel_iteration_hint(BlockType::Equation, nullptr);
     printer->push_block("for (int id = 0; id < nodecount; id++)");  // begin for
 
     if (breakpoint_exist()) {
@@ -2286,6 +2295,7 @@ void CodegenNeuronCppVisitor::print_nrn_state() {
     printer->add_newline(2);
     print_global_function_common_code(BlockType::State);
 
+    print_parallel_iteration_hint(BlockType::State, info.nrn_state_block);
     printer->push_block("for (int id = 0; id < nodecount; id++)");
     printer->add_line("int node_id = node_data.nodeindices[id];");
     printer->add_line("auto* _ppvar = _ml_arg->pdata[id];");
@@ -2499,7 +2509,7 @@ void CodegenNeuronCppVisitor::print_nrn_cur() {
     printer->add_newline(2);
     printer->add_line("/** update current */");
     print_global_function_common_code(BlockType::Equation);
-    // print_channel_iteration_block_parallel_hint(BlockType::Equation, info.breakpoint_node);
+    print_parallel_iteration_hint(BlockType::Equation, info.breakpoint_node);
     printer->push_block("for (int id = 0; id < nodecount; id++)");
     print_nrn_cur_kernel(*info.breakpoint_node);
     // print_nrn_cur_matrix_shadow_update();
