@@ -1,14 +1,16 @@
 The NMODL Framework
 ===================
 
-> [!WARNING]
->
-> NMODL has been fully integrated into the NEURON repository. There will
-> be no further development efforts NMODL as an independent project.
->
-> All future development will happen at:
->  https://github.com/neuronsimulator/nrn
+WARNING
+_______
 
+**NMODL has been fully integrated into the NEURON repository.**
+There will be no further development efforts on NMODL as an independent project.
+
+All future development will happen at:
+`https://github.com/neuronsimulator/nrn <https://github.com/neuronsimulator/nrn>`_.
+
+---------------------
 
 The NMODL Framework is a code generation engine for **N**\ EURON
 **MOD**\ eling **L**\ anguage
@@ -341,7 +343,7 @@ the following paper:
   Michael Hines, and Felix Schürmann. 2020. An optimizing multi-platform
   source-to-source compiler framework for the NEURON MODeling Language.
   In *Computational Science – ICCS 2020*, Springer, Cham, 45–58.
-  DOI: [`10.1007/978-3-030-50371-0_4`](https://doi.org/10.1007/978-3-030-50371-0_4)
+  DOI: `10.1007/978-3-030-50371-0_4 <https://doi.org/10.1007/978-3-030-50371-0_4>`__
 
 Some additional details are covered in the pre-print:
 
