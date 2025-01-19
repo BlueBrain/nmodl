@@ -13,7 +13,6 @@
 #include "utils/logger.hpp"
 #include "visitors/visitor_utils.hpp"
 #include <optional>
-#include <regex>
 #include <utility>
 
 namespace pywrap = nmodl::pybind_wrappers;
@@ -38,18 +37,14 @@ static void remove_conserve_statements(ast::StatementBlock& node) {
 
 // remove units from CVODE block so sympy can parse it properly
 static void remove_units(ast::BinaryExpression& node) {
-    // matches either an int or a float, followed by any (including zero)
-    // number of spaces, followed by an expression in parentheses, that only
-    // has letters of the alphabet
-    std::regex unit_pattern(R"((\d+\.?\d*|\.\d+)\s*\([a-zA-Z]+\))");
-    auto rhs_string = to_nmodl(node.get_rhs());
-    auto rhs_string_no_units = fmt::format("{} = {}",
-                                           to_nmodl(node.get_lhs()),
-                                           std::regex_replace(rhs_string, unit_pattern, "$1"));
+    auto statement =
+        fmt::format("{} = {}",
+                    to_nmodl(node.get_lhs()),
+                    to_nmodl(node.get_rhs(), {ast::AstNodeType::UNIT, ast::AstNodeType::UNIT_DEF}));
     logger->debug("CvodeVisitor :: removing units from statement {}", to_nmodl(node));
-    logger->debug("CvodeVisitor :: result: {}", rhs_string_no_units);
+    logger->debug("CvodeVisitor :: result: {}", statement);
     auto expr_statement = std::dynamic_pointer_cast<ast::ExpressionStatement>(
-        create_statement(rhs_string_no_units));
+        create_statement(statement));
     const auto bin_expr = std::dynamic_pointer_cast<const ast::BinaryExpression>(
         expr_statement->get_expression());
     node.set_rhs(std::shared_ptr<ast::Expression>(bin_expr->get_rhs()->clone()));
